@@ -349,6 +349,8 @@ const load = (k, d) => { try { const v = localStorage.getItem(LS + k); return v 
 const save = (k, v) => { try { localStorage.setItem(LS + k, JSON.stringify(v)); } catch (e) {} };
 
 const MIME = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+/* 이 브라우저가 WEBP로 저장할 수 있는지 (아이폰 사파리 등 일부는 불가) */
+const WEBP_OK = (() => { try { const c = document.createElement("canvas"); c.width = c.height = 2; return c.toDataURL("image/webp").indexOf("data:image/webp") === 0; } catch (e) { return false; } })();
 const MAX_PIXELS = 16000000; // 아이폰 사파리 캔버스 한도 대비
 
 const fmtBytes = b => b < 1024 ? b + " B" : b < 1048576 ? (b / 1024).toFixed(b < 10240 ? 1 : 0) + " KB" : (b / 1048576).toFixed(2) + " MB";
@@ -442,9 +444,12 @@ function targetDims(w, h, s) {
   return [Math.max(1, W), Math.max(1, H)];
 }
 function outType(inType, s) {
-  if (s.format === "keep") return MIME[inType] ? inType : "image/png";
-  if (s.format === "auto") return inType === "image/webp" ? "image/webp" : "image/jpeg";
-  return s.format;
+  let t;
+  if (s.format === "keep") t = MIME[inType] ? inType : "image/png";
+  else if (s.format === "auto") t = inType === "image/webp" ? "image/webp" : "image/jpeg";
+  else t = s.format;
+  if (t === "image/webp" && !WEBP_OK) t = "image/jpeg";   // WEBP로 저장 못 하는 브라우저는 JPG로
+  return t;
 }
 
 /* 워터마크 */
@@ -540,7 +545,7 @@ async function processOne(item, s, logo) {
   }
   let keptOriginal = false;
   if (!edited && type === file.type && res.w === w0 && res.h === h0 && res.blob.size >= file.size) { res = { ...res, blob: file }; keptOriginal = true; }
-  const t = keptOriginal ? file.type : type;
+  const t = keptOriginal ? file.type : (MIME[res.blob.type] ? res.blob.type : type);   // 실제로 만들어진 형식 기준으로 이름 짓기
   return { blob: res.blob, w: res.w, h: res.h, type: t, name: keptOriginal ? file.name : baseName(file.name) + "_변환." + (MIME[t] || "png"),
     over: !!res.over, keptOriginal, scaled: targetMode && res.w < Math.round(W), w0, h0 };
 }
@@ -639,7 +644,8 @@ function SizeStep({ s, up, n, upMany }) {
 function FmtStep({ s, up, n }) {
   const opts = [["keep", "원본 유지"], ["image/jpeg", "JPG"], ["image/png", "PNG"], ["image/webp", "WEBP"]].filter(o => MODE !== "convert" || o[0] !== "keep");
   return html`<${Step} n=${n} title="파일 형식" sub="JPG는 사진, PNG는 캡처·투명 배경, WEBP는 가장 가벼움">
-    <${Seg} value=${s.format} options=${opts} onChange=${v => up("format", v)} />
+    <${Seg} value=${s.format} options=${opts.map(o => o[0] === "image/webp" && !WEBP_OK ? [o[0], "WEBP (지원 안 됨)"] : o)} onChange=${v => { if (v === "image/webp" && !WEBP_OK) return; up("format", v); }} />
+    ${!WEBP_OK && html`<div class="note w">이 브라우저는 <b>WEBP로 저장하는 기능을 지원하지 않아요</b>(아이폰 사파리 등). WEBP가 필요하면 크롬이나 엣지에서 열어 주세요. 이 브라우저에서는 JPG로 저장됩니다.</div>`}
     ${s.format === "image/jpeg" && html`<div class="note">JPG는 투명한 부분을 담지 못해 <b>흰색 배경</b>으로 바뀝니다.</div>`}
     ${s.format === "image/png" && html`<div class="note">PNG는 품질 손실이 없는 대신 사진은 용량이 커질 수 있습니다.</div>`}
   </${Step}>`;

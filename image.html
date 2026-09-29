@@ -976,4 +976,18 @@ function App() {
 }
 render(html`<${App} />`, document.getElementById("root"));
 
+
+/* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알려 iframe 높이를 자동으로 맞춤 */
+(function(){ if(!EMBED || window.parent===window) return;
+  var last=0, t=null;
+  function send(){ var r=document.getElementById("root"); if(!r) return;
+    var h=Math.ceil(r.getBoundingClientRect().height)+8;
+    if(document.querySelector(".edws")) h=Math.max(h,900);   /* 큰 화면 편집 중엔 넉넉하게 */
+    if(Math.abs(h-last)<4) return; last=h;
+    try{ window.parent.postMessage({blogj:"height",h:h},"https://luvbong.tistory.com"); }catch(e){} }
+  function soon(){ clearTimeout(t); t=setTimeout(send,60); }
+  if(window.ResizeObserver){ new ResizeObserver(soon).observe(document.getElementById("root")); }
+  new MutationObserver(soon).observe(document.body,{childList:true,subtree:true});
+  window.addEventListener("load",send); setTimeout(send,300);
+})();
 </script></body></html>

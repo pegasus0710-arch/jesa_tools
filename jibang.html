@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Blog J</title><meta name="description" content="설치·회원가입 없는 무료 제사 지방 출력 (A4 한 장에 2매, 크기 조절 저장)" />
+<title>제사 지방 출력 | Blog J</title><meta name="description" content="설치·회원가입 없는 무료 제사 지방 출력 (A4 한 장에 2매, 크기 조절 저장)" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237a4b2a'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-style='italic' font-weight='700' font-size='36' fill='white' text-anchor='middle'%3EJ%3C/text%3E%3C/svg%3E" />
 <style>
 :root{
@@ -597,6 +597,7 @@ function Charye(){
 function App(){
   const Q=new URLSearchParams(location.search); const EMBED=Q.get("embed")==="1";
   const [tab,setTab]=useState(()=>({print:"print",calc:"calc",charye:"charye"}[Q.get("tab")]||"print"));
+  useEffect(()=>{ document.title=({print:"제사 지방 출력",calc:"제사 날짜 계산기",charye:"차례상 차리기"}[tab]||"제사 지방 출력")+" | Blog J"; },[tab]);
   useEffect(()=>{ if(!EMBED||window.parent===window) return; const send=()=>{ try{ window.parent.postMessage({blogj:"height",h:Math.ceil((document.getElementById("root")||document.body).getBoundingClientRect().height)+16},"https://luvbong.tistory.com"); }catch(e){} }; send(); const ro=new ResizeObserver(send); ro.observe(document.getElementById("root")||document.body); window.addEventListener("load",send); return ()=>ro.disconnect(); },[tab]);
   const [mode,setMode]=useState(()=>load("mode","hanja"));
   /* 주소로 대상 미리 선택: ?cat=inlaw (&opt=1 → 두 번째 선택지). 미리 선택된 글에서는 선택을 저장하지 않아 다른 글에 영향 없음 */

@@ -1,5 +1,14 @@
 {
-  "write":  { "latest": "1.0" },
-  "image":  { "latest": "1.0" },
-  "jibang": { "latest": "1.0" }
+  "write": {
+    "latest": "1.0"
+  },
+  "image": {
+    "latest": "1.0"
+  },
+  "jibang": {
+    "latest": "1.0"
+  },
+  "chukmun": {
+    "latest": "1.0"
+  }
 }

@@ -10,5 +10,9 @@
   },
   "chukmun": {
     "latest": "1.0"
+  },
+  "pdf": {
+    "latest": "1.0",
+    "posts": {}
   }
 }

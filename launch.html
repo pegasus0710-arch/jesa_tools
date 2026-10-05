@@ -139,6 +139,13 @@ const TOOLS = {
     sign: { title: "PDF 서명·도장 넣기", desc: "서명을 직접 그리거나 도장 사진을 올려 원하는 자리에", chips: ["서명 그리기", "도장 사진 흰 배경 투명", "모든 쪽 같은 자리"] },
     pagenum: { title: "PDF 쪽 번호 넣기", desc: "제출 서류에 쪽 번호를 원하는 위치·모양으로", chips: ["위치 6곳", "1 · 1/10 · - 1 -", "시작 번호", "표지 건너뛰기"] },
     watermark: { title: "PDF 워터마크 넣기", desc: "\"사본\" · \"제출용\" 같은 표시를 모든 쪽에", chips: ["한글 가능", "가운데 · 반복", "진하기 · 기울기"] } } } };
+let lastH = 0;
+function sendH() {
+  const r = document.getElementById("root"); if (!r) return;
+  const h = Math.ceil(r.getBoundingClientRect().height) + 2;
+  if (!h || Math.abs(h - lastH) < 2) return; lastH = h;
+  try { parent.postMessage({ blogj: "height", h: Math.max(h, 200) }, "https://luvbong.tistory.com"); } catch (e) {}
+}
 const TOOL_KEY = LQ.get("tool") || "pdf", KNOWN = !!TOOLS[TOOL_KEY];
 const TL = TOOLS[TOOL_KEY] || TOOLS.pdf, TB = TL.tabs[LQ.get("tab")] ? LQ.get("tab") : Object.keys(TL.tabs)[0], C = TL.tabs[TB];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -149,7 +156,7 @@ const ICON_GO = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width
 function render(state) {
   if (!KNOWN) {   /* 모르는 도구: 다른 도구로 바꿔 보여 주지 않고 안내 */
     document.getElementById("root").innerHTML = `<div class="lc" style="--c:#8a8f84"><div class="lc-msg warn"><b>이 프로그램 정보를 아직 불러오지 못했어요.</b> 잠시 뒤 새로고침(Ctrl+F5)해 주세요. 계속 이렇게 보이면 <a href="https://luvbong.tistory.com/" target="_top" rel="noopener">Blog J</a>에 댓글로 알려 주세요. <span style="color:#8a8f84">(${esc(TOOL_KEY)})</span></div></div>`;
-    try { parent.postMessage({ blogj: "height", h: document.documentElement.scrollHeight }, "https://luvbong.tistory.com"); } catch (e) {}
+    try { sendH(); } catch (e) {}
     return;
   }
   const ok = BJ_GATE.embedded();
@@ -174,8 +181,11 @@ function render(state) {
   </div>`;
   const go = () => { const p = { tab: TB }; ["cat", "opt"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TL.file) ? "opened" : "blocked"); };
   document.querySelectorAll(".lc-go,.lc-again").forEach(b => b.onclick = go);
-  try { parent.postMessage({ blogj: "height", h: document.documentElement.scrollHeight }, "https://luvbong.tistory.com"); } catch (e) {}
+  try { sendH(); } catch (e) {}
 }
 render("ready");
-window.addEventListener("resize", () => { try { parent.postMessage({ blogj: "height", h: document.documentElement.scrollHeight }, "https://luvbong.tistory.com"); } catch (e) {} });
+/* 높이 알리기: 페이지 전체(scrollHeight)가 아니라 카드 자체의 높이 — iframe보다 작아져도 줄어들 수 있게 */
+if (window.ResizeObserver) new ResizeObserver(() => sendH()).observe(document.getElementById("root"));
+window.addEventListener("load", () => sendH());
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => sendH());
 </script></body></html>

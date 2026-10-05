@@ -65,9 +65,7 @@ const BJ_GATE = (() => {
 
   /* 막힘 화면 */
   async function blocked(key, tab, why) {
-    let post = BJ_BLOG + "/";
-    try { const r = await fetch("versions.json", { cache: "no-cache" }); if (r.ok) { const j = await r.json(), p = j[key] && j[key].posts;
-      const u = p && (p[tab] || p.all); if (u && u.startsWith(BJ_BLOG + "/")) post = u; } } catch (e) {}
+    const post = BJ_BLOG + "/";     /* 막힘 화면은 늘 블로그 첫 화면으로 (글마다 주소를 적을 필요 없음) */
     const root = document.getElementById("root");
     root.innerHTML = `<div class="bj-gate"><div class="bj-gate-in">
       <div class="bj-gate-mark">J<i></i></div>

@@ -1,0 +1,114 @@
+{
+  "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기",
+  "tools": [
+    {
+      "name": "PDF 편집 도구",
+      "category": "디지털",
+      "icon": "doc",
+      "desc": "합치기·나누기·용량·가리기·서명까지, 서류 업로드 없이",
+      "short": "합치기·용량·가리기·서명",
+      "link": "https://luvbong.tistory.com/745",
+      "new": true,
+      "hero": true
+    },
+    {
+      "name": "이미지 도구",
+      "category": "디지털",
+      "icon": "image",
+      "desc": "크기·용량·형식·자르기·증명사진 규격·워터마크",
+      "short": "용량·크기·증명사진",
+      "link": "https://luvbong.tistory.com/733"
+    },
+    {
+      "name": "쓰기 연습장",
+      "category": "학습",
+      "icon": "pencil",
+      "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
+      "short": "따라쓰기·받아쓰기 시험지",
+      "link": "https://luvbong.tistory.com/search/한글 따라쓰기",
+      "hero": true
+    },
+    {
+      "name": "제사 지방 출력",
+      "category": "의례",
+      "icon": "printer",
+      "desc": "관계만 고르면 한자 지방 완성, 제사 날짜 계산기까지",
+      "short": "관계별 한자 지방",
+      "link": "https://luvbong.tistory.com/728"
+    },
+    {
+      "name": "축문 자동 작성",
+      "category": "의례",
+      "icon": "doc",
+      "desc": "17개 관계, 간지 자동 계산, 읽는 법·풀이까지",
+      "short": "간지 자동 · 읽는 법까지",
+      "link": "https://luvbong.tistory.com/search/축문",
+      "hero": true
+    },
+    {
+      "name": "차례상 배치도",
+      "category": "의례",
+      "icon": "table",
+      "desc": "성균관 간소화 기준과 전해 오는 관습 비교",
+      "link": "https://luvbong.tistory.com/search/차례상"
+    },
+    {
+      "name": "가계부 달력",
+      "category": "재무",
+      "icon": "wallet",
+      "desc": "달력에 바로 적는 가계부, 내 PC에만 저장",
+      "link": "https://luvbong.tistory.com/search/가계부 달력"
+    },
+    {
+      "name": "매매일지",
+      "category": "재무",
+      "icon": "chart",
+      "desc": "매수·매도 기록과 수익률, 내 PC에만 저장",
+      "link": "https://luvbong.tistory.com/search/매매일지"
+    }
+  ],
+  "areas": [
+    {
+      "name": "제사·의례",
+      "category": "의례",
+      "icon": "table",
+      "desc": "지방·축문·차례상",
+      "link": "https://luvbong.tistory.com/search/지방"
+    },
+    {
+      "name": "문서·이미지",
+      "category": "디지털",
+      "icon": "doc",
+      "desc": "PDF·사진 정리",
+      "link": "https://luvbong.tistory.com/category/Blog J 무료 도구/문서·이미지 도구"
+    },
+    {
+      "name": "학습 자료",
+      "category": "학습",
+      "icon": "pencil",
+      "desc": "쓰기 연습장",
+      "link": "https://luvbong.tistory.com/search/따라쓰기"
+    },
+    {
+      "name": "돈 관리",
+      "category": "재무",
+      "icon": "wallet",
+      "desc": "가계부·매매일지",
+      "link": "https://luvbong.tistory.com/search/가계부"
+    },
+    {
+      "name": "PC·윈도우",
+      "category": "해결",
+      "icon": "gear",
+      "desc": "문제 해결",
+      "link": "https://luvbong.tistory.com/category/PC·Windows 문제 해결"
+    },
+    {
+      "name": "앱·기기",
+      "category": "해결",
+      "icon": "phone",
+      "desc": "사용법",
+      "link": "https://luvbong.tistory.com/category/앱·기기 사용법"
+    }
+  ]
+}

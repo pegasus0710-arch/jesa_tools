@@ -120,6 +120,16 @@ const BJ_GATE = (() => {
 /* ══════════ Blog J 프로그램 실행 카드 (글 속에 넣는 작은 창) ══════════ */
 const LQ = new URLSearchParams(location.search);
 const TOOLS = {
+  image: { file: "image.html", color: "#1f7f8f", tag: "#e3f3f5", name: "이미지 도구", icon: "image",
+    dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v1.0.zip", file: "image-tool-v1.0.zip", size: "약 62KB" },
+    tabs: {
+    all: { title: "이미지 도구", desc: "크기·용량·형식·자르기·증명사진 규격·워터마크 — 사진은 기기 밖으로 나가지 않아요", chips: ["여러 장 한 번에", "목표 용량 맞추기", "JPG · PNG · WEBP", "증명사진 규격", "워터마크", "zip으로 받기"] },
+    resize: { title: "이미지 크기 줄이기", desc: "긴 변 · 가로 · 비율 · 정확한 가로×세로로 한 번에", chips: ["800 · 1280px 버튼", "비율 그대로", "작은 사진은 키우지 않기"] },
+    compress: { title: "이미지 용량 줄이기", desc: "목표 용량을 고르면 화질을 알아서 맞춰요", chips: ["300KB · 500KB 이하", "여러 장 한 번에", "원본보다 커지지 않게"] },
+    convert: { title: "이미지 형식 바꾸기", desc: "JPG · PNG · WEBP를 서로 변환", chips: ["WEBP → JPG", "PNG → JPG", "여러 장 한 번에"] },
+    crop: { title: "사진 자르기 · 회전", desc: "비율을 고르고 남길 부분을 끌어서 정해요", chips: ["1:1 · 4:3 · 16:9", "회전 · 좌우 반전", "큰 화면 편집"] },
+    idphoto: { title: "증명사진 규격 맞추기", desc: "공무원 원서 137×177·350KB 미만 등 공식 규격을 한 번에", chips: ["공무원 원서", "KPC자격", "여권 규격"] },
+    watermark: { title: "사진 워터마크 넣기", desc: "글자나 로고를 여러 장에 한 번에", chips: ["9곳 위치 · 반복", "색 자동", "로고 이미지"] } } },
   jibang: { file: "jibang.html", color: "#7a4b2a", tag: "#f4ebe3", name: "제사 지방 출력", icon: "printer",
     dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/jesa-jibang-v1.0.zip", file: "jesa-jibang-v1.0.zip", size: "약 270KB" },
     tabs: {
@@ -140,10 +150,10 @@ const TOOLS = {
     pagenum: { title: "PDF 쪽 번호 넣기", desc: "제출 서류에 쪽 번호를 원하는 위치·모양으로", chips: ["위치 6곳", "1 · 1/10 · - 1 -", "시작 번호", "표지 건너뛰기"] },
     watermark: { title: "PDF 워터마크 넣기", desc: "\"사본\" · \"제출용\" 같은 표시를 모든 쪽에", chips: ["한글 가능", "가운데 · 반복", "진하기 · 기울기"] } } } };
 let lastH = 0;
-function sendH() {
+function sendH(force) {
   const r = document.getElementById("root"); if (!r) return;
   const h = Math.ceil(r.getBoundingClientRect().height) + 2;
-  if (!h || Math.abs(h - lastH) < 2) return; lastH = h;
+  if (!h || (!force && Math.abs(h - lastH) < 2)) return; lastH = h;
   try { parent.postMessage({ blogj: "height", h: Math.max(h, 200) }, "https://luvbong.tistory.com"); } catch (e) {}
 }
 const TOOL_KEY = LQ.get("tool") || "pdf", KNOWN = !!TOOLS[TOOL_KEY];
@@ -151,6 +161,7 @@ const TL = TOOLS[TOOL_KEY] || TOOLS.pdf, TB = TL.tabs[LQ.get("tab")] ? LQ.get("t
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/></svg>';
 const ICON_PRINT = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 14h10v7H7z"/></svg>';
+const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></svg>';
 const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const ICON_GO = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function render(state) {
@@ -164,7 +175,7 @@ function render(state) {
   <div class="lc" style="--c:${TL.color};--ct:${TL.tag}">
     <div class="lc-main">
       <div class="lc-info">
-        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
+        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
         <p class="lc-desc">${esc(C.desc)}</p>
         <div class="lc-chips">${C.chips.map(c => `<span>${esc(c)}</span>`).join("")}</div>
       </div>
@@ -186,6 +197,8 @@ function render(state) {
 render("ready");
 /* 높이 알리기: 페이지 전체(scrollHeight)가 아니라 카드 자체의 높이 — iframe보다 작아져도 줄어들 수 있게 */
 if (window.ResizeObserver) new ResizeObserver(() => sendH()).observe(document.getElementById("root"));
-window.addEventListener("load", () => sendH());
+window.addEventListener("load", () => sendH(true));
+/* 블로그 쪽이 아직 준비 전이라 첫 알림을 놓쳤을 때를 대비해 몇 번 더 알림 */
+[400, 1200, 2500, 5000].forEach(t => setTimeout(() => sendH(true), t));
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => sendH());
 </script></body></html>

@@ -13,6 +13,8 @@
   },
   "pdf": {
     "latest": "1.0",
-    "posts": {}
+    "posts": {
+      "all": "https://luvbong.tistory.com/745"
+    }
   }
 }

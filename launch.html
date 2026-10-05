@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>프로그램 실행 | Blog J</title><meta name="robots" content="noindex"><style>*{box-sizing:border-box}html,body{margin:0;background:transparent;}body{padding:2px 12px 26px;}html,body{font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#20241f}
-.lc{border:1px solid #d6d9e0;border-top:5px solid var(--c);border-radius:18px;background:#fff;padding:22px 22px 18px;box-shadow:0 10px 24px rgba(32,38,58,.13);margin:0}
+.lc{border:1px solid #d6d9e0;border-top:5px solid var(--c);border-radius:18px;background:#fff;padding:22px 22px 18px;box-shadow:none;margin:0}
 .lc-main{display:flex;gap:22px;align-items:stretch}.lc-info{flex:1;min-width:0}
 .lc-head{display:flex;gap:14px;align-items:center}.lc-ic{position:relative;width:58px;height:58px;border-radius:16px;background:var(--c);display:grid;place-items:center;flex-shrink:0}.lc-ic svg{width:30px;height:30px}
 .lc-ic i{position:absolute;right:-3px;bottom:-3px;width:14px;height:14px;border-radius:50%;background:#e08a3e;border:3px solid #fff}
@@ -25,8 +25,8 @@
 .lc-dl{display:flex;align-items:center;justify-content:center;gap:9px;border-radius:14px;background:#20263a;color:#fff;font-size:17px;font-weight:800;padding:14px;text-decoration:none;box-shadow:0 8px 18px rgba(32,38,58,.25)}.lc-dl svg{width:20px;height:20px}
 .lc-col .lc-sub{margin-top:7px}
 @media(max-width:560px){.lc-two{flex-direction:column}}
-/* 카드 그림자가 창 아래에서 잘리지 않게 여유 (높이 알림은 #root 기준이라 함께 늘어남) */
-#root{padding:2px 6px 18px}
+/* 글 속 카드: 바깥 그림자 없이 테두리만 (창 끝에서 그림자가 잘려 회색 띠가 생기지 않게) */
+#root{padding:1px}
 </style></head>
 <body><div id="root"></div><script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
    허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창

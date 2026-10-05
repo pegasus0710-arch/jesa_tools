@@ -235,6 +235,99 @@ input,select{padding:10px 12px;border-radius:10px;font-size:14px}
 
 </script>
 <script>
+/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
+   허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
+   그 밖(주소 복사·공유 링크·즐겨찾기·직접 입력·다른 사이트에 퍼가기)은 막고 해당 글로 안내.
+   서버 없는 브라우저 안 확인이라 일반 사용자의 건너뛰기를 막는 수준(의도적 우회는 못 막음). */
+const BJ_BLOG = "https://luvbong.tistory.com";
+const BJ_GATE = (() => {
+  const S = "bjgate:";                       /* 새 창 안에서만 유지되는 확인 표시(sessionStorage) */
+  const tokens = new Map();                  /* 글 속 도구가 발급한 일회용 확인값 */
+  const approved = new Set();                /* 확인을 마친 새 창 — 이 창에만 작업을 넘겨줌 */
+  let provider = null, handoff = null;       /* 넘겨줄 작업을 만드는 함수 / 새 창이 받은 작업 */
+  const inFrame = window.parent !== window;
+  const dev = (location.protocol === "file:" || location.hostname === "localhost") && new URLSearchParams(location.search).get("bjdev") === "1";
+  const fromBlog = () => { try { const a = location.ancestorOrigins; if (a && a.length) return a[a.length - 1] === BJ_BLOG; } catch (e) {}
+    return (document.referrer || "").startsWith(BJ_BLOG + "/"); };
+  let embedOK = false;
+
+  /* 글 속 도구: 새 창이 보내는 확인 요청에 답함 */
+  window.addEventListener("message", e => {
+    const d = e.data; if (!d || d.bjgate !== "verify" || e.origin !== location.origin) return;
+    const t = tokens.get(d.t); tokens.delete(d.t);
+    const ok = embedOK && t && Date.now() - t.at < 30000 && e.source === t.win;
+    if (ok) approved.add(e.source);
+    try { e.source.postMessage({ bjgate: ok ? "ok" : "no", t: d.t }, location.origin); } catch (err) {}
+  });
+  window.addEventListener("message", e => {   /* 새 창이 작업을 달라고 할 때 (확인된 창에만) */
+    const d = e.data; if (!d || d.bjhand !== "req" || e.origin !== location.origin || !approved.has(e.source)) return;
+    approved.delete(e.source);
+    let data = null; try { data = provider ? provider() : null; } catch (err) {}
+    try { e.source.postMessage({ bjhand: "data", data }, location.origin); } catch (err) {}
+  });
+
+  /* 새 창으로 열기 (글 속 도구에서만) */
+  function openWindow(key, params, file) {
+    const t = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const q = new URLSearchParams(params || {}); q.delete("embed"); q.set("bjt", t);
+    const path = file ? location.pathname.replace(/[^/]*$/, file) : location.pathname;
+    const url = path + "?" + q.toString();
+    const w = window.open(url, "bj_" + key + "_" + (q.get("tab") || "all"), "popup,width=1320,height=920");
+    if (!w) return false;
+    tokens.set(t, { at: Date.now(), win: w });
+    return true;
+  }
+
+  /* 막힘 화면 */
+  async function blocked(key, tab, why) {
+    const post = BJ_BLOG + "/";     /* 막힘 화면은 늘 블로그 첫 화면으로 (글마다 주소를 적을 필요 없음) */
+    const root = document.getElementById("root");
+    root.innerHTML = `<div class="bj-gate"><div class="bj-gate-in">
+      <div class="bj-gate-mark">J<i></i></div>
+      <h1>Blog J 블로그 글에서 열어 주세요</h1>
+      <p>이 도구는 <b>Blog J 블로그 글</b>을 통해서만 쓸 수 있어요.<br>글 안의 도구에서 <b>새 창으로 열기</b>를 누르면 광고 없이 도구만 크게 띄워 쓸 수 있습니다.</p>
+      <a class="bj-gate-btn" href="${post}" target="_top" rel="noopener">Blog J 이동하기 ›</a>
+      <p class="bj-gate-s">${why === "frame" ? "다른 사이트에 넣은 도구는 열리지 않아요." : "주소를 직접 입력하거나, 즐겨찾기·공유받은 링크로는 열리지 않아요."} · 설치·가입 없는 무료 도구 모음 <a href="${BJ_BLOG}/" target="_top" rel="noopener">Blog J</a></p>
+    </div></div>`;
+    document.title = "Blog J 블로그 글에서 열어 주세요";
+    return false;
+  }
+
+  /* 시작할 때 확인: true면 도구를 띄움 */
+  async function check(key, tab, opts) {
+    if (dev) { embedOK = inFrame; return true; }
+    /* 예전 글 호환: 블로그 글의 링크를 눌러 들어온 경우 허용 (프로그램 창 → 실행 카드로 바꾸기 전까지만) */
+    if (!inFrame && opts && opts.legacyReferrer && (document.referrer || "").startsWith(BJ_BLOG + "/")) return true;
+    if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }
+    try { const v = sessionStorage.getItem(S + key);
+      if (v) { if (v !== "1" && v !== (tab || "all")) { const q = new URLSearchParams(location.search); q.set("tab", v); location.replace(location.pathname + "?" + q.toString()); return false; } return true; } } catch (e) {}
+    const q = new URLSearchParams(location.search), t = q.get("bjt");
+    if (t && window.opener) {
+      const ok = await new Promise(res => {
+        const on = e => { if (e.origin === location.origin && e.data && e.data.t === t && (e.data.bjgate === "ok" || e.data.bjgate === "no")) { window.removeEventListener("message", on); res(e.data.bjgate === "ok"); } };
+        window.addEventListener("message", on);
+        try { window.opener.postMessage({ bjgate: "verify", t }, location.origin); } catch (e) { res(false); }
+        setTimeout(() => { window.removeEventListener("message", on); res(false); }, 3000);
+      });
+      if (ok) { try { sessionStorage.setItem(S + key, tab || "all"); } catch (e) {}
+        const op = window.opener;
+        handoff = await new Promise(res => {
+          const on = e => { if (e.origin === location.origin && e.source === op && e.data && e.data.bjhand === "data") { window.removeEventListener("message", on); res(e.data.data || null); } };
+          window.addEventListener("message", on);
+          try { op.postMessage({ bjhand: "req" }, location.origin); } catch (e) { res(null); }
+          setTimeout(() => { window.removeEventListener("message", on); res(null); }, 4000);
+        });
+        q.delete("bjt"); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q.toString() : ""));
+        try { window.opener = null; } catch (e) {}
+        return true; }
+    }
+    return blocked(key, tab, "direct");
+  }
+  return { check, openWindow, embedded: () => { embedOK = inFrame && (dev || fromBlog()); return embedOK; }, inFrame: () => inFrame, setProvider: fn => { provider = fn; }, takeHandoff: () => { const h = handoff; handoff = null; return h; } };
+})();
+
+</script>
+<script>
 /* ══════════ 제사 지방 출력 v1.0 ══════════ */
 const APP_VER="1.0";
 const { h, render } = preact; const { useState, useEffect, useRef, useMemo } = preactHooks; const html = htm.bind(h);
@@ -692,9 +785,7 @@ function App(){
       </div>
     </div>
     <div class="print-only"><${Sheet} sc=${96/25.4} /></div>
-    <div class="foot">${EMBED?html`<a href=${location.pathname} target="_blank" rel="noopener">전체 화면으로 열기 ↗</a> · `:null}Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>
+    <div class="foot">${EMBED?html`<a href="#" onClick=${e=>{ e.preventDefault(); const q=new URLSearchParams(location.search); const p={}; ["tab","cat","opt"].forEach(k=>{ if(q.get(k)) p[k]=q.get(k); }); if(!BJ_GATE.openWindow("jibang",p)) alert("새 창이 막혔어요. 주소창 오른쪽의 팝업 차단을 풀어 주세요"); }}>새 창으로 열기 ↗</a> · `:null}Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>
   </div>`;
 }
-render(html`<${App} />`, document.getElementById("root"));
-
-</script></body></html>
+(async () => { const T = new URLSearchParams(location.search).get("tab") || "print"; if (!(await BJ_GATE.check("jibang", T, { legacyReferrer: true }))) return; render(html`<${App} />`, document.getElementById("root")); })(); </script></body></html>

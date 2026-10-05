@@ -19,6 +19,12 @@
 .lc-msg{margin-top:18px;border-radius:12px;padding:13px 15px;font-size:14px;line-height:1.6}.lc-msg.ok{background:#e7f4ec;color:#1f6b45}.lc-msg.warn{background:#fff6ea;color:#7a4a12}
 .lc-msg a{color:#20263a;font-weight:700}.lc-again{margin-left:6px;border:1px solid currentColor;background:#fff;color:inherit;font:inherit;font-weight:700;border-radius:8px;padding:3px 10px;cursor:pointer}
 @media(max-width:560px){.lc{padding:18px 16px 14px}.lc-main{flex-direction:column}.lc-prev{display:none}.lc-head h2{font-size:21px}.lc-go{font-size:18px}}
+
+.lc-two{display:flex;gap:12px;margin-top:18px}.lc-col{flex:1;min-width:0;border:1px solid #e7e5dc;border-radius:14px;padding:14px;background:#faf9f6}
+.lc-h{margin:0 0 8px;font-size:13px;font-weight:800;color:var(--c)}.lc-col .lc-go{margin-top:0;font-size:17px;padding:14px}
+.lc-dl{display:flex;align-items:center;justify-content:center;gap:9px;border-radius:14px;background:#20263a;color:#fff;font-size:17px;font-weight:800;padding:14px;text-decoration:none;box-shadow:0 8px 18px rgba(32,38,58,.25)}.lc-dl svg{width:20px;height:20px}
+.lc-col .lc-sub{margin-top:7px}
+@media(max-width:560px){.lc-two{flex-direction:column}}
 </style></head>
 <body><div id="root"></div><script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
    허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
@@ -79,8 +85,10 @@ const BJ_GATE = (() => {
   }
 
   /* 시작할 때 확인: true면 도구를 띄움 */
-  async function check(key, tab) {
+  async function check(key, tab, opts) {
     if (dev) { embedOK = inFrame; return true; }
+    /* 예전 글 호환: 블로그 글의 링크를 눌러 들어온 경우 허용 (프로그램 창 → 실행 카드로 바꾸기 전까지만) */
+    if (!inFrame && opts && opts.legacyReferrer && (document.referrer || "").startsWith(BJ_BLOG + "/")) return true;
     if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }
     try { const v = sessionStorage.getItem(S + key);
       if (v) { if (v !== "1" && v !== (tab || "all")) { const q = new URLSearchParams(location.search); q.set("tab", v); location.replace(location.pathname + "?" + q.toString()); return false; } return true; } } catch (e) {}
@@ -112,6 +120,12 @@ const BJ_GATE = (() => {
 /* ══════════ Blog J 프로그램 실행 카드 (글 속에 넣는 작은 창) ══════════ */
 const LQ = new URLSearchParams(location.search);
 const TOOLS = {
+  jibang: { file: "jibang.html", color: "#7a4b2a", tag: "#f4ebe3", name: "제사 지방 출력", icon: "printer",
+    dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/jesa-jibang-v1.0.zip", file: "jesa-jibang-v1.0.zip", size: "약 270KB" },
+    tabs: {
+    print: { title: "제사 지방 출력", desc: "관계만 고르면 한자 지방 완성, A4 한 장에 2매 인쇄 — 설치·가입 없이", chips: ["관계 26가지", "한자 · 한글 독음 · 우리말", "본관·성씨 한자 변환", "지방틀 크기 조절"] },
+    calc: { title: "제사 날짜 계산기", desc: "음력 기일을 양력으로, 삼우제·49재·소상·대상까지", chips: ["음력 · 양력 · 윤달", "앞으로 10년 기일", "삼우제 · 49재 · 백일"] },
+    charye: { title: "차례상 배치도", desc: "전통 · 간소 · 영남식 차례상을 설날·추석별로", chips: ["배치도 3종", "설날 · 추석", "전해 오는 용어 풀이"] } } },
   pdf: { file: "pdf.html", color: "#1f7f8f", tag: "#e3f3f5", name: "PDF 편집 도구", tabs: {
     all: { title: "PDF 편집 도구", desc: "합치기·나누기·용량 줄이기·개인정보 가리기·서명까지 — 서류를 올리지 않고 내 기기 안에서", chips: ["합치기", "나누기", "페이지 추출", "삭제·회전", "JPG 변환", "용량 줄이기", "가리기", "서명·도장", "쪽 번호", "워터마크"] },
     merge: { title: "PDF 합치기", desc: "여러 PDF와 사진을 원하는 순서대로 한 파일로 — 서류를 올리지 않고 내 기기 안에서", chips: ["PDF + 사진 섞기", "끌어서 순서 바꾸기", "파일 이름순 정렬", "A4에 맞추기"] },
@@ -125,9 +139,11 @@ const TOOLS = {
     sign: { title: "PDF 서명·도장 넣기", desc: "서명을 직접 그리거나 도장 사진을 올려 원하는 자리에", chips: ["서명 그리기", "도장 사진 흰 배경 투명", "모든 쪽 같은 자리"] },
     pagenum: { title: "PDF 쪽 번호 넣기", desc: "제출 서류에 쪽 번호를 원하는 위치·모양으로", chips: ["위치 6곳", "1 · 1/10 · - 1 -", "시작 번호", "표지 건너뛰기"] },
     watermark: { title: "PDF 워터마크 넣기", desc: "\"사본\" · \"제출용\" 같은 표시를 모든 쪽에", chips: ["한글 가능", "가운데 · 반복", "진하기 · 기울기"] } } } };
-const TL = TOOLS[LQ.get("tool")] || TOOLS.pdf, TB = TL.tabs[LQ.get("tab")] ? LQ.get("tab") : "all", C = TL.tabs[TB];
+const TL = TOOLS[LQ.get("tool")] || TOOLS.pdf, TB = TL.tabs[LQ.get("tab")] ? LQ.get("tab") : Object.keys(TL.tabs)[0], C = TL.tabs[TB];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/></svg>';
+const ICON_PRINT = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 14h10v7H7z"/></svg>';
+const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const ICON_GO = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function render(state) {
   const ok = BJ_GATE.embedded();
@@ -135,20 +151,22 @@ function render(state) {
   <div class="lc" style="--c:${TL.color};--ct:${TL.tag}">
     <div class="lc-main">
       <div class="lc-info">
-        <div class="lc-head"><span class="lc-ic">${ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
+        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
         <p class="lc-desc">${esc(C.desc)}</p>
         <div class="lc-chips">${C.chips.map(c => `<span>${esc(c)}</span>`).join("")}</div>
       </div>
-      <div class="lc-prev" aria-hidden="true"><div class="pv-bar"><b style="color:#e2766a">●</b><b style="color:#e3b44f">●</b><b style="color:#62b46e">●</b><span>${esc(C.title)}</span></div>
+      ${(LQ.get("tool") || "pdf") === "pdf" ? `<div class="lc-prev" aria-hidden="true"><div class="pv-bar"><b style="color:#e2766a">●</b><b style="color:#e3b44f">●</b><b style="color:#62b46e">●</b><span>${esc(C.title)}</span></div>
         <div class="pv-grid">${[["계약서", 0], ["등본", 1], ["신분증", 0], ["", 0]].map(([t, m], i) => `<div class="pv-pg">${t ? `<em>${i + 1}</em><b>${t}</b>` : ""}<p></p><p></p><p class="s"></p>${m ? '<p class="mk"></p>' : ""}</div>`).join("")}</div>
-        <div class="pv-save">PDF로 저장</div></div>
+        <div class="pv-save">PDF로 저장</div></div>` : ""}
     </div>
     ${!ok ? `<div class="lc-msg warn">이 프로그램은 <b>Blog J 블로그 글</b>에서 실행할 수 있어요. <a href="https://luvbong.tistory.com/" target="_top" rel="noopener">Blog J 이동하기 ›</a></div>`
       : state === "opened" ? `<div class="lc-msg ok"><b>새 창에서 프로그램이 열렸어요.</b> 창이 보이지 않으면 화면 아래 작업 표시줄을 확인하세요. <button class="lc-again">다시 열기</button></div>`
       : state === "blocked" ? `<div class="lc-msg warn"><b>새 창이 막혔어요.</b> 주소창 오른쪽의 팝업 차단 아이콘을 눌러 <b>항상 허용</b>을 고른 뒤 다시 눌러 주세요. <button class="lc-again">다시 열기</button></div>`
+      : TL.dl ? `<div class="lc-two"><div class="lc-col"><p class="lc-h">온라인으로 바로 쓰기</p><button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입 없음</p></div>
+          <div class="lc-col"><p class="lc-h">내 PC에 받아서 쓰기</p><a class="lc-dl" href="${TL.dl.href}" target="_blank" rel="noopener">${ICON_DL}<span>무료 다운로드</span></a><p class="lc-sub">${esc(TL.dl.file)} · ${esc(TL.dl.size)} · 인터넷 없이 실행</p></div></div>`
       : `<button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입·업로드 없음 · 광고 없이 도구만 크게</p>`}
   </div>`;
-  const go = () => render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", { tab: TB }, TL.file) ? "opened" : "blocked");
+  const go = () => { const p = { tab: TB }; ["cat", "opt"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TL.file) ? "opened" : "blocked"); };
   document.querySelectorAll(".lc-go,.lc-again").forEach(b => b.onclick = go);
   try { parent.postMessage({ blogj: "height", h: document.documentElement.scrollHeight }, "https://luvbong.tistory.com"); } catch (e) {}
 }

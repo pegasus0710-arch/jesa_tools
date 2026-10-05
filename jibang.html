@@ -506,10 +506,8 @@ function renderText(form,inp,mode){
   const clanH=toHanja(inp.clan)||"○○○", clanK=(inp.clan||"○○○").replace(/\s/g,"");
   const name=inp.name||"○○";
   if(mode==="kor") return form.kor.replace("{K}",clanK).replace("{N}",name);
-  let t=form.hanja.replace("{T}",title||"").replace("{C}",clanH).replace("{N}",name);
-  if(mode==="dok") t=[...t].map(c=>DOK[c]||c).join("");
-  return t;
-}
+  if(mode==="dok"){ /* 한글 독음: 고정 글자만 독음표로, 본관·성씨는 입력한 한글, 직함은 목록의 한글 이름 */ const tk=(TITLES_M.concat(TITLES_F).find(x=>x[0]&&x[0]===title)||[])[1]; const titleK=tk?tk.split(" (")[0]:[...(title||"")].map(c=>DOK[c]||c).join(""); let d=form.hanja.replace("{T}","\u0001").replace("{C}","\u0002").replace("{N}","\u0003"); d=[...d].map(c=>DOK[c]||c).join(""); return d.replace("\u0001",titleK).replace("\u0002",clanK).replace("\u0003",name); }
+  let t=form.hanja.replace("{T}",title||"").replace("{C}",clanH).replace("{N}",name); return t; }
 const LS="jb1:";
 const load=(k,d)=>{ try{ const v=localStorage.getItem(LS+k); return v?JSON.parse(v):d; }catch(e){ return d; } };
 const save=(k,v)=>{ try{ localStorage.setItem(LS+k,JSON.stringify(v)); }catch(e){} };
@@ -788,4 +786,4 @@ function App(){
     <div class="foot">${EMBED?html`<a href="#" onClick=${e=>{ e.preventDefault(); const q=new URLSearchParams(location.search); const p={}; ["tab","cat","opt"].forEach(k=>{ if(q.get(k)) p[k]=q.get(k); }); if(!BJ_GATE.openWindow("jibang",p)) alert("새 창이 막혔어요. 주소창 오른쪽의 팝업 차단을 풀어 주세요"); }}>새 창으로 열기 ↗</a> · `:null}Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>
   </div>`;
 }
-(async () => { const T = new URLSearchParams(location.search).get("tab") || "print"; if (!(await BJ_GATE.check("jibang", T, { legacyReferrer: true }))) return; render(html`<${App} />`, document.getElementById("root")); })(); </script></body></html>
+(async () => { const T = new URLSearchParams(location.search).get("tab") || "print"; if (!(await BJ_GATE.check("jibang", T))) return; render(html`<${App} />`, document.getElementById("root")); })(); </script></body></html>

@@ -17,7 +17,7 @@
       "icon": "image",
       "desc": "크기·용량·형식·자르기·증명사진 규격·워터마크",
       "short": "용량·크기·증명사진",
-      "link": "https://luvbong.tistory.com/733"
+      "link": "https://luvbong.tistory.com/pages/image-tool"
     },
     {
       "name": "쓰기 연습장",
@@ -50,21 +50,21 @@
       "category": "의례",
       "icon": "table",
       "desc": "성균관 간소화 기준과 전해 오는 관습 비교",
-      "link": "https://luvbong.tistory.com/search/차례상"
+      "link": "https://luvbong.tistory.com/731"
     },
     {
       "name": "가계부 달력",
       "category": "재무",
       "icon": "wallet",
       "desc": "달력에 바로 적는 가계부, 내 PC에만 저장",
-      "link": "https://luvbong.tistory.com/search/가계부 달력"
+      "link": "https://luvbong.tistory.com/725"
     },
     {
       "name": "매매일지",
       "category": "재무",
       "icon": "chart",
       "desc": "매수·매도 기록과 수익률, 내 PC에만 저장",
-      "link": "https://luvbong.tistory.com/search/매매일지"
+      "link": "https://luvbong.tistory.com/726"
     }
   ],
   "areas": [

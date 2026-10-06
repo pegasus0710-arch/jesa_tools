@@ -1,5 +1,5 @@
 {
-  "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기",
+  "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기 / count: 카드 하나가 여러 프로그램을 묶을 때 그 수(예: 제사·의례 = 지방 + 축문 → 2). 홈의 \"무료 도구 N가지\"에 더해짐",
   "tools": [
     {
       "name": "PDF 편집 도구",
@@ -29,28 +29,14 @@
       "hero": true
     },
     {
-      "name": "제사 지방 출력",
+      "name": "제사·의례 도구",
       "category": "의례",
       "icon": "printer",
-      "desc": "관계만 고르면 한자 지방 완성, 제사 날짜 계산기까지",
-      "short": "관계별 한자 지방",
-      "link": "https://luvbong.tistory.com/pages/jesa"
-    },
-    {
-      "name": "축문 자동 작성",
-      "category": "의례",
-      "icon": "doc",
-      "desc": "17개 관계, 간지 자동 계산, 읽는 법·풀이까지",
-      "short": "간지 자동 · 읽는 법까지",
-      "link": "https://luvbong.tistory.com/search/축문",
-      "hero": true
-    },
-    {
-      "name": "차례상 배치도",
-      "category": "의례",
-      "icon": "table",
-      "desc": "성균관 간소화 기준과 전해 오는 관습 비교",
-      "link": "https://luvbong.tistory.com/731"
+      "desc": "지방 인쇄 · 제사 날짜 계산 · 차례상 배치도 · 축문까지 한곳에",
+      "short": "지방 · 제사 날짜 · 차례상",
+      "link": "https://luvbong.tistory.com/pages/jesa",
+      "hero": true,
+      "count": 2
     },
     {
       "name": "가계부 달력",
@@ -73,7 +59,7 @@
       "category": "의례",
       "icon": "table",
       "desc": "지방·축문·차례상",
-      "link": "https://luvbong.tistory.com/search/지방"
+      "link": "https://luvbong.tistory.com/pages/jesa"
     },
     {
       "name": "문서·이미지",

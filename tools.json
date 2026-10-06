@@ -1,5 +1,5 @@
 {
-  "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기 / count: 카드 하나가 여러 프로그램을 묶을 때 그 수(예: 제사·의례 = 지방 + 축문 → 2). 홈의 \"무료 도구 N가지\"에 더해짐",
+  "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기 / count: 카드 하나가 여러 프로그램을 묶을 때 그 수(예: 제사·의례 = 지방 + 축문 → 2). 홈의 \"무료 도구 N가지\"에 더해짐 / soon: 곧 나올 도구(아이디어 보드 순서). 홈 도구 카드 마지막 줄의 빈칸만 \"준비 중\" 카드로 채움 — 링크 없음, 도구 수에 안 셈",
   "tools": [
     {
       "name": "PDF 편집 도구",
@@ -95,6 +95,26 @@
       "icon": "phone",
       "desc": "사용법",
       "link": "https://luvbong.tistory.com/category/앱·기기 사용법"
+    }
+  ],
+  "soon": [
+    {
+      "name": "글자수 세기",
+      "category": "디지털",
+      "icon": "list",
+      "desc": "공백 포함·제외, 바이트까지 한 화면에 — 자소서 쓸 때"
+    },
+    {
+      "name": "사진 콜라주",
+      "category": "디지털",
+      "icon": "grid",
+      "desc": "여러 장을 한 장으로, 칸마다 위치·확대 조절"
+    },
+    {
+      "name": "노후 자금 계산기",
+      "category": "재무",
+      "icon": "trend",
+      "desc": "모자란 노후 자금과 매달 모을 금액 계산"
     }
   ]
 }

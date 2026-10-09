@@ -1195,7 +1195,7 @@ function App() {
     ${!EMBED && html`<div class="foot">Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>`}
   </div>`;
 }
-(async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (!(await BJ_GATE.check("image", T, { legacyReferrer: true }))) return; render(html`<${App} />`, document.getElementById("root")); })();
+(async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (!(await BJ_GATE.check("image", T))) return; render(html`<${App} />`, document.getElementById("root")); })();
 
 
 /* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알려 iframe 높이를 자동으로 맞춤 */

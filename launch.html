@@ -132,6 +132,13 @@ const TOOLS = {
     crop: { title: "사진 자르기 · 회전", desc: "비율을 고르고 남길 부분을 끌어서 정해요", chips: ["1:1 · 4:3 · 16:9", "회전 · 좌우 반전", "큰 화면 편집"] },
     idphoto: { title: "증명사진 규격 맞추기", desc: "공무원 원서 137×177·350KB 미만 등 공식 규격을 한 번에", chips: ["공무원 원서", "KPC자격", "여권 규격"] },
     watermark: { title: "사진 워터마크 넣기", desc: "글자나 로고를 여러 장에 한 번에", chips: ["9곳 위치 · 반복", "색 자동", "로고 이미지"] } } },
+  write: { file: "write.html", color: "#6b4fa0", tag: "#efe9f7", name: "쓰기 연습장", icon: "pencil",
+    tabs: {
+    ko: { title: "한글 따라쓰기 연습장", desc: "자음·모음부터 낱말·문장까지, 매번 새로 뽑아 A4로 인쇄", chips: ["자음 · 모음 · 받침", "낱말 · 속담 · 문장", "이름 직접 입력", "인쇄 · PDF 저장"], q: { lang: "ko", cat: "word" } },
+    test: { title: "받아쓰기 시험지 만들기", desc: "번호와 빈칸이 있는 시험지에 정답지까지 한 번에", chips: ["학교 범위 직접 입력", "번호와 빈칸", "마지막 쪽 정답지"], q: { lang: "ko", cat: "word", test: "1" } },
+    en: { title: "알파벳 쓰기 연습장", desc: "영어 4줄 공책에 대문자·소문자 따라쓰기", chips: ["영어 4줄 공책", "대문자 · 소문자", "손으로 쓰는 모양 글꼴"], q: { lang: "en", cat: "upper" } },
+    enword: { title: "영어 단어 쓰기 연습장", desc: "한글 뜻을 보며 영어 단어를 따라 쓰고, 시험지로 확인", chips: ["한글 뜻과 함께", "주제별 낱말", "시험지 모드"], q: { lang: "en", cat: "word" } },
+    proverb: { title: "속담 따라쓰기", desc: "속담으로 바른 글씨와 띄어쓰기를 함께 연습", chips: ["속담 48개", "띄어쓰기 · 문장 부호", "인쇄 · PDF 저장"], q: { lang: "ko", cat: "proverb" } } } },
   jibang: { file: "jibang.html", color: "#7a4b2a", tag: "#f4ebe3", name: "제사 지방 출력", icon: "printer",
     dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/jesa-jibang-v1.0.zip", file: "jesa-jibang-v1.0.zip", size: "약 270KB" },
     tabs: {
@@ -164,6 +171,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/></svg>';
 const ICON_PRINT = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 14h10v7H7z"/></svg>';
 const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></svg>';
+const ICON_PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>';
 const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const ICON_GO = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function render(state) {
@@ -177,7 +185,7 @@ function render(state) {
   <div class="lc" style="--c:${TL.color};--ct:${TL.tag}">
     <div class="lc-main">
       <div class="lc-info">
-        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
+        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : TL.icon === "pencil" ? ICON_PEN : ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
         <p class="lc-desc">${esc(C.desc)}</p>
         <div class="lc-chips">${C.chips.map(c => `<span>${esc(c)}</span>`).join("")}</div>
       </div>
@@ -192,7 +200,7 @@ function render(state) {
           <div class="lc-col"><p class="lc-h">내 PC에 받아서 쓰기</p><a class="lc-dl" href="${TL.dl.href}" target="_blank" rel="noopener">${ICON_DL}<span>무료 다운로드</span></a><p class="lc-sub">${esc(TL.dl.file)} · ${esc(TL.dl.size)} · 인터넷 없이 실행</p></div></div>`
       : `<button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입·업로드 없음 · 광고 없이 도구만 크게</p>`}
   </div>`;
-  const go = () => { const p = { tab: TB }; ["cat", "opt"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TL.file) ? "opened" : "blocked"); };
+  const go = () => { const p = { tab: TB, ...(C.q || {}) }; ["cat", "opt", "lang", "test"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TL.file) ? "opened" : "blocked"); };
   document.querySelectorAll(".lc-go,.lc-again").forEach(b => b.onclick = go);
   try { sendH(); } catch (e) {}
 }

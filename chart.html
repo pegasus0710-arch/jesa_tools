@@ -1029,7 +1029,7 @@ function applyData(p) {
   if (p.series.length > 8) { p.series = p.series.slice(0, 8); p.rows = p.rows.map(r => r.slice(0, 9)); }
   D = p; if (Object.values(SAMPLES).some(x => x.title === S.title)) { S.title = ""; S.sub = ""; S.source = ""; }
   S.colors = {}; S.catColors = {}; S.hide = []; S.noVal = []; S.noBg = []; S.sortBy = "none"; S.lineSer = S.lineSer.filter(i => i < p.series.length); S.barLine = S.barLine.filter(i => i < p.series.length);
-  if (S.type === "combo" && !S.lineSer.length && p.series.length > 1) S.lineSer = [p.series.length - 1];
+  if (S.type === "combo" && p.series.length > 1) S.lineSer = [p.series.length - 1];  /* 새 데이터: 콤보는 마지막 계열을 꺾은선으로 */
   render(); toast(`${p.rows.length}줄 × ${p.series.length}계열을 넣었어요`); }
 
 /* ── 입력 처리 ── */

@@ -1,131 +1,131 @@
 {
-  "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기 / count: 카드 하나가 여러 프로그램을 묶을 때 그 수(예: 제사·의례 = 지방 + 축문 → 2). 홈의 \"무료 도구 N가지\"에 더해짐 / soon: 곧 나올 도구(아이디어 보드 순서). 홈 도구 카드 마지막 줄의 빈칸만 \"준비 중\" 카드로 채움 — 링크 없음, 도구 수에 안 셈",
-  "tools": [
-    {
-      "name": "PDF 편집 도구",
-      "category": "디지털",
-      "icon": "doc",
-      "desc": "합치기·나누기·용량·가리기·서명까지, 서류 업로드 없이",
-      "short": "합치기·용량·가리기·서명",
-      "link": "https://luvbong.tistory.com/745",
-      "new": true,
-      "hero": true,
-      "open": "2026-10-18T22:00:00+09:00"
-    },
-    {
-      "name": "이미지 도구",
-      "category": "디지털",
-      "icon": "image",
-      "desc": "크기·용량·형식·자르기·증명사진 규격·워터마크",
-      "short": "용량·크기·증명사진",
-      "link": "https://luvbong.tistory.com/pages/image-tool"
-    },
-    {
-      "name": "차트 만들기",
-      "category": "디지털",
-      "icon": "chart",
-      "desc": "엑셀 표 붙여넣기로 막대·꺾은선·원·콤보 차트, PPT에 바로",
-      "short": "막대·꺾은선·원·콤보",
-      "link": "https://luvbong.tistory.com/748",
-      "new": true,
-      "open": "2026-10-12T22:00:00+09:00"
-    },
-    {
-      "name": "쓰기 연습장",
-      "category": "학습",
-      "icon": "pencil",
-      "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
-      "short": "따라쓰기·받아쓰기 시험지",
-      "link": "https://luvbong.tistory.com/search/한글 따라쓰기",
-      "hero": true
-    },
-    {
-      "name": "제사·의례 도구",
-      "category": "의례",
-      "icon": "printer",
-      "desc": "지방 인쇄 · 제사 날짜 계산 · 차례상 배치도 · 축문까지 한곳에",
-      "short": "지방 · 제사 날짜 · 차례상",
-      "link": "https://luvbong.tistory.com/pages/jesa",
-      "hero": true,
-      "count": 2
-    },
-    {
-      "name": "가계부 달력",
-      "category": "재무",
-      "icon": "wallet",
-      "desc": "달력에 바로 적는 가계부, 내 PC에만 저장",
-      "link": "https://luvbong.tistory.com/725"
-    },
-    {
-      "name": "매매일지",
-      "category": "재무",
-      "icon": "chart",
-      "desc": "매수·매도 기록과 수익률, 내 PC에만 저장",
-      "link": "https://luvbong.tistory.com/726"
-    }
-  ],
-  "areas": [
-    {
-      "name": "제사·의례",
-      "category": "의례",
-      "icon": "table",
-      "desc": "지방·축문·차례상",
-      "link": "https://luvbong.tistory.com/pages/jesa"
-    },
-    {
-      "name": "문서·이미지",
-      "category": "디지털",
-      "icon": "doc",
-      "desc": "PDF·사진 정리",
-      "link": "https://luvbong.tistory.com/category/Blog J 무료 도구/문서·이미지 도구"
-    },
-    {
-      "name": "학습 자료",
-      "category": "학습",
-      "icon": "pencil",
-      "desc": "쓰기 연습장",
-      "link": "https://luvbong.tistory.com/search/따라쓰기"
-    },
-    {
-      "name": "돈 관리",
-      "category": "재무",
-      "icon": "wallet",
-      "desc": "가계부·매매일지",
-      "link": "https://luvbong.tistory.com/search/가계부"
-    },
-    {
-      "name": "PC·윈도우",
-      "category": "해결",
-      "icon": "gear",
-      "desc": "문제 해결",
-      "link": "https://luvbong.tistory.com/category/PC·Windows 문제 해결"
-    },
-    {
-      "name": "앱·기기",
-      "category": "해결",
-      "icon": "phone",
-      "desc": "사용법",
-      "link": "https://luvbong.tistory.com/category/앱·기기 사용법"
-    }
-  ],
-  "soon": [
-    {
-      "name": "글자수 세기",
-      "category": "디지털",
-      "icon": "list",
-      "desc": "공백 포함·제외, 바이트까지 한 화면에 — 자소서 쓸 때"
-    },
-    {
-      "name": "사진 콜라주",
-      "category": "디지털",
-      "icon": "grid",
-      "desc": "여러 장을 한 장으로, 칸마다 위치·확대 조절"
-    },
-    {
-      "name": "노후 자금 계산기",
-      "category": "재무",
-      "icon": "trend",
-      "desc": "모자란 노후 자금과 매달 모을 금액 계산"
-    }
-  ]
+ "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기 / count: 카드 하나가 여러 프로그램을 묶을 때 그 수(예: 제사·의례 = 지방 + 축문 → 2). 홈의 \"무료 도구 N가지\"에 더해짐 / soon: 곧 나올 도구(아이디어 보드 순서). 홈 도구 카드 마지막 줄의 빈칸만 \"준비 중\" 카드로 채움 — 링크 없음, 도구 수에 안 셈",
+ "tools": [
+  {
+   "name": "PDF 편집 도구",
+   "category": "디지털",
+   "icon": "doc",
+   "desc": "합치기·나누기·용량·가리기·서명까지, 서류 업로드 없이",
+   "short": "합치기·용량·가리기·서명",
+   "link": "https://luvbong.tistory.com/745",
+   "new": true,
+   "hero": true,
+   "open": "2026-10-18T22:00:00+09:00"
+  },
+  {
+   "name": "이미지 도구",
+   "category": "디지털",
+   "icon": "image",
+   "desc": "크기·용량·형식·자르기·증명사진 규격·워터마크",
+   "short": "용량·크기·증명사진",
+   "link": "https://luvbong.tistory.com/pages/image-tool"
+  },
+  {
+   "name": "차트 만들기",
+   "category": "디지털",
+   "icon": "chart",
+   "desc": "엑셀 표 붙여넣기로 막대·꺾은선·원·콤보 차트, PPT에 바로",
+   "short": "막대·꺾은선·원·콤보",
+   "link": "https://luvbong.tistory.com/748",
+   "new": true,
+   "open": "2026-10-12T22:00:00+09:00"
+  },
+  {
+   "name": "쓰기 연습장",
+   "category": "학습",
+   "icon": "pencil",
+   "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
+   "short": "따라쓰기·받아쓰기 시험지",
+   "link": "https://luvbong.tistory.com/pages/write",
+   "hero": true
+  },
+  {
+   "name": "제사·의례 도구",
+   "category": "의례",
+   "icon": "printer",
+   "desc": "지방 인쇄 · 제사 날짜 계산 · 차례상 배치도 · 축문까지 한곳에",
+   "short": "지방 · 제사 날짜 · 차례상",
+   "link": "https://luvbong.tistory.com/pages/jesa",
+   "hero": true,
+   "count": 2
+  },
+  {
+   "name": "가계부 달력",
+   "category": "재무",
+   "icon": "wallet",
+   "desc": "달력에 바로 적는 가계부, 내 PC에만 저장",
+   "link": "https://luvbong.tistory.com/725"
+  },
+  {
+   "name": "매매일지",
+   "category": "재무",
+   "icon": "chart",
+   "desc": "매수·매도 기록과 수익률, 내 PC에만 저장",
+   "link": "https://luvbong.tistory.com/726"
+  }
+ ],
+ "areas": [
+  {
+   "name": "제사·의례",
+   "category": "의례",
+   "icon": "table",
+   "desc": "지방·축문·차례상",
+   "link": "https://luvbong.tistory.com/pages/jesa"
+  },
+  {
+   "name": "문서·이미지",
+   "category": "디지털",
+   "icon": "doc",
+   "desc": "PDF·사진 정리",
+   "link": "https://luvbong.tistory.com/category/Blog J 무료 도구/문서·이미지 도구"
+  },
+  {
+   "name": "학습 자료",
+   "category": "학습",
+   "icon": "pencil",
+   "desc": "쓰기 연습장",
+   "link": "https://luvbong.tistory.com/pages/write"
+  },
+  {
+   "name": "돈 관리",
+   "category": "재무",
+   "icon": "wallet",
+   "desc": "가계부·매매일지",
+   "link": "https://luvbong.tistory.com/search/가계부"
+  },
+  {
+   "name": "PC·윈도우",
+   "category": "해결",
+   "icon": "gear",
+   "desc": "문제 해결",
+   "link": "https://luvbong.tistory.com/category/PC·Windows 문제 해결"
+  },
+  {
+   "name": "앱·기기",
+   "category": "해결",
+   "icon": "phone",
+   "desc": "사용법",
+   "link": "https://luvbong.tistory.com/category/앱·기기 사용법"
+  }
+ ],
+ "soon": [
+  {
+   "name": "글자수 세기",
+   "category": "디지털",
+   "icon": "list",
+   "desc": "공백 포함·제외, 바이트까지 한 화면에 — 자소서 쓸 때"
+  },
+  {
+   "name": "사진 콜라주",
+   "category": "디지털",
+   "icon": "grid",
+   "desc": "여러 장을 한 장으로, 칸마다 위치·확대 조절"
+  },
+  {
+   "name": "노후 자금 계산기",
+   "category": "재무",
+   "icon": "trend",
+   "desc": "모자란 노후 자금과 매달 모을 금액 계산"
+  }
+ ]
 }

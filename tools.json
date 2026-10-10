@@ -9,7 +9,8 @@
       "short": "합치기·용량·가리기·서명",
       "link": "https://luvbong.tistory.com/745",
       "new": true,
-      "hero": true
+      "hero": true,
+      "open": "2026-10-12T22:00:00+09:00"
     },
     {
       "name": "이미지 도구",
@@ -26,15 +27,16 @@
       "desc": "엑셀 표 붙여넣기로 막대·꺾은선·원·콤보 차트, PPT에 바로",
       "short": "막대·꺾은선·원·콤보",
       "link": "https://luvbong.tistory.com/748",
-      "new": true
+      "new": true,
+      "open": "2026-10-13T22:00:00+09:00"
     },
     {
       "name": "쓰기 연습장",
       "category": "학습",
       "icon": "pencil",
-      "desc": "한글·영어 따라쓰기, 받아쓰기 시험지, 속담까지 매번 새로",
+      "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
       "short": "따라쓰기·받아쓰기 시험지",
-      "link": "https://luvbong.tistory.com/pages/write",
+      "link": "https://luvbong.tistory.com/search/한글 따라쓰기",
       "hero": true
     },
     {

@@ -589,6 +589,12 @@ async function decorate(doc, page, E, p, n, total, deco, cache) {
 /* PDF 만들기: raster = 그림으로 다시 그릴지(가리기·보안·용량), q/dpi = 그림 화질 */
 async function buildPdf(pages, files, opt, deco, onStep, comp) {
   const { PDFDocument, degrees } = PDFLib, out = await PDFDocument.create(), src = {}, cache = {}; let i = 0, rasterized = 0;
+  /* 같은 PDF의 쪽은 한 번에 복사해야 글꼴 등 공통 자료가 쪽마다 중복되지 않음(나누기·합치기 용량 부풀림 방지) */
+  const pre = {}, copied = new Map();
+  for (const p of pages) { const f = files[p.fid]; if (!f || f.type !== "pdf" || p.kind === "blank" || f.locked) continue;
+    if (!src[p.fid]) { try { src[p.fid] = await PDFDocument.load(f.bytes); } catch (e) { f.locked = true; continue; } }
+    if ((p.masks && p.masks.length) || comp) continue; (pre[p.fid] = pre[p.fid] || []).push(p); }
+  for (const fid in pre) { const cps = await out.copyPages(src[fid], pre[fid].map(p => p.idx)); pre[fid].forEach((p, k) => copied.set(p, cps[k])); }
   for (const p of pages) {
     const f = files[p.fid]; let page, E;
     const locked = f && f.type === "pdf" && (f.locked || await (async () => { if (src[p.fid] || f.locked) return false; try { src[p.fid] = await PDFDocument.load(f.bytes); return false; } catch (e) { f.locked = true; return true; } })());
@@ -602,7 +608,7 @@ async function buildPdf(pages, files, opt, deco, onStep, comp) {
       const im = await out.embedJpg(new Uint8Array(await blob.arrayBuffer())), W = vw * 72 / dpi, H = vh * 72 / dpi;
       page = out.addPage([W, H]); page.drawImage(im, { x: 0, y: 0, width: W, height: H }); E = 0; rasterized += locked ? 1 : 0;
     } else if (p.kind === "blank") { page = out.addPage(A4); page.setRotation(degrees(p.rot)); E = p.rot; }
-    else if (f.type === "pdf") { const [cp] = await out.copyPages(src[p.fid], [p.idx]); E = (cp.getRotation().angle + p.rot) % 360; cp.setRotation(degrees(E)); page = out.addPage(cp); }
+    else if (f.type === "pdf") { const cp = copied.get(p) || (await out.copyPages(src[p.fid], [p.idx]))[0]; E = (cp.getRotation().angle + p.rot) % 360; cp.setRotation(degrees(E)); page = out.addPage(cp); }
     else {
       const raw = /jpe?g/.test(f.mime) ? await out.embedJpg(new Uint8Array(f.bytes)) : /png/.test(f.mime) ? await out.embedPng(new Uint8Array(f.bytes))
         : await out.embedPng(new Uint8Array(await (await toBlob(await (async () => { const img = await loadImg(f.url), c = document.createElement("canvas"); c.width = img.naturalWidth; c.height = img.naturalHeight; c.getContext("2d").drawImage(img, 0, 0); return c; })(), "image/png")).arrayBuffer()));

@@ -20,12 +20,21 @@
       "link": "https://luvbong.tistory.com/pages/image-tool"
     },
     {
+      "name": "차트 만들기",
+      "category": "디지털",
+      "icon": "chart",
+      "desc": "엑셀 표 붙여넣기로 막대·꺾은선·원·콤보 차트, PPT에 바로",
+      "short": "막대·꺾은선·원·콤보",
+      "link": "https://luvbong.tistory.com/748",
+      "new": true
+    },
+    {
       "name": "쓰기 연습장",
       "category": "학습",
       "icon": "pencil",
-      "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
+      "desc": "한글·영어 따라쓰기, 받아쓰기 시험지, 속담까지 매번 새로",
       "short": "따라쓰기·받아쓰기 시험지",
-      "link": "https://luvbong.tistory.com/search/한글 따라쓰기",
+      "link": "https://luvbong.tistory.com/pages/write",
       "hero": true
     },
     {

@@ -1166,6 +1166,6 @@ function start() {
   S.step = S.kind ? 1 : 0;
   drawRuler(); drawPanel(); preview();
 }
-(async () => { if (!(await BJ_GATE.check("label", TAB || "all"))) return; start(); })();
+(async () => { start(); })();
 </script>
 </body></html>

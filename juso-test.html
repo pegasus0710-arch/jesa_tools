@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>주소 우편번호 시험 | Blog J</title>
+<style>
+:root{--paper:#f7f6f2;--ink:#20241f;--navy:#20263a;--amber:#e08a3e;--ok:#2e8a58;--bad:#b84a3c;--warn:#d98a1a;--line:#e3e0d6;--sub:#6b6f68}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 "Pretendard","SUIT","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+#root{max-width:1000px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;margin:0 0 4px;font-weight:800}
+.sub{color:var(--sub);font-size:13.5px;margin:0 0 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:10px;padding:10px;font:14px/1.6 inherit;font-family:inherit;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+button{border:0;border-radius:10px;padding:10px 16px;font:600 14.5px inherit;font-family:inherit;cursor:pointer}
+.go{background:var(--amber);color:#fff}
+.sec{background:#eef0f5;color:var(--navy)}
+button:disabled{opacity:.5;cursor:default}
+.bar{height:8px;background:#eceae3;border-radius:999px;overflow:hidden;flex:1;min-width:120px}
+.bar i{display:block;height:100%;width:0;background:var(--navy);transition:width .2s}
+.sum{font-size:13.5px;color:var(--sub)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{background:#f3f2ed;font-weight:700;white-space:nowrap}
+.zip{font-weight:800;font-size:15px;color:var(--navy)}
+.st{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap}
+.s1{background:var(--ok)}.sN{background:var(--warn)}.s0{background:var(--bad)}.sw{background:#9aa0a6}
+.cand{margin:4px 0 0;padding-left:16px;color:var(--sub);font-size:12.5px}
+.cand li{cursor:pointer}.cand li:hover{color:var(--navy);text-decoration:underline}
+.q{color:var(--sub);font-size:12.5px}
+pre{background:#20263a;color:#e8e8e8;border-radius:10px;padding:10px;font-size:12.5px;max-height:420px;overflow:auto;white-space:pre-wrap;margin:0}
+.note{border-left:4px solid var(--navy);background:#fff;border-radius:0 10px 10px 0;padding:10px 12px;font-size:13.5px}
+</style>
+</head>
+<body>
+<div id="root">
+  <h1>주소 → 우편번호 자동 채우기 시험</h1>
+  <p class="sub">라벨 출력기용 시험 페이지 · 행정안전부 도로명주소 검색 API · 등록 주소(pegasus0710-arch.github.io)에서만 동작</p>
+
+  <div class="card">
+    <b>주소 붙여넣기</b> <span class="q">— 한 줄에 하나. 엑셀에서 여러 열을 복사해도 됩니다(주소가 든 칸을 자동으로 찾음).</span>
+    <textarea id="inp" placeholder="서울특별시 중구 세종대로 110&#10;서울 강남구 테헤란로 152 101동 1203호"></textarea>
+    <div class="row">
+      <button class="go" id="run">우편번호 채우기</button>
+      <button class="sec" id="sample">예시 주소 넣기</button>
+      <div class="bar"><i id="prog"></i></div>
+      <span class="sum" id="sum">대기 중</span>
+    </div>
+  </div>
+
+  <div class="card tw">
+    <table>
+      <thead><tr><th>#</th><th>붙여넣은 주소</th><th>조회한 주소 / 상세주소</th><th>우편번호</th><th>도로명주소 (결과)</th><th>상태</th></tr></thead>
+      <tbody id="tb"><tr><td colspan="6" class="q">아직 결과가 없습니다.</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <b>시험 기록</b> <span class="q">— 이 부분을 캡처해서 보내 주세요.</span>
+    <pre id="log"></pre>
+  </div>
+
+  <div class="note">이 페이지는 시험용입니다. "우편번호 채우기"를 누르면 붙여넣은 주소(상세주소 제외)가 행정안전부 주소 검색 서비스로 전송됩니다. 저장은 하지 않습니다.</div>
+</div>
+
+<script>
+(function(){
+  var KEY = "U01TX0FVVEgyMDI2MTAxNTA4MTQ0NzEyMDcwNzU=";
+  var API = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
+  var API_JSONP = "https://business.juso.go.kr/addrlink/addrLinkApiJsonp.do";
+  var GAP = 150; // 요청 사이 간격(ms)
+  var mode = null; // "fetch" | "jsonp" | "none"
+
+  var $ = function(id){ return document.getElementById(id); };
+  function log(s){ var p=$("log"); p.textContent += s + "\n"; p.scrollTop = p.scrollHeight; }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  var SAMPLE = [
+    "서울특별시 중구 세종대로 110",
+    "서울 강남구 테헤란로 152 101동 1203호",
+    "부산광역시 연제구 중앙대로 1001",
+    "대전 서구 둔산로 100 (둔산동)",
+    "경기도 성남시 분당구 판교역로 166, 3층",
+    "서울 종로구 세종로 1-68",
+    "역삼동",
+    "김철수\t서울특별시 중구 세종대로 110\t010-0000-0000"
+  ];
+  $("sample").onclick = function(){ $("inp").value = SAMPLE.join("\n"); };
+
+  // 한 줄에서 주소 칸 고르기 (탭 구분일 때)
+  function pickCell(line){
+    if(line.indexOf("\t") < 0) return line.trim();
+    var cells = line.split("\t").map(function(c){return c.trim();});
+    var best = "", score = -1;
+    cells.forEach(function(c){
+      var s = 0;
+      if(/(로|길)\s*\d/.test(c)) s += 3;
+      if(/(동|리|가)\s*(산\s*)?\d/.test(c)) s += 2;
+      if(/(시|도|군|구)\s/.test(c)) s += 2;
+      if(/^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(c)) s -= 5;
+      s += Math.min(c.length, 40) / 40;
+      if(s > score){ score = s; best = c; }
+    });
+    return best;
+  }
+
+  // 조회할 주소 / 상세주소 나누기
+  function splitAddr(a){
+    var t = a.replace(/\s+/g," ").trim();
+    var paren = "";
+    t = t.replace(/\s*\(([^)]*)\)/g, function(m, p){ paren = paren ? paren+","+p : p; return ""; }).trim();
+    // 도로명 + 건물번호
+    var m = t.match(/^(.*?(?:로|길)\s*\d+(?:-\d+)?)(?=$|[\s,])(.*)$/);
+    // 지번 주소
+    if(!m) m = t.match(/^(.*?(?:동|리|가)\s*(?:산\s*)?\d+(?:-\d+)?)(?=$|[\s,])(.*)$/);
+    if(!m) return { q: t, d: paren };
+    var d = m[2].replace(/^[\s,]+/,"").trim();
+    return { q: m[1].trim(), d: [d, paren ? "("+paren+")" : ""].filter(Boolean).join(" ") };
+  }
+
+  function url(base, kw, extra){
+    return base + "?confmKey=" + encodeURIComponent(KEY) + "&currentPage=1&countPerPage=10&keyword=" +
+      encodeURIComponent(kw) + "&resultType=json" + (extra||"");
+  }
+
+  function viaFetch(kw){
+    return fetch(url(API, kw), { method:"GET" }).then(function(r){
+      if(!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+  }
+
+  var jn = 0;
+  function viaJsonp(kw){
+    return new Promise(function(res, rej){
+      var name = "__bjJuso" + (++jn);
+      var s = document.createElement("script");
+      var done = false;
+      var timer = setTimeout(function(){ cleanup(); rej(new Error("JSONP 시간 초과")); }, 8000);
+      function cleanup(){ done = true; clearTimeout(timer); try{ delete window[name]; }catch(e){ window[name]=undefined; } s.remove(); }
+      window[name] = function(data){ if(done) return; cleanup(); res(typeof data === "string" ? JSON.parse(data) : data); };
+      s.onerror = function(){ if(done) return; cleanup(); rej(new Error("JSONP 불러오기 실패")); };
+      s.src = url(API_JSONP, kw, "&callback=" + name);
+      document.head.appendChild(s);
+    });
+  }
+
+  function normalize(data){
+    // JSON: {results:{common:{...},juso:[...]}}  JSONP는 returnXml 등 다른 모양일 수 있어 그대로 기록
+    if(data && data.results) return data.results;
+    if(data && data.returnXml) return { common:{ errorCode:"XML", errorMessage:"XML로 응답 — 기록 확인" }, juso:[], raw:data.returnXml };
+    return { common:{ errorCode:"?", errorMessage:"알 수 없는 응답" }, juso:[], raw:data };
+  }
+
+  function query(kw){
+    if(mode === "jsonp") return viaJsonp(kw).then(normalize);
+    return viaFetch(kw).then(function(d){ if(!mode){ mode="fetch"; log("호출 방식: fetch (CORS 허용됨)"); } return normalize(d); })
+      .catch(function(e){
+        if(mode === "fetch") throw e;
+        log("fetch 실패: " + e.message + " → JSONP로 다시 시도");
+        return viaJsonp(kw).then(function(d){ mode="jsonp"; log("호출 방식: JSONP"); log("JSONP 응답 모양: " + JSON.stringify(d).slice(0,300)); return normalize(d); });
+      });
+  }
+
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  function rowHtml(i, src, sp, r){
+    var zip = "", road = "", st = '<span class="st sw">대기</span>', cand = "";
+    if(r){
+      var c = r.common || {}, list = r.juso || [];
+      if(c.errorCode && c.errorCode !== "0"){
+        st = '<span class="st s0">오류 ' + esc(c.errorCode) + '</span><div class="q">' + esc(c.errorMessage) + '</div>';
+      } else if(list.length === 1){
+        zip = list[0].zipNo; road = list[0].roadAddr;
+        st = '<span class="st s1">자동 입력</span>';
+      } else if(list.length > 1){
+        st = '<span class="st sN">' + esc(c.totalCount || list.length) + '건 — 고르기</span>';
+        cand = '<ol class="cand">' + list.slice(0,5).map(function(j, k){
+          return '<li data-i="'+i+'" data-k="'+k+'">' + esc(j.zipNo) + " " + esc(j.roadAddr) + (j.bdNm ? " (" + esc(j.bdNm) + ")" : "") + '</li>';
+        }).join("") + '</ol>';
+      } else {
+        st = '<span class="st s0">결과 없음</span>';
+      }
+      if(r.err) st = '<span class="st s0">호출 실패</span><div class="q">' + esc(r.err) + '</div>';
+    }
+    return '<tr id="r'+i+'"><td>'+(i+1)+'</td><td>'+esc(src)+'</td><td>'+esc(sp.q)+(sp.d?'<div class="q">상세: '+esc(sp.d)+'</div>':'')+'</td>' +
+      '<td class="zip">'+esc(zip)+'</td><td>'+esc(road)+cand+'</td><td>'+st+'</td></tr>';
+  }
+
+  var results = [];
+  $("tb").addEventListener("click", function(e){
+    var li = e.target.closest("li[data-i]"); if(!li) return;
+    var i = +li.dataset.i, k = +li.dataset.k, row = results[i];
+    var j = row.r.juso[k];
+    row.r = { common:{errorCode:"0"}, juso:[j] };
+    $("r"+i).outerHTML = rowHtml(i, row.src, row.sp, row.r);
+    var cell = $("r"+i).lastChild; cell.innerHTML = '<span class="st s1">직접 고름</span>';
+  });
+
+  $("run").onclick = async function(){
+    var lines = $("inp").value.split(/\r?\n/).map(function(s){return s;}).filter(function(s){return s.trim();});
+    if(!lines.length){ alert("주소를 붙여넣어 주세요."); return; }
+    $("run").disabled = true; $("log").textContent = "";
+    log("시작: " + new Date().toLocaleString("ko-KR") + " · " + lines.length + "건 · 페이지 주소 " + location.origin);
+    results = lines.map(function(l){ var src = pickCell(l); return { src: src, sp: splitAddr(src), r: null }; });
+    $("tb").innerHTML = results.map(function(x,i){ return rowHtml(i, x.src, x.sp, null); }).join("");
+    var ok=0, many=0, none=0, t0 = performance.now();
+    for(var i=0;i<results.length;i++){
+      var x = results[i];
+      try{
+        x.r = await query(x.sp.q);
+        var c = x.r.common||{}, n = (x.r.juso||[]).length;
+        if(c.errorCode && c.errorCode!=="0"){ none++; log((i+1)+". 오류 "+c.errorCode+" "+c.errorMessage+" ← "+x.sp.q); }
+        else if(n===1){ ok++; log((i+1)+". "+x.r.juso[0].zipNo+" ← "+x.sp.q); }
+        else if(n>1){ many++; log((i+1)+". "+(c.totalCount||n)+"건 ← "+x.sp.q); }
+        else { none++; log((i+1)+". 0건 ← "+x.sp.q); }
+      }catch(e){
+        x.r = { common:{}, juso:[], err:e.message }; none++;
+        log((i+1)+". 호출 실패: "+e.message);
+      }
+      $("r"+i).outerHTML = rowHtml(i, x.src, x.sp, x.r);
+      $("prog").style.width = ((i+1)/results.length*100)+"%";
+      $("sum").textContent = (i+1)+" / "+results.length;
+      if(i < results.length-1) await sleep(GAP);
+    }
+    var sec = ((performance.now()-t0)/1000).toFixed(1);
+    $("sum").textContent = "자동 " + ok + " · 고르기 " + many + " · 실패 " + none + " · " + sec + "초";
+    log("끝: 자동 "+ok+" · 고르기 "+many+" · 실패 "+none+" · "+sec+"초 · 방식 "+(mode||"없음"));
+    $("run").disabled = false;
+  };
+})();
+</script>
+</body>
+</html>

@@ -125,6 +125,16 @@ const TOOLS = {
   image: { file: "image.html", color: "#1f7f8f", tag: "#e3f3f5", name: "이미지 도구", icon: "image",
     dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v1.0.zip", file: "image-tool-v1.0.zip", size: "약 62KB" },
     tabs: {
+    home: { title: "이미지 도구", desc: "블로그 사진 한 번에 · 증명사진 규격 · 크기·용량 줄이기 — 사진은 기기 밖으로 나가지 않아요", chips: ["블로그 사진 한 번에", "증명사진 규격", "크기 · 용량 줄이기", "자르기 · 회전", "워터마크"], file: "image-v2.0.html",
+      dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v2.0.zip", file: "image-tool-v2.0.zip", size: "약 125KB" } },
+    blog: { title: "블로그 사진 한 번에", desc: "여러 장을 자르고 · 수평 맞추고 · 크기 · 필터 · 테두리까지 한 번에", chips: ["여러 장 동시에", "수평 맞추기", "풍경 · 계절 · 음식 · 인물 필터", "아웃포커스 · 비네팅", "폴라로이드 테두리"], file: "image-v2.0.html",
+      dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v2.0.zip", file: "image-tool-v2.0.zip", size: "약 125KB" } },
+    filter: { title: "사진 필터 · 보정", desc: "풍경 · 계절 · 음식 · 인물 필터에 아웃포커스 · 비네팅까지, 여러 장 한 번에", chips: ["필터 19가지", "자동 보정", "아웃포커스 · 미니어처", "비네팅"], file: "image-v2.0.html",
+      dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v2.0.zip", file: "image-tool-v2.0.zip", size: "약 125KB" } },
+    frame: { title: "사진 테두리 넣기", desc: "흰 여백 · 폴라로이드 · 둥근 모서리 · 그림자 테두리를 여러 장에 한 번에", chips: ["테두리 6가지", "폴라로이드 글씨", "색 고르기", "블로그 크기에 맞춤"], file: "image-v2.0.html",
+      dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v2.0.zip", file: "image-tool-v2.0.zip", size: "약 125KB" } },
+    collage: { title: "사진 콜라주 만들기", desc: "가로·세로 칸 수를 마음대로, 원본 화질 그대로 또는 블로그 크기로 한 장에", chips: ["가로 × 세로 칸 수 자유", "세로 · 가로 이어 붙이기", "원본 크기 유지", "테두리 굵기 · 둥근 모서리"], file: "image-v2.0.html",
+      dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v2.0.zip", file: "image-tool-v2.0.zip", size: "약 125KB" } },
     all: { title: "이미지 도구", desc: "크기·용량·형식·자르기·증명사진 규격·워터마크 — 사진은 기기 밖으로 나가지 않아요", chips: ["여러 장 한 번에", "목표 용량 맞추기", "JPG · PNG · WEBP", "증명사진 규격", "워터마크", "zip으로 받기"] },
     resize: { title: "이미지 크기 줄이기", desc: "긴 변 · 가로 · 비율 · 정확한 가로×세로로 한 번에", chips: ["800 · 1280px 버튼", "비율 그대로", "작은 사진은 키우지 않기"] },
     compress: { title: "이미지 용량 줄이기", desc: "목표 용량을 고르면 화질을 알아서 맞춰요", chips: ["300KB · 500KB 이하", "여러 장 한 번에", "원본보다 커지지 않게"] },
@@ -150,6 +160,12 @@ const TOOLS = {
     line: { title: "꺾은선 그래프 만들기", desc: "월별 추이·전년 비교를 여러 선으로", chips: ["여러 계열", "부드러운 곡선", "표식 모양 · 크기 · 색"] },
     pie: { title: "원그래프 · 도넛 차트 만들기", desc: "비중·점유율을 비율(%) 자동 계산으로", chips: ["비율 자동 계산", "도넛 가운데 합계", "값 · 비율 범례"] },
     combo: { title: "콤보 차트 만들기", desc: "매출은 막대, 성장률은 선 — 보조 축까지", chips: ["막대 + 꺾은선", "보조 축", "축마다 단위"] } } },
+  label: { file: "label.html", color: "#1f7f8f", tag: "#e3f3f5", name: "라벨 출력기", icon: "tag",
+    dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/label-printer-v1.0.zip", file: "label-printer-v1.0.zip", size: "약 46KB" },
+    tabs: {
+    all: { title: "라벨 출력기", desc: "주소 라벨 · 이름 스티커 · 정리 라벨을 A4 라벨지에 — 설치 · 가입 없이 브라우저에서", chips: ["엑셀 붙여넣기 · 파일", "우편번호 자동 찾기", "폼텍 · 애니라벨 규격", "시험 인쇄 · 위치 보정"] },
+    addr: { title: "주소 라벨 인쇄", desc: "엑셀 주소록을 붙여넣으면 우편번호까지 채워서 라벨로 — 못 찾은 주소만 골라 고쳐요", chips: ["우편번호 자동 찾기", "못 찾은 주소 맨 위로", "상세주소 그대로", "정리된 주소록 엑셀로"] },
+    gen: { title: "이름 스티커 · 라벨 만들기", desc: "이름 스티커 · 수납 정리 · 물품 표시 라벨을 칸 수에 맞춰 한 장 가득", chips: ["한 장 가득 반복", "1~3줄", "글자 크기 자동 맞춤", "남은 칸부터 인쇄"] } } },
   jibang: { file: "jibang.html", color: "#7a4b2a", tag: "#f4ebe3", name: "제사 지방 출력", icon: "printer",
     dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/jesa-jibang-v1.0.zip", file: "jesa-jibang-v1.0.zip", size: "약 270KB" },
     tabs: {
@@ -178,12 +194,15 @@ function sendH(force) {
 }
 const TOOL_KEY = LQ.get("tool") || "pdf", KNOWN = !!TOOLS[TOOL_KEY];
 const TL = TOOLS[TOOL_KEY] || TOOLS.pdf, TB = TL.tabs[LQ.get("tab")] ? LQ.get("tab") : Object.keys(TL.tabs)[0], C = TL.tabs[TB];
+/* 탭마다 다른 파일·다운로드를 쓸 수 있음 (새 버전 화면: image home·blog → image-v2.0.html) */
+const TFILE = C.file || TL.file, TDL = C.dl !== undefined ? C.dl : TL.dl;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/></svg>';
 const ICON_PRINT = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 14h10v7H7z"/></svg>';
 const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></svg>';
 const ICON_PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>';
 const ICON_CHART = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-6M10 20v-9M15 20v-5M20 20V9"/><path d="M4 9l5-3 5 2 6-5"/></svg>';
+const ICON_TAG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>';
 const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const ICON_GO = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function render(state) {
@@ -197,7 +216,7 @@ function render(state) {
   <div class="lc" style="--c:${TL.color};--ct:${TL.tag}">
     <div class="lc-main">
       <div class="lc-info">
-        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : TL.icon === "pencil" ? ICON_PEN : TL.icon === "chart" ? ICON_CHART : ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
+        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : TL.icon === "pencil" ? ICON_PEN : TL.icon === "chart" ? ICON_CHART : TL.icon === "tag" ? ICON_TAG : ICON_DOC}<i></i></span><div><span class="lc-tag">Blog J 무료 프로그램</span><h2>${esc(C.title)}</h2></div></div>
         <p class="lc-desc">${esc(C.desc)}</p>
         <div class="lc-chips">${C.chips.map(c => `<span>${esc(c)}</span>`).join("")}</div>
       </div>
@@ -208,11 +227,11 @@ function render(state) {
     ${!ok ? `<div class="lc-msg warn">이 프로그램은 <b>Blog J 블로그 글</b>에서 실행할 수 있어요. <a href="https://luvbong.tistory.com/" target="_top" rel="noopener">Blog J 이동하기 ›</a></div>`
       : state === "opened" ? `<div class="lc-msg ok"><b>새 창에서 프로그램이 열렸어요.</b> 창이 보이지 않으면 화면 아래 작업 표시줄을 확인하세요. <button class="lc-again">다시 열기</button></div>`
       : state === "blocked" ? `<div class="lc-msg warn"><b>새 창이 막혔어요.</b> 주소창 오른쪽의 팝업 차단 아이콘을 눌러 <b>항상 허용</b>을 고른 뒤 다시 눌러 주세요. <button class="lc-again">다시 열기</button></div>`
-      : TL.dl ? `<div class="lc-two"><div class="lc-col"><p class="lc-h">온라인으로 바로 쓰기</p><button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입 없음</p></div>
-          <div class="lc-col"><p class="lc-h">내 PC에 받아서 쓰기</p><a class="lc-dl" href="${TL.dl.href}" target="_blank" rel="noopener">${ICON_DL}<span>무료 다운로드</span></a><p class="lc-sub">${esc(TL.dl.file)} · ${esc(TL.dl.size)} · 인터넷 없이 실행</p></div></div>`
+      : TDL ? `<div class="lc-two"><div class="lc-col"><p class="lc-h">온라인으로 바로 쓰기</p><button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입 없음</p></div>
+          <div class="lc-col"><p class="lc-h">내 PC에 받아서 쓰기</p><a class="lc-dl" href="${TDL.href}" target="_blank" rel="noopener">${ICON_DL}<span>무료 다운로드</span></a><p class="lc-sub">${esc(TDL.file)} · ${esc(TDL.size)} · 인터넷 없이 실행</p></div></div>`
       : `<button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입·업로드 없음 · 광고 없이 도구만 크게</p>`}
   </div>`;
-  const go = () => { const p = { tab: TB, ...(C.q || {}) }; ["cat", "opt", "lang", "test"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TL.file) ? "opened" : "blocked"); };
+  const go = () => { const p = { tab: TB, ...(C.q || {}) }; ["cat", "opt", "lang", "test"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TFILE) ? "opened" : "blocked"); };
   document.querySelectorAll(".lc-go,.lc-again").forEach(b => b.onclick = go);
   try { sendH(); } catch (e) {}
 }

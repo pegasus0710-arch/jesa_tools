@@ -357,7 +357,8 @@ select.inp.auto{border-color:var(--cat);background:var(--catbg);color:#165e6a;fo
 .imgrow{display:flex;gap:10px;align-items:flex-start}
 .imgrow img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex-shrink:0}
 
-.tst{position:absolute;inset:0;border:.25mm solid #222;border-radius:1mm;display:grid;place-items:center;font:600 9pt/1 sans-serif;color:#555}
+.tst{position:absolute;inset:0;border:.25mm solid #222;border-radius:1mm;font:600 9pt/1 sans-serif;color:#555}
+.tst b{position:absolute;left:1.5mm;top:1.5mm;font:inherit}
 .tst::before,.tst::after{content:"";position:absolute;left:50%;top:50%;background:#999}
 .tst::before{width:6mm;height:.2mm;margin-left:-3mm}.tst::after{height:6mm;width:.2mm;margin-top:-3mm}
 
@@ -1499,7 +1500,7 @@ function pPrint(P) {
   $$("[data-fm]").forEach(b => b.onclick = () => { S.failMode = b.dataset.fm; drawPanel(); preview(); });
   if ($("[data-go4]")) $("[data-go4]").onclick = () => { S.filter = "need"; go(3); };
   $$("[data-st]").forEach(b => b.onclick = () => { S.start = +b.dataset.st; drawPanel(); S.page = 0; preview(); });
-  const oo = () => { S.off = { x: parseFloat($("#offX").value) || 0, y: parseFloat($("#offY").value) || 0 }; lsSet("off", S.off); };
+  const oo = () => { S.off = { x: parseFloat($("#offX").value) || 0, y: parseFloat($("#offY").value) || 0 }; lsSet("off", S.off); const sm = $("details.og summary small"); if (sm) sm.textContent = `가로 ${S.off.x}mm · 세로 ${S.off.y}mm`; };
   $("#offX").addEventListener("input", oo); $("#offY").addEventListener("input", oo);
   $("#doPrint").onclick = () => doPrint(false);
   $("#doTest").onclick = () => doPrint(true);
@@ -1556,7 +1557,7 @@ function buildPage(items, pageIdx, test) {
     const r = Math.floor(i / s.cols), c = i % s.cols;
     const x = s.left + c * (s.w + s.gx) + S.off.x, y = s.top + r * (s.h + s.gy) + S.off.y;
     const st = `left:${x}mm;top:${y}mm;width:${s.w}mm;height:${s.h}mm`;
-    if (test) { h += `<div class="lbl" style="${st}"><div class="tst">${i + 1}</div></div>`; continue; }
+    if (test) { h += `<div class="lbl" style="${st}"><div class="tst"><b>${i + 1}</b></div></div>`; continue; }
     const k = first + i, it = k >= 0 ? items[k] : null;
     if (k < 0) { h += `<div class="lbl used" style="${st}"></div>`; continue; }
     if (!it) { h += `<div class="lbl" style="${st}"></div>`; continue; }

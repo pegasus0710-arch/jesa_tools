@@ -33,11 +33,12 @@
   {
    "name": "라벨 출력기",
    "category": "디지털",
-   "icon": "printer",
+   "icon": "tag",
    "desc": "엑셀 주소록 붙여넣기로 주소 라벨·이름 스티커, 우편번호 자동 검색",
    "short": "주소 라벨·우편번호 자동",
    "link": "https://luvbong.tistory.com/769",
-   "new": true
+   "new": true,
+   "hero": true
   },
   {
    "name": "쓰기 연습장",
@@ -45,8 +46,7 @@
    "icon": "pencil",
    "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
    "short": "따라쓰기·받아쓰기 시험지",
-   "link": "https://luvbong.tistory.com/pages/write",
-   "hero": true
+   "link": "https://luvbong.tistory.com/pages/write"
   },
   {
    "name": "제사·의례 도구",

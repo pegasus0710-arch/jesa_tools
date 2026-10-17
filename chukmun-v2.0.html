@@ -357,6 +357,14 @@ details.adv[open]{box-shadow:var(--in);background:var(--in-bg)}
   .tray .sheets{padding:0!important}
   .tray .cpage{zoom:1!important;box-shadow:none!important;border-radius:0!important}
 }
+
+/* 진행 표시 C안(10-17): 주황 점에 주황 선이 붙어 처음부터 지금 단계까지 이어짐 */
+.ruler li{position:relative}
+.ruler li:has(>button.done)::after,.ruler li:has(>button.cur)::after{content:"";position:absolute;left:0;top:9px;height:3px;border-radius:0;background:var(--amber);pointer-events:none;z-index:1}
+.ruler li:has(>button.done)::after{right:-10px}
+.ruler li:has(>button.cur)::after{width:17px}
+.ruler .bead{z-index:2}
+@media (max-width:640px){.ruler li:has(>button.done)::after{right:-4px}.ruler li:has(>button.cur)::after{width:50%}}
 </style></head><body><div id="root"></div>
 <script>
 /* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════

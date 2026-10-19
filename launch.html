@@ -61,12 +61,12 @@ const BJ_GATE = (() => {
   });
 
   /* 새 창으로 열기 (글 속 도구에서만) */
-  function openWindow(key, params, file) {
+  function openWindow(key, params, file, feat) {
     const t = Math.random().toString(36).slice(2) + Date.now().toString(36);
     const q = new URLSearchParams(params || {}); q.delete("embed"); q.set("bjt", t);
     const path = file ? location.pathname.replace(/[^/]*$/, file) : location.pathname;
     const url = path + "?" + q.toString();
-    const w = window.open(url, "bj_" + key + "_" + (q.get("tab") || "all"), "popup,width=1320,height=920");
+    const w = window.open(url, "bj_" + key + "_" + (q.get("tab") || "all"), feat || "popup,width=1320,height=920");
     if (!w) return false;
     tokens.set(t, { at: Date.now(), win: w });
     return true;
@@ -163,8 +163,12 @@ const TOOLS = {
     line: { title: "꺾은선 그래프 만들기", desc: "월별 추이·전년 비교를 여러 선으로", chips: ["여러 계열", "부드러운 곡선", "표식 모양 · 크기 · 색"] },
     pie: { title: "원그래프 · 도넛 차트 만들기", desc: "비중·점유율을 비율(%) 자동 계산으로", chips: ["비율 자동 계산", "도넛 가운데 합계", "값 · 비율 범례"] },
     combo: { title: "콤보 차트 만들기", desc: "매출은 막대, 성장률은 선 — 보조 축까지", chips: ["막대 + 꺾은선", "보조 축", "축마다 단위"] } } },
+  photo: { file: "photo/photo.html", color: "#1f7f8f", tag: "#e3f3f5", name: "사진 정리기", icon: "image", win: "max",
+    dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/photo-organizer-v1.0.zip", file: "photo-organizer-v1.0.zip", size: "약 47KB" },
+    tabs: {
+    all: { title: "사진 정리기", desc: "내 PC 사진 폴더를 열어 찍은 날 · 기기 · 위치로 찾고 지도에서 확인 — 업로드 없음", chips: ["폴더별 보기", "찍은 날 · 종류 · 기기 찾기", "복사 · 이동 · 지우기", "찍은 위치 지도"] } } },
   label: { file: "label-v2.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "라벨 출력기", icon: "tag",
-    dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/label-printer-v2.0.zip", file: "label-printer-v2.0.zip", size: "약 48KB" },
+    dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/label-printer-v2.0.zip", file: "label-printer-v2.0.zip", size: "약 52KB", note: "우편번호는 직접 입력" },
     tabs: {
     all: { title: "라벨 출력기", desc: "주소 라벨 · 이름 스티커 · 정리 라벨을 A4 라벨지에 — 설치 · 가입 없이 브라우저에서", chips: ["엑셀 붙여넣기 · 파일", "우편번호 자동 찾기", "폼텍 · 애니라벨 규격", "시험 인쇄 · 위치 보정"] },
     addr: { title: "주소 라벨 인쇄", desc: "엑셀 주소록을 붙여넣으면 우편번호까지 채워서 라벨로 — 못 찾은 주소만 골라 고쳐요", chips: ["우편번호 자동 찾기", "못 찾은 주소 맨 위로", "상세주소 그대로", "정리된 주소록 엑셀로"] },
@@ -231,10 +235,10 @@ function render(state) {
       : state === "opened" ? `<div class="lc-msg ok"><b>새 창에서 프로그램이 열렸어요.</b> 창이 보이지 않으면 화면 아래 작업 표시줄을 확인하세요. <button class="lc-again">다시 열기</button></div>`
       : state === "blocked" ? `<div class="lc-msg warn"><b>새 창이 막혔어요.</b> 주소창 오른쪽의 팝업 차단 아이콘을 눌러 <b>항상 허용</b>을 고른 뒤 다시 눌러 주세요. <button class="lc-again">다시 열기</button></div>`
       : TDL ? `<div class="lc-two"><div class="lc-col"><p class="lc-h">온라인으로 바로 쓰기</p><button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입 없음</p></div>
-          <div class="lc-col"><p class="lc-h">내 PC에 받아서 쓰기</p><a class="lc-dl" href="${TDL.href}" target="_blank" rel="noopener">${ICON_DL}<span>무료 다운로드</span></a><p class="lc-sub">${esc(TDL.file)} · ${esc(TDL.size)} · 인터넷 없이 실행</p></div></div>`
+          <div class="lc-col"><p class="lc-h">내 PC에 받아서 쓰기</p><a class="lc-dl" href="${TDL.href}" target="_blank" rel="noopener">${ICON_DL}<span>무료 다운로드</span></a><p class="lc-sub">${esc(TDL.file)} · ${esc(TDL.size)} · ${esc(TDL.note || "인터넷 없이 실행")}</p></div></div>`
       : `<button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입·업로드 없음 · 광고 없이 도구만 크게</p>`}
   </div>`;
-  const go = () => { const p = { tab: TB, ...(C.q || {}) }; ["cat", "opt", "lang", "test"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TFILE) ? "opened" : "blocked"); };
+  const go = () => { const p = { tab: TB, ...(C.q || {}) }; ["cat", "opt", "lang", "test"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); const feat = TL.win === "max" ? `popup,left=${screen.availLeft || 0},top=${screen.availTop || 0},width=${screen.availWidth},height=${screen.availHeight}` : undefined; render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TFILE, feat) ? "opened" : "blocked"); };
   document.querySelectorAll(".lc-go,.lc-again").forEach(b => b.onclick = go);
   try { sendH(); } catch (e) {}
 }

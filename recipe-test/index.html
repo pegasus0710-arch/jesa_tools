@@ -1063,12 +1063,16 @@ function sheetHtml() {
     ${(D.cats || []).map((c, i) => `<div class="mrow"><span>${esc(c)}</span><button class="ib s" data-cup="${i}" aria-label="위로">${IC.up}</button><button class="ib s" data-cren="${i}" aria-label="이름 바꾸기">${IC.pen}</button><button class="ib s" data-cdel="${i}" aria-label="지우기">${IC.trash}</button></div>`).join("")}
     <div class="addl"><input class="inp" id="newcat" placeholder="새 분류 (예: 디저트)"><button class="btn sm" data-catadd>${IC.plus} 넣기</button></div>`;
   else if (k === "tags") { const T = allTags(); h = `<b class="sht">태그 관리</b>${T.length ? T.map(([t, n]) => `<div class="mrow"><span>#${esc(t)} <small>${n}개</small></span><button class="ib s" data-tren="${esc(t)}" aria-label="이름 바꾸기">${IC.pen}</button><button class="ib s" data-tdelall="${esc(t)}" aria-label="지우기">${IC.trash}</button></div>`).join("") : `<p class="hint">아직 태그가 없어요. 레시피를 고칠 때 붙여요.</p>`}<p class="hint">이름을 다른 태그와 같게 바꾸면 두 태그가 합쳐져요.</p>`; }
-  else if (k === "store") h = `<b class="sht">레시피를 어디에 저장할까요?</b><p class="hint">PC는 <b>폴더에 저장</b>을 권해요. 브라우저 기록을 지우거나 브라우저를 다시 설치해도 레시피가 폴더에 그대로 남아요.</p>
-    <button class="opt" data-sheet="storeguide"><span class="ic">${IC.folder}</span><span><b>추천 위치에 저장 <span class="req" style="background:var(--cat)">추천</span></b><small>사진 › 레시피노트 — 열린 창에서 「폴더 선택」 → 「허용」만 누르면 폴더는 우리가 만들어요</small></span></button>
+  else if (k === "store") h = `<b class="sht">레시피를 어디에 저장할까요?</b><p class="hint">${ANDROID ? "휴대폰" : "PC"}는 <b>폴더에 저장</b>을 권해요. 브라우저 기록을 지우거나 브라우저를 다시 설치해도 레시피가 폴더에 그대로 남아요.</p>
+    <button class="opt" data-sheet="storeguide"><span class="ic">${IC.folder}</span><span><b>추천 위치에 저장 <span class="req" style="background:var(--cat)">추천</span></b><small>${ANDROID ? "휴대폰에 레시피노트 폴더 하나 만들기 — 안내를 따라 하면 돼요" : "사진 › 레시피노트 — 열린 창에서 「폴더 선택」 → 「허용」만 누르면 폴더는 우리가 만들어요"}</small></span></button>
     <button class="opt" data-pickown><span class="ic">${IC.pen}</span><span><b>내가 폴더 고르기</b><small>D 드라이브 · 원드라이브 · 구글 드라이브 폴더 등 원하는 곳</small></span></button>
     <button class="opt" data-pickagain><span class="ic">${IC.copy}</span><span><b>전에 쓰던 폴더 다시 연결</b><small>브라우저 기록을 지웠거나 새로 설치했을 때 — 사진 창이 열리면 「레시피노트」 폴더(또는 그대로 사진 폴더)를 「폴더 선택」 → 그대로 이어져요</small></span></button>
     <button class="opt" data-nostore><span class="ic">${IC.x}</span><span><b>폴더 없이 시작</b><small>브라우저 안에만 저장 — 브라우저 기록(사이트 데이터)을 지우면 사라져요. 나중에 설정에서 폴더를 정할 수 있어요</small></span></button>`;
-  else if (k === "storeguide") h = `<b class="sht">추천 위치에 저장하기</b><p class="hint">「시작」을 누르면 <b>사진</b> 폴더가 열린 창이 떠요. 아무것도 고르지 말고 이렇게만 눌러 주세요.</p>
+  else if (k === "storeguide") h = ANDROID ? `<b class="sht">휴대폰에 레시피노트 폴더 만들기</b><p class="hint">「시작」을 누르면 휴대폰 폴더 고르기 창이 떠요. 안드로이드는 사진 · 다운로드 폴더를 그대로 고를 수 없어서 <b>새 폴더를 하나 만들어</b> 골라 주세요.</p>
+    <ol class="gsteps"><li><span>창 오른쪽 위 <span class="k">⋮</span> 또는 아래의 <span class="k">새 폴더</span>(폴더 만들기)를 눌러요</span></li><li><span>이름을 <span class="k">레시피노트</span>로 적고 <span class="k">확인</span></span></li><li><span>만든 폴더 안에서 아래 <span class="k">이 폴더 사용</span>을 눌러요</span></li><li><span>「파일에 액세스하도록 허용할까요?」에서 <span class="k">허용</span></span></li></ol>
+    <p class="hint">다음에 다시 연결할 때는 같은 창에서 레시피노트 폴더를 열고 「이 폴더 사용」 → 「허용」만 하면 돼요. 폴더는 휴대폰 「내 파일」 앱에서도 보여요.</p>
+    <div class="row2"><button class="btn" data-sheet="store">뒤로</button><button class="btn nv" style="flex:1" data-pickrec>${IC.folder} 시작</button></div>`
+    : `<b class="sht">추천 위치에 저장하기</b><p class="hint">「시작」을 누르면 <b>사진</b> 폴더가 열린 창이 떠요. 아무것도 고르지 말고 이렇게만 눌러 주세요.</p>
     <ol class="gsteps"><li><span>창 아래 <span class="k">폴더 선택</span>을 눌러요</span></li><li><span>크롬이 묻는 <span class="k">파일 수정 허용</span>(또는 「허용」)을 눌러요</span></li><li><span>끝 — <b>사진 › 레시피노트</b> 폴더를 우리가 만들어 자동 저장해요</span></li></ol>
     <p class="hint">레시피 사진과 함께 「사진」 폴더에 두면 찾기 쉽고, 사진 폴더를 원드라이브로 백업하는 PC라면 레시피도 함께 백업돼요.</p>
     <div class="row2"><button class="btn" data-sheet="store">뒤로</button><button class="btn nv" style="flex:1" data-pickrec>${IC.folder} 시작</button></div>`;
@@ -1187,7 +1191,7 @@ async function syncFromFolder() { const o = await readFolder(); if (o) { const r
 const hasJson = async h => { try { await h.getFileHandle(FJ); return true; } catch (e) { return false; } };
 const README = "이 폴더는 「레시피 노트」(Blog J 무료 도구)의 저장 폴더예요.\r\n\r\n· 레시피 · 사진 · 장보기가 이 폴더에 자동으로 저장돼요.\r\n· 브라우저 기록(사이트 데이터)을 지웠거나 브라우저를 다시 설치했다면,\r\n  레시피 노트를 열고 「전에 쓰던 폴더 다시 연결」 → 이 폴더를 고르면 그대로 이어져요.\r\n· 새 PC로 옮길 때는 이 폴더를 통째로 복사해 가서 같은 방법으로 고르면 돼요.\r\n· 레시피노트.json 파일과 사진 폴더는 지우거나 고치지 마세요.\r\n\r\nhttps://luvbong.tistory.com\r\n";
 async function pickDir(rec, again) {
-  let h; try { h = await window.showDirectoryPicker({ mode: "readwrite", id: rec ? "bj-recipe-rec" : "bj-recipe-note", startIn: rec || again ? "pictures" : "documents" }); }
+  let h; try { h = await window.showDirectoryPicker({ mode: "readwrite", id: rec ? "bj-recipe-rec" : "bj-recipe-note", startIn: ANDROID ? undefined : rec || again ? "pictures" : "documents" }); }
   catch (e) { if (e.name !== "AbortError") toast("폴더를 열지 못했어요: " + e.message); return false; }
   let target = h, found = false;
   try {

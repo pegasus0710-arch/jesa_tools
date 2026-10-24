@@ -713,7 +713,8 @@ const setMeta = (k, v) => putO("meta", { k, v });
 const D = { recipes: [], shops: [], cats: null, pantry: [], set: { lv: "card", sort: "made", banner: true, lastBackup: null, savedAt: 0, offOn: true }, dir: null, dirPerm: null };
 const PURL = {};   /* 사진 id → { f: 큰 사진 URL, t: 작은 사진 URL, kind } */
 let saving = null;
-function touch() { D.set.savedAt = Date.now(); setMeta("set", D.set).catch(() => {}); clearTimeout(saving); saving = setTimeout(() => { folderWrite(); if (typeof gdAuto === "function") gdAuto(); }, 1200); }
+let wantGd = false;
+function touch() { D.set.savedAt = Date.now(); setMeta("set", D.set).catch(() => {}); if (!(typeof GD !== "undefined" && GD.importing)) wantGd = true; clearTimeout(saving); saving = setTimeout(() => { folderWrite(); if (wantGd && typeof gdAuto === "function") { wantGd = false; gdAuto(); } }, 1200); }
 async function saveRecipe(r) { r.updated = Date.now(); const i = D.recipes.findIndex(x => x.id === r.id); if (i >= 0) D.recipes[i] = r; else D.recipes.push(r); try { await putO("recipes", r); } catch (e) { toast("저장하지 못했어요: " + e.message); } touch(); }
 async function delRecipe(id) { const r = RR(id); if (!r) return; for (const p of r.photos || []) await delPhoto(p.id); D.recipes = D.recipes.filter(x => x.id !== id); await delO("recipes", id).catch(() => {}); D.set.gone = D.set.gone || {}; D.set.gone[id] = Date.now(); touch(); }
 async function saveShop(s) { s.updated = Date.now(); const i = D.shops.findIndex(x => x.id === s.id); if (i >= 0) D.shops[i] = s; else D.shops.unshift(s); await putO("shops", s).catch(() => {}); touch(); }
@@ -1505,7 +1506,7 @@ async function gdSync(opt = {}) {
     const files = await gdList();
     if (files["레시피노트.json"] && !opt.pushOnly) {
       const o = JSON.parse(await (await gdGet(files["레시피노트.json"].id)).text());
-      got = await importData(o, async id => files[id + ".jpg"] ? await gdGet(files[id + ".jpg"].id) : null);
+      GD.importing = true; try { got = await importData(o, async id => files[id + ".jpg"] ? await gdGet(files[id + ".jpg"].id) : null); } finally { GD.importing = false; }
     }
     const want = new Set(); for (const r of D.recipes) for (const p of r.photos || []) want.add(p.id + ".jpg");
     let up = 0; for (const n of want) if (!files[n]) { const o = await st("photos", "readonly", s => s.get(n.replace(/\.jpg$/, ""))); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg"); } }

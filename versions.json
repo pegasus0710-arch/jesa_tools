@@ -13,5 +13,8 @@
   },
   "pdf": {
     "latest": "1.0"
+  },
+  "recipe": {
+    "latest": "1.0"
   }
 }

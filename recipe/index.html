@@ -616,6 +616,16 @@ body.pc .pfoot{max-width:1240px;margin-left:auto;margin-right:auto}
 .er{transition:transform .12s}.er.drag{transition:none}
 body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .er{grid-template-columns:22px minmax(0,1fr) 50px 64px 30px;gap:5px}.er .inp[data-if="u"]{padding-left:8px;padding-right:6px}
+.esh .en{border-radius:7px;width:30px;height:26px;background:#efe4d0;color:#7a4b2a;box-shadow:inset 0 0 0 1.5px #c9b08f;font-size:13px;letter-spacing:-.02em}
+/* 재료 줄: 제목 체크 · 지우기 */
+.er{grid-template-columns:22px minmax(0,1fr) 46px 58px 28px 26px;gap:5px}
+.er.hrow{grid-template-columns:22px minmax(0,1fr) 28px 26px}
+.er .ihk{width:24px;height:24px;border:0;border-radius:6px;background:var(--card);box-shadow:inset 0 0 0 2px #b7ad99;display:grid;place-items:center;cursor:pointer;justify-self:center;padding:0}
+.er .ihk.on{background:#7a4b2a;box-shadow:none;color:#fff}.er .ihk svg{width:15px;height:15px}
+.er .ihk:hover{box-shadow:inset 0 0 0 2px #7a4b2a}
+.er .ex{width:26px}.er .ex svg{width:15px;height:15px}
+.er{grid-template-columns:22px minmax(0,1fr) 54px 56px 28px 26px}.er .inp[data-if="q"]{padding-left:7px;padding-right:5px;text-align:right}
+.er .inp[data-if="u"]{padding-left:6px;padding-right:2px;font-size:14px}
 
 
 </style></head>
@@ -1190,7 +1200,7 @@ function esecSt(e) { const ps = (e.photos || []).filter(p => PURL[p.id]).length,
     ing: ni ? ["ok", ni + "가지"] : ["warn", "비어 있음"], step: ns ? ["ok", ns + "단계"] : ["warn", "비어 있음"], photo: ps ? ["ok", ps + "장"] : ["op", "선택"],
     tag: e.cat || e.tags.length ? ["ok", [e.cat, e.tags.length ? "태그 " + e.tags.length : ""].filter(Boolean).join(" · ")] : ["op", "선택"], memo: (e.src || "").trim() || (e.memo || "").trim() ? ["ok", "입력함"] : ["op", "선택"] }; }
 const ESEC = [["basic", "이름 · 기준", true], ["ing", "재료"], ["step", "만드는 순서"], ["photo", "사진"], ["tag", "분류 · 태그"], ["memo", "출처 · 메모"]];
-function esh(k, n, t, req, sub) { const st = esecSt(S.edit)[k]; return `<div class="esh"><span class="en">${n}</span><b>${t}</b>${req ? `<span class="req">필수</span>` : ""}${sub ? `<small>${sub}</small>` : ""}<span class="est ${st[0]}" data-est="${k}">${st[1]}</span></div>`; }
+function esh(k, n, t, req, sub) { const st = esecSt(S.edit)[k]; return `<div class="esh"><span class="en">${String(n).padStart(2, "0")}</span><b>${t}</b>${req ? `<span class="req">필수</span>` : ""}${sub ? `<small>${sub}</small>` : ""}<span class="est ${st[0]}" data-est="${k}">${st[1]}</span></div>`; }
 function updEsec() { if (!S.edit) return; const st = esecSt(S.edit); document.querySelectorAll("[data-est]").forEach(el => { const v = st[el.dataset.est]; el.className = (el.classList.contains("enc") ? "enc " : "est ") + v[0]; el.textContent = el.classList.contains("enc") ? el.dataset.lbl : v[1]; }); }
 function scrEdit() {
   const e = S.edit, cats = D.cats || [];
@@ -1208,9 +1218,9 @@ function scrEdit() {
       <p class="hint">아래 재료 양이 이 기준이에요. 예: 「2 인분」 · 백숙 「닭 1 마리」 · 김장 「절임배추 20 kg」 · 김밥 「김밥 5 줄」. 기준이 있어야 양을 바꿀 때 <b>재료가 자동으로 계산</b>돼요.</p></div>
   </section>
   <datalist id="ulist">${UNITS.map(u => `<option value="${u}">`).join("")}</datalist>
-  <section class="esec" id="es-ing">${esh("ing", 2, "재료", false, "⋮⋮ 끌어서 순서 · ⋯ 에서 구분 줄(제목)로 바꾸기")}
-    <div id="erows">${e.ing.map((r, i) => r.h != null ? `<div class="er hrow" data-i="${i}"><span class="dh" data-drag="${i}" title="끌어서 순서 바꾸기" aria-label="끌어서 순서 바꾸기">⋮⋮</span><input class="inp" data-if="h" data-i="${i}" value="${esc(r.h)}" placeholder="구분 이름 (예: 양념)"><button class="ex" data-imenu="${i}" aria-label="줄 메뉴">⋯</button></div>`
-      : `<div class="er" data-i="${i}"><span class="dh" data-drag="${i}" title="끌어서 순서 바꾸기" aria-label="끌어서 순서 바꾸기">⋮⋮</span><input class="inp" data-if="n" data-i="${i}" value="${esc(r.n)}" placeholder="재료"><input class="inp num" data-if="q" data-i="${i}" value="${r.q == null ? "" : esc(r.q)}" placeholder="양" inputmode="decimal"><input class="inp" data-if="u" data-i="${i}" value="${esc(r.u || "")}" list="ulist" placeholder="단위"><button class="ex" data-imenu="${i}" aria-label="줄 메뉴">⋯</button></div>`).join("")}</div>
+  <section class="esec" id="es-ing">${esh("ing", 2, "재료", false, "⋮⋮ 끌어서 순서 · 단위 옆 네모를 체크하면 그 줄이 제목(양념 · 소스 등)")}
+    <div id="erows">${e.ing.map((r, i) => r.h != null ? `<div class="er hrow" data-i="${i}"><span class="dh" data-drag="${i}" title="끌어서 순서 바꾸기" aria-label="끌어서 순서 바꾸기">⋮⋮</span><input class="inp" data-if="h" data-i="${i}" value="${esc(r.h)}" placeholder="제목 (예: 양념)"><button class="ihk on" data-iconv="${i}" aria-pressed="true" title="제목 줄 — 끄면 재료 줄로" aria-label="제목 줄 끄기">${IC.ok}</button><button class="ex" data-irm="${i}" aria-label="줄 지우기">${IC.x}</button></div>`
+      : `<div class="er" data-i="${i}"><span class="dh" data-drag="${i}" title="끌어서 순서 바꾸기" aria-label="끌어서 순서 바꾸기">⋮⋮</span><input class="inp" data-if="n" data-i="${i}" value="${esc(r.n)}" placeholder="재료"><input class="inp num" data-if="q" data-i="${i}" value="${r.q == null ? "" : esc(r.q)}" placeholder="양" inputmode="decimal"><input class="inp" data-if="u" data-i="${i}" value="${esc(r.u || "")}" list="ulist" placeholder="단위"><button class="ihk" data-iconv="${i}" aria-pressed="false" title="체크하면 제목 줄(양념 · 소스처럼 묶는 이름)" aria-label="제목 줄로"></button><button class="ex" data-irm="${i}" aria-label="줄 지우기">${IC.x}</button></div>`).join("")}</div>
     <div class="row2"><button class="btn sm" data-iadd>${IC.plus} 재료</button><button class="btn sm" data-hadd>${IC.plus} 구분 줄</button><button class="btn sm" data-sheet="paste">글로 붙여넣기</button></div>
   </section>
   <section class="esec" id="es-step">${esh("step", 3, "만드는 순서", false, "번호는 자동, ▲▼로 순서 바꾸기")}
@@ -1386,7 +1396,7 @@ function sheetHtml() {
       <li>한 줄에 여러 개는 <b>쉼표</b>로: <code>양파 1개, 대파 1대</code></li>
       <li>알아듣는 단위: g · kg · mL · L · 컵 · 큰술(T · 숟가락 · 스푼) · 작은술(t) · 개 · 모 · 통 · 쪽 · 단 · 대 · 장 · 줌 · 포기 · 마리 · 줄 · 판 · 봉지 · 팩 · 알 · 꼬집</li>
       <li>숫자가 없으면 <b>「약간」</b>으로 들어가요: <code>소금 약간</code> <code>후추</code></li>
-      <li><b>묶음 이름</b>은 따로 한 줄에: <code>[양념]</code> <code>양념:</code> 또는 그냥 <code>양념장</code> <code>소스 재료</code> <code>고기 밑간</code> <code>주재료</code> → 구분 줄이 돼요. 못 알아들은 줄은 넣은 뒤 줄 끝 <b>⋯ → 구분 줄로 바꾸기</b></li>
+      <li><b>묶음 이름</b>은 따로 한 줄에: <code>[양념]</code> <code>양념:</code> 또는 그냥 <code>양념장</code> <code>소스 재료</code> <code>고기 밑간</code> <code>주재료</code> → 구분 줄이 돼요. 못 알아들은 줄은 넣은 뒤 단위 옆 <b>네모를 체크</b>하면 제목이 돼요</li>
       <li>양 · 단위가 다음 줄로 떨어져 있어도(<code>돼지고기</code> / <code>600</code> / <code>g</code>) 한 줄로 붙여 읽어요</li>
       <li>앞의 <code>-</code> <code>•</code> <code>1.</code> 같은 표시와 끝의 <code>(괄호 설명)</code>은 빠져요</li>` :
       `<li><b>한 줄에 한 단계</b> — 줄마다 1, 2, 3… 번호가 새로 붙어요</li>

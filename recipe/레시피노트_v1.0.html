@@ -581,6 +581,10 @@ body.pc .pfoot{max-width:1240px;margin-left:auto;margin-right:auto}
 .pi .pa [data-pmain]{flex:1 1 auto;white-space:nowrap}
 .pi .pa button:last-child{flex:0 0 30px;margin-left:auto}
 .amt small .fx{font-weight:800;color:var(--ink)}.amt small .lk{font-size:inherit}
+.pvth{display:flex;gap:8px;overflow-x:auto;padding:8px 14px 0;justify-content:safe center;scrollbar-width:none}
+.pvth button{flex-shrink:0;width:58px;height:58px;padding:0;border:0;border-radius:9px;overflow:hidden;background:#333;opacity:.55;box-shadow:0 0 0 2px transparent;cursor:pointer}
+.pvth button.on{opacity:1;box-shadow:0 0 0 3px #e08a3e}
+.pvth img{width:100%;height:100%;object-fit:cover;display:block}
 
 
 </style></head>
@@ -1412,17 +1416,18 @@ function sheetHtml() {
 
 /* ───────── 사진 크게 보기 ───────── */
 function pvList() {
-  if (S.scr === "edit") return S.edit.photos.filter(p => PURL[p.id]).map(p => ({ f: PURL[p.id].f, kind: KIND[p.kind] }));
+  if (S.scr === "edit") return S.edit.photos.filter(p => PURL[p.id]).map(p => ({ f: PURL[p.id].f, t: PURL[p.id].t, kind: KIND[p.kind] }));
   const r = RR(S.rid); if (!r) return [];
   if (r.off) return r.photo ? [{ f: r.photo, kind: "음식", cap: r.cap }] : [];
   const A = (r.photos || []).filter(p => PURL[p.id]), set = S.pvSet === "recipe" ? A.filter(p => p.kind === "recipe") : S.pvSet === "other" ? A.filter(p => p.kind !== "recipe") : A;
-  return set.map(p => ({ f: PURL[p.id].f, kind: KIND[p.kind] }));
+  return set.map(p => ({ f: PURL[p.id].f, t: PURL[p.id].t, kind: KIND[p.kind] }));
 }
 function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i]; const r = S.scr === "edit" ? S.edit : RR(S.rid);
   return `<div class="pv"><div class="pt"><button class="cb" data-pvx aria-label="닫기">${IC.x}</button><b>${esc(r.name || "사진")}<small>${p.kind} 사진 · ${i + 1} / ${L.length}</small></b></div>
     <div class="pb" id="pvb"><img id="pvimg" src="${p.f}" alt="" draggable="false"></div>
     ${p.cap ? `<p class="hint2">${esc(p.cap)}</p>` : `<p class="hint2">두 손가락으로 벌려 확대 · 두 번 눌러 2배 · 옆으로 밀어 다음 사진</p>`}
+    ${L.length > 1 ? `<div class="pvth">${L.map((x, k) => `<button class="${k === i ? "on" : ""}" data-pvj="${k}" aria-label="${k + 1}번째 사진"><img src="${x.t || x.f}" alt=""></button>`).join("")}</div>` : ""}
     <div class="pf2">${L.length > 1 ? `<button class="cb" data-pvm="-1" aria-label="이전 사진">‹</button>` : ""}<button class="cb" data-zm="-1" aria-label="작게">−</button><span class="num" id="zv">100%</span><button class="cb" data-zm="1" aria-label="크게">+</button>${L.length > 1 ? `<button class="cb" data-pvm="1" aria-label="다음 사진">›</button>` : ""}</div></div>`;
 }
 const Z = { s: 1, x: 0, y: 0 };
@@ -1475,7 +1480,8 @@ async function readZip(buf) {
     out[name] = data; q += 46 + nl + el + cl; }
   return out;
 }
-function exportObj() { return { kind: "bj-recipe-note", v: 1, app: "레시피 노트 " + VER, savedAt: D.set.savedAt || Date.now(), recipes: D.recipes, shops: D.shops, cats: D.cats || [], catsAt: D.set.catsAt || 0, pantry: D.pantry, gone: D.set.gone || {}, set: { lv: D.set.lv, sort: D.set.sort, offOn: D.set.offOn } }; }
+function exportObj() { return { kind: "bj-recipe-note", v: 1, app: "레시피 노트 " + VER, savedAt: D.set.savedAt || Date.now(), recipes: D.recipes, shops: D.shops, cats: D.cats || [], catsAt: D.set.catsAt || 0, pantryAt: D.set.pantryAt || 0, pantry: D.pantry, gone: D.set.gone || {}, set: { lv: D.set.lv, sort: D.set.sort, offOn: D.set.offOn } }; }
+async function savePantry() { D.set.pantryAt = Date.now(); await setMeta("set", D.set).catch(() => {}); await saveMeta(); }
 async function saveCats() { D.set.catsAt = Date.now(); await setMeta("set", D.set).catch(() => {}); await saveMeta(); }
 async function importData(o, getPhoto) {
   if (!o || o.kind !== "bj-recipe-note") throw new Error("레시피 노트 백업이 아니에요");
@@ -1493,7 +1499,9 @@ async function importData(o, getPhoto) {
   /* 분류: 나중에 고친 쪽을 그대로 씀(합치면 지운 · 이름 바꾼 분류가 되살아남) */
   if (o.cats && ((fresh && o.cats.length && !D.set.catsAt) || (o.catsAt || 0) > (D.set.catsAt || 0))) { D.cats = o.cats.slice(); if (o.catsAt) D.set.catsAt = o.catsAt; }
   else if (o.cats && !o.catsAt && !D.set.catsAt) { D.cats = D.cats || []; o.cats.forEach(c => { if (!D.cats.includes(c)) D.cats.push(c); }); }
-  (o.pantry || []).forEach(p => { if (!D.pantry.includes(p)) D.pantry.push(p); });
+  /* 있는 재료 목록도 나중에 고친 쪽을 씀(합치면 지운 재료가 되살아남) */
+  if (o.pantry && (o.pantryAt || 0) > (D.set.pantryAt || 0)) { D.pantry = o.pantry.slice(); D.set.pantryAt = o.pantryAt; }
+  else if (!o.pantryAt && !D.set.pantryAt) (o.pantry || []).forEach(p => { if (!D.pantry.includes(p)) D.pantry.push(p); });
   await saveMeta(); return { nr, np };
 }
 async function makeBackup() {
@@ -1649,6 +1657,7 @@ document.addEventListener("click", async e => {
   if (d.pv != null) { S.pv = +d.pv; S.pvSet = d.pvset || null; return render(); }
   if (d.epv) { S.pv = S.edit.photos.filter(p => PURL[p.id]).findIndex(p => p.id === d.epv); return render(); }
   if (d.pvx != null) { S.pv = null; return render(); }
+  if (d.pvj != null) { S.pv = +d.pvj; return render(); }
   if (d.pvm) { const n = pvList().length; S.pv = (S.pv + (+d.pvm) + n) % n; return render(); }
   if (d.zm) { Z.s = Math.min(5, Math.max(1, Z.s + (+d.zm) * 0.5)); if (Z.s === 1) { Z.x = 0; Z.y = 0; } return zApply(); }
   if (d.lognote) { const r = RR(S.rid), l = r.log.find(x => x.id === d.lognote); const v = prompt("한 줄 평 (예: 젓갈이 조금 짰음 → 다음엔 줄이기)", l.note || ""); if (v != null) { l.note = v.trim(); await saveRecipe(r); render(); } return; }
@@ -1679,8 +1688,8 @@ document.addEventListener("click", async e => {
   if (d.fridge != null) { S.fridge = !S.fridge; render(); const f = $("#fin"); f && f.focus(); return; }
   if (d.tagsall != null) { S.tagsAll = !S.tagsAll; return render(); }
   if (d.tagpick != null) { S.tag = d.tagpick || null; S.sheet = null; return render(); }
-  if (d.prm) { D.pantry.splice(+d.prm, 1); saveMeta(); render(); const f = $("#fin"); f && f.focus(); return; }
-  if (d.pclear != null) { D.pantry = []; saveMeta(); return render(); }
+  if (d.prm) { D.pantry.splice(+d.prm, 1); savePantry(); render(); const f = $("#fin"); f && f.focus(); return; }
+  if (d.pclear != null) { D.pantry = []; savePantry(); return render(); }
   /* 넣기 · 고치기 */
   const E = S.edit;
   if (E) {
@@ -1751,13 +1760,13 @@ document.addEventListener("keydown", e => {
   const t = e.target;
   if (t.id === "tagin" && (e.key === "Enter" || e.key === "," || e.key === "，")) { e.preventDefault(); if (t.value.trim()) { addTags(t.value); S.edit._dirty = true; render(); $("#tagin").focus(); } return; }
   if (t.id === "tagin" && e.key === "Backspace" && !t.value && S.edit.tags.length) { S.edit.tags.pop(); render(); $("#tagin").focus(); return; }
-  if (t.id === "fin" && (e.key === "Enter" || e.key === ",")) { e.preventDefault(); const vs = t.value.split(/[,，]/).map(x => x.trim()).filter(Boolean); vs.forEach(v => { if (!D.pantry.includes(v)) D.pantry.push(v); }); if (vs.length) { saveMeta(); render(); $("#fin").focus(); } return; }
+  if (t.id === "fin" && (e.key === "Enter" || e.key === ",")) { e.preventDefault(); const vs = t.value.split(/[,，]/).map(x => x.trim()).filter(Boolean); vs.forEach(v => { if (!D.pantry.includes(v)) D.pantry.push(v); }); if (vs.length) { savePantry(); render(); $("#fin").focus(); } return; }
   if (t.id === "extra" && e.key === "Enter") { e.preventDefault(); $("[data-extra]").click(); return; }
   if (t.id === "newcat" && e.key === "Enter") { e.preventDefault(); $("[data-catadd]").click(); return; }
   if (e.key === "Escape") { if (S.pv != null) { S.pv = null; render(); } else if (S.sheet) { S.sheet = null; render(); } }
   if (S.pv != null && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { const n = pvList().length; S.pv = (S.pv + (e.key === "ArrowRight" ? 1 : -1) + n) % n; render(); }
 });
-document.addEventListener("focusout", e => { const t = e.target; if (t.id === "fin" && t.value.trim()) { const vs = t.value.split(/[,，]/).map(x => x.trim()).filter(Boolean); vs.forEach(v => { if (!D.pantry.includes(v)) D.pantry.push(v); }); saveMeta(); setTimeout(render, 0); } if (t.id === "tagin" && t.value.trim() && S.edit) { addTags(t.value); t.value = ""; setTimeout(render, 0); } });
+document.addEventListener("focusout", e => { const t = e.target; if (t.id === "fin" && t.value.trim()) { const vs = t.value.split(/[,，]/).map(x => x.trim()).filter(Boolean); vs.forEach(v => { if (!D.pantry.includes(v)) D.pantry.push(v); }); savePantry(); setTimeout(render, 0); } if (t.id === "tagin" && t.value.trim() && S.edit) { addTags(t.value); t.value = ""; setTimeout(render, 0); } });
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window._bip = e; render(); });
 window.addEventListener("beforeunload", e => { if (S.edit && S.edit._dirty) { e.preventDefault(); e.returnValue = ""; } });
 

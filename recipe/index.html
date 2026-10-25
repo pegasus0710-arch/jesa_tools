@@ -1273,7 +1273,6 @@ function scrSet() {
     <div class="lbl"><span>정리</span></div>
     <button class="row" data-sheet="cats">${IC.book}<div class="t"><b>분류 관리</b><small>${(D.cats || []).map(esc).join(" · ") || "없음"}</small></div></button>
     <button class="row" data-sheet="tags"><span class="hs">#</span><div class="t"><b>태그 관리</b><small>${allTags().length}개 · 이름 바꾸기 · 지우기</small></div></button>
-    <label class="row tgl">${IC.jar}<div class="t"><b>공식 레시피(김치 양념 계산기) 보이기</b><small>목록 위 남색 띠와 찾기 결과</small></div><input type="checkbox" data-offon ${D.set.offOn ? "checked" : ""}></label>
     <div class="foot">레시피 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>
   </div>`;
 }
@@ -1325,8 +1324,9 @@ function sheetHtml() {
     ${S.tag ? `<div class="row2"><button class="btn" data-tagpick="">태그 선택 풀기</button></div>` : ""}`; }
   else if (k === "cats") h = `<b class="sht">분류 관리</b><p class="hint">레시피는 분류 하나에 들어가요. 지우면 그 레시피들은 「분류 없음」이 돼요.</p>
     ${(D.cats || []).map((c, i) => `<div class="mrow"><span>${esc(c)}</span><button class="ib s" data-cup="${i}" aria-label="위로">${IC.up}</button><button class="ib s" data-cren="${i}" aria-label="이름 바꾸기">${IC.pen}</button><button class="ib s" data-cdel="${i}" aria-label="지우기">${IC.trash}</button></div>`).join("")}
-    <div class="addl"><input class="inp" id="newcat" placeholder="새 분류 (예: 디저트)"><button class="btn sm" data-catadd>${IC.plus} 넣기</button></div>`;
-  else if (k === "tags") { const T = allTags(); h = `<b class="sht">태그 관리</b>${T.length ? T.map(([t, n]) => `<div class="mrow"><span>#${esc(t)} <small>${n}개</small></span><button class="ib s" data-tren="${esc(t)}" aria-label="이름 바꾸기">${IC.pen}</button><button class="ib s" data-tdelall="${esc(t)}" aria-label="지우기">${IC.trash}</button></div>`).join("") : `<p class="hint">아직 태그가 없어요. 레시피를 고칠 때 붙여요.</p>`}<p class="hint">이름을 다른 태그와 같게 바꾸면 두 태그가 합쳐져요.</p>`; }
+    <div class="addl"><input class="inp" id="newcat" placeholder="새 분류 (예: 디저트)"><button class="btn sm" data-catadd>${IC.plus} 넣기</button></div>
+    <div class="row2"><button class="btn nv" style="flex:1" data-close>닫기</button></div>`;
+  else if (k === "tags") { const T = allTags(); h = `<b class="sht">태그 관리</b>${T.length ? T.map(([t, n]) => `<div class="mrow"><span>#${esc(t)} <small>${n}개</small></span><button class="ib s" data-tren="${esc(t)}" aria-label="이름 바꾸기">${IC.pen}</button><button class="ib s" data-tdelall="${esc(t)}" aria-label="지우기">${IC.trash}</button></div>`).join("") : `<p class="hint">아직 태그가 없어요. 레시피를 고칠 때 붙여요.</p>`}<p class="hint">이름을 다른 태그와 같게 바꾸면 두 태그가 합쳐져요.</p><div class="row2"><button class="btn nv" style="flex:1" data-close>닫기</button></div>`; }
   else if (k === "store" && !CAN_DIR) h = `<b class="sht">레시피를 어디에 저장할까요?</b><p class="hint">구글 드라이브에 저장하면 휴대폰을 바꾸거나 기록을 지워도 레시피가 남고, PC에서도 같이 써요.</p>
     ${typeof gdHttp === "function" && gdHttp() ? `<button class="opt" data-gdstart><span class="ic">${IC.cloud}</span><span><b>구글 드라이브에 저장</b><small>구글 계정으로 연결 — 휴대폰 · PC에서 같은 레시피를 함께 써요. 내 드라이브에 「레시피노트」 폴더가 생기고, 이 앱은 그 폴더만 봐요</small></span></button>` : ""}
     <button class="opt" data-nostore><span class="ic">${IC.x}</span><span><b>그냥 시작(이 기기에만 저장)</b><small>브라우저 안에만 저장 — 사이트 기록을 지우면 사라질 수 있어요. 나중에 설정에서 구글 드라이브를 연결할 수 있어요</small></span></button>`;
@@ -1728,6 +1728,7 @@ window.addEventListener("beforeunload", e => { if (S.edit && S.edit._dirty) { e.
     try { D.dir = (await getMeta("dir")) || null; if (D.dir && D.dir.queryPermission) D.dirPerm = await D.dir.queryPermission({ mode: "readwrite" }); } catch (e) { D.dir = null; }
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   } else toast("이 브라우저는 저장을 막고 있어요 — 시크릿 창이면 일반 창으로 열어 주세요.");
+  D.set.offOn = true; /* 공식 레시피 보이기 설정은 없앰 — 늘 보임 */
   if ((CAN_DIR || (typeof gdHttp === "function" && gdHttp())) && !D.dir && !D.set.gdOn && !D.set.storeAsked) S.sheet = "store"; else if (D.cats == null) S.sheet = "start";
   try { history.replaceState({ n: 0 }, ""); } catch (e) {}
   render(true);

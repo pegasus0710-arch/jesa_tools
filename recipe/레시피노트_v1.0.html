@@ -548,6 +548,39 @@ body.pc .pcbar{max-width:1240px;padding-left:26px;padding-right:26px}
 body.pc .pcl.full,body.pc .pcl.full.nar{max-width:1240px}
 body.pc .pfoot{max-width:1240px;margin-left:auto;margin-right:auto}
 .ing.gn{justify-content:flex-start}
+.hv .q{font-size:15px;font-weight:700;white-space:nowrap;text-align:right;color:var(--ink);margin-left:auto}
+.sl .sldel{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;color:var(--ink3);flex-shrink:0}
+.sl .sldel:hover{color:var(--red);background:rgba(194,58,43,.08)}
+.sl .sldel svg{width:18px;height:18px}
+.log .lga{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0}
+.log .lgdel{width:30px;height:30px;color:var(--ink3)}.log .lgdel svg{width:16px;height:16px}.log .lgdel:hover{color:var(--red)}
+.log{align-items:center}
+/* 사진 구분: 대표 · 레시피 · 참고 */
+.hero{position:relative}
+.hero .hk{position:absolute;left:12px;bottom:12px;font-style:normal;background:#e08a3e;color:#fff;font-size:12px;font-weight:800;border-radius:7px;padding:3px 9px}
+.rph{display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--card);box-shadow:var(--up-s),inset 4px 0 0 #20263a;border-radius:14px;padding:10px 14px 10px 10px;margin-top:12px;text-align:left;font:inherit;cursor:pointer}
+.rph img{width:56px;height:56px;border-radius:9px;object-fit:cover;flex-shrink:0}
+.rph span{flex:1;min-width:0}.rph b{display:block;font-size:15.5px;color:#20263a}.rph small{display:block;font-size:12.5px;color:var(--ink3);margin-top:2px}
+.rph:hover{box-shadow:var(--up-s),inset 4px 0 0 #20263a,0 0 0 2px var(--navy)}
+.thlbl{font-size:12.5px;font-weight:800;color:var(--ink3);margin:14px 2px 0}.thlbl small{font-weight:600;margin-left:4px}
+.thlbl+.thumbs{padding-top:6px}
+.thumbs div em{background:#6f6857}
+.thumbs div.main em{background:#e08a3e}
+.kleg{font-size:12.5px;color:var(--ink3);line-height:1.9;margin:10px 0 0}
+.kleg span{display:inline-block;font-weight:800;color:#fff;border-radius:6px;padding:0 7px;margin-right:3px;font-size:12px;line-height:1.7}
+.kleg span:not(:first-child){margin-left:6px}
+.k-food{background:#1f7f8f}.k-recipe{background:#20263a}.k-ref{background:#8b8474}
+.pi{box-shadow:0 0 0 2px transparent}
+.pi.k-food{box-shadow:0 0 0 2px #1f7f8f}.pi.k-recipe{box-shadow:0 0 0 2px #20263a}.pi.k-ref{box-shadow:0 0 0 2px #b7ad99}
+.pi.main{box-shadow:0 0 0 3px #e08a3e}
+.pi .pa [data-pkind]{color:#fff;font-weight:800}
+.pi.k-food .pa [data-pkind]{background:#1f7f8f}.pi.k-recipe .pa [data-pkind]{background:#20263a}.pi.k-ref .pa [data-pkind]{background:#8b8474}
+.pi .mn{background:#e08a3e}
+.pi .pa{flex-wrap:wrap;gap:4px}
+.pi .pa [data-pkind]{flex:1 1 100%;white-space:nowrap}
+.pi .pa [data-pmain]{flex:1 1 auto;white-space:nowrap}
+.pi .pa button:last-child{flex:0 0 30px;margin-left:auto}
+.amt small .fx{font-weight:800;color:var(--ink)}.amt small .lk{font-size:inherit}
 
 
 </style></head>
@@ -998,19 +1031,26 @@ function detailHtml(r, pc) {
   const nIng = (r.ing || []).filter(i => !i.h).length;
   const q = o.u === "인분" ? "몇 인분 만들까요?" : ["kg", "g", "L", "mL"].includes(o.u) ? `${r.main ? esc(r.main) + " " : ""}얼마나 만들까요?` : `${r.main ? esc(r.main) + " " : ""}몇 ${esc(o.u)} 만들까요?`;
   const unitSel = !r.off && r.bu !== "인분" && r.serv > 0 ? `<div class="vt mini">${[r.bu, "인분"].map(u => `<button class="${o.u === u ? "on" : ""}" data-uu="${esc(u)}">${u === "인분" ? "인분으로" : esc(u + "로")}</button>`).join("")}</div>` : r.off && r.k.id === "baechu" ? `<div class="vt mini">${["kg", "포기"].map(u => `<button class="${o.u === u ? "on" : ""}" data-u="${u}">${u === "kg" ? "절임배추 kg" : "포기 수"}</button>`).join("")}</div>` : "";
-  return `${!pc ? `<div class="hero" ${photos.length ? `data-pv="${mainIdx}"` : ""}>${m ? `<img src="${m.f}" alt="">` : `<div class="no">${IC.dish}<br>${r.off ? "사진 준비 중" : "대표 사진 없음 — 고치기에서 음식 사진을 올려 주세요"}</div>`}</div>` : ""}
-    ${photos.length > 1 || (pc && photos.length) ? `<div class="thumbs">${photos.map((p, i) => `<div class="${i === mainIdx ? "main" : ""}" data-pv="${i}"><img src="${p.u}" alt=""><em>${p.kind}</em></div>`).join("")}</div>` : ""}
+  const PA = r.off ? [] : (r.photos || []).filter(p => PURL[p.id]), oth = PA.filter(p => p.kind !== "recipe"), recs = PA.filter(p => p.kind === "recipe");
+  const mid = (PA.find(p => PURL[p.id].f === (m && m.f)) || {}).id, mainRec = recs.some(p => p.id === mid);
+  const heroAttr = r.off ? (r.photo ? `data-pv="0"` : "") : !m ? "" : mainRec ? `data-pv="${recs.findIndex(p => p.id === mid)}" data-pvset="recipe"` : `data-pv="${oth.findIndex(p => p.id === mid)}" data-pvset="other"`;
+  const refs = oth.filter(p => p.id !== mid);
+  return `${!pc ? `<div class="hero" ${heroAttr}>${m ? `<img src="${m.f}" alt="">${!r.off ? `<em class="hk">대표 사진</em>` : ""}` : `<div class="no">${IC.dish}<br>${r.off ? "사진 준비 중" : "대표 사진 없음 — 고치기에서 음식 사진을 올려 주세요"}</div>`}</div>` : ""}
+    ${pc && m ? `<div class="thumbs"><div class="main" ${heroAttr}><img src="${m.t}" alt=""><em>대표</em></div></div>` : ""}
+    ${recs.length ? `<button class="rph" data-pv="0" data-pvset="recipe"><img src="${PURL[recs[0].id].t}" alt=""><span><b>레시피 사진 보기</b><small>종이 · 캡처 레시피 ${recs.length}장 — 크게 보며 따라 하기</small></span>${IC.next}</button>` : ""}
+    ${refs.length ? `<div class="thlbl">${refs.every(p => p.kind === "ref") ? "참고 사진" : "다른 사진"} <small>${refs.length}장</small></div><div class="thumbs">${refs.map(p => `<div data-pv="${oth.indexOf(p)}" data-pvset="other"><img src="${PURL[p.id].t}" alt=""><em>${KIND[p.kind]}</em></div>`).join("")}</div>` : ""}
     ${r.off && r.cap ? `<div class="cap">${esc(r.cap)}</div>` : ""}
     <div class="ttl">${esc(r.name)}${r.off ? ` <small>${esc(r.sub)}</small>` : ""}</div>
     <div class="meta"><span class="cat">${esc(r.cat || "분류 없음")}</span>${(r.tags || []).map(t => `<span class="tag">#${esc(t)}</span>`).join("")}</div>
     ${r.off ? `<p class="desc">${esc(r.desc)}</p>` : ""}
-    ${nIng ? `<div class="amtq">${q}</div>${unitSel}<div class="amt"><button class="stp" data-mul="-1" aria-label="줄이기">−</button><div class="v"><input class="amin num" id="amtin" inputmode="decimal" value="${fmtN(o.a)}" style="width:${String(fmtN(o.a)).length * 0.62 + 0.5}em" aria-label="만들 양"><span class="au">${esc(o.u)}</span><small>${r.off && r.main ? esc(r.main) + " · " : ""}이 레시피는 <b>${r.main && !r.off ? esc(r.main) + " " : ""}${fmtN(r.base)}${esc(r.bu)} 기준</b>${r.serv ? ` (약 ${fmtN(r.serv)}인분)` : ""} · 양을 바꾸면 재료가 바로 계산돼요</small></div><button class="stp" data-mul="1" aria-label="늘리기">+</button></div>
+    ${nIng ? `<div class="amtq">${q}</div>${unitSel}<div class="amt"><button class="stp" data-mul="-1" aria-label="줄이기">−</button><div class="v"><input class="amin num" id="amtin" inputmode="decimal" value="${fmtN(o.a)}" style="width:${String(fmtN(o.a)).length * 0.62 + 0.5}em" aria-label="만들 양"><span class="au">${esc(o.u)}</span><small>${(() => { const f = factorOf(r, o.a, o.u), same = Math.abs(f - 1) < 1e-9, sv = r.serv && o.u !== "인분" ? `약 ${fmtN(r.serv * f)}인분 · ` : "";
+      return same ? `${sv}− + 로 양을 바꾸면 재료가 바로 계산돼요` : `${sv}원래 ${r.main && !r.off ? esc(r.main) + " " : ""}${fmtN(r.base)}${esc(r.bu)} 기준의 <span class="fx">${fmtN(Math.round(f * 100) / 100)}배</span>로 계산했어요 · <button class="lk" data-amtreset>원래대로</button>`; })()}</small></div><button class="stp" data-mul="1" aria-label="늘리기">+</button></div>
     ${hasR || hasJ ? `<div class="adjs">${hasR ? `<div class="vt mini"><span>맵기</span>${[[0.8, "덜"], [1, "보통"], [1.2, "더"]].map(([v, t]) => `<button class="${adj.hot === v ? "on" : ""}" data-adj="hot" data-v="${v}">${t}</button>`).join("")}</div>` : ""}${hasJ ? `<div class="vt mini"><span>젓갈</span>${[[0.8, "덜"], [1, "보통"], [1.2, "더"]].map(([v, t]) => `<button class="${adj.salty === v ? "on" : ""}" data-adj="salty" data-v="${v}">${t}</button>`).join("")}</div>` : ""}<button class="chip ${adj.extra ? "on" : ""}" data-adj="extra">양념 넉넉히 +10%</button></div>` : ""}` : ""}
     <div class="sec"><h4>재료 <small>${nIng ? nIng + "가지" : ""}</small></h4>${nIng ? L.map(i => i.h ? `<div class="ing gn">${esc(i.h)}</div>` : `<div class="ing"><span>${esc(i.n)}${i.m ? `<small>${esc(i.m)}</small>` : ""}</span><b class="${i.q == null ? "x" : ""}">${i.q == null ? (i.u && i.u !== "약간" ? esc(i.u) : "약간") : fmtA(i.q, i.u)}</b></div>`).join("") : `<div class="ing x">재료를 아직 안 적었어요${photos.length ? " — 사진을 크게 보며 「고치기」에서 적으면 계산 · 장보기가 돼요" : ""}</div>`}${nIng && Math.abs(factorOf(r, o.a, o.u) - 1) > 0.001 ? `<p class="hint">양을 바꿔 계산했어요. 물 · 향신료 · 굽거나 끓이는 시간은 그대로 두고 맛보며 맞춰 주세요.</p>` : ""}</div>
     ${(r.steps || []).length ? `<div class="sec"><h4>만드는 순서 <small>${r.steps.length}단계</small></h4><ol class="stp-l">${r.steps.map(s => `<li>${esc(s.t)}</li>`).join("")}</ol>${r.stepNote ? `<p class="hint">${esc(r.stepNote)}</p>` : ""}</div>` : ""}
     ${r.off && r.tips && r.tips.length ? `<div class="note">${r.tips.map(t => "· " + t).join("<br>")}<br>· 양은 출처 레시피를 비례로 늘린 계산값이에요. 간은 맛보며 맞춰 주세요.</div>` : ""}
     ${r.memo ? `<div class="sec"><h4>메모</h4><p class="memo">${esc(r.memo)}</p></div>` : ""}
-    ${!r.off ? `<div class="sec"><h4>만든 기록 <small>「이거 만들기」를 끝내면 자동으로 한 줄</small></h4>${(r.log || []).slice().sort((a, b) => b.d.localeCompare(a.d)).map(l => `<div class="log" data-logi="${esc(l.id)}"><span class="d">${esc(l.d)}</span><span class="lt"><b>${esc(l.amt || "")}</b>${l.note ? " · " + esc(l.note) : ""}</span><button class="lk" data-lognote="${esc(l.id)}">${l.note ? "고치기" : "한 줄 평"}</button></div>`).join("") || `<div class="log"><span class="lt" style="color:var(--ink3)">아직 없어요</span></div>`}</div>` : ""}
+    ${!r.off ? `<div class="sec"><h4>만든 기록 <small>「이거 만들기」를 끝내면 자동으로 한 줄</small></h4>${(r.log || []).slice().sort((a, b) => b.d.localeCompare(a.d)).map(l => `<div class="log" data-logi="${esc(l.id)}"><span class="d">${esc(l.d)}</span><span class="lt"><b>${esc(l.amt || "")}</b>${l.note ? " · " + esc(l.note) : ""}</span><span class="lga"><button class="lk" data-lognote="${esc(l.id)}">${l.note ? "평 고치기" : "한 줄 평"}</button>${l.note ? `<button class="lk" data-lognotedel="${esc(l.id)}">평 지우기</button>` : ""}<button class="ib s lgdel" data-logdel="${esc(l.id)}" aria-label="이 기록 지우기" title="이 기록 지우기">${IC.trash}</button></span></div>`).join("") || `<div class="log"><span class="lt" style="color:var(--ink3)">아직 없어요</span></div>`}</div>` : ""}
     ${r.off ? `<div class="src">출처: ${esc(r.src.n)}${r.src.u ? ` · <a href="${esc(r.src.u)}" target="_blank" rel="noopener">원문 보기</a>` : ""}</div>` : r.src ? `<div class="src">출처: ${/^https?:\/\//.test(r.src) ? `<a href="${esc(r.src)}" target="_blank" rel="noopener">${esc(r.src)}</a>` : esc(r.src)}</div>` : ""}`;
 }
 function detailBar(r) {
@@ -1044,14 +1084,15 @@ function scrMake2() {
   return hd("집에 있는 재료", `<button class="ib" data-mk1 aria-label="뒤로">${IC.back}</button>`) + `<div class="body"><div class="step"><span class="on"></span><span class="on"></span></div>
     <p class="mk-h"><b>2/2 · 있는 것만 「있음」으로</b><br>「없음」으로 남은 재료만 장보기로 넘어가요.</p>
     <div class="bulk"><button class="btn sm" data-bulk="all">전부 있음</button><button class="btn sm" data-bulk="sauce">양념류는 있음</button>${D.pantry.length ? `<button class="btn sm" data-bulk="pantry">있는 재료 목록대로</button>` : ""}<button class="btn sm" data-bulk="none">전부 없음</button></div>
-    ${it.map(e => `<div class="hv"><div class="n">${esc(e.n)}<small>${e.q == null ? esc(e.u === "약간" ? "약간" : e.u) : fmtQ(e.q, e.u)}${e.from.length > 1 ? " · " + e.from.map(esc).join(" + ") : ""}</small></div><div class="yn"><button class="y ${hv[e.key] ? "on" : ""}" data-hv="${esc(e.key)}" data-v="1">있음</button><button class="n ${!hv[e.key] ? "on" : ""}" data-hv="${esc(e.key)}" data-v="0">없음</button></div></div>`).join("") || `<div class="empty">재료가 적힌 레시피가 없어요</div>`}
+    ${it.map(e => `<div class="hv"><div class="n">${esc(e.n)}${e.from.length > 1 ? `<small>${e.from.map(esc).join(" + ")}</small>` : ""}</div><b class="q num">${e.q == null ? esc(e.u === "약간" ? "약간" : e.u) : fmtQ(e.q, e.u)}</b><div class="yn"><button class="y ${hv[e.key] ? "on" : ""}" data-hv="${esc(e.key)}" data-v="1">있음</button><button class="n ${!hv[e.key] ? "on" : ""}" data-hv="${esc(e.key)}" data-v="0">없음</button></div></div>`).join("") || `<div class="empty">재료가 적힌 레시피가 없어요</div>`}
   </div><div class="btmbar"><button class="btn go" data-mkdone>${no ? `없는 재료 ${no}가지 장보기로` : "장 볼 것 없음 — 기록만 남기기"}</button></div>`;
 }
 
 /* 장보기 */
 function shopRows(s) { return s.items; }
 function scrShop() {
-  return hd("장보기") + `<div class="body">${D.shops.length ? D.shops.map(s => { const n = s.items.length + (s.extra || []).length, d = s.items.filter(i => s.done[i.key]).length + (s.extra || []).filter(i => s.done[i.key]).length; return `<button class="sl" data-sid="${s.id}"><div class="t"><b>${esc(s.name)}</b><small>${esc(s.created.slice(5).replace("-", "/"))} · ${esc(s.recipes.join(" · "))} · ${n ? (d === n ? "다 샀어요" : `${n}가지 중 ${d}가지 샀음`) : "살 것 없음"}</small><div class="prog"><i style="width:${n ? Math.round(d / n * 100) : 100}%"></i></div></div>${IC.next}</button>`; }).join("")
+  const doneN = D.shops.filter(s => { const all = s.items.concat(s.extra || []); return all.length && all.every(e => s.done[e.key]); }).length;
+  return hd("장보기 목록", "", D.shops.length ? `<button class="btn sm" data-sdelall>${IC.trash} ${doneN ? `다 산 것 지우기 (${doneN})` : "모두 지우기"}</button>` : "") + `<div class="body">${D.shops.length ? D.shops.map(s => { const n = s.items.length + (s.extra || []).length, d = s.items.filter(i => s.done[i.key]).length + (s.extra || []).filter(i => s.done[i.key]).length; return `<button class="sl" data-sid="${s.id}"><div class="t"><b>${esc(s.name)}</b><small>${esc(s.created.slice(5).replace("-", "/"))} · ${esc(s.recipes.join(" · "))} · ${n ? (d === n ? "다 샀어요" : `${n}가지 중 ${d}가지 샀음`) : "살 것 없음"}</small><div class="prog"><i style="width:${n ? Math.round(d / n * 100) : 100}%"></i></div></div><span class="sldel" data-sdel="${s.id}" role="button" tabindex="0" aria-label="이 장보기 지우기" title="지우기">${IC.trash}</span>${IC.next}</button>`; }).join("")
     : `<div class="empty"><b>장보기가 없어요</b>레시피에서 「이거 만들기」 → 집에 있는 재료를 고르면<br>없는 재료만 여기로 와요.</div>`}</div>`;
 }
 function scrShopD() {
@@ -1062,7 +1103,7 @@ function scrShopD() {
   let body;
   if (S.shopMode === "all" || s.recipes.length < 2) body = sorted(all).map(e => row(e)).join("");
   else body = s.recipes.map(rn => { const mine = s.items.filter(e => e.from.includes(rn)); const vis = sorted(mine); return `<div class="lbl"><span>${esc(rn)}</span><span>${mine.length}가지</span></div>` + vis.map(e => { const p = e.per.filter(x => x.r === rn); const q = p.every(x => x.q != null) ? fmtQ(p.reduce((a, x) => a + x.q, 0), e.u) : null; return row(e, q); }).join(""); }).join("") + ((s.extra || []).length ? `<div class="lbl"><span>직접 넣은 것</span></div>` + sorted(s.extra).map(e => row(e)).join("") : "");
-  return hd(s.name, backBtn(), `<button class="ib" data-shopmenu aria-label="더 보기">${IC.share}</button>`) + `<div class="body">
+  return hd(s.name, backBtn(), `<button class="ib" data-shopmenu aria-label="보내기">${IC.share}</button><button class="ib" data-shopdel aria-label="이 장보기 지우기" title="지우기">${IC.trash}</button>`) + `<div class="body">
     ${s.recipes.length > 1 ? `<div class="vt" style="margin-bottom:6px"><button style="flex:1" class="${S.shopMode === "all" ? "on" : ""}" data-sm="all">전체 재료</button><button style="flex:1" class="${S.shopMode === "per" ? "on" : ""}" data-sm="per">음식별</button></div>` : ""}
     <div class="lbl"><span>살 것 ${left}가지 남음${s.hide && all.length - left ? ` · 다 산 것 ${all.length - left}가지 숨김` : ""}</span><span>같은 재료 · 단위는 합침</span></div>
     ${body || `<div class="empty">살 것이 없어요</div>`}
@@ -1144,7 +1185,7 @@ function scrEdit() {
   <section class="esec" id="es-photo">${esh("photo", 4, "사진", false, "음식 사진이 대표, 없으면 레시피 사진이 대표")}
     <div class="slots">${[["food", IC.cam, "음식 사진", "다 만든 모습"], ["recipe", IC.doc, "레시피 사진", "종이 · 캡처"], ["ref", IC.cam, "참고 사진", "과정 · 재료"]].map(([k, ic, t, d]) => `<label class="slot add">${ic}<b>${t}</b>${d}<input type="file" accept="image/*" multiple hidden data-addph="${k}"></label>`).join("")}</div>
     <div class="phpaste"><button class="btn sm" data-phpaste>${IC.copy} 복사한 사진 붙여넣기</button><span>${DEV === "pc" ? "또는 이 화면에서 <b>Ctrl + V</b>" : "다른 앱에서 사진을 「복사」한 뒤 눌러요"} · 붙인 뒤 사진 아래 꼬리표를 눌러 음식 · 레시피 · 참고를 바꿔요</span></div>
-    ${ps.length ? `<div class="phl">${ps.map(p => `<div class="pi ${p.id === mainId ? "main" : ""}"><img src="${PURL[p.id].t}" alt="" data-epv="${p.id}">${p.id === mainId ? `<em class="mn">대표</em>` : ""}<div class="pa"><button data-pkind="${p.id}">${KIND[p.kind]}</button>${p.id !== mainId ? `<button data-pmain="${p.id}">대표로</button>` : ""}<button data-pdel="${p.id}" aria-label="사진 지우기">${IC.x}</button></div></div>`).join("")}</div>` : ""}
+    ${ps.length ? `<p class="kleg"><span class="k-food">음식</span> 다 만든 모습 · 대표 사진 후보 <span class="k-recipe">레시피</span> 종이 · 캡처 — 레시피 화면의 「레시피 사진 보기」로 <span class="k-ref">참고</span> 과정 · 재료 사진 — 작은 사진 줄에 · 사진 아래 종류 단추를 누르면 바뀌어요</p><div class="phl">${ps.map(p => `<div class="pi k-${p.kind} ${p.id === mainId ? "main" : ""}"><img src="${PURL[p.id].t}" alt="" data-epv="${p.id}">${p.id === mainId ? `<em class="mn">대표</em>` : ""}<div class="pa"><button data-pkind="${p.id}">${KIND[p.kind]}</button>${p.id !== mainId ? `<button data-pmain="${p.id}">대표로</button>` : ""}<button data-pdel="${p.id}" aria-label="사진 지우기">${IC.x}</button></div></div>`).join("")}</div>` : ""}
     <p class="hint">레시피 사진만 올리고 저장해도 돼요. 재료는 나중에 적으면 그때부터 계산 · 장보기가 돼요. 사진은 크기를 줄여 저장해요(원본은 사진첩에 그대로).</p>
   </section>
   <section class="esec" id="es-tag">${esh("tag", 5, "분류 · 태그")}
@@ -1373,7 +1414,9 @@ function sheetHtml() {
 function pvList() {
   if (S.scr === "edit") return S.edit.photos.filter(p => PURL[p.id]).map(p => ({ f: PURL[p.id].f, kind: KIND[p.kind] }));
   const r = RR(S.rid); if (!r) return [];
-  return r.off ? (r.photo ? [{ f: r.photo, kind: "음식", cap: r.cap }] : []) : (r.photos || []).filter(p => PURL[p.id]).map(p => ({ f: PURL[p.id].f, kind: KIND[p.kind] }));
+  if (r.off) return r.photo ? [{ f: r.photo, kind: "음식", cap: r.cap }] : [];
+  const A = (r.photos || []).filter(p => PURL[p.id]), set = S.pvSet === "recipe" ? A.filter(p => p.kind === "recipe") : S.pvSet === "other" ? A.filter(p => p.kind !== "recipe") : A;
+  return set.map(p => ({ f: PURL[p.id].f, kind: KIND[p.kind] }));
 }
 function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i]; const r = S.scr === "edit" ? S.edit : RR(S.rid);
@@ -1603,7 +1646,7 @@ document.addEventListener("click", async e => {
   if (d.print != null) return printRecipe(RR(S.rid));
   if (d.make != null) return startMake(S.rid);
   if (d.makefrom) return startMake(d.makefrom);
-  if (d.pv != null) { S.pv = +d.pv; return render(); }
+  if (d.pv != null) { S.pv = +d.pv; S.pvSet = d.pvset || null; return render(); }
   if (d.epv) { S.pv = S.edit.photos.filter(p => PURL[p.id]).findIndex(p => p.id === d.epv); return render(); }
   if (d.pvx != null) { S.pv = null; return render(); }
   if (d.pvm) { const n = pvList().length; S.pv = (S.pv + (+d.pvm) + n) % n; return render(); }
@@ -2090,6 +2133,26 @@ document.addEventListener("click", async e => {
   if (t.dataset.rshare != null) { S.sheet = "rshare"; return render(); }
   S.sheet = null; render(); await shareRecipe(r, t.dataset.rsend);
 });
+
+/* 장보기 지우기 — 목록의 휴지통 · 다 산 것 한꺼번에 */
+document.addEventListener("click", async e => {
+  const t = e.target.closest("[data-sdel],[data-sdelall]"); if (!t) return; e.preventDefault(); e.stopPropagation();
+  if (t.dataset.sdel) { const s = D.shops.find(x => x.id === t.dataset.sdel); if (!s || !confirm(`「${s.name}」 장보기를 지울까요?`)) return; await delShop(s.id); render(); return toast("장보기를 지웠어요."); }
+  const done = D.shops.filter(s => { const all = s.items.concat(s.extra || []); return all.length && all.every(e => s.done[e.key]); });
+  const L = done.length ? done : D.shops; if (!L.length) return;
+  if (!confirm(done.length ? `다 산 장보기 ${L.length}개를 지울까요?` : `장보기 ${L.length}개를 모두 지울까요?`)) return;
+  for (const s of L) await delShop(s.id); render(); toast(`장보기 ${L.length}개를 지웠어요.`);
+}, true);
+
+/* 만든 기록 · 한 줄 평 지우기 */
+document.addEventListener("click", async e => {
+  const t = e.target.closest("[data-logdel],[data-lognotedel]"); if (!t) return; const r = RR(S.rid); if (!r || !r.log) return;
+  const id = t.dataset.logdel || t.dataset.lognotedel, l = r.log.find(x => x.id === id); if (!l) return;
+  if (t.dataset.logdel) { if (!confirm(`${l.d} 만든 기록을 지울까요?${l.note ? "\n(한 줄 평도 함께 지워져요)" : ""}`)) return; r.log = r.log.filter(x => x.id !== id); await saveRecipe(r); render(); return toast("만든 기록을 지웠어요."); }
+  if (!confirm("한 줄 평을 지울까요? (만든 날짜 기록은 남아요)")) return; l.note = ""; await saveRecipe(r); render(); toast("한 줄 평을 지웠어요.");
+});
+
+document.addEventListener("click", e => { if (!e.target.closest("[data-amtreset]")) return; const r = RR(S.rid); if (r) { delete S.amt[r.id]; render(); } });
 
 
 if (/^https?:/.test(location.protocol) && "serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});

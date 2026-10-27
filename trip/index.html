@@ -1499,7 +1499,7 @@ function pastePrev() {
 }
 function scrPaste() {
   const t = TR(), has = t && t.days.some(d => d.items.length), P = S.paste || {};
-  return hd("일정 붙여넣기", backBtn()) + `<div class="body">${P.fromLink ? `<p class="hint lk2">${IC.link} 「${esc(P.title || "여행사 페이지")}」에서 가져온 글이에요 — 아래 미리보기를 확인하고 「이대로 넣기」</p>` : bmBox()}
+  return hd("일정 붙여넣기", backBtn()) + `<div class="body">${P.fromLink ? `<p class="hint lk2">${IC.link} 「${esc(P.title || "여행사 페이지")}」에서 가져온 글이에요 — 아래 미리보기를 확인하고 「이대로 넣기」</p>` : ""}
     <textarea class="inp pta" id="pta" placeholder="1일차  인천 출발&#10;11.11 수 20:35 인천(ICN) 출발 제주항공 7C2401&#10;아침: 불포함 / 점심: 불포함 / 저녁: 기내식&#10;2일차 …">${esc(P.text || "")}</textarea>
     <div class="row2"><button class="btn sm" data-pclip>${IC.paste} 복사한 것 붙여넣기</button><button class="btn sm" data-sheet="pstd">붙여넣기 표준 보기</button>${P.text ? `<button class="btn sm" data-pclear>비우기</button>` : ""}</div>
     ${has ? `<label class="f">지금 있는 일정은</label><div class="vt">${[["add", "뒤에 더하기"], ["rep", "모두 바꾸기"]].map(([k, n]) => `<button class="${(P.mode || "add") === k ? "on" : ""}" data-pmode="${k}">${n}</button>`).join("")}</div>` : ""}
@@ -1537,25 +1537,11 @@ function scrSet() {
     <div class="lbl"><span>백업</span></div>
     <button class="row" data-backup>${IC.save}<div class="t"><b>백업 만들기</b><small>여행 ${D.items.length}개 · 사진 ${D.items.reduce((a, r) => a + (r.photos || []).length, 0)}장을 파일 하나로 · 마지막 백업: ${lb ? new Date(lb).toLocaleDateString("ko-KR") : "없음"}</small></div></button>
     <label class="row">${IC.copy}<div class="t"><b>백업에서 되살리기</b><small>다른 휴대폰 · PC에서 만든 백업 파일(.zip)</small></div><input type="file" accept=".zip,application/zip" hidden id="restore"></label>
-    <div class="foot">여행 노트 v${VER} 시험판 · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>
+    <div class="foot">여행 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>
   </div>`;
 }
 
 
-/* ───────── 「Blog J로 일정 보내기」 즐겨찾기 버튼(북마클릿) — 시험 기능 ─────────
-   여행사 페이지에서 누르면 그 페이지 글(고른 글이 있으면 그 글)을 우리 앱 새 탭으로 넘김.
-   글은 주소의 # 뒤에 담겨 서버로 가지 않음(브라우저 안에서만) */
-function appBase() { return /^https?:$/.test(location.protocol) ? location.origin + location.pathname.replace(/[^/]*$/, "") : "https://pegasus0710-arch.github.io/jesa_tools/trip/"; }
-function bmHref() {
-  const js = `(function(){var s=String(window.getSelection?getSelection():"");var t=s.length>80?s:(document.body.innerText||"");t=t.slice(0,300000);window.open(${JSON.stringify(appBase())}+"#bjpaste="+encodeURIComponent(document.title.slice(0,100))+"|"+encodeURIComponent(t),"_blank");})()`;
-  return "javascript:" + encodeURI(js).replace(/#/g, "%23");
-}
-const bmShow = () => !IS_MOBILE() && gdHttp();
-function bmBox() {
-  if (!bmShow()) return "";
-  return `<div class="tcard bmk"><div class="bmh"><b>여행사 페이지에서 버튼 한 번으로 가져오기</b><em class="okb" style="background:var(--amber)">시험</em></div>
-    <div class="bmr"><a class="bmb" href="${esc(bmHref())}" data-bm draggable="true">${IC.plane} Blog J로 일정 보내기</a><small>이 단추를 즐겨찾기 막대로 끌어 놓고, 여행사 일정 페이지에서 누르세요.</small></div></div>`;
-}
 /* ───────── 아래에서 올라오는 창 ───────── */
 function sheetHtml() {
   const k = S.sheet, t = TR(); let h = "";
@@ -2024,7 +2010,6 @@ async function saveItemForm() {
 }
 
 /* 즐겨찾기 버튼은 앱 안에서 누르면 안 됨(끌어 놓기 전용) */
-document.addEventListener("click", e => { if (e.target.closest("a[data-bm]")) { e.preventDefault(); toast("눌러서가 아니라, 마우스로 끌어서 즐겨찾기 막대에 놓아 주세요."); } }, true);
 /* ───────── 누르기 ───────── */
 document.addEventListener("click", async e => {
   const tg = e.target.closest("button,[data-close],[data-trip],[data-pvid],label[data-x]"); if (!tg) return; const d = tg.dataset, t = TR();
@@ -2174,12 +2159,9 @@ window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   } else toast("이 브라우저는 저장을 막고 있어요 — 시크릿 창이면 일반 창으로 열어 주세요.");
   if ((CAN_DIR || gdHttp()) && !D.dir && !D.set.gdOn && !D.set.storeAsked && gdHttp()) S.sheet = "store";
-  /* 「Blog J로 일정 보내기」로 열림: #bjpaste=제목|글 */
-  let lk = null; if (/^#bjpaste=/.test(location.hash)) { try { const raw = location.hash.slice(9), i = raw.indexOf("|"); lk = { title: decodeURIComponent(raw.slice(0, i)), text: decodeURIComponent(raw.slice(i + 1)) }; } catch (e) { lk = null; } }
-  try { history.replaceState({ n: 0 }, "", lk ? location.pathname + location.search : location.href); } catch (e) {}
-  if (lk && lk.text.trim()) { S.paste = { text: lk.text, title: lk.title, res: parseTrip(lk.text, { page: true }), mode: "add", fromLink: true }; S.sheet = "lpick"; }
+  try { history.replaceState({ n: 0 }, "", location.href); } catch (e) {}
   /* 여행 중이면 바로 그 여행의 오늘 */
-  const ct = D.items.find(t => phase(t).k === "on"); if (ct && !S.sheet && !lk) { S.rid = ct.id; S.day = phase(ct).i; S.scr = "trip"; hist.push({ scr: "list", rid: null }); }
+  const ct = D.items.find(t => phase(t).k === "on"); if (ct && !S.sheet) { S.rid = ct.id; S.day = phase(ct).i; S.scr = "trip"; hist.push({ scr: "list", rid: null }); }
   render(true);
   if (D.dir && D.dirPerm === "granted") syncFromFolder();
 })();

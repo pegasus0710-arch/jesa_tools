@@ -2225,8 +2225,8 @@ function scrAll() {
   const cats = ["전체", ...(D.cats || [])]; if (D.recipes.some(r => !r.cat)) cats.push("분류 없음");
   const tags = allTags();
   const views = `<span class="lvs aviews">${AVIEWS.map(([k, ic, t]) => `<button class="${aView() === k ? "on" : ""}" data-aview="${k}">${IC[ic] || ""}${t}</button>`).join("")}</span>`;
-  const right = `${D.recipes.length ? `<button class="btn sm ${A.sel ? "nv" : ""}" data-asel0>${A.sel ? "다 했어요" : "여러 개 고르기"}</button>` : ""}${home ? `<button class="btn nv" data-new>${IC.plus} 레시피 넣기</button>` : ""}`;
-  return hd(home ? `내 레시피 ${D.recipes.length}` : `전체 레시피 ${D.recipes.length}`, home ? "" : backBtn(), `<span class="ahr">${right}</span>`) + `<div class="body allp">
+  const right = `${D.recipes.length ? `<button class="btn sm ${A.sel ? "nv" : ""}" data-asel0>${A.sel ? "다 했어요" : "한꺼번에 정리"}</button>` : ""}${home ? `<button class="btn nv" data-new>${IC.plus} 레시피 넣기</button>` : ""}`;
+  return hd(home ? `내 레시피 · ${D.recipes.length}개` : `전체 레시피 · ${D.recipes.length}개`, home ? "" : backBtn(), `<span class="ahr">${right}</span>`) + `<div class="body allp">
     ${home ? banner() : ""}
     <div class="atop"><div class="srch in">${IC.find}<input id="aq" value="${esc(A.q || "")}" placeholder="이름 · 태그 · 재료로 찾기" autocomplete="off" enterkeyhint="search"></div>
       <button class="btn sm ${S.fridge ? "nv" : ""}" data-fridge>${IC.jar} 있는 재료로 찾기${D.pantry.length ? ` (${D.pantry.length})` : ""}</button></div>

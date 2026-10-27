@@ -675,8 +675,8 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .ar.sr2{grid-template-columns:52px minmax(0,1fr) 34px;grid-template-areas:"p n o" "p m o"}
 .allp .ar.sr2[data-asel]{grid-template-columns:24px 52px minmax(0,1fr);grid-template-areas:"c p n" "c p m"}
 .ar.sr2>.ltile{grid-area:p;width:52px;height:52px}
-body.pc .allp .ah{grid-template-columns:52px minmax(0,1fr) 70px 150px 92px 78px 34px}
-body.pc .allp .ar.sr2{grid-template-columns:52px minmax(0,1fr) 70px 150px 92px 78px 34px;grid-template-areas:none}
+body.pc .allp .ah{grid-template-columns:52px minmax(0,1fr) 70px 140px 92px 118px 34px}
+body.pc .allp .ar.sr2{grid-template-columns:52px minmax(0,1fr) 70px 140px 92px 118px 34px;grid-template-areas:none}
 body.pc .allp .ar.sr2>.ltile{grid-area:auto;width:52px;height:44px}
 body.pc .allp .ar.sr2 .opb{grid-area:auto}
 body.pc .allp .atb.sel .ah,body.pc .allp .ar.sr2[data-asel]{grid-template-columns:24px 52px minmax(0,1fr) 70px 150px 92px 78px}
@@ -757,6 +757,10 @@ body:not(.pc) .allp .aopt .chips:not(.tg):not(.kinds){flex-wrap:nowrap;overflow-
 .stbar.ic .stc:after{content:"";position:absolute;right:4px;top:4px;width:10px;height:10px;border-radius:50%;border:2px solid var(--card);background:#9b9383}
 .stbar.ic .stc.ok:after{background:#2f7d4f}.stbar.ic .stc.warn:after{background:#d8892e}.stbar.ic .stc.bad:after{background:var(--red)}.stbar.ic .stc.busy:after{background:var(--amber)}
 .hd .stbar.ic{margin-right:2px}
+
+/* 설치 아이콘(10-28) — 점 없이, 남색 아이콘 */
+.stbar.ic .stc.ip{color:var(--navy)}.stbar.ic .stc.ip:after{display:none}
+.row.hlp{text-decoration:none;color:var(--ink)}.row.hlp>.i:last-child{width:17px;height:17px;color:var(--ink3);flex-shrink:0;margin-left:auto}
 
 
 </style></head>
@@ -1000,7 +1004,9 @@ const ASORTS = { new: "최근 담은 순", name: "가나다순", open: "최근 �
 const AVIEWS = [["card", "grid", "카드"], ["table", "list", "목록"], ["names", "doc", "이름만"]];
 const APAGE = { card: 24, table: 50, names: 300 };
 const STS = [["all", "전체"], ["later", "나중에 볼 것"], ["done", "봤음"], ["fav", "즐겨찾기"]];
-const fmtD = ms => { if (!ms) return ""; const d = new Date(ms); return String(d.getFullYear()).slice(2) + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0"); };
+/* 날짜 표기 규칙(10-28 제이): 2026-01-01(목) */
+const ymdw = d => { d = new Date(d); return isNaN(d) ? "" : d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + "(" + "일월화수목금토"[d.getDay()] + ")"; };
+const fmtD = ms => ms ? ymdw(ms) : "";
 const aView = () => S.al.view || (isPC() ? "card" : "card");
 const favB = r => `<span class="fvb ${r.fav ? "on" : ""}" data-favr="${r.id}" role="button" tabindex="0" aria-label="${r.fav ? "즐겨찾기 빼기" : "즐겨찾기"}" title="${r.fav ? "즐겨찾기 빼기" : "즐겨찾기"}">${IC.star}</span>`;
 const ns = s => String(s || "").toLowerCase().replace(/\s+/g, "");
@@ -1165,11 +1171,12 @@ function scrSet() {
     ${mobileBox()}
     <div class="lbl"><span>가져오기 · 백업</span></div>
     <button class="row" data-sheet="import">${IC.imp}<div class="t"><b>크롬 · 엣지 즐겨찾기 가져오기</b><small>브라우저의 「즐겨찾기 내보내기」 파일(.html)을 넣으면 폴더대로, 또는 주소로 자동 분류해 넣어요. 같은 주소는 한 번만.</small></div></button>
-    <button class="row" data-backup>${IC.save}<div class="t"><b>백업 만들기</b><small>스크랩 ${D.items.length}개 · 사진 ${D.items.reduce((a, r) => a + (r.photos || []).length, 0)}장을 파일 하나로${IS_MOBILE() ? " → 카톡 나에게 · 드라이브 · 파일 앱" : ""}<br>마지막 백업: ${lb ? new Date(lb).toLocaleDateString("ko-KR") : "없음"}</small></div></button>
+    <button class="row" data-backup>${IC.save}<div class="t"><b>백업 만들기</b><small>스크랩 ${D.items.length}개 · 사진 ${D.items.reduce((a, r) => a + (r.photos || []).length, 0)}장을 파일 하나로${IS_MOBILE() ? " → 카톡 나에게 · 드라이브 · 파일 앱" : ""}<br>마지막 백업: ${lb ? ymdw(lb) : "없음"}</small></div></button>
     <label class="row">${IC.copy}<div class="t"><b>백업에서 되살리기</b><small>다른 휴대폰 · PC에서 만든 백업 파일(.zip)을 넣어요. 같은 스크랩은 더 최근 것으로.</small></div><input type="file" accept=".zip,application/zip" hidden id="restore"></label>
     <div class="lbl"><span>정리</span></div>
     <button class="row" data-sheet="cats">${IC.folder}<div class="t"><b>분류 관리</b><small>${(D.cats || []).map(c => esc(c.n) + (c.s.length ? ` (${c.s.length})` : "")).join(" · ") || "없음"}</small></div></button>
     <button class="row" data-sheet="tags"><span class="hs">#</span><div class="t"><b>태그 관리</b><small>${allTags().length}개 · 이름 바꾸기 · 지우기</small></div></button>
+    ${helpBox()}
     <div class="foot">스크랩 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>
   </div>`;
 }
@@ -1501,7 +1508,7 @@ async function gdSync(opt = {}) {
 /* 고칠 때마다 자동으로 올리기 — 토큰이 살아 있을 때만(1시간), 없으면 다음 「맞추기」 때 */
 let gdT; function gdAuto() { if (!gdOn() || !gdHttp() || !GD.token || Date.now() > GD.exp - 60000) { if (gdOn()) gdPaint(); return; } clearTimeout(gdT); gdT = setTimeout(() => gdSync({ toast: false }), 2500); }
 function gdPaint() { const el = $("#gdbox"); if (el) el.outerHTML = gdBox(); const b = $("#stbar"); if (b) b.outerHTML = stBar(); }
-const gdAgo = t => { if (!t) return "아직 없음"; const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "방금" : m < 60 ? m + "분 전" : m < 1440 ? Math.round(m / 60) + "시간 전" : new Date(t).toLocaleDateString("ko-KR"); };
+const gdAgo = t => { if (!t) return "아직 없음"; const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "방금" : m < 60 ? m + "분 전" : m < 1440 ? Math.round(m / 60) + "시간 전" : ymdw(t); };
 function gdBox() {
   if (!gdHttp()) return `<div class="row" id="gdbox">${IC.link}<div class="t"><b>구글 드라이브 연동 <span class="okb" style="background:var(--amber)">웹 주소에서</span></b><small>받은 파일(내 PC)로 연 화면에서는 구글 로그인이 막혀요. PC도 <b class="url">pegasus0710-arch.github.io/jesa_tools/scrap/</b> 주소로 열어서(주소창 오른쪽 「설치」로 앱처럼) 연결해 주세요.</small></div></div>`;
   const live = GD.token && Date.now() < GD.exp - 60000;
@@ -1532,13 +1539,7 @@ document.addEventListener("click", async e => {
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && gdOn() && GD.token && Date.now() < GD.exp - 60000) gdSync({ toast: false }); });
 
 /* ───────── 머리줄: 설치 단추 · 저장 상태 줄 ───────── */
-function instBtn(pc) {
-  if (STANDALONE || !gdHttp()) return `<span id="inst"></span>`;
-  if (DEV === "ios-safari") return `<button class="ib inst" id="inst" data-guide>${IC.home}<em>홈 화면에 추가</em></button>`;
-  if (IS_SAMSUNG) return `<button class="ib inst" id="inst" data-samsung>${IC.home}<em>${window._bip ? "앱 설치" : "설치 안내"}</em></button>`;
-  if (window._bip) return `<button class="ib inst" id="inst" data-install>${IC.home}<em>${DEV === "pc" ? "PC에 설치" : "앱 설치"}</em></button>`;
-  return `<span id="inst"></span>`;
-}
+function instBtn(pc) { return `<span id="inst"></span>`; }   /* 10-28: 설치는 머리줄 아이콘(공통 instIc)으로 */
 /* 저장 상태 줄 — 늘 같은 자리(누르면: 구글 드라이브 = 맞추기, 폴더 = 다시 연결 · 설정) */
 function stBar() {
   const it = [];
@@ -1884,10 +1885,27 @@ document.addEventListener("click", e => {
 if (/[?&]install(=|&|$)/.test(location.search) && !STANDALONE) { const iv = setInterval(() => { if (typeof S !== "undefined") { S.instPg = true; clearInterval(iv); } }, 20); setTimeout(() => clearInterval(iv), 3000); }
 
 /* 머리줄 저장 상태 — 글자 없이 아이콘만(구글 드라이브 · 폴더), 상태는 점 색 · 마우스를 올리면 설명 */
+/* 설치 아이콘(10-28) — 설치 안 한 웹 화면에서만, 구글 드라이브 · 폴더 아이콘 옆. 설치한 앱(홈 화면 · PC 앱 창)에서는 안 보임.
+   누르면: 브라우저가 설치 창을 줄 수 있으면 바로 설치 창, 아니면 설치 화면(브라우저별 방법 · 아이폰 · 앱 안 브라우저 안내) */
+function instIc() { if (STANDALONE || !(/^https:$/.test(location.protocol) || location.hostname === "localhost")) return "";
+  const t = DEV === "pc" ? "PC에 앱으로 설치" : IOS ? "홈 화면에 추가" : "휴대폰에 앱으로 설치";
+  return `<button class="stc ip" data-instic title="${t}" aria-label="${t}"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg></button>`; }
+document.addEventListener("click", async e => { if (!e.target.closest("[data-instic]")) return; e.stopPropagation();
+  if (window._bip && !IOS) { const ev = window._bip; ev.prompt(); try { const r = await ev.userChoice; if (r && r.outcome === "accepted") window._bip = null; } catch (er) {} return render(); }
+  S.instPg = true; IP.wait = false; render(); }, true);
 function stIc(h) {
+  h = h.replace(/<\/div>\s*$/, instIc() + "</div>");
   return h.replace('class="stbar"', 'class="stbar ic"').replace(/<button class="stc ([^"]*)"([^>]*)>([\s\S]*?)<b>([\s\S]*?)<\/b><i>([\s\S]*?)<\/i><\/button>/g, (m, c, a, ic, b, i) => {
     a = a.replace(/\s*title="[^"]*"/, ""); const t = (b + " · " + i).replace(/"/g, "&quot;");
     return `<button class="stc ${c}"${a} title="${t}" aria-label="${t}">${ic}</button>`; });
+}
+
+/* 설정 맨 아래 「도움말」(10-28 제이) — 설치형 앱마다 설치 · 삭제 방법(790) · 저장 위치 · 구글 드라이브(791) 글 링크 */
+function helpBox() {
+  const ic = '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v6H4V6h6"/></svg>';
+  return `<div class="lbl"><span>도움말</span></div>
+    <a class="row hlp" href="https://luvbong.tistory.com/790" target="_blank" rel="noopener">${IC.home}<div class="t"><b>앱 설치 · 삭제 방법</b><small>휴대폰 · PC에 설치하기, 지우는 방법 — 블로그 글</small></div>${ic}</a>
+    <a class="row hlp" href="https://luvbong.tistory.com/791" target="_blank" rel="noopener">${IC.cloud}<div class="t"><b>저장 위치 · 구글 드라이브 연결 방법</b><small>휴대폰과 PC를 같이 쓰기, PC 폴더에 저장하기 — 블로그 글</small></div>${ic}</a>`;
 }
 
 

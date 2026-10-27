@@ -639,6 +639,9 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .acnt{display:flex;align-items:center;gap:10px;margin:12px 2px 0;font-size:13.5px;color:var(--ink2)}.acnt b{color:var(--ink)}
 .row small b{display:inline;font-size:inherit}
 
+.bn2 .bn-in{background:var(--amber);color:#fff;font-weight:800}
+.bn2 .bn-x{min-height:32px;padding:2px 8px;color:#8a6a3a;font-weight:600;align-self:flex-start}
+
 /* ── 스크랩 노트 ── */
 .tabs.t3{grid-template-columns:repeat(3,1fr)}
 .tabs.t3 button .bd{right:18%}
@@ -958,7 +961,7 @@ const backBtn = () => `<button class="ib" data-back aria-label="뒤로">${IC.bac
 
 function banner() {
   let h = S.newVer ? `<div class="bn2"><div class="t"><b>새 버전 v${esc(S.newVer)}이 나왔어요</b><br>내 스크랩은 그대로 두고 프로그램 파일만 바꾸면 돼요.</div><a class="lk" href="https://luvbong.tistory.com/search/스크랩 노트" target="_blank" rel="noopener">받으러 가기</a></div>` : "";
-  if (D.set.banner && IS_SAMSUNG && !STANDALONE) h += `<div class="bn2"><div class="t"><b>삼성 인터넷으로 설치할 때</b><br>「안전하지 않은 앱 차단됨」 경고가 뜰 수 있어요. 삼성 인터넷이 홈 화면 앱을 만드는 방식 때문이고 스크랩 노트는 안전해요 — <b>「무시하고 설치하기」</b>를 누르면 설치돼요. 크롬이 있으면 크롬으로 이 주소를 열어 설치하면 경고가 안 떠요.</div><button data-samsung>방법</button></div>`;
+  if (D.set.banner && IS_SAMSUNG && !STANDALONE) h += `<div class="bn2"><div class="t"><b>삼성 인터넷으로 설치할 때</b><br>「안전하지 않은 앱 차단됨」 경고가 뜰 수 있어요. 삼성 인터넷이 홈 화면 앱을 만드는 방식 때문이고 스크랩 노트는 안전해요 — <b>「무시하고 설치하기」</b>를 누르면 설치돼요. 크롬이 있으면 크롬으로 이 주소를 열어 설치하면 경고가 안 떠요.</div>${window._bip ? `<button class="bn-in" data-install>설치</button>` : `<button data-samsung>방법</button>`}<button class="bn-x" data-nobanner aria-label="닫기">✕</button></div>`;
   if (D.set.banner && DEV === "ios-safari") h += `<div class="bn2"><div class="t"><b>아이폰은 홈 화면에 추가해서 쓰세요</b><br>사파리에서 그냥 쓰면 오래 안 열 때 스크랩이 지워질 수 있어요.</div><button data-guide>방법 보기</button></div>`;
   const lb = D.set.lastBackup, days = lb ? Math.floor((Date.now() - lb) / 864e5) : null;
   if (typeof gdOn === "function" && gdOn()) return h;
@@ -1183,7 +1186,7 @@ function sheetHtml() {
   else if (k === "samsung") h = `<b class="sht">삼성 인터넷에서 설치하기</b>
     <ol class="gsteps"><li><span>아래 <span class="k">≡</span> 메뉴 → <span class="k">페이지 추가</span>(버전에 따라 「현재 페이지 추가」) → <span class="k">홈 화면</span> — 주소창에 설치 아이콘이 보이면 그걸 눌러도 돼요</span></li><li><span>「안전하지 않은 앱 차단됨」이 뜨면 <span class="k">세부정보 더보기</span> → <span class="k">무시하고 설치하기</span></span></li><li><span>홈 화면의 <span class="k">스크랩 노트</span> 아이콘으로 열어요</span></li></ol>
     <p class="hint">경고는 삼성 인터넷이 홈 화면 앱을 만드는 방식 때문에 뜨는 것이고, 스크랩 노트는 가입 · 서버 없이 내 기기와 내 구글 드라이브에만 저장해요. 크롬이 깔려 있으면 크롬으로 같은 주소를 열어 「앱 설치」를 누르면 경고 없이 설치돼요.</p>
-    <div class="row2"><button class="btn nv" style="flex:1" data-close>알겠어요</button></div>`;
+    <div class="row2">${window._bip ? `<button class="btn go" style="flex:1" data-install>${IC.home} 지금 설치</button><button class="btn sm" data-close>닫기</button>` : `<button class="btn nv" style="flex:1" data-close>알겠어요</button>`}</div>`;
   else if (k === "ishare") { const mob = IS_MOBILE(); h = `<b class="sht">스크랩 보내기</b>
     <button class="opt" data-isend="${mob ? "text" : "copy"}"><span class="ic">${IC.doc}</span><span><b>${mob ? "글로 보내기" : "글로 복사"}</b><small>제목 · 주소 · 메모를 글로 — 카톡 · 문자 · 메일에</small></span></button>
     ${RR(S.rid) && RR(S.rid).url ? `<button class="opt" data-isend="url"><span class="ic">${IC.link}</span><span><b>주소만 복사</b><small>${RR(S.rid).start ? "시작 시각까지 붙은 주소" : "열어 볼 주소"}</small></span></button>` : ""}`; }
@@ -1506,7 +1509,7 @@ document.addEventListener("visibilitychange", () => { if (document.visibilitySta
 function instBtn(pc) {
   if (STANDALONE || !gdHttp()) return `<span id="inst"></span>`;
   if (DEV === "ios-safari") return `<button class="ib inst" id="inst" data-guide>${IC.home}<em>홈 화면에 추가</em></button>`;
-  if (IS_SAMSUNG) return `<button class="ib inst" id="inst" data-samsung>${IC.home}<em>설치 안내</em></button>`;
+  if (IS_SAMSUNG) return `<button class="ib inst" id="inst" data-samsung>${IC.home}<em>${window._bip ? "앱 설치" : "설치 안내"}</em></button>`;
   if (window._bip) return `<button class="ib inst" id="inst" data-install>${IC.home}<em>${DEV === "pc" ? "PC에 설치" : "앱 설치"}</em></button>`;
   return `<span id="inst"></span>`;
 }

@@ -638,6 +638,22 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .wpb{margin-top:10px;display:flex;flex-direction:column;gap:2px;min-height:56px}.wpb small{font-size:12.5px;font-weight:500;color:var(--ink3)}
 .acnt{display:flex;align-items:center;gap:10px;margin:12px 2px 0;font-size:13.5px;color:var(--ink2)}.acnt b{color:var(--ink)}
 .row small b{display:inline;font-size:inherit}
+/* 참고 사진 ↔ 만드는 순서 (10-27) */
+.pi .pa .pst{flex:1 1 100%;border:0;border-radius:7px;background:var(--tint);font-size:12px;font-weight:700;padding:6px 4px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pi .pa .pst.on{background:#20263a;color:#fff}
+.pstimg{display:flex;gap:12px;align-items:flex-start;margin:4px 0 10px}.pstimg img{width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0}.pstimg .hint{margin:0}
+.pstl{display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow:auto;padding:2px}
+.pstl .opt{display:flex;align-items:flex-start;gap:10px;text-align:left}
+.pstl .opt .no{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.pstl .opt .tx{flex:1;min-width:0;font-size:14px;line-height:1.5}
+.pstl .opt .ck{flex-shrink:0;width:24px;height:24px;border-radius:7px;box-shadow:inset 0 0 0 2px #c9bfae;display:grid;place-items:center}
+.pstl .opt.on{box-shadow:inset 0 0 0 2px var(--navy),var(--up-s)}.pstl .opt.on .ck{background:var(--navy);color:#fff;box-shadow:none}.pstl .opt .ck svg{width:15px;height:15px}
+.thumbs div.hst em{background:#20263a}
+.stp-l .sph{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.stp-l .sph button{width:52px;height:52px;border:0;padding:0;border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px #d9cfbd;background:var(--tint)}.stp-l .sph img{width:100%;height:100%;object-fit:cover;display:block}
+.pv .pvst{margin:6px auto 0;max-width:720px;width:calc(100% - 28px);max-height:24vh;overflow:auto;background:rgba(255,255,255,.08);border-radius:12px;padding:8px 12px;box-sizing:border-box}
+.pv .pvst p{display:flex;gap:10px;margin:4px 0;color:#f3efe8;font-size:14.5px;line-height:1.55}.pv .pvst b{flex-shrink:0;width:23px;height:23px;border-radius:50%;background:#e08a3e;color:#fff;font-size:12.5px;display:grid;place-items:center;margin-top:1px}
+.pi .pa{flex-wrap:wrap}.pi .pa button.pst:last-child{flex:1 1 100%}
 
 .bn2 .bn-in{background:var(--amber);color:#fff;font-weight:800}
 .bn2 .bn-x{min-height:32px;padding:2px 8px;color:#8a6a3a;font-weight:600;align-self:flex-start}
@@ -1132,7 +1148,7 @@ function detailHtml(r, pc) {
   return `${!pc ? `<div class="hero" ${heroAttr}>${m ? `<img src="${m.f}" alt="">${!r.off ? `<em class="hk">대표 사진</em>` : ""}` : `<div class="no">${IC.dish}<br>${r.off ? "사진 준비 중" : "대표 사진 없음 — 고치기에서 음식 사진을 올려 주세요"}</div>`}</div>` : ""}
     ${pc && m ? `<div class="thumbs"><div class="main" ${heroAttr}><img src="${m.t}" alt=""><em>대표</em></div></div>` : ""}
     ${recs.length ? `<button class="rph" data-pv="0" data-pvset="recipe"><img src="${PURL[recs[0].id].t}" alt=""><span><b>레시피 사진 보기</b><small>종이 · 캡처 레시피 ${recs.length}장 — 크게 보며 따라 하기</small></span>${IC.next}</button>` : ""}
-    ${refs.length ? `<div class="thlbl">참고 사진 <small>${refs.length}장</small></div><div class="thumbs">${refs.map(p => `<div data-pv="${oth.indexOf(p)}" data-pvset="other"><img src="${PURL[p.id].t}" alt=""><em>참고</em></div>`).join("")}</div>` : ""}
+    ${refs.length ? `<div class="thlbl">참고 사진 <small>${refs.length}장</small></div><div class="thumbs">${refs.map(p => { const ns = stNums(r.steps, p); return `<div data-pv="${oth.indexOf(p)}" data-pvset="other" class="${ns.length ? "hst" : ""}"><img src="${PURL[p.id].t}" alt=""><em>${ns.length ? "순서 " + ns.join("·") : "참고"}</em></div>`; }).join("")}</div>` : ""}
     ${r.off && r.cap ? `<div class="cap">${esc(r.cap)}</div>` : ""}
     <div class="ttl">${esc(r.name)}${r.off ? ` <small>${esc(r.sub)}</small>` : ""}</div>
     <div class="meta"><span class="cat">${esc(r.cat || "분류 없음")}</span>${(r.tags || []).map(t => `<span class="tag">#${esc(t)}</span>`).join("")}</div>
@@ -1141,7 +1157,7 @@ function detailHtml(r, pc) {
       return same ? `${sv}− + 로 양을 바꾸면 재료가 바로 계산돼요` : `${sv}원래 ${r.main && !r.off ? esc(r.main) + " " : ""}${fmtN(r.base)}${esc(r.bu)} 기준의 <span class="fx">${fmtN(Math.round(f * 100) / 100)}배</span>로 계산했어요 · <button class="lk" data-amtreset>원래대로</button>`; })()}</small></div><button class="stp" data-mul="1" aria-label="늘리기">+</button></div>
     ${hasR || hasJ ? `<div class="adjs">${hasR ? `<div class="vt mini"><span>맵기</span>${[[0.8, "덜"], [1, "보통"], [1.2, "더"]].map(([v, t]) => `<button class="${adj.hot === v ? "on" : ""}" data-adj="hot" data-v="${v}">${t}</button>`).join("")}</div>` : ""}${hasJ ? `<div class="vt mini"><span>젓갈</span>${[[0.8, "덜"], [1, "보통"], [1.2, "더"]].map(([v, t]) => `<button class="${adj.salty === v ? "on" : ""}" data-adj="salty" data-v="${v}">${t}</button>`).join("")}</div>` : ""}<button class="chip ${adj.extra ? "on" : ""}" data-adj="extra">양념 넉넉히 +10%</button></div>` : ""}` : ""}
     <div class="sec"><h4>재료 <small>${nIng ? nIng + "가지" : ""}</small></h4>${nIng ? L.map(i => i.h ? `<div class="ing gn">${esc(i.h)}</div>` : `<div class="ing"><span>${esc(i.n)}${i.m ? `<small>${esc(i.m)}</small>` : ""}</span><b class="${i.q == null ? "x" : ""}">${i.q == null ? (i.u && i.u !== "약간" ? esc(i.u) : "약간") : fmtA(i.q, i.u)}</b></div>`).join("") : `<div class="ing x">재료를 아직 안 적었어요${photos.length ? " — 사진을 크게 보며 「고치기」에서 적으면 계산 · 장보기가 돼요" : ""}</div>`}${nIng && Math.abs(factorOf(r, o.a, o.u) - 1) > 0.001 ? `<p class="hint">양을 바꿔 계산했어요. 물 · 향신료 · 굽거나 끓이는 시간은 그대로 두고 맛보며 맞춰 주세요.</p>` : ""}</div>
-    ${(r.steps || []).length ? `<div class="sec"><h4>만드는 순서 <small>${r.steps.length}단계</small></h4><ol class="stp-l">${r.steps.map(s => `<li>${esc(s.t)}</li>`).join("")}</ol>${r.stepNote ? `<p class="hint">${esc(r.stepNote)}</p>` : ""}</div>` : ""}
+    ${(r.steps || []).length ? `<div class="sec"><h4>만드는 순서 <small>${r.steps.length}단계</small></h4><ol class="stp-l">${r.steps.map(s => { const ps = s.id ? refs.filter(p => (p.st || []).includes(s.id)) : []; return `<li>${esc(s.t)}${ps.length ? `<span class="sph">${ps.map(p => `<button data-pv="${oth.indexOf(p)}" data-pvset="other" aria-label="이 순서 사진 크게 보기"><img src="${PURL[p.id].t}" alt=""></button>`).join("")}</span>` : ""}</li>`; }).join("")}</ol>${r.stepNote ? `<p class="hint">${esc(r.stepNote)}</p>` : ""}</div>` : ""}
     ${r.off && r.tips && r.tips.length ? `<div class="note">${r.tips.map(t => "· " + t).join("<br>")}<br>· 양은 출처 레시피를 비례로 늘린 계산값이에요. 간은 맛보며 맞춰 주세요.</div>` : ""}
     ${r.memo ? `<div class="sec"><h4>메모</h4><p class="memo">${esc(r.memo)}</p></div>` : ""}
     ${!r.off ? `<div class="sec"><h4>만든 기록 <small>「이거 만들기」를 끝내면 자동으로 한 줄</small></h4>${(r.log || []).slice().sort((a, b) => b.d.localeCompare(a.d)).map(l => `<div class="log" data-logi="${esc(l.id)}"><span class="d">${esc(l.d)}</span><span class="lt"><b>${esc(l.amt || "")}</b>${l.note ? " · " + esc(l.note) : ""}</span><span class="lga"><button class="lk" data-lognote="${esc(l.id)}">${l.note ? "평 고치기" : "한 줄 평"}</button>${l.note ? `<button class="lk" data-lognotedel="${esc(l.id)}">평 지우기</button>` : ""}<button class="ib s lgdel" data-logdel="${esc(l.id)}" aria-label="이 기록 지우기" title="이 기록 지우기">${IC.trash}</button></span></div>`).join("") || `<div class="log"><span class="lt" style="color:var(--ink3)">아직 없어요</span></div>`}</div>` : ""}
@@ -1276,14 +1292,14 @@ function scrEdit() {
     <button class="btn w wpb" data-sheet="wpaste">${IC.doc} 레시피 글 통째로 붙여넣기 <small>유튜브 설명란 등 — 재료 · 순서를 한 번에</small></button>
   </section>
   <section class="esec" id="es-step">${esh("step", 3, "만드는 순서", false, "번호는 자동, ▲▼로 순서 바꾸기")}
-    <div id="srows">${e.steps.map((s, i) => `<div class="sr"><span class="no">${i + 1}</span><textarea class="inp" rows="2" data-sf="${i}" placeholder="${i ? "다음 단계" : "예: 배추를 소금물에 8시간 절여요"}">${esc(s.t)}</textarea><div class="mv"><button data-sup="${i}" aria-label="위로">▲</button><button data-sdn="${i}" aria-label="아래로">▼</button><button data-srm="${i}" aria-label="지우기">×</button></div></div>`).join("")}</div>
+    <div id="srows">${e.steps.map((s, i) => (s.id || (s.id = "s" + uid())) && `<div class="sr"><span class="no">${i + 1}</span><textarea class="inp" rows="2" data-sf="${i}" placeholder="${i ? "다음 단계" : "예: 배추를 소금물에 8시간 절여요"}">${esc(s.t)}</textarea><div class="mv"><button data-sup="${i}" aria-label="위로">▲</button><button data-sdn="${i}" aria-label="아래로">▼</button><button data-srm="${i}" aria-label="지우기">×</button></div></div>`).join("")}</div>
     <div class="row2"><button class="btn sm" data-sadd>${IC.plus} 단계</button><button class="btn sm" data-sheet="spaste">글로 붙여넣기</button></div>
   </section>
   <section class="esec" id="es-photo">${esh("photo", 4, "사진", false, "올린 사진마다 「대표」 · 「레시피」를 체크")}
     <div class="phadd"><label class="btn nv">${IC.cam} 사진 올리기<input type="file" accept="image/*" multiple hidden data-addph="auto"></label>
 <button class="btn" data-phpaste>${IC.copy} 복사한 사진 붙여넣기</button></div>
     <p class="hint">${DEV === "pc" ? "사진을 복사해 이 화면에서 <b>Ctrl + V</b>로 붙여도 돼요. " : ""}여러 장 한꺼번에 골라도 돼요.</p>
-    ${ps.length ? `<p class="kleg"><b class="kc on">대표</b> 레시피 맨 위 큰 사진(한 장) · <b class="kc on">레시피</b> 종이 · 캡처 레시피 — 「레시피 사진 보기」로 따로 · 둘 다 아니면 <b>참고 사진</b>(작은 사진 줄)</p><div class="phl">${ps.map(p => { const mn = p.id === mainId, rc = p.kind === "recipe"; return `<div class="pi ${mn ? "main" : ""} ${rc ? "isrec" : ""}"><img src="${PURL[p.id].t}" alt="" data-epv="${p.id}">${mn ? `<em class="mn">대표</em>` : rc ? `<em class="mn rc">레시피</em>` : `<em class="mn rf">참고</em>`}<div class="pa"><button class="kc ${mn ? "on" : ""}" data-pmain="${p.id}" aria-pressed="${mn}"><i>${mn ? IC.ok : ""}</i>대표</button><button class="kc ${rc ? "on" : ""}" data-prec="${p.id}" aria-pressed="${rc}"><i>${rc ? IC.ok : ""}</i>레시피</button></div><button class="pdx" data-pdel="${p.id}" aria-label="사진 지우기">${IC.x}</button></div>`; }).join("")}</div>` : ""}
+    ${ps.length ? `<p class="kleg"><b class="kc on">대표</b> 레시피 맨 위 큰 사진(한 장) · <b class="kc on">레시피</b> 종이 · 캡처 레시피 — 「레시피 사진 보기」로 따로 · 둘 다 아니면 <b>참고 사진</b>(작은 사진 줄) — 참고 사진에 <b>만드는 순서</b>를 연결하면 사진 아래 그 순서가 함께 보여요</p><div class="phl">${ps.map(p => { const mn = p.id === mainId, rc = p.kind === "recipe"; return `<div class="pi ${mn ? "main" : ""} ${rc ? "isrec" : ""}"><img src="${PURL[p.id].t}" alt="" data-epv="${p.id}">${mn ? `<em class="mn">대표</em>` : rc ? `<em class="mn rc">레시피</em>` : `<em class="mn rf">참고</em>`}<div class="pa"><button class="kc ${mn ? "on" : ""}" data-pmain="${p.id}" aria-pressed="${mn}"><i>${mn ? IC.ok : ""}</i>대표</button><button class="kc ${rc ? "on" : ""}" data-prec="${p.id}" aria-pressed="${rc}"><i>${rc ? IC.ok : ""}</i>레시피</button>${!mn && !rc ? (() => { const ns = stNums(e.steps, p); return `<button class="pst ${ns.length ? "on" : ""}" data-pst="${p.id}">${ns.length ? "순서 " + ns.join(" · ") : "+ 만드는 순서 연결"}</button>`; })() : ""}</div><button class="pdx" data-pdel="${p.id}" aria-label="사진 지우기">${IC.x}</button></div>`; }).join("")}</div>` : ""}
     <p class="hint">레시피 사진만 올리고 저장해도 돼요. 재료는 나중에 적으면 그때부터 계산 · 장보기가 돼요. 사진은 크기를 줄여 저장해요(원본은 사진첩에 그대로).</p>
   </section>
   <section class="esec" id="es-tag">${esh("tag", 5, "분류 · 태그")}
@@ -1382,7 +1398,7 @@ async function saveEdit() {
   const hasQ = ing.some(i => i.q != null);
   if (hasQ && !(base > 0)) { toast("몇 인분(또는 몇 kg) 기준인지 넣어 주세요. 그래야 양을 바꿀 때 재료가 계산돼요."); const bb = $("#basein"); if (bb) { bb.scrollIntoView({ block: "center" }); bb.focus(); } return; }
   const bad = e.ing.find(r => r.h == null && (r.n || "").trim() && r.q !== "" && r.q != null && isNaN(parseFloat(String(r.q).replace(/,/g, "")))); if (bad) { toast(`「${bad.n}」의 양을 숫자로 넣어 주세요.`); return; }
-  const r = { id: e.id, name: e.name.trim(), cat: e.cat, tags: e.tags, fav: e.fav, main: (e.bu || "").trim() === "인분" ? "" : (e.main || "").trim(), base: base > 0 ? base : null, bu: (e.bu || "").trim() || "인분", serv: (e.bu || "").trim() !== "인분" && parseFloat(e.serv) > 0 ? parseFloat(e.serv) : null, ing, steps: e.steps.filter(s => s.t.trim()).map(s => ({ t: s.t.trim() })), photos: e.photos.slice(), main_ph: e.main_ph, src: (e.src || "").trim(), memo: (e.memo || "").trim(), log: e.log || [], created: e.created || Date.now(), from: e.from };
+  const r = { id: e.id, name: e.name.trim(), cat: e.cat, tags: e.tags, fav: e.fav, main: (e.bu || "").trim() === "인분" ? "" : (e.main || "").trim(), base: base > 0 ? base : null, bu: (e.bu || "").trim() || "인분", serv: (e.bu || "").trim() !== "인분" && parseFloat(e.serv) > 0 ? parseFloat(e.serv) : null, ing, steps: e.steps.filter(s => s.t.trim()).map(s => s.id ? { t: s.t.trim(), id: s.id } : { t: s.t.trim() }), photos: keepSt(e), main_ph: e.main_ph, src: (e.src || "").trim(), memo: (e.memo || "").trim(), log: e.log || [], created: e.created || Date.now(), from: e.from };
   (e._removed || []).forEach(id => delPhoto(id));
   await saveRecipe(r); const wasNew = e.isNew; S.edit = null; delete S.amt[r.id];
   if (wasNew) { hist.pop(); } S.rid = r.id; S.scr = "detail"; render(true); toast(wasNew ? "레시피를 저장했어요." : "고쳤어요.");
@@ -1507,6 +1523,10 @@ function sheetHtml() {
     ${r.h != null ? `<button class="opt" data-iconv="${i}"><span class="ic">${IC.list}</span><span><b>재료 줄로 바꾸기</b><small>제목이 아니라 재료였으면</small></span></button>` : `<button class="opt" data-iconv="${i}"><span class="ic">${IC.list}</span><span><b>구분 줄(제목)로 바꾸기</b><small>「양념」 · 「소스」처럼 아래 재료를 묶는 제목으로 — 양 · 단위는 지워져요</small></span></button>`}
     <div class="row2"><button class="btn" data-imove="-1" ${i === 0 ? "disabled" : ""}>${IC.up} 위로</button><button class="btn" data-imove="1" ${i === E.ing.length - 1 ? "disabled" : ""}><span style="display:inline-flex;transform:rotate(180deg)">${IC.up}</span> 아래로</button></div>
     <button class="opt" data-irm="${i}"><span class="ic">${IC.trash}</span><span><b>이 줄 지우기</b></span></button>`; }
+  else if (k === "phstep") { const E = S.edit, p = E && E.photos.find(x => x.id === S.phStep); if (!p) h = ""; else { const st = p.st || [];
+    h = `<b class="sht">이 사진에 만드는 순서 연결</b><div class="pstimg"><img src="${PURL[p.id] ? PURL[p.id].t : ""}" alt=""><p class="hint">여러 순서를 고를 수 있어요. 같은 순서를 다른 사진에도 연결할 수 있어요. 레시피 화면에서 이 사진을 크게 보면 아래에 고른 순서가 나와요.</p></div>
+    ${E.steps.some(s => (s.t || "").trim()) ? `<div class="pstl">${E.steps.map((s, i) => (s.t || "").trim() ? `<button class="opt ${st.includes(s.id) ? "on" : ""}" data-pstt="${esc(s.id)}" aria-pressed="${st.includes(s.id)}"><span class="no">${i + 1}</span><span class="tx">${esc(s.t)}</span><i class="ck">${st.includes(s.id) ? IC.ok : ""}</i></button>` : "").join("")}</div>` : `<p class="hint">「03 만드는 순서」를 먼저 적어 주세요.</p>`}
+    <div class="row2"><button class="btn go" data-close>완료</button></div>`; } }
   else if (k === "acat") h = `<b class="sht">분류 바꾸기</b><p class="hint">고른 ${Object.keys(S.al.picked).filter(x => S.al.picked[x]).length}개 레시피를 옮길 분류를 고르세요.</p>${(D.cats || []).map(c => `<button class="opt" data-acatset="${esc(c)}"><span><b>${esc(c)}</b></span></button>`).join("")}<button class="opt" data-acatset=""><span><b>분류 없음</b></span></button>`;
   else if (k === "sort") h = `<b class="sht">정렬</b>${Object.entries(SORTS).map(([v, t]) => `<button class="opt ${D.set.sort === v ? "on" : ""}" data-setsort="${v}"><span><b>${t}</b></span></button>`).join("")}`;
   return `<div class="sheet" data-close><div class="in"><div class="gr"></div>${h}</div></div>`;
@@ -1514,18 +1534,18 @@ function sheetHtml() {
 
 /* ───────── 사진 크게 보기 ───────── */
 function pvList() {
-  if (S.scr === "edit") return S.edit.photos.filter(p => PURL[p.id]).map(p => ({ f: PURL[p.id].f, t: PURL[p.id].t, kind: p.id === S.edit.main_ph ? "대표" : p.kind === "recipe" ? "레시피" : "참고" }));
+  if (S.scr === "edit") return S.edit.photos.filter(p => PURL[p.id]).map(p => ({ f: PURL[p.id].f, t: PURL[p.id].t, kind: p.id === S.edit.main_ph ? "대표" : p.kind === "recipe" ? "레시피" : "참고", st: p.kind === "ref" && p.id !== S.edit.main_ph ? stList(S.edit.steps, p) : [] }));
   const r = RR(S.rid); if (!r) return [];
   if (r.off) return r.photo ? [{ f: r.photo, kind: "음식", cap: r.cap }] : [];
   const A = (r.photos || []).filter(p => PURL[p.id]), set = S.pvSet === "recipe" ? A.filter(p => p.kind === "recipe") : S.pvSet === "other" ? A.filter(p => p.kind !== "recipe") : A;
   const m = mainPhoto(r), mid = (A.find(p => PURL[p.id].f === (m && m.f)) || {}).id;
-  return set.map(p => ({ f: PURL[p.id].f, t: PURL[p.id].t, kind: p.id === mid ? "대표" : p.kind === "recipe" ? "레시피" : "참고" }));
+  return set.map(p => ({ f: PURL[p.id].f, t: PURL[p.id].t, kind: p.id === mid ? "대표" : p.kind === "recipe" ? "레시피" : "참고", st: p.kind !== "recipe" && p.id !== mid ? stList(r.steps, p) : [] }));
 }
 function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i]; const r = S.scr === "edit" ? S.edit : RR(S.rid);
   return `<div class="pv"><div class="pt"><b>${esc(r.name || "사진")}<small>${p.kind} 사진 · ${i + 1} / ${L.length}</small></b><button class="cb pvx" data-pvx aria-label="닫기">${IC.x}</button></div>
     <div class="pbw"><div class="pb" id="pvb"><img id="pvimg" src="${p.f}" alt="" draggable="false"></div>${L.length > 1 ? `<button class="pva l" data-pvm="-1" aria-label="이전 사진">‹</button><button class="pva r" data-pvm="1" aria-label="다음 사진">›</button>` : ""}</div>
-    ${p.cap ? `<p class="hint2">${esc(p.cap)}</p>` : `<p class="hint2">두 손가락으로 벌려 확대 · 두 번 눌러 2배 · 옆으로 밀어 다음 사진</p>`}
+    ${p.st && p.st.length ? `<div class="pvst">${p.st.map(([n, t]) => `<p><b>${n}</b><span>${esc(t)}</span></p>`).join("")}</div>` : p.cap ? `<p class="hint2">${esc(p.cap)}</p>` : `<p class="hint2">두 손가락으로 벌려 확대 · 두 번 눌러 2배 · 옆으로 밀어 다음 사진</p>`}
     ${L.length > 1 ? `<div class="pvth">${L.map((x, k) => `<button class="${k === i ? "on" : ""}" data-pvj="${k}" aria-label="${k + 1}번째 사진"><img src="${x.t || x.f}" alt=""></button>`).join("")}</div>` : ""}
     <div class="pf2"><button class="cb" data-zm="-1" aria-label="작게">−</button><span class="num" id="zv">100%</span><button class="cb" data-zm="1" aria-label="크게">+</button></div></div>`;
 }
@@ -1586,7 +1606,7 @@ async function saveCats() { D.set.catsAt = Date.now(); await setMeta("set", D.se
 async function getPh(id, getPhoto) { if (PURL[id]) return false; try { const b = await getPhoto(id); if (!b) return false; const th = await shrink(b, 420, 0.8); await putO("photos", { id, blob: b, th }); PURL[id] = { f: URL.createObjectURL(b), t: URL.createObjectURL(th) }; return true; } catch (e) { return false; } }
 const okId = v => typeof v === "string" && /^[A-Za-z0-9_-]{1,40}$/.test(v), clean = v => typeof v === "string" ? v.replace(/[<>"]/g, "") : v;
 function sanitize(o) { /* 백업 · 드라이브 · 폴더에서 온 자료는 id 모양과 단위 글자를 확인하고 받음 */
-  o.recipes = (Array.isArray(o.recipes) ? o.recipes : []).filter(r => r && okId(r.id)).map(r => ({ ...r, photos: (r.photos || []).filter(p => p && okId(p.id)), main_ph: okId(r.main_ph) ? r.main_ph : null, ing: (r.ing || []).map(i => i && i.h == null ? { ...i, u: clean(i.u || "") } : i), log: (r.log || []).filter(l => l && okId(l.id)), updated: +r.updated || 0, created: +r.created || 0 }));
+  o.recipes = (Array.isArray(o.recipes) ? o.recipes : []).filter(r => r && okId(r.id)).map(r => ({ ...r, photos: (r.photos || []).filter(p => p && okId(p.id)).map(p => { const q = { ...p }; delete q.st; const st = Array.isArray(p.st) ? p.st.filter(okSt).slice(0, 60) : []; if (st.length) q.st = st; return q; }), steps: (r.steps || []).filter(s => s && typeof s.t === "string").map(s => okSt(s.id) ? { t: s.t, id: s.id } : { t: s.t }), main_ph: okId(r.main_ph) ? r.main_ph : null, ing: (r.ing || []).map(i => i && i.h == null ? { ...i, u: clean(i.u || "") } : i), log: (r.log || []).filter(l => l && okId(l.id)), updated: +r.updated || 0, created: +r.created || 0 }));
   o.shops = (Array.isArray(o.shops) ? o.shops : []).filter(s => s && okId(s.id)).map(s => ({ ...s, items: (s.items || []).map(e => ({ ...e, u: clean(e.u || "") })), extra: (s.extra || []).map(e => ({ ...e, u: clean(e.u || "") })), updated: +s.updated || 0 }));
   const g = {}; Object.entries(o.gone || {}).forEach(([k, t]) => { if (okId(k)) g[k] = +t || 0; }); o.gone = g; return o; }
 async function importData(o, getPhoto) {
@@ -1824,6 +1844,8 @@ document.addEventListener("click", async e => {
     if (d.sup || d.sdn) { const i = +(d.sup || d.sdn), j = d.sup ? i - 1 : i + 1; if (j < 0 || j >= E.steps.length) return; [E.steps[i], E.steps[j]] = [E.steps[j], E.steps[i]]; E._dirty = true; return render(); }
     if (d.pkind) { const p = E.photos.find(x => x.id === d.pkind); p.kind = { food: "recipe", recipe: "ref", ref: "food" }[p.kind]; E._dirty = true; return render(); }
     if (d.pmain) { const p = E.photos.find(x => x.id === d.pmain); if (p && p.kind === "ref") p.kind = "food"; E.photos.forEach(x => { if (x.id !== d.pmain && x.kind === "food") x.kind = "ref"; }); E.main_ph = d.pmain; E._dirty = true; return render(); }
+    if (d.pst) { S.phStep = d.pst; S.sheet = "phstep"; return render(); }
+    if (d.pstt) { const p = E.photos.find(x => x.id === S.phStep); if (!p) return; const st = new Set(p.st || []); st.has(d.pstt) ? st.delete(d.pstt) : st.add(d.pstt); p.st = E.steps.map(s => s.id).filter(id => st.has(id)); if (!p.st.length) delete p.st; E._dirty = true; return render(); }
     if (d.prec) { const p = E.photos.find(x => x.id === d.prec); if (!p) return; p.kind = p.kind === "recipe" ? (E.main_ph === p.id ? "food" : "ref") : "recipe"; E._dirty = true; return render(); }
     if (d.pdel) { E.photos = E.photos.filter(x => x.id !== d.pdel); if ((E._added || []).includes(d.pdel)) await delPhoto(d.pdel); else (E._removed = E._removed || []).push(d.pdel); if (E.main_ph === d.pdel) E.main_ph = null; E._dirty = true; return render(); }
     if (d.rdel != null) { if (confirm(`「${E.name}」를 지울까요? 사진도 함께 지워져요.`)) { await delRecipe(E.id); S.edit = null; hist.length = 0; S.rid = null; S.scr = "list"; render(true); toast("지웠어요."); } return; }

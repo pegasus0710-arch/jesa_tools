@@ -914,6 +914,42 @@ body.pc .pside .sidep{margin-top:12px}body.pc .pside .sidep .lnk{display:flex;wi
 body.pc .pside .sidep .lnk b{flex:1;display:flex;gap:6px;align-items:center;text-align:left}body.pc .pside .sidep .i{width:17px;height:17px}
 body.pc .pside .sidep .pk{margin-bottom:6px}
 body.pc .pmid .hd h3{min-width:0;flex:1}
+/* 내 여행 보기 3가지 (10-28) */
+.tvbar{display:flex;gap:4px;padding:4px;margin:0 0 12px;border-radius:12px;background:var(--tint);box-shadow:var(--in)}
+.tvbar button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;border:0;border-radius:9px;background:transparent;color:var(--ink2);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.tvbar button svg{width:18px;height:18px}
+.tvbar button.on{background:var(--card);color:var(--ink);box-shadow:var(--up-s),inset 0 0 0 2px var(--navy)}
+.tlist.v-list .tcard.tlth{display:flex;gap:12px;align-items:center}
+.tl-th{width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:var(--up-s)}
+.tl-x{display:block;flex:1;min-width:0}
+.tlist.v-card{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.tlist.v-card .tcard{margin:0;padding:0;overflow:hidden}
+.tcv-p{position:relative;display:block;aspect-ratio:16/9;background:var(--tint);overflow:hidden}
+.tcv-p img{width:100%;height:100%;object-fit:cover;display:block}
+.tcv-p.nop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:var(--in);color:var(--ink3)}
+.tcv-p.nop small{font-size:12.5px;color:var(--ink3);padding:0 12px;text-align:center}
+.tcv-p .dd{position:absolute;left:10px;top:10px}
+.tg-ic svg{width:34px;height:34px;opacity:.7}
+.tcv-t{display:block;padding:12px 14px 14px}
+.tcv-t b{display:block;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tcv-t small{margin-top:3px}
+.tlist.v-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tgt{position:relative;display:block;aspect-ratio:1/1;border:0;padding:0;border-radius:14px;overflow:hidden;background:var(--navy);box-shadow:var(--up-s);cursor:pointer;color:#fff;text-align:left}
+.tgt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tgt.nop{background:#1f7f8f}
+.tgt.nop .tg-ic{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);color:#fff}
+.tgt .tg-b{position:absolute;left:0;right:0;bottom:0;display:block;padding:8px 10px;background:rgba(31,33,37,.68)}
+.tgt .tg-b b{display:block;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tgt .tg-b small{font-size:12.5px;opacity:.9;font-variant-numeric:tabular-nums}
+.tgt .dd{position:absolute;left:8px;top:8px}
+.tgt:hover,.tlist .tcard.trip:hover{box-shadow:var(--up-s),0 0 0 2px var(--navy)}
+.tgt:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (max-width:420px){.tvbar button span{font-size:12.5px}.tlist.v-grid{grid-template-columns:1fr 1fr}}
+.cb.pvc.on{color:var(--amber)}
+body.pc .pc2>div .body>.tvbar,body.pc .pc2>div .body>.tlist{grid-column:1/-1}
+body.pc .pc2>div .body>.tvbar{max-width:460px}
+body.pc .tlist.v-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0 14px}
+body.pc .tlist.v-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
 
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
@@ -1354,7 +1390,7 @@ function sanitize(o) {
     plists: (Array.isArray(r.plists) ? r.plists : []).slice(0, 30).filter(g => g && okId(g.id)).map(g => ({ id: g.id, name: s(g.name, 60), memo: s(g.memo, 5000) })),
     notes: (Array.isArray(r.notes) ? r.notes : []).slice(0, 100).filter(n => n && okId(n.id)).map(n => ({ id: n.id, title: s(n.title, 100), body: s(n.body, 20000), warn: !!n.warn })),
     links: (Array.isArray(r.links) ? r.links : []).slice(0, 300).filter(l => l && okId(l.id) && /^https?:\/\//i.test(l.url || "")).map(l => ({ id: l.id, title: s(l.title, 200), url: s(l.url, 2000), memo: s(l.memo, 1000) })),
-    photos: (Array.isArray(r.photos) ? r.photos : []).filter(p => p && okId(p.id)).map(p => ({ id: p.id, t: +p.t || 0, lm: !!p.lm, it: okId(p.it) ? p.it : "" })),
+    photos: (Array.isArray(r.photos) ? r.photos : []).filter(p => p && okId(p.id)).map(p => ({ id: p.id, t: +p.t || 0, lm: !!p.lm, it: okId(p.it) ? p.it : "" })), cover: okId(r.cover) ? r.cover : "",
     off: Math.max(-24, Math.min(24, +r.off || 0)), later: !!r.later, created: +r.created || 0, updated: +r.updated || 0 }));
   o.items.forEach(r => { if (!r.days.length) r.days.push(newDay()); });
   o.cats = null;
@@ -1450,20 +1486,32 @@ function qrCard() {
   return `<div class="tcard qrc"><div class="qr">${q}</div><div><b>휴대폰으로 찍어서 설치</b><p>일정은 PC에서 넓게 짜고, 여행 중엔 휴대폰으로 봐요. 양쪽에서 <b>같은 구글 계정</b>으로 「구글 드라이브 연결」을 누르면 같은 일정이 맞춰져요.</p><small class="url">${esc(u.replace(/^https:\/\//, ""))}</small></div></div>`;
 }
 
-/* ── 내 여행(첫 화면) ── */
-function tripCard(t) {
-  const p = phase(t), c = costs(t), last = dOf(t, t.days.length - 1), pd = pending(t).length;
-  const badge = p.k === "before" ? `<em class="dd">D-${p.n}</em>` : p.k === "on" ? `<em class="dd on">여행 중 · ${p.i + 1}일째</em>` : `<em class="dd past">다녀옴</em>`;
-  const n = t.days.reduce((a, d) => a + d.items.length, 0);
-  return `<button class="tcard trip" data-trip="${t.id}"><span class="tt"><b>${esc(t.name || "이름 없는 여행")}</b>${badge}</span>
-    <small>${mdw(dOf(t, 0))} ~ ${mdw(last)} · ${t.days.length - 1}박 ${t.days.length}일 · ${t.people}명 · ${t.type === "pkg" ? "패키지" : "자유여행"}${t.abroad ? " · 해외" : ""}</small>
-    <span class="tm"><span>일정 ${n}개</span>${c.total ? `<span class="num">${won(c.total)}원 · 1인 ${won(c.per)}원</span>` : ""}${pd ? `<span class="pdb">확인할 일정 ${pd}</span>` : ""}</span></button>`;
+/* ── 내 여행(첫 화면) ── 보기 3가지(10-28): 목록 · 사진 카드 · 사진 모아 보기 — 표지 = 고른 사진 → 명소 사진 → 처음 찍은 사진 */
+const TVIEW = [["list", "목록", I('<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/>')], ["card", "사진 카드", I('<rect x="3" y="4" width="18" height="11" rx="2"/><path d="M3 19h18"/>')], ["grid", "사진 모아 보기", I('<rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>')]];
+const tview = () => TVIEW.some(v => v[0] === D.set.tview) ? D.set.tview : "list";
+function coverOf(t) {
+  const P = (t.photos || []).filter(p => PURL[p.id]); if (!P.length) return null;
+  const p = P.find(x => x.id === t.cover) || P.find(x => x.lm) || P.slice().sort((a, b) => a.t - b.t)[0];
+  return { id: p.id, t: PURL[p.id].t, f: PURL[p.id].f, n: P.length };
 }
+function tripBadge(t) { const p = phase(t); return p.k === "before" ? `<em class="dd">D-${p.n}</em>` : p.k === "on" ? `<em class="dd on">여행 중 · ${p.i + 1}일째</em>` : `<em class="dd past">다녀옴</em>`; }
+function tripCard(t) {
+  const c = costs(t), last = dOf(t, t.days.length - 1), pd = pending(t).length, v = tview(), cv = coverOf(t);
+  const n = t.days.reduce((a, d) => a + d.items.length, 0), nm = esc(t.name || "이름 없는 여행");
+  const when = `${mdw(dOf(t, 0))} ~ ${mdw(last)}`, info = `${t.days.length - 1}박 ${t.days.length}일 · ${t.people}명 · ${t.type === "pkg" ? "패키지" : "자유여행"}${t.abroad ? " · 해외" : ""}`;
+  const meta = `<span class="tm"><span>일정 ${n}개</span>${cv ? `<span>사진 ${cv.n}장</span>` : ""}${c.total ? `<span class="num">${won(c.total)}원 · 1인 ${won(c.per)}원</span>` : ""}${pd ? `<span class="pdb">확인할 일정 ${pd}</span>` : ""}</span>`;
+  if (v === "grid") return `<button class="tgt${cv ? "" : " nop"}" data-trip="${t.id}" aria-label="${nm}">${cv ? `<img src="${cv.t}" alt="" loading="lazy">` : `<span class="tg-ic">${IC.pin || IC.cam}</span>`}<span class="tg-b"><b>${nm}</b><small>${mdw(dOf(t, 0))}</small></span>${tripBadge(t)}</button>`;
+  if (v === "card") return `<button class="tcard trip tcv" data-trip="${t.id}"><span class="tcv-p${cv ? "" : " nop"}">${cv ? `<img src="${cv.t}" alt="" loading="lazy">` : `<span class="tg-ic">${IC.cam}</span><small>다녀와서 사진을 연결하면 표지가 돼요</small>`}${tripBadge(t)}</span>
+    <span class="tcv-t"><b>${nm}</b><small>${when} · ${info}</small>${meta}</span></button>`;
+  return `<button class="tcard trip${cv ? " tlth" : ""}" data-trip="${t.id}">${cv ? `<img class="tl-th" src="${cv.t}" alt="" loading="lazy">` : ""}<span class="tl-x"><span class="tt"><b>${nm}</b>${tripBadge(t)}</span>
+    <small>${when} · ${info}</small>${meta}</span></button>`;
+}
+function tviewBar() { const v = tview(); return `<div class="tvbar" role="group" aria-label="보기 방식">${TVIEW.map(([k, n, ic]) => `<button class="${v === k ? "on" : ""}" data-tview="${k}" aria-pressed="${v === k}" title="${n}">${ic}<span>${n}</span></button>`).join("")}</div>`; }
 function scrList() {
   const L = D.items.slice().sort((a, b) => { const pa = phase(a), pb = phase(b), r = x => x.k === "on" ? 0 : x.k === "before" ? 1 : 2; return r(pa) - r(pb) || (r(pa) === 2 ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start)); });
   const right = `${stBar()}${instBtn()}`;
   const empty = `<div class="empty"><b>첫 여행을 만들어 보세요</b><p>날짜만 고르면 1일째 · 2일째가 저절로 생겨요.<br>여행사 패키지 일정은 통째로 복사해서 붙여넣으면 날짜별로 정리돼요.</p><button class="btn go w" data-newtrip>${IC.plus} 새 여행 만들기</button></div>`;
-  const list = `${banner()}${isPC() ? "" : installCard()}${L.length ? L.map(tripCard).join("") : empty}`;
+  const v = tview(), list = `${banner()}${isPC() ? "" : installCard()}${L.length ? `${L.length > 0 ? tviewBar() : ""}<div class="tlist v-${v}">${L.map(tripCard).join("")}</div>` : empty}`;
   if (isPC()) return `<div class="pc2"><div>${hd("내 여행", "", `<button class="btn nv sm" data-newtrip>${IC.plus} 새 여행</button>`)}<div class="body">${list}</div></div><aside><div class="tcard tip"><b>이렇게 써요</b><ol><li>새 여행 → 날짜 · 인원 · 자유/패키지</li><li>여행사 일정은 「붙여넣기」로 한 번에</li><li>여행 중엔 휴대폰 「오늘」 · 지도 · 길안내</li><li>시간이 지난 일정은 「했어요 · 고쳐서」로 확정</li><li>다녀와서 사진 연결 · 엑셀로 받기</li></ol></div></aside></div>`;
   return hd("여행 노트", "", right) + `<div class="body">${list}</div>${L.length ? `<button class="fab" data-newtrip aria-label="새 여행">${IC.plus}</button>` : ""}`;
 }
@@ -1717,7 +1765,7 @@ function sheetHtml() {
   else if (k === "move" && t) { const it = S.moveIt; h = `<b class="sht">「${esc(it.title)}」 어느 날로 옮길까요?</b>${t.days.map((d, i) => `<button class="opt" data-moveto="${i}"><span><b>${i + 1}일째 · ${mdw(dOf(t, i))}</b><small>${esc(d.title || "")} 일정 ${d.items.length}개</small></span></button>`).join("")}`; }
   else if (k === "phit" && t) { const p = (t.photos || []).find(x => x.id === S.phId); h = `<b class="sht">이 사진을 붙일 일정</b>${p && PURL[p.id] ? `<img class="phprev" src="${PURL[p.id].t}" alt="">` : ""}
     <div class="phl">${t.days.map((d, i) => d.items.map(it => `<button class="opt sm ${p && p.it === it.id ? "on1" : ""}" data-phset="${it.id}"><span><b>${i + 1}일째 ${esc(it.time)} ${esc(it.title)}</b></span></button>`).join("")).join("")}</div>
-    <div class="row2"><button class="btn dl" data-phdel>${IC.trash} 사진 빼기</button><button class="btn" data-phset="">어느 일정도 아님</button><button class="btn nv" data-phview>크게 보기</button></div>`; }
+    <div class="row2"><button class="btn dl" data-phdel>${IC.trash} 사진 빼기</button><button class="btn" data-phset="">어느 일정도 아님</button><button class="btn nv" data-phview>크게 보기</button></div><button class="btn w" data-phcover style="margin-top:8px">${t.cover === S.phId ? "이 사진이 표지예요" : "이 사진을 여행 표지로"}</button>`; }
   else if (k === "mapin" && t) { const it = S.mapIt; if (it) h = `<b class="sht">「${esc(it.title || "이 일정")}」 지도 위치</b>
     <p class="hint">장소 이름 · 주소 · 지도 링크 중 하나를 넣으면 「지도 · 길안내」가 켜져요.<br>지도 앱에서 장소를 찾고 「공유 → 링크 복사」한 링크가 가장 정확해요(구글 링크는 구글 지도로, 네이버 · 카카오 링크는 그 지도로 열려요).</p>
     <input class="inp" id="mpin" value="${esc(it.place || "")}" placeholder="예: 성산일출봉 매표소 · 주소 · https://naver.me/…">
@@ -1735,7 +1783,7 @@ function sheetHtml() {
 function pvList() { const t = TR(); if (!t) return []; return (t.photos || []).filter(p => PURL[p.id]).sort((a, b) => a.t - b.t).map(p => ({ id: p.id, f: PURL[p.id].f, t: PURL[p.id].t })); }
 function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i];
-  return `<div class="pv"><div class="pt"><b>${esc((TR() || {}).name || "")}<small>사진 ${i + 1} / ${L.length}</small></b><button class="cb pvx" data-pvx aria-label="닫기">${IC.x}</button></div>
+  return `<div class="pv"><div class="pt"><b>${esc((TR() || {}).name || "")}<small>사진 ${i + 1} / ${L.length}</small></b><button class="cb pvc${(TR() || {}).cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="여행 표지로">${IC.star}</button><button class="cb pvx" data-pvx aria-label="닫기">${IC.x}</button></div>
     <div class="pbw"><div class="pb" id="pvb"><img id="pvimg" src="${p.f}" alt="" draggable="false"></div>${L.length > 1 ? `<button class="pva l" data-pvm="-1" aria-label="이전 사진">‹</button><button class="pva r" data-pvm="1" aria-label="다음 사진">›</button>` : ""}</div>
     <div class="pf2"><button class="cb" data-zm="-1" aria-label="작게">−</button><span class="num" id="zv">100%</span><button class="cb" data-zm="1" aria-label="크게">+</button></div></div>`;
 }
@@ -2180,6 +2228,9 @@ document.addEventListener("click", async e => {
   /* 사진 보기 */
   if (d.pvid) { e.stopPropagation(); if (S.ttab === "photo" || S.scr !== "trip") { S.phId = d.pvid; S.sheet = "phit"; return render(); } S.pv = pvList().findIndex(p => p.id === d.pvid); return render(); }
   if (d.pvx != null) { S.pv = null; return render(); }
+  if (d.tview) { D.set.tview = d.tview; await setMeta("set", D.set).catch(() => {}); return render(); }
+  if (d.phcover != null && t) { t.cover = S.phId; await saveTrip(t); S.sheet = null; toast("여행 표지로 정했어요."); return render(); }
+  if (d.pvcover != null && t) { const L = pvList(), q = L[S.pv]; if (q) { t.cover = q.id; await saveTrip(t); toast("여행 표지로 정했어요."); } return render(); }
   if (d.pvm) { const n = pvList().length; S.pv = (S.pv + (+d.pvm) + n) % n; return render(); }
   if (d.zm) { Z.s = Math.min(5, Math.max(1, Z.s + (+d.zm) * 0.5)); if (Z.s === 1) { Z.x = 0; Z.y = 0; } return zApply(); }
   if (d.phview != null) { const id = S.phId; S.sheet = null; S.pv = pvList().findIndex(p => p.id === id); return render(); }

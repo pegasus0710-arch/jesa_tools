@@ -1,0 +1,31 @@
+{
+ "id": "/jesa_tools/trading/",
+ "name": "매매일지 | Blog J",
+ "short_name": "매매일지",
+ "description": "주식 매매 기록 · 보유종목 · 실현손익 · 분석, 휴대폰 · PC 구글 드라이브 동기화 — Blog J 무료 도구",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f7f6f2",
+ "theme_color": "#20263a",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512-mask.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+{
+ "id": "/jesa_tools/photo-editor/",
+ "name": "이미지 편집기 | Blog J",
+ "short_name": "이미지 편집기",
+ "description": "여러 장 사진을 한 번에 자르기 · 수평 · 크기 · 필터 · 테두리, 콜라주 · 증명사진 · 용량 줄이기 — Blog J 무료 도구",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#ece6da",
+ "theme_color": "#ece6da",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512-mask.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

@@ -312,6 +312,23 @@
    "ver": "1.0",
    "open": "2026-11-17T09:00:00+09:00",
    "img": "https://pegasus0710-arch.github.io/jesa_tools/photo/icon-192.png"
+  },
+  {
+   "name": "이미지 편집기",
+   "category": "디지털",
+   "area": "doc",
+   "icon": "image",
+   "type": [
+    "설치",
+    "다운로드"
+   ],
+   "desc": "사진 여러 장을 한 번에 자르기 · 수평 · 크기 · 필터 · 테두리, 콜라주 · 증명사진 · 용량 줄이기",
+   "short": "여러 장 한 번에 · 필터 · 콜라주",
+   "link": "https://luvbong.tistory.com/798",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/icon-192.png",
+   "ver": "2.0",
+   "open": "2026-11-18T09:00:00+09:00"
   }
  ],
  "soon": [

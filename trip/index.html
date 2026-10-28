@@ -990,6 +990,33 @@ body.pc .pc3{grid-template-columns:230px minmax(0,1fr)}
 .tsel{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px}
 .tsel select:disabled{opacity:.55}
 .g2:has(.tsel){grid-template-columns:1fr}
+/* 코스 사진 줄(10-28): 넓이에 맞춰 큰 칸 · 넘치면 「+N」 */
+.iph{display:grid;grid-template-columns:repeat(auto-fill,var(--tile));--tile:76px;gap:6px;padding:0 10px 12px 68px;align-items:center}
+body.pc .iph{--tile:96px}
+.iph img{width:var(--tile);height:var(--tile);object-fit:cover;border-radius:9px;cursor:pointer;display:block}
+.iph img[hidden]{display:none}
+.iph-more{width:var(--tile);height:var(--tile);border:0;border-radius:9px;cursor:pointer;color:#fff;font:inherit;font-size:20px;font-weight:800;background:#1f2125 center/cover no-repeat;box-shadow:inset 0 0 0 999px rgba(20,22,28,.55)}
+.iph-more[hidden]{display:none}
+.iph-more:hover{box-shadow:inset 0 0 0 999px rgba(20,22,28,.4),0 0 0 2px var(--navy)}
+@media (max-width:420px){.iph{padding-left:12px}}
+/* 사진 모두 보기 */
+.pg2-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:6px 22px 22px;align-content:start}
+.pg2-grid button{position:relative;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:zoom-in;background:#000;aspect-ratio:4/3}
+.pg2-grid img{width:100%;height:100%;object-fit:cover;display:block}
+.pg2-grid em{position:absolute;left:8px;bottom:8px;font-style:normal;font-size:12.5px;padding:2px 7px;border-radius:6px;background:rgba(18,20,26,.7);color:#fff}
+.pg2-grid button:hover{box-shadow:0 0 0 3px #fff}
+@media (max-width:760px){.pg2-grid{grid-template-columns:repeat(2,1fr);gap:6px;padding:4px 8px 12px}}
+/* 한 장 크게 보기 + 사진 목록: PC 왼쪽 세로 · 휴대폰 아래 가로 */
+.vw2-main{flex:1;min-height:0;display:flex}
+.vw2-main .vw2-stage{flex:1;min-width:0}
+.vw2-strip{width:112px;flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:0 8px 10px 14px}
+.vw2-strip button{flex-shrink:0;border:0;padding:0;border-radius:8px;overflow:hidden;cursor:pointer;opacity:.55;background:#000;aspect-ratio:1/1}
+.vw2-strip button.on{opacity:1;box-shadow:0 0 0 3px var(--amber)}
+.vw2-strip button:hover{opacity:1}
+.vw2-strip img{width:100%;height:100%;object-fit:cover;display:block}
+@media (max-width:760px){.vw2-main{flex-direction:column-reverse}.vw2-strip{width:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:8px 8px 4px}.vw2-strip button{width:60px;height:60px}}
+.pv.vw2{background:#121419}
+.pg2-grid{row-gap:10px}.pg2-grid button{margin:0;width:100%}
 
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
@@ -1592,7 +1619,7 @@ function itRow(t, it, i) {
     <span class="cs num">${c ? won(c) : ""}${it.per && c ? `<small>1인 ${won(it.cost)}</small>` : ""}</span></button>
     <span class="mp ${mapOn(it) ? "" : "mpoff"}">${mapOn(it) ? `<button data-map="${it.id}" data-iday="${i}" title="${isUrl(placeOf(it)) ? URLK[urlKind(placeOf(it))] : mapLbl(t)}에서 보기">${IC.map}<em>지도</em></button><button data-nav="${it.id}" data-iday="${i}" title="${t.abroad ? "구글 지도" : NAVA[navApp()]} 길안내">${IC.nav}<em>길안내</em></button>`
       : `<button data-mapin="${it.id}" data-iday="${i}" title="지도 위치(이름 · 주소 · 지도 링크)를 넣으면 켜져요">${IC.map}<em>지도</em></button><button data-mapin="${it.id}" data-iday="${i}" title="지도 위치(이름 · 주소 · 지도 링크)를 넣으면 켜져요">${IC.nav}<em>길안내</em></button>`}</span>
-    ${ph.length ? `<span class="iph">${ph.slice(0, 6).map(p => `<img src="${PURL[p.id].t}" alt="" data-pvid="${p.id}">`).join("")}${ph.length > 6 ? `<em>+${ph.length - 6}</em>` : ""}</span>` : ""}</div>`;
+    ${ph.length ? `<span class="iph" data-n="${ph.length}">${ph.slice().sort((a, b) => a.t - b.t).map(p => `<img src="${PURL[p.id].t}" alt="" data-pvid="${p.id}" data-pvit="${it.id}" loading="lazy">`).join("")}<button class="iph-more" data-pgall="${it.id}" hidden aria-label="사진 모두 보기"></button></span>` : ""}</div>`;
 }
 function planTab(t) {
   const i = Math.min(S.day || 0, t.days.length - 1), d = t.days[i], c = costs(t), m = d.meals || {};
@@ -1833,17 +1860,24 @@ function sheetHtml() {
 }
 
 /* ───────── 사진 크게 보기 ───────── */
-function pvList() { const t = TR(); if (!t) return []; return (t.photos || []).filter(p => PURL[p.id]).sort((a, b) => a.t - b.t).map(p => ({ id: p.id, f: PURL[p.id].f, t: PURL[p.id].t })); }
+function pvList() { const t = TR(); if (!t) return []; return (t.photos || []).filter(p => PURL[p.id] && (!S.pvIt || p.it === S.pvIt)).sort((a, b) => a.t - b.t).map(p => ({ id: p.id, f: PURL[p.id].f, t: PURL[p.id].t })); }
+/* 코스 사진 모두 보기(10-28 제이): 「+N」을 누르면 화면 가득 큰 사진 목록, 누르면 한 장 크게 */
+function gallery() {
+  const t = TR(); if (!t) return ""; let it = null; t.days.forEach(d => d.items.forEach(x => { if (x.id === S.pg) it = x; }));
+  const P = (t.photos || []).filter(p => PURL[p.id] && p.it === S.pg).sort((a, b) => a.t - b.t); if (!P.length) return "";
+  return `<div class="pv vw2 pg2" role="dialog" aria-label="사진 모두 보기"><div class="vw2-top"><b>${esc(it ? it.title : "")}</b><span class="k">사진 ${P.length}장</span><span class="k n"></span><button class="vw2-x" data-pgx aria-label="닫기">${IC.x}</button></div>
+    <div class="pg2-grid">${P.map((p, k) => `<button data-pgi="${k}"><img src="${PURL[p.id].f}" alt="" loading="lazy"><em class="num">${p.t ? hmOf(p.t) : ""}</em></button>`).join("")}</div></div>`;
+}
 function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i], t = TR() || {}, rec = (t.photos || []).find(x => x.id === p.id) || {};
   let it = null; (t.days || []).forEach(d => d.items.forEach(x => { if (x.id === rec.it) it = x; }));
   const when = rec.t ? (() => { const d = new Date(rec.t); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(rec.t)}`; })() : "";
   return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span><span class="k n num">${i + 1} / ${L.length}</span>
     <button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button><button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
-    <div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f}" alt="" draggable="false"></div>
+    <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f}" alt="" draggable="false"></div>
       ${L.length > 1 ? `<button class="vw2-nav l" data-pvm="-1" ${i === 0 ? "disabled" : ""} aria-label="이전 사진">${IC.back}</button><button class="vw2-nav r" data-pvm="1" ${i >= L.length - 1 ? "disabled" : ""} aria-label="다음 사진">${IC.next}</button>` : ""}
       <div class="zs2-bar"><div class="zs2-nav" id="pvnav" hidden><img src="${p.t}" alt="" draggable="false"><span></span></div>
-        <div class="zs2-ctl"><button data-zm="-1" aria-label="축소">−</button><b class="num" id="zv">100%</b><button data-zm="1" aria-label="확대">+</button><button class="t on" data-zfit>화면 맞춤</button><button class="t" data-z1>원래 크기</button></div></div></div>
+        <div class="zs2-ctl"><button data-zm="-1" aria-label="축소">−</button><b class="num" id="zv">100%</b><button data-zm="1" aria-label="확대">+</button><button class="t on" data-zfit>화면 맞춤</button><button class="t" data-z1>원래 크기</button></div></div></div></div>
     <p class="vw2-help">${IS_MOBILE() ? "밀어서 다음 사진 · 두 손가락 확대 · 누르면 맞춤 ↔ 크게" : "← → 다음 사진 · 마우스 휠 확대/축소 · 끌어서 옮기기 · 누르면 맞춤 ↔ 원래 크기 · Esc 닫기"}</p></div>`;
 }
 
@@ -1870,6 +1904,7 @@ function zApply() {
 }
 function zReset() { Z.s = 0; Z.x = 0; Z.y = 0; zApply(); }
 function pvBind() {
+  const sp = $("#pvstrip .on"); if (sp) sp.scrollIntoView({ block: "nearest", inline: "nearest" });
   const b = $("#pvb"), im = $("#pvimg"); if (!b || !im) return; Z.s = 0; Z.x = 0; Z.y = 0; Z.nw = 0; Z.nh = 0;
   const meas = () => { Z.bw = b.clientWidth; Z.bh = b.clientHeight; if (Z.s) { const c = zClamp(Z.s, Z.x, Z.y); Z.x = c.x; Z.y = c.y; } zApply(); };
   if (Z.ro) Z.ro.disconnect(); Z.ro = new ResizeObserver(meas); Z.ro.observe(b); meas();
@@ -1894,7 +1929,7 @@ function pvBind() {
 function pvGo(k) { const n = pvList().length; if (n < 2) return; const i = S.pv + k; if (i < 0 || i >= n) return; S.pv = i; render(); }
 document.addEventListener("keydown", e => { if (S.pv == null || /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || "")) return;
   const k = e.key, s = Z.s || zFit();
-  if (k === "Escape") { S.pv = null; render(); } else if (k === "ArrowRight") pvGo(1); else if (k === "ArrowLeft") pvGo(-1);
+  if (k === "Escape") { S.pv = null; if (!S.pg) S.pvIt = null; render(); } else if (k === "ArrowRight") pvGo(1); else if (k === "ArrowLeft") pvGo(-1);
   else if (k === "+" || k === "=") zTo(s * 1.25); else if (k === "-" || k === "_") zTo(s / 1.25); else if (k === "0") zTo(zFit()); else if (k === "1") zTo(1); else return;
   e.preventDefault(); e.stopPropagation(); }, true);
 
@@ -2255,7 +2290,7 @@ function render(top) {
   let main;
   if (pc) main = `<div class="app pcapp">${pcBar()}<div class="pcl full tw ${S.scr}"><main class="pmain">${SCR[S.scr]()}</main></div><footer class="pfoot">여행 노트 v${VER} · 가입 · 서버 없이 내 기기${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장 · 만든 곳 <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></footer>`;
   else { const tabs = ["list", "set"].includes(S.scr); main = `<div class="app ${tabs ? "wt" : ""} s-${S.scr}">${SCR[S.scr]()}${tabs ? tabsHtml() : ""}`; }
-  main += `${S.sheet ? sheetHtml() : ""}${S.pv != null ? viewer() : ""}${S.instPg ? instPage() : ""}</div>`;
+  main += `${S.sheet ? sheetHtml() : ""}${S.pg && S.pv == null ? gallery() : ""}${S.pv != null ? viewer() : ""}${S.instPg ? instPage() : ""}</div>`;
   $("#root").innerHTML = main;
   if (S.pv != null) pvBind();
   const nb = $(".app .body"); if (!top) { if (nb && !pc) nb.scrollTop = y; if (pc) window.scrollTo(0, wy); } else { if (nb) nb.scrollTop = 0; if (pc) window.scrollTo(0, 0); }
@@ -2317,8 +2352,12 @@ document.addEventListener("click", async e => {
     n._new = true; n._link = true; S.edit = n; S.sheet = null; hist.length = 0; S.scr = "list"; return go("info"); }
   if (d.linto) { S.sheet = null; hist.length = 0; S.scr = "list"; S.rid = d.linto; hist.push({ scr: "list", rid: null }); S.scr = "trip"; return go("paste"); }
   /* 사진 보기 */
-  if (d.pvid) { e.stopPropagation(); if (S.ttab === "photo" || S.scr !== "trip") { S.phId = d.pvid; S.sheet = "phit"; return render(); } S.pv = pvList().findIndex(p => p.id === d.pvid); return render(); }
-  if (d.pvx != null) { S.pv = null; return render(); }
+  if (d.pvid) { e.stopPropagation(); if (S.ttab === "photo" || S.scr !== "trip") { S.phId = d.pvid; S.sheet = "phit"; return render(); } S.pvIt = d.pvit || null; S.pv = pvList().findIndex(p => p.id === d.pvid); return render(); }
+  if (d.pgall) { S.pg = d.pgall; return render(); }
+  if (d.pgx != null) { S.pg = null; return render(); }
+  if (d.pgi != null) { S.pvIt = S.pg; S.pv = +d.pgi; return render(); }
+  if (d.pvi != null) { S.pv = +d.pvi; return render(); }
+  if (d.pvx != null) { S.pv = null; if (!S.pg) S.pvIt = null; return render(); }
   if (d.tview) { D.set.tview = d.tview; await setMeta("set", D.set).catch(() => {}); return render(); }
   if (d.phcover != null && t) { t.cover = S.phId; await saveTrip(t); S.sheet = null; toast("여행 표지로 정했어요."); return render(); }
   if (d.pvcover != null && t) { const L = pvList(), q = L[S.pv]; if (q) { t.cover = q.id; await saveTrip(t); toast("여행 표지로 정했어요."); } return render(); }
@@ -2327,7 +2366,7 @@ document.addEventListener("click", async e => {
   if (d.zm) { const s = Z.s || zFit(); return zTo(+d.zm > 0 ? s * 1.25 : s / 1.25); }
   if (d.zfit != null) return zTo(zFit());
   if (d.z1 != null) return zTo(1);
-  if (d.phview != null) { const id = S.phId; S.sheet = null; S.pv = pvList().findIndex(p => p.id === id); return render(); }
+  if (d.phview != null) { const id = S.phId; S.sheet = null; S.pvIt = null; S.pv = pvList().findIndex(p => p.id === id); return render(); }
   if (d.phset != null && t) { const p = t.photos.find(x => x.id === S.phId); if (p) { p.it = d.phset; p.man = true; await saveTrip(t); } S.sheet = null; return render(); }
   if (d.phdel != null && t) { if (!confirm("이 사진을 여행에서 뺄까요? (휴대폰 · PC의 원본은 그대로예요)")) return; t.photos = t.photos.filter(x => x.id !== S.phId); await delPhoto(S.phId); await saveTrip(t); S.sheet = null; return render(); }
   if (d.off && t) { t.off = Math.max(-24, Math.min(24, (t.off || 0) + +d.off)); for (const p of t.photos) p.it = assignPh(t, p); await saveTrip(t); return render(); }
@@ -2497,6 +2536,15 @@ document.addEventListener("change", e => { const el = e.target, w = el.closest &
 /* 일정 팝업: 바깥 누르기 · Esc = 닫기 */
 document.addEventListener("click", e => { if (e.target.classList && e.target.classList.contains("emodal")) { const x = e.target.querySelector("[data-itclose]"); if (x) x.click(); } });
 document.addEventListener("keydown", e => { if (e.key !== "Escape" || S.pv != null || S.sheet) return; const x = document.querySelector(".emodal [data-itclose]"); if (x) { e.preventDefault(); x.click(); } });
+
+/* 코스 사진 줄: 넓이에 맞춰 한 줄로 채우고, 넘치는 만큼 마지막 칸에 「+N」(누르면 모두 보기) */
+function fitIph() { document.querySelectorAll(".iph").forEach(w => { const im = [...w.querySelectorAll("img")], mo = w.querySelector(".iph-more"), n = im.length; if (!n) return;
+  const cs = getComputedStyle(w), gap = parseFloat(cs.columnGap) || 6, tile = parseFloat(cs.getPropertyValue("--tile")) || 76, W = w.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const fit = Math.max(1, Math.floor((W + gap) / (tile + gap))); const show = n > fit ? fit - 1 : n;
+  im.forEach((x, k) => { x.hidden = k >= show; }); if (mo) { mo.hidden = n <= fit; if (n > fit) { const last = im[show]; const tx = "+" + (n - show); if (mo.textContent !== tx) mo.textContent = tx; const bg = last ? `url("${last.src}")` : ""; if (mo.dataset.bg !== bg) { mo.dataset.bg = bg; mo.style.backgroundImage = bg; } } } }); }
+new MutationObserver(() => { clearTimeout(fitIph._t); fitIph._t = setTimeout(fitIph, 0); }).observe(document.body, { childList: true, subtree: true });
+window.addEventListener("resize", () => { clearTimeout(fitIph._r); fitIph._r = setTimeout(fitIph, 80); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && S.pg && S.pv == null) { S.pg = null; render(); e.preventDefault(); } });
 
 /* ───────── 설치 화면 (블로그 「설치하기」 → 앱주소?install=1) ─────────
    Blog J 앱형 도구 공통. 필요한 것: S(상태) · render() · toast() · IC · esc · DEV · IOS · ANDROID · STANDALONE · IS_SAMSUNG · QRS · mobileUrl()

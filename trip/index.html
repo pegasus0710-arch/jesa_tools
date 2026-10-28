@@ -1017,6 +1017,13 @@ body.pc .iph{--tile:96px}
 @media (max-width:760px){.vw2-main{flex-direction:column-reverse}.vw2-strip{width:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:8px 8px 4px}.vw2-strip button{width:60px;height:60px}}
 .pv.vw2{background:#121419}
 .pg2-grid{row-gap:10px}.pg2-grid button{margin:0;width:100%}
+/* 지난 일정 확인 — 「모두 했어요」 강조 (10-28) */
+.btn.ckall{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;justify-items:start;text-align:left;width:100%;min-height:64px;margin:6px 0 14px;padding:12px 18px;border:0;border-radius:16px;background:var(--navy);color:#fff;box-shadow:4px 6px 14px rgba(32,38,58,.35);cursor:pointer}
+.btn.ckall svg{grid-row:1/3;width:26px;height:26px;padding:6px;border-radius:50%;background:var(--amber);color:#fff;box-sizing:content-box}
+.btn.ckall span{font-size:16.5px;font-weight:800}
+.btn.ckall small{font-size:12.5px;color:#c9cde0;font-weight:500}
+.btn.ckall:hover{box-shadow:4px 6px 14px rgba(32,38,58,.35),0 0 0 3px var(--amber)}
+.btn.ckall:active{transform:translateY(1px)}
 
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
@@ -1773,9 +1780,11 @@ function scrCheck() {
     return `<div class="tcard ck3 ${o ? "open" : ""}"><div class="ckh"><span class="num">${i + 1}일째 ${esc(it.time || "")}</span><b>${esc(it.title)}</b><span class="num">${planCost(t, it) ? won(planCost(t, it)) : ""}</span></div>
       ${o ? `<div class="g2"><div><label class="f">실제 시간</label>${timeSel(`data-act="${it.id}:time"`, o.time)}</div><div><label class="f">실제 비용${it.per ? "(1인)" : ""}</label><input class="inp num" inputmode="numeric" data-money data-act="${it.id}:cost" value="${o.cost != null ? won(o.cost) : ""}" placeholder="0"></div></div><label class="f">실제 장소</label><input class="inp" data-act="${it.id}:place" value="${esc(o.place)}"><div class="row2"><button class="btn sm" data-ckcancel="${it.id}">취소</button><button class="btn sm nv" data-ckfix="${it.id}">이대로 확정</button></div>`
         : `<div class="ck4"><button data-ck="done:${it.id}">했어요</button><button data-ck="fix:${it.id}">고쳐서</button><button data-ck="move:${it.id}">다른 날로</button><button data-ck="skip:${it.id}">안 했어요</button></div>`}</div>`; };
+  const all = L.length ? `<button class="btn ckall" data-ckall>${IC.ok}<span>${L.length > 1 ? `남은 ${L.length}개 모두 「했어요」` : "「했어요」로 확정"}</span><small>계획대로 다녀왔으면 한 번에</small></button>` : "";   /* 10-28 제이: 모두 했어요 강조 */
   return hd("지난 일정 확인", backBtn()) + `<div class="body"><p class="hint">시간이 지난 일정 ${L.length}개 — 실제로 한 대로 남기면 「다녀와서」 정리와 실제 경비에 그대로 쓰여요.</p>
+    ${all}
     ${L.length ? L.map(rowH).join("") : `<div class="empty sm"><p>확인할 일정이 없어요.</p></div>`}
-    ${L.length > 1 ? `<button class="btn w" data-ckall>남은 ${L.length}개 모두 「했어요」</button>` : ""}</div>
+    ${L.length > 2 ? all : ""}</div>
     <div class="btmbar"><button class="btn" data-cklater>나중에 한꺼번에</button><button class="btn go" data-back>확인 끝</button></div>`;
 }
 

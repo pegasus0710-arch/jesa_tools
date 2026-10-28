@@ -26,8 +26,17 @@ x.querySelector("i").style.cssText="font-style:normal;font-size:18px;opacity:.7;
 x.addEventListener("click",function(ev){if(ev.target.tagName==="I"){x.style.display="none";var g=document.getElementById("bjinstg");if(g)g.style.display="none";return;}
  if(bip){bip.prompt();bip.userChoice.then(function(r){if(r&&r.outcome==="accepted")x.style.display="none";bip=null;});}else guide();});
 document.body.appendChild(x);
+/* 10-28 제이: 오른쪽 아래 단추는 잘 안 보임 → 설치 안 하고 쓸 때는 맨 위 안내 띠(닫으면 이 브라우저에서는 오른쪽 아래 단추만) */
+var off=false;try{off=localStorage.getItem("bjphoto:instbar")==="off";}catch(e){}
+if(!off){x.style.display="none";var bar=document.createElement("div");bar.id="bjinstbar";
+bar.style.cssText="position:relative;z-index:9998;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px max(16px,calc((100vw - 1320px)/2));background:#20263a;color:#fff;font:600 14.5px/1.5 sans-serif";
+bar.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e08a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span style="flex:1;min-width:220px">사진 뷰어를 <b style="color:#ffd9b0">PC에 앱으로 설치</b>하면 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요. 설치 · 가입 없이 무료, 인터넷이 되면 늘 새 버전이에요.</span><button type="button" data-a="i" style="border:0;border-radius:10px;padding:9px 16px;background:#e08a3e;color:#1f2125;font:800 14px/1 sans-serif;cursor:pointer">PC에 앱으로 설치</button><button type="button" data-a="x" aria-label="안내 닫기" title="닫기 — 다음에는 오른쪽 아래 단추로" style="border:0;background:transparent;color:#fff;opacity:.75;font:400 22px/1 sans-serif;cursor:pointer;padding:2px 6px">×</button>';
+bar.addEventListener("click",function(ev){var b=ev.target.closest("button");if(!b)return;
+ if(b.getAttribute("data-a")==="x"){bar.remove();try{localStorage.setItem("bjphoto:instbar","off");}catch(e){}x.style.display="flex";return;}
+ if(bip){bip.prompt();bip.userChoice.then(function(r){if(r&&r.outcome==="accepted")bar.remove();bip=null;});}else{guide();var g=document.getElementById("bjinstg");if(g){g.style.top="64px";g.style.bottom="auto";}}});
+document.body.insertBefore(bar,document.body.firstChild);}
 if(/[?&]install=1/.test(location.search)){if(bip)x.click();else setTimeout(function(){if(bip)x.click();else guide();},1200);}});
-window.addEventListener("appinstalled",function(){["bjinst","bjinstg"].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display="none";});});})();
+window.addEventListener("appinstalled",function(){["bjinst","bjinstg","bjinstbar"].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display="none";});});})();
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%231f7f8f%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%2211%22%20y%3D%2216%22%20width%3D%2238%22%20height%3D%2230%22%20rx%3D%225%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2227%22%20r%3D%223.5%22%2F%3E%3Cpath%20d%3D%22M49%2039L38%2028%2021%2045%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2253%22%20cy%3D%2253%22%20r%3D%228%22%20fill%3D%22%23e08a3e%22%20stroke%3D%22%231f7f8f%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E" />
 <style>

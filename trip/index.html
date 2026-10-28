@@ -2091,16 +2091,31 @@ async function gdFolder() {
   const c = await (await gdApi("files?fields=id", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: GDF, mimeType: "application/vnd.google-apps.folder" }) })).json();
   return GD.fid = c.id;
 }
+/* 목록 — 「여행노트」 폴더(여행노트.json · 여행별 폴더) + 여행별 폴더 안 사진. 사진은 이름(p….jpg)으로 찾음.
+   10-29 제이: 사진이 한 폴더에 섞이지 않게 여행마다 폴더(「2026-11-01 강릉」) — 폴더에 여행 id를 꼬리표(appProperties)로 붙여 이름을 바꿔도 같은 폴더 */
+const FOLDER_MT = "application/vnd.google-apps.folder";
+async function gdQ(q) { const out = []; let pt = "";
+  do { const r = await (await gdApi(`files?q=${gq(q)}&fields=nextPageToken,files(id,name,modifiedTime,mimeType,parents,appProperties)&pageSize=1000${pt ? "&pageToken=" + pt : ""}`)).json();
+    out.push(...(r.files || [])); pt = r.nextPageToken; } while (pt); return out; }
 async function gdList() {
-  const fid = await gdFolder(), map = {}; let pt = "";
-  do { const r = await (await gdApi(`files?q=${gq(`'${fid}' in parents and trashed=false`)}&fields=nextPageToken,files(id,name,modifiedTime)&pageSize=1000${pt ? "&pageToken=" + pt : ""}`)).json();
-    (r.files || []).forEach(f => map[f.name] = f); pt = r.nextPageToken; } while (pt);
-  return GD.files = map;
+  const fid = await gdFolder(), map = {}, subs = {};
+  for (const f of await gdQ(`'${fid}' in parents and trashed=false`)) {
+    if (f.mimeType === FOLDER_MT) { const tid = f.appProperties && f.appProperties.trip; if (tid) subs[tid] = f; } else map[f.name] = f; }
+  const ids = Object.values(subs).map(f => f.id);
+  for (let i = 0; i < ids.length; i += 25) for (const f of await gdQ(`(${ids.slice(i, i + 25).map(x => `'${x}' in parents`).join(" or ")}) and trashed=false`)) if (f.mimeType !== FOLDER_MT) map[f.name] = f;
+  GD.subs = subs; return GD.files = map;
 }
-async function gdUpload(name, blob, mime, id) {
-  const meta = id ? {} : { name, parents: [await gdFolder()] };
+const tripFolderName = t => (`${t.start || ""} ${(t.name || "이름 없는 여행").trim()}`).replace(/[\\/:*?"<>|]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 80);
+async function gdTripFolder(t) {
+  const subs = GD.subs || (GD.subs = {}), nm = tripFolderName(t); let f = subs[t.id];
+  if (f) { if (f.name !== nm) { await gdApi(`files/${f.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: nm }) }).catch(() => {}); f.name = nm; } return f.id; }
+  f = await (await gdApi("files?fields=id,name,parents,appProperties", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: nm, mimeType: FOLDER_MT, parents: [await gdFolder()], appProperties: { trip: t.id } }) })).json();
+  subs[t.id] = f; return f.id;
+}
+async function gdUpload(name, blob, mime, id, parent) {
+  const meta = id ? {} : { name, parents: [parent || await gdFolder()] };
   const fd = new FormData(); fd.append("metadata", new Blob([JSON.stringify(meta)], { type: "application/json" })); fd.append("file", blob instanceof Blob ? blob : new Blob([blob], { type: mime }));
-  const r = await (await gdApi(`https://www.googleapis.com/upload/drive/v3/files${id ? "/" + id : ""}?uploadType=multipart&fields=id,name,modifiedTime`, { method: id ? "PATCH" : "POST", body: fd })).json();
+  const r = await (await gdApi(`https://www.googleapis.com/upload/drive/v3/files${id ? "/" + id : ""}?uploadType=multipart&fields=id,name,modifiedTime,parents`, { method: id ? "PATCH" : "POST", body: fd })).json();
   if (GD.files) GD.files[name] = r; return r;
 }
 const gdGet = async id => (await gdApi(`files/${id}?alt=media`)).blob();
@@ -2117,8 +2132,17 @@ async function gdSync(opt = {}) {
       GD.importing = true; try { got = await importData(o, async id => files[id + ".jpg"] ? await gdGet(files[id + ".jpg"].id) : null); } finally { GD.importing = false; }
     }
     const want = new Set(); for (const r of D.items) for (const p of r.photos || []) want.add(p.id + ".jpg");
-    let up = 0; for (const n of want) if (!files[n]) { const o = await st("photos", "readonly", s => s.get(n.replace(/\.jpg$/, ""))); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg"); } }
+    /* 사진: 여행마다 폴더 — 없는 것만 올리고, 다른 곳(예전처럼 「여행노트」 바로 아래)에 있으면 그 여행 폴더로 옮김 */
+    let up = 0, mv = 0;
+    for (const r of D.items) { if (!(r.photos || []).length) continue; const tf = await gdTripFolder(r);
+      for (const p of r.photos) { const n = p.id + ".jpg", f = files[n];
+        if (!f) { const o = await st("photos", "readonly", s => s.get(p.id)); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg", null, tf); } }
+        else if (f.parents && f.parents.length && !f.parents.includes(tf)) { GD.msg = `사진을 여행별 폴더로 정리하는 중 ${++mv}…`; gdPaint();
+          await gdApi(`files/${f.id}?addParents=${tf}&removeParents=${f.parents.join(",")}&fields=id,parents`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: "{}" }).then(x => x.json()).then(x => { f.parents = x.parents; }).catch(() => {}); } } }
     for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
+    /* 지운 여행의 폴더(사진이 다 빠진 것)는 휴지통으로 */
+    { const live = new Set([...D.items.map(r => r.id)]); const inUse = new Set(Object.values(files).flatMap(f => f.parents || []));
+      for (const [tid, f] of Object.entries(GD.subs || {})) if (!live.has(tid) && !inUse.has(f.id) && Date.now() - Date.parse(f.modifiedTime || 0) > 30 * 60000) { await gdApi(`files/${f.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {}); delete GD.subs[tid]; } }
     D.set.savedAt = Date.now();
     await gdUpload("여행노트.json", new Blob([JSON.stringify(exportObj())], { type: "application/json" }), "application/json", files["여행노트.json"] && files["여행노트.json"].id);
     if (!D.set.gdEmail) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user && a.user.emailAddress) { D.set.gdEmail = a.user.emailAddress; GD.stc = null; setTimeout(gdPrepSilent, 300); } } catch (er) {} }

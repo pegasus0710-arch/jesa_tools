@@ -1,86 +1,375 @@
 {
- "_설명": "Blog J 스킨이 읽는 도구 목록. 도구를 추가하면 메인·사이드바에 자동 반영. category: 의례·디지털·학습·재무·건강 / icon: doc image pencil printer table wallet chart stamp idcard eye shield / new: NEW 표시 / hero: 첫 화면 대표(3개까지) / hide: 숨기기 / count: 카드 하나가 여러 프로그램을 묶을 때 그 수(예: 제사·의례 = 지방 + 축문 → 2). 홈의 \"무료 도구 N가지\"에 더해짐 / soon: 곧 나올 도구(아이디어 보드 순서). 홈 도구 카드 마지막 줄의 빈칸만 \"준비 중\" 카드로 채움 — 링크 없음, 도구 수에 안 셈 / guides: 홈 「Blog J 앱 사용 안내」 칸 — 앱형 도구 공통 글(설치 · 저장 위치 등), open 전에는 「○월 ○일 공개」",
+ "_설명": "Blog J 스킨이 읽는 도구 목록(2026-10-28 메인 개편). 도구를 추가하면 메인 · 사이드바에 자동 반영. category: 색(의례 · 디지털 · 학습 · 재무 · 건강) / area: 메인 탭(rite 제사·의례 · doc 문서·이미지 · money 돈 관리 · life 생활 · learn 학습 — 없으면 category로 정함) / icon: 아이콘 이름 / type: 쓰는 방법 「온라인」 「다운로드」 「설치」(여러 개면 첫 번째가 아이콘 점) / open: 공개 시각 — 맨 위 「새로 나온 무료 도구」는 공개된 도구 중 open이 가장 최근인 3개, 이 시각 전에는 메인에서 흐린 「공개 예정」 아이콘 / rank: 사이드바 「인기 도구」 순위(1~8, 매주 월요일 점검 때 고침) · prev: 지난주 순위(없으면 오르내림 표시 없음) / short: 짧은 설명 / hide: 숨기기 / count: 아이콘 하나가 여러 프로그램을 묶을 때 그 수(「무료 도구 N가지」에 더해짐) / soon: 곧 나올 도구 — 메인 아이콘 칸 맨 뒤에 흐린 「곧 공개」로(링크 없음, 도구 수에 안 셈, hide면 안 보임) / tabs: 메인 영역 탭 / guides: 메인 「안내」 줄 / areas: 예전 스킨용(새 스킨은 안 씀) / run: 메인 아이콘을 누르면 열 실행 카드(launch.html?tool=…, n = 이름, q = tool&tab) — 여러 개면 창 안에서 고름 / app: 설치형 앱 주소(누르면 새 창) / run · app 둘 다 없으면 글(link)로 이동 / ver: 버전(무료 도구 전체 페이지) / img: 앱 아이콘 그림(설치형은 그 앱의 icon-192.png, 나머지는 icons/apps/이름.png) — 메인 · 사이드 · 무료 도구 전체 페이지에 그대로",
+ "tabs": [
+  {
+   "id": "rite",
+   "name": "제사 · 의례",
+   "category": "의례"
+  },
+  {
+   "id": "doc",
+   "name": "문서 · 이미지",
+   "category": "디지털"
+  },
+  {
+   "id": "money",
+   "name": "돈 관리",
+   "category": "재무"
+  },
+  {
+   "id": "life",
+   "name": "생활",
+   "category": "디지털"
+  },
+  {
+   "id": "learn",
+   "name": "학습",
+   "category": "학습"
+  }
+ ],
  "tools": [
+  {
+   "name": "제사·의례 도구",
+   "category": "의례",
+   "area": "rite",
+   "icon": "printer",
+   "type": [
+    "온라인"
+   ],
+   "desc": "지방 인쇄 · 제사 날짜 계산 · 차례상 배치도 · 축문까지 한곳에",
+   "short": "지방 · 축문 · 제사 날짜 · 차례상",
+   "link": "https://luvbong.tistory.com/pages/jesa",
+   "count": 2,
+   "rank": 1,
+   "hero": true,
+   "open": "2026-09-21T09:00:00+09:00",
+   "ver": "2.0",
+   "run": [
+    {
+     "n": "지방 출력",
+     "q": "jibang&tab=print"
+    },
+    {
+     "n": "제사 날짜 계산",
+     "q": "jibang&tab=calc"
+    },
+    {
+     "n": "차례상 배치도",
+     "q": "jibang&tab=charye"
+    },
+    {
+     "n": "축문 작성",
+     "q": "chukmun&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jesa.png"
+  },
   {
    "name": "PDF 편집 도구",
    "category": "디지털",
+   "area": "doc",
    "icon": "doc",
+   "type": [
+    "온라인"
+   ],
    "desc": "합치기·나누기·용량·가리기·서명까지, 서류 업로드 없이",
    "short": "합치기·용량·가리기·서명",
    "link": "https://luvbong.tistory.com/745",
-   "new": true,
+   "rank": 4,
    "hero": true,
-   "open": "2026-10-19T22:00:00+09:00"
+   "open": "2026-10-19T22:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "PDF 편집",
+     "q": "pdf&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/pdf.png"
   },
   {
    "name": "이미지 도구",
    "category": "디지털",
+   "area": "doc",
    "icon": "image",
+   "type": [
+    "온라인",
+    "다운로드"
+   ],
    "desc": "크기·용량·형식·자르기·증명사진 규격·워터마크",
    "short": "용량·크기·증명사진",
-   "link": "https://luvbong.tistory.com/pages/image-tool"
+   "link": "https://luvbong.tistory.com/pages/image-tool",
+   "rank": 5,
+   "open": "2026-10-01T09:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "이미지 도구",
+     "q": "image&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/image.png"
   },
   {
    "name": "차트 만들기",
    "category": "디지털",
+   "area": "doc",
    "icon": "chart",
+   "type": [
+    "온라인"
+   ],
    "desc": "엑셀 표 붙여넣기로 막대·꺾은선·원·콤보 차트, PPT에 바로",
    "short": "막대·꺾은선·원·콤보",
    "link": "https://luvbong.tistory.com/pages/chart",
-   "new": true,
-   "open": "2026-10-12T22:00:00+09:00"
+   "rank": 8,
+   "open": "2026-10-12T22:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "차트 만들기",
+     "q": "chart&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/chart.png"
   },
   {
-   "name": "라벨 출력기",
+   "name": "자기소개서 쓰기",
    "category": "디지털",
-   "icon": "tag",
-   "desc": "엑셀 주소록 붙여넣기로 주소 라벨·이름 스티커, 우편번호 자동 검색",
-   "short": "주소 라벨·우편번호 자동",
-   "link": "https://luvbong.tistory.com/pages/label",
-   "new": true,
-   "hero": true
+   "area": "doc",
+   "icon": "pen",
+   "type": [
+    "다운로드"
+   ],
+   "desc": "공고 문항 붙여넣고 질문에 답하면 초안, A4 미리보기 · 글자수",
+   "short": "질문에 답하면 초안 · 글자수",
+   "link": "https://luvbong.tistory.com/786",
+   "rank": 3,
+   "open": "2026-10-24T09:00:00+09:00",
+   "ver": "1.0",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jaso.png"
   },
   {
-   "name": "레시피 노트",
-   "category": "디지털",
-   "icon": "list",
-   "desc": "내 레시피를 사진째 모아 두고, 양만 바꾸면 재료 계산 · 장보기 목록까지 — 휴대폰 · PC에 설치",
-   "short": "레시피 저장·인분 계산·장보기",
-   "link": "https://luvbong.tistory.com/788",
-   "new": true,
-   "open": "2026-10-29T09:00:00+09:00"
-  },
-  {
-   "name": "쓰기 연습장",
-   "category": "학습",
-   "icon": "pencil",
-   "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
-   "short": "따라쓰기·받아쓰기 시험지",
-   "link": "https://luvbong.tistory.com/pages/write"
-  },
-  {
-   "name": "제사·의례 도구",
-   "category": "의례",
-   "icon": "printer",
-   "desc": "지방 인쇄 · 제사 날짜 계산 · 차례상 배치도 · 축문까지 한곳에",
-   "short": "지방 · 제사 날짜 · 차례상",
-   "link": "https://luvbong.tistory.com/pages/jesa",
-   "hero": true,
-   "count": 2
+   "name": "견적서 발행기",
+   "category": "재무",
+   "area": "money",
+   "icon": "receipt",
+   "type": [
+    "다운로드"
+   ],
+   "desc": "견적서 · 거래명세서 · 청구서를 한 번에, 자료는 내 PC 폴더에만",
+   "short": "견적서 · 거래명세서 · 청구서",
+   "link": "https://luvbong.tistory.com/784",
+   "rank": 2,
+   "open": "2026-10-22T09:00:00+09:00",
+   "ver": "1.0",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/quote.png"
   },
   {
    "name": "가계부 달력",
    "category": "재무",
+   "area": "money",
    "icon": "wallet",
+   "type": [
+    "다운로드"
+   ],
    "desc": "달력에 바로 적는 가계부, 내 PC에만 저장",
-   "link": "https://luvbong.tistory.com/725"
+   "short": "달력에 바로 적는 가계부",
+   "link": "https://luvbong.tistory.com/725",
+   "rank": 7,
+   "open": "2026-09-19T09:00:00+09:00",
+   "ver": "1.0",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/budget.png"
   },
   {
    "name": "매매일지",
    "category": "재무",
-   "icon": "chart",
+   "area": "money",
+   "icon": "trend",
+   "type": [
+    "다운로드"
+   ],
    "desc": "매수·매도 기록과 수익률, 내 PC에만 저장",
-   "link": "https://luvbong.tistory.com/726"
+   "short": "매수 · 매도 기록과 수익률",
+   "link": "https://luvbong.tistory.com/726",
+   "open": "2026-09-19T09:00:00+09:00",
+   "ver": "1.0",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/trading.png"
+  },
+  {
+   "name": "레시피 노트",
+   "category": "디지털",
+   "area": "life",
+   "icon": "recipe",
+   "type": [
+    "설치"
+   ],
+   "desc": "내 레시피를 사진째 모아 두고, 양만 바꾸면 재료 계산 · 장보기 목록까지 — 휴대폰 · PC에 설치",
+   "short": "레시피 저장·인분 계산·장보기",
+   "link": "https://luvbong.tistory.com/788",
+   "open": "2026-10-29T09:00:00+09:00",
+   "ver": "1.0",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/recipe/",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/recipe/icon-192.png"
+  },
+  {
+   "name": "라벨 출력기",
+   "category": "디지털",
+   "area": "life",
+   "icon": "tag",
+   "type": [
+    "온라인",
+    "다운로드"
+   ],
+   "desc": "엑셀 주소록 붙여넣기로 주소 라벨·이름 스티커, 우편번호 자동 검색",
+   "short": "주소 라벨·우편번호 자동",
+   "link": "https://luvbong.tistory.com/pages/label",
+   "rank": 6,
+   "hero": true,
+   "open": "2026-10-16T09:00:00+09:00",
+   "ver": "2.0",
+   "run": [
+    {
+     "n": "라벨 출력",
+     "q": "label&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/label.png"
+  },
+  {
+   "name": "쓰기 연습장",
+   "category": "학습",
+   "area": "learn",
+   "icon": "pencil",
+   "type": [
+    "온라인"
+   ],
+   "desc": "한글·영어 따라쓰기, 받아쓰기 시험지까지 매번 새로",
+   "short": "따라쓰기·받아쓰기 시험지",
+   "link": "https://luvbong.tistory.com/pages/write",
+   "open": "2026-10-06T09:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "한글 따라쓰기",
+     "q": "write&tab=ko"
+    },
+    {
+     "n": "받아쓰기",
+     "q": "write&tab=test"
+    },
+    {
+     "n": "영어 따라쓰기",
+     "q": "write&tab=en"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/write.png"
+  },
+  {
+   "name": "여행 노트",
+   "category": "디지털",
+   "area": "life",
+   "icon": "pin",
+   "type": [
+    "설치"
+   ],
+   "desc": "여행사 일정 붙여넣기 · 경비 N분의 1 · 지도 길안내 · 사진 연결 — 휴대폰 · PC에 설치",
+   "short": "여행 일정 · 경비 · 지도",
+   "link": "https://luvbong.tistory.com/793",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/trip/",
+   "ver": "1.0",
+   "open": "2026-11-10T09:00:00+09:00",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/trip/icon-192.png"
+  },
+  {
+   "name": "스크랩 노트",
+   "category": "디지털",
+   "area": "life",
+   "icon": "bookmark",
+   "type": [
+    "설치"
+   ],
+   "desc": "유튜브 · 링크 · 글 · 캡처를 한곳에, 나중에 볼 것 정리 — 휴대폰 · PC에 설치",
+   "short": "유튜브 · 링크 · 캡처 모아 두기",
+   "link": "https://luvbong.tistory.com/792",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/scrap/",
+   "ver": "1.0",
+   "open": "2026-11-14T09:00:00+09:00",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/scrap/icon-192.png"
+  },
+  {
+   "name": "사진 뷰어",
+   "category": "디지털",
+   "area": "doc",
+   "icon": "camera",
+   "type": [
+    "설치",
+    "다운로드"
+   ],
+   "desc": "PC 사진 폴더를 한곳에 모아 태그 · 찍은 날 · 장소별로, 사진 파일은 그대로",
+   "short": "사진 모아 보기 · 태그 · 찍은 날",
+   "link": "https://luvbong.tistory.com/794",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/photo/",
+   "ver": "1.0",
+   "open": "2026-11-17T09:00:00+09:00",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/photo/icon-192.png"
+  },
+  {
+   "name": "이미지 편집기",
+   "category": "디지털",
+   "area": "doc",
+   "icon": "image",
+   "type": [
+    "설치",
+    "다운로드"
+   ],
+   "desc": "사진 여러 장을 한 번에 자르기 · 수평 · 크기 · 필터 · 테두리, 콜라주 · 증명사진 · 용량 줄이기",
+   "short": "여러 장 한 번에 · 필터 · 콜라주",
+   "link": "https://luvbong.tistory.com/798",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/icon-192.png",
+   "ver": "2.0",
+   "open": "2026-11-18T09:00:00+09:00"
+  }
+ ],
+ "soon": [
+  {
+   "name": "글자수 세기 · 맞춤법",
+   "category": "디지털",
+   "area": "doc",
+   "icon": "list",
+   "desc": "공백 포함·제외 글자수와 자주 틀리는 맞춤법·띄어쓰기 점검 — 자소서 쓸 때"
+  },
+  {
+   "name": "사진 콜라주",
+   "category": "디지털",
+   "area": "doc",
+   "icon": "grid",
+   "desc": "여러 장을 한 장으로, 칸마다 위치·확대 조절",
+   "hide": true
+  },
+  {
+   "name": "노후 자금 계산기",
+   "category": "재무",
+   "area": "money",
+   "icon": "trend",
+   "desc": "모자란 노후 자금과 매달 모을 금액 계산",
+   "hide": true
+  }
+ ],
+ "guides": [
+  {
+   "name": "앱 설치 · 삭제 방법",
+   "icon": "phone",
+   "desc": "휴대폰 · PC 홈 화면 아이콘으로 설치하고, 지우는 법까지",
+   "link": "https://luvbong.tistory.com/790",
+   "open": "2026-10-28T09:00:00+09:00"
+  },
+  {
+   "name": "저장 위치 정하기",
+   "icon": "cloud",
+   "desc": "구글 드라이브 연결 · 내 PC 폴더 · 휴대폰 폴더 — 자료를 잃지 않게",
+   "link": "https://luvbong.tistory.com/791",
+   "open": "2026-10-30T09:00:00+09:00"
   }
  ],
  "areas": [
@@ -125,42 +414,6 @@
    "icon": "phone",
    "desc": "사용법",
    "link": "https://luvbong.tistory.com/category/앱·기기 사용법"
-  }
- ],
- "soon": [
-  {
-   "name": "글자수 세기 · 맞춤법",
-   "category": "디지털",
-   "icon": "list",
-   "desc": "공백 포함·제외 글자수와 자주 틀리는 맞춤법·띄어쓰기 점검 — 자소서 쓸 때"
-  },
-  {
-   "name": "사진 콜라주",
-   "category": "디지털",
-   "icon": "grid",
-   "desc": "여러 장을 한 장으로, 칸마다 위치·확대 조절"
-  },
-  {
-   "name": "노후 자금 계산기",
-   "category": "재무",
-   "icon": "trend",
-   "desc": "모자란 노후 자금과 매달 모을 금액 계산"
-  }
- ],
- "guides": [
-  {
-   "name": "앱 설치 · 삭제 방법",
-   "icon": "phone",
-   "desc": "휴대폰 · PC 홈 화면 아이콘으로 설치하고, 지우는 법까지",
-   "link": "https://luvbong.tistory.com/790",
-   "open": "2026-10-28T09:00:00+09:00"
-  },
-  {
-   "name": "저장 위치 정하기",
-   "icon": "cloud",
-   "desc": "구글 드라이브 연결 · 내 PC 폴더 · 휴대폰 폴더 — 자료를 잃지 않게",
-   "link": "https://luvbong.tistory.com/791",
-   "open": "2026-10-30T09:00:00+09:00"
   }
  ]
 }

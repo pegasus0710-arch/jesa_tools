@@ -1908,7 +1908,7 @@ document.addEventListener("click", async e => {
   if (d.cdel) { const i = +d.cdel, old = D.cats[i], n = D.recipes.filter(r => r.cat === old).length; if (!confirm(`「${old}」 분류를 지울까요?${n ? ` 레시피 ${n}개는 「분류 없음」이 돼요.` : ""}`)) return; D.cats.splice(i, 1); for (const r of D.recipes.filter(r => r.cat === old)) { r.cat = ""; await saveRecipe(r); } if (S.cat === old) S.cat = "전체"; await saveCats(); return render(); }
   if (d.tren) { const old = d.tren, v = prompt("태그 이름 (다른 태그와 같게 하면 합쳐져요)", old); if (v && v.trim() && v.trim() !== old) { const nv = v.trim().replace(/^#/, ""); for (const r of D.recipes.filter(r => (r.tags || []).includes(old))) { r.tags = [...new Set(r.tags.map(t => t === old ? nv : t))]; await saveRecipe(r); } if (S.tag === old) S.tag = nv; } return render(); }
   if (d.tdelall) { const old = d.tdelall; if (!confirm(`#${old} 태그를 모든 레시피에서 뺄까요?`)) return; for (const r of D.recipes.filter(r => (r.tags || []).includes(old))) { r.tags = r.tags.filter(t => t !== old); await saveRecipe(r); } if (S.tag === old) S.tag = null; return render(); }
-  if (d.startcats) { D.cats = [["김치", "반찬", "국 · 찌개", "밥 · 면", "고기 · 해물", "간식 · 디저트", "기타"], ["한식", "중식", "일식", "양식", "기타"], []][+d.startcats]; await saveMeta(); S.sheet = null; return render(); }
+  if (d.startcats) { if (D.cats != null) { S.sheet = null; render(); return toast("구글 드라이브에서 분류를 불러왔어요 — 설정 → 분류 관리에서 바꿀 수 있어요."); } D.cats = [["김치", "반찬", "국 · 찌개", "밥 · 면", "고기 · 해물", "간식 · 디저트", "기타"], ["한식", "중식", "일식", "양식", "기타"], []][+d.startcats]; await saveMeta(); S.sheet = null; return render(); }
   if (d.copyurl != null) { const u = mobileUrl(); try { await navigator.clipboard.writeText(u); toast("주소를 복사했어요. 카톡 나에게 보내서 휴대폰에서 여세요."); } catch (er) { prompt("복사해서 쓰세요", u); } return; }
   if (d.kc) { S.kc = d.kc; return render(); }
 });
@@ -1965,7 +1965,7 @@ window.addEventListener("beforeunload", e => { if (S.edit && S.edit._dirty) { e.
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   } else toast("이 브라우저는 저장을 막고 있어요 — 시크릿 창이면 일반 창으로 열어 주세요.");
   D.set.offOn = true; /* 공식 레시피 보이기 설정은 없앰 — 늘 보임 */
-  if ((CAN_DIR || (typeof gdHttp === "function" && gdHttp())) && !D.dir && !D.set.gdOn && !D.set.storeAsked) S.sheet = "store"; else if (D.cats == null) S.sheet = "start";
+  if ((CAN_DIR || (typeof gdHttp === "function" && gdHttp())) && !D.dir && !D.set.gdOn && !D.set.storeAsked) S.sheet = "store"; else if (D.cats == null && !D.set.gdOn) S.sheet = "start"; /* 10-29 제이: 드라이브 연결 기기는 동기화로 분류를 받은 뒤에만 물음 */
   try { history.replaceState({ n: 0 }, ""); } catch (e) {}
   render(true);
   if (D.dir && D.dirPerm === "granted") syncFromFolder();
@@ -2061,16 +2061,18 @@ async function gdSync(opt = {}) {
       GD.importing = true; try { got = await importData(o, async id => files[id + ".jpg"] ? await gdGet(files[id + ".jpg"].id) : null); } finally { GD.importing = false; }
     }
     const want = new Set(); for (const r of D.recipes) for (const p of r.photos || []) want.add(p.id + ".jpg");
-    let up = 0; for (const n of want) if (!files[n]) { const o = await st("photos", "readonly", s => s.get(n.replace(/\.jpg$/, ""))); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg"); } }
-    for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
+    /* 10-29: 목록(레시피노트.json)을 사진보다 먼저 씀 — 사진을 올리다 앱을 닫아도 다른 기기에 레시피가 가고, 빠진 사진은 다음 동기화 때 채움(여행 노트와 같은 방식) */
     D.set.savedAt = Date.now();
     await gdUpload("레시피노트.json", new Blob([JSON.stringify(exportObj())], { type: "application/json" }), "application/json", files["레시피노트.json"] && files["레시피노트.json"].id);
+    let up = 0; for (const n of want) if (!files[n]) { const o = await st("photos", "readonly", s => s.get(n.replace(/\.jpg$/, ""))); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg"); } }
+    for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
     if (!D.set.gdEmail) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user && a.user.emailAddress) { D.set.gdEmail = a.user.emailAddress; GD.stc = null; setTimeout(gdPrepSilent, 300); } } catch (er) {} }
     D.set.gdLast = Date.now(); D.set.gdOn = true; GD.syncedThisRun = true; GD.silentFail = false; await setMeta("set", D.set);
     GD.msg = got.nr || got.np ? `동기화했어요 — 받은 레시피 ${got.nr}개 · 사진 ${got.np}장` : "동기화했어요";
     if (opt.toast !== false) toast(GD.msg);
     if (got.nr || got.np) render();
-  } catch (e) { GD.err = e.message; GD.msg = ""; if (opt.toast !== false) toast("구글 드라이브: " + e.message); }
+    if (D.cats != null && S.sheet === "start") { S.sheet = null; render(); } else if (D.cats == null && !S.sheet) { S.sheet = "start"; render(); }
+  } catch (e) { GD.err = e.message; GD.msg = ""; if (opt.toast !== false) toast("구글 드라이브: " + e.message); if (D.cats == null && !S.sheet) { S.sheet = "start"; render(); } }
   GD.busy = false; gdPaint(); if (GD.again) { GD.again = false; setTimeout(() => gdSync({ toast: false }), 500); }
 }
 /* 고칠 때마다 자동으로 올리기 — 토큰이 살아 있을 때만(1시간), 없으면 다음 「맞추기」 때 */
@@ -2097,7 +2099,7 @@ const gdBar = () => "";
 /* 누르기 */
 document.addEventListener("click", async e => {
   const t = e.target.closest("[data-gdon],[data-gdstart],[data-gdsync],[data-gdoff],[data-gdcid]"); if (!t) return; const d = t.dataset;
-  if (d.gdstart != null) { try { await gdToken(true); } catch (er) { GD.err = er.message; return toast(er.message); } D.set.gdOn = true; D.set.storeAsked = true; await setMeta("set", D.set); S.sheet = D.cats == null ? "start" : null; render(); setTimeout(gdPrepSilent, 500); return gdSync({ interactive: true }); }
+  if (d.gdstart != null) { try { await gdToken(true); } catch (er) { GD.err = er.message; return toast(er.message); } D.set.gdOn = true; D.set.storeAsked = true; await setMeta("set", D.set); S.sheet = null; render(); setTimeout(gdPrepSilent, 500); return gdSync({ interactive: true }); }
   if (d.gdcid != null) { const v = ($("#gdcid").value || "").trim(); if (!/\.apps\.googleusercontent\.com$/.test(v)) return toast("…apps.googleusercontent.com 으로 끝나는 클라이언트 ID를 넣어 주세요."); D.set.gdCid = v; await setMeta("set", D.set); return render(); }
   if (d.gdon != null) { try { await gdToken(true); } catch (er) { GD.err = er.message; gdPaint(); return toast(er.message); } D.set.gdOn = true; await setMeta("set", D.set); setTimeout(gdPrepSilent, 500); return gdSync({ interactive: true }); }
   if (d.gdsync != null) { if (GD.busy) return; try { await gdToken(true); } catch (er) { GD.err = er.message; gdPaint(); return toast(er.message); } return gdSync({}); }

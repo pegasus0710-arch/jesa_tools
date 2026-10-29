@@ -2121,7 +2121,8 @@ async function gdUpload(name, blob, mime, id, parent) {
 const gdGet = async id => (await gdApi(`files/${id}?alt=media`)).blob();
 /* 맞추기: ① 드라이브 것을 받아 더 최근 것만 반영 ② 지금 것을 드라이브에 씀(사진은 없는 것만 올리고, 지운 사진은 휴지통으로) */
 async function gdSync(opt = {}) {
-  if (GD.busy) { GD.again = true; return; } GD.busy = true; GD.err = ""; GD.msg = "구글 드라이브와 동기화하는 중…"; gdPaint();
+  if (GD.busy) { GD.again = true; return; } GD.busy = true; GD.err = ""; GD.prog = ""; GD.msg = "구글 드라이브와 동기화하는 중…"; gdPaint();
+  let wl = null; try { if (navigator.wakeLock) wl = await navigator.wakeLock.request("screen"); } catch (e) {} /* 사진이 많을 때 휴대폰 화면이 꺼져 멈추지 않게 */
   let got = { nr: 0, np: 0 };
   try {
     await gdToken(!!opt.interactive);
@@ -2129,19 +2130,25 @@ async function gdSync(opt = {}) {
     if (files["여행노트.json"] && !opt.pushOnly) {
       const o = JSON.parse(await (await gdGet(files["여행노트.json"].id)).text());
       (o.items || []).forEach(r => (r.photos || []).forEach(p => keep.add(p.id + ".jpg")));
-      GD.importing = true; try { got = await importData(o, async id => files[id + ".jpg"] ? await gdGet(files[id + ".jpg"].id) : null); } finally { GD.importing = false; }
+      /* 받을 사진 수를 먼저 세어 「사진 받는 중 n/전체」로 보여 줌 */
+      const need = (o.items || []).flatMap(r => (r.photos || []).map(p => p.id)).filter(id => !PURL[id] && files[id + ".jpg"]).length; let dn = 0;
+      GD.importing = true; try { got = await importData(o, async id => { if (!files[id + ".jpg"]) return null; const b = await gdGet(files[id + ".jpg"].id); if (need) { GD.prog = `받는 중 ${++dn}/${need}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } return b; }); } finally { GD.importing = false; }
     }
     const want = new Set(); for (const r of D.items) for (const p of r.photos || []) want.add(p.id + ".jpg");
     /* 10-29: 목록(여행노트.json)을 사진보다 먼저 씀 — 사진을 올리다 앱을 닫아도 다른 기기에 여행 · 사진 목록이 가고, 빠진 사진은 다음 동기화 때 채워짐 */
     D.set.savedAt = Date.now();
     await gdUpload("여행노트.json", new Blob([JSON.stringify(exportObj())], { type: "application/json" }), "application/json", files["여행노트.json"] && files["여행노트.json"].id);
     /* 사진: 여행마다 폴더 — 없는 것만 올리고, 다른 곳(예전처럼 「여행노트」 바로 아래)에 있으면 그 여행 폴더로 옮김 */
-    let up = 0, mv = 0;
+    /* 10-29: 올릴 사진을 먼저 모아 3장씩 동시에 올리고 「사진 올리는 중 n/전체」 표시(사진이 수백 장이면 한 장씩은 너무 느림) */
+    let mv = 0; const todo = [];
     for (const r of D.items) { if (!(r.photos || []).length) continue; const tf = await gdTripFolder(r);
       for (const p of r.photos) { const n = p.id + ".jpg", f = files[n];
-        if (!f) { const o = await st("photos", "readonly", s => s.get(p.id)); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg", null, tf); } }
+        if (!f) todo.push([p.id, n, tf]);
         else if (f.parents && f.parents.length && !f.parents.includes(tf)) { GD.msg = `사진을 여행별 폴더로 정리하는 중 ${++mv}…`; gdPaint();
           await gdApi(`files/${f.id}?addParents=${tf}&removeParents=${f.parents.join(",")}&fields=id,parents`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: "{}" }).then(x => x.json()).then(x => { f.parents = x.parents; }).catch(() => {}); } } }
+    if (todo.length) { let up = 0, i = 0; const tot = todo.length;
+      const one = async () => { while (i < todo.length) { const [id, n, tf] = todo[i++]; const o = await st("photos", "readonly", s => s.get(id)); if (o) await gdUpload(n, o.blob, "image/jpeg", null, tf); GD.prog = `올리는 중 ${++up}/${tot}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } };
+      GD.prog = `올리는 중 0/${tot}`; gdPaint(); await Promise.all([one(), one(), one()]); }
     for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
     /* 지운 여행의 폴더(사진이 다 빠진 것)는 휴지통으로 */
     { const live = new Set([...D.items.map(r => r.id)]); const inUse = new Set(Object.values(files).flatMap(f => f.parents || []));
@@ -2152,6 +2159,7 @@ async function gdSync(opt = {}) {
     if (opt.toast !== false) toast(GD.msg);
     if (got.nr || got.np) render();
   } catch (e) { GD.err = e.message; GD.msg = ""; if (opt.toast !== false) toast("구글 드라이브: " + e.message); }
+  try { if (wl) wl.release(); } catch (e) {} GD.prog = "";
   GD.busy = false; gdPaint(); if (GD.again) { GD.again = false; setTimeout(() => gdSync({ toast: false }), 500); }
 }
 /* 고칠 때마다 자동으로 올리기 — 토큰이 살아 있을 때만(1시간), 없으면 다음 「맞추기」 때 */
@@ -2195,7 +2203,7 @@ function stBar() {
   if (gdHttp()) { const live = GD.token && Date.now() < GD.exp - 60000;
     if (!gdOn()) it.push(`<button class="stc warn" data-go="set" title="설정에서 구글 드라이브를 연결하면 휴대폰 · PC가 같은 여행을 써요">${IC.cloud}<b>구글 드라이브</b><i>미연결</i></button>`);
     else { const pend = (D.set.savedAt || 0) > (D.set.gdLast || 0) + 3000, ago = Date.now() - (D.set.gdLast || 0);
-      const [c, t] = GD.busy ? ["busy", "동기화 중…"] : GD.err ? ["bad", "다시 연결"] : live || (!pend && ago < 12 * 3600e3 && GD.syncedThisRun) ? ["ok", "연결됨"] : ["warn", "동기화 필요"];
+      const [c, t] = GD.busy ? ["busy", GD.prog || "동기화 중…"] : GD.err ? ["bad", "다시 연결"] : live || (!pend && ago < 12 * 3600e3 && GD.syncedThisRun) ? ["ok", "연결됨"] : ["warn", "동기화 필요"];
       it.push(`<button class="stc ${c}" data-gdsync title="${esc(GD.err || "구글 드라이브 › " + GDF + " · 마지막: " + gdAgo(D.set.gdLast))}">${IC.cloud}<b>구글 드라이브</b><i>${t}</i></button>`); } }
   if (D.dir) { const ok = D.dirPerm === "granted";
     it.push(`<button class="stc ${ok ? "ok" : "bad"}" ${ok ? 'data-go="set"' : "data-dirperm"}>${IC.folder}<b>${esc(D.dir.name)}</b><i>${ok ? "연결됨" : "다시 연결"}</i></button>`); }

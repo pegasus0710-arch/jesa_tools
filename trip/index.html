@@ -2132,6 +2132,9 @@ async function gdSync(opt = {}) {
       GD.importing = true; try { got = await importData(o, async id => files[id + ".jpg"] ? await gdGet(files[id + ".jpg"].id) : null); } finally { GD.importing = false; }
     }
     const want = new Set(); for (const r of D.items) for (const p of r.photos || []) want.add(p.id + ".jpg");
+    /* 10-29: 목록(여행노트.json)을 사진보다 먼저 씀 — 사진을 올리다 앱을 닫아도 다른 기기에 여행 · 사진 목록이 가고, 빠진 사진은 다음 동기화 때 채워짐 */
+    D.set.savedAt = Date.now();
+    await gdUpload("여행노트.json", new Blob([JSON.stringify(exportObj())], { type: "application/json" }), "application/json", files["여행노트.json"] && files["여행노트.json"].id);
     /* 사진: 여행마다 폴더 — 없는 것만 올리고, 다른 곳(예전처럼 「여행노트」 바로 아래)에 있으면 그 여행 폴더로 옮김 */
     let up = 0, mv = 0;
     for (const r of D.items) { if (!(r.photos || []).length) continue; const tf = await gdTripFolder(r);
@@ -2143,8 +2146,6 @@ async function gdSync(opt = {}) {
     /* 지운 여행의 폴더(사진이 다 빠진 것)는 휴지통으로 */
     { const live = new Set([...D.items.map(r => r.id)]); const inUse = new Set(Object.values(files).flatMap(f => f.parents || []));
       for (const [tid, f] of Object.entries(GD.subs || {})) if (!live.has(tid) && !inUse.has(f.id) && Date.now() - Date.parse(f.modifiedTime || 0) > 30 * 60000) { await gdApi(`files/${f.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {}); delete GD.subs[tid]; } }
-    D.set.savedAt = Date.now();
-    await gdUpload("여행노트.json", new Blob([JSON.stringify(exportObj())], { type: "application/json" }), "application/json", files["여행노트.json"] && files["여행노트.json"].id);
     if (!D.set.gdEmail) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user && a.user.emailAddress) { D.set.gdEmail = a.user.emailAddress; GD.stc = null; setTimeout(gdPrepSilent, 300); } } catch (er) {} }
     D.set.gdLast = Date.now(); D.set.gdOn = true; GD.syncedThisRun = true; GD.silentFail = false; await setMeta("set", D.set);
     GD.msg = got.nr || got.np ? `동기화했어요 — 받은 여행 ${got.nr}개 · 사진 ${got.np}장` : "동기화했어요";

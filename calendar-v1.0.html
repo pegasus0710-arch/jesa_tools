@@ -1026,8 +1026,8 @@ function App() {
           ${st.kind !== "year" ? html`<label class="chk"><input type="checkbox" checked=${st.other} onChange=${e => up("other", e.target.checked)} /> 앞뒤 달 날짜 흐리게 보이기</label>` : null}
           ${st.kind === "month" ? html`<label class="chk"><input type="checkbox" checked=${st.minis} onChange=${e => up("minis", e.target.checked)} /> 위에 지난달 · 다음 달 작은 달력</label>
             <label class="f">아래 메모 줄</label><${Seg} value=${st.memo} options=${[[0, "없음"], [3, "3줄"], [5, "5줄"]]} onChange=${v => up("memo", v)} />` : null}
-          ${st.kind === "desk" ? html`<label class="f">A4 아래 반쪽 <span class="muted">탁상 달력</span></label><${Seg} value=${st.deskBot || "next"} options=${[["next", "다음 달 달력"], ["days", "날짜별 기록 줄"], ["lines", "빈 줄 노트"]]} onChange=${v => up("deskBot", v)} />
-            <p class="hint">${st.deskBot === "days" ? "A4 아래쪽에 그달 1일~말일 날짜 줄이 들어가요. 한 장에 한 달 · 3단계 날짜 메모와 공휴일이 그 날짜 줄에 미리 적혀요." : st.deskBot === "lines" ? "A4 아래쪽이 줄만 있는 노트가 돼요. 한 장에 한 달." : "A4 한 장에 두 달(위 · 아래)을 넣어요."}</p>` : null}
+          ${st.kind === "desk" ? html`<label class="f">A4 아래 반쪽 <span class="muted">탁상 달력</span></label><${Seg} value=${st.deskBot || "next"} options=${[["next", "없음"], ["days", "날짜별 기록 줄"], ["lines", "빈 줄 노트"]]} onChange=${v => up("deskBot", v)} />
+            <p class="hint">${st.deskBot === "days" ? "A4 아래쪽에 그달 1일~말일 날짜 줄이 들어가요. 한 장에 한 달 · 3단계 날짜 메모와 공휴일이 그 날짜 줄에 미리 적혀요." : st.deskBot === "lines" ? "A4 아래쪽이 줄만 있는 노트가 돼요. 한 장에 한 달." : st.count > 1 ? "A4 아래쪽에는 다음 달 달력이 들어가요(한 장에 두 달)." : "A4 아래쪽은 비워 둬요. 2단계 「몇 달」을 2달 이상 고르면 아래쪽에 다음 달 달력이 들어가요."}</p>` : null}
           <label class="f">머리 글귀 <span class="muted">선택 · 예: 우리 가족 2027</span></label><input type="text" value=${st.motto} maxlength="30" placeholder="비워 두면 넣지 않아요" onInput=${e => up("motto", e.target.value)} />
           <p class="note">인쇄 창에서 <b>배율 「실제 크기(100%)」</b>, <b>여백 「없음」</b>, <b>「배경 그래픽」 켜기</b>로 인쇄하세요. 「PDF로 저장」을 고르면 파일로 받을 수 있어요.</p>`}
         </div>

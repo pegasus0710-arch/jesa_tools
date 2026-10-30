@@ -997,9 +997,9 @@ function App() {
       <section class="wp">
         <div class="wp-h"><span class="k">0${cur + 1} / 04</span><h2>${STEPS[cur][1]}</h2><p>${STEPS[cur][2]}</p></div>
         <div class="wp-b">
-        ${cur === 0 && html`<div class="cl-kinds">${[["month", "한 달 한 장", "칸이 큰 월간 달력 · 메모 줄"], ["year", "1년 한 장", "12달을 한 장에 · 공휴일 목록"], ["desk", "탁상 달력", "A5 크기 · A4 한 장에 두 달"]].map(([k, t, s]) => html`<button class=${"tcard cl-kind" + (st.kind === k ? " on" : "")} onClick=${() => up("kind", k)}><span><b>${t}</b><small>${s}</small></span>${st.kind === k ? html`<i></i>` : null}</button>`)}</div>
+        ${cur === 0 && html`<div class="cl-kinds">${[["month", "한 달 한 장", "칸이 큰 월간 달력 · 메모 줄"], ["year", "1년 한 장", "12달을 한 장에 · 공휴일 목록"], ["desk", "탁상 달력", "A5 크기 · 아래쪽은 다음 달이나 노트"]].map(([k, t, s]) => html`<button class=${"tcard cl-kind" + (st.kind === k ? " on" : "")} onClick=${() => up("kind", k)}><span><b>${t}</b><small>${s}</small></span>${st.kind === k ? html`<i></i>` : null}</button>`)}</div>
           ${st.kind !== "desk" ? html`<label class="f">종이</label><${Seg} value=${st.paper} options=${[["land", "A4 가로"], ["port", "A4 세로"]]} onChange=${v => up("paper", v)} />`
-            : html`<p class="note">A4 세로 한 장에 A5 가로 크기로 두 달이 들어가요. 가운데 자르는 선대로 잘라 탁상 달력 받침이나 링에 끼워 쓰세요.</p>`}`}
+            : html`<p class="note">A4 세로 한 장의 위쪽에 A5 크기 달력이 들어가요. 아래쪽에는 다음 달 달력이나 날짜별 기록 줄 · 빈 줄 노트를 넣을 수 있어요(4단계). 가운데 선대로 잘라 탁상 달력 받침에 끼우거나, 접어서 세워 쓰세요.</p>`}`}
         ${cur === 1 && html`<div class="dd2"><div><label class="f">연도</label><select value=${st.year} onChange=${e => up("year", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div>
             ${st.kind !== "year" ? html`<div><label class="f">시작 달</label><select value=${st.m0} onChange=${e => up("m0", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}월</option>`)}</select></div>` : null}</div>
           ${st.kind !== "year" ? html`<label class="f">몇 달</label><select value=${st.count} onChange=${e => up("count", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}달${st.kind === "desk" && !deskNote ? ` (${Math.ceil((i + 1) / 2)}장)` : ` (${i + 1}장)`}</option>`)}</select>
@@ -1047,7 +1047,7 @@ function App() {
   </div>`;
 }
 /* 블로그 경유 잠금: 시험 기간(10-30 제이)에는 끔 — 공식 출시(대표 글 발행) 때 true로 */
-const GATE_ON = false;
+const GATE_ON = Date.now() >= Date.parse("2026-11-06T20:00:00+09:00");   // 대표 글 공개(2026-11-06(금) 20:00)부터 블로그 경유 잠금
 (async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return; render(html`<${App} />`, document.getElementById("root")); })();
 
 /* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알려 iframe 높이를 자동으로 맞춤 */

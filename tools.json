@@ -236,6 +236,27 @@
    "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/label.png"
   },
   {
+   "name": "달력 만들기",
+   "category": "디지털",
+   "area": "life",
+   "icon": "calendar",
+   "type": [
+    "온라인"
+   ],
+   "desc": "2027년 달력을 공휴일 · 음력 · 손 없는 날 · 날짜 메모와 함께 A4로 — 한 달 · 1년 · 탁상 달력",
+   "short": "공휴일 · 음력 · 날짜 메모",
+   "link": "https://luvbong.tistory.com/802",
+   "open": "2026-11-06T20:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "달력 만들기",
+     "q": "calendar&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/calendar.png"
+  },
+  {
    "name": "쓰기 연습장",
    "category": "학습",
    "area": "learn",

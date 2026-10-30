@@ -1,0 +1,31 @@
+{
+ "id": "/jesa_tools/kit/",
+ "name": "무료 도구 키트 | Blog J",
+ "short_name": "도구 키트",
+ "description": "Blog J 무료 도구를 한 화면에 — 설치한 앱은 바로, 온라인 도구는 블로그 실행 카드로",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f0e8db",
+ "theme_color": "#f0e8db",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512-mask.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

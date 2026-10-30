@@ -1874,7 +1874,7 @@ document.addEventListener("click", async e => {
     if (d.bu) { E.bu = d.bu; E._dirty = true; render(); const b = $("#basein"); if (b && !b.value) b.focus(); return; }
     if (d.ecat != null) { E.cat = d.ecat; E._dirty = true; return render(); }
     if (d.addcat != null) { const v = prompt("새 분류 이름"); if (v && v.trim()) { D.cats = D.cats || []; if (!D.cats.includes(v.trim())) D.cats.push(v.trim()); E.cat = v.trim(); saveCats(); } return render(); }
-    if (d.tdel) { E.tags.splice(+d.tdel, 1); E._dirty = true; return render(); }
+    if (d.tdel) { E.tags.splice(+d.tdel, 1); E._dirty = true; tagSync(); const ti = $("#tagin"); if (ti) ti.focus(); return; }
     if (d.iadd != null) { E.ing.push({ n: "", q: "", u: "g" }); render(); const ins = $$('#erows [data-if="n"]'); ins.length && ins[ins.length - 1].focus(); return; }
     if (d.hadd != null) { E.ing.push({ h: "" }); render(); const ins = $$('#erows [data-if="h"]'); ins.length && ins[ins.length - 1].focus(); return; }
     if (d.irm) { E.ing.splice(+d.irm, 1); E._dirty = true; S.sheet = null; return render(); }
@@ -1913,7 +1913,12 @@ document.addEventListener("click", async e => {
   if (d.kc) { S.kc = d.kc; return render(); }
 });
 /* 입력 */
+function tagSync() { const box = $(".inp.tagin"), inp = $("#tagin"); if (!box || !inp) return render(); box.querySelectorAll(".tag").forEach(x => x.remove()); inp.insertAdjacentHTML("beforebegin", S.edit.tags.map((t, i) => `<span class="tag">#${esc(t)}<button data-tdel="${i}" aria-label="태그 빼기">×</button></span>`).join("")); }
+/* 냉장고 재료: 넣은 뒤 목록이 바뀌어야 해서 다시 그리고, 입력칸에 커서를 돌려놓음(남은 글자 유지) */
+function finAdd(v, rest) { const vs = v.split(/[,，]/).map(x => x.trim()).filter(Boolean); const fi = $("#fin"); if (fi) fi.value = ""; if (!vs.length) return; vs.forEach(x => { if (!D.pantry.includes(x)) D.pantry.push(x); }); savePantry(); render(); const nf = $("#fin"); if (nf) { nf.value = rest || ""; nf.focus(); } }
 document.addEventListener("input", e => {
+  { const t = e.target; if (t.id === "tagin" && S.edit && /[,，]/.test(t.value)) { const p = t.value.split(/[,，]/), rest = p.pop(); addTags(p.join(",")); t.value = rest.replace(/^\s+/, ""); S.edit._dirty = true; tagSync(); return; }
+    if (t.id === "fin" && /[,，]/.test(t.value)) { const p = t.value.split(/[,，]/), rest = p.pop(); finAdd(p.join(","), rest.replace(/^\s+/, "")); return; } }
   const t = e.target, d = t.dataset, E = S.edit;
   if (E && d.ef) { E[d.ef] = t.value; E._dirty = true; updEsec(); return; }
   if (E && d.if) { E.ing[+d.i][d.if] = t.value; E._dirty = true; updEsec(); return; }
@@ -1942,15 +1947,16 @@ document.addEventListener("change", async e => {
 });
 document.addEventListener("keydown", e => {
   const t = e.target;
-  if (t.id === "tagin" && (e.key === "Enter" || e.key === "," || e.key === "，")) { e.preventDefault(); if (t.value.trim()) { addTags(t.value); S.edit._dirty = true; render(); $("#tagin").focus(); } return; }
-  if (t.id === "tagin" && e.key === "Backspace" && !t.value && S.edit.tags.length) { S.edit.tags.pop(); render(); $("#tagin").focus(); return; }
-  if (t.id === "fin" && (e.key === "Enter" || e.key === ",")) { e.preventDefault(); const vs = t.value.split(/[,，]/).map(x => x.trim()).filter(Boolean); vs.forEach(v => { if (!D.pantry.includes(v)) D.pantry.push(v); }); if (vs.length) { savePantry(); render(); $("#fin").focus(); } return; }
+  if ((t.id === "tagin" || t.id === "fin") && e.isComposing) return; /* 한글 조합 중에는 기다림 — 쉼표는 input에서 처리 */
+  if (t.id === "tagin" && (e.key === "Enter" || e.key === "," || e.key === "，")) { e.preventDefault(); if (t.value.trim()) { addTags(t.value); t.value = ""; S.edit._dirty = true; tagSync(); } return; }
+  if (t.id === "tagin" && e.key === "Backspace" && !t.value && S.edit.tags.length) { e.preventDefault(); S.edit.tags.pop(); S.edit._dirty = true; tagSync(); return; }
+  if (t.id === "fin" && (e.key === "Enter" || e.key === "," || e.key === "，")) { e.preventDefault(); finAdd(t.value); return; }
   if (t.id === "extra" && e.key === "Enter") { e.preventDefault(); $("[data-extra]").click(); return; }
   if (t.id === "newcat" && e.key === "Enter") { e.preventDefault(); $("[data-catadd]").click(); return; }
   if (e.key === "Escape") { if (S.pv != null) { S.pv = null; render(); } else if (S.sheet) { S.sheet = null; render(); } }
   if (S.pv != null && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { const n = pvList().length; S.pv = (S.pv + (e.key === "ArrowRight" ? 1 : -1) + n) % n; render(); }
 });
-document.addEventListener("focusout", e => { const t = e.target; if (t.id === "fin" && t.value.trim()) { const vs = t.value.split(/[,，]/).map(x => x.trim()).filter(Boolean); vs.forEach(v => { if (!D.pantry.includes(v)) D.pantry.push(v); }); savePantry(); setTimeout(render, 0); } if (t.id === "tagin" && t.value.trim() && S.edit) { addTags(t.value); t.value = ""; setTimeout(render, 0); } });
+document.addEventListener("focusout", e => { const t = e.target; if (t.id === "fin" && t.value.trim() && t.isConnected) { const v = t.value; t.value = ""; const vs = v.split(/[,，]/).map(x => x.trim()).filter(Boolean); vs.forEach(x => { if (!D.pantry.includes(x)) D.pantry.push(x); }); savePantry(); setTimeout(render, 0); } if (t.id === "tagin" && t.value.trim() && S.edit && t.isConnected) { addTags(t.value); t.value = ""; S.edit._dirty = true; tagSync(); } });
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window._bip = e; render(); });
 window.addEventListener("beforeunload", e => { if (S.edit && S.edit._dirty) { e.preventDefault(); e.returnValue = ""; } });
 

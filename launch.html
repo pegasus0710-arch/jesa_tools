@@ -150,6 +150,12 @@ const TOOLS = {
     en: { title: "알파벳 쓰기 연습장", desc: "영어 4줄 공책에 대문자·소문자 따라쓰기", chips: ["영어 4줄 공책", "대문자 · 소문자", "손으로 쓰는 모양 글꼴"], q: { lang: "en", cat: "upper" } },
     enword: { title: "영어 단어 쓰기 연습장", desc: "한글 뜻을 보며 영어 단어를 따라 쓰고, 시험지로 확인", chips: ["한글 뜻과 함께", "주제별 낱말", "시험지 모드"], q: { lang: "en", cat: "word" } },
     proverb: { title: "속담 따라쓰기", desc: "속담으로 바른 글씨와 띄어쓰기를 함께 연습", chips: ["속담 48개", "띄어쓰기 · 문장 부호", "인쇄 · PDF 저장"], q: { lang: "ko", cat: "proverb" } } } },
+  calendar: { file: "calendar-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "달력 출력", icon: "calendar",
+    tabs: {
+    all: { title: "달력 출력", desc: "2026 · 2027 · 2028년 달력을 공휴일 · 음력 · 절기 · 우리 집 기념일과 함께 A4로 인쇄", chips: ["한 달 한 장 · 1년 한 장 · 탁상", "공휴일 · 대체공휴일", "음력 · 24절기 · 손 없는 날", "음력 생일 · 기일 자동"] },
+    month: { title: "월간 달력 인쇄", desc: "칸이 큰 한 달 한 장 달력 — 음력 · 절기 · 메모 줄까지", chips: ["A4 가로 · 세로", "음력 1일 · 15일 또는 매일", "우리 집 기념일", "메모 줄"] },
+    year: { title: "1년 달력 한 장 인쇄", desc: "12달을 A4 한 장에 — 아래에 그해 공휴일 목록", chips: ["A4 가로 · 세로", "공휴일 · 대체공휴일", "월요일 시작도 OK"] },
+    desk: { title: "탁상 달력 만들기", desc: "A4 한 장에 A5 두 달 — 잘라서 탁상 달력으로", chips: ["A5 크기 두 달", "자르는 선", "음력 · 기념일"] } } },
   kimchi: { file: "kimchi-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "김치 양념 계산기", icon: "jar",
     tabs: {
     all: { title: "김치 양념 계산기", desc: "절임배추 kg이나 포기 수만 넣으면 고춧가루 · 젓갈 · 마늘 양이 자동으로 — 김치 18가지", chips: ["배추김치 · 깍두기 · 총각김치 등 18가지", "농촌진흥청 · 연구소 레시피", "맵기 · 젓갈 조절", "장보기 목록 · 이미지 저장"] } } },
@@ -214,6 +220,7 @@ const ICON_PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-widt
 const ICON_CHART = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-6M10 20v-9M15 20v-5M20 20V9"/><path d="M4 9l5-3 5 2 6-5"/></svg>';
 const ICON_TAG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>';
 const ICON_JAR = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8"/><path d="M9 3v3.5L6.5 9.2A3 3 0 0 0 6 10.9V19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8.1a3 3 0 0 0-.5-1.7L15 6.5V3"/><path d="M6 13h12"/></svg>';
+const ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>';
 const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const ICON_GO = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function render(state) {
@@ -227,7 +234,7 @@ function render(state) {
   <div class="lc" style="--c:${TL.color};--ct:${TL.tag}">
     <div class="lc-main">
       <div class="lc-info">
-        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : TL.icon === "pencil" ? ICON_PEN : TL.icon === "chart" ? ICON_CHART : TL.icon === "tag" ? ICON_TAG : TL.icon === "jar" ? ICON_JAR : ICON_DOC}<i></i></span><div><span class="lc-tag">BLOG J 무료 도구</span><h2>${esc(C.title)}</h2></div></div>
+        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : TL.icon === "pencil" ? ICON_PEN : TL.icon === "chart" ? ICON_CHART : TL.icon === "tag" ? ICON_TAG : TL.icon === "jar" ? ICON_JAR : TL.icon === "calendar" ? ICON_CAL : ICON_DOC}<i></i></span><div><span class="lc-tag">BLOG J 무료 도구</span><h2>${esc(C.title)}</h2></div></div>
         <p class="lc-desc">${esc(C.desc)}</p>
         <div class="lc-chips">${C.chips.map(c => `<span>${esc(c)}</span>`).join("")}</div>
       </div>

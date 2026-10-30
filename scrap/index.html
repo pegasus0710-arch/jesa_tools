@@ -1627,6 +1627,7 @@ async function saveEdit() {
   if (wasNew) hist.pop(); S.rid = r.id; S.scr = "detail"; render(true);
   toast(dup ? `담았어요 · 같은 주소를 전에도 담았어요(${fmtD(dup.created)})` : wasNew ? "담았어요." : "고쳤어요.");
 }
+function tagSync() { const box = $(".inp.tagin"), inp = $("#tagin"); if (!box || !inp) return render(); box.querySelectorAll(".tag").forEach(x => x.remove()); inp.insertAdjacentHTML("beforebegin", S.edit.tags.map((t, i) => `<span class="tag">#${esc(t)}<button data-tdel="${i}" aria-label="태그 빼기">×</button></span>`).join("")); }
 function addTags(v) { v.split(/[,，#]+/).map(t => t.trim()).filter(Boolean).forEach(t => { t = t.slice(0, 40); if (!S.edit.tags.includes(t)) S.edit.tags.push(t); }); }
 /* 붙여넣은 것(글 · 주소 · 공유로 온 것) → 담기 */
 function fromShared(title, text, url) {
@@ -1693,7 +1694,7 @@ document.addEventListener("click", async e => {
     if (d.addcat != null) { const v = (prompt("새 분류 이름") || "").trim().slice(0, 60); if (v) { if (!catNames().includes(v)) { D.cats.push({ n: v, s: [] }); await saveCats(); } E.cat = v; E.sub = ""; E._dirty = true; } return updCats(); }
     if (d.addsub != null) { const v = (prompt(`「${E.cat}」 아래 하위 분류 이름`) || "").trim().slice(0, 60); if (v) { ensureCat(E.cat, v); await saveCats(); E.sub = v; E._dirty = true; } return updCats(); }
     if (d.est2) { E.st = E.st === d.est2 ? "" : d.est2; E._dirty = true; return render(); }
-    if (d.tdel) { E.tags.splice(+d.tdel, 1); E._dirty = true; return render(); }
+    if (d.tdel) { E.tags.splice(+d.tdel, 1); E._dirty = true; tagSync(); const ti = $("#tagin"); if (ti) ti.focus(); return; }
     if (d.pasteurl != null) { try { const t = await navigator.clipboard.readText(); const u = findUrl(t) || t.trim(); if (!u) return toast("복사한 주소가 없어요."); E.url = u; E._dirty = true; const i = $("#eurl"); if (i) i.value = u; if (!findUrl(t) && !fixUrl(t)) return toast("복사한 글에 주소가 없어요."); const rest = t.replace(findUrl(t), "").trim(); if (rest && !E.title.trim() && rest.length <= 160) { E.title = rest; const ti = $("#etitle"); if (ti) ti.value = rest; } onUrl(true); } catch (er) { toast("붙여넣기가 막혀 있어요. 주소 칸을 누르고 길게 눌러(Ctrl + V) 붙여 넣으세요."); const i = $("#eurl"); i && i.focus(); } return; }
     if (d.pastetext != null) { try { const t = await navigator.clipboard.readText(); if (!t.trim()) return toast("복사한 글이 없어요."); E.text = E.text ? E.text + "\n" + t : t; E._dirty = true; const i = $("#etext"); if (i) i.value = E.text; } catch (er) { toast("붙여넣기가 막혀 있어요. 글 칸을 누르고 Ctrl + V(길게 눌러 붙여넣기)."); const i = $("#etext"); i && i.focus(); } return; }
     if (d.pdel) { E.photos = E.photos.filter(x => x.id !== d.pdel); if ((E._added || []).includes(d.pdel)) await delPhoto(d.pdel); else (E._removed = E._removed || []).push(d.pdel); E._dirty = true; return render(); }
@@ -1752,6 +1753,7 @@ function aSave() { try { localStorage.setItem("sn_al", JSON.stringify({ sort: S.
 /* 입력 */
 document.addEventListener("input", e => {
   const t = e.target, d = t.dataset, E = S.edit;
+  if (E && t.id === "tagin" && /[,，]/.test(t.value)) { const p = t.value.split(/[,，]/), rest = p.pop(); addTags(p.join(",")); t.value = rest.replace(/^\s+/, ""); E._dirty = true; tagSync(); return; }
   if (E && d.ef) { E[d.ef] = t.value; E._dirty = true; if (d.ef === "url") onUrl(); return; }
   if (t.id === "aq") { S.al.q = t.value; S.al.page = 1; const R = $("#ares"); if (R) R.innerHTML = aResHtml(); return; }
 });
@@ -1772,14 +1774,15 @@ document.addEventListener("change", async e => {
 });
 document.addEventListener("keydown", e => {
   const t = e.target;
-  if (t.id === "tagin" && (e.key === "Enter" || e.key === "," || e.key === "，")) { e.preventDefault(); if (t.value.trim()) { addTags(t.value); S.edit._dirty = true; render(); $("#tagin").focus(); } return; }
-  if (t.id === "tagin" && e.key === "Backspace" && !t.value && S.edit.tags.length) { S.edit.tags.pop(); render(); $("#tagin").focus(); return; }
+  if (t.id === "tagin" && e.isComposing) return; /* 한글 입력 중(글자 조합 중)에는 기다림 — 쉼표는 input에서 처리 */
+  if (t.id === "tagin" && (e.key === "Enter" || e.key === "," || e.key === "，")) { e.preventDefault(); if (t.value.trim()) { addTags(t.value); t.value = ""; S.edit._dirty = true; tagSync(); } return; }
+  if (t.id === "tagin" && e.key === "Backspace" && !t.value && S.edit.tags.length) { e.preventDefault(); S.edit.tags.pop(); S.edit._dirty = true; tagSync(); return; }
   if (t.id === "newcat" && e.key === "Enter") { e.preventDefault(); $("[data-catadd]").click(); return; }
   if ((e.key === "Enter" || e.key === " ") && t.matches && t.matches(".ar[tabindex],[data-favr],[data-open]")) { e.preventDefault(); t.click(); return; }
   if (e.key === "Escape") { if (S.pv != null) { S.pv = null; render(); } else if (S.sheet) { S.sheet = null; render(); } }
   if (S.pv != null && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { const n = pvList().length; S.pv = (S.pv + (e.key === "ArrowRight" ? 1 : -1) + n) % n; render(); }
 });
-document.addEventListener("focusout", e => { const t = e.target; if (t.id === "tagin" && t.value.trim() && S.edit) { addTags(t.value); t.value = ""; setTimeout(render, 0); } });
+document.addEventListener("focusout", e => { const t = e.target; if (t.id === "tagin" && t.value.trim() && S.edit && t.isConnected) { addTags(t.value); t.value = ""; S.edit._dirty = true; tagSync(); } });
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window._bip = e; render(); });
 window.addEventListener("beforeunload", e => { if (S.edit && S.edit._dirty) { e.preventDefault(); e.returnValue = ""; } });
 

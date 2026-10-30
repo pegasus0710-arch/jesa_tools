@@ -1104,6 +1104,11 @@ body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
 .pg2-grid button{aspect-ratio:auto!important;height:0!important;min-height:0!important;padding:0 0 75%!important}
 .pg2-grid button img{position:absolute;inset:0;width:100%;height:100%}
 
+/* 10-31: 가벼운 저장 — 큰 사진 불러오는 동안 · 못 불러왔을 때 */
+#pvimg.lzw{filter:blur(1.5px);transition:filter .25s}
+#pvimg.lzx{opacity:.85}
+.sgc .lzbox{margin-top:10px}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -1372,7 +1377,7 @@ async function delItem(id) { const r = RR(id); if (!r) return; for (const p of r
 async function saveMeta() { await setMeta("cats", D.cats).catch(() => {}); touch(); }
 async function saveCats() { D.set.catsAt = Date.now(); await setMeta("set", D.set).catch(() => {}); await saveMeta(); }
 async function addPhoto(blob, th) { const id = "p" + uid(); try { await putO("photos", { id, blob, th }); } catch (e) { throw new Error("사진을 저장하지 못했어요(저장 공간 부족일 수 있어요): " + (e.message || e)); } PURL[id] = { f: URL.createObjectURL(blob), t: URL.createObjectURL(th) }; return id; }
-async function delPhoto(id) { await delO("photos", id).catch(() => {}); if (PURL[id]) { URL.revokeObjectURL(PURL[id].f); URL.revokeObjectURL(PURL[id].t); delete PURL[id]; } }
+async function delPhoto(id) { await delO("photos", id).catch(() => {}); if (PURL[id]) { if (PURL[id].f) URL.revokeObjectURL(PURL[id].f); URL.revokeObjectURL(PURL[id].t); delete PURL[id]; } }
 const RR = id => D.items.find(r => r.id === id);
 
 /* ── 사진 줄이기 ── */
@@ -2011,7 +2016,7 @@ function scrSet() {
       ${gdBox()}
       ${CAN_DIR ? (D.dir ? `<div class="row">${IC.folder}<div class="t"><b>저장 폴더: 「${esc(D.dir.name)}」 <span class="okb" style="${D.dirPerm === "granted" ? "" : "background:var(--red)"}">${D.dirPerm === "granted" ? "연결됨" : "다시 연결 필요"}</span></b><small>일정 · 사진이 이 폴더에도 자동 저장돼요.</small><div class="row2">${D.dirPerm !== "granted" ? `<button class="btn sm nv" data-dirperm>다시 연결</button>` : ""}<button class="btn sm" data-undir>연결 끊기</button></div></div></div>`
       : ANDROID ? `<button class="row" data-pickown>${IC.folder}<div class="t"><b>휴대폰 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>사진 · 일정이 휴대폰 폴더에도 저장돼요. 브라우저 데이터를 지워도 폴더를 다시 고르면 사진을 다시 받지 않고 바로 불러와요.<br>폴더 고르는 창에서 <b>⋮ 또는 「새 폴더」 → 이름 「여행노트」 → 그 폴더에서 「이 폴더 사용」 → 「허용」</b>.</small></div></button>`
-      : `<button class="row" data-sheet="store">${IC.folder}<div class="t"><b>내 PC 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>사진 · 일정이 PC 폴더에도 저장돼요. 브라우저 데이터를 지워도 폴더를 다시 연결하면 사진을 다시 받지 않고 바로 불러와요.</small></div></button>`) : ""}</section>
+      : `<button class="row" data-sheet="store">${IC.folder}<div class="t"><b>내 PC 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>사진 · 일정이 PC 폴더에도 저장돼요. 브라우저 데이터를 지워도 폴더를 다시 연결하면 사진을 다시 받지 않고 바로 불러와요.</small></div></button>`) : ""}${keepFullBox()}</section>
     ${DEV === "pc" ? `<section class="sgc">${mobileBox().replace('<div class="lbl"><span>휴대폰에서도 쓰기</span></div>', `<h4>${IC.home} 휴대폰에서도 쓰기</h4>`)}</section>` : ""}
     <section class="sgc"><h4>${IC.save} 백업 <small>마지막: ${lb ? ymdw(new Date(lb)) : "없음"}</small></h4>
       <p class="hint">여행 ${D.items.length}개 · 사진 ${nPh}장을 파일(.zip) 하나로 받아 두거나, 다른 기기에서 만든 백업으로 되살려요.</p>
@@ -2092,7 +2097,7 @@ function gallery() {
   const t = TR(); if (!t) return ""; let it = null; t.days.forEach(d => d.items.forEach(x => { if (x.id === S.pg) it = x; }));
   const P = (t.photos || []).filter(p => PURL[p.id] && p.it === S.pg).sort((a, b) => a.t - b.t); if (!P.length) return "";
   return `<div class="pv vw2 pg2" role="dialog" aria-label="사진 모두 보기"><div class="vw2-top"><b>${esc(it ? it.title : "")}</b><span class="k">사진 ${P.length}장</span><span class="k n"></span><button class="vw2-x" data-pgx aria-label="닫기">${IC.x}</button></div>
-    <div class="pg2-grid">${P.map((p, k) => `<button data-pgi="${k}"><img src="${PURL[p.id].f}" alt="" loading="lazy"><em class="num">${phT(t, p) ? hmOf(phT(t, p)) : ""}</em></button>`).join("")}</div></div>`;
+    <div class="pg2-grid">${P.map((p, k) => `<button data-pgi="${k}"><img src="${PURL[p.id].t}" alt="" loading="lazy"><em class="num">${phT(t, p) ? hmOf(phT(t, p)) : ""}</em></button>`).join("")}</div></div>`;
 }
 function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i], t = TR() || {}, rec = (t.photos || []).find(x => x.id === p.id) || {};
@@ -2100,7 +2105,7 @@ function viewer() {
   const when = rec.t || rec.u ? (() => { const lt = phT(t, rec), d = new Date(lt); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(lt)}${rec.lm ? " (파일 시간)" : ""}`; })() : "";
   return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span><span class="k n num">${i + 1} / ${L.length}</span>
     <button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button><button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
-    <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f}" alt="" draggable="false"></div>
+    <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f || p.t}" alt="" draggable="false"></div>
       ${L.length > 1 ? `<button class="vw2-nav l" data-pvm="-1" ${i === 0 ? "disabled" : ""} aria-label="이전 사진">${IC.back}</button><button class="vw2-nav r" data-pvm="1" ${i >= L.length - 1 ? "disabled" : ""} aria-label="다음 사진">${IC.next}</button>` : ""}
       <div class="zs2-bar"><div class="zs2-nav" id="pvnav" hidden><img src="${p.t}" alt="" draggable="false"><span></span></div>
         <div class="zs2-ctl"><button data-zm="-1" aria-label="축소">−</button><b class="num" id="zv">100%</b><button data-zm="1" aria-label="확대">+</button><button class="t on" data-zfit>화면 맞춤</button><button class="t" data-z1>원래 크기</button></div></div></div></div>
@@ -2212,7 +2217,7 @@ async function importData(o, getPhoto) {
 }
 async function makeBackup() {
   const enc = new TextEncoder(), files = [{ name: "trip-planner.json", data: enc.encode(JSON.stringify(exportObj())) }];
-  for (const r of D.items) for (const p of r.photos || []) { const o = await st("photos", "readonly", s => s.get(p.id)); if (o) files.push({ name: "photos/" + p.id + ".jpg", data: new Uint8Array(await o.blob.arrayBuffer()) }); }
+  for (const r of D.items) for (const p of r.photos || []) { const b = await fullBlob(p.id); if (b) files.push({ name: "photos/" + p.id + ".jpg", data: new Uint8Array(await b.arrayBuffer()) }); }
   const blob = makeZip(files), name = `여행노트_백업_${today()}.zip`, file = new File([blob], name, { type: "application/zip" });
   if (IS_MOBILE() && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: name }); } catch (e) { if (e && e.name === "AbortError") return; download(blob, name); } }
   else download(blob, name);
@@ -2240,10 +2245,11 @@ async function folderWrite() {
   try { const fh = await D.dir.getFileHandle(FJ, { create: true }); const w = await fh.createWritable(); await w.write(JSON.stringify(exportObj(), null, 1)); await w.close();
     const want = new Set(); for (const r of D.items) for (const p of r.photos || []) want.add(p.id + ".jpg");
     if (want.size || true) { const pd = await D.dir.getDirectoryHandle(FP, { create: true }); const have = new Set(); for await (const [n] of pd.entries()) have.add(n);
-      for (const n of want) if (!have.has(n)) { const o = await st("photos", "readonly", s => s.get(n.replace(/\.jpg$/, ""))); if (o) { const f = await pd.getFileHandle(n, { create: true }); const w2 = await f.createWritable(); await w2.write(o.blob); await w2.close(); } }
+      for (const n of want) { const pid = n.replace(/\.jpg$/, ""); if (have.has(n)) { phMark(pid, "inF"); continue; } const b = await fullBlob(pid, true); if (b) { const f = await pd.getFileHandle(n, { create: true }); const w2 = await f.createWritable(); await w2.write(b); await w2.close(); phMark(pid, "inF"); } }
+      await phFlush();
       for (const n of have) if (/^p.*\.jpg$/.test(n) && !want.has(n)) await pd.removeEntry(n).catch(() => {}); }
   } catch (e) { if (e.name === "NotAllowedError") { D.dirPerm = "prompt"; render(); } else console.warn(e); }
-  fwBusy = false; if (fwAgain) { fwAgain = false; setTimeout(folderWrite, 300); }
+  fwBusy = false; if (fwAgain) { fwAgain = false; setTimeout(folderWrite, 300); } else compactPhotos();
 }
 async function syncFromFolder() { const o = await readFolder(); if (o) { try { const r = await importData(o, folderPhoto); if (r.nr) toast(`저장 폴더에서 여행 ${r.nr}개를 불러왔어요.`); } catch (e) { toast(e.message); } } await folderWrite(); render(); }
 const hasJson = async h => { try { await h.getFileHandle(FJ); return true; } catch (e) { return false; } };
@@ -2367,14 +2373,16 @@ async function gdSync(opt = {}) {
         if (!f) todo.push([p.id, n, tf]);
         else if (f.parents && f.parents.length && !f.parents.includes(tf)) { GD.msg = `사진을 여행별 폴더로 정리하는 중 ${++mv}…`; gdPaint();
           await gdApi(`files/${f.id}?addParents=${tf}&removeParents=${f.parents.join(",")}&fields=id,parents`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: "{}" }).then(x => x.json()).then(x => { f.parents = x.parents; }).catch(() => {}); } } }
+    for (const r of D.items) for (const p of r.photos || []) if (files[p.id + ".jpg"]) phMark(p.id, "inD");   /* 10-31: 드라이브에 이미 있는 사진 */
     if (todo.length) { let up = 0, i = 0; const tot = todo.length;
-      const one = async () => { while (i < todo.length) { const [id, n, tf] = todo[i++]; const o = await st("photos", "readonly", s => s.get(id)); if (o) await gdUpload(n, o.blob, "image/jpeg", null, tf); GD.prog = `올리는 중 ${++up}/${tot}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } };
+      const one = async () => { while (i < todo.length) { const [id, n, tf] = todo[i++]; const b = await fullBlob(id, true); if (b) { await gdUpload(n, b, "image/jpeg", null, tf); phMark(id, "inD"); } GD.prog = `올리는 중 ${++up}/${tot}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } };
       GD.prog = `올리는 중 0/${tot}`; gdPaint(); await Promise.all([one(), one(), one()]); }
     for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
     /* 지운 여행의 폴더(사진이 다 빠진 것)는 휴지통으로 */
     { const live = new Set([...D.items.map(r => r.id)]); const inUse = new Set(Object.values(files).flatMap(f => f.parents || []));
       for (const [tid, f] of Object.entries(GD.subs || {})) if (!live.has(tid) && !inUse.has(f.id) && Date.now() - Date.parse(f.modifiedTime || 0) > 30 * 60000) { await gdApi(`files/${f.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {}); delete GD.subs[tid]; } }
     if (!D.set.gdEmail) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user && a.user.emailAddress) { D.set.gdEmail = a.user.emailAddress; GD.stc = null; setTimeout(gdPrepSilent, 300); } } catch (er) {} }
+    await phFlush(); compactPhotos();
     D.set.gdLast = Date.now(); D.set.gdOn = true; GD.syncedThisRun = true; GD.silentFail = false; await setMeta("set", D.set);
     GD.msg = got.nr || got.np ? `동기화했어요 — 받은 여행 ${got.nr}개 · 사진 ${got.np}장` : "동기화했어요";
     if (opt.toast !== false) toast(GD.msg);
@@ -2795,7 +2803,7 @@ window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window
   if (db) {
     D.items = (await getAll("items")) || []; Object.assign(D.set, (await getMeta("set")) || {});
     if (D.set.map === "tmap") { D.set.map = "naver"; D.set.nav = "tmap"; }   /* 10-28: 지도 / 길안내 앱 따로 */
-    const ph = (await getAll("photos")) || []; ph.forEach(p => { PURL[p.id] = { f: URL.createObjectURL(p.blob), t: URL.createObjectURL(p.th || p.blob) }; });
+    const ph = (await getAll("photos")) || []; ph.forEach(p => { PHF[p.id] = { inF: !!p.inF, inD: !!p.inD, full: !!p.blob }; if (!p.blob && !p.th) return; PURL[p.id] = { f: p.blob ? URL.createObjectURL(p.blob) : null, t: URL.createObjectURL(p.th || p.blob) }; });   /* 10-31: 가벼운 저장 — 큰 사진은 폴더 · 드라이브에서 그때그때 */
     try { D.dir = (await getMeta("dir")) || null; if (D.dir && D.dir.queryPermission) D.dirPerm = await D.dir.queryPermission({ mode: "readwrite" }); } catch (e) { D.dir = null; }
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   } else toast("이 브라우저는 저장을 막고 있어요 — 시크릿 창이면 일반 창으로 열어 주세요.");
@@ -2984,6 +2992,62 @@ document.addEventListener("click", async e => {
 document.addEventListener("change", e => { if (e.target.id !== "tyear") return; tlState().year = e.target.value; const R = $("#tres"); if (R) R.innerHTML = tResHtml(); });
 document.addEventListener("input", e => { if (e.target.id !== "tq") return; tlState().q = e.target.value; const R = $("#tres"); if (R) R.innerHTML = tResHtml(); });
 document.addEventListener("change", async e => { const el = e.target; if (el.dataset.phtz == null) return; const t = TR(); if (!t) return; t.tz = el.value === "" ? null : +el.value; await saveTrip(t); render(); toast(t.tz == null ? "사진에 적힌 시각 그대로 나눠요." : `${tzName(t.tz)} 기준으로 다시 나눴어요.`); });
+
+/* ───────── 10-31 제이: 가벼운 저장 — 사진이 많은 「추억 저장소」로 써도 브라우저가 무거워지지 않게 ─────────
+   · 큰 사진의 원본 자리 = 구글 드라이브 · 이 기기 폴더. 브라우저(IndexedDB)에는 작은 사진(목록 · 모아 보기용)만 남김
+   · 큰 사진은 크게 볼 때 그때 불러옴: 브라우저에 있으면 → 이 기기 폴더 → 구글 드라이브 순서
+   · 브라우저에서 큰 사진을 지우는 때: 드라이브 연결이면 드라이브에 올라간 뒤, 폴더 연결이면 폴더에 써진 뒤(둘 다 연결이면 둘 다 끝난 뒤)
+   · 설정 「이 기기에 큰 사진도 보관」을 켜면 지금처럼 모두 보관(인터넷 없이 크게 보기) */
+const PHF = {};   /* 사진 id → { inF: 폴더에 있음, inD: 드라이브에 있음, full: 브라우저에 큰 사진 있음 } */
+let phDirty = new Set();
+function phMark(id, k) { const f = PHF[id] || (PHF[id] = { inF: false, inD: false, full: true }); if (f[k]) return; f[k] = true; phDirty.add(id); }
+async function phFlush() {
+  if (!phDirty.size) return; const ids = [...phDirty]; phDirty = new Set();
+  for (let i = 0; i < ids.length; i += 200) { const part = ids.slice(i, i + 200);
+    await st("photos", "readwrite", s => { part.forEach(id => { const q = s.get(id); q.onsuccess = () => { const o = q.result; if (!o) return; const f = PHF[id] || {}; o.inF = !!f.inF; o.inD = !!f.inD; s.put(o); }; }); return null; }).catch(() => {}); }
+}
+async function fullBlob(id) {
+  const o = await st("photos", "readonly", s => s.get(id)).catch(() => null); if (o && o.blob) return o.blob;
+  if (D.dir && D.dirPerm === "granted" && typeof folderPhoto === "function") { const f = await folderPhoto(id); if (f) return f; }
+  if (typeof gdOn === "function" && gdOn() && gdHttp()) { try {
+    if (!GD.files) await gdList(); const fl = GD.files && GD.files[id + ".jpg"]; if (fl) return await gdGet(fl.id); } catch (e) {} }
+  return null;
+}
+const FULLC = [];   /* 그때그때 불러온 큰 사진(최근 40장만 기억) */
+async function fullURL(id) {
+  const P = PURL[id]; if (!P) return null; if (P.f) return P.f;
+  if (P._ld) return P._ld; P._ld = (async () => { const b = await fullBlob(id); P._ld = null; if (!b) return null; P.f = URL.createObjectURL(b); P.lz = true; FULLC.push(id);
+    while (FULLC.length > 40) { const old = FULLC.shift(); const q = PURL[old]; if (q && q.lz && q.f && !(S.pv != null && pvList().some((x, k) => x.id === old && Math.abs(k - S.pv) <= 2))) { URL.revokeObjectURL(q.f); q.f = null; q.lz = false; } }
+    return P.f; })(); return P._ld;
+}
+/* 브라우저 안 큰 사진 정리(조건이 맞는 것만) */
+let cpBusy = false;
+async function compactPhotos() {
+  if (cpBusy || D.set.keepFull || !db) return; const gd = typeof gdOn === "function" && gdOn(), fd = !!(D.dir && D.dirPerm === "granted");
+  if (!gd && !fd) return; cpBusy = true;
+  try { const ids = Object.keys(PHF).filter(id => { const f = PHF[id]; return f.full && (!gd || f.inD) && (!fd || f.inF); });
+    for (let i = 0; i < ids.length; i += 100) { const part = ids.slice(i, i + 100);
+      await st("photos", "readwrite", s => { part.forEach(id => { const q = s.get(id); q.onsuccess = () => { const o = q.result; if (!o || !o.blob || !o.th) return; delete o.blob; s.put(o); }; }); return null; }).catch(() => {});
+      part.forEach(id => { PHF[id].full = false; const P = PURL[id]; if (P && P.f && !P.lz) { P.lz = true; FULLC.push(id); } }); }
+  } finally { cpBusy = false; }
+}
+/* 크게 보기: 작은 사진으로 먼저 열고 큰 사진이 오면 바꿈 + 앞뒤 한 장 미리 */
+{ const _pvBind = pvBind;
+  pvBind = function () { _pvBind();
+    const L = pvList(), i = Math.min(S.pv || 0, L.length - 1), p = L[i]; if (!p) return;
+    const pre = k => { const q = L[k]; if (q && PURL[q.id] && !PURL[q.id].f) fullURL(q.id); };
+    if (!p.f) { const im = $("#pvimg"); if (im) im.classList.add("lzw");
+      fullURL(p.id).then(u => { const im2 = $("#pvimg"); if (!im2 || S.pv !== i) return; if (!u) { im2.classList.remove("lzw"); im2.classList.add("lzx"); return; }
+        im2.addEventListener("load", () => { Z.nw = im2.naturalWidth; Z.nh = im2.naturalHeight; zApply(); im2.classList.remove("lzw"); }, { once: true }); im2.src = u; }); }
+    pre(i + 1); pre(i - 1); };
+}
+/* 설정: 큰 사진 보관 켜기/끄기 */
+document.addEventListener("change", async e => { if (!e.target.matches("[data-keepfull]")) return; D.set.keepFull = e.target.checked; await setMeta("set", D.set).catch(() => {});
+  if (!D.set.keepFull) { await compactPhotos(); toast("큰 사진은 폴더 · 드라이브에서 그때그때 불러와요. 브라우저가 가벼워져요."); } else toast("새로 받는 사진부터 큰 사진도 이 기기에 보관해요."); render(); });
+function keepFullBox() { if (!(typeof gdOn === "function" && gdOn()) && !D.dir) return "";
+  const n = Object.values(PHF).filter(f => f.full).length, tot = Object.keys(PHF).length;
+  return `<label class="gdauto lzbox"><input type="checkbox" data-keepfull ${D.set.keepFull ? "checked" : ""}> 이 기기에 큰 사진도 보관 <span>(인터넷 없이 크게 보기 · 용량 많이 씀)</span></label>
+    <p class="hint">꺼 두면 브라우저에는 작은 사진만 두고, 크게 볼 때 ${D.dir ? "이 기기 폴더" : ""}${D.dir && gdOn() ? " · " : ""}${gdOn() ? "구글 드라이브" : ""}에서 불러와요. 지금 이 기기에 큰 사진 ${n.toLocaleString()}장 / 전체 ${tot.toLocaleString()}장.</p>`; }
 
 /* ───────── 설치 화면 (블로그 「설치하기」 → 앱주소?install=1) ─────────
    Blog J 앱형 도구 공통. 필요한 것: S(상태) · render() · toast() · IC · esc · DEV · IOS · ANDROID · STANDALONE · IS_SAMSUNG · QRS · mobileUrl()

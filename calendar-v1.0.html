@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>달력 만들기 | Blog J</title><meta name="description" content="2026 · 2027 · 2028년 달력을 공휴일 · 음력 · 24절기 · 손 없는 날 · 우리 집 기념일과 함께 A4 · A5로 인쇄 — 월간 · 연간 · 탁상 달력" />
+<title>달력 만들기 | Blog J</title><meta name="description" content="2026 · 2027 · 2028년 달력을 공휴일 · 음력 · 24절기 · 손 없는 날 · 날짜 메모와 함께 A4 · A5로 인쇄 — 월간 · 연간 · 탁상 달력" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%237a4b2a%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2010h18l10%2010v34H20z%22%2F%3E%3Cpath%20d%3D%22M27%2032h14M27%2042h14%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2253%22%20cy%3D%2253%22%20r%3D%228%22%20fill%3D%22%23e08a3e%22%20stroke%3D%22%237a4b2a%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E" />
 <style>
 
@@ -458,6 +458,20 @@ body,button,input,select{font-family:var(--font)}
 @media(max-width:1060px){.app.t-cal .lay.wb{grid-template-columns:minmax(0,1fr)}.app.t-cal .tray{position:static}}
 @media(max-width:600px){.t-cal .ruler{padding:10px 8px}.t-cal .ruler ol{gap:2px}.t-cal .ruler button{font-size:12.5px;padding:22px 4px 4px;white-space:normal;line-height:1.25;overflow:visible}.t-cal .ruler button .rn{display:block;margin:0 0 1px}.t-cal .wp-h,.t-cal .wp-b,.t-cal .wp-f{padding-left:18px;padding-right:18px}.t-cal .wp-h h2{font-size:21px}}
 .t-cal .brand .lg{box-shadow:4px 6px 12px rgba(20,90,100,.35),-3px -3px 8px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.18)}
+/* 날짜 메모 줄 */
+.cl-mr{display:grid;grid-template-columns:150px minmax(0,1fr) 40px;gap:6px;align-items:center;width:100%;background:var(--in-bg);box-shadow:var(--in);border-radius:14px;padding:8px}
+.cl-mr input[type=text]{min-height:42px;padding:8px 10px;font-size:14.5px;min-width:0}
+.cl-mr .cl-ad{grid-column:1/-1;font-size:13px;color:#9a5a17;padding:0 4px}
+.cl-dt{position:relative;display:flex;align-items:center;min-height:42px;padding:0 10px;border-radius:10px;background:var(--card);box-shadow:inset 0 0 0 1px rgba(90,74,50,.2);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer;white-space:nowrap}
+.cl-dt input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;min-height:0;padding:0}
+.cl-dt:focus-within{box-shadow:inset 0 0 0 1.5px var(--navy,#195455)}
+@media(max-width:520px){.cl-mr{grid-template-columns:minmax(0,1fr) 40px}.cl-mr .cl-dt{grid-column:1/2}.cl-mr input[type=text]{grid-column:1/-1;grid-row:2}}
+/* 탁상 달력 아래 칸 */
+.cl-dbot{flex:none;height:27mm;margin-top:2.5mm;border-top:.35mm solid #1f2125;padding-top:1.6mm;display:flex;flex-direction:column;min-height:0}
+.cl-dbot>b{font-size:2.6mm;font-weight:800;letter-spacing:.04em;color:#3f3b33;margin-bottom:1mm}
+.cl-dl{display:grid;grid-template-columns:1fr 1fr;gap:.6mm 5mm;font-size:2.5mm;line-height:1.35;overflow:hidden}
+.cl-dl span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cl-dl em{font-style:normal;font-weight:700;font-variant-numeric:tabular-nums}
+.cl-dln{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}.cl-dln i{display:block;border-bottom:.25mm solid var(--lc)}
 
 /* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
@@ -823,11 +837,6 @@ const RED = "#c23a2b", BLUE = "#2d5a9e";
 const MYEAR0 = 2026, MYEAR1 = 2028;
 
 /* 그해 기념일(매년) → 양력 날짜 */
-function annivDate(a, y) {
-  if (!a.m || !a.d) return null;
-  if (a.cal === "lunar") { let d = lunarToSolar(y, a.m, a.d, false); if (!d && a.d === 30) d = lunarToSolar(y, a.m, 29, false); return d; }
-  const d = new Date(y, a.m - 1, a.d); return d.getMonth() === a.m - 1 ? d : null;
-}
 /* 한 달의 날짜 정보 */
 function dayInfo(d, st, annMap) {
   const k = ymd(d), lu = solarToLunar(d), out = { d, k, hol: null, term: null, lun: null, son: false, ev: [], trad: null };
@@ -842,7 +851,7 @@ function dayInfo(d, st, annMap) {
   return out;
 }
 function monthList(st) { const out = []; let y = st.year, m = st.m0; const n = st.kind === "year" ? 0 : st.count; for (let i = 0; i < n; i++) { out.push([y, m]); m++; if (m > 12) { m = 1; y++; } } return out; }
-function annMapFor(st, years) { const map = {}; for (const y of years) for (const a of st.ann) { if (!a.name) continue; const d = annivDate(a, y); if (d) (map[ymd(d)] = map[ymd(d)] || []).push(a.name); } return map; }
+function memoMapFor(st) { const map = {}; for (const m of st.memos || []) { if (!m.d || !(m.t || "").trim()) continue; (map[m.d] = map[m.d] || []).push(m.t.trim()); } return map; }
 function weeks(y, m, ws) { const first = new Date(y, m - 1, 1), off = (first.getDay() - ws + 7) % 7, days = new Date(y, m, 0).getDate(), rows = Math.ceil((off + days) / 7), out = [];
   for (let r = 0; r < rows; r++) { const w = []; for (let c = 0; c < 7; c++) w.push(new Date(y, m - 1, 1 - off + r * 7 + c)); out.push(w); } return out; }
 const wkHead = ws => Array.from({ length: 7 }, (_, i) => (i + ws) % 7);
@@ -861,6 +870,8 @@ function Mini({ y, m, st, big }) {
 
 /* ── 월간 한 장(또는 탁상 반 장) ── */
 function MonthPage({ y, m, st, annMap, half }) {
+  const mm = `${y}-${p2(m)}-`, mL = (st.memos || []).filter(x => x.d && x.d.startsWith(mm) && (x.t || "").trim()).sort((a, b) => a.d.localeCompare(b.d));
+  const bot = half && st.deskBot && st.deskBot !== "none" ? st.deskBot : null;
   const W = weeks(y, m, st.ws), lc = LINE[st.line] || LINE.gray;
   const prev = m === 1 ? [y - 1, 12] : [y, m - 1], next = m === 12 ? [y + 1, 1] : [y, m + 1];
   const memo = half ? 0 : st.memo;
@@ -888,6 +899,7 @@ function MonthPage({ y, m, st, annMap, half }) {
         </div>`; })}
     </div>
     ${memo ? html`<div class="cl-memo">${Array.from({ length: memo }, () => html`<i></i>`)}</div>` : null}
+    ${bot ? html`<div class="cl-dbot"><b>이달의 메모</b>${bot === "list" && mL.length ? html`<div class="cl-dl">${mL.slice(0, 8).map(x => html`<span><em>${ymdw(pdate(x.d))}</em> ${x.t}</span>`)}</div>` : html`<div class="cl-dln">${Array.from({ length: 4 }, () => html`<i></i>`)}</div>`}</div>` : null}
     <div class="cl-ft"><span>${legend.join("   ·   ")}</span><span>Blog J 달력 만들기</span></div>
   </div>`;
 }
@@ -908,7 +920,7 @@ function YearPage({ y, st }) {
   </div>`;
 }
 
-const STEPS = [["달력 모양", "어떤 달력을 뽑을까요?", "한 달 한 장 · 1년 한 장 · 탁상용 중에서 골라요"], ["기간", "언제부터 몇 달인가요?", "연도와 시작 달, 시작 요일을 정해요"], ["표시할 것", "달력에 무엇을 넣을까요?", "공휴일 · 음력 · 절기 · 손 없는 날 · 우리 집 기념일"], ["꾸미기 · 인쇄", "모양을 다듬고 인쇄해요", "선 색 · 머리 글귀 · 메모 줄을 고르고 인쇄 · PDF로 저장"]];
+const STEPS = [["달력 모양", "어떤 달력을 뽑을까요?", "한 달 한 장 · 1년 한 장 · 탁상용 중에서 골라요"], ["기간", "언제부터 몇 달인가요?", "연도와 시작 달, 시작 요일을 정해요"], ["표시할 것", "달력에 무엇을 넣을까요?", "공휴일 · 음력 · 절기 · 손 없는 날 · 날짜 메모"], ["꾸미기 · 인쇄", "모양을 다듬고 인쇄해요", "선 색 · 머리 글귀 · 메모 줄을 고르고 인쇄 · PDF로 저장"]];
 const NEXT = ["다음: 기간", "다음: 표시할 것", "다음: 꾸미기 · 인쇄"];
 
 function App() {
@@ -916,7 +928,7 @@ function App() {
   const nm = now.getMonth() === 11 ? [now.getFullYear() + 1, 1] : [now.getFullYear(), now.getMonth() + 2];
   const [st, setSt] = useState(() => {
     const s = { kind: "month", paper: "land", year: Math.min(MYEAR1, Math.max(MYEAR0, nm[0])), m0: nm[1], count: 1, ws: 0,
-      hol: true, lun: "key", term: true, son: false, trad: true, ann: [], holList: true,
+      hol: true, lun: "key", term: true, son: false, trad: true, memos: [], deskBot: "none", holList: true,
       line: "gray", red: true, blue: true, other: true, minis: true, memo: 0, motto: "", ...loadC("set", {}) };
     if (TAB0 === "month" || TAB0 === "year" || TAB0 === "desk") s.kind = TAB0;
     if (s.year < MYEAR0 || s.year > MYEAR1) s.year = MYEAR0;
@@ -929,7 +941,7 @@ function App() {
 
   const months = monthList(st);
   const years = st.kind === "year" ? [st.year] : [...new Set(months.map(x => x[0]))];
-  const annMap = useMemo(() => annMapFor(st, [...years, years[0] - 1, years[years.length - 1] + 1]), [st.ann, years.join()]);
+  const annMap = useMemo(() => memoMapFor(st), [st.memos]);
   const noHol = st.hol ? years.filter(y => !HOL_YEARS.includes(y)) : [];
   const paper = st.kind === "desk" ? "port" : st.paper;
   const [pw] = PAGE[paper];
@@ -947,7 +959,9 @@ function App() {
     fit(); const ro = window.ResizeObserver ? new ResizeObserver(fit) : null; ro && ro.observe(el); return () => ro && ro.disconnect(); }, [pw]);
 
   const yrs = []; for (let y = MYEAR0; y <= MYEAR1; y++) yrs.push(y);
-  const setAnn = (i, k, v) => setSt(p => ({ ...p, ann: p.ann.map((a, j) => j === i ? { ...a, [k]: v } : a) }));
+  const setMemo = (i, k, v) => setSt(p => ({ ...p, memos: (p.memos || []).map((a, j) => j === i ? { ...a, [k]: v } : a) }));
+  const inRange = d => { const k = d.slice(0, 7); return st.kind === "year" ? d.startsWith(st.year + "-") : months.some(([y, m]) => `${y}-${p2(m)}` === k); };
+  const newMemoDate = () => { const t = new Date(), tk = ymd(t); if (inRange(tk)) return tk; const f = st.kind === "year" ? [st.year, 1] : months[0]; return `${f[0]}-${p2(f[1])}-01`; };
   const quick = (y, m, c) => setSt(p => ({ ...p, year: y, m0: m, count: c }));
   const sheetsN = pages.length;
   const kindName = { month: "한 달 한 장", year: "1년 한 장", desk: "탁상 달력" }[st.kind];
@@ -978,22 +992,22 @@ function App() {
           <label class="chk"><input type="checkbox" checked=${st.term} onChange=${e => up("term", e.target.checked)} /> 24절기 (입춘 · 동지 등)</label>
           <label class="chk"><input type="checkbox" checked=${st.trad} onChange=${e => up("trad", e.target.checked)} /> 전통 명절 (정월대보름 · 단오 · 칠석)</label>
           <label class="chk"><input type="checkbox" checked=${st.son} onChange=${e => up("son", e.target.checked)} /> 손 없는 날</label><p class="hint">이사 · 큰일 날을 고를 때 참고하는 민속 기준이에요(음력 끝자리 9 · 0인 날).</p>
-          <label class="f">우리 집 기념일 <span class="muted">생일 · 기일 · 결혼기념일 — 매년 그 날짜에 들어가요</span></label>
-          <div class="cl-ann">${st.ann.map((a, i) => { const d = annivDate(a, years[0]);
-            return html`<div class="cl-ar"><input type="text" value=${a.name} placeholder="예: 어머니 생신" maxlength="14" onInput=${e => setAnn(i, "name", e.target.value)} />
-              <select value=${a.cal} onChange=${e => setAnn(i, "cal", e.target.value)}><option value="solar">양력</option><option value="lunar">음력</option></select>
-              <select value=${a.m} onChange=${e => setAnn(i, "m", +e.target.value)}>${Array.from({ length: 12 }, (_, j) => html`<option value=${j + 1}>${j + 1}월</option>`)}</select>
-              <select value=${a.d} onChange=${e => setAnn(i, "d", +e.target.value)}>${Array.from({ length: a.cal === "lunar" ? 30 : 31 }, (_, j) => html`<option value=${j + 1}>${j + 1}일</option>`)}</select>
-              <button class="ib cl-del" aria-label="빼기" onClick=${() => setSt(p => ({ ...p, ann: p.ann.filter((_, j) => j !== i) }))}>${h(Icon, { name: "x", size: 18 })}</button>
-              <small class="cl-ad">${d ? `${years[0]}년에는 ${ymdw(d)}` : "날짜를 확인해 주세요"}</small></div>`; })}
-            <button class="btn s" onClick=${() => setSt(p => ({ ...p, ann: [...p.ann, { name: "", cal: "solar", m: 1, d: 1 }] }))}>${h(Icon, { name: "plus", size: 16 })} 기념일 넣기</button>
-            ${st.ann.some(a => a.cal === "lunar") ? html`<p class="hint">음력 기념일은 해마다 양력 날짜를 계산해 넣어요. 그해 그 달에 30일이 없으면 29일에 넣습니다.</p>` : null}</div>`}`}
+          <label class="f">날짜 메모 <span class="muted">생일 · 약속 · 기념일 — 고른 날짜 칸에 글이 들어가요</span></label>
+          <div class="cl-ann">${(st.memos || []).map((m, i) => html`<div class="cl-mr">
+              <label class="cl-dt"><span>${m.d ? ymdw(pdate(m.d)) : "날짜 고르기"}</span><input type="date" value=${m.d} onInput=${e => setMemo(i, "d", e.target.value)} onClick=${e => { try { e.target.showPicker(); } catch (_) {} }} aria-label="메모 날짜" /></label>
+              <input type="text" value=${m.t} placeholder="예: 어머니 생신 · 학부모 상담" maxlength="20" onInput=${e => setMemo(i, "t", e.target.value)} />
+              <button class="ib cl-del" aria-label="빼기" onClick=${() => setSt(p => ({ ...p, memos: p.memos.filter((_, j) => j !== i) }))}>${h(Icon, { name: "x", size: 18 })}</button>
+              ${m.d && !inRange(m.d) ? html`<small class="cl-ad">지금 고른 기간 밖이라 인쇄되지 않아요</small>` : null}</div>`)}
+            <button class="btn s" onClick=${() => setSt(p => ({ ...p, memos: [...(p.memos || []), { d: newMemoDate(), t: "" }] }))}>${h(Icon, { name: "plus", size: 16 })} 메모 넣기</button>
+            <p class="hint">메모는 이 기기 브라우저에만 저장돼요. 해마다 같은 날 넣는 생일 · 일정 저장은 설치형 「일기 노트」에서 할 예정이에요.</p></div>`}`}
         ${cur === 3 && html`<label class="f">선 색</label><${Seg} value=${st.line} options=${[["gray", "연한 회색"], ["ink", "검정"], ["navy", "남색"]]} onChange=${v => up("line", v)} />
           <label class="chk"><input type="checkbox" checked=${st.red} onChange=${e => up("red", e.target.checked)} /> 일요일 · 공휴일 빨간색</label>
           <label class="chk"><input type="checkbox" checked=${st.blue} onChange=${e => up("blue", e.target.checked)} /> 토요일 파란색</label>
           ${st.kind !== "year" ? html`<label class="chk"><input type="checkbox" checked=${st.other} onChange=${e => up("other", e.target.checked)} /> 앞뒤 달 날짜 흐리게 보이기</label>` : null}
           ${st.kind === "month" ? html`<label class="chk"><input type="checkbox" checked=${st.minis} onChange=${e => up("minis", e.target.checked)} /> 위에 지난달 · 다음 달 작은 달력</label>
             <label class="f">아래 메모 줄</label><${Seg} value=${st.memo} options=${[[0, "없음"], [3, "3줄"], [5, "5줄"]]} onChange=${v => up("memo", v)} />` : null}
+          ${st.kind === "desk" ? html`<label class="f">달력 아래 칸 <span class="muted">탁상 달력</span></label><${Seg} value=${st.deskBot || "none"} options=${[["none", "없음"], ["list", "이달의 날짜 메모"], ["lines", "빈 메모 줄"]]} onChange=${v => up("deskBot", v)} />
+            <p class="hint">${st.deskBot === "list" ? "3단계에서 넣은 날짜 메모가 그 달 아래에 목록으로 들어가요(메모가 없으면 빈 줄)." : st.deskBot === "lines" ? "손으로 쓸 수 있는 메모 줄 4줄이 들어가요." : "달력 칸을 크게 써요."}</p>` : null}
           <label class="f">머리 글귀 <span class="muted">선택 · 예: 우리 가족 2027</span></label><input type="text" value=${st.motto} maxlength="30" placeholder="비워 두면 넣지 않아요" onInput=${e => up("motto", e.target.value)} />
           <p class="note">인쇄 창에서 <b>배율 「실제 크기(100%)」</b>, <b>여백 「없음」</b>, <b>「배경 그래픽」 켜기</b>로 인쇄하세요. 「PDF로 저장」을 고르면 파일로 받을 수 있어요.</p>`}
         </div>
@@ -1008,7 +1022,7 @@ function App() {
         <div class="tray-f k"><span>${st.kind === "year" ? st.year + "년" : months.length ? `${months[0][0]}년 ${months[0][1]}월${months.length > 1 ? ` ~ ${months[months.length - 1][0]}년 ${months[months.length - 1][1]}월` : ""}` : ""}</span><span>인쇄 배율 100% · 여백 없음</span></div>
       </section>
     </div>
-    <p class="priv">${h(Icon, { name: "info", size: 15 })} 공휴일은 한국천문연구원 월력요항(2026 · 2027 · 2028년) 기준이고, 임시공휴일은 발표되면 반영합니다. 24절기는 천문 계산으로 넣었고 2027 · 2028년 공식 발표와 날짜가 같아요. 입력한 기념일은 이 기기 브라우저에만 저장됩니다.</p>
+    <p class="priv">${h(Icon, { name: "info", size: 15 })} 공휴일은 한국천문연구원 월력요항(2026 · 2027 · 2028년) 기준이고, 임시공휴일은 발표되면 반영합니다. 24절기는 천문 계산으로 넣었고 2027 · 2028년 공식 발표와 날짜가 같아요. 입력한 메모는 이 기기 브라우저에만 저장됩니다.</p>
     ${!EMBED && html`<div class="foot">Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>`}
   </div>`;
 }

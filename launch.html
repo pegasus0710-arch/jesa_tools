@@ -156,6 +156,11 @@ const TOOLS = {
     month: { title: "월간 달력 인쇄", desc: "칸이 큰 한 달 한 장 달력 — 음력 · 절기 · 메모 줄까지", chips: ["A4 가로 · 세로", "음력 매일 · 10일마다", "날짜 메모", "메모 줄"] },
     year: { title: "1년 달력 한 장 인쇄", desc: "12달을 A4 한 장에 — 아래에 그해 공휴일 목록", chips: ["A4 가로 · 세로", "공휴일 · 대체공휴일", "월요일 시작도 OK"] },
     desk: { title: "탁상 달력 만들기", desc: "A4 위쪽은 A5 달력, 아래쪽은 다음 달 · 날짜별 기록 줄 · 빈 줄 노트", chips: ["A5 크기 달력", "날짜별 기록 줄", "접는 선 · 자르는 선"] } } },
+  form: { file: "form-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "무료 양식", icon: "doc",
+    tabs: {
+    all: { title: "무료 양식 — 이력서 · 사직서 · 증명서", desc: "빈 양식을 가입 없이 바로 인쇄하거나 PDF · Word · Excel · 한글 파일로 받기", chips: ["이력서 · 자기소개서 · 경력기술서", "사직서 · 재직 · 경력증명서", "위임장 · 시말서 · 경위서", "PDF · Word · Excel · 한글"] },
+    job: { title: "이력서 · 자기소개서 양식", desc: "이력서 · 아르바이트 이력서 · 경력기술서 · 자기소개서 빈 양식", chips: ["A4 한 장", "바로 인쇄", "Word · Excel · 한글 파일"] },
+    work: { title: "회사 서류 양식", desc: "사직서 · 재직증명서 · 경력증명서 · 위임장 · 시말서 · 경위서 빈 양식", chips: ["A4 한 장", "바로 인쇄", "Word · Excel · 한글 파일"] } } },
   kimchi: { file: "kimchi-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "김치 양념 계산기", icon: "jar",
     tabs: {
     all: { title: "김치 양념 계산기", desc: "절임배추 kg이나 포기 수만 넣으면 고춧가루 · 젓갈 · 마늘 양이 자동으로 — 김치 18가지", chips: ["배추김치 · 깍두기 · 총각김치 등 18가지", "농촌진흥청 · 연구소 레시피", "맵기 · 젓갈 조절", "장보기 목록 · 이미지 저장"] } } },
@@ -249,7 +254,7 @@ function render(state) {
           <div class="lc-col"><p class="lc-h">내 PC에 받아서 쓰기</p><a class="lc-dl" href="${TDL.href}" target="_blank" rel="noopener">${ICON_DL}<span>무료 다운로드</span></a><p class="lc-sub">${esc(TDL.file)} · ${esc(TDL.size)} · ${esc(TDL.note || "인터넷 없이 실행")}</p></div></div>`
       : `<button class="lc-go">${ICON_GO}<span>프로그램 실행하기</span></button><p class="lc-sub">새 창에서 열려요 · 설치·가입·업로드 없음 · 광고 없이 도구만 크게</p>`}
   </div>`;
-  const go = () => { const p = { tab: TB, ...(C.q || {}) }; ["cat", "opt", "lang", "test"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); const feat = TL.win === "max" ? `popup,left=${screen.availLeft || 0},top=${screen.availTop || 0},width=${screen.availWidth},height=${screen.availHeight}` : undefined; render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TFILE, feat) ? "opened" : "blocked"); };
+  const go = () => { const p = { tab: TB, ...(C.q || {}) }; ["cat", "opt", "lang", "test", "f"].forEach(k => { if (LQ.get(k)) p[k] = LQ.get(k); }); const feat = TL.win === "max" ? `popup,left=${screen.availLeft || 0},top=${screen.availTop || 0},width=${screen.availWidth},height=${screen.availHeight}` : undefined; render(BJ_GATE.openWindow(LQ.get("tool") || "pdf", p, TFILE, feat) ? "opened" : "blocked"); };
   document.querySelectorAll(".lc-go,.lc-again").forEach(b => b.onclick = go);
   try { sendH(); } catch (e) {}
 }

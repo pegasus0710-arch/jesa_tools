@@ -884,12 +884,12 @@ body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div{box-shadow:var(--up);border-rad
 .btn.go.w:hover,.btn.w.nv:hover{box-shadow:var(--up3s),inset 0 0 0 1.5px var(--navy,#195455)!important}
 .btn.go.w:active,.btn.w.nv:active{box-shadow:var(--press3)!important}
 /* 눈금자 구슬: 지금 위치를 알려 주듯 살짝 반짝임(10-30 제이) — 퍼지는 고리 + 은은한 빛, 움직임 줄이기 설정이면 멈춤 */
-.ruler .bead{animation:bjBeadGlow 2.6s ease-in-out infinite}
-.ruler .bead::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
+.ruler .bead,.ruler-dot,.ruler .rdot{animation:bjBeadGlow 2.6s ease-in-out infinite}
+.ruler .bead::after,.ruler-dot::after,.ruler .rdot::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
 @keyframes bjBeadGlow{0%,100%{filter:brightness(1);box-shadow:2px 3px 5px rgba(120,70,20,.35),inset 2px 2px 3px rgba(255,255,255,.45)}50%{filter:brightness(1.18);box-shadow:0 0 10px 3px rgba(255,150,50,.55),inset 2px 2px 3px rgba(255,255,255,.6)}}
 @keyframes bjBeadRing{0%{transform:scale(1);opacity:.75}70%,100%{transform:scale(2.3);opacity:0}}
-@media (prefers-reduced-motion:reduce){.ruler .bead::after{animation-duration:4s}.ruler .bead{animation-duration:4s}}
-@media print{.ruler .bead,.ruler .bead::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.ruler .bead::after,.ruler-dot::after,.ruler .rdot::after{animation-duration:4s}.ruler .bead,.ruler-dot,.ruler .rdot{animation-duration:4s}}
+@media print{.ruler .bead,.ruler .bead::after,.ruler-dot,.ruler-dot::after,.ruler .rdot,.ruler .rdot::after{animation:none}}
 /* 고르기 칸(select) · 체크 — 입력칸과 같이 카드 바탕 + 선, 체크는 앱 색 */
 select,.t-cal select,select.inp{background-color:var(--card)!important;box-shadow:inset 0 0 0 1px var(--hair2)!important;border-radius:var(--r)!important}
 select:focus{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.12)!important;outline:0}
@@ -899,6 +899,8 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 /* 10-30 밤: 떠 있는 「+」 단추 — 주황 단추 금지(3.1 2-1) → 앱 색 */
 .fab{background:var(--navy,#195455);color:#fff;box-shadow:0 1px 2px rgba(15,55,56,.25),0 8px 20px -6px rgba(15,55,56,.45)}
 .fab:hover{background:#12403f}
+/* 10-30 밤: 머리 막대 안 눈금자(라벨 · 김치)도 3.1 6번 — 홈 · 바탕 상자 없이 */
+.bar-in .ruler::before{display:none!important}
 
 
 </style></head>
@@ -1299,7 +1301,7 @@ function scrSet() {
     : DEV === "ios-app" ? `<div class="row">${IC.ok}<div class="t"><b>홈 화면 앱으로 쓰는 중</b><small>아이폰은 「공유 → 스크랩 노트」가 안 돼요. 주소를 복사한 뒤 「담기 → 복사한 주소 붙여넣기」로 넣어요.</small></div></div>`
     : DEV === "android" && !STANDALONE ? `<div class="row">${IC.home}<div class="t"><b>앱으로 설치하면 「공유」로 담을 수 있어요</b><small>${IS_SAMSUNG ? "<b>크롬으로 열어 설치하는 걸 추천해요.</b> 삼성 인터넷으로 설치하면 「안전하지 않은 앱 차단됨」(Play 프로텍트)이 뜰 수 있어요 — 「무시하고 설치하기」를 누르면 돼요." : "크롬 메뉴(⋮) → 「앱 설치」(또는 「홈 화면에 추가」). 설치하면 유튜브 · 네이버 앱의 「공유」 목록에 스크랩 노트가 생겨요."}</small></div>${window._bip ? `<button class="btn sm" data-install>설치</button>` : ""}</div>` : "";
   const lb = D.set.lastBackup;
-  return hd("설정") + `<div class="body">${dev}
+  return hd("설정") + `<div class="body">${dev}${setCards(`
     <div class="lbl"><span>저장 위치</span><span id="usage"></span></div>
     <div class="stnote ${gdOn() || D.dir ? "ok" : "warn"}">${gdOn() || D.dir ? IC.ok : IC.save}<p><b>둘 다 써도 되고, 하나는 꼭 연결해 두세요.</b><br>휴대폰과 PC를 같이 쓰면 <b>구글 드라이브</b>, PC 한 대에서만 쓰면 <b>내 PC 폴더</b>를 추천해요. 연결해 두면 담고 고칠 때마다 저절로 저장돼요.</p></div>
     ${gdBox()}
@@ -1314,8 +1316,8 @@ function scrSet() {
     <div class="lbl"><span>정리</span></div>
     <button class="row" data-sheet="cats">${IC.folder}<div class="t"><b>분류 관리</b><small>${(D.cats || []).map(c => esc(c.n) + (c.s.length ? ` (${c.s.length})` : "")).join(" · ") || "없음"}</small></div></button>
     <button class="row" data-sheet="tags"><span class="hs">#</span><div class="t"><b>태그 관리</b><small>${allTags().length}개 · 이름 바꾸기 · 지우기</small></div></button>
-    ${helpBox()}
-    <div class="foot">스크랩 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>
+    ${helpBox()}`)}
+    ${DEV === "pc" ? "" : `<div class="foot">스크랩 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>`}
   </div>`;
 }
 
@@ -2047,6 +2049,27 @@ function helpBox() {
   return `<div class="lbl"><span>도움말</span></div>
     <a class="row hlp" href="https://luvbong.tistory.com/790" target="_blank" rel="noopener">${IC.home}<div class="t"><b>앱 설치 · 삭제 방법</b><small>휴대폰 · PC에 설치하기, 지우는 방법 — 블로그 글</small></div>${ic}</a>
     <a class="row hlp" href="https://luvbong.tistory.com/791" target="_blank" rel="noopener">${IC.cloud}<div class="t"><b>저장 위치 · 구글 드라이브 연결 방법</b><small>휴대폰과 PC를 같이 쓰기, PC 폴더에 저장하기 — 블로그 글</small></div>${ic}</a>`;
+}
+
+/* ───────── 10-31 제이: 설정 화면 = 카드 정리(여행 노트와 같은 모양) — 묶음마다 카드, PC는 두 줄로 오와 열을 맞추고 줄마다 마지막 카드가 남은 높이를 채움 ───────── */
+const SETC_CSS = `.setg{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));align-items:start} .sgc{background:var(--card,#f4efe6);border-radius:16px;box-shadow:var(--up-s);padding:14px 16px} .sgc h4{display:flex;align-items:center;gap:7px;margin:0 0 10px;font-size:15px;font-weight:800}.sgc h4 svg{width:18px;height:18px;color:var(--cat,#1f7f8f)}.sgc h4 small{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--ink3)} .sgr{display:flex;align-items:center;gap:10px;margin:6px 0}.sgr>span{width:46px;flex-shrink:0;font-size:13.5px;font-weight:700;color:var(--ink2)}.sgr .vt{flex:1;margin:0}.sgr .vt button{font-size:13.5px;min-height:36px;padding:6px 8px} .sgc .hint{margin:8px 0 0;font-size:12.5px;line-height:1.5} .sgstat{display:flex;align-items:center;gap:6px;margin:0 0 6px;font-size:13.5px;font-weight:700}.sgstat svg{width:17px;height:17px;flex-shrink:0}.sgstat.sgok{color:var(--cat,#1f7f8f)}.sgstat.sgwn{color:#b5700f} .sgc .row{background:transparent;box-shadow:none;border-radius:0;padding:10px 2px;margin:0;border-top:1px solid rgba(160,140,108,.22);min-height:0;gap:10px} .sgc .row:hover{background:rgba(244,239,230,.6)} .sgc .row .t b{font-size:14px}.sgc .row .t small{font-size:12.5px;line-height:1.5} .sgc .row.mob{border-top:0;padding-top:0;align-items:flex-start}.sgc .row.mob .qr{width:92px;height:92px;flex-shrink:0;padding:6px}.sgc .row.mob .qr svg{width:100%;height:100%} .sgc .row2{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px} .sgc.sgh .row:first-of-type{border-top:0} body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr))} .sgr .vt{display:grid;grid-auto-columns:1fr;grid-auto-flow:column} .sgc .sgr>span{white-space:nowrap}  /* 10-31: 설정 카드 정렬(두 줄, 아래 끝 맞춤) */ body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch} .sgcol{display:flex;flex-direction:column;gap:14px;min-width:0} .sgcol>.sgc:last-child{flex:1} .sgc .row,.sgc .row.mob,.sgc #gdbox{background:transparent!important;box-shadow:none!important;border-radius:0!important;margin-left:0!important;margin-right:0!important;width:100%!important;box-sizing:border-box} .sgc .row:first-of-type{border-top:0} 
+.sgc .stnote{margin:0 0 6px}.sgc .lbl{display:none}.sgc .foot{display:none}
+`;
+(function () { try { const s = document.createElement("style"); s.textContent = SETC_CSS; document.head.appendChild(s); } catch (e) {} })();
+const SETC_IC = { "저장 위치": "cloud", "휴대폰에서도 쓰기": "home", "백업 파일": "save", "가져오기 · 백업": "save", "정리": "folder", "도움말": "link" };
+const SETC_RIGHT = /휴대폰에서도 쓰기|백업|도움말/;
+function setCards(html) {
+  const parts = html.split(/<div class="lbl">/), out = [];
+  for (const p of parts) {
+    const m = p.match(/^<span>([^<]*)<\/span>(<span[^>]*>[^<]*<\/span>)?<\/div>/);
+    if (!m) { if (p.trim()) out.push({ n: "", h: p }); continue; }
+    const n = m[1].trim(), sm = m[2] ? m[2].replace(/^<span/, "<small").replace(/<\/span>$/, "</small>") : "", ic = IC[SETC_IC[n] || "folder"] || "";
+    out.push({ n, h: `<section class="sgc${n === "도움말" ? " sgh" : ""}"><h4>${ic} ${n}${sm}</h4>${p.slice(m[0].length)}</section>` });
+  }
+  const pre = out.filter(x => !x.n).map(x => x.h).join(""), cards = out.filter(x => x.n);
+  if (DEV !== "pc") return pre + `<div class="setg">${cards.map(x => x.h).join("")}</div>`;
+  const L = cards.filter(x => !SETC_RIGHT.test(x.n)), R = cards.filter(x => SETC_RIGHT.test(x.n));
+  return pre + `<div class="setg"><div class="sgcol">${L.map(x => x.h).join("")}</div><div class="sgcol">${R.map(x => x.h).join("")}</div></div>`;
 }
 
 

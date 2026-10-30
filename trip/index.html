@@ -1093,6 +1093,17 @@ body.pc.wide .pc2{grid-template-columns:minmax(0,1fr) 400px}
 body.pc.wide .pc2.wide{grid-template-columns:minmax(0,1fr)}
 .sgc .sgr>span{white-space:nowrap}
 
+/* 10-31: 설정 카드 정렬(두 줄, 아래 끝 맞춤) */
+body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.sgcol{display:flex;flex-direction:column;gap:14px;min-width:0}
+.sgcol>.sgc:last-child{flex:1}
+.sgc .row,.sgc .row.mob,.sgc #gdbox{background:transparent!important;box-shadow:none!important;border-radius:0!important;margin-left:0!important;margin-right:0!important;width:100%!important;box-sizing:border-box}
+.sgc .row:first-of-type{border-top:0}
+/* 10-31: 전체 화면 · 넓은 창에서 「사진 모두 보기」 칸이 겹치던 문제 — aspect-ratio 대신 높이를 자리 잡는 방식으로(행 높이가 줄어도 겹치지 않음) */
+.pg2-grid{grid-auto-rows:auto}
+.pg2-grid button{aspect-ratio:auto!important;height:0!important;min-height:0!important;padding:0 0 75%!important}
+.pg2-grid button img{position:absolute;inset:0;width:100%;height:100%}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -1982,7 +1993,7 @@ function scrSet() {
   const dev = DEV === "ios-safari" ? `<div class="warn"><b>지금 사파리에서 쓰고 있어요.</b><br>홈 화면에 추가해야 일정이 안전하게 남아요. <button class="lk" data-guide>방법 보기</button></div>` : "";
   const lb = D.set.lastBackup, nPh = D.items.reduce((a, r) => a + (r.photos || []).length, 0), ok = gdOn() || D.dir;
   const navNm = { naver: "네이버", kakao: "카카오", tmap: "티맵" };
-  return hd("설정") + `<div class="body">${dev}<div class="setg">
+  const secs = `
     <section class="sgc"><h4>${IC.map} 지도 · 길안내 <small>국내 여행</small></h4>
       <div class="sgr"><span>지도</span><div class="vt mini">${Object.entries(MAPA).map(([k, n]) => `<button class="${mapApp() === k ? "on" : ""}" data-mapset="${k}">${n}</button>`).join("")}</div></div>
       <div class="sgr"><span>길안내</span><div class="vt mini">${Object.entries(NAVA).map(([k, n]) => `<button class="${navApp() === k ? "on" : ""}" data-navset="${k}">${navNm[k] || n}</button>`).join("")}</div></div>
@@ -2000,12 +2011,19 @@ function scrSet() {
     <section class="sgc"><h4>${IC.save} 백업 <small>마지막: ${lb ? ymdw(new Date(lb)) : "없음"}</small></h4>
       <p class="hint">여행 ${D.items.length}개 · 사진 ${nPh}장을 파일(.zip) 하나로 받아 두거나, 다른 기기에서 만든 백업으로 되살려요.</p>
       <div class="row2"><button class="btn sm nv" data-backup>${IC.save} 백업 만들기</button><label class="btn sm">${IC.copy} 백업에서 되살리기<input type="file" accept=".zip,application/zip" hidden id="restore"></label></div></section>
-    <section class="sgc sgh">${helpBox().replace('<div class="lbl"><span>도움말</span></div>', `<h4>${IC_HELP} 도움말</h4>`)}</section>
-    </div>
-    <div class="foot">여행 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>
+    <section class="sgc sgh">${helpBox().replace('<div class="lbl"><span>도움말</span></div>', `<h4>${IC_HELP} 도움말</h4>`)}</section>`;
+  return hd("설정") + `<div class="body">${dev}<div class="setg">${setCols(secs)}</div>
+    ${DEV === "pc" ? "" : `<div class="foot">여행 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>`}
   </div>`;
 }
 
+/* 10-31 제이: 설정 카드 오와 열 맞추기 — PC는 두 줄(왼쪽: 지도 · 화면 · 휴대폰 / 오른쪽: 저장 · 백업 · 도움말), 줄마다 마지막 카드가 남은 높이를 채워 아래 끝을 맞춤 */
+function setCols(html) {
+  const parts = html.split(/(?=<section class="sgc)/).map(x => x.trim()).filter(x => x.startsWith("<section"));
+  if (DEV !== "pc") return parts.join("");
+  const L = [], R = []; parts.forEach(x => { const h = (x.match(/<h4>[\s\S]*?<\/h4>/) || [""])[0]; (/저장 위치|백업|도움말/.test(h) ? R : L).push(x); });
+  return `<div class="sgcol">${L.join("")}</div><div class="sgcol">${R.join("")}</div>`;
+}
 /* ───────── 아래에서 올라오는 창 ───────── */
 function sheetHtml() {
   const k = S.sheet, t = TR(); let h = "";

@@ -1025,6 +1025,33 @@ body.pc .iph{--tile:96px}
 .btn.ckall small{font-size:12.5px;color:#c9cde0;font-weight:500}
 .btn.ckall:hover{box-shadow:4px 6px 14px rgba(32,38,58,.35),0 0 0 3px var(--amber)}
 .btn.ckall:active{transform:translateY(1px)}
+/* 10-30 내 여행: 넓은 목록 · 찾기 · 정렬 · 여행지 */
+body.pc .pc2.wide{grid-template-columns:minmax(0,1fr)}
+body.pc .pc2>div .body>.tlbar,body.pc .pc2>div .body>#tres{grid-column:1/-1}
+.tlbar{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.tlbar .tvbar{margin:2px 0 0;max-width:460px}
+.tlbar .aopt{display:flex;align-items:flex-start;gap:10px}.tlbar .aot{flex-shrink:0;width:48px;padding-top:8px;font-size:13px;font-weight:700;color:var(--ink3)}
+.tlbar .chips{display:flex;flex-wrap:wrap;gap:6px}
+.tgh{display:flex;align-items:center;gap:6px;margin:14px 2px 8px;font-size:15px;font-weight:800;color:var(--ink)}.tgh svg{width:17px;height:17px;color:var(--teal,#1f7f8f)}.tgh small{font-weight:600;color:var(--ink3)}
+.hdr2{display:flex;gap:8px;align-items:center;margin-left:auto}
+body.pc .tlist.v-list{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+/* 「이렇게 써요」 팝업 */
+.tippop{position:fixed;right:24px;bottom:24px;z-index:80;width:min(360px,calc(100vw - 32px));background:var(--card,#f4efe6);border-radius:18px;box-shadow:0 14px 40px rgba(60,48,30,.28),0 0 0 1px rgba(160,140,108,.25);padding:16px 18px 14px;opacity:0;transform:translateY(14px);transition:opacity .3s,transform .3s;overflow:hidden}
+.tippop.on{opacity:1;transform:none}
+.tippop .tph{display:flex;align-items:center;justify-content:space-between}.tippop .tph b{display:flex;align-items:center;gap:6px;font-size:15px}.tippop .tph b svg{width:18px;height:18px;color:#e08a3e}
+.tippop ol{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.75;color:var(--ink2)}
+.tippop .tpbar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:#e08a3e;transform-origin:left;animation:tpbar 6.5s linear forwards}
+.tippop.hold .tpbar{animation-play-state:paused;opacity:.35}
+@keyframes tpbar{to{transform:scaleX(0)}}
+@media (max-width:899px){.tippop{left:16px;right:16px;bottom:84px;width:auto}}
+/* 사진: 일정별 / 시간 · 장소별 · 시간대 */
+.vt.phv{margin:14px 0 4px}
+.phday{margin:18px 2px 8px;font-size:15px;font-weight:800}.phday small{font-weight:600;font-size:13px;color:var(--ink3);margin-left:6px}
+.phtzr select.inp{width:100%}
+.phsh{display:flex;gap:10px;align-items:flex-start}.phsh>svg{flex-shrink:0;margin-top:2px}.phsh .btn{margin-top:8px}
+.pg .pgh{flex-wrap:wrap}.pg .pgh .btn{margin-left:auto}
+.phmap{display:inline-flex;align-items:center;gap:3px;font-size:13px}.phmap svg{width:15px;height:15px}
+@media (max-width:899px){.tlbar .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.tlbar .chips::-webkit-scrollbar{display:none}.tlbar .chip{flex-shrink:0}.tlbar .asort button{white-space:nowrap;font-size:13px;padding-left:6px;padding-right:6px}.tlbar .aopt{align-items:center}.tlbar .aot{padding-top:0;width:44px}}
 
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
@@ -1424,7 +1451,7 @@ function linkStart(r) { if (!r || !r.days.length) return ""; const d0 = r.days.f
   let m = /^(?:(\d{4})-)?(\d{2})-(\d{2})$/.exec(d0.date); if (!m) return ""; let y = m[1] ? +m[1] : new Date().getFullYear();
   let dt = new Date(y, +m[2] - 1, +m[3]); if (!m[1] && dt < new Date(Date.now() - 30 * 864e5)) dt = new Date(y + 1, +m[2] - 1, +m[3]);
   dt.setDate(dt.getDate() - k); return isNaN(dt) ? "" : ymdOf(dt); }
-function blankTrip() { const d = new Date(); d.setDate(d.getDate() + 14); return { id: "t" + uid(), name: "", start: ymdOf(d), people: 2, type: "free", abroad: false, pkg: { price: 0, incl: ["항공", "숙소", "전용 차량", "조식"] }, days: [newDay(), newDay(), newDay()], prep: [], plists: [], notes: [], links: [], photos: [], created: Date.now() }; }
+function blankTrip() { const d = new Date(); d.setDate(d.getDate() + 14); return { id: "t" + uid(), name: "", start: ymdOf(d), people: 2, type: "free", abroad: false, pkg: { price: 0, incl: ["항공", "숙소", "전용 차량", "조식"] }, days: [newDay(), newDay(), newDay()], prep: [], plists: [], notes: [], links: [], photos: [], region: "", tz: null, created: Date.now() }; }
 /* 준비 — 목록(준비물 · 할 일 …) 여러 개, 목록마다 체크 항목 + 메모 (10-28) */
 function ensPrep(t) {
   if (!Array.isArray(t.plists) || !t.plists.length) t.plists = [{ id: "g" + uid(), name: "준비물", memo: "" }, { id: "g" + uid(), name: "할 일 · 예약 확인", memo: "" }];
@@ -1468,7 +1495,8 @@ function sanitize(o) {
     plists: (Array.isArray(r.plists) ? r.plists : []).slice(0, 30).filter(g => g && okId(g.id)).map(g => ({ id: g.id, name: s(g.name, 60), memo: s(g.memo, 5000) })),
     notes: (Array.isArray(r.notes) ? r.notes : []).slice(0, 100).filter(n => n && okId(n.id)).map(n => ({ id: n.id, title: s(n.title, 100), body: s(n.body, 20000), warn: !!n.warn })),
     links: (Array.isArray(r.links) ? r.links : []).slice(0, 300).filter(l => l && okId(l.id) && /^https?:\/\//i.test(l.url || "")).map(l => ({ id: l.id, title: s(l.title, 200), url: s(l.url, 2000), memo: s(l.memo, 1000) })),
-    photos: (Array.isArray(r.photos) ? r.photos : []).filter(p => p && okId(p.id)).map(p => ({ id: p.id, t: +p.t || 0, lm: !!p.lm, it: okId(p.it) ? p.it : "", man: !!p.man })), cover: okId(r.cover) ? r.cover : "",
+    photos: (Array.isArray(r.photos) ? r.photos : []).filter(p => p && okId(p.id)).map(p => ({ id: p.id, t: +p.t || 0, u: +p.u || 0, z: p.z == null || !isFinite(p.z) ? null : Math.max(-900, Math.min(900, +p.z)), ll: p.ll && isFinite(p.ll.lat) && isFinite(p.ll.lng) ? { lat: +p.ll.lat, lng: +p.ll.lng } : null, lm: !!p.lm, it: okId(p.it) ? p.it : "", man: !!p.man })), cover: okId(r.cover) ? r.cover : "",
+    region: s(r.region, 40), tz: r.tz == null || !isFinite(r.tz) ? null : Math.max(-720, Math.min(840, +r.tz)),
     off: Math.max(-24, Math.min(24, +r.off || 0)), later: !!r.later, created: +r.created || 0, updated: +r.updated || 0 }));
   o.items.forEach(r => { if (!r.days.length) r.days.push(newDay()); });
   o.cats = null;
@@ -1585,14 +1613,6 @@ function tripCard(t) {
     <small>${when} · ${info}</small>${meta}</span></button>`;
 }
 function tviewBar() { const v = tview(); return `<div class="tvbar" role="group" aria-label="보기 방식">${TVIEW.map(([k, n, ic]) => `<button class="${v === k ? "on" : ""}" data-tview="${k}" aria-pressed="${v === k}" title="${n}">${ic}<span>${n}</span></button>`).join("")}</div>`; }
-function scrList() {
-  const L = D.items.slice().sort((a, b) => { const pa = phase(a), pb = phase(b), r = x => x.k === "on" ? 0 : x.k === "before" ? 1 : 2; return r(pa) - r(pb) || (r(pa) === 2 ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start)); });
-  const right = `${stBar()}${instBtn()}`;
-  const empty = `<div class="empty"><b>첫 여행을 만들어 보세요</b><p>날짜만 고르면 1일째 · 2일째가 저절로 생겨요.<br>여행사 패키지 일정은 통째로 복사해서 붙여넣으면 날짜별로 정리돼요.</p><button class="btn go w" data-newtrip>${IC.plus} 새 여행 만들기</button></div>`;
-  const v = tview(), list = `${banner()}${isPC() ? "" : installCard()}${L.length ? `${L.length > 0 ? tviewBar() : ""}<div class="tlist v-${v}">${L.map(tripCard).join("")}</div>` : empty}`;
-  if (isPC()) return `<div class="pc2"><div>${hd("내 여행", "", `<button class="btn nv sm" data-newtrip>${IC.plus} 새 여행</button>`)}<div class="body">${list}</div></div><aside><div class="tcard tip"><b>이렇게 써요</b><ol><li>새 여행 → 날짜 · 인원 · 자유/패키지</li><li>여행사 일정은 「붙여넣기」로 한 번에</li><li>여행 중엔 휴대폰 「오늘」 · 지도 · 길안내</li><li>시간이 지난 일정은 「했어요 · 고쳐서」로 확정</li><li>다녀와서 사진 연결 · 엑셀로 받기</li></ol></div></aside></div>`;
-  return hd("여행 노트", "", right) + `<div class="body">${list}</div>${L.length ? `<button class="fab" data-newtrip aria-label="새 여행">${IC.plus}</button>` : ""}`;
-}
 
 /* ── 새 여행 · 여행 정보 ── */
 function scrInfo() {
@@ -1604,6 +1624,7 @@ function scrInfo() {
     <p class="hint num">${e.days.length - 1}박 ${e.days.length}일 — 날짜를 바꾸면 1일째 · 2일째가 저절로 맞춰져요</p>
     <label class="f">인원</label><div class="stp2"><button class="ib s" data-ppl="-1" aria-label="한 명 빼기">−</button><b class="num">${e.people}명</b><button class="ib s" data-ppl="1" aria-label="한 명 더하기">+</button><span class="hint">경비를 이 인원으로 나눠요(N분의 1)</span></div>
     <label class="f">여행 방식</label><div class="vt">${[["free", "자유여행"], ["pkg", "패키지여행"]].map(([k, t]) => `<button class="${e.type === k ? "on" : ""}" data-etype="${k}">${t}</button>`).join("")}</div>
+    <label class="f">여행지 <span class="lt">— 내 여행에서 여행지별로 모아 봐요</span></label><input class="inp" data-ef="region" value="${esc(e.region || "")}" placeholder="${esc(guessRegion(e.name) || "예: 제주 · 오사카 · 다낭")}" list="rglist" maxlength="40"><datalist id="rglist">${[...new Set(D.items.map(regionOf).filter(Boolean))].map(r => `<option value="${esc(r)}">`).join("")}</datalist>
     <label class="f">어디로</label><div class="vt">${[[0, "국내"], [1, "해외"]].map(([k, t]) => `<button class="${+e.abroad === k ? "on" : ""}" data-eab="${k}">${t}</button>`).join("")}</div>
     <p class="hint">${e.abroad ? "지도 · 길안내는 구글 지도로 열어요." : `지도는 ${MAPA[mapApp()]}, 길안내는 ${NAVA[navApp()]}로 열어요(설정에서 바꿔요).`}</p>
     ${e.type === "pkg" ? `<label class="f">1인 상품가</label><div class="wonin"><input class="inp num" inputmode="numeric" data-money data-epkg value="${e.pkg.price ? won(e.pkg.price) : ""}" placeholder="예: 459,000"><span>원 × ${e.people}명 = <b class="num">${won(e.pkg.price * e.people)}원</b></span></div>
@@ -1674,19 +1695,6 @@ function linkTab(t) { ensPrep(t);
 function prepTab(t) { const k = S.ptab || "list";
   const sub = isPC() ? "" : `<div class="vt ptab">${PTABS.map(([x, n, ic]) => `<button class="${k === x ? "on" : ""}" data-ptab="${x}">${IC[ic]}${n.split(" · ")[0]}</button>`).join("")}</div>`;
   return sub + (k === "note" ? noteTab(t) : k === "link" ? linkTab(t) : prepList(t) + resvBox(t)); }
-function photoTab(t) {
-  const P = (t.photos || []).filter(p => PURL[p.id]), by = {}; P.forEach(p => (by[p.it || ""] = by[p.it || ""] || []).push(p));
-  const grp = (title, sub, L) => `<div class="tcard pg"><div class="pgh"><b>${title}</b><small>${sub}</small></div><div class="pgr">${L.sort((a, b) => a.t - b.t).map(p => `<button data-pvid="${p.id}"><img src="${PURL[p.id].t}" alt=""><em class="num">${p.t ? hmOf(p.t) : "시간 없음"}${p.lm ? "*" : ""}${p.man ? " ✓" : ""}</em></button>`).join("")}</div></div>`;
-  let h = `<label class="btn go w">${IC.img} 여행 사진 고르기<input type="file" accept="image/*" multiple hidden data-phpick></label>
-    <p class="hint">찍은 시간으로 일정에 저절로 나눠요. 원본은 휴대폰 · PC에 그대로 두고, 여기엔 작은 사본(가로 1280)만 저장해요.</p>`;
-  if (!P.length) return h + `<div class="empty sm"><p>아직 연결한 사진이 없어요.</p></div>`;
-  const nMan = P.filter(p => p.man).length;
-  h += `<div class="offr"><button class="btn sm nv" data-phremap>${IC.img} 찍은 시간으로 다시 나누기</button><small>일정을 넣거나 시간을 고치면 저절로 다시 나눠요${nMan ? ` · 손으로 붙인 사진 ${nMan}장(✓)은 그대로` : ""}</small></div>`;
-  h += `<div class="offr"><span>카메라 시계가 틀렸다면</span><button class="btn sm" data-off="-1">−1시간</button><b class="num">${t.off > 0 ? "+" : ""}${t.off || 0}시간</b><button class="btn sm" data-off="1">+1시간</button></div>`;
-  t.days.forEach((d, i) => d.items.forEach(it => { if (by[it.id]) h += grp(`${i + 1}일째 ${esc(it.time)} ${esc(it.title)}`, `${by[it.id].length}장`, by[it.id]); }));
-  if (by[""]) h += grp("어느 일정에도 안 맞는 사진", `${by[""].length}장 — 눌러서 일정 고르기`, by[""]);
-  return h + `<p class="hint">* 찍은 시간 정보가 없어 파일 시간으로 넣은 사진이에요.</p>`;
-}
 function scrTrip() {
   const t = TR(); if (!t) { S.scr = "list"; return scrList(); }
   S.day = Math.min(S.day || 0, t.days.length - 1); const tab = S.ttab || "plan", pd = pending(t), p = phase(t);
@@ -1876,12 +1884,12 @@ function gallery() {
   const t = TR(); if (!t) return ""; let it = null; t.days.forEach(d => d.items.forEach(x => { if (x.id === S.pg) it = x; }));
   const P = (t.photos || []).filter(p => PURL[p.id] && p.it === S.pg).sort((a, b) => a.t - b.t); if (!P.length) return "";
   return `<div class="pv vw2 pg2" role="dialog" aria-label="사진 모두 보기"><div class="vw2-top"><b>${esc(it ? it.title : "")}</b><span class="k">사진 ${P.length}장</span><span class="k n"></span><button class="vw2-x" data-pgx aria-label="닫기">${IC.x}</button></div>
-    <div class="pg2-grid">${P.map((p, k) => `<button data-pgi="${k}"><img src="${PURL[p.id].f}" alt="" loading="lazy"><em class="num">${p.t ? hmOf(p.t) : ""}</em></button>`).join("")}</div></div>`;
+    <div class="pg2-grid">${P.map((p, k) => `<button data-pgi="${k}"><img src="${PURL[p.id].f}" alt="" loading="lazy"><em class="num">${phT(t, p) ? hmOf(phT(t, p)) : ""}</em></button>`).join("")}</div></div>`;
 }
 function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i], t = TR() || {}, rec = (t.photos || []).find(x => x.id === p.id) || {};
   let it = null; (t.days || []).forEach(d => d.items.forEach(x => { if (x.id === rec.it) it = x; }));
-  const when = rec.t ? (() => { const d = new Date(rec.t); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(rec.t)}`; })() : "";
+  const when = rec.t || rec.u ? (() => { const lt = phT(t, rec), d = new Date(lt); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(lt)}${rec.lm ? " (파일 시간)" : ""}`; })() : "";
   return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span><span class="k n num">${i + 1} / ${L.length}</span>
     <button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button><button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
     <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f}" alt="" draggable="false"></div>
@@ -2244,25 +2252,39 @@ document.addEventListener("change", async e => { if (!e.target.matches("[data-gd
 setInterval(() => { if (typeof gdOn === "function" && gdOn()) gdPaint(); }, 30000); /* 「마지막: n분 전」 · 상태 새로 그리기 */
 
 /* ───────── 사진: 찍은 시간 읽기(EXIF) · 일정에 나누기 ───────── */
-async function exifTime(file) {
+/* 사진 정보 읽기: 찍은 시각(카메라 시계 그대로) · 시간대(있으면) · GPS 위치 · GPS 시각(UTC) */
+async function exifInfo(file) {
   try { const buf = await file.slice(0, 256 * 1024).arrayBuffer(), v = new DataView(buf); if (v.byteLength < 12 || v.getUint16(0) !== 0xFFD8) return null;
     let o = 2; while (o < v.byteLength - 10) { const m = v.getUint16(o); if ((m & 0xFF00) !== 0xFF00) break; const len = v.getUint16(o + 2);
-      if (m === 0xFFE1 && v.getUint32(o + 4) === 0x45786966) return tiffTime(v, o + 10); if (m === 0xFFDA) break; o += 2 + len; } } catch (e) {} return null;
+      if (m === 0xFFE1 && v.getUint32(o + 4) === 0x45786966) return tiffInfo(v, o + 10); if (m === 0xFFDA) break; o += 2 + len; } } catch (e) {} return null;
 }
-function tiffTime(v, t) {
+async function exifTime(file) { const x = await exifInfo(file); return x ? x.t : null; }
+function tiffInfo(v, t) {
   const le = v.getUint16(t) === 0x4949, g16 = p => v.getUint16(p, le), g32 = p => v.getUint32(p, le), dec = new TextDecoder("ascii");
   const ent = (ifd, tag) => { const n = g16(ifd); for (let i = 0; i < n; i++) { const e = ifd + 2 + i * 12; if (g16(e) === tag) return e; } return 0; };
-  const sv = e => { const c = g32(e + 4), off = c > 4 ? t + g32(e + 8) : e + 8; return dec.decode(new Uint8Array(v.buffer, off, Math.max(0, c - 1))); };
-  const i0 = t + g32(t + 4); let s = ""; const ep = ent(i0, 0x8769);
-  if (ep) { const ex = t + g32(ep + 8), a = ent(ex, 0x9003) || ent(ex, 0x9004); if (a) s = sv(a); }
+  const sv = e => { const c = g32(e + 4), off = c > 4 ? t + g32(e + 8) : e + 8; return dec.decode(new Uint8Array(v.buffer, off, Math.max(0, c - 1))).replace(/\0+$/, ""); };
+  const rat = (e, k) => { const off = t + g32(e + 8) + k * 8, d = g32(off + 4); return d ? g32(off) / d : 0; };
+  const i0 = t + g32(t + 4); let s = "", z = null, ll = null, gu = 0; const ep = ent(i0, 0x8769);
+  if (ep) { const ex = t + g32(ep + 8), a = ent(ex, 0x9003) || ent(ex, 0x9004); if (a) s = sv(a);
+    const zo = ent(ex, 0x9011) || ent(ex, 0x9010); if (zo) { const m = /^([+-])(\d{2}):?(\d{2})/.exec(sv(zo)); if (m) z = (m[1] === "-" ? -1 : 1) * (+m[2] * 60 + +m[3]); } }
   if (!s) { const a = ent(i0, 0x0132); if (a) s = sv(a); }
+  const gp = ent(i0, 0x8825);
+  if (gp) { try { const g = t + g32(gp + 8), la = ent(g, 2), lo = ent(g, 4), lr = ent(g, 1), lor = ent(g, 3);
+      if (la && lo) { const dms = e => rat(e, 0) + rat(e, 1) / 60 + rat(e, 2) / 3600; let lat = dms(la), lng = dms(lo);
+        if (lr && sv(lr).startsWith("S")) lat = -lat; if (lor && sv(lor).startsWith("W")) lng = -lng;
+        if (isFinite(lat) && isFinite(lng) && (lat || lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) ll = { lat: Math.round(lat * 1e5) / 1e5, lng: Math.round(lng * 1e5) / 1e5 }; }
+      const gt = ent(g, 7), gd = ent(g, 0x1D);
+      if (gt && gd) { const dm = /^(\d{4}):(\d{2}):(\d{2})/.exec(sv(gd)); if (dm) gu = Date.UTC(+dm[1], dm[2] - 1, +dm[3], 0, 0, 0) + Math.round((rat(gt, 0) * 3600 + rat(gt, 1) * 60 + rat(gt, 2)) * 1000); } } catch (e) {} }
   const m = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/.exec(s); if (!m || m[1] === "0000") return null;
-  return Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]); /* 카메라 시계 그대로(시간대 없는 「그 자리 시각」) */
+  const tt = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]); /* 카메라 시계 그대로(시간대 없는 「그 자리 시각」) */
+  return { t: tt, z, ll, u: z != null ? tt - z * 60000 : gu || 0 };
 }
+/* 사진의 「현지 시각」: 현지 시간대를 정했으면 정확한 시각(UTC)으로 다시 계산, 아니면 카메라 시계 그대로. 그다음 「시계 보정」 */
+function phT(t, p) { if (!p.t && !p.u) return 0; const base = (t.tz != null && p.u) ? p.u + t.tz * 60000 : p.t; return base + (t.off || 0) * 3600e3; }
 const naive = (t, i, hm) => { const d = dOf(t, i), m = hm2m(hm); return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), m == null ? 0 : Math.floor(m / 60), m == null ? 0 : m % 60); };
 /* 찍은 시각 → 그 날의 일정: 시작 시각이 지난 마지막 일정(다음 일정 전, 4시간 안). 시간 없는 일정은 앞 일정 시각을 이어받음 */
-function assignPh(t, p) {
-  if (!p.t) return ""; const ts = p.t + (t.off || 0) * 3600e3;
+function assignPh(t, p, ts) {
+  if (ts == null) ts = phT(t, p); if (!ts) return "";
   for (let i = 0; i < t.days.length; i++) {
     const d0 = naive(t, i, "00:00"); if (ts < d0 || ts >= d0 + 864e5) continue;
     let prev = null, best = "";
@@ -2276,8 +2298,9 @@ function assignPh(t, p) {
 async function addTripPhotos(files) {
   const t = TR(); if (!t) return; const busy = $("#busy"); busy.classList.add("on"); let n = 0, bad = 0, lm = 0;
   for (const f of files) { busy.firstElementChild.textContent = `사진 넣는 중 ${n + bad + 1} / ${files.length}…`;
-    try { let tt = await exifTime(f), isLm = false; if (!tt && f.lastModified) { tt = f.lastModified - new Date(f.lastModified).getTimezoneOffset() * 60000; isLm = true; lm++; }
-      const id = await importFile(f), p = { id, t: tt || 0, lm: isLm, it: "" }; p.it = assignPh(t, p); t.photos.push(p); n++; } catch (e) { bad++; } }
+    try { const x = await exifInfo(f); let tt = x ? x.t : 0, u = x ? x.u : 0, isLm = false;
+      if (!tt && f.lastModified) { u = f.lastModified; tt = u - new Date(u).getTimezoneOffset() * 60000; isLm = true; lm++; }
+      const id = await importFile(f), p = { id, t: tt || 0, u: u || 0, z: x ? x.z : null, ll: x ? x.ll : null, lm: isLm, it: "" }; p.it = assignPh(t, p); t.photos.push(p); n++; } catch (e) { bad++; } }
   busy.classList.remove("on"); await saveTrip(t); render();
   const hit = t.photos.slice(-n).filter(p => p.it).length;
   toast(`사진 ${n}장 — 일정에 ${hit}장 · 맞는 일정 없음 ${n - hit}장${bad ? ` · 못 읽음 ${bad}장(HEIC면 JPG로)` : ""}`);
@@ -2588,6 +2611,131 @@ function fitIph() { document.querySelectorAll(".iph").forEach(w => { const im = 
 new MutationObserver(() => { clearTimeout(fitIph._t); fitIph._t = setTimeout(fitIph, 0); }).observe(document.body, { childList: true, subtree: true });
 window.addEventListener("resize", () => { clearTimeout(fitIph._r); fitIph._r = setTimeout(fitIph, 80); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && S.pg && S.pv == null) { S.pg = null; render(); e.preventDefault(); } });
+
+/* ───────── 10-30: 사진 현지 시간대 · 시간 · 장소 묶음 · 내 여행 찾기 · 정렬 · 분류 ───────── */
+const TZS = [[540, "UTC+9 한국 · 일본"], [480, "UTC+8 중국 · 대만 · 홍콩 · 필리핀 · 싱가포르 · 말레이시아 · 발리"], [420, "UTC+7 베트남 · 태국 · 캄보디아 · 라오스 · 자카르타"], [390, "UTC+6:30 미얀마"], [345, "UTC+5:45 네팔"], [330, "UTC+5:30 인도 · 스리랑카"], [300, "UTC+5 몰디브"], [240, "UTC+4 두바이"], [180, "UTC+3 튀르키예"], [120, "UTC+2 그리스 · 이집트 · 유럽 중부(서머타임)"], [60, "UTC+1 유럽 중부(겨울) · 영국(서머타임)"], [0, "UTC+0 영국 · 포르투갈(겨울)"], [600, "UTC+10 괌 · 사이판 · 호주 동부(겨울)"], [660, "UTC+11 호주 동부(서머타임)"], [720, "UTC+12 뉴질랜드(겨울)"], [780, "UTC+13 뉴질랜드(서머타임)"], [-240, "UTC−4 미국 동부(서머타임)"], [-300, "UTC−5 미국 동부(겨울)"], [-420, "UTC−7 미국 서부(서머타임)"], [-480, "UTC−8 미국 서부(겨울)"], [-600, "UTC−10 하와이"]];
+const tzName = m => { const f = TZS.find(x => x[0] === m); if (f) return f[1]; const h = Math.floor(Math.abs(m) / 60), mm = Math.abs(m) % 60; return `UTC${m < 0 ? "−" : "+"}${h}${mm ? ":" + String(mm).padStart(2, "0") : ""}`; };
+const hm2 = ms => hmOf(ms);
+function phDay(t, ts) { for (let i = 0; i < t.days.length; i++) { const d0 = naive(t, i, "00:00"); if (ts >= d0 && ts < d0 + 864e5) return i; } return -1; }
+function kmBetween(a, b) { const R = 6371, r = x => x * Math.PI / 180, dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng), h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); }
+/* 찍은 시각 · 장소로 묶기: 90분 넘게 비거나 2km 넘게 떨어지면 새 묶음 (같은 날 안에서만) */
+function phClusters(t, P) {
+  const L = P.map(p => ({ p, ts: phT(t, p) })).filter(x => x.ts).sort((a, b) => a.ts - b.ts), out = [];
+  for (const x of L) { const day = phDay(t, x.ts), c = out[out.length - 1];
+    const lastLL = c && c.ps.slice().reverse().find(q => q.ll);
+    if (c && c.day === day && x.ts - c.to <= 90 * 60e3 && !(x.p.ll && lastLL && kmBetween(x.p.ll, lastLL.ll) > 2)) { c.ps.push(x.p); c.to = x.ts; }
+    else out.push({ day, from: x.ts, to: x.ts, ps: [x.p] }); }
+  for (const c of out) { const G = c.ps.filter(q => q.ll); c.ll = G.length ? { lat: G.reduce((a, q) => a + q.ll.lat, 0) / G.length, lng: G.reduce((a, q) => a + q.ll.lng, 0) / G.length } : null; }
+  return out;
+}
+/* 시계가 몇 시간 어긋났는지 찾기: 일정에 맞는 사진이 가장 많아지는 보정값 */
+function bestShift(t) {
+  const P = (t.photos || []).filter(p => !p.man && (p.t || p.u)); if (P.length < 5 || !t.days.some(d => d.items.some(it => it.time || (it.act && it.act.time)))) return null;
+  const hits = o => P.filter(p => assignPh(t, p, phT(t, p) + o * 3600e3)).length, cur = hits(0); let best = { o: 0, n: cur };
+  for (let o = -12; o <= 12; o++) { if (!o) continue; const n = hits(o); if (n > best.n) best = { o, n }; }
+  return best.o && best.n >= cur + Math.max(3, Math.ceil(P.length * 0.1)) ? { o: best.o, n: best.n, cur } : null;
+}
+function photoTab(t) {
+  const P = (t.photos || []).filter(p => PURL[p.id]), v = S.phv || "it";
+  let h = `<label class="btn go w">${IC.img} 여행 사진 고르기<input type="file" accept="image/*" multiple hidden data-phpick></label>
+    <p class="hint">찍은 시각으로 일정에 나누고, 맞는 일정이 없는 사진은 찍은 시간 · 장소로 묶어요. 원본은 휴대폰 · PC에 그대로 두고, 여기엔 작은 사본(가로 1280)만 저장해요.</p>`;
+  if (!P.length) return h + `<div class="empty sm"><p>아직 연결한 사진이 없어요.</p></div>`;
+  const nMan = P.filter(p => p.man).length, nLm = P.filter(p => p.lm).length, Z = {}; P.forEach(p => { if (p.z != null) Z[p.z] = (Z[p.z] || 0) + 1; });
+  const zTop = Object.entries(Z).sort((a, b) => b[1] - a[1])[0], sh = bestShift(t);
+  h += `<div class="vt phv">${[["it", "일정별"], ["tp", "시간 · 장소별"]].map(([k, n]) => `<button class="${v === k ? "on" : ""}" data-phv="${k}">${n}</button>`).join("")}</div>`;
+  if (sh) h += `<div class="note w phsh">${IC.warn}<div><b>사진 시계가 ${Math.abs(sh.o)}시간 ${sh.o > 0 ? "늦은" : "빠른"} 것 같아요.</b> ${sh.o > 0 ? "+" : "−"}${Math.abs(sh.o)}시간 옮기면 일정에 맞는 사진이 <b class="num">${sh.cur}장 → ${sh.n}장</b>이 돼요. 해외에서 휴대폰 시간대가 한국 시간 그대로였거나, 시간 정보 없는 사진(*)을 한국에서 넣었을 때 생겨요.<br><button class="btn sm nv" data-phshift="${sh.o}">${sh.o > 0 ? "+" : "−"}${Math.abs(sh.o)}시간 옮겨서 맞추기</button></div></div>`;
+  h += `<div class="phtzr"><label class="f">사진 시각 기준 <span class="lt">— 해외 여행이면 현지 시간대를 골라 주세요</span></label>
+    <select class="inp" data-phtz><option value="" ${t.tz == null ? "selected" : ""}>사진에 적힌 시각 그대로 (기본)</option>${TZS.map(([m, n]) => `<option value="${m}" ${t.tz === m ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>
+    <p class="hint">${zTop ? `사진에 적힌 시간대: <b>${esc(tzName(+zTop[0]))}</b> ${zTop[1]}장. ` : ""}${nLm ? `시간 정보가 없어 파일 시간으로 넣은 사진(*) ${nLm}장 — 현지 시간대를 고르면 그 시간대로 다시 계산해요.` : "현지 시간대를 고르면 휴대폰 시간대가 틀렸던 사진도 현지 시각으로 맞춰져요."}</p></div>`;
+  h += `<div class="offr"><span>그래도 어긋나면 시계 보정</span><button class="btn sm" data-off="-1">−1시간</button><b class="num">${t.off > 0 ? "+" : ""}${t.off || 0}시간</b><button class="btn sm" data-off="1">+1시간</button></div>`;
+  h += `<div class="offr"><button class="btn sm nv" data-phremap>${IC.img} 찍은 시간으로 다시 나누기</button><small>${nMan ? `손으로 붙인 사진 ${nMan}장(✓)은 그대로` : "일정을 넣거나 시간을 고치면 저절로 다시 나눠요"}</small></div>`;
+  const tile = p => { const ts = phT(t, p); return `<button data-pvid="${p.id}"><img src="${PURL[p.id].t}" alt="" loading="lazy"><em class="num">${ts ? hm2(ts) : "시간 없음"}${p.lm ? "*" : ""}${p.man ? " ✓" : ""}</em></button>`; };
+  const sortT = L => L.slice().sort((a, b) => phT(t, a) - phT(t, b));
+  const grp = (title, sub, L, extra) => `<div class="tcard pg"><div class="pgh"><b>${title}</b><small>${sub}</small>${extra || ""}</div><div class="pgr">${sortT(L).map(tile).join("")}</div></div>`;
+  const itOf = id => { for (let i = 0; i < t.days.length; i++) { const it = t.days[i].items.find(x => x.id === id); if (it) return [i, it]; } return null; };
+  S.phcl = [];
+  const clCard = (c, mk) => { const k = S.phcl.push(c) - 1, its = {}; c.ps.forEach(p => { if (p.it) its[p.it] = (its[p.it] || 0) + 1; });
+    const topIt = Object.entries(its).sort((a, b) => b[1] - a[1])[0], ti = topIt && itOf(topIt[0]);
+    const map = c.ll ? `<a class="lk phmap" href="https://www.google.com/maps/search/?api=1&query=${c.ll.lat.toFixed(5)},${c.ll.lng.toFixed(5)}" target="_blank" rel="noopener">${IC.map}지도</a>` : "";
+    const mkb = mk && c.day >= 0 ? `<button class="btn sm" data-phmk="${k}">${IC.plus} 일정으로 만들기</button>` : "";
+    return grp(`${hm2(c.from)}${c.to - c.from >= 60e3 ? " ~ " + hm2(c.to) : ""}${ti ? " · " + esc(ti[1].title || "일정") : ""}`, `${c.ps.length}장${c.ll ? "" : " · 위치 정보 없음"}`, c.ps, map + mkb); };
+  const dayHead = i => `<div class="phday">${i >= 0 ? `${i + 1}일째 <small>${mdw(dOf(t, i))}</small>` : "여행 날짜 밖"}</div>`;
+  if (v === "tp") {
+    let lastDay = null; for (const c of phClusters(t, P)) { if (c.day !== lastDay) { h += dayHead(c.day); lastDay = c.day; } h += clCard(c, false); }
+    const nt = P.filter(p => !phT(t, p)); if (nt.length) h += grp("찍은 시간을 모르는 사진", `${nt.length}장`, nt);
+  } else {
+    const by = {}; P.forEach(p => (by[p.it || ""] = by[p.it || ""] || []).push(p));
+    t.days.forEach((d, i) => { const L = d.items.filter(it => by[it.id]); if (!L.length) return; h += dayHead(i); L.forEach(it => { h += grp(`${esc((it.act && it.act.time) || it.time)} ${esc(it.title)}`, `${by[it.id].length}장`, by[it.id]); }); });
+    if (by[""]) { h += `<div class="phday">맞는 일정이 없는 사진 <small>${by[""].length}장 — 찍은 시간 · 장소로 묶었어요. 「일정으로 만들기」를 누르면 그 시각에 일정이 생기고 사진이 붙어요</small></div>`;
+      for (const c of phClusters(t, by[""])) h += clCard(c, true);
+      const nt = by[""].filter(p => !phT(t, p)); if (nt.length) h += grp("찍은 시간을 모르는 사진", `${nt.length}장 — 눌러서 일정 고르기`, nt); }
+  }
+  return h + `<p class="hint">* 사진 안에 찍은 시간 정보가 없어 파일 시간으로 넣은 사진이에요(메신저로 받은 사진 · 캡처 등). 위치는 사진에 GPS 정보가 있을 때만 보여요 — 휴대폰에서 고르면 위치를 빼고 넘겨주는 경우가 있어요.</p>`;
+}
+
+/* ── 내 여행: 찾기 · 국내/해외 · 여행지 · 정렬 ── */
+const TSORTS = { near: "가까운 순", date: "최근 날짜순", place: "여행지별", made: "입력순" };
+const IC_HELP = I('<circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><path d="M12 17h.01"/>');
+const RSTOP = /^(\d|[0-9]+박|[0-9]+일|여행|가족|가족여행|패키지|자유|자유여행|우정|신혼|신혼여행|효도|출장|투어|일정|당일|당일치기|여름|겨울|봄|가을|휴가|나들이|캠핑|워크숍|첫|우리)/;
+function guessRegion(n) { for (const w of String(n || "").split(/[\s·,/()\-_~]+/)) { const x = w.replace(/(여행|가족여행|투어|패키지)$/, ""); if (x.length >= 2 && !RSTOP.test(x) && !/\d/.test(x)) return x; } return ""; }
+const regionOf = t => (t.region || "").trim() || guessRegion(t.name);
+function tripHay(t) { const a = [t.name, regionOf(t)]; (t.days || []).forEach(d => { a.push(d.title, d.hotel); d.items.forEach(it => a.push(it.title, it.place, it.memo, it.kind)); }); (t.notes || []).forEach(n => a.push(n.title)); return a.filter(Boolean).join(" ").toLowerCase(); }
+function tlState() { return S.tl || (S.tl = { q: "", ab: "all", rg: "" }); }
+function tFiltered() { const A = tlState(), q = A.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  return D.items.filter(t => (A.ab === "all" || (A.ab === "ab") === !!t.abroad) && (!A.rg || regionOf(t) === A.rg) && q.every(w => tripHay(t).includes(w))); }
+function tSorted(L) { const k = TSORTS[D.set.tsort] ? D.set.tsort : "near";
+  const near = (a, b) => { const pa = phase(a), pb = phase(b), r = x => x.k === "on" ? 0 : x.k === "before" ? 1 : 2; return r(pa) - r(pb) || (r(pa) === 2 ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start)); };
+  if (k === "date") return L.slice().sort((a, b) => b.start.localeCompare(a.start));
+  if (k === "made") return L.slice().sort((a, b) => (a.created || 0) - (b.created || 0));
+  if (k === "place") return L.slice().sort((a, b) => (regionOf(a) || "￿").localeCompare(regionOf(b) || "￿", "ko") || b.start.localeCompare(a.start));
+  return L.slice().sort(near); }
+function tResHtml() {
+  const L = tSorted(tFiltered()), v = tview(); if (!L.length) return `<div class="empty sm"><p>찾는 여행이 없어요.</p></div>`;
+  if (D.set.tsort === "place") { const G = []; L.forEach(t => { const r = regionOf(t) || "여행지 없음", g = G[G.length - 1]; if (g && g.r === r) g.L.push(t); else G.push({ r, L: [t] }); });
+    return G.map(g => `<div class="tgh">${IC.pin}${esc(g.r)} <small class="num">${g.L.length}</small></div><div class="tlist v-${v}">${g.L.map(tripCard).join("")}</div>`).join(""); }
+  return `<div class="tlist v-${v}">${L.map(tripCard).join("")}</div>`; }
+function tToolbar() { const A = tlState(), R = {}; D.items.forEach(t => { const r = regionOf(t); if (r) R[r] = (R[r] || 0) + 1; });
+  const regs = Object.entries(R).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "ko")), nAb = D.items.filter(t => t.abroad).length;
+  return `<div class="tlbar"><div class="atop"><div class="srch in">${IC.find}<input id="tq" value="${esc(A.q)}" placeholder="여행 이름 · 여행지 · 일정 · 장소 · 메모로 찾기" autocomplete="off" enterkeyhint="search"></div></div>
+    <div class="vt sts">${[["all", "전체", D.items.length], ["dom", "국내", D.items.length - nAb], ["ab", "해외", nAb]].map(([k, n, c]) => `<button class="${A.ab === k ? "on" : ""}" data-tlab="${k}">${n} <small class="num">${c}</small></button>`).join("")}</div>
+    ${regs.length ? `<div class="aopt"><span class="aot">여행지</span><div class="chips"><button class="chip ${!A.rg ? "on" : ""}" data-tlrg="">전체</button>${regs.map(([r, c]) => `<button class="chip ${A.rg === r ? "on" : ""}" data-tlrg="${esc(r)}">${esc(r)} <small class="num">${c}</small></button>`).join("")}</div></div>` : ""}
+    <div class="aopt asr"><span class="aot">정렬</span><div class="vt mini asort">${Object.entries(TSORTS).map(([k, n]) => `<button class="${(TSORTS[D.set.tsort] ? D.set.tsort : "near") === k ? "on" : ""}" data-tlsort="${k}">${n}</button>`).join("")}</div></div>
+    ${tviewBar()}</div>`; }
+function scrList() {
+  const right = `${stBar()}${instBtn()}`;
+  const empty = `<div class="empty"><b>첫 여행을 만들어 보세요</b><p>날짜만 고르면 1일째 · 2일째가 저절로 생겨요.<br>여행사 패키지 일정은 통째로 복사해서 붙여넣으면 날짜별로 정리돼요.</p><button class="btn go w" data-newtrip>${IC.plus} 새 여행 만들기</button></div>`;
+  const list = `${banner()}${isPC() ? "" : installCard()}${D.items.length ? `${tToolbar()}<div id="tres">${tResHtml()}</div>` : empty}`;
+  setTimeout(autoTips, 400);
+  const tipB = `<button class="btn sm tipb" data-tips>${IC_HELP} 이렇게 써요</button>`;
+  if (isPC()) return `<div class="pc2 wide"><div>${hd("내 여행", "", `<span class="hdr2">${tipB}<button class="btn nv sm" data-newtrip>${IC.plus} 새 여행</button></span>`)}<div class="body">${list}</div></div></div>`;
+  return hd("여행 노트", "", `<button class="ib" data-tips aria-label="이렇게 써요" title="이렇게 써요">${IC_HELP}</button>` + right) + `<div class="body">${list}</div>${D.items.length ? `<button class="fab" data-newtrip aria-label="새 여행">${IC.plus}</button>` : ""}`;
+}
+/* 「이렇게 써요」: 앱을 열 때 한 번 살짝 띄웠다가 사라짐(머리의 단추로 다시 보기) */
+function showTips(auto) {
+  let el = document.getElementById("tippop"); if (el) el.remove();
+  el = document.createElement("div"); el.id = "tippop"; el.className = "tippop"; el.setAttribute("role", "dialog");
+  el.innerHTML = `<div class="tph"><b>${IC_HELP} 이렇게 써요</b><button class="ib s" aria-label="닫기">${IC.x}</button></div><ol><li>새 여행 → 날짜 · 인원 · 자유/패키지 · 국내/해외</li><li>여행사 일정은 「붙여넣기」로 한 번에</li><li>여행 중엔 휴대폰 「오늘」 · 지도 · 길안내</li><li>시간이 지난 일정은 「했어요 · 고쳐서」로 확정</li><li>다녀와서 사진 넣기 — 찍은 시간 · 장소로 저절로 나눠요</li></ol>${auto ? `<i class="tpbar"></i>` : ""}`;
+  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add("on"));
+  let tm = null; const close = () => { el.classList.remove("on"); setTimeout(() => el.remove(), 350); };
+  el.querySelector("button").onclick = close;
+  if (auto) { tm = setTimeout(close, 6500); el.onmouseenter = () => { clearTimeout(tm); el.classList.add("hold"); }; el.onmouseleave = () => { tm = setTimeout(close, 2500); }; }
+}
+function autoTips() { if (S.scr !== "list" || S.sheet || S._tipShown) return; S._tipShown = true; let n = 0; try { n = +sessionStorage.getItem("trip:tip") || 0; sessionStorage.setItem("trip:tip", "1"); } catch (e) {} if (!n && (D.set.tipN || 0) < 5) { D.set.tipN = (D.set.tipN || 0) + 1; setMeta("set", D.set).catch(() => {}); showTips(true); } }
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-tips],[data-tlab],[data-tlrg],[data-tlsort],[data-phv],[data-phshift],[data-phmk]"); if (!b) return; const d = b.dataset, t = TR();
+  if (d.tips != null) return showTips(false);
+  if (d.tlab) { tlState().ab = d.tlab; return render(); }
+  if (d.tlrg != null) { tlState().rg = d.tlrg; return render(); }
+  if (d.tlsort) { D.set.tsort = d.tlsort; await setMeta("set", D.set).catch(() => {}); return render(); }
+  if (d.phv) { S.phv = d.phv; return render(); }
+  if (d.phshift && t) { t.off = Math.max(-24, Math.min(24, (t.off || 0) + +d.phshift)); await saveTrip(t); render(); return toast(`사진 시각을 ${+d.phshift > 0 ? "+" : "−"}${Math.abs(+d.phshift)}시간 옮겼어요 — 「시계 보정」에서 되돌릴 수 있어요.`); }
+  if (d.phmk != null && t) { const c = (S.phcl || [])[+d.phmk]; if (!c || c.day < 0) return; const tm = hm2(c.from);
+    const it = newIt({ time: tm, memo: `사진 ${c.ps.length}장으로 만든 일정`, ...(c.ll ? { place: `https://www.google.com/maps/search/?api=1&query=${c.ll.lat.toFixed(5)},${c.ll.lng.toFixed(5)}`, ll: { lat: +c.ll.lat.toFixed(5), lng: +c.ll.lng.toFixed(5) } } : {}) });
+    S.day = c.day; toast("일정 이름을 넣고 저장하면 이 사진들이 붙어요."); return startItem(it, c.day, true); }
+});
+document.addEventListener("input", e => { if (e.target.id !== "tq") return; tlState().q = e.target.value; const R = $("#tres"); if (R) R.innerHTML = tResHtml(); });
+document.addEventListener("change", async e => { const el = e.target; if (el.dataset.phtz == null) return; const t = TR(); if (!t) return; t.tz = el.value === "" ? null : +el.value; await saveTrip(t); render(); toast(t.tz == null ? "사진에 적힌 시각 그대로 나눠요." : `${tzName(t.tz)} 기준으로 다시 나눴어요.`); });
 
 /* ───────── 설치 화면 (블로그 「설치하기」 → 앱주소?install=1) ─────────
    Blog J 앱형 도구 공통. 필요한 것: S(상태) · render() · toast() · IC · esc · DEV · IOS · ANDROID · STANDALONE · IS_SAMSUNG · QRS · mobileUrl()

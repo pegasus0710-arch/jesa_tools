@@ -653,7 +653,7 @@ function enRows(item, kind, o) {
   }
   if (o.test && kind === "word") { rows.push([]); return rows; }
   const body = item.t.replace(/\s+$/, ""), nTrail = item.t.length - body.length, w = textW(body, fs), g = gap * Math.max(1, nTrail); let row = [], x = 0;   /* 뒤 빈칸 0~1개 = 기본 간격, 2개 = 두 배 */
-  const copies = o.test ? 1 : o.trace;
+  const perRow = Math.max(1, Math.floor((avail + g) / (w + g))), copies = o.test ? 1 : Math.ceil(o.trace / perRow) * perRow;   /* 줄 끝까지 채움(10-30) */
   for (let i = 0; i < copies; i++) {
     if (x + w > avail && row.length) { rows.push(row); row = []; x = 0; }
     row.push({ x, s: body, tone: (i === 0 && (o.dark || o.test)) ? "dark" : "gray" }); x += w + g;
@@ -663,9 +663,52 @@ function enRows(item, kind, o) {
   return rows;
 }
 
+/* 낱말: 한 단에 여러 낱말을 나란히(3·3·2글자처럼) 놓아 줄을 빈틈없이 쓰고, 따라쓰기는 아래로(10-30 제이 — 용지 낭비) */
+function koBands(items, o) {
+  const cols = Math.floor(CW / o.cell), out = [];
+  const ws = items.map((it, idx) => ({ it, idx, ch: [...it.t.trim()] }));
+  const rest = ws.filter(w => w.ch.length && w.ch.length <= cols);
+  for (const w of ws) if (w.ch.length > cols) out.push({ at: w.idx, long: w });
+  while (rest.length) {
+    /* 맨 앞 낱말 + 뒤 낱말 가운데 줄을 가장 꽉 채우는 조합(예: 10칸 = 3·3·2글자) */
+    const first = rest.shift(), cand = rest.slice(0, 14); let best = [], bestU = first.ch.length;
+    const dfs = (i, pick, u) => { if (u > bestU || (u === bestU && pick.length < best.length)) { bestU = u; best = pick.slice(); }
+      if (bestU === cols) return; for (let j = i; j < cand.length; j++) { const nu = u + 1 + cand[j].ch.length; if (nu <= cols) { pick.push(j); dfs(j + 1, pick, nu); pick.pop(); if (bestU === cols) return; } } };
+    dfs(0, [], first.ch.length);
+    const seg = [first, ...best.map(j => cand[j])]; let used = bestU;
+    for (const j of best.slice().sort((x, y) => y - x)) rest.splice(j, 1);
+    /* 남은 칸이 크면(낱말이 하나뿐일 때 등) 같은 낱말을 옆에 한 번 더 */
+    const segs = seg.map(w => ({ w, rep: false }));
+    for (let k = 0; ; k++) { const w = seg[k % seg.length], need = w.ch.length + 1; if (used + need > cols || k > 40) break; segs.push({ w, rep: true }); used += need; }
+    const rows = [];
+    for (let r = 0; r < o.trace; r++) { const row = [];
+      segs.forEach((g, j) => { if (j) row.push(null); g.w.ch.forEach(c => row.push(/\s/.test(c) ? null : { ch: c, tone: r === 0 && o.dark && !g.rep ? "dark" : "gray" })); });
+      while (row.length < cols) row.push(null); rows.push(row); }
+    for (let i = 0; i < o.blank; i++) rows.push(Array(cols).fill(null));
+    out.push({ at: seg[0].idx, rows, cols, it: seg[0].it, idx: seg[0].idx });
+  }
+  return out.sort((a, b) => a.at - b.at);
+}
+
+/* 자모 · 글자: 한 줄에 글자 여러 개를 나란히(줄 끝까지 따라쓰기로 채움) */
+function koGlyphRows(items, o) {
+  const cols = Math.floor(CW / o.cell), tr = Math.max(1, Math.min(+o.trace || 1, cols)), per = Math.max(1, Math.floor(cols / tr)), each = Math.floor(cols / per), out = [];
+  for (let i = 0; i < items.length; i += per) {
+    const grp = items.slice(i, i + per), row = [];
+    grp.forEach(it => { const ch = [...it.t.trim()][0] || ""; for (let k = 0; k < each; k++) row.push(ch ? { ch, tone: k === 0 && o.dark ? "dark" : "gray" } : null); });
+    while (row.length < cols) row.push(null);
+    const rows = [row]; for (let j = 0; j < o.blank; j++) rows.push(Array(cols).fill(null));
+    out.push({ type: "ko", it: grp[0], idx: i, rows, cols, hmm: rows.length * (o.cell + 1.2) + 3 });
+  }
+  return out;
+}
+
 /* 블록 → 쪽 나누기 */
 function buildPages(items, kind, o) {
-  const blocks = items.map((it, idx) => {
+  const band = o.lang === "ko" && kind === "word" && !o.test;
+  const blocks = o.lang === "ko" && kind === "glyph" && !o.test ? koGlyphRows(items, o) : band ? koBands(items, o).map(x => { const r = x.long ? koRows(x.long.it, kind, o) : x;
+      return { type: "ko", it: x.long ? x.long.it : x.it, idx: x.at, rows: r.rows, cols: r.cols, hmm: r.rows.length * (o.cell + 1.2) + 3 }; })
+    : items.map((it, idx) => {
     if (o.lang === "ko") { const r = koRows(it, kind, o); const label = o.test && kind !== "glyph" ? 1 : 0;
       return { type: "ko", it, idx, ...r, hmm: r.rows.length * (o.cell + 1.2) + 3 }; }
     const rows = enRows(it, kind, o), lab = kind !== "glyph" && (o.test || it.m) ? 5.5 : 0;   /* 연습장에서도 한글 뜻을 함께 */
@@ -685,6 +728,21 @@ function buildPages(items, kind, o) {
     }
   }
   return pages;
+}
+/* 마지막 쪽 아래가 비면 같은 글감에서 더 뽑아 채움(쪽 수는 늘리지 않음) */
+function fillPages(items, extra, kind, o) {
+  let pages = buildPages(items, kind, o), add = 0;
+  if (extra && extra.length && pages.length) {
+    const n0 = pages.length;
+    while (add < extra.length && add < 60) { const p2 = buildPages(items.concat(extra.slice(0, add + 1)), kind, o); if (p2.length > n0) break; pages = p2; add++; }
+  }
+  /* 그래도 남는 쪽 아래는 빈 연습 칸(줄)으로 채움 — 종이를 비워 두지 않음 */
+  for (const pg of pages) {
+    const used = pg.reduce((a, b) => a + b.hmm, 0), k = pg.find(b => b.type === "ko"), e = pg.find(b => b.type === "en");
+    if (k) { const n = Math.floor((CH - used - 3) / (o.cell + 1.2)); if (n >= 1) pg.push({ type: "ko", fill: true, rows: Array.from({ length: n }, () => Array(k.cols || Math.floor(CW / o.cell)).fill(null)), hmm: n * (o.cell + 1.2) + 3 }); }
+    else if (e) { const n = Math.floor((CH - used - 3.2) / o.pitch); if (n >= 1) pg.push({ type: "en", fill: true, lab: 0, rows: Array.from({ length: n }, () => []), hmm: n * o.pitch + 3.2 }); }
+  }
+  return { pages, items: items.concat(extra && add ? extra.slice(0, add) : []), add };
 }
 
 /* ── 한 쪽 그리기 ── */
@@ -754,12 +812,15 @@ function App() {
     if (s.useCustom) return s.custom.split("\n").map(x => x.replace(/\r/g, "").replace(/^\s+/, "").replace(/\s{4,}$/, "   ")).filter(x => x.trim()).slice(0, 60).map(t => ({ t, m: "" }));
     const all = pool.items; if (!all.length) return [];
     const chunks = Math.max(1, Math.ceil(all.length / N)), k = s.k % chunks, round = Math.floor(s.k / chunks);
-    return shuffled(all, s.seed + round * 7919).slice(k * N, k * N + N);
+    const sh = shuffled(all, s.seed + round * 7919), pick = sh.slice(k * N, k * N + N);
+    pick.extra = sh.slice(k * N + N).concat(sh.slice(0, k * N));
+    return pick;
   }, [pool, s.seed, s.k, N, s.useCustom, s.custom]);
   const sz = SIZES[s.size];
   const o = { lang: s.lang, cell: sz.ko, fs: sz.en / (AN.top + AN.desc), pitch: sz.en + 4.6, trace: +s.trace, blank: +s.blank, cross: s.cross, font: s.font, tone: s.tone, dark: s.dark, test: s.test, title: s.title || (L.label + (s.test ? " 받아쓰기" : " 따라쓰기")), nameDate: s.nameDate };
   o.fs = sz.en / (AN.top + AN.desc); o.pitch = 1.6 + sz.en + 4.2;
-  const pages = useMemo(() => ready ? buildPages(items, kind, o) : [], [ready, items, kind, JSON.stringify(o)]);
+  const filled = useMemo(() => ready ? fillPages(items, s.useCustom ? null : items.extra, kind, o) : { pages: [], items, add: 0 }, [ready, items, kind, JSON.stringify(o)]);
+  const pages = filled.pages, used = filled.items;
   const showAnswer = s.test && s.answer && kind !== "glyph" && items.length;
   const total = pages.length + (showAnswer ? 1 : 0);
   const no = s.useCustom ? "직접 입력" : `${s.seed}-${s.k + 1}`;
@@ -790,7 +851,7 @@ function App() {
                 return html`<p class=${"cnt" + (n > MAX_LINES ? " over" : "")}>${n} / ${MAX_LINES}줄${n > MAX_LINES ? html` · <b>${MAX_LINES}줄을 넘는 ${n - MAX_LINES}줄은 연습장에 들어가지 않아요</b>` : ""}</p>
                   ${odd.length ? html`<p class="cnt warn">"${odd.slice(0, 5).join(", ")}${odd.length > 5 ? " 등" : ""}"은 연습장 글꼴에 없는 글자라 기기 글꼴로 표시돼요</p>` : null}
                   ${long ? html`<p class="cnt">긴 줄은 칸이 모자라면 다음 줄·다음 쪽으로 이어져요</p>` : null}`; })()}`
-            : html`<label class="f">개수 <b class="qv">${N}</b> <span class="muted">${pool.items.length}개 중에서 뽑아요</span></label><input type="range" min="1" max=${Math.min(30, pool.items.length || 1)} value=${N} onInput=${e => upMany({ count: +e.target.value, k: 0 })} />`}
+            : html`<label class="f">개수 <b class="qv">${N}</b> <span class="muted">${pool.items.length}개 중에서 뽑아요${filled.add ? ` · 쪽 아래 빈칸에 ${filled.add}개 더` : ""}</span></label><input type="range" min="1" max=${Math.min(30, pool.items.length || 1)} value=${N} onInput=${e => upMany({ count: +e.target.value, k: 0 })} />`}
         </${Step}>
         <${Step} n=${3} title="연습장 모양" sub="칸 크기와 따라쓰기 횟수를 정합니다">
           <label class="f">${s.lang === "ko" ? "칸 크기" : "줄 크기"}</label><${Seg} value=${s.size} options=${[["l", "크게"], ["m", "보통"], ["s", "작게"]]} onChange=${v => up("size", v)} />
@@ -817,7 +878,7 @@ function App() {
         <p class="pv-meta"><b>연습장 ${no}</b> · ${total}쪽 · 같은 번호를 넣으면 같은 연습장이 다시 나와요</p>
         <div class="sheets" ref=${wrap}><div class="scaler" style=${{ transform: `scale(${scale})`, height: (total * (PAGE_H * 3.7795 + 16)) * scale + "px" }}>
           ${!ready ? html`<p class="loading">글꼴을 불러오는 중…</p>` : !items.length ? html`<p class="loading">${s.useCustom ? "연습할 글을 한 줄에 하나씩 넣어 주세요" : "글감이 없어요"}</p>`
-            : [...pages.map((p, i) => html`<${Page} blocks=${p} o=${o} n=${i + 1} total=${total} meta=${meta} />`), showAnswer ? html`<${Page} o=${o} n=${total} total=${total} meta=${meta} answer=${items} />` : null]}
+            : [...pages.map((p, i) => html`<${Page} blocks=${p} o=${o} n=${i + 1} total=${total} meta=${meta} />`), showAnswer ? html`<${Page} o=${o} n=${total} total=${total} meta=${meta} answer=${used} />` : null]}
         </div></div>
         <button class="btn accent w big" disabled=${!items.length} onClick=${() => window.print()}>${h(Icon, { name: "printer", size: 18 })} 인쇄 · PDF로 저장</button>
         <p class="priv">${h(Icon, { name: "info", size: 15, color: "#5c6259" })} 인쇄 창에서 <b>대상: PDF로 저장</b>을 고르면 파일로 받을 수 있어요. 여백은 <b>기본값</b>, 배율은 <b>100%</b>로 두세요.</p>

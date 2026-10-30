@@ -1072,6 +1072,13 @@ body.pc .tlist.v-list{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
 body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr))}
 .sgr .vt{display:grid;grid-auto-columns:1fr;grid-auto-flow:column}
 
+/* 10-31: 계획 · 다녀옴 보기(정렬 옆) */
+.tlbar .asr{flex-wrap:wrap;row-gap:8px}
+.tlbar .tstat{display:flex;align-items:flex-start;gap:10px;margin-left:14px}
+.tlbar .tstat .aot{width:auto}
+.tlbar .tstat .num{font-size:11.5px;opacity:.7;margin-left:2px}
+@media(max-width:600px){.tlbar .tstat{margin-left:0;flex-basis:100%}.tlbar .tstat .aot{width:48px}}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -2848,8 +2855,12 @@ async function saveTcats(L) { D.set.tcats = L; D.set.tcatsAt = Date.now(); await
 const tsortK = () => D.set.tsort === "place" ? "cat" : TSORTS[D.set.tsort] ? D.set.tsort : "near";
 function tripHay(t) { const a = [t.name, catOf(t), t.region]; (t.days || []).forEach(d => { a.push(d.title, d.hotel); d.items.forEach(it => a.push(it.title, it.place, it.memo, it.kind)); }); (t.notes || []).forEach(n => a.push(n.title)); return a.filter(Boolean).join(" ").toLowerCase(); }
 function tlState() { return S.tl || (S.tl = { q: "", cat: "" }); }
+/* 10-31 제이: 계획 · 다녀옴 보기 — 계획 = 아직 안 간 여행 + 여행 중, 다녀옴 = 끝난 여행 */
+const TSTATS = { all: "모두", plan: "계획", done: "다녀옴" };
+const tstatK = () => TSTATS[D.set.tstat] ? D.set.tstat : "all";
+const tstatOf = t => phase(t).k === "after" ? "done" : "plan";
 function tFiltered() { const A = tlState(), q = A.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  return D.items.filter(t => (!A.cat || catOf(t) === A.cat) && q.every(w => tripHay(t).includes(w))); }
+  const st = tstatK(); return D.items.filter(t => (!A.cat || catOf(t) === A.cat) && (st === "all" || tstatOf(t) === st) && q.every(w => tripHay(t).includes(w))); }
 function tSorted(L) { const k = tsortK(), C = tCats();
   const near = (a, b) => { const pa = phase(a), pb = phase(b), r = x => x.k === "on" ? 0 : x.k === "before" ? 1 : 2; return r(pa) - r(pb) || (r(pa) === 2 ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start)); };
   if (k === "date") return L.slice().sort((a, b) => b.start.localeCompare(a.start));
@@ -2857,14 +2868,15 @@ function tSorted(L) { const k = tsortK(), C = tCats();
   if (k === "cat") return L.slice().sort((a, b) => C.indexOf(catOf(a)) - C.indexOf(catOf(b)) || near(a, b));
   return L.slice().sort(near); }
 function tResHtml() {
-  const L = tSorted(tFiltered()), v = tview(); if (!L.length) return `<div class="empty sm"><p>${tlState().q ? "찾는 여행이 없어요." : "이 카테고리에 여행이 없어요."}</p></div>`;
+  const L = tSorted(tFiltered()), v = tview(); if (!L.length) return `<div class="empty sm"><p>${tlState().q ? "찾는 여행이 없어요." : tstatK() === "plan" ? "계획 중인 여행이 없어요." : tstatK() === "done" ? "다녀온 여행이 없어요." : "이 카테고리에 여행이 없어요."}</p></div>`;
   if (tsortK() === "cat" && !tlState().cat) { const G = []; L.forEach(t => { const c = catOf(t), g = G[G.length - 1]; if (g && g.c === c) g.L.push(t); else G.push({ c, L: [t] }); });
     return G.map(g => `<div class="tgh">${IC.folder}${esc(g.c)} <small class="num">${g.L.length}</small></div><div class="tlist v-${v}">${g.L.map(tripCard).join("")}</div>`).join(""); }
   return `<div class="tlist v-${v}">${L.map(tripCard).join("")}</div>`; }
 function tToolbar() { const A = tlState(), C = tCats(), n = c => D.items.filter(t => catOf(t) === c).length;
   return `<div class="tlbar"><div class="atop"><div class="srch in">${IC.find}<input id="tq" value="${esc(A.q)}" placeholder="여행 이름 · 일정 · 장소 · 메모로 찾기" autocomplete="off" enterkeyhint="search"></div></div>
     <div class="aopt"><span class="aot">카테고리</span><div class="chips"><button class="chip ${!A.cat ? "on" : ""}" data-tlcat="">전체 <small class="num">${D.items.length}</small></button>${C.map(c => `<button class="chip ${A.cat === c ? "on" : ""}" data-tlcat="${esc(c)}">${esc(c)} <small class="num">${n(c)}</small></button>`).join("")}<button class="chip add" data-sheet="tcats">${IC.pen} 고치기</button></div></div>
-    <div class="aopt asr"><span class="aot">정렬</span><div class="vt mini asort">${Object.entries(TSORTS).map(([k, nm]) => `<button class="${tsortK() === k ? "on" : ""}" data-tlsort="${k}">${nm}</button>`).join("")}</div></div>
+    <div class="aopt asr"><span class="aot">정렬</span><div class="vt mini asort">${Object.entries(TSORTS).map(([k, nm]) => `<button class="${tsortK() === k ? "on" : ""}" data-tlsort="${k}">${nm}</button>`).join("")}</div>
+      <div class="tstat"><span class="aot">보기</span><div class="vt mini asort">${Object.entries(TSTATS).map(([k, nm]) => `<button class="${tstatK() === k ? "on" : ""}" data-tlstat="${k}">${nm}${k === "all" ? "" : ` <small class="num">${D.items.filter(t => tstatOf(t) === k).length}</small>`}</button>`).join("")}</div></div></div>
     ${tviewBar()}</div>`; }
 function tcatSheet() { const C = tCats(), n = c => D.items.filter(t => catOf(t) === c).length;
   return `<b class="sht">${IC.folder} 카테고리 고치기</b><p class="hint">국내 · 해외 · 캠핑처럼 내 여행을 나눌 이름을 직접 만들어요. 카테고리를 정하지 않은 여행은 「어디로」(국내 · 해외)에 따라 들어가요.</p>
@@ -2892,7 +2904,7 @@ function showTips(auto) {
 function autoTips() { if (S.scr !== "list" || S.sheet || S._tipShown) return; S._tipShown = true; let n = 0; try { n = +sessionStorage.getItem("trip:tip") || 0; sessionStorage.setItem("trip:tip", "1"); } catch (e) {} if (!n && (D.set.tipN || 0) < 5) { D.set.tipN = (D.set.tipN || 0) + 1; setMeta("set", D.set).catch(() => {}); showTips(true); } }
 
 document.addEventListener("click", async e => {
-  const b = e.target.closest("[data-tips],[data-tlcat],[data-tlsort],[data-phv],[data-phshift],[data-phmk],[data-ecatp],[data-tcadd],[data-tcren],[data-tcdel],[data-tcmv]"); if (!b) return; const d = b.dataset, t = TR();
+  const b = e.target.closest("[data-tips],[data-tlcat],[data-tlsort],[data-tlstat],[data-phv],[data-phshift],[data-phmk],[data-ecatp],[data-tcadd],[data-tcren],[data-tcdel],[data-tcmv]"); if (!b) return; const d = b.dataset, t = TR();
   if (d.tips != null) return showTips(false);
   if (d.tlcat != null) { tlState().cat = d.tlcat; return render(); }
   if (d.ecatp != null && S.edit) { S.edit.cat = d.ecatp; S.edit._dirty = true; return render(); }
@@ -2903,6 +2915,7 @@ document.addEventListener("click", async e => {
     if (!confirm(`「${c}」 카테고리를 지울까요?${L.length ? ` 이 카테고리의 여행 ${L.length}개는 「어디로」에 따라 국내 · 해외로 옮겨요.` : ""}`)) return;
     for (const x of L) { x.cat = ""; await saveItem(x); } await saveTcats(tCats().filter(x => x !== c)); if (tlState().cat === c) tlState().cat = ""; return render(); }
   if (d.tcmv) { const [i, dv] = d.tcmv.split(":").map(Number), C = tCats(), j = i + dv; if (j < 0 || j >= C.length) return; [C[i], C[j]] = [C[j], C[i]]; await saveTcats(C); return render(); }
+  if (d.tlstat) { D.set.tstat = d.tlstat; await setMeta("set", D.set).catch(() => {}); return render(); }
   if (d.tlsort) { D.set.tsort = d.tlsort; await setMeta("set", D.set).catch(() => {}); return render(); }
   if (d.phv) { S.phv = d.phv; return render(); }
   if (d.phshift && t) { t.off = Math.max(-24, Math.min(24, (t.off || 0) + +d.phshift)); await saveTrip(t); render(); return toast(`사진 시각을 ${+d.phshift > 0 ? "+" : "−"}${Math.abs(+d.phshift)}시간 옮겼어요 — 「시계 보정」에서 되돌릴 수 있어요.`); }

@@ -232,8 +232,9 @@ function openTool(name) {
   const t = visibleTools().find(x => x.name === name); if (!t || t.wait) return;
   used(name);
   const url = t.how === "app" ? t.app : t.link;
-  const w = window.open(url, "_blank", "noopener");
-  if (!w && t.how !== "app") location.href = url;
+  /* 키트는 그대로 두고 새 창으로만 연다(10-30 제이). "noopener"를 넘기면 window.open이 늘 null을 돌려줘 예전엔 키트가 그 주소로 넘어갔음 */
+  const w = window.open(url, "_blank");
+  if (w) { try { w.opener = null; } catch (e) {} } else toast("새 창이 막혔어요 — 주소창 오른쪽의 팝업 허용을 눌러 주세요");
   render();
 }
 async function load() {

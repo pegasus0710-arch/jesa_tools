@@ -1012,12 +1012,12 @@ body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div{box-shadow:var(--up);border-rad
 .btn.go.w:hover,.btn.w.nv:hover{box-shadow:var(--up3s),inset 0 0 0 1.5px var(--navy,#195455)!important}
 .btn.go.w:active,.btn.w.nv:active{box-shadow:var(--press3)!important}
 /* 눈금자 구슬: 지금 위치를 알려 주듯 살짝 반짝임(10-30 제이) — 퍼지는 고리 + 은은한 빛, 움직임 줄이기 설정이면 멈춤 */
-.ruler .bead{animation:bjBeadGlow 2.6s ease-in-out infinite}
-.ruler .bead::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
+.ruler .bead,.ruler-dot,.ruler .rdot{animation:bjBeadGlow 2.6s ease-in-out infinite}
+.ruler .bead::after,.ruler-dot::after,.ruler .rdot::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
 @keyframes bjBeadGlow{0%,100%{filter:brightness(1);box-shadow:2px 3px 5px rgba(120,70,20,.35),inset 2px 2px 3px rgba(255,255,255,.45)}50%{filter:brightness(1.18);box-shadow:0 0 10px 3px rgba(255,150,50,.55),inset 2px 2px 3px rgba(255,255,255,.6)}}
 @keyframes bjBeadRing{0%{transform:scale(1);opacity:.75}70%,100%{transform:scale(2.3);opacity:0}}
-@media (prefers-reduced-motion:reduce){.ruler .bead::after{animation-duration:4s}.ruler .bead{animation-duration:4s}}
-@media print{.ruler .bead,.ruler .bead::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.ruler .bead::after,.ruler-dot::after,.ruler .rdot::after{animation-duration:4s}.ruler .bead,.ruler-dot,.ruler .rdot{animation-duration:4s}}
+@media print{.ruler .bead,.ruler .bead::after,.ruler-dot,.ruler-dot::after,.ruler .rdot,.ruler .rdot::after{animation:none}}
 /* 고르기 칸(select) · 체크 — 입력칸과 같이 카드 바탕 + 선, 체크는 앱 색 */
 select,.t-cal select,select.inp{background-color:var(--card)!important;box-shadow:inset 0 0 0 1px var(--hair2)!important;border-radius:var(--r)!important}
 select:focus{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.12)!important;outline:0}
@@ -1027,6 +1027,8 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 /* 10-30 밤: 떠 있는 「+」 단추 — 주황 단추 금지(3.1 2-1) → 앱 색 */
 .fab{background:var(--navy,#195455);color:#fff;box-shadow:0 1px 2px rgba(15,55,56,.25),0 8px 20px -6px rgba(15,55,56,.45)}
 .fab:hover{background:#12403f}
+/* 10-30 밤: 머리 막대 안 눈금자(라벨 · 김치)도 3.1 6번 — 홈 · 바탕 상자 없이 */
+.bar-in .ruler::before{display:none!important}
 
 </style></head><body><div id="root"></div>
 <script>

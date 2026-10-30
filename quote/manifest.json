@@ -1,0 +1,31 @@
+{
+ "id": "/jesa_tools/quote/",
+ "name": "견적서 발행기 | Blog J",
+ "short_name": "견적서 발행기",
+ "description": "견적서 · 거래명세서 · 청구서를 칸만 채워 PDF · 인쇄 · 엑셀로 — 내 PC 폴더에 저장, Blog J 무료 도구",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f0e8db",
+ "theme_color": "#f0e8db",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512-mask.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

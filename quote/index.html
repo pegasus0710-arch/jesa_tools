@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>견적서 발행기 | Blog J</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#ece6da" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<script>
+/* PC 설치형(10-30 다운로드형 → 설치형) — 휴대폰 · 태블릿은 「PC용」 안내 */
+(function(){var ua=navigator.userAgent,m=/Android|iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+if(m){document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML='<div style="font-family:sans-serif;max-width:420px;margin:60px auto;padding:24px;background:#f1ebe1;border-radius:18px;color:#1f2125;line-height:1.7"><b style="font-size:19px">견적서 발행기는 PC용이에요</b><p style="color:#5b5547">PC 크롬 · 엣지에서 이 주소를 열어 설치해 주세요. 휴대폰용은 준비 중이에요.</p><a href="https://luvbong.tistory.com" style="color:#0A1931;font-weight:700">Blog J 블로그로 가기 ›</a></div>';});}
+if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(function(){});
+/* 설치 단추 — 설치 안 한 PC 브라우저에서 늘 오른쪽 아래(설치한 앱 창에서는 안 보임).
+   브라우저 설치 창을 띄울 수 있으면 바로, 아니면(이미 설치 · 지원 안 함) 방법 안내. ?install=1 이면 안내를 먼저 펼침 */
+var st=matchMedia("(display-mode: standalone)").matches||navigator.standalone,bip=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();bip=e;});
+function guide(){var g=document.getElementById("bjinstg");if(g){g.style.display=g.style.display==="none"?"block":"none";return;}
+g=document.createElement("div");g.id="bjinstg";
+g.style.cssText="position:fixed;right:18px;bottom:74px;z-index:9999;width:330px;max-width:calc(100vw - 36px);box-sizing:border-box;background:#f4efe6;color:#1f2125;border-radius:16px;padding:16px 18px;font:14px/1.65 sans-serif;box-shadow:4px 8px 22px rgba(40,44,60,.3)";
+g.innerHTML='<b style="font-size:15px">PC에 앱으로 설치하기</b><div style="color:#5b5547;margin-top:6px">크롬 · 엣지 <b style="color:#1f2125">주소창 오른쪽 설치 아이콘</b>(모니터 + 아래 화살표)을 누르거나,<br>오른쪽 위 <b style="color:#1f2125">⋮ 메뉴 → 전송, 저장 및 공유 → 「견적서 발행기」 설치</b>를 누르세요.<br>이미 설치했다면 바탕화면 · 시작 메뉴의 <b style="color:#1f2125">견적서 발행기</b>로 여세요.</div><a href="https://luvbong.tistory.com/790" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#0A1931;font-weight:700">설치 · 삭제 방법 자세히 ›</a>';
+document.body.appendChild(g);}
+document.addEventListener("DOMContentLoaded",function(){if(st||m)return;
+var x=document.createElement("button");x.id="bjinst";x.type="button";x.title="PC에 앱으로 설치 — 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요";
+x.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span>PC에 앱으로 설치</span><i aria-label="닫기">×</i>';
+x.style.cssText="position:fixed;right:18px;bottom:18px;z-index:9999;display:flex;align-items:center;gap:8px;border:0;border-radius:14px;padding:11px 12px 11px 15px;background:#0A1931;color:#fff;font:700 14px/1 sans-serif;box-shadow:4px 6px 14px rgba(40,44,60,.35);cursor:pointer";
+x.querySelector("i").style.cssText="font-style:normal;font-size:18px;opacity:.7;margin-left:4px;padding:0 4px";
+x.addEventListener("click",function(ev){if(ev.target.tagName==="I"){x.style.display="none";var g=document.getElementById("bjinstg");if(g)g.style.display="none";return;}
+ if(bip){bip.prompt();bip.userChoice.then(function(r){if(r&&r.outcome==="accepted")x.style.display="none";bip=null;});}else guide();});
+document.body.appendChild(x);
+/* 10-28 제이: 오른쪽 아래 단추는 잘 안 보임 → 설치 안 하고 쓸 때는 맨 위 안내 띠(닫으면 이 브라우저에서는 오른쪽 아래 단추만) */
+var off=false;try{off=localStorage.getItem("bjquote:instbar")==="off";}catch(e){}
+if(!off){x.style.display="none";var bar=document.createElement("div");bar.id="bjinstbar";
+bar.style.cssText="position:relative;z-index:9998;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px max(16px,calc((100vw - 1320px)/2));background:#0A1931;color:#fff;font:600 14.5px/1.5 sans-serif";
+bar.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e08a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span style="flex:1;min-width:220px">견적서 발행기를 <b style="color:#ffffff">PC에 앱으로 설치</b>하면 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요. 가입 없이 무료이고, 인터넷이 되면 늘 새 버전으로 열려요. 전에 내려받은 파일로 쓰던 자료는 「저장할 곳 고르기」에서 그때 고른 폴더(또는 「견적서 발행기」 폴더)를 다시 고르면 그대로 이어져요.</span><button type="button" data-a="i" style="border:0;border-radius:10px;padding:9px 16px;background:#fcf9f4;color:#1f2125;font:800 14px/1 sans-serif;cursor:pointer">PC에 앱으로 설치</button><button type="button" data-a="x" aria-label="안내 닫기" title="닫기 — 다음에는 오른쪽 아래 단추로" style="border:0;background:transparent;color:#fff;opacity:.75;font:400 22px/1 sans-serif;cursor:pointer;padding:2px 6px">×</button>';
+bar.addEventListener("click",function(ev){var b=ev.target.closest("button");if(!b)return;
+ if(b.getAttribute("data-a")==="x"){bar.remove();try{localStorage.setItem("bjquote:instbar","off");}catch(e){}x.style.display="flex";return;}
+ if(bip){bip.prompt();bip.userChoice.then(function(r){if(r&&r.outcome==="accepted")bar.remove();bip=null;});}else{guide();var g=document.getElementById("bjinstg");if(g){g.style.top="64px";g.style.bottom="auto";}}});
+document.body.insertBefore(bar,document.body.firstChild);}
+if(/[?&]install=1/.test(location.search)){if(bip)x.click();else setTimeout(function(){if(bip)x.click();else guide();},1200);}});
+window.addEventListener("appinstalled",function(){["bjinst","bjinstg","bjinstbar"].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display="none";});});})();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%234f56d8%27/%3E%3Cg fill=%27none%27 stroke=%27%23fff%27 stroke-width=%275%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M18 10h20l10 10v34H18z%27/%3E%3Cpath d=%27M25 30h16M25 39h16M25 48h10%27/%3E%3C/g%3E%3Ccircle cx=%2752%27 cy=%2752%27 r=%277%27 fill=%27%23e08a3e%27 stroke=%27%234f56d8%27 stroke-width=%273%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<style>
+:root{--pan:#ece6da;--up:#f1ebe1;--up2:#f4efe6;--in:#e7e0d2;--ink:#1f2125;--t2:#5b5547;--t3:#6f6857;--navy:#20263a;--amber:#e08a3e;--red:#c23a2b;--fin:#4f56d8;--line:#ddd4c4;
+--sh-up:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);--sh-s:3px 4px 9px rgba(160,140,108,.38),-3px -3px 8px rgba(255,255,255,.9);--sh-in:inset 3px 3px 8px rgba(160,140,108,.4),inset -3px -3px 8px rgba(255,255,255,.85);--sh-pr:inset 3px 3px 7px rgba(150,128,95,.5),inset -2px -2px 5px rgba(255,255,255,.75)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--pan);color:var(--ink);font:15px/1.55 'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+#root{padding:12px 16px 14px}
+.num{font-variant-numeric:tabular-nums}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--up);border-radius:16px;padding:10px 14px;box-shadow:var(--sh-up)}
+.badge{width:40px;height:40px;border-radius:11px;background:var(--fin);display:grid;place-items:center;flex-shrink:0;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),3px 5px 10px rgba(60,50,35,.28)}
+.ttl{display:flex;flex-direction:column;line-height:1.25}
+.ttl small{font-size:12.5px;font-weight:700;color:var(--fin)}
+.ttl b{font-size:19px;font-weight:700;letter-spacing:-.4px}
+.tabs{display:flex;gap:4px;padding:4px;border-radius:12px;background:var(--in);box-shadow:var(--sh-in);margin-left:auto;flex-wrap:wrap}
+.tabs button{padding:7px 13px;border-radius:9px;font-weight:600;color:var(--t2);font-size:14.5px;white-space:nowrap}
+.tabs button.on{background:var(--up2);color:var(--ink);box-shadow:2px 3px 6px rgba(160,140,108,.4),inset 0 0 0 2px var(--navy)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 14px;border-radius:11px;background:var(--up2);box-shadow:var(--sh-s);font-weight:600;font-size:14px;white-space:nowrap;transition:box-shadow .15s,transform .15s}
+.btn:hover{transform:translateY(1px);box-shadow:var(--sh-s),0 0 0 2px var(--navy)}
+.btn:active{transform:translateY(2px);box-shadow:var(--sh-pr)}
+.btn.p{background:var(--navy);color:#fff;box-shadow:3px 4px 9px rgba(32,38,58,.32)}
+.btn.s{height:34px;padding:0 11px;font-size:13.5px}
+.btn.red{color:var(--red)}
+.lk{font-weight:600;font-size:13.5px;color:var(--t2);padding:3px 2px}.lk:hover{color:var(--navy);text-decoration:underline}.lk.red{color:var(--red)}
+.panel{background:var(--up);border-radius:16px;box-shadow:var(--sh-up);padding:16px}
+.muted{color:var(--t3);font-size:13.5px}
+.lbl{font-size:13px;font-weight:600;color:var(--t3);margin:0 0 5px;display:block}
+input[type=text],input[type=number],input[type=date],input[type=search],input[type=tel],input[type=email],select,textarea{background:var(--in);border:0;border-radius:10px;box-shadow:var(--sh-in);padding:8px 11px;outline:0;width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{box-shadow:var(--sh-in),0 0 0 2px var(--navy)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.f{margin-bottom:10px;min-width:0}
+.seg{display:flex;gap:4px;padding:4px;border-radius:11px;background:var(--in);box-shadow:var(--sh-in)}
+.seg button{flex:1;height:34px;border-radius:8px;font-weight:600;color:var(--t2);font-size:14px;white-space:nowrap;padding:0 10px}
+.seg button.on{background:var(--up2);color:var(--ink);box-shadow:2px 3px 6px rgba(160,140,108,.4),inset 0 0 0 2px var(--navy)}
+h3.sec{margin:16px 0 8px;font-size:15.5px;font-weight:700;display:flex;align-items:center;gap:8px}
+h3.sec:first-child{margin-top:0}
+/* 작업대 */
+.work{display:grid;grid-template-columns:minmax(440px,560px) minmax(0,1fr);gap:14px;margin-top:12px;align-items:start}
+@media (max-width:1100px){.work{grid-template-columns:1fr}}
+.edit{max-height:calc(100vh - 110px);overflow:auto}
+@media (max-width:1100px){.edit{max-height:none}}
+.lines{width:100%;border-collapse:separate;border-spacing:0 4px;font-size:14px}
+.lines th{font-size:12.5px;font-weight:600;color:var(--t3);text-align:left;padding:0 4px}
+.lines td{padding:0 3px;vertical-align:middle}
+.lines input{padding:6px 7px;font-size:14px}
+.lines .amt{text-align:right;font-weight:600;white-space:nowrap;padding-right:4px}
+.lines .x{width:28px;height:28px;border-radius:7px;color:var(--t3);font-weight:700}
+.lines .x:hover{color:var(--red);background:var(--in)}
+.tot{display:grid;grid-template-columns:1fr auto;gap:4px 14px;background:var(--in);border-radius:12px;padding:10px 14px;box-shadow:var(--sh-in);margin-top:8px;font-size:14.5px}
+.tot b{text-align:right}
+.tot .big{font-size:17px;color:var(--navy)}
+.tot .han{grid-column:1/-1;font-size:13.5px;color:var(--t2);text-align:right}
+/* 교정대 + A4 */
+.stage{background:var(--in);border-radius:16px;box-shadow:var(--sh-in);padding:16px;position:sticky;top:10px;max-height:calc(100vh - 110px);overflow:auto}
+.stage .bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.paper{transform-origin:top left}
+.sheet{width:210mm;min-height:297mm;background:#fff;color:#111;padding:14mm 13mm;box-shadow:0 1px 3px rgba(0,0,0,.15),6px 10px 24px rgba(120,100,70,.22);font-family:'Malgun Gothic','Pretendard',sans-serif;font-size:10pt;line-height:1.45;position:relative;margin-bottom:12px}
+.sheet.half{min-height:148.5mm;height:148.5mm;padding:7mm 12mm;overflow:hidden}
+.sheet.half+.sheet.half{margin-top:0;border-top:1px dashed #999}
+.sheet.half.pend{margin-bottom:12px}.sheet.half.pend+.sheet.half{border-top:0}
+.sheet h1{text-align:center;font-size:24pt;letter-spacing:14pt;margin:0 0 8mm;font-weight:700}
+.sheet.half h1{font-size:17pt;letter-spacing:9pt;margin:0 0 3mm}
+.sheet .who{display:grid;grid-template-columns:1fr 1.15fr;gap:5mm;margin-bottom:5mm;align-items:start}
+.sheet table{width:100%;border-collapse:collapse}
+.sheet td,.sheet th{border:1px solid #444;padding:1.6mm 2mm;font-size:9.5pt;vertical-align:middle}
+.sheet th{background:#f1f1f1;font-weight:600;text-align:center;white-space:nowrap}
+.sheet.half td,.sheet.half th{padding:1mm 1.5mm;font-size:8.5pt}
+.sheet .r{text-align:right;font-variant-numeric:tabular-nums}
+.sheet .c{text-align:center}
+.sheet .sum{border:2px solid #222;padding:3mm 4mm;margin:0 0 4mm;display:flex;justify-content:space-between;align-items:center;font-size:12pt;font-weight:700}
+.sheet.half .sum{padding:1.5mm 3mm;margin:0 0 2mm;font-size:10pt}
+.sheet .sum small{font-size:9pt;font-weight:400}
+.sheet .stamp{position:absolute;width:17mm;height:17mm;object-fit:contain;opacity:.92;pointer-events:none}
+.sheet .sfoot{margin-top:4mm;font-size:9.5pt}
+.sheet .note{border:1px solid #444;padding:2.5mm 3mm;min-height:16mm;white-space:pre-wrap;font-size:9.5pt}
+.sheet .pgno{margin-left:3mm;color:#555}
+.sheet .tag{position:absolute;right:12mm;top:9mm;font-size:8.5pt;color:#555}
+.sheet .to{font-size:13pt;border-bottom:1px solid #222;padding-bottom:1mm;margin-bottom:2mm}
+.sheet .meta td{border:0;padding:.6mm 0;font-size:9.5pt}
+/* 목록 */
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{font-size:12.5px;font-weight:600;color:var(--t3);text-align:left;padding:6px 8px;border-bottom:2px solid var(--line)}
+.tbl td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr.clk{cursor:pointer}.tbl tr.clk:hover td{background:#efe9de}
+.wrapt{overflow-x:auto;background:var(--up2);border-radius:12px;box-shadow:var(--sh-s);padding:4px 8px}
+.chip{display:inline-block;padding:1px 8px;border-radius:6px;font-size:12.5px;font-weight:600;background:var(--in);color:var(--t2)}
+.chip.q{color:#4f56d8}.chip.s{color:#1f7f8f}.chip.b{color:#7a4b2a}
+/* 품목 고르기 · 분류 */
+.cats{display:flex;flex-direction:column;gap:3px;padding:6px;border-radius:12px;background:var(--in);box-shadow:var(--sh-in);align-self:start;max-height:60vh;overflow:auto}
+.cats button{display:flex;justify-content:space-between;gap:8px;text-align:left;padding:7px 10px;border-radius:8px;font-size:14px;font-weight:600;color:var(--t2);white-space:nowrap}
+.cats button:hover{color:var(--navy)}
+.cats button.on{background:var(--up2);color:var(--ink);box-shadow:2px 3px 6px rgba(160,140,108,.4),inset 0 0 0 2px var(--navy)}
+.cats .n{font-weight:500;color:var(--t3);font-variant-numeric:tabular-nums}
+.pk{display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px}
+.pk .lst{max-height:52vh;overflow:auto}
+.pk tr.sel td{background:#e9e3f3}
+.pk tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--navy)}
+.pk .q{width:64px;padding:4px 6px;text-align:right}
+.ibox{display:flex;align-items:center;gap:2px}
+.ibox input{flex:1;min-width:0}
+.ibox .pick{width:26px;height:30px;border-radius:7px;color:var(--t2);flex-shrink:0;display:grid;place-items:center}
+.ibox .pick:hover{color:var(--navy);background:var(--in)}
+.itl{display:grid;grid-template-columns:180px minmax(0,1fr);gap:12px;align-items:start}
+@media(max-width:680px){.pk,.itl{grid-template-columns:1fr}.cats{flex-direction:row;flex-wrap:wrap;max-height:none}.cats button{padding:6px 9px}}
+.empty{padding:36px 16px;text-align:center;color:var(--t3)}
+.gate{max-width:720px;margin:24px auto 0}
+.ov{position:fixed;inset:0;background:rgba(20,22,30,.55);z-index:70;display:grid;place-items:center;padding:20px}
+.dlg{background:var(--up);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);padding:20px;width:min(560px,100%);max-height:92vh;overflow:auto}
+.dlg h3{margin:0 0 12px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;font-size:14px;z-index:90;box-shadow:0 8px 20px rgba(0,0,0,.25);max-width:90vw}
+.foot{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--t3);margin-top:10px;padding:0 4px}
+.demo{display:inline-block;background:#fff3a3;color:var(--ink);font-weight:700;border-radius:6px;padding:0 7px;font-size:12px}
+.stampbox{display:flex;align-items:center;gap:12px}
+.stampbox .pv{width:72px;height:72px;border-radius:10px;background:#fff;display:grid;place-items:center;box-shadow:var(--sh-s);overflow:hidden}
+.stampbox .pv img{max-width:100%;max-height:100%}
+@media print{
+  @page{size:A4;margin:0}
+  html,body{background:#fff!important}
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block!important;position:static}
+  .sheet:last-child,.sheet.half.last{page-break-after:auto!important;break-after:auto!important}
+  .sheet.half.pend{page-break-after:always!important;break-after:page!important}
+  #printArea .paper{transform:none!important}
+  .sheet{box-shadow:none!important;margin:0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;page-break-after:always;break-after:page}
+  .sheet.half{page-break-after:auto;break-after:auto}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="printArea"></div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const pad=n=>String(n).padStart(2,'0');
+const ds=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>ds(new Date());
+const won=n=>(Math.round(+n||0)).toLocaleString('ko-KR');
+const numIn=v=>{const n=parseFloat(String(v).replace(/[^\d.\-]/g,''));return isFinite(n)?n:0;};
+const TYPES={quote:{name:'견적서',title:'견 적 서',chip:'q',pre:'견적'},stmt:{name:'거래명세서',title:'거 래 명 세 서',chip:'s',pre:'명세'},bill:{name:'청구서',title:'청 구 서',chip:'b',pre:'청구'}};
+
+/* 금액 → 한글 (일금 ○○원정) */
+function hangul(n){n=Math.round(Math.abs(+n||0));if(!n)return'영';const D=['','일','이','삼','사','오','육','칠','팔','구'],U=['','십','백','천'],B=['','만','억','조','경'];
+  let s='',g=0;while(n>0){const part=n%10000;if(part){let p='';const ds=String(part).padStart(4,'0');for(let i=0;i<4;i++){const d=+ds[i];if(d)p+=D[d]+U[3-i];}s=p+B[g]+s;}n=Math.floor(n/10000);g++;}return s;}
+const wonHan=n=>'일금 '+hangul(n)+' 원정';
+
+/* 저장: 내가 고른 폴더 */
+let db;
+function idb(){return new Promise((ok,no)=>{const r=indexedDB.open('bjquote',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error);});}
+const kv=(m,fn)=>new Promise((ok,no)=>{const t=db.transaction('kv',m);const r=fn(t.objectStore('kv'));t.oncomplete=()=>ok(r&&r.result);t.onerror=()=>no(t.error);});
+const kvGet=k=>kv('readonly',s=>s.get(k)),kvSet=(k,v)=>kv('readwrite',s=>s.put(v,k));
+const LS='bjquote:';const lget=(k,d)=>{try{const v=localStorage.getItem(LS+k);return v?JSON.parse(v):d;}catch(e){return d;}};const lset=(k,v)=>{try{localStorage.setItem(LS+k,JSON.stringify(v));}catch(e){}};
+const FILE='견적서발행기.json';
+const ST={root:null,name:'',
+  async write(n,t){const f=await this.root.getFileHandle(n,{create:true});const w=await f.createWritable();await w.write(t);await w.close();},
+  async read(n){try{const f=await this.root.getFileHandle(n);return await (await f.getFile()).text();}catch(e){return null;}}};
+async function pickFolder(){let h=await window.showDirectoryPicker({id:'bjquote',mode:'readwrite',startIn:'documents'});
+  let ours=false;try{await h.getFileHandle(FILE);ours=true;}catch(e){}
+  if(!ours)h=await h.getDirectoryHandle('견적서 발행기',{create:true});
+  ST.root=h;ST.name=h.name;await ST.write('견적서발행기_안내.txt','이 폴더는 Blog J 「견적서 발행기」가 내 정보 · 거래처 · 품목 · 발행한 문서를 저장하는 곳입니다.\r\n견적서발행기.json = 전부, 견적서발행기_어제.json = 하루 전 사본.\r\n폴더째 복사해 두면 그대로 백업이 됩니다.\r\n');await kvSet('dir',h);}
+async function permOk(h,ask){if(!h.queryPermission)return true;const o={mode:'readwrite'};if(await h.queryPermission(o)==='granted')return true;if(!ask)return false;return (await h.requestPermission(o))==='granted';}
+
+/* 상태 */
+const D={v:1,me:{},clients:[],items:[],docs:[],set:{vat:'sep',valid:30,copies:2}};
+const S={tab:'edit',cur:null,q:'',ftype:'all',fy:'',fm:'',zoom:lget('zoom',0)};
+let saveT=null;function save(){clearTimeout(saveT);saveT=setTimeout(flush,400);}
+async function flush(){clearTimeout(saveT);saveT=null;if(!ST.root)return;try{const day=lget('bakday','');if(day!==today()){const o=await ST.read(FILE);if(o)await ST.write('견적서발행기_어제.json',o);lset('bakday',today());}await ST.write(FILE,JSON.stringify(D,null,1));}catch(e){toast('저장하지 못했어요 — 폴더 권한을 확인해 주세요.');}}
+
+/* 계산 */
+function calc(doc){const mode=doc.vat||'sep';let supply=0,tax=0;const rows=(doc.lines||[]).map(l=>{const amt=Math.round(numIn(l.qty)*numIn(l.price));let sp,tx;
+  if(mode==='inc'){sp=Math.round(amt/1.1);tx=amt-sp;}else if(mode==='none'){sp=amt;tx=0;}else{sp=amt;tx=Math.floor(amt*0.1);}supply+=sp;tax+=tx;return {sp,tx};});
+  return {rows,supply,tax,total:supply+tax};}
+function nextNo(type,date){const pre=date.replace(/-/g,'').slice(2);const k=TYPES[type].pre+' '+pre+'-';let n=0;D.docs.forEach(d=>{if(d.type===type&&d.no&&d.no.startsWith(k)){const x=+d.no.slice(k.length);if(x>n)n=x;}});return k+pad(n+1);}
+function newDoc(type,from){const date=today();const d={id:rid('d'),type,no:nextNo(type,date),date,clientId:from?from.clientId:'',client:from?Object.assign({},from.client):{},lines:from?from.lines.map(l=>Object.assign({},l)):[{name:'',spec:'',qty:1,unit:'',price:0}],vat:from?from.vat:(D.set.vat||'sep'),valid:D.set.valid||30,due:'',note:from?from.note:'',from:from?from.id:'',created:Date.now(),updated:Date.now(),copies:D.set.copies||2};D.docs.unshift(d);return d;}
+const isBlank=d=>!d.clientId&&!(d.client&&d.client.name)&&!(d.lines||[]).some(l=>l.name||numIn(l.price));
+
+/* 그리기 */
+function render(){const r=$('#root');
+  r.innerHTML=`<header class="top"><span class="badge">${ICON}</span><div class="ttl"><small>Blog J 무료 도구 · 내 PC</small><b>견적서 발행기</b></div>
+  <nav class="tabs">${[['edit','문서 작성'],['list','발행 목록'],['clients','거래처'],['items','품목'],['me','내 정보'],['set','설정 · 백업']].map(([k,l])=>`<button data-tab="${k}" class="${S.tab===k?'on':''}">${l}</button>`).join('')}</nav></header>
+  <div id="main"></div>
+  <div class="foot"><span>문서 <b class="num">${D.docs.filter(d=>!isBlank(d)).length}</b>개 · 거래처 <b class="num">${D.clients.length}</b> · 품목 <b class="num">${D.items.length}</b></span><span>저장 폴더: <b>${esc(ST.name)}</b> — 이 PC 폴더에만 저장돼요</span><span style="flex:1"></span><span>견적서 발행기 v1.0 · Blog J <span class="muted" title="만든 때">2026.10.21</span></span></div>`;
+  r.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanup();S.tab=b.dataset.tab;render();});
+  ({edit:renderEdit,list:renderList,clients:renderClients,items:renderItems,me:renderMe,set:renderSet})[S.tab]();}
+const ICON='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M10 11h5M10 15h5M10 19h3"/></svg>';
+function cleanup(){if(S.cur&&isBlank(S.cur)){D.docs=D.docs.filter(d=>d!==S.cur);S.cur=null;save();}}
+
+/* ── 문서 작성 ── */
+function renderEdit(){
+  if(!S.cur||!D.docs.includes(S.cur)){S.cur=D.docs.find(d=>isBlank(d))||newDoc('quote');}
+  const d=S.cur;const T=TYPES[d.type];const meOk=!!(D.me&&D.me.name);
+  $('#main').innerHTML=`<div class="work"><section class="panel edit" id="ed"></section><section class="stage"><div class="bar"><b style="font-size:14px">미리보기 — A4</b><span class="muted" id="pgInfo"></span><span style="flex:1"></span>
+    <label class="muted row" style="gap:6px">크기<input type="range" id="zoom" min="0" max="3" step="1" value="${S.zoom}" style="width:90px;accent-color:#20263a"></label>
+    <button class="btn s" id="pXl">엑셀로 저장</button><button class="btn s" id="pPrint">인쇄 · PDF로 저장</button></div><div id="pv"></div>${meOk?'':'<p class="muted" style="margin:8px 0 0">공급자 칸이 비어 있어요 — 「내 정보」에 상호 · 사업자번호를 먼저 넣으세요.</p>'}</section></div>`;
+  drawEditor();drawPreview();
+  $('#zoom').oninput=e=>{S.zoom=+e.target.value;lset('zoom',S.zoom);fitPreview();};
+  $('#pPrint').onclick=doPrint;$('#pXl').onclick=()=>docXlsx();
+}
+function drawEditor(){const d=S.cur;const E=$('#ed');const c=calc(d);
+  const cl=D.clients.find(x=>x.id===d.clientId);
+  E.innerHTML=`<div class="row" style="margin-bottom:12px"><div class="seg" style="flex:1">${Object.entries(TYPES).map(([k,t])=>`<button data-ty="${k}" class="${d.type===k?'on':''}">${t.name}</button>`).join('')}</div></div>
+   <div class="g3"><div class="f"><span class="lbl">번호</span><input type="text" id="eNo" value="${esc(d.no)}"></div><div class="f"><span class="lbl">${d.type==='quote'?'견적일':d.type==='bill'?'청구일':'작성일'}</span><input type="date" id="eDate" value="${esc(d.date)}"></div>
+   ${d.type==='quote'?`<div class="f"><span class="lbl">유효기간(일)</span><input type="number" id="eValid" min="0" value="${esc(d.valid)}"></div>`:d.type==='bill'?`<div class="f"><span class="lbl">결제 기한</span><input type="date" id="eDue" value="${esc(d.due||'')}"></div>`:`<div class="f"><span class="lbl">출력</span><select id="eCopies"><option value="2" ${d.copies==2?'selected':''}>A4 한 장에 2부</option><option value="1" ${d.copies==1?'selected':''}>A4 한 장에 1부</option></select></div>`}</div>
+   <h3 class="sec">받는 곳 (거래처)</h3>
+   <div class="row" style="flex-wrap:nowrap"><select id="eCl" style="flex:1"><option value="">— 거래처 고르기 —</option>${D.clients.map(x=>`<option value="${x.id}" ${x.id===d.clientId?'selected':''}>${esc(x.name)}</option>`).join('')}</select><button class="btn s" id="eClNew">+ 새 거래처</button></div>
+   ${d.clientId?'':`<div class="g2" style="margin-top:8px"><div class="f"><span class="lbl">상호(직접 입력)</span><input type="text" id="eClName" value="${esc(d.client.name||'')}" placeholder="거래처를 고르지 않고 이번만"></div><div class="f"><span class="lbl">담당자</span><input type="text" id="eClMgr" value="${esc(d.client.manager||'')}"></div></div>`}
+   ${cl?`<p class="muted" style="margin:6px 0 0">${esc([cl.bizno,cl.ceo&&('대표 '+cl.ceo),cl.tel].filter(Boolean).join(' · '))}</p>`:''}
+   <h3 class="sec">품목 <span class="muted" style="font-weight:400">— 이름을 치거나, 「목록에서 고르기」로 여러 개를 한 번에</span></h3>
+   <table class="lines"><thead><tr><th style="width:34%">품목</th><th style="width:15%">규격</th><th style="width:11%">수량</th><th style="width:10%">단위</th><th style="width:16%">단가</th><th style="text-align:right">금액</th><th></th></tr></thead><tbody id="lb">${d.lines.map((l,i)=>lineRow(l,i,c.rows[i])).join('')}</tbody></table>
+   <datalist id="itemList">${D.items.map(x=>`<option value="${esc(x.name)}">${esc([x.cat&&('['+x.cat+']'),x.spec,x.unit,won(x.price)+'원'].filter(Boolean).join(' · '))}</option>`).join('')}</datalist>
+   <div class="row" style="margin-top:6px"><button class="btn s" id="ePick">목록에서 고르기</button><button class="btn s" id="eAdd">+ 줄 추가</button><button class="btn s" id="ePaste">엑셀에서 붙여넣기</button></div>
+   <div class="f" style="margin-top:12px"><span class="lbl">부가세</span><div class="seg" id="eVat">${[['sep','별도 (단가 + 10%)'],['inc','포함 (단가에 들어 있음)'],['none','없음 (면세 · 간이)']].map(([k,l])=>`<button data-vat="${k}" class="${d.vat===k?'on':''}">${l}</button>`).join('')}</div></div>
+   <div class="tot" id="eTot">${totHtml(c)}</div>
+   <div class="f" style="margin-top:12px"><span class="lbl">비고 · 특기사항</span><textarea id="eNote" rows="3" placeholder="예: 납기 계약 후 7일 · 설치비 별도 · 운송비 포함">${esc(d.note||'')}</textarea></div>
+   <div class="row" style="margin-top:6px;justify-content:space-between"><span class="muted" id="eSaved">${isBlank(d)?'내용을 넣으면 저절로 저장돼요':'저장됨'}</span><span class="row">
+     ${d.type==='quote'?`<button class="btn s" data-conv="stmt">거래명세서로</button><button class="btn s" data-conv="bill">청구서로</button>`:d.type==='stmt'?`<button class="btn s" data-conv="bill">청구서로</button>`:''}
+     <button class="btn s" id="eCopy">복사해서 새로</button><button class="btn p s" id="eNew">+ 새 문서</button></span></div>
+   ${d.from?`<p class="muted" style="margin:10px 0 0">「${esc((D.docs.find(x=>x.id===d.from)||{}).no||'')}」에서 바꿔 만든 문서예요.</p>`:''}`;
+  bindEditor();}
+function lineRow(l,i,r){return `<tr data-i="${i}"><td><div class="ibox"><input type="text" data-k="name" list="itemList" value="${esc(l.name)}" aria-label="품목"><button class="pick" data-pick="${i}" title="목록에서 골라 이 줄 바꾸기" aria-label="목록에서 고르기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button></div></td><td><input type="text" data-k="spec" value="${esc(l.spec)}" aria-label="규격"></td><td><input type="text" inputmode="decimal" data-k="qty" value="${esc(l.qty)}" aria-label="수량" style="text-align:right"></td><td><input type="text" data-k="unit" value="${esc(l.unit)}" aria-label="단위"></td><td><input type="text" inputmode="numeric" data-k="price" value="${l.price?won(l.price):''}" aria-label="단가" style="text-align:right"></td><td class="amt num" data-amt>${won(Math.round(numIn(l.qty)*numIn(l.price)))}</td><td><button class="x" data-del="${i}" aria-label="이 줄 지우기">×</button></td></tr>`;}
+function totHtml(c){return `<span>공급가액</span><b class="num">${won(c.supply)}</b><span>세액</span><b class="num">${won(c.tax)}</b><span style="font-weight:700">합계</span><b class="num big">${won(c.total)} 원</b><span class="han">${wonHan(c.total)}</span>`;}
+function touch(){const d=S.cur;d.updated=Date.now();save();const s=$('#eSaved');if(s)s.textContent='저장됨';}
+function refresh(){const c=calc(S.cur);const t=$('#eTot');if(t)t.innerHTML=totHtml(c);document.querySelectorAll('#lb tr').forEach((tr,i)=>{const l=S.cur.lines[i];const a=tr.querySelector('[data-amt]');if(a&&l)a.textContent=won(Math.round(numIn(l.qty)*numIn(l.price)));});drawPreview();}
+function bindEditor(){const d=S.cur;
+  document.querySelectorAll('[data-ty]').forEach(b=>b.onclick=()=>{if(d.type===b.dataset.ty)return;d.type=b.dataset.ty;d.no=nextNo(d.type,d.date);touch();drawEditor();drawPreview();});
+  $('#eNo').oninput=e=>{d.no=e.target.value;touch();drawPreview();};
+  $('#eDate').onchange=e=>{d.date=e.target.value||today();touch();drawPreview();};
+  if($('#eValid'))$('#eValid').oninput=e=>{d.valid=+e.target.value||0;touch();drawPreview();};
+  if($('#eDue'))$('#eDue').onchange=e=>{d.due=e.target.value;touch();drawPreview();};
+  if($('#eCopies'))$('#eCopies').onchange=e=>{d.copies=+e.target.value;D.set.copies=d.copies;touch();drawPreview();};
+  $('#eCl').onchange=e=>{d.clientId=e.target.value;const x=D.clients.find(z=>z.id===d.clientId);d.client=x?Object.assign({},x):{};touch();drawEditor();drawPreview();};
+  $('#eClNew').onclick=()=>clientDlg(null,x=>{d.clientId=x.id;d.client=Object.assign({},x);touch();drawEditor();drawPreview();});
+  if($('#eClName'))$('#eClName').oninput=e=>{d.client.name=e.target.value;touch();drawPreview();};
+  if($('#eClMgr'))$('#eClMgr').oninput=e=>{d.client.manager=e.target.value;touch();drawPreview();};
+  document.querySelectorAll('#lb input').forEach(inp=>{const i=+inp.closest('tr').dataset.i,k=inp.dataset.k;
+    inp.oninput=()=>{const l=d.lines[i];if(k==='price'){l.price=numIn(inp.value);}else if(k==='qty'){l.qty=inp.value;}else l[k]=inp.value;touch();refresh();};
+    if(k==='price')inp.onblur=()=>{inp.value=d.lines[i].price?won(d.lines[i].price):'';};
+    if(k==='name')inp.onchange=()=>{const it=D.items.find(x=>x.name===inp.value);if(it){const l=d.lines[i];l.spec=it.spec||'';l.unit=it.unit||'';l.price=+it.price||0;if(!numIn(l.qty))l.qty=1;touch();drawEditor();drawPreview();const n=document.querySelector(`#lb tr[data-i="${i}"] [data-k="qty"]`);if(n){n.focus();n.select();}}};
+    inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();const tr=inp.closest('tr');const nx=tr.nextElementSibling;if(nx){nx.querySelector(`[data-k="${k}"]`).focus();}else if(k==='price'||k==='name'){d.lines.push({name:'',spec:'',qty:1,unit:'',price:0});touch();drawEditor();drawPreview();const r=document.querySelector(`#lb tr:last-child [data-k="name"]`);if(r)r.focus();}}};});
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{d.lines.splice(+b.dataset.del,1);if(!d.lines.length)d.lines.push({name:'',spec:'',qty:1,unit:'',price:0});touch();drawEditor();drawPreview();});
+  const itLine=(it,q)=>({name:it.name,spec:it.spec||'',qty:String(q||1),unit:it.unit||'',price:+it.price||0});
+  $('#ePick').onclick=()=>pickDlg(false,sel=>{d.lines=d.lines.filter(l=>l.name||numIn(l.price));sel.forEach(([it,q])=>d.lines.push(itLine(it,q)));if(!d.lines.length)d.lines.push({name:'',spec:'',qty:1,unit:'',price:0});touch();drawEditor();drawPreview();toast(sel.length+'개 품목을 넣었어요.');});
+  document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const i=+b.dataset.pick;pickDlg(true,sel=>{const [it]=sel[0];const q=numIn(d.lines[i].qty)||1;d.lines[i]=itLine(it,q);touch();drawEditor();drawPreview();const n=document.querySelector(`#lb tr[data-i="${i}"] [data-k="qty"]`);if(n){n.focus();n.select();}});});
+  $('#eAdd').onclick=()=>{d.lines.push({name:'',spec:'',qty:1,unit:'',price:0});touch();drawEditor();drawPreview();const r=document.querySelector('#lb tr:last-child [data-k="name"]');if(r)r.focus();};
+  $('#ePaste').onclick=()=>pasteDlg(rows=>{const blank=d.lines.length===1&&!d.lines[0].name&&!numIn(d.lines[0].price);if(blank)d.lines=[];rows.forEach(r=>d.lines.push(r));touch();drawEditor();drawPreview();toast(rows.length+'줄을 넣었어요.');});
+  document.querySelectorAll('[data-vat]').forEach(b=>b.onclick=()=>{d.vat=b.dataset.vat;D.set.vat=d.vat;touch();drawEditor();drawPreview();});
+  $('#eNote').oninput=e=>{d.note=e.target.value;touch();drawPreview();};
+  document.querySelectorAll('[data-conv]').forEach(b=>b.onclick=()=>{const n=newDoc(b.dataset.conv,d);S.cur=n;save();render();toast(TYPES[n.type].name+'로 바꿔 만들었어요 — 번호 '+n.no);});
+  $('#eCopy').onclick=()=>{const n=newDoc(d.type,d);n.from='';S.cur=n;save();render();toast('복사해서 새로 만들었어요 — 번호 '+n.no);};
+  $('#eNew').onclick=()=>{cleanup();S.cur=newDoc(d.type);save();render();};
+}
+
+/* ── A4 문서 ── */
+function supplierBox(me,label){return `<table><tr><th rowspan="4" style="width:7mm;padding:1mm;line-height:1.25">${label.split('').join('<br>')}</th><th style="width:20mm">등록번호</th><td colspan="3"><b style="letter-spacing:.5pt">${esc(me.bizno||'')}</b></td></tr>
+ <tr><th>상호</th><td>${esc(me.name||'')}</td><th style="width:12mm">대표</th><td style="position:relative">${esc(me.ceo||'')} <span style="color:#888">(인)</span>${me.stamp?`<img class="stamp" src="${me.stamp}" alt="" style="width:${me.stampSize||17}mm;height:${me.stampSize||17}mm;right:-1mm;top:50%;transform:translateY(-50%)">`:''}</td></tr>
+ <tr><th>주소</th><td colspan="3">${esc(me.addr||'')}</td></tr>
+ <tr><th>업태 · 종목</th><td colspan="3">${esc([me.biztype,me.bizitem].filter(Boolean).join(' / '))}</td></tr></table>`;}
+function clientBox(cl,label){return `<table><tr><th rowspan="4" style="width:7mm;padding:1mm;line-height:1.25">${label.split('').join('<br>')}</th><th style="width:20mm">등록번호</th><td colspan="3">${esc(cl.bizno||'')}</td></tr>
+ <tr><th>상호</th><td>${esc(cl.name||'')}</td><th style="width:12mm">대표</th><td>${esc(cl.ceo||'')}</td></tr>
+ <tr><th>주소</th><td colspan="3">${esc(cl.addr||'')}</td></tr>
+ <tr><th>담당 · 연락처</th><td colspan="3">${esc([cl.manager,cl.tel].filter(Boolean).join(' · '))}</td></tr></table>`;}
+/* 품목 표 한 쪽 — P = [{l, i(원래 순서)}], start = 앞쪽까지 줄 수, fill = 채울 줄 수, last = 마지막 쪽 */
+function linesTable(d,c,P,start,fill,compact,last){const vat=d.vat!=='none';let h=`<table><thead><tr><th style="width:8mm">No</th><th>품목</th><th style="width:20mm">규격</th><th style="width:13mm">수량</th><th style="width:11mm">단위</th><th style="width:22mm">단가</th><th style="width:25mm">공급가액</th>${vat?'<th style="width:20mm">세액</th>':''}</tr></thead><tbody>`;
+  P.forEach(({l,i},k)=>{const r=c.rows[i];h+=`<tr><td class="c">${start+k+1}</td><td>${esc(l.name)}</td><td class="c">${esc(l.spec)}</td><td class="r">${esc(l.qty)}</td><td class="c">${esc(l.unit)}</td><td class="r">${won(l.price)}</td><td class="r">${won(r.sp)}</td>${vat?`<td class="r">${won(r.tx)}</td>`:''}</tr>`;});
+  for(let k=P.length;k<fill;k++)h+=`<tr><td class="c" style="color:#bbb">${compact?'':start+k+1}</td><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td>${vat?'<td></td>':''}</tr>`;
+  if(last)h+=`<tr><th colspan="6">합 계</th><td class="r"><b>${won(c.supply)}</b></td>${vat?`<td class="r"><b>${won(c.tax)}</b></td>`:''}</tr>`;
+  else{const sp=P.reduce((n,{i})=>n+c.rows[i].sp,0),tx=P.reduce((n,{i})=>n+c.rows[i].tx,0);h+=`<tr><th colspan="6" style="font-weight:600">이 쪽 소계 — 다음 쪽에 이어집니다</th><td class="r">${won(sp)}</td>${vat?`<td class="r">${won(tx)}</td>`:''}</tr>`;}
+  return h+'</tbody></table>';}
+/* 한 쪽에 들어가는 품목 줄 수 — 견적서 · 청구서 15 · 거래명세서 1부 15 · 2부(반쪽) 8 */
+const PER={full:15,half:8};
+function pagesOf(d,per){const L=d.lines.map((l,i)=>({l,i})).filter(({l})=>l.name||numIn(l.price));const P=[];for(let k=0;k<L.length;k+=per)P.push(L.slice(k,k+per));if(!P.length)P.push([]);return P;}
+function vatNote(d){return d.vat==='inc'?'부가세 포함':d.vat==='none'?'부가세 없음':'부가세 포함';}
+function sheetHtml(d){const me=D.me||{};const cl=d.clientId?(D.clients.find(x=>x.id===d.clientId)||d.client):d.client;const c=calc(d);const T=TYPES[d.type];
+  const dt=d.date?d.date.replace(/-/g,'. ')+'.':'';
+  const pgTag=(k,n)=>n>1?` <span class="pgno">${k+1} / ${n}쪽</span>`:'';
+  if(d.type==='stmt'){const two=d.copies==2;const per=two?PER.half:PER.full;const PG=pagesOf(d,per);const n=PG.length;
+    const fill=two?(n===1&&PG[0].length<=6?6:per):(n===1?14:per);
+    const one=(lab,P,k,cls)=>{const last=k===n-1;return `<div class="sheet ${two?'half':''} ${cls}">${two?`<span class="tag">${lab}</span>`:''}<h1>${T.title}</h1>
+      <table class="meta" style="margin-bottom:2mm"><tr><td>번호 ${esc(d.no)}${pgTag(k,n)}</td><td style="text-align:right">작성일 ${dt}</td></tr></table>
+      <div class="who" style="grid-template-columns:1fr 1fr;gap:3mm;margin-bottom:${two?'2mm':'5mm'}">${supplierBox(me,'공급자')}${clientBox(cl||{},'공급받는자')}</div>
+      <div class="sum"><span>합계금액 <small>(${vatNote(d)})</small></span><span>${wonHan(c.total)} <small>(₩${won(c.total)})</small></span></div>
+      ${linesTable(d,c,P,k*per,fill,two,last)}
+      ${two?`<div class="sfoot" style="display:flex;justify-content:space-between;margin-top:2mm"><span>${d.note?esc(d.note.split('\n')[0]):''}</span><span>인수자 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(인)</span></div>`:`<div class="sfoot"><div class="note">${esc(d.note||'')}</div><p style="text-align:right;margin:5mm 0 0">인수자 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(인)</p></div>`}</div>`;};
+    return PG.map((P,k)=>{const fin=k===n-1;return two?one('공급받는자 보관용',P,k,'')+one('공급자 보관용',P,k,fin?'last':'pend'):one('',P,k,fin?'last':'');}).join('');}
+  const valid=d.type==='quote'&&d.valid?(()=>{const x=new Date(d.date);x.setDate(x.getDate()+(+d.valid));return ds(x).replace(/-/g,'. ')+'.';})():'';
+  const PG=pagesOf(d,PER.full);const n=PG.length;
+  return PG.map((P,k)=>`<div class="sheet ${k===n-1?'last':''}"><h1>${T.title}</h1>${n>1?`<span class="tag">${k+1} / ${n}쪽</span>`:''}
+   <div class="who"><div><div class="to"><b>${esc((cl&&cl.name)||'')}</b> 귀하</div>${cl&&cl.manager?`<div style="margin-bottom:1mm">담당: ${esc(cl.manager)}</div>`:''}
+     <table class="meta"><tr><td style="width:22mm">번호</td><td>${esc(d.no)}</td></tr><tr><td>${d.type==='quote'?'견적일':'청구일'}</td><td>${dt}</td></tr>${valid?`<tr><td>유효기간</td><td>${valid}까지 (${d.valid}일)</td></tr>`:''}${d.type==='bill'&&d.due?`<tr><td>결제 기한</td><td>${d.due.replace(/-/g,'. ')}.</td></tr>`:''}</table>
+     <p style="margin:3mm 0 0">${d.type==='quote'?'아래와 같이 견적합니다.':'아래와 같이 청구합니다.'}</p></div>
+     ${supplierBox(me,'공급자')}</div>
+   <div class="sum"><span>합계금액 <small>(${vatNote(d)})</small></span><span>${wonHan(c.total)} <small>(₩${won(c.total)})</small></span></div>
+   ${linesTable(d,c,P,k*PER.full,n===1?12:PER.full,false,k===n-1)}
+   <div class="sfoot"><b style="display:block;margin:4mm 0 1.5mm">비고 · 특기사항</b><div class="note">${esc(d.note||'')}</div>
+   ${me.bank&&me.account?`<p style="margin:4mm 0 0">${d.type==='bill'?'<b>입금 계좌</b>':'입금 계좌'}: ${esc(me.bank)} ${esc(me.account)}${me.holder?' (예금주 '+esc(me.holder)+')':''}</p>`:''}
+   ${me.tel||me.email?`<p style="margin:1.5mm 0 0">문의: ${esc([me.tel,me.email].filter(Boolean).join(' · '))}</p>`:''}</div></div>`).join('');}
+function placeStamps(){}
+function drawPreview(){const P=$('#pv');if(!P)return;P.innerHTML=`<div class="paper">${sheetHtml(S.cur)}</div>`;fitPreview();placeStamps(P);const n=P.querySelectorAll('.sheet').length;const pi=$('#pgInfo');if(pi){const two=S.cur.type==='stmt'&&S.cur.copies==2;const pages=two?n/2:n;pi.textContent=TYPES[S.cur.type].name+(two?' · 2부':'')+(pages>1?` · A4 ${pages}쪽 (한 쪽에 ${two?PER.half:PER.full}줄)`:'');}}
+function fitPreview(){const P=$('#pv');if(!P)return;const pp=P.querySelector('.paper');if(!pp)return;const W=P.clientWidth||600;const base=793.7;const scales=[W/base,0.75,1,1.25];let k=scales[S.zoom]||W/base;if(S.zoom===0)k=Math.min(1,W/base);pp.style.transform=`scale(${k})`;pp.style.width=base+'px';P.style.height=(pp.scrollHeight*k)+'px';}
+window.addEventListener('resize',()=>{if(S.tab==='edit')fitPreview();});
+function doPrint(d){d=d&&d.id?d:S.cur;if(!d)return;flush();const A=$('#printArea');A.innerHTML=`<div class="paper">${sheetHtml(d)}</div>`;placeStamps(A);setTimeout(()=>{window.print();setTimeout(()=>{A.innerHTML='';},500);},60);}
+
+/* ── 발행 목록 ── */
+function renderList(){const docs=D.docs.filter(d=>!isBlank(d));const q=S.q.trim().toLowerCase();
+  const years=[...new Set(docs.map(d=>(d.date||'').slice(0,4)).filter(Boolean))].sort().reverse();if(S.fy&&!years.includes(S.fy)){S.fy='';S.fm='';}
+  const L=docs.filter(d=>(S.ftype==='all'||d.type===S.ftype)&&(!S.fy||(d.date||'').slice(0,4)===S.fy)&&(!S.fm||(d.date||'').slice(5,7)===S.fm)&&(!q||[d.no,(d.client&&d.client.name)||'',(D.clients.find(x=>x.id===d.clientId)||{}).name||'',d.lines.map(l=>l.name).join(' '),d.note||''].join(' ').toLowerCase().includes(q)));
+  $('#main').innerHTML=`<section class="panel" style="margin-top:12px"><div class="row" style="margin-bottom:12px"><div class="seg">${[['all','전체'],['quote','견적서'],['stmt','거래명세서'],['bill','청구서']].map(([k,l])=>`<button data-ft="${k}" class="${S.ftype===k?'on':''}">${l}</button>`).join('')}</div>
+   <select id="lY" aria-label="연도" style="width:auto"><option value="">전체 연도</option>${years.map(y=>`<option value="${y}" ${S.fy===y?'selected':''}>${y}년</option>`).join('')}</select><select id="lM" aria-label="월" style="width:auto" ${S.fy?'':'disabled'}><option value="">전체 월</option>${[...Array(12)].map((_,i)=>{const m=String(i+1).padStart(2,'0');const c=S.fy?docs.filter(d=>(d.date||'').slice(0,7)===S.fy+'-'+m&&(S.ftype==='all'||d.type===S.ftype)).length:0;return `<option value="${m}" ${S.fm===m?'selected':''}>${i+1}월${c?` (${c})`:''}</option>`;}).join('')}</select><input type="search" id="lq" placeholder="번호 · 거래처 · 품목 · 비고로 찾기" value="${esc(S.q)}" style="max-width:280px"><span style="flex:1"></span><span class="muted num">${L.length}개 · 합계 ${won(L.reduce((n,d)=>n+calc(d).total,0))}원</span><button class="btn s" id="lCsv">목록을 엑셀로</button><button class="btn p s" id="lNew">+ 새 견적서</button></div>
+   ${L.length?`<div class="wrapt"><table class="tbl"><thead><tr><th>종류</th><th>번호</th><th>날짜</th><th>거래처</th><th>품목</th><th style="text-align:right">합계</th><th></th></tr></thead><tbody>${L.map(d=>{const c=calc(d);const cn=(D.clients.find(x=>x.id===d.clientId)||d.client||{}).name||'—';const it=d.lines.filter(l=>l.name);return `<tr class="clk" data-open="${d.id}"><td><span class="chip ${TYPES[d.type].chip}">${TYPES[d.type].name}</span></td><td class="num">${esc(d.no)}</td><td class="num">${esc(d.date)}</td><td>${esc(cn)}</td><td>${esc(it[0]?it[0].name:'')}${it.length>1?` 외 ${it.length-1}건`:''}</td><td class="num" style="text-align:right;font-weight:600">${won(c.total)}</td><td style="white-space:nowrap"><button class="lk" data-pr="${d.id}">인쇄</button> <button class="lk" data-xl="${d.id}">엑셀</button> <button class="lk" data-cp="${d.id}">복사</button> <button class="lk red" data-dl="${d.id}">삭제</button></td></tr>`;}).join('')}</tbody></table></div>`:`<div class="empty">${docs.length?'찾는 문서가 없어요.':'아직 만든 문서가 없어요.<br>「+ 새 견적서」로 시작해 보세요.'}</div>`}</section>`;
+  document.querySelectorAll('[data-ft]').forEach(b=>b.onclick=()=>{S.ftype=b.dataset.ft;renderList();});
+  $('#lY').onchange=e=>{S.fy=e.target.value;if(!S.fy)S.fm='';renderList();};$('#lM').onchange=e=>{S.fm=e.target.value;renderList();};
+  const lq=$('#lq');let comp=false;lq.addEventListener('compositionstart',()=>comp=true);lq.addEventListener('compositionend',()=>{comp=false;S.q=lq.value;renderList();const n=$('#lq');n.focus();n.setSelectionRange(n.value.length,n.value.length);});lq.oninput=()=>{if(comp)return;S.q=lq.value;renderList();const n=$('#lq');n.focus();n.setSelectionRange(n.value.length,n.value.length);};
+  $('#lNew').onclick=()=>{S.cur=newDoc('quote');S.tab='edit';save();render();};
+  $('#lCsv').onclick=()=>{const rows=L.map(d=>{const c=calc(d);return [TYPES[d.type].name,d.no,d.date,(D.clients.find(x=>x.id===d.clientId)||d.client||{}).name||'',d.lines.filter(l=>l.name).map(l=>l.name).join(' / '),c.supply,c.tax,c.total,(d.note||'').replace(/\n/g,' ')];});
+    const sum=['','','','','합계',rows.reduce((n,r)=>n+r[5],0),rows.reduce((n,r)=>n+r[6],0),rows.reduce((n,r)=>n+r[7],0),''];
+    const sh=XL.table('발행 목록',['종류','번호','날짜','거래처','품목','공급가액','세액','합계','비고'],rows.concat([sum]),[10,16,11,18,36,13,11,13,30],[5,6,7]);
+    const det=[];L.forEach(d=>{const c=calc(d);const cn=(D.clients.find(x=>x.id===d.clientId)||d.client||{}).name||'';d.lines.forEach((l,i)=>{if(!(l.name||numIn(l.price)))return;det.push([TYPES[d.type].name,d.no,d.date,cn,l.name,l.spec||'',numIn(l.qty),l.unit||'',numIn(l.price),c.rows[i].sp,c.rows[i].tx]);});});
+    const sh2=XL.table('품목별 내역',['종류','번호','날짜','거래처','품목','규격','수량','단위','단가','공급가액','세액'],det,[10,16,11,18,30,12,8,7,12,13,11],[6,8,9,10]);
+    XL.save('발행목록_'+(S.fy?S.fy+'년'+(S.fm?' '+(+S.fm)+'월':''):today())+'.xlsx',[sh,sh2]);toast('엑셀 파일로 받았어요 — 시트 2개(발행 목록 · 품목별 내역).');};
+  document.querySelectorAll('[data-xl]').forEach(b=>b.onclick=e=>{e.stopPropagation();docXlsx(D.docs.find(d=>d.id===b.dataset.xl));});
+  document.querySelectorAll('[data-open]').forEach(tr=>tr.onclick=e=>{if(e.target.closest('button'))return;S.cur=D.docs.find(d=>d.id===tr.dataset.open);S.tab='edit';render();});
+  document.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>doPrint(D.docs.find(d=>d.id===b.dataset.pr)));
+  document.querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>{const s=D.docs.find(d=>d.id===b.dataset.cp);const n=newDoc(s.type,s);n.from='';S.cur=n;S.tab='edit';save();render();toast('복사해서 새로 만들었어요 — 번호 '+n.no);});
+  document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>{const s=D.docs.find(d=>d.id===b.dataset.dl);if(!confirm(`「${s.no}」을(를) 삭제할까요? 되돌릴 수 없어요.`))return;D.docs=D.docs.filter(d=>d!==s);if(S.cur===s)S.cur=null;save();renderList();toast('삭제했어요.');});}
+
+/* ── 거래처 ── */
+const CF=[['name','상호 *'],['bizno','사업자등록번호'],['ceo','대표'],['manager','담당자'],['tel','연락처'],['email','이메일'],['addr','주소','wide'],['memo','메모','wide']];
+function clientDlg(x,cb){const isNew=!x;x=x||{id:rid('c')};const o=document.createElement('div');o.className='ov';
+  o.innerHTML=`<div class="dlg" role="dialog" aria-label="거래처"><h3>${isNew?'새 거래처':'거래처 고치기'}</h3><div class="g2">${CF.map(([k,l,w])=>`<div class="f" style="${w?'grid-column:1/-1':''}"><span class="lbl">${l}</span><input type="text" data-k="${k}" value="${esc(x[k]||'')}"></div>`).join('')}</div>
+   <div class="row" style="justify-content:flex-end;margin-top:6px">${isNew?'':'<button class="btn red" id="cfDel" style="margin-right:auto">삭제</button>'}<button class="btn" id="cfX">닫기</button><button class="btn p" id="cfOk">저장</button></div></div>`;
+  document.body.appendChild(o);const close=()=>o.remove();o.querySelector('#cfX').onclick=close;o.querySelector('[data-k="name"]').focus();
+  o.querySelector('#cfOk').onclick=()=>{const v={};o.querySelectorAll('[data-k]').forEach(i=>v[i.dataset.k]=i.value.trim());if(!v.name){toast('상호를 적어 주세요.');return;}Object.assign(x,v);if(isNew)D.clients.push(x);D.clients.sort((a,b)=>a.name.localeCompare(b.name,'ko'));save();close();if(cb)cb(x);else render();toast('저장했어요.');};
+  const del=o.querySelector('#cfDel');if(del)del.onclick=()=>{if(!confirm(`「${x.name}」을(를) 삭제할까요? 이미 만든 문서에는 그대로 남아요.`))return;D.docs.forEach(d=>{if(d.clientId===x.id){d.client=Object.assign({},x);d.clientId='';}});D.clients=D.clients.filter(c=>c!==x);save();close();render();};
+  o.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='Enter'&&e.target.tagName==='INPUT')o.querySelector('#cfOk').click();});}
+function renderClients(){$('#main').innerHTML=`<section class="panel" style="margin-top:12px"><div class="row" style="margin-bottom:12px"><b style="font-size:17px">거래처</b><span class="muted">문서에서 고르면 상호 · 등록번호 · 주소가 저절로 들어가요.</span><span style="flex:1"></span>${D.clients.length?'<button class="btn s" id="cXl">엑셀로 저장</button>':''}<button class="btn p s" id="cAdd">+ 새 거래처</button></div>
+  ${D.clients.length?`<div class="wrapt"><table class="tbl"><thead><tr><th>상호</th><th>사업자등록번호</th><th>대표</th><th>담당 · 연락처</th><th style="text-align:right">문서</th><th style="text-align:right">합계</th></tr></thead><tbody>${D.clients.map(x=>{const ds_=D.docs.filter(d=>d.clientId===x.id&&!isBlank(d));return `<tr class="clk" data-c="${x.id}"><td><b style="font-weight:600">${esc(x.name)}</b></td><td class="num">${esc(x.bizno||'')}</td><td>${esc(x.ceo||'')}</td><td>${esc([x.manager,x.tel].filter(Boolean).join(' · '))}</td><td class="num" style="text-align:right">${ds_.length}</td><td class="num" style="text-align:right">${won(ds_.reduce((n,d)=>n+calc(d).total,0))}</td></tr>`;}).join('')}</tbody></table></div>`:'<div class="empty">거래처가 없어요. 「+ 새 거래처」로 넣어 보세요.</div>'}</section>`;
+  if($('#cXl'))$('#cXl').onclick=()=>XL.save('거래처목록_'+today()+'.xlsx',[XL.table('거래처',CF.map(f=>f[1].replace(' *','')).concat(['문서 수','합계']),D.clients.map(x=>{const ds_=D.docs.filter(d=>d.clientId===x.id&&!isBlank(d));return CF.map(f=>x[f[0]]||'').concat([ds_.length,ds_.reduce((n,d)=>n+calc(d).total,0)]);}),[20,15,10,10,15,22,36,24,8,14],[8,9])]);
+  $('#cAdd').onclick=()=>clientDlg(null);document.querySelectorAll('[data-c]').forEach(tr=>tr.onclick=()=>clientDlg(D.clients.find(x=>x.id===tr.dataset.c)));}
+
+/* ── 품목 ── */
+/* ── 품목 분류 ── */
+const NOCAT='\u0001';
+function catList(){const m=new Map();D.items.forEach(x=>{const c=(x.cat||'').trim();if(c)m.set(c,(m.get(c)||0)+1);});return [...m.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ko'));}
+function inCat(x,c){return c===''?true:c===NOCAT?!(x.cat||'').trim():(x.cat||'').trim()===c;}
+function catsHtml(cur){const L=catList();const none=D.items.filter(x=>!(x.cat||'').trim()).length;
+  return `<button data-cat="" class="${cur===''?'on':''}"><span>전체</span><span class="n">${D.items.length}</span></button>${L.map(([c,n])=>`<button data-cat="${esc(c)}" class="${cur===c?'on':''}"><span>${esc(c)}</span><span class="n">${n}</span></button>`).join('')}${none&&L.length?`<button data-cat="${NOCAT}" class="${cur===NOCAT?'on':''}"><span>분류 없음</span><span class="n">${none}</span></button>`:''}`;}
+function itemMatch(x,q){if(!q)return true;q=q.toLowerCase();return [x.name,x.spec,x.cat].some(v=>(v||'').toLowerCase().includes(q));}
+
+/* 목록에서 고르기 — one=true면 하나만 골라 바로 넣음 */
+function pickDlg(one,cb){
+  if(!D.items.length){toast('저장한 품목이 없어요 — 「품목」 탭에서 먼저 넣어 주세요.');return;}
+  if(S.pcat==null||(S.pcat&&S.pcat!==NOCAT&&!catList().some(([c])=>c===S.pcat)))S.pcat='';
+  const sel=new Map();let q='';
+  const o=document.createElement('div');o.className='ov';
+  o.innerHTML=`<div class="dlg" role="dialog" aria-label="품목 고르기" style="width:min(860px,100%)"><div class="row" style="margin-bottom:10px"><h3 style="margin:0">${one?'품목 하나 고르기':'품목 목록에서 고르기'}</h3><span style="flex:1"></span><input type="search" id="pkQ" placeholder="품목 · 규격 찾기" style="width:min(240px,100%)"></div>
+    <div class="pk"><div class="cats" id="pkC"></div><div class="wrapt lst"><table class="tbl"><thead><tr>${one?'':'<th style="width:34px"></th>'}<th>품목</th><th>규격</th><th>단위</th><th style="text-align:right">단가</th>${one?'':'<th style="text-align:right">수량</th>'}</tr></thead><tbody id="pkB"></tbody></table></div></div>
+    <div class="row" style="justify-content:flex-end;margin-top:12px"><span class="muted" id="pkN" style="margin-right:auto">${one?'줄을 누르면 바로 들어가요':'줄을 눌러 고르세요 — 여러 분류에서 골라도 돼요'}</span><button class="btn" id="pkX">닫기</button>${one?'':'<button class="btn p" id="pkOk" disabled>넣기</button>'}</div></div>`;
+  document.body.appendChild(o);
+  const close=()=>o.remove();
+  const drawC=()=>{o.querySelector('#pkC').innerHTML=catsHtml(S.pcat);o.querySelectorAll('#pkC [data-cat]').forEach(b=>b.onclick=()=>{S.pcat=b.dataset.cat;drawC();drawB();});};
+  const drawN=()=>{if(one)return;const ok=o.querySelector('#pkOk');ok.disabled=!sel.size;ok.textContent=sel.size?`${sel.size}개 넣기`:'넣기';o.querySelector('#pkN').textContent=sel.size?`고른 품목 ${sel.size}개`:'줄을 눌러 고르세요 — 여러 분류에서 골라도 돼요';};
+  const drawB=()=>{const L=D.items.filter(x=>x.name&&(q?itemMatch(x,q):inCat(x,S.pcat)));
+    o.querySelector('#pkB').innerHTML=L.map(x=>{const on=sel.has(x.id);return `<tr class="clk ${on?'sel':''}" data-id="${x.id}">${one?'':`<td><input type="checkbox" ${on?'checked':''} tabindex="-1" aria-label="고르기"></td>`}<td><b style="font-weight:600">${esc(x.name)}</b>${(q||S.pcat==='')&&x.cat?` <span class="chip">${esc(x.cat)}</span>`:''}</td><td class="muted">${esc(x.spec||'')}</td><td>${esc(x.unit||'')}</td><td class="num" style="text-align:right">${x.price?won(x.price):''}</td>${one?'':`<td style="text-align:right">${on?`<input class="q" type="text" inputmode="decimal" value="${esc(sel.get(x.id))}" aria-label="수량">`:''}</td>`}</tr>`;}).join('')||`<tr><td colspan="6" class="empty">${q?'찾는 품목이 없어요.':'이 분류에 품목이 없어요.'}</td></tr>`;
+    o.querySelectorAll('#pkB tr[data-id]').forEach(tr=>{const id=tr.dataset.id;
+      tr.onclick=e=>{if(e.target.classList.contains('q'))return;const it=D.items.find(x=>x.id===id);if(one){close();cb([[it,1]]);return;}if(sel.has(id))sel.delete(id);else sel.set(id,'1');drawB();drawN();const qi=o.querySelector(`#pkB tr[data-id="${id}"] .q`);if(qi){qi.focus();qi.select();}};
+      const qi=tr.querySelector('.q');if(qi){qi.oninput=()=>sel.set(id,qi.value);qi.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();o.querySelector('#pkOk').click();}};}});};
+  drawC();drawB();drawN();
+  const qe=o.querySelector('#pkQ');qe.oninput=()=>{q=qe.value.trim();drawB();};setTimeout(()=>qe.focus(),30);
+  o.querySelector('#pkX').onclick=close;o.onclick=e=>{if(e.target===o)close();};
+  o.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+  if(!one)o.querySelector('#pkOk').onclick=()=>{const out=D.items.filter(x=>sel.has(x.id)).map(x=>[x,numIn(sel.get(x.id))||1]);if(!out.length)return;close();cb(out);};}
+
+/* ── 품목 ── */
+function renderItems(){if(S.icat==null||(S.icat&&S.icat!==NOCAT&&!catList().some(([c])=>c===S.icat)))S.icat='';
+  const iq=S.iq||'';const cur=S.icat;
+  $('#main').innerHTML=`<section class="panel" style="margin-top:12px"><div class="row" style="margin-bottom:12px"><b style="font-size:17px">품목</b><span class="muted">분류를 넣어 두면 문서에서 「목록에서 고르기」로 분류별로 골라 넣을 수 있어요.</span><span style="flex:1"></span><input type="search" id="iQ" placeholder="품목 · 규격 · 분류 찾기" value="${esc(iq)}" style="width:min(220px,100%)"><button class="btn s" id="iXl">엑셀로 저장</button><button class="btn s" id="iPaste">엑셀에서 붙여넣기</button><button class="btn p s" id="iAdd">+ 품목 추가</button></div>
+  <div class="itl"><div><div class="cats" id="iC">${catsHtml(cur)}</div>${cur&&cur!==NOCAT?`<div class="row" style="margin-top:8px;gap:10px;padding:0 4px"><button class="lk" id="iRen">분류 이름 바꾸기</button><button class="lk red" id="iCdel">분류 지우기</button></div>`:''}<p class="muted" style="margin:10px 4px 0;font-size:12.5px">새 분류는 품목의 「분류」 칸에 이름을 쓰면 생겨요.</p></div>
+  <div class="wrapt"><table class="tbl"><thead><tr><th style="width:17%">분류</th><th style="width:31%">품목</th><th>규격</th><th style="width:10%">단위</th><th style="width:15%;text-align:right">단가</th><th></th></tr></thead><tbody>${(()=>{const L=D.items.map((x,i)=>[x,i]).filter(([x])=>iq?itemMatch(x,iq):inCat(x,cur));
+    return L.map(([x,i])=>`<tr data-r="${i}"><td><input type="text" data-k="cat" list="catList" value="${esc(x.cat||'')}" placeholder="분류 없음"></td><td><input type="text" data-k="name" value="${esc(x.name)}"></td><td><input type="text" data-k="spec" value="${esc(x.spec||'')}"></td><td><input type="text" data-k="unit" value="${esc(x.unit||'')}"></td><td><input type="text" inputmode="numeric" data-k="price" value="${x.price?won(x.price):''}" style="text-align:right"></td><td><button class="lk red" data-idel="${i}">삭제</button></td></tr>`).join('')||`<tr><td colspan="6" class="empty">${D.items.length?(iq?'찾는 품목이 없어요.':'이 분류에 품목이 없어요.'):'품목이 없어요. 자주 쓰는 품목을 넣어 두면 견적서 쓰기가 빨라져요.'}</td></tr>`;})()}</tbody></table></div></div>
+  <datalist id="catList">${catList().map(([c])=>`<option value="${esc(c)}">`).join('')}</datalist></section>`;
+  const drawC=()=>{const box=$('#iC');if(box){box.innerHTML=catsHtml(S.icat);bindC();}const dl=$('#catList');if(dl)dl.innerHTML=catList().map(([c])=>`<option value="${esc(c)}">`).join('');};
+  const bindC=()=>document.querySelectorAll('#iC [data-cat]').forEach(b=>b.onclick=()=>{S.icat=b.dataset.cat;S.iq='';renderItems();});bindC();
+  document.querySelectorAll('[data-r] input').forEach(inp=>{const i=+inp.closest('tr').dataset.r,k=inp.dataset.k;inp.oninput=()=>{D.items[i][k]=k==='price'?numIn(inp.value):inp.value;save();};if(k==='price')inp.onblur=()=>{inp.value=D.items[i].price?won(D.items[i].price):'';};if(k==='cat')inp.onchange=()=>{D.items[i].cat=inp.value.trim();inp.value=D.items[i].cat;save();drawC();};});
+  document.querySelectorAll('[data-idel]').forEach(b=>b.onclick=()=>{D.items.splice(+b.dataset.idel,1);save();renderItems();});
+  const iQ=$('#iQ');let comp=false;iQ.addEventListener('compositionstart',()=>comp=true);iQ.addEventListener('compositionend',()=>{comp=false;iQ.dispatchEvent(new Event('input'));});
+  iQ.oninput=()=>{if(comp)return;S.iq=iQ.value.trim();const pos=iQ.selectionStart;renderItems();const n=$('#iQ');n.focus();try{n.setSelectionRange(pos,pos);}catch(e){}};
+  const curCat=()=>cur&&cur!==NOCAT?cur:'';
+  $('#iAdd').onclick=()=>{S.iq='';D.items.push({id:rid('i'),cat:curCat(),name:'',spec:'',unit:'',price:0});save();renderItems();const r=document.querySelector('[data-r]:last-child [data-k="name"]');if(r)r.focus();};
+  if($('#iRen'))$('#iRen').onclick=()=>{const nv=(prompt(`「${cur}」 분류의 새 이름`,cur)||'').trim();if(!nv||nv===cur)return;D.items.forEach(x=>{if((x.cat||'').trim()===cur)x.cat=nv;});S.icat=nv;save();renderItems();toast('분류 이름을 바꿨어요.');};
+  if($('#iCdel'))$('#iCdel').onclick=()=>{if(!confirm(`「${cur}」 분류를 지울까요? 품목은 지우지 않고 「분류 없음」으로 옮겨요.`))return;D.items.forEach(x=>{if((x.cat||'').trim()===cur)x.cat='';});S.icat='';save();renderItems();};
+  $('#iXl').onclick=()=>{const L=D.items.filter(x=>x.name).slice().sort((a,b)=>(a.cat||'힣').localeCompare(b.cat||'힣','ko'));XL.save('품목목록_'+today()+'.xlsx',[XL.table('품목',['품목','규격','단위','단가','분류'],L.map(x=>[x.name,x.spec||'',x.unit||'',+x.price||0,x.cat||'']),[32,14,8,13,16],[3])]);toast('엑셀로 받았어요 — 고친 뒤 표를 복사해 「엑셀에서 붙여넣기」로 다시 넣을 수 있어요.');};
+  $('#iPaste').onclick=()=>pasteDlg(rows=>{rows.forEach(r=>{if(!r.cat)r.cat=curCat();const ex=D.items.find(x=>x.name===r.name);if(ex)Object.assign(ex,{spec:r.spec,unit:r.unit,price:r.price,cat:r.cat||ex.cat||''});else D.items.push({id:rid('i'),cat:r.cat,name:r.name,spec:r.spec,unit:r.unit,price:r.price});});save();renderItems();toast(rows.length+'개를 넣었어요(같은 이름은 고쳤어요).');},true);}
+
+/* ── 엑셀(.xlsx) 만들기 — 외부 라이브러리 없이 ── */
+const XL=(()=>{
+  const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+  const crc=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;};
+  const enc=new TextEncoder();
+  function zip(files){const parts=[],cen=[];let off=0;
+    for(const [name,text] of files){const nb=enc.encode(name),db=enc.encode(text),c=crc(db);
+      const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,0,true);h.setUint16(10,0,true);h.setUint16(12,0x21,true);h.setUint32(14,c,true);h.setUint32(18,db.length,true);h.setUint32(22,db.length,true);h.setUint16(26,nb.length,true);h.setUint16(28,0,true);
+      parts.push(new Uint8Array(h.buffer),nb,db);
+      const e=new DataView(new ArrayBuffer(46));e.setUint32(0,0x02014b50,true);e.setUint16(4,20,true);e.setUint16(6,20,true);e.setUint16(8,0x0800,true);e.setUint16(10,0,true);e.setUint16(12,0,true);e.setUint16(14,0x21,true);e.setUint32(16,c,true);e.setUint32(20,db.length,true);e.setUint32(24,db.length,true);e.setUint16(28,nb.length,true);e.setUint32(42,off,true);
+      cen.push(new Uint8Array(e.buffer),nb);off+=30+nb.length+db.length;}
+    const cs=cen.reduce((n,b)=>n+b.length,0);const z=new DataView(new ArrayBuffer(22));z.setUint32(0,0x06054b50,true);z.setUint16(8,files.length,true);z.setUint16(10,files.length,true);z.setUint32(12,cs,true);z.setUint32(16,off,true);
+    return new Blob([...parts,...cen,new Uint8Array(z.buffer)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});}
+  const x=v=>String(v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const col=n=>{let s='';n++;while(n){const m=(n-1)%26;s=String.fromCodePoint(65+m)+s;n=(n-m-1)/26;}return s;};
+  /* 스타일 번호: 0 기본 · 1 제목 · 2 머리칸 · 3 글자칸 · 4 숫자칸 · 5 이름칸(굵게 · 회색) · 6 굵은 숫자칸 · 7 작은 글씨 · 8 비고칸 · 9 가운데칸 · 10 굵은 글자칸 · 11 굵게(테두리 없음) · 12 굵은 큰 글씨 */
+  const STY=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<fonts count="5"><font><sz val="10"/><name val="맑은 고딕"/><family val="3"/><charset val="129"/></font><font><b/><sz val="10"/><name val="맑은 고딕"/><family val="3"/><charset val="129"/></font><font><b/><sz val="20"/><name val="맑은 고딕"/><family val="3"/><charset val="129"/></font><font><sz val="9"/><color rgb="FF666666"/><name val="맑은 고딕"/><family val="3"/><charset val="129"/></font><font><b/><sz val="12"/><name val="맑은 고딕"/><family val="3"/><charset val="129"/></font></fonts>
+<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF1F1F1"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FF444444"/></left><right style="thin"><color rgb="FF444444"/></right><top style="thin"><color rgb="FF444444"/></top><bottom style="thin"><color rgb="FF444444"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="13"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>
+<xf numFmtId="3" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="3" fontId="1" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf></cellXfs>
+<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  /* sheet = {name, cols:[너비], rows:[{h, c:[셀]}], merges:['A1:H1'], fit:true}
+     셀 = null | 값 | {v, s, f}  (f는 = 없이 수식) */
+  function sheetXml(sh){let r='';sh.rows.forEach((row,ri)=>{if(!row)return;const cells=row.c||row;let cs='';
+      cells.forEach((c,ci)=>{if(c==null)return;const o=typeof c==='object'?c:{v:c};const ref=col(ci)+(ri+1);const s=o.s?` s="${o.s}"`:'';
+        if(o.f!=null)cs+=`<c r="${ref}"${s}><f>${x(o.f)}</f>${o.v!=null&&o.v!==''?`<v>${+o.v||0}</v>`:''}</c>`;
+        else if(typeof o.v==='number'&&isFinite(o.v))cs+=`<c r="${ref}"${s}><v>${o.v}</v></c>`;
+        else if(o.v==null||o.v==='')cs+=`<c r="${ref}"${s}/>`;
+        else cs+=`<c r="${ref}"${s} t="inlineStr"><is><t xml:space="preserve">${x(o.v)}</t></is></c>`;});
+      r+=`<row r="${ri+1}"${row.h?` ht="${row.h}" customHeight="1"`:''}>${cs}</row>`;});
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${sh.fit?'<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>':''}<sheetViews><sheetView workbookViewId="0"${sh.grid===false?' showGridLines="0"':''}>${sh.freeze?`<pane ySplit="${sh.freeze}" topLeftCell="A${sh.freeze+1}" activePane="bottomLeft" state="frozen"/>`:''}</sheetView></sheetViews><sheetFormatPr defaultRowHeight="16.5"/>
+<cols>${sh.cols.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${r}</sheetData>${sh.merges&&sh.merges.length?`<mergeCells count="${sh.merges.length}">${sh.merges.map(m=>`<mergeCell ref="${m}"/>`).join('')}</mergeCells>`:''}<printOptions horizontalCentered="1"/><pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="portrait"${sh.fit?' fitToWidth="1" fitToHeight="0"':''}/></worksheet>`;}
+  function book(sheets){const n=sheets.length,ix=[...Array(n).keys()];
+    const files=[['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${ix.map(i=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`],
+      ['_rels/.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`],
+      ['xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${x(s.name.replace(/[\\\/?*\[\]:]/g,' ').slice(0,31))}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>`],
+      ['xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${ix.map(i=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${n+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
+      ['xl/styles.xml',STY]];
+    sheets.forEach((s,i)=>files.push([`xl/worksheets/sheet${i+1}.xml`,sheetXml(s)]));return zip(files);}
+  /* 간단한 표(머리줄 + 줄들) */
+  function table(name,head,rows,widths,numCols){return {name,cols:widths,freeze:1,rows:[{h:22,c:head.map(v=>({v,s:2}))}].concat(rows.map(r=>r.map((v,i)=>({v,s:(numCols||[]).includes(i)?4:3}))))};}
+  function save(name,sheets){const b=book(sheets);const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name.replace(/[\\\/:*?"<>|]/g,' ').replace(/\s+/g,' ').trim();document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},800);}
+  return {book,table,save,col};})();
+
+/* 문서 한 장을 엑셀 양식으로 — 금액 칸은 수식이라 엑셀에서 수량 · 단가를 고치면 다시 계산됨 */
+function docSheet(d){const me=D.me||{};const cl=(d.clientId?(D.clients.find(x=>x.id===d.clientId)||d.client):d.client)||{};const c=calc(d);const T=TYPES[d.type];const vat=d.vat!=='none';const mode=d.vat||'sep';
+  const rows=[],M=[];const put=(r,ci,v)=>{rows[r]=rows[r]||{c:[]};rows[r].c[ci]=v;};const merge=(a)=>M.push(a);
+  const dt=d.date?d.date.replace(/-/g,'. ')+'.':'';
+  rows[0]={h:40,c:[{v:T.title,s:1}]};merge('A1:H1');
+  const box=(r0,ci,lab,pairs)=>{/* 왼쪽 묶음 A:D(이름 A:B · 값 C:D) / 오른쪽 묶음 E:H(이름 E · 값 F:H) */
+    pairs.forEach(([k,v],i)=>{const r=r0+i;if(ci===0){put(r,0,{v:k,s:5});put(r,1,{s:5});put(r,2,{v,s:3});put(r,3,{s:3});merge(`A${r+1}:B${r+1}`);merge(`C${r+1}:D${r+1}`);}
+      else{put(r,4,{v:k,s:5});put(r,5,{v,s:3});put(r,6,{s:3});put(r,7,{s:3});merge(`F${r+1}:H${r+1}`);}});};
+  const sup=[['등록번호',me.bizno||''],['상호',me.name||''],['대표',(me.ceo||'')+'  (인)'],['주소',me.addr||''],['업태 · 종목',[me.biztype,me.bizitem].filter(Boolean).join(' / ')]];
+  let r=2;
+  if(d.type==='stmt'){put(1,0,{v:'번호 '+d.no,s:7});put(1,7,{v:'작성일 '+dt,s:7});
+    put(2,0,{v:'공급자',s:11});put(2,4,{v:'공급받는자',s:11});
+    box(3,0,'',sup);box(3,4,'',[['등록번호',cl.bizno||''],['상호',cl.name||''],['대표',cl.ceo||''],['주소',cl.addr||''],['담당 · 연락처',[cl.manager,cl.tel].filter(Boolean).join(' · ')]]);r=9;}
+  else{const valid=d.type==='quote'&&d.valid?(()=>{const z=new Date(d.date);z.setDate(z.getDate()+(+d.valid));return ds(z).replace(/-/g,'. ')+'.';})():'';
+    put(2,0,{v:(cl.name||'')+'  귀하',s:12});merge('A3:D3');put(2,4,{v:'공급자',s:11});
+    const L=[['번호',d.no],[d.type==='quote'?'견적일':'청구일',dt]];if(cl.manager)L.unshift(['담당',cl.manager]);if(valid)L.push(['유효기간',valid+'까지 ('+d.valid+'일)']);if(d.type==='bill'&&d.due)L.push(['결제 기한',d.due.replace(/-/g,'. ')+'.']);
+    box(3,0,'',L.slice(0,5));box(3,4,'',sup);
+    put(3+Math.max(L.length,5),0,{v:d.type==='quote'?'아래와 같이 견적합니다.':'아래와 같이 청구합니다.'});r=4+Math.max(L.length,5)+1;}
+  // 합계금액 줄
+  const sumR=r;put(r,0,{v:'합계금액 ('+vatNote(d)+')',s:5});[1,2,3].forEach(i=>put(r,i,{s:5}));merge(`A${r+1}:D${r+1}`);
+  put(r,4,{v:wonHan(c.total)+'  (₩'+won(c.total)+')',s:10});[5,6,7].forEach(i=>put(r,i,{s:10}));merge(`E${r+1}:H${r+1}`);rows[r].h=24;r+=2;
+  const hr=r;put(r,0,{v:'No',s:2});['품목','규격','수량','단위','단가','공급가액'].forEach((v,i)=>put(r,i+1,{v,s:2}));if(vat)put(r,7,{v:'세액',s:2});rows[r].h=22;r++;
+  const L=d.lines.filter(l=>l.name||numIn(l.price));const first=r+1;
+  L.forEach((l,i)=>{const rr=r+1,row=c.rows[d.lines.indexOf(l)];const q=numIn(l.qty),p=numIn(l.price);
+    put(r,0,{v:i+1,s:9});put(r,1,{v:l.name,s:3});put(r,2,{v:l.spec||'',s:9});put(r,3,{v:q,s:4});put(r,4,{v:l.unit||'',s:9});put(r,5,{v:p,s:4});
+    const amt=`ROUND(D${rr}*F${rr},0)`;
+    put(r,6,{f:mode==='inc'?`ROUND(${amt}/1.1,0)`:amt,v:row.sp,s:4});
+    if(vat)put(r,7,{f:mode==='inc'?`${amt}-G${rr}`:`ROUNDDOWN(G${rr}*0.1,0)`,v:row.tx,s:4});r++;});
+  for(let i=L.length;i<Math.max(L.length,10);i++){put(r,0,{s:9});[1,2,3,4,5,6].forEach(k=>put(r,k,{s:k===3||k===5||k===6?4:3}));if(vat)put(r,7,{s:4});r++;}
+  const last=r;put(r,0,{v:'합 계',s:2});[1,2,3,4,5].forEach(i=>put(r,i,{s:2}));merge(`A${r+1}:F${r+1}`);
+  put(r,6,{f:`SUM(G${first}:G${last})`,v:c.supply,s:6});if(vat)put(r,7,{f:`SUM(H${first}:H${last})`,v:c.tax,s:6});r++;
+  put(r,0,{v:'총 금액 (공급가액 + 세액)',s:2});[1,2,3,4,5].forEach(i=>put(r,i,{s:2}));merge(`A${r+1}:F${r+1}`);
+  put(r,6,{f:vat?`G${r}+H${r}`:`G${r}`,v:c.total,s:6});if(vat){put(r,7,{s:6});merge(`G${r+1}:H${r+1}`);}r+=2;
+  if(d.type==='stmt'){put(r,5,{v:'인수자',s:11});put(r,7,{v:'(인)'});r+=2;}
+  put(r,0,{v:'비고 · 특기사항',s:11});r++;put(r,0,{v:d.note||'',s:8});for(let i=1;i<8;i++)put(r,i,{s:8});merge(`A${r+1}:H${r+1}`);rows[r].h=Math.max(48,16*((d.note||'').split('\n').length+1));r+=2;
+  if(me.bank&&me.account){put(r,0,{v:'입금 계좌: '+me.bank+' '+me.account+(me.holder?' (예금주 '+me.holder+')':''),s:d.type==='bill'?11:0});r++;}
+  if(me.tel||me.email){put(r,0,{v:'문의: '+[me.tel,me.email].filter(Boolean).join(' · ')});r++;}
+  put(r+1,0,{v:'※ 수량 · 단가를 고치면 공급가액 · 세액 · 합계는 다시 계산돼요. 한글 금액(일금 …)과 도장은 견적서 발행기에서 인쇄하세요.',s:7});
+  for(let i=0;i<=r+1;i++)if(!rows[i])rows[i]={c:[]};
+  return {name:T.name+' '+d.no,cols:[5,27,11,8,10,12,14,12],rows,merges:M,fit:true,grid:false};}
+function docXlsx(d){d=d&&d.id?d:S.cur;if(!d)return;flush();const cl=(d.clientId?(D.clients.find(x=>x.id===d.clientId)||d.client):d.client)||{};
+  XL.save(`${TYPES[d.type].name}_${d.no}${cl.name?'_'+cl.name:''}.xlsx`,[docSheet(d)]);toast('엑셀 파일로 받았어요 — 「다운로드」 폴더를 보세요.');}
+
+/* 엑셀 붙여넣기: 탭 구분 — 품목 · 규격 · 수량 · 단위 · 단가 (품목 목록은 수량 없이) */
+function pasteDlg(cb,itemsOnly){const o=document.createElement('div');o.className='ov';const cols=itemsOnly?'품목 · 규격 · 단위 · 단가 · 분류':'품목 · 규격 · 수량 · 단위 · 단가';
+  o.innerHTML=`<div class="dlg" role="dialog" aria-label="엑셀에서 붙여넣기"><h3>엑셀에서 붙여넣기</h3><p class="muted" style="margin:0 0 8px">엑셀에서 <b>${cols}</b> 순서로 칸을 골라 복사(Ctrl+C)한 뒤 아래에 붙여넣으세요(Ctrl+V). 칸이 모자라면 비워 둬도 돼요.</p>
+   <textarea id="pTx" rows="8" placeholder="${itemsOnly?'A4 복사용지\t80g 500매\t박스\t28000\t사무용품':'A4 복사용지\t80g 500매\t10\t박스\t28000'}" style="font-family:Consolas,monospace;font-size:13px"></textarea><p class="muted" id="pInfo" style="margin:6px 0 0"></p>
+   <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn" id="pX">닫기</button><button class="btn p" id="pOk">넣기</button></div></div>`;
+  document.body.appendChild(o);const tx=o.querySelector('#pTx');tx.focus();
+  const parse=()=>tx.value.split(/\r?\n/).map(l=>l.split('\t')).filter(c=>c.join('').trim()).map(c=>itemsOnly?{name:(c[0]||'').trim(),spec:(c[1]||'').trim(),unit:(c[2]||'').trim(),price:numIn(c[3]||0),cat:(c[4]||'').trim()}:{name:(c[0]||'').trim(),spec:(c[1]||'').trim(),qty:String(numIn(c[2]||1)||1),unit:(c[3]||'').trim(),price:numIn(c[4]||0)}).filter(r=>r.name);
+  tx.oninput=()=>{const r=parse();o.querySelector('#pInfo').textContent=r.length?`${r.length}줄을 읽었어요. 첫 줄: ${r[0].name}${r[0].price?' · '+won(r[0].price)+'원':''}`:'';};
+  o.querySelector('#pX').onclick=()=>o.remove();o.querySelector('#pOk').onclick=()=>{const r=parse();if(!r.length){toast('읽은 줄이 없어요 — 엑셀 칸을 복사해서 붙여넣어 주세요.');return;}o.remove();cb(r);};}
+
+/* ── 내 정보 ── */
+const MF=[['name','상호 *'],['bizno','사업자등록번호'],['ceo','대표자'],['tel','전화'],['email','이메일'],['fax','팩스'],['addr','사업장 주소','wide'],['biztype','업태'],['bizitem','종목'],['bank','은행'],['account','계좌번호'],['holder','예금주']];
+function renderMe(){const me=D.me||{};$('#main').innerHTML=`<div class="work" style="grid-template-columns:minmax(0,640px) minmax(0,1fr)"><section class="panel"><b style="font-size:17px">내 정보 (공급자)</b><p class="muted" style="margin:4px 0 12px">모든 문서의 공급자 칸 · 입금 계좌에 들어가요. 이 PC 폴더에만 저장돼요.</p>
+  <div class="g2">${MF.map(([k,l,w])=>`<div class="f" style="${w?'grid-column:1/-1':''}"><span class="lbl">${l}</span><input type="text" data-m="${k}" value="${esc(me[k]||'')}"></div>`).join('')}</div>
+  <h3 class="sec">도장 · 직인</h3><div class="stampbox"><span class="pv">${me.stamp?`<img src="${me.stamp}" alt="도장">`:'<span class="muted">없음</span>'}</span><div><label class="btn s">도장 사진 넣기<input type="file" id="mStamp" accept="image/*" hidden></label> ${me.stamp?'<button class="lk red" id="mStampDel">빼기</button>':''}<p class="muted" style="margin:6px 0 0">흰 종이에 찍은 도장을 사진으로 찍어 넣으면 <b>흰 배경을 지우고 빨간 도장만</b> 남겨요.</p>
+   ${me.stamp?`<label class="muted row" style="gap:6px;margin-top:6px">크기<input type="range" id="mSize" min="12" max="24" value="${me.stampSize||17}" style="width:120px;accent-color:#20263a"><span id="mSizeV">${me.stampSize||17}mm</span></label>`:''}</div></div></section>
+  <section class="stage"><div class="bar"><b style="font-size:14px">견적서에 이렇게 들어가요</b></div><div id="pv"></div></section></div>`;
+  const prev=()=>{const P=$('#pv');const demo={type:'quote',no:'견적 예시',date:today(),valid:30,vat:'sep',client:{name:'받는 곳 예시'},lines:[{name:'품목 예시',spec:'',qty:1,unit:'개',price:10000}],note:''};P.innerHTML=`<div class="paper">${sheetHtml(demo)}</div>`;const pp=P.querySelector('.paper');const k=Math.min(1,(P.clientWidth||500)/793.7);pp.style.transform=`scale(${k})`;pp.style.width='793.7px';P.style.height=(pp.scrollHeight*k*0.55)+'px';P.style.overflow='hidden';placeStamps(P);};prev();
+  document.querySelectorAll('[data-m]').forEach(i=>i.oninput=()=>{D.me[i.dataset.m]=i.value.trim();save();prev();});
+  $('#mStamp').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{D.me.stamp=await cleanStamp(f);save();renderMe();toast('도장을 넣었어요.');}catch(x){toast('사진을 열 수 없어요.');}};
+  if($('#mStampDel'))$('#mStampDel').onclick=()=>{delete D.me.stamp;save();renderMe();};
+  if($('#mSize'))$('#mSize').oninput=e=>{D.me.stampSize=+e.target.value;$('#mSizeV').textContent=e.target.value+'mm';save();prev();};}
+/* 도장: 흰 배경 → 투명, 빨간 기 강조, 여백 잘라 256px */
+function cleanStamp(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f);const im=new Image();im.onload=()=>{const s=Math.min(1,600/Math.max(im.width,im.height));const w=Math.round(im.width*s),h=Math.round(im.height*s);const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(im,0,0,w,h);const d=x.getImageData(0,0,w,h),p=d.data;let x0=w,y0=h,x1=0,y1=0;
+  for(let i=0;i<p.length;i+=4){const r=p[i],g=p[i+1],b=p[i+2];const red=r-(g+b)/2;const light=(r+g+b)/3;let a=0;if(red>40)a=Math.min(255,red*3);else if(light<110)a=Math.min(255,(110-light)*2.2);if(a<30)a=0;p[i+3]=a;if(a){p[i]=Math.max(r,170);p[i+1]=Math.min(g,60);p[i+2]=Math.min(b,60);const k=i/4,xx=k%w,yy=(k-xx)/w;if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(yy<y0)y0=yy;if(yy>y1)y1=yy;}}
+  x.putImageData(d,0,0);URL.revokeObjectURL(u);if(x1<=x0||y1<=y0){no();return;}const cw=x1-x0+1,ch=y1-y0+1,S2=256,k=S2/Math.max(cw,ch);const o=document.createElement('canvas');o.width=o.height=S2;o.getContext('2d').drawImage(c,x0,y0,cw,ch,(S2-cw*k)/2,(S2-ch*k)/2,cw*k,ch*k);ok(o.toDataURL('image/png'));};im.onerror=()=>{URL.revokeObjectURL(u);no();};im.src=u;});}
+
+/* ── 설정 · 백업 ── */
+function renderSet(){$('#main').innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-top:12px;align-items:start">
+ <section class="panel"><b style="font-size:17px">새 문서 기본값</b><div class="f" style="margin-top:10px"><span class="lbl">부가세</span><div class="seg">${[['sep','별도'],['inc','포함'],['none','없음']].map(([k,l])=>`<button data-sv="${k}" class="${(D.set.vat||'sep')===k?'on':''}">${l}</button>`).join('')}</div></div>
+  <div class="f"><span class="lbl">견적 유효기간(일)</span><input type="number" id="sValid" min="0" value="${D.set.valid||30}"></div>
+  <p class="muted" style="margin:0">세액은 줄마다 공급가액의 10%(원 아래 버림). 「포함」은 금액 ÷ 1.1을 공급가액(반올림)으로, 나머지를 세액으로 계산해요. 세금계산서가 아니라 견적 · 명세용 계산이에요.</p></section>
+ <section class="panel"><b style="font-size:17px">저장 · 백업</b><p style="margin:8px 0 10px;font-size:14.5px">저장 폴더: <b>${esc(ST.name)}</b> — 「견적서발행기.json」 하나에 모두 저장되고, 하루 전 사본도 남겨요.</p>
+  <div class="row"><button class="btn" id="bDir">다른 폴더로 바꾸기</button><button class="btn" id="bOut">백업 파일 받기</button><label class="btn">백업 불러오기<input type="file" id="bIn" accept=".json" hidden></label></div>
+  <h3 class="sec" style="margin-top:16px">예시로 써 보기</h3><div class="row"><button class="btn" id="bDemo">예시 넣어 보기</button><button class="btn red" id="bWipe">모두 지우기</button></div><p class="muted" style="margin:6px 0 0">예시는 가상 회사 · 가상 거래처예요(설명용).</p></section></div>`;
+  document.querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{D.set.vat=b.dataset.sv;save();renderSet();});
+  $('#sValid').oninput=e=>{D.set.valid=+e.target.value||0;save();};
+  $('#bDir').onclick=async()=>{try{await flush();const old=JSON.stringify(D);await pickFolder();const ex=await ST.read(FILE);if(ex&&confirm('고른 폴더에 이미 저장된 내용이 있어요. 그것을 열까요?\n(취소 = 지금 내용을 그 폴더에 저장)'))load(JSON.parse(ex));else await ST.write(FILE,old);render();toast('「'+ST.name+'」 폴더에 저장합니다.');}catch(e){}};
+  $('#bOut').onclick=()=>dl('견적서발행기_백업_'+today()+'.json',JSON.stringify(D,null,1),'application/json');
+  $('#bIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());if(!Array.isArray(j.docs))throw 0;if(!confirm(`백업(문서 ${j.docs.length}개)으로 바꿀까요? 지금 내용은 사라져요.`))return;load(j);S.cur=null;save();render();toast('불러왔어요.');}catch(x){toast('백업 파일이 아니에요.');}};
+  $('#bDemo').onclick=()=>{fillDemo();S.cur=D.docs[0];S.tab='edit';save();render();toast('예시를 넣었어요 — 다 보셨으면 「모두 지우기」로 지우고 시작하세요.');};
+  $('#bWipe').onclick=()=>{if(!confirm('내 정보 · 거래처 · 품목 · 문서를 모두 지울까요? (하루 전 사본은 남아요)'))return;D.me={};D.clients=[];D.items=[];D.docs=[];S.cur=null;save();render();};}
+function load(j){D.me=j.me||{};D.clients=j.clients||[];D.items=j.items||[];D.docs=j.docs||[];D.set=Object.assign({vat:'sep',valid:30,copies:2},j.set||{});}
+function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function fillDemo(){
+  if(!D.me.name)D.me=Object.assign({name:'(예시) 블루문 인테리어',bizno:'000-00-00000',ceo:'김예시',tel:'02-000-0000',email:'example@example.com',addr:'서울시 ○○구 ○○로 00 (설명용 가상 주소)',biztype:'건설업',bizitem:'실내 인테리어',bank:'○○은행',account:'000-000000-00-000',holder:'김예시'},D.me);
+  const c1={id:rid('c'),name:'(예시) 해오름 카페',bizno:'000-00-00001',ceo:'박예시',manager:'이담당',tel:'010-0000-0000',addr:'경기도 ○○시 ○○길 00'};const c2={id:rid('c'),name:'(예시) 초록 학원',bizno:'000-00-00002',ceo:'최예시',manager:'정실장',tel:'031-000-0000',addr:'경기도 ○○시 ○○로 00'};D.clients.push(c1,c2);
+  [['도배 · 바닥','도배 (실크 벽지)','','㎡',18000],['도배 · 바닥','도배 (합지 벽지)','','㎡',12000],['도배 · 바닥','바닥 장판 1.8T','','㎡',32000],['도배 · 바닥','강마루 시공','','㎡',68000],['목공','몰딩 교체','','m',9000],['목공','걸레받이 교체','','m',7000],['목공','방문 교체','ABS','짝',280000],['전기 · 조명','조명 교체 (LED 매입등)','4인치','개',35000],['전기 · 조명','콘센트 · 스위치 교체','','개',15000],['기타','철거 · 폐기물 처리','','식',350000],['기타','출장 · 실측','','회',50000]].forEach(([c,n,s,u,p])=>D.items.push({id:rid('i'),cat:c,name:n,spec:s,unit:u,price:p}));
+  const mk=(type,cl,lines,note,daysAgo)=>{const d=newDoc(type);const x=new Date();x.setDate(x.getDate()-daysAgo);d.date=ds(x);d.no=nextNo(type,d.date);d.clientId=cl.id;d.client=Object.assign({},cl);d.lines=lines.map(([n,q])=>{const it=D.items.find(i=>i.name===n);return {name:n,spec:it.spec,qty:String(q),unit:it.unit,price:it.price};});d.note=note;return d;};
+  mk('quote',c2,[['도배 (실크 벽지)',62],['몰딩 교체',40],['철거 · 폐기물 처리',1]],'공사 기간 3일 · 주말 작업 가능',6);
+  const q=mk('quote',c1,[['도배 (실크 벽지)',85],['바닥 장판 1.8T',42],['조명 교체 (LED 매입등)',12],['철거 · 폐기물 처리',1],['출장 · 실측',1]],'계약 후 착공 7일 전 일정 확정\n자재 색상은 샘플 확인 후 결정',2);
+  newDoc('stmt',q);}
+
+let tT;function toast(m){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=m;document.body.appendChild(d);clearTimeout(tT);tT=setTimeout(()=>d.remove(),2800);}
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='p'&&S.tab==='edit'&&S.cur){e.preventDefault();doPrint();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();flush();toast('저장했어요.');}});
+
+/* 시작 */
+function gate(html){$('#root').innerHTML=`<section class="panel gate">${html}</section>`;}
+async function boot(){const t=await ST.read(FILE);if(t){try{load(JSON.parse(t));}catch(e){toast('저장 파일을 읽지 못했어요 — 「견적서발행기_어제.json」을 확인해 주세요.');}}
+  S.tab=D.me&&D.me.name?'edit':'me';render();if(S.tab==='me')toast('먼저 「내 정보」에 상호 · 사업자번호를 넣어 주세요.');}
+async function start(){
+  try{db=await idb();}catch(e){gate('<h2>크롬 · 엣지에서 열어 주세요</h2><p>이 브라우저에서는 저장 공간을 쓸 수 없어요.</p>');return;}
+  if(!window.showDirectoryPicker){gate('<h2>크롬 · 엣지에서 열어 주세요</h2><p>견적서 발행기는 거래처 · 품목 · 문서를 <b>내가 고른 폴더에 파일로</b> 저장해요.<br>이 기능은 PC의 크롬 · 엣지에서만 돼요.</p>');return;}
+  const h=await kvGet('dir');
+  if(h&&await permOk(h,false)){ST.root=h;ST.name=h.name;return boot();}
+  if(h){gate(`<h2>저장 폴더를 다시 열어 주세요</h2><p>브라우저가 보안을 위해 처음 열 때마다 폴더 사용을 다시 물어요.<br>저장 폴더: <b>${esc(h.name)}</b></p><div class="row" style="margin-top:14px"><button class="btn p" id="reo">「${esc(h.name)}」 폴더 열기</button><button class="btn" id="oth">다른 폴더 고르기</button></div>`);
+    $('#reo').onclick=async()=>{if(await permOk(h,true)){ST.root=h;ST.name=h.name;boot();}else toast('폴더를 허용해야 열 수 있어요.');};$('#oth').onclick=async()=>{try{await pickFolder();boot();}catch(e){}};return;}
+  gate(`<h2 style="margin:0 0 8px">견적서 발행기 — 저장할 곳 고르기</h2><p style="line-height:1.7;margin:0 0 14px">거래처 · 품목 · 만든 문서를 <b>이 PC 폴더에 파일로</b> 저장해요. 인터넷에 올라가지 않아요.<br>아래 단추를 누르고 <b>「문서」</b>처럼 아무 폴더나 고르면, 그 안에 「견적서 발행기」 폴더가 생겨요.<br>원드라이브 · 구글 드라이브 폴더 안에 두면 다른 PC에서도 같이 쓸 수 있어요.</p><button class="btn p" id="pick" style="height:50px;padding:0 24px;font-size:16px">저장할 곳 고르기</button><p class="muted" style="margin:12px 0 0">브라우저가 「파일을 수정하도록 허용할까요?」라고 물으면 <b>허용</b>을 눌러 주세요.</p>`);
+  $('#pick').onclick=async()=>{try{await pickFolder();boot();}catch(e){if(e&&e.name!=='AbortError')toast('폴더를 열지 못했어요.');}};}
+start();
+window.addEventListener('beforeunload',()=>{if(saveT)flush();});
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+ "id": "/jesa_tools/jaso/",
+ "name": "자기소개서 쓰기 | Blog J",
+ "short_name": "자기소개서 쓰기",
+ "description": "공고 문항 붙여넣기 · 질문에 답하면 초안 · 글자 수 · 회사별 자동 저장 · Word · PDF — Blog J 무료 도구",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f0e8db",
+ "theme_color": "#f0e8db",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512-mask.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

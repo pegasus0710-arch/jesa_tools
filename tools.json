@@ -138,7 +138,7 @@
    "area": "doc",
    "icon": "pen",
    "type": [
-    "다운로드"
+    "설치"
    ],
    "desc": "공고 문항 붙여넣고 질문에 답하면 초안, A4 미리보기 · 글자수",
    "short": "질문에 답하면 초안 · 글자수",
@@ -146,7 +146,8 @@
    "rank": 3,
    "open": "2026-10-24T09:00:00+09:00",
    "ver": "1.0",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jaso.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jaso.png",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/jaso/"
   },
   {
    "name": "견적서 발행기",
@@ -154,7 +155,7 @@
    "area": "money",
    "icon": "receipt",
    "type": [
-    "다운로드"
+    "설치"
    ],
    "desc": "견적서 · 거래명세서 · 청구서를 한 번에, 자료는 내 PC 폴더에만",
    "short": "견적서 · 거래명세서 · 청구서",
@@ -162,7 +163,8 @@
    "rank": 2,
    "open": "2026-10-22T09:00:00+09:00",
    "ver": "1.0",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/quote.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/quote.png",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/quote/"
   },
   {
    "name": "가계부 달력",
@@ -170,15 +172,16 @@
    "area": "money",
    "icon": "wallet",
    "type": [
-    "다운로드"
+    "설치"
    ],
    "desc": "달력에 바로 적는 가계부, 내 PC에만 저장",
    "short": "달력에 바로 적는 가계부",
    "link": "https://luvbong.tistory.com/725",
    "rank": 7,
    "open": "2026-09-19T09:00:00+09:00",
-   "ver": "1.0",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/budget.png"
+   "ver": "1.1",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/budget.png",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/budget/"
   },
   {
    "name": "매매일지",
@@ -186,14 +189,15 @@
    "area": "money",
    "icon": "trend",
    "type": [
-    "다운로드"
+    "설치"
    ],
    "desc": "매수·매도 기록과 수익률, 내 PC에만 저장",
    "short": "매수 · 매도 기록과 수익률",
    "link": "https://luvbong.tistory.com/726",
    "open": "2026-09-19T09:00:00+09:00",
-   "ver": "1.0",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/trading.png"
+   "ver": "1.1",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/trading.png",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/trading/"
   },
   {
    "name": "레시피 노트",

@@ -1766,6 +1766,10 @@ function banner() {
   let h = "";
   if (D.set.banner && IS_SAMSUNG && !STANDALONE) h += `<div class="bn2"><div class="t"><b>삼성 인터넷으로 설치할 때</b><br>「안전하지 않은 앱 차단됨」 경고가 뜰 수 있어요. 삼성 인터넷이 홈 화면 앱을 만드는 방식 때문이고 여행 노트는 안전해요 — <b>「무시하고 설치하기」</b>를 누르면 돼요.</div>${window._bip ? `<button class="bn-in" data-install>설치</button>` : `<button data-samsung>방법</button>`}<button class="bn-x" data-nobanner aria-label="닫기">✕</button></div>`;
   if (D.set.banner && DEV === "ios-safari") h += `<div class="bn2"><div class="t"><b>아이폰은 홈 화면에 추가해서 쓰세요</b><br>사파리에서 그냥 쓰면 오래 안 열 때 일정이 지워질 수 있어요.</div><button data-guide>방법 보기</button><button class="bn-x" data-nobanner aria-label="닫기">✕</button></div>`;
+  /* 10-31 제이: 사진이 많은 앱 — 구글 드라이브만으로는 브라우저 데이터를 지우면 사진을 모두 다시 받아야 함 → 폴더를 쓸 수 있는 기기(PC 크롬 · 엣지 · 안드로이드 크롬)는 이 기기 폴더도 꼭 연결 */
+  const nPh = D.items.reduce((a, r) => a + (r.photos || []).length, 0);
+  if (typeof gdOn === "function" && gdOn() && CAN_DIR && !D.dir && nPh && Date.now() - (D.set.dirLater || 0) > 7 * 864e5)
+    h += `<div class="bn2"><div class="t"><b>이 ${ANDROID ? "휴대폰" : "PC"} 폴더도 연결해 주세요</b><br>사진 ${nPh.toLocaleString()}장이 지금은 브라우저 안에만 있어요. 폴더를 연결하면 사진이 폴더에도 저장돼서, 브라우저 데이터를 지우거나 다시 설치해도 <b>다시 받지 않고 바로</b> 불러와요.${ANDROID ? "<br>폴더 고르는 창: ⋮ 또는 「새 폴더」 → 「여행노트」 → 「이 폴더 사용」 → 「허용」" : ""}</div><button ${ANDROID ? "data-pickown" : "data-pickrec"}>폴더 연결</button><button class="bn-x" data-dirlater aria-label="7일 동안 숨기기">${IC.x}</button></div>`;
   if (typeof gdOn === "function" && gdOn()) return h;
   const lb = D.set.lastBackup, days = lb ? Math.floor((Date.now() - lb) / 864e5) : null;
   if (!CAN_DIR && D.items.length && !D.dir && (days == null || days >= 30)) h += `<div class="bn2 soft"><div class="t"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><br>구글 드라이브를 연결하면 휴대폰을 바꿔도 그대로예요.</div><button data-go="set">연결</button></div>`;
@@ -2005,8 +2009,9 @@ function scrSet() {
     <section class="sgc"><h4>${IC.cloud} 저장 위치 <small id="usage"></small></h4>
       <p class="sgstat ${ok ? "sgok" : "sgwn"}">${ok ? IC.ok : IC.warn}${ok ? "저절로 저장되고 있어요." : "휴대폰과 PC를 같이 쓰려면 구글 드라이브를 연결하세요."}</p>
       ${gdBox()}
-      ${CAN_DIR && !ANDROID ? (D.dir ? `<div class="row">${IC.folder}<div class="t"><b>저장 폴더: 「${esc(D.dir.name)}」 <span class="okb" style="${D.dirPerm === "granted" ? "" : "background:var(--red)"}">${D.dirPerm === "granted" ? "연결됨" : "다시 연결 필요"}</span></b><small>일정 · 사진이 이 폴더에도 자동 저장돼요.</small><div class="row2">${D.dirPerm !== "granted" ? `<button class="btn sm nv" data-dirperm>다시 연결</button>` : ""}<button class="btn sm" data-undir>연결 끊기</button></div></div></div>`
-      : `<button class="row" data-sheet="store">${IC.folder}<div class="t"><b>내 PC 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>PC 한 대에서만 쓰면 폴더 저장도 좋아요.</small></div></button>`) : ""}</section>
+      ${CAN_DIR ? (D.dir ? `<div class="row">${IC.folder}<div class="t"><b>저장 폴더: 「${esc(D.dir.name)}」 <span class="okb" style="${D.dirPerm === "granted" ? "" : "background:var(--red)"}">${D.dirPerm === "granted" ? "연결됨" : "다시 연결 필요"}</span></b><small>일정 · 사진이 이 폴더에도 자동 저장돼요.</small><div class="row2">${D.dirPerm !== "granted" ? `<button class="btn sm nv" data-dirperm>다시 연결</button>` : ""}<button class="btn sm" data-undir>연결 끊기</button></div></div></div>`
+      : ANDROID ? `<button class="row" data-pickown>${IC.folder}<div class="t"><b>휴대폰 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>사진 · 일정이 휴대폰 폴더에도 저장돼요. 브라우저 데이터를 지워도 폴더를 다시 고르면 사진을 다시 받지 않고 바로 불러와요.<br>폴더 고르는 창에서 <b>⋮ 또는 「새 폴더」 → 이름 「여행노트」 → 그 폴더에서 「이 폴더 사용」 → 「허용」</b>.</small></div></button>`
+      : `<button class="row" data-sheet="store">${IC.folder}<div class="t"><b>내 PC 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>사진 · 일정이 PC 폴더에도 저장돼요. 브라우저 데이터를 지워도 폴더를 다시 연결하면 사진을 다시 받지 않고 바로 불러와요.</small></div></button>`) : ""}</section>
     ${DEV === "pc" ? `<section class="sgc">${mobileBox().replace('<div class="lbl"><span>휴대폰에서도 쓰기</span></div>', `<h4>${IC.home} 휴대폰에서도 쓰기</h4>`)}</section>` : ""}
     <section class="sgc"><h4>${IC.save} 백업 <small>마지막: ${lb ? ymdw(new Date(lb)) : "없음"}</small></h4>
       <p class="hint">여행 ${D.items.length}개 · 사진 ${nPh}장을 파일(.zip) 하나로 받아 두거나, 다른 기기에서 만든 백업으로 되살려요.</p>
@@ -2348,7 +2353,7 @@ async function gdSync(opt = {}) {
       (o.items || []).forEach(r => (r.photos || []).forEach(p => keep.add(p.id + ".jpg")));
       /* 받을 사진 수를 먼저 세어 「사진 받는 중 n/전체」로 보여 줌 */
       const need = (o.items || []).flatMap(r => (r.photos || []).map(p => p.id)).filter(id => !PURL[id] && files[id + ".jpg"]).length; let dn = 0;
-      GD.importing = true; try { got = await importData(o, async id => { if (!files[id + ".jpg"]) return null; const b = await gdGet(files[id + ".jpg"].id); if (need) { GD.prog = `받는 중 ${++dn}/${need}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } return b; }); } finally { GD.importing = false; }
+      GD.importing = true; try { got = await importData(o, async id => { if (D.dir && D.dirPerm === "granted") { const lf = await folderPhoto(id); if (lf) return lf; } if (!files[id + ".jpg"]) return null; const b = await gdGet(files[id + ".jpg"].id); if (need) { GD.prog = `받는 중 ${++dn}/${need}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } return b; }); } finally { GD.importing = false; }
     }
     const want = new Set(); for (const r of D.items) for (const p of r.photos || []) want.add(p.id + ".jpg");
     /* 10-29: 목록(여행노트.json)을 사진보다 먼저 씀 — 사진을 올리다 앱을 닫아도 다른 기기에 여행 · 사진 목록이 가고, 빠진 사진은 다음 동기화 때 채워짐 */
@@ -2373,7 +2378,7 @@ async function gdSync(opt = {}) {
     D.set.gdLast = Date.now(); D.set.gdOn = true; GD.syncedThisRun = true; GD.silentFail = false; await setMeta("set", D.set);
     GD.msg = got.nr || got.np ? `동기화했어요 — 받은 여행 ${got.nr}개 · 사진 ${got.np}장` : "동기화했어요";
     if (opt.toast !== false) toast(GD.msg);
-    if (got.nr || got.np) render();
+    if (got.nr || got.np) { render(); if (got.np && D.dir && D.dirPerm === "granted") folderWrite(); }   /* 받은 사진을 이 기기 폴더에도 */
   } catch (e) { GD.err = e.message; GD.msg = ""; if (opt.toast !== false) toast("구글 드라이브: " + e.message); }
   try { if (wl) wl.release(); } catch (e) {} GD.prog = "";
   GD.busy = false; gdPaint(); if (GD.again) { GD.again = false; setTimeout(() => gdSync({ toast: false }), 500); }
@@ -2423,7 +2428,7 @@ function stBar() {
       it.push(`<button class="stc ${c}" data-gdsync title="${esc(GD.err || "구글 드라이브 › " + GDF + " · 마지막: " + gdAgo(D.set.gdLast))}">${IC.cloud}<b>구글 드라이브</b><i>${t}</i></button>`); } }
   if (D.dir) { const ok = D.dirPerm === "granted";
     it.push(`<button class="stc ${ok ? "ok" : "bad"}" ${ok ? 'data-go="set"' : "data-dirperm"}>${IC.folder}<b>${esc(D.dir.name)}</b><i>${ok ? "연결됨" : "다시 연결"}</i></button>`); }
-  else if (CAN_DIR && gdOn()) { if (!D.set.hideDir) it.push(`<button class="stc op" ${ANDROID ? "data-pickown" : 'data-sheet="store"'} title="구글 드라이브에 저장 중이라 폴더는 없어도 돼요 — 이 기기 폴더에도 저장하려면 눌러요">${IC.folder}<b>저장 폴더</b><i>선택</i></button>`); }
+  else if (CAN_DIR && gdOn()) it.push(`<button class="stc warn" ${ANDROID ? "data-pickown" : "data-pickrec"} title="사진이 많아서 이 기기 폴더도 연결해야 해요 — 브라우저 데이터를 지워도 사진을 다시 받지 않아요">${IC.folder}<b>저장 폴더</b><i>연결 필요</i></button>`);   /* 10-31 제이: 폴더 꼭 연결(선택 → 필요) */
   else if (CAN_DIR) it.push(`<button class="stc warn" ${ANDROID ? "data-pickown" : 'data-sheet="store"'} title="저장 폴더를 정하면 브라우저 기록을 지워도 여행이 남아요">${IC.folder}<b>저장 폴더</b><i>미지정</i></button>`);
   if (!it.length) it.push(`<button class="stc warn" data-go="set">${IC.save}<b>이 브라우저에만 저장</b><i>백업 권장</i></button>`);
   return stIc(`<div class="stbar" id="stbar">${it.join("")}</div>`);
@@ -2612,6 +2617,8 @@ document.addEventListener("click", async e => {
   if (d.install != null) { if (window._bip) { const ev = window._bip; ev.prompt(); try { const r = await ev.userChoice; if (r && r.outcome === "accepted") window._bip = null; } catch (er) {} render(); } return; }
   if (d.backup != null) return makeBackup();
   if (d.pickrec != null) { const ok = await pickDir(true); if (ok) { S.sheet = null; render(); } return; }
+  if (d.dirlater != null) { D.set.dirLater = Date.now(); await setMeta("set", D.set).catch(() => {}); toast("7일 뒤에 다시 알려 드릴게요. 설정 › 저장 위치에서 언제든 연결할 수 있어요."); return render(); }
+  if (d.pickown != null) { const ok = await pickDir(false); if (ok) { S.sheet = null; render(); } return; }   /* 10-31: 안드로이드 머리줄 · 설정 「휴대폰 폴더」 단추가 아무 일도 안 하던 것 */
   if (d.nostore != null) { D.set.storeAsked = true; await setMeta("set", D.set); S.sheet = null; return render(); }
   if (d.undir != null) { if (confirm("저장 폴더 연결을 끊을까요? (폴더 안 파일은 그대로 남아요)")) { D.dir = null; D.dirPerm = null; await delO("meta", "dir"); render(); } return; }
   if (d.dirperm != null) { try { const p = await D.dir.requestPermission({ mode: "readwrite" }); D.dirPerm = p; if (p === "granted") await syncFromFolder(); else render(); } catch (er) { toast("연결하지 못했어요."); } return; }

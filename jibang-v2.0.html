@@ -764,7 +764,7 @@ function lunarMonths(y){ const t=LUNAR[y]; if(!t) return null; const [leap,len,n
 function lunarToSolar(y,m,d,isLeap){ const L=lunarMonths(y); if(!L) return null; let off=0; for(const mo of L.months){ if(mo.m===m&&mo.leap===!!isLeap){ if(d>mo.days) return null; return new Date(L.ny.getTime()+(off+d-1)*DAY); } off+=mo.days; } return null; }
 function solarToLunar(date){ let y=date.getFullYear(); let L=lunarMonths(y); if(!L||date<L.ny){ y--; L=lunarMonths(y); if(!L) return null; } let off=Math.round((date-L.ny)/DAY); for(const mo of L.months){ if(off<mo.days) return {y,m:mo.m,d:off+1,leap:mo.leap}; off-=mo.days; } return null; }
 function hasLeap(y,m){ const L=lunarMonths(y); return !!(L&&L.leap===m); }
-function fmtK(d){ return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${"일월화수목금토"[d.getDay()]})`; }
+function fmtK(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}(${"일월화수목금토"[d.getDay()]})`; }
 
 /* ── 성씨·본관 한자 ── */
 const SURNAME={"김":"金","이":"李","박":"朴","최":"崔","정":"鄭","강":"姜","조":"趙","윤":"尹","장":"張","임":"林","한":"韓","오":"吳","서":"徐","신":"申","권":"權","황":"黃","안":"安","송":"宋","류":"柳","유":"柳","전":"全","홍":"洪","고":"高","문":"文","양":"梁","손":"孫","배":"裵","백":"白","허":"許","남":"南","심":"沈","노":"盧","하":"河","곽":"郭","성":"成","차":"車","주":"朱","우":"禹","구":"具","민":"閔","나":"羅","진":"陳","지":"池","엄":"嚴","채":"蔡","원":"元","천":"千","방":"方","공":"孔","현":"玄","함":"咸","변":"卞","염":"廉","여":"呂","추":"秋","도":"都","석":"石","소":"蘇","설":"薛","선":"宣","마":"馬","길":"吉","연":"延","위":"魏","표":"表","명":"明","기":"奇","반":"潘","왕":"王","금":"琴","옥":"玉","육":"陸","인":"印","맹":"孟","제":"諸","모":"牟","탁":"卓","국":"鞠","어":"魚","은":"殷","편":"片","용":"龍","예":"芮","봉":"奉","경":"慶","사":"史","부":"夫","황보":"皇甫","남궁":"南宮","제갈":"諸葛","선우":"鮮于","독고":"獨孤","사공":"司空","서문":"西門","동방":"東方"};
@@ -904,7 +904,7 @@ function Calc(){
     <div class="col-l"><div class="panel">
       <div class="sec-h">기일 (돌아가신 날짜)</div>
       <div class="seg"><button class=${c.cal==="solar"?"on":""} onClick=${()=>up("cal","solar")}>양력으로 입력</button><button class=${c.cal==="lunar"?"on":""} onClick=${()=>up("cal","lunar")}>음력으로 입력</button></div>
-      ${c.cal==="solar"?html`<label class="f">양력 기일</label><div class="row datrow"><${DateInput} value=${c.date} onInput=${e=>up("date",e.target.value)} />${lun?html`<span class="conv">음력 ${lun.y}.${lun.leap?"윤":""}${lun.m}.${lun.d}</span>`:null}${c.date?html`<button class="btn s" onClick=${reset}>초기화</button>`:null}</div>`
+      ${c.cal==="solar"?html`<label class="f">양력 기일</label><div class="row datrow"><${DateInput} value=${c.date} onInput=${e=>up("date",e.target.value)} />${lun?html`<span class="conv">음력 ${lun.y}년 ${lun.leap?"윤":""}${lun.m}월 ${lun.d}일</span>`:null}${c.date?html`<button class="btn s" onClick=${reset}>초기화</button>`:null}</div>`
       :html`<label class="f">음력 기일</label><div class="row datrow"><${LunarInput} y=${c.ly} m=${c.lm} d=${c.ld} leap=${c.leap} onChange=${n=>setC(p=>({...p,ly:n.y||"",lm:n.m||"",ld:n.d||"",leap:n.leap}))} />${base?html`<span class="conv">양력 ${fmtK(base)}</span>`:err?html`<span class="conv" style="color:#a6352e">${err}</span>`:null}${(c.ly||c.lm||c.ld)?html`<button class="btn s" onClick=${reset}>초기화</button>`:null}</div>`}
       <label class="f">장례 기간 <span class="muted">삼우제 계산용</span></label><select value=${c.funeral} onChange=${e=>up("funeral",+e.target.value)}><option value="3">3일장</option><option value="4">4일장</option><option value="5">5일장</option></select>
       <div class="note" style="margin-top:12px">${c.cal==="lunar"?"음력 기일은 해마다 양력 날짜가 달라집니다. 아래 표의 양력 날짜로 달력에 표시해 두세요.":"양력 기일은 매년 같은 날입니다. 집안에서 음력으로 지낸다면 '음력으로 입력'을 고르세요."}<br/>제사는 보통 기일 전날 저녁에 준비해 기일 첫 시간(자정 무렵)에 지내거나, 기일 저녁에 지냅니다.</div>
@@ -921,7 +921,7 @@ function Calc(){
     </div>
     <div class="col-r">
       ${!base?html`<div class="empty">기일을 입력하면 제사 날짜가 계산됩니다</div>`:html`
-        <div class="panel"><div class="sec-h">기일 기준: ${fmtK(base)}${lun?html` <span class="muted">· 음력 ${lun.y}.${lun.leap?"윤":""}${lun.m}.${lun.d}</span>`:null}</div>
+        <div class="panel"><div class="sec-h">기일 기준: ${fmtK(base)}${lun?html` <span class="muted">· 음력 ${lun.y}년 ${lun.leap?"윤":""}${lun.m}월 ${lun.d}일</span>`:null}</div>
           ${next?html`<div class="big-d"><div class="t">다음 제사 · ${nth}주기${nth===1?" (소상)":nth===2?" (대상)":""}</div><div class="v">${fmtK(next)}</div><div class="dd">${dday(next)}</div></div>`:null}
           <table class="tb res"><thead><tr><th>구분</th><th>날짜</th><th>D-day</th></tr></thead><tbody>
             ${rows.map(([n,h,d,desc])=>html`<tr class=${d>=today?"":"past"}><td><b>${n}</b> <span class="muted">${h}</span><div class="muted small">${desc}</div></td><td>${fmtK(d)}${c.cal==="solar"&&n.includes("주기")?null:null}</td><td class="mono">${dday(d)}</td></tr>`)}

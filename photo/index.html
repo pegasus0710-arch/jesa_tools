@@ -2,7 +2,7 @@
 <html lang="ko"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>사진 뷰어 v1.0 (내 PC용) | Blog J</title><meta name="description" content="PC 곳곳의 사진 폴더를 한곳에 모아 태그 · 찍은 날 · 장소 · 폴더별로 보기 (사진 파일은 바꾸지 않음 · 업로드 없음)" />
 <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#ece6da" />
+<meta name="theme-color" content="#f0e8db" />
 <link rel="apple-touch-icon" href="icon-192.png" />
 <script>
 /* PC 설치형 — 휴대폰 · 태블릿은 아직 안 됨(10-28 제이: 모바일 보류) */
@@ -30,7 +30,7 @@ document.body.appendChild(x);
 var off=false;try{off=localStorage.getItem("bjphoto:instbar")==="off";}catch(e){}
 if(!off){x.style.display="none";var bar=document.createElement("div");bar.id="bjinstbar";
 bar.style.cssText="position:relative;z-index:9998;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px max(16px,calc((100vw - 1320px)/2));background:#20263a;color:#fff;font:600 14.5px/1.5 sans-serif";
-bar.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e08a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span style="flex:1;min-width:220px">사진 뷰어를 <b style="color:#ffd9b0">PC에 앱으로 설치</b>하면 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요. 가입 없이 무료이고, 인터넷이 되면 늘 새 버전으로 열려요.</span><button type="button" data-a="i" style="border:0;border-radius:10px;padding:9px 16px;background:#e08a3e;color:#1f2125;font:800 14px/1 sans-serif;cursor:pointer">PC에 앱으로 설치</button><button type="button" data-a="x" aria-label="안내 닫기" title="닫기 — 다음에는 오른쪽 아래 단추로" style="border:0;background:transparent;color:#fff;opacity:.75;font:400 22px/1 sans-serif;cursor:pointer;padding:2px 6px">×</button>';
+bar.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e08a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span style="flex:1;min-width:220px">사진 뷰어를 <b style="color:#ffd9b0">PC에 앱으로 설치</b>하면 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요. 가입 없이 무료이고, 인터넷이 되면 늘 새 버전으로 열려요.</span><button type="button" data-a="i" style="border:0;border-radius:10px;padding:9px 16px;background:#fcf9f4;color:#1f2125;font:800 14px/1 sans-serif;cursor:pointer">PC에 앱으로 설치</button><button type="button" data-a="x" aria-label="안내 닫기" title="닫기 — 다음에는 오른쪽 아래 단추로" style="border:0;background:transparent;color:#fff;opacity:.75;font:400 22px/1 sans-serif;cursor:pointer;padding:2px 6px">×</button>';
 bar.addEventListener("click",function(ev){var b=ev.target.closest("button");if(!b)return;
  if(b.getAttribute("data-a")==="x"){bar.remove();try{localStorage.setItem("bjphoto:instbar","off");}catch(e){}x.style.display="flex";return;}
  if(bip){bip.prompt();bip.userChoice.then(function(r){if(r&&r.outcome==="accepted")bar.remove();bip=null;});}else{guide();var g=document.getElementById("bjinstg");if(g){g.style.top="64px";g.style.bottom="auto";}}});
@@ -42,9 +42,9 @@ window.addEventListener("appinstalled",function(){["bjinst","bjinstg","bjinstbar
 <style>
 /* ══════════ 사진 정리기 — 디자인 3.0 "입체 교정지" ══════════ */
 :root{
---pan:#ece6da;--up-bg:#f1ebe1;--card:#f4efe6;--in-bg:#e7e0d2;--pr-bg:#e6dfd1;--tray:#e2dacb;--hover:#f7f2e9;
+--pan:#f0e8db;--up-bg:#f1ebe1;--card:#f4efe6;--in-bg:#e7e0d2;--pr-bg:#e6dfd1;--tray:#e2dacb;--hover:#f7f2e9;
 --ink:#1f2125;--ink2:#5b5547;--ink3:#6f6857;--line:#ddd5c5;--line2:#cfc6b3;
---navy:#20263a;--amber:#e08a3e;--red:#c23a2b;--cat:#1f7f8f;
+--navy:#195455;--amber:#f56d03;--red:#c23a2b;--cat:#1f7f8f;
 --up:9px 10px 22px rgba(160,140,108,.42),-7px -7px 18px rgba(255,255,255,.9);
 --up-m:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);
 --up-s:3px 4px 9px rgba(160,140,108,.38),-3px -3px 8px rgba(255,255,255,.9);
@@ -87,10 +87,10 @@ a{color:inherit}
 .btn:disabled{opacity:.5;box-shadow:none;transform:none}
 .btn.s{min-height:34px;padding:6px 11px;font-size:13.5px;border-radius:10px;gap:6px}
 .btn.go{background:var(--amber);color:#fff;font-size:16px;min-height:52px;padding:12px 26px;box-shadow:4px 6px 14px rgba(170,110,55,.45),-3px -3px 8px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.3)}
-.btn.go:hover{background:#d97f32;box-shadow:2px 3px 7px rgba(170,110,55,.4);outline:2.5px solid var(--navy);outline-offset:3px}
-.btn.go:active{background:#c9742c;box-shadow:inset 3px 3px 7px rgba(110,60,20,.5)}
+.btn.go:hover{background:#d95f00;box-shadow:2px 3px 7px rgba(170,110,55,.4);outline:2.5px solid var(--navy);outline-offset:3px}
+.btn.go:active{background:#c25500;box-shadow:inset 3px 3px 7px rgba(110,60,20,.5)}
 .btn.p{background:var(--navy);color:#fff;box-shadow:4px 5px 12px rgba(40,44,60,.35),-3px -3px 8px rgba(255,255,255,.85)}
-.btn.p:hover{background:#2c3450;box-shadow:2px 3px 7px rgba(40,44,60,.35);outline:2.5px solid var(--navy);outline-offset:3px}
+.btn.p:hover{background:#12403f;box-shadow:2px 3px 7px rgba(40,44,60,.35);outline:2.5px solid var(--navy);outline-offset:3px}
 input[type=search],input[type=date],select{background:var(--in-bg);border:0;border-radius:12px;padding:9px 12px;font-size:15px;box-shadow:var(--in);min-height:42px;min-width:0}
 input:focus,select:focus{outline:0;box-shadow:var(--in),0 0 0 2px var(--navy)}
 select{appearance:none;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235b5547' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
@@ -201,7 +201,7 @@ label.f{display:block;font-size:13.5px;font-weight:700;color:#3f3b33;margin:16px
 .cell.on::after{content:"";position:absolute;right:-4px;top:-4px;width:12px;height:12px;border-radius:50%;background:var(--amber);border:3px solid var(--tray)}
 .cell .im{position:relative;display:block;width:100%;border-radius:9px;overflow:hidden;background:#d6cdbb}
 .cell .im img,.row .im img{width:100%;height:100%;object-fit:cover;display:block}
-.cell .gp{position:absolute;left:6px;bottom:6px;width:22px;height:22px;border-radius:7px;background:rgba(32,38,58,.82);color:#fff;display:flex;align-items:center;justify-content:center}
+.cell .gp{position:absolute;left:6px;bottom:6px;width:22px;height:22px;border-radius:7px;background:rgba(25,84,85,.82);color:#fff;display:flex;align-items:center;justify-content:center}
 .cell .nm{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:2px 3px 0}
 .cell .dt{padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;color:#8d8574;background:repeating-linear-gradient(45deg,#ddd4c3 0 8px,#d8cfbd 8px 16px)}
@@ -237,7 +237,7 @@ label.f{display:block;font-size:13.5px;font-weight:700;color:#3f3b33;margin:16px
 .pv{position:relative;display:block;width:100%;height:190px;border-radius:12px;background:var(--tray);box-shadow:var(--in);overflow:hidden;padding:8px}
 .pv img{width:100%;height:100%;object-fit:contain;display:block}
 .pv .ph{border-radius:8px}
-.pv-x{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:5px;background:rgba(32,38,58,.82);color:#fff;font-size:12.5px;font-weight:700;padding:5px 9px;border-radius:8px;opacity:0;transition:opacity .15s}
+.pv-x{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:5px;background:rgba(25,84,85,.82);color:#fff;font-size:12.5px;font-weight:700;padding:5px 9px;border-radius:8px;opacity:0;transition:opacity .15s}
 .pv:hover .pv-x,.pv:focus-visible .pv-x{opacity:1}
 .pv:hover{box-shadow:var(--in),inset 0 0 0 2px var(--navy)}
 .fname{font-size:16px;font-weight:800;margin:14px 0 2px;word-break:break-all;letter-spacing:-.02em}
@@ -272,7 +272,7 @@ label.f{display:block;font-size:13.5px;font-weight:700;color:#3f3b33;margin:16px
 .foot a{color:var(--ink2);font-weight:700;text-decoration:none}
 
 /* 진행 창 */
-.modal{position:fixed;inset:0;z-index:2000;background:rgba(32,38,58,.35);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{position:fixed;inset:0;z-index:2000;background:rgba(25,84,85,.35);display:flex;align-items:center;justify-content:center;padding:20px}
 .mdl{width:100%;max-width:420px;padding:26px 28px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
 .md-ic{width:56px;height:56px;border-radius:16px;background:var(--card);box-shadow:var(--up-s);display:flex;align-items:center;justify-content:center;color:var(--cat)}
 .mdl h3{margin:4px 0 0;font-size:18px;font-weight:800}
@@ -351,7 +351,7 @@ label.f{display:block;font-size:13.5px;font-weight:700;color:#3f3b33;margin:16px
 
 .ro{margin-left:4px;padding:2px 7px;border-radius:6px;background:var(--pan);color:var(--ink2)}
 /* 고르기 점 */
-.ck{position:absolute;left:7px;top:7px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 0 2px rgba(32,38,58,.55);display:flex;align-items:center;justify-content:center;color:transparent;opacity:0;transition:opacity .12s;cursor:pointer;z-index:2}
+.ck{position:absolute;left:7px;top:7px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 0 2px rgba(25,84,85,.55);display:flex;align-items:center;justify-content:center;color:transparent;opacity:0;transition:opacity .12s;cursor:pointer;z-index:2}
 .cell:hover .ck,.gal.picking .ck,.ck.on{opacity:1}
 .ck:hover{box-shadow:0 0 0 2px var(--navy);color:var(--ink3)}
 .ck.on{background:var(--navy);box-shadow:0 0 0 2px #fff;color:#fff}
@@ -494,7 +494,7 @@ label.f{display:block;font-size:13.5px;font-weight:700;color:#3f3b33;margin:16px
 .lw-h::after{content:"";position:absolute;left:4px;top:50%;width:2px;height:48px;margin-top:-24px;border-radius:2px;background:rgba(111,104,87,.35)}
 .lw-h:hover::after,body.rsz .lw-h::after{background:var(--navy);height:72px;margin-top:-36px}
 body.rsz{cursor:col-resize;user-select:none}
-.vb{position:absolute;right:6px;bottom:6px;display:flex;align-items:center;gap:4px;padding:3px 7px 3px 5px;border-radius:7px;background:rgba(32,38,58,.82);color:#fff;font-style:normal;z-index:1}
+.vb{position:absolute;right:6px;bottom:6px;display:flex;align-items:center;gap:4px;padding:3px 7px 3px 5px;border-radius:7px;background:rgba(25,84,85,.82);color:#fff;font-style:normal;z-index:1}
 .vb span{font-family:var(--mono);font-size:12px}
 .vb svg{fill:#fff;stroke:none}
 .hv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
@@ -546,7 +546,7 @@ body.rsz{cursor:col-resize;user-select:none}
 .vw-side .szl{margin-top:4px}
 /* 동영상 표시 */
 .vi{display:none}
-.cell .vi{position:absolute;right:6px;top:6px;z-index:1;width:26px;height:26px;border-radius:8px;background:rgba(32,38,58,.82);color:#fff;display:flex;align-items:center;justify-content:center;font-style:normal}
+.cell .vi{position:absolute;right:6px;top:6px;z-index:1;width:26px;height:26px;border-radius:8px;background:rgba(25,84,85,.82);color:#fff;display:flex;align-items:center;justify-content:center;font-style:normal}
 .dirc .vi{display:none}
 
 
@@ -640,7 +640,7 @@ body.rsz{cursor:col-resize;user-select:none}
 .zs-bar{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:flex-end;gap:10px;z-index:3;cursor:default}
 .zs-nav{position:relative;border-radius:8px;overflow:hidden;background:#000;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 6px 20px rgba(0,0,0,.5);cursor:crosshair;flex-shrink:0;display:grid;place-items:center}
 .zs-nav img{width:100%;height:100%;display:block;object-fit:fill;pointer-events:none;opacity:.8}
-.zs-v{position:absolute;border:2px solid #e08a3e;background:rgba(224,138,62,.18);box-shadow:0 0 0 999px rgba(0,0,0,.35);pointer-events:none}
+.zs-v{position:absolute;border:2px solid #f56d03;background:rgba(245,109,3,.18);box-shadow:0 0 0 999px rgba(0,0,0,.35);pointer-events:none}
 .zs-ctl{display:flex;align-items:center;gap:4px;padding:5px;border-radius:12px;background:rgba(20,24,38,.88);color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .zs-ctl b{min-width:50px;text-align:center;font-size:13px;font-variant-numeric:tabular-nums}
 .zs-ctl button{height:32px;min-width:32px;border-radius:8px;display:grid;place-items:center;color:#fff;background:transparent;padding:0 8px;font-size:13px}
@@ -682,16 +682,16 @@ body.rsz{cursor:col-resize;user-select:none}
 .tg-in{display:flex;gap:8px;margin-top:12px}.tg-in .tin{flex:1;min-width:0}
 .tg-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px;text-align:left}
 .tg-row>.k{width:100%;font-size:12.5px}
-.tgc{display:inline-flex;align-items:center;gap:4px;padding:4px 6px 4px 11px;border-radius:999px;background:#e6e9f2;color:#20263a;font-size:13.5px;font-weight:600;line-height:1.3}
+.tgc{display:inline-flex;align-items:center;gap:4px;padding:4px 6px 4px 11px;border-radius:999px;background:#e6e9f2;color:#195455;font-size:13.5px;font-weight:600;line-height:1.3}
 .tgc small{font-weight:500;color:#5a6178;font-size:12px}
 .tgc button{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#5a6178}
-.tgc button:hover{background:rgba(32,38,58,.12);color:#20263a}
+.tgc button:hover{background:rgba(25,84,85,.12);color:#195455}
 .tgc.new{background:#fbe6d2;color:#7a3f0f}
 .tgc.gone{text-decoration:line-through;opacity:.5}
 .tgc.sug{padding:4px 11px;background:var(--in-bg,#efede6);cursor:pointer}
 .tgc.sug:hover{box-shadow:inset 0 0 0 2px var(--navy)}
 .tgc.lk{padding:3px 10px;cursor:pointer;font-size:13px}
-.tgc.lk:hover{background:#20263a;color:#fff}
+.tgc.lk:hover{background:#195455;color:#fff}
 .meta dd.tgs{display:flex;flex-wrap:wrap;gap:5px}
 .hint.sm{font-size:12.5px;margin-top:14px;text-align:left}
 .fpop section.wide{grid-column:1/-1}
@@ -745,7 +745,7 @@ body.rsz{cursor:col-resize;user-select:none}
 .fgp-on{min-width:0;flex:1 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;font-weight:700;color:#7a3f0f;background:#fbe6d2;border-radius:999px;padding:2px 10px;max-width:60%}
 .fgp-c{margin-left:auto;display:grid;transition:transform .15s}
 .fgp.op .fgp-c{transform:rotate(180deg)}
-.fgp.act{box-shadow:var(--up-s),inset 4px 0 0 var(--amber,#e08a3e)}
+.fgp.act{box-shadow:var(--up-s),inset 4px 0 0 var(--amber,#f56d03)}
 .fgp-b{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
 .fgp-b .f{margin-top:4px}
 .muted.sm{font-size:12.5px;margin:0}
@@ -791,8 +791,8 @@ body.rsz{cursor:col-resize;user-select:none}
 
 
 
-.fp-b{padding:0 2px;border-radius:5px;color:inherit;font:inherit;text-decoration:underline;text-decoration-color:rgba(32,38,58,.3);text-underline-offset:3px;cursor:pointer}
-.fp-b:hover{color:var(--navy);background:rgba(32,38,58,.07);text-decoration-color:var(--navy)}
+.fp-b{padding:0 2px;border-radius:5px;color:inherit;font:inherit;text-decoration:underline;text-decoration-color:rgba(25,84,85,.3);text-underline-offset:3px;cursor:pointer}
+.fp-b:hover{color:var(--navy);background:rgba(25,84,85,.07);text-decoration-color:var(--navy)}
 .fp-s{opacity:.6}
 
 /* ══════════ v1.0 개편(10-27): 내 사진 모음 · 모아 보기 ══════════ */
@@ -875,8 +875,8 @@ body.rsz{cursor:col-resize;user-select:none}
 .stabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:12px 12px 8px;padding:4px;border-radius:12px;background:var(--in,#e7e0d2);box-shadow:inset 2px 2px 5px rgba(160,140,108,.35),inset -2px -2px 5px rgba(255,255,255,.7)}
 .stabs button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 2px 6px;border-radius:9px;font:inherit;font-size:13px;font-weight:700;color:var(--ink2,#5b5547);min-width:0}
 .stabs button .k{font-size:11.5px;font-weight:600;color:var(--ink3,#6f6857);line-height:1.2}
-.stabs button.on{background:var(--card,#f4efe6);color:var(--ink,#1f2125);box-shadow:inset 0 0 0 2px var(--navy,#20263a),var(--up-s)}
-.stabs button:not(.on):hover{color:var(--navy,#20263a)}
+.stabs button.on{background:var(--card,#f4efe6);color:var(--ink,#1f2125);box-shadow:inset 0 0 0 2px var(--navy,#195455),var(--up-s)}
+.stabs button:not(.on):hover{color:var(--navy,#195455)}
 .stab-b{min-height:120px}
 .nv-h2{margin:2px 0 4px 6px;font-size:12.5px}
 /* 날짜 칸(10-28) — 2026-01-01(목) 표기 + 투명 date 입력 */
@@ -887,6 +887,146 @@ body.rsz{cursor:col-resize;user-select:none}
 .dtin input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
 .dd2 .dtin{padding:7px 9px;min-height:38px}.dd2 .dtin span{font-size:13px}
 .dt-row .dtin{flex:1}.dt-row .tin.tm{width:auto;flex:0 0 150px}
+
+
+/* BJ31-APPLIED */
+/* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
+/* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
+   1) 깊이는 3단만: 판(바탕) · 카드(머리카락 선 + 아주 옅은 그림자) · 들어감(입력 · 고르기 바탕)
+   2) 이중 그림자(어두운 + 흰 빛) 없앰 → 흐릿함 · 뭉개짐 제거
+   3) 모서리 4단계: 8 · 10 · 14 · 18px
+   4) 고른 것 = 남색 선(1.5px) + 남색 글자, 주 버튼 = 앰버 한 곳(평평하게) */
+:root{
+  --navy:#195455;--amber:#f56d03;--brand:#195455;--accent:#f56d03;
+  --paper:#f0e8db;--panel:#f7f2ea;--card:#fcf9f4;--tint:#ece3d5;--in-bg:#ece3d5;--up-bg:#f7f2ea;--pr-bg:#f3ece1;--press-bg:#f3ece1;--tray:#e9e0d1;--hover:#f5efe5;
+  --hair:rgba(90,74,50,.12);--hair2:rgba(90,74,50,.2);
+  --up:0 0 0 1px rgba(90,74,50,.07),0 1px 2px rgba(90,74,50,.05),0 10px 28px -12px rgba(90,74,50,.18);
+  --up-s:0 0 0 1px rgba(90,74,50,.09),0 1px 2px rgba(90,74,50,.06);
+  --in:inset 0 0 0 1px rgba(90,74,50,.1);
+  --press:inset 0 0 0 1.5px var(--navy,#195455);
+  --sh-paper:0 1px 3px rgba(0,0,0,.06),0 14px 34px -14px rgba(60,48,30,.28);
+  --r-s:8px;--r:10px;--r-m:14px;--r-l:18px;
+}
+/* 버튼: 평평하게, 그림자는 선 하나 */
+.btn{border-radius:var(--r);box-shadow:var(--up-s);font-weight:600;transition:background .12s,box-shadow .12s}
+.btn:hover{background:var(--hover);box-shadow:0 0 0 1px var(--navy,#195455)}
+.btn:active{transform:none;box-shadow:inset 0 0 0 1.5px var(--navy,#195455)}
+.btn.sm{border-radius:var(--r-s)}
+.btn.go{background:var(--amber,#f56d03);color:#fff;box-shadow:0 1px 2px rgba(140,60,10,.25),inset 0 -1px 0 rgba(0,0,0,.08);outline:0}
+.btn.go:hover{background:#d95f00;box-shadow:0 1px 2px rgba(140,60,10,.25),0 0 0 3px rgba(245,109,3,.22);outline:0}
+.btn.nv,.btn.p,.btn.accent{background:var(--navy,#195455);color:#fff;box-shadow:0 1px 2px rgba(15,55,56,.25)}
+.btn.nv:hover,.btn.p:hover,.btn.accent:hover{background:#12403f;box-shadow:0 0 0 3px rgba(25,84,85,.16)}
+.ib{box-shadow:var(--up-s);border-radius:var(--r)}
+.ib:hover{box-shadow:0 0 0 1px var(--navy,#195455)}
+/* 고르기(세그먼트): 바탕은 들어감 한 장, 고른 칸은 흰 카드 + 머리카락 선 */
+.vt,.seg,.tvbar{background:var(--tint);box-shadow:var(--in);border-radius:var(--r);padding:3px;gap:2px}
+.vt button,.seg button,.tvbar button{border-radius:var(--r-s);font-weight:600}
+.vt button.on,.seg button.on,.tvbar button.on{background:var(--card);color:var(--ink,#1f2125);font-weight:700;box-shadow:0 0 0 1px rgba(90,74,50,.12),0 1px 3px rgba(90,74,50,.12)}
+/* 칩: 테두리만, 고른 칩은 남색 선 + 남색 글자 */
+.chip{background:transparent;box-shadow:inset 0 0 0 1px var(--hair2);border-radius:999px;padding:7px 13px;font-weight:600}
+.chip:hover{background:var(--card);box-shadow:inset 0 0 0 1px var(--navy,#195455)}
+.chip.on,.chip.on:hover{background:var(--card);color:var(--navy,#195455);box-shadow:inset 0 0 0 1.5px var(--navy,#195455);font-weight:700}
+/* 입력: 들어감 대신 흰 바탕 + 선 (읽기 쉬움) */
+.inp,input.inp,select.inp,textarea.inp{background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
+.inp:focus{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.1);outline:0}
+.srch{background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
+.srch:focus-within{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.1)}
+/* 카드 · 줄 */
+.tcard,.row,.sgc,.pg{box-shadow:var(--up-s);border-radius:var(--r-m)}
+.tcard:hover,.tgt:hover,.tlist .tcard.trip:hover{box-shadow:0 0 0 1px var(--navy,#195455),0 6px 18px -10px rgba(25,84,85,.3)}
+body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div{box-shadow:var(--up);border-radius:var(--r-l)}
+.sheet .in,.sheet>div{border-radius:var(--r-l) var(--r-l) 0 0}
+/* 이름표(섹션 머리): 작게 · 자간 · 흐린 먹 */
+.lbl{font-size:12.5px;letter-spacing:.06em;color:var(--ink3);font-weight:700}
+.sgc h4{font-size:14px;letter-spacing:-.01em}
+/* 안내 상자: 상자 대신 왼쪽 선 하나 */
+.note,.note.w,.stnote{background:transparent;box-shadow:none;border-radius:0;border-left:3px solid var(--hair2);padding:4px 0 4px 12px}
+.note.w{border-left-color:#d98a1a}
+/* 작은 표 · 뱃지 */
+.okb,.dd{border-radius:6px}
+/* 도구 작업대(3.0 틀): 교정대 · 작업 패널 · 눈금자 */
+.tray{background:var(--tray);box-shadow:var(--in);border-radius:var(--r-l)}
+.wp{box-shadow:var(--up);border-radius:var(--r-l)}
+.ruler{box-shadow:var(--in);background:var(--tint)}
+.tcard.on,.tcard.on:hover{box-shadow:inset 0 0 0 1.5px var(--navy,#195455)}
+.wp-f{box-shadow:0 -1px 0 var(--hair)}
+.brand .lg,.pcbar .lg{box-shadow:0 1px 2px rgba(0,0,0,.18),inset 0 -2px 0 rgba(0,0,0,.1)!important}
+/* 고른 것 = 남색(10-30 제이): 고른 칸의 아이콘 · 글자 · 점은 남색, 주황은 진행 표시와 주 단추에만 */
+.vt button.on,.seg button.on,.tvbar button.on,.pcnav button.on,.tabs button.on,.chip.on{color:var(--navy,#195455)}
+.vt button.on svg,.seg button.on svg,.tvbar button.on svg,.pcnav button.on svg,.tabs button.on svg,.chip.on svg,.li.on svg,.tcard.on svg{color:var(--navy,#195455);opacity:1}
+.tcard.on i{background:var(--navy,#195455)}
+.pvth button.on,.vw2-strip button.on{box-shadow:0 0 0 3px var(--navy,#195455)}
+.li.on{box-shadow:inset 0 0 0 1.5px var(--navy,#195455)}
+/* 눈금자 진행(공통 · 10-22 제이 규칙): 단계 이름은 글자만 — 박스 · 테두리 · 바탕 없음.
+   올리면 번호 앰버 + 글자 밑 앰버 2px 밑줄, 지금 단계는 굵게만, 키보드 포커스만 남색 윤곽선 */
+.ruler{background:transparent!important;box-shadow:none!important;border-bottom:1px solid var(--hair2);border-radius:0!important}
+.ruler button,.ruler button:hover,.ruler button.cur,.ruler button.done{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+.ruler button:hover{color:var(--ink)}
+.ruler button:hover .rn{color:var(--amber,#f56d03)}
+.ruler button:not(.cur):hover{text-decoration:underline;text-decoration-color:var(--amber,#f56d03);text-decoration-thickness:2px;text-underline-offset:6px}
+.ruler button:focus{outline:0}
+.ruler button:focus-visible{outline:2px solid var(--navy,#195455);outline-offset:2px;border-radius:6px!important}
+/* 로고 배지(도구 아이콘) 바탕 = 남색 — Blog J 고유 색(10-30 제이). 분야색은 배지에서 빼고 표시에만 */
+.brand .lg,.pcbar .lg{background:var(--navy,#195455)!important;color:#fff}
+.brand .lg svg,.pcbar .lg svg{color:#fff}
+
+/* 고른 것 = 초록 바탕 + 흰 글자(10-30 제이) — 카드 · 칩 · 나눔 단추 · 보기 단추 · 날 목록 */
+.tcard.on,.tcard.on:hover,.li.on,.chip.on,.chip.on:hover,.vt button.on,.seg button.on,.tvbar button.on,.pcnav button.on{background:var(--navy,#195455)!important;color:#fff!important;box-shadow:0 1px 2px rgba(15,55,56,.25)!important}
+.tcard.on *,.li.on *,.chip.on *,.vt button.on *,.seg button.on *,.tvbar button.on *,.pcnav button.on *{color:#fff!important}
+.tcard.on small,.li.on small,.tcard.on .muted,.li.on .k,.chip.on small{color:rgba(255,255,255,.78)!important}
+.tcard.on i{background:#fff!important}
+.tcard.on svg,.chip.on svg,.vt button.on svg,.seg button.on svg,.tvbar button.on svg,.pcnav button.on svg,.li.on svg{color:#fff!important}
+.pdays>button.on,.pdays>button.on:hover,.pside button.on{background:var(--navy,#195455)!important;color:#fff!important;box-shadow:0 1px 2px rgba(15,55,56,.25)!important}
+.pdays>button.on *,.pside button.on *{color:#fff!important}.pdays>button.on small,.pside button.on small{color:rgba(255,255,255,.78)!important}
+/* 주 단추 = 앱의 메인 색(10-30 제이 안): 주황은 단추에 쓰지 않고 진행 구슬 · 로고 점 · 새 소식 같은 작은 표시에만 */
+.btn.go{background:var(--navy,#195455)!important;color:#fff!important;box-shadow:0 1px 2px rgba(15,55,56,.3),inset 0 -1px 0 rgba(0,0,0,.12)!important;outline:0!important}
+.btn.go:hover{background:var(--navy-h,#12403f)!important;box-shadow:0 0 0 3px rgba(25,84,85,.2)!important}
+.btn.go:disabled{background:#d6cdbd!important;color:#8d8574!important;box-shadow:none!important}
+:root{--navy-h:#12403f}
+/* ══ 10-30 제이: 색을 칠하는 단추는 적당한 크기로만, 큰 카드 · 큰 단추는 3.0의 돋움(음영) · 들어감(음각)으로 ══ */
+:root{
+  --up3:9px 10px 22px rgba(160,140,108,.38),-7px -7px 18px rgba(255,255,255,.85);
+  --up3s:3px 4px 9px rgba(160,140,108,.34),-3px -3px 8px rgba(255,255,255,.88);
+  --in3:inset 3px 3px 8px rgba(160,140,108,.34),inset -3px -3px 8px rgba(255,255,255,.8);
+  --press3:inset 3px 3px 7px rgba(150,128,95,.42),inset -2px -2px 5px rgba(255,255,255,.72);
+}
+/* 큰 판 · 패널 = 돋움 */
+.wp,body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div,.pdays,.sgc{box-shadow:var(--up3)!important}
+/* 큰 고르기 카드 · 날 목록 · 목록 카드 = 작은 돋움, 고르면 눌림(음각) + 앱 색 테두리 · 글자 · 점 (바탕을 칠하지 않음) */
+.tcard,.pdays>button[data-day],.row,.pg{box-shadow:var(--up3s)!important}
+.pdays>button.tname{box-shadow:none!important;background:transparent!important}
+.tcard:hover,.pdays>button[data-day]:hover,.tlist .tcard.trip:hover{box-shadow:var(--up3s),inset 0 0 0 1.5px var(--navy,#195455)!important}
+.tcard.on,.tcard.on:hover,.pdays>button.on,.pdays>button.on:hover,.pside button.on,.li.on{background:var(--press-bg,#f3ece1)!important;color:var(--navy,#195455)!important;box-shadow:var(--press3),inset 0 0 0 2px var(--navy,#195455)!important}
+.tcard.on *,.pdays>button.on *,.pside button.on *,.li.on *{color:var(--navy,#195455)!important}
+.tcard.on small,.pdays>button.on small,.pside button.on small,.li.on small{color:var(--ink2,#5b5547)!important}
+.tcard.on i{background:var(--navy,#195455)!important}
+.tcard.on svg,.li.on svg{color:var(--navy,#195455)!important}
+/* 교정대 · 나눔 단추 홈 = 들어감(음각) */
+.tray{box-shadow:var(--in3)!important}
+.vt,.seg,.tvbar{box-shadow:var(--in3)!important;background:var(--tint)!important}
+/* 색 단추는 적당한 크기 — 주 단추 높이 44, 좌우 여유만 */
+.btn.go{min-height:44px!important;padding:10px 20px!important;font-size:15px!important;flex:0 0 auto}
+/* 폭이 넓은 큰 단추(가로 꽉 찬 단추)는 칠하지 않고 돋움 + 앱 색 글자 */
+.btn.go.w,.btn.w.nv{background:var(--card,#fcf9f4)!important;color:var(--navy,#195455)!important;box-shadow:var(--up3s)!important;min-height:52px!important;font-weight:700}
+.btn.go.w svg,.btn.w.nv svg{color:var(--navy,#195455)!important}
+.btn.go.w:hover,.btn.w.nv:hover{box-shadow:var(--up3s),inset 0 0 0 1.5px var(--navy,#195455)!important}
+.btn.go.w:active,.btn.w.nv:active{box-shadow:var(--press3)!important}
+/* 눈금자 구슬: 지금 위치를 알려 주듯 살짝 반짝임(10-30 제이) — 퍼지는 고리 + 은은한 빛, 움직임 줄이기 설정이면 멈춤 */
+.ruler .bead{animation:bjBeadGlow 2.6s ease-in-out infinite}
+.ruler .bead::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
+@keyframes bjBeadGlow{0%,100%{filter:brightness(1);box-shadow:2px 3px 5px rgba(120,70,20,.35),inset 2px 2px 3px rgba(255,255,255,.45)}50%{filter:brightness(1.18);box-shadow:0 0 10px 3px rgba(255,150,50,.55),inset 2px 2px 3px rgba(255,255,255,.6)}}
+@keyframes bjBeadRing{0%{transform:scale(1);opacity:.75}70%,100%{transform:scale(2.3);opacity:0}}
+@media (prefers-reduced-motion:reduce){.ruler .bead::after{animation-duration:4s}.ruler .bead{animation-duration:4s}}
+@media print{.ruler .bead,.ruler .bead::after{animation:none}}
+/* 고르기 칸(select) · 체크 — 입력칸과 같이 카드 바탕 + 선, 체크는 앱 색 */
+select,.t-cal select,select.inp{background-color:var(--card)!important;box-shadow:inset 0 0 0 1px var(--hair2)!important;border-radius:var(--r)!important}
+select:focus{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.12)!important;outline:0}
+input[type=checkbox],input[type=radio]{accent-color:var(--navy,#195455)}
+input[type=text]:not(.inp),input[type=number]:not(.inp){background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
+input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.12);outline:0}
+/* 10-30 밤: 떠 있는 「+」 단추 — 주황 단추 금지(3.1 2-1) → 앱 색 */
+.fab{background:var(--navy,#195455);color:#fff;box-shadow:0 1px 2px rgba(15,55,56,.25),0 8px 20px -6px rgba(15,55,56,.45)}
+.fab:hover{background:#12403f}
 
 </style></head><body><div id="root"></div>
 <script>

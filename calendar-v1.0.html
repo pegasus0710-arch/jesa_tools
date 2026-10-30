@@ -466,12 +466,17 @@ body,button,input,select{font-family:var(--font)}
 .cl-dt input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;min-height:0;padding:0}
 .cl-dt:focus-within{box-shadow:inset 0 0 0 1.5px var(--navy,#195455)}
 @media(max-width:520px){.cl-mr{grid-template-columns:minmax(0,1fr) 40px}.cl-mr .cl-dt{grid-column:1/2}.cl-mr input[type=text]{grid-column:1/-1;grid-row:2}}
-/* 탁상 달력 아래 칸 */
-.cl-dbot{flex:none;height:27mm;margin-top:2.5mm;border-top:.35mm solid #1f2125;padding-top:1.6mm;display:flex;flex-direction:column;min-height:0}
-.cl-dbot>b{font-size:2.6mm;font-weight:800;letter-spacing:.04em;color:#3f3b33;margin-bottom:1mm}
-.cl-dl{display:grid;grid-template-columns:1fr 1fr;gap:.6mm 5mm;font-size:2.5mm;line-height:1.35;overflow:hidden}
-.cl-dl span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cl-dl em{font-style:normal;font-weight:700;font-variant-numeric:tabular-nums}
-.cl-dln{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}.cl-dln i{display:block;border-bottom:.25mm solid var(--lc)}
+/* 탁상 달력 A4 아래 반쪽 노트 */
+.cl-note{height:100%;padding:6mm 10mm 7mm;display:flex;flex-direction:column}
+.cl-nh{display:flex;align-items:baseline;gap:3mm;border-bottom:.5mm solid #1f2125;padding-bottom:1.6mm;margin-bottom:1mm}
+.cl-nh b{font-size:6mm;font-weight:800;letter-spacing:-.02em}.cl-nh span{font-size:3.4mm;font-weight:700;color:#6f6857}
+.cl-ng{flex:1;display:grid;grid-auto-flow:column;grid-template-columns:1fr 1fr;column-gap:8mm;min-height:0}
+.cl-nr{display:flex;align-items:flex-end;gap:1.6mm;border-bottom:.25mm solid var(--lc);padding-bottom:.8mm;min-width:0}
+.cl-nr b{width:6mm;text-align:right;font-size:3.6mm;font-weight:800;font-variant-numeric:tabular-nums;flex:none}
+.cl-nr .w{width:3.6mm;font-size:2.8mm;font-weight:700;flex:none}
+.cl-nr .tx{font-size:2.8mm;color:#1f2125;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:1.4mm}
+.cl-nr .tx em{font-style:normal;color:#8a8272;font-size:2.5mm;margin-right:1.6mm}
+.cl-nl{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}.cl-nl i{display:block;border-bottom:.25mm solid var(--lc)}
 
 /* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
@@ -599,7 +604,7 @@ body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div{box-shadow:var(--up);border-rad
 .ruler .bead::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
 @keyframes bjBeadGlow{0%,100%{filter:brightness(1);box-shadow:2px 3px 5px rgba(120,70,20,.35),inset 2px 2px 3px rgba(255,255,255,.45)}50%{filter:brightness(1.18);box-shadow:0 0 10px 3px rgba(255,150,50,.55),inset 2px 2px 3px rgba(255,255,255,.6)}}
 @keyframes bjBeadRing{0%{transform:scale(1);opacity:.75}70%,100%{transform:scale(2.3);opacity:0}}
-@media (prefers-reduced-motion:reduce){.ruler .bead,.ruler .bead::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.ruler .bead::after{animation-duration:4s}.ruler .bead{animation-duration:4s}}
 @media print{.ruler .bead,.ruler .bead::after{animation:none}}
 /* 고르기 칸(select) · 체크 — 입력칸과 같이 카드 바탕 + 선, 체크는 앱 색 */
 select,.t-cal select,select.inp{background-color:var(--card)!important;box-shadow:inset 0 0 0 1px var(--hair2)!important;border-radius:var(--r)!important}
@@ -870,8 +875,6 @@ function Mini({ y, m, st, big }) {
 
 /* ── 월간 한 장(또는 탁상 반 장) ── */
 function MonthPage({ y, m, st, annMap, half }) {
-  const mm = `${y}-${p2(m)}-`, mL = (st.memos || []).filter(x => x.d && x.d.startsWith(mm) && (x.t || "").trim()).sort((a, b) => a.d.localeCompare(b.d));
-  const bot = half && st.deskBot && st.deskBot !== "none" ? st.deskBot : null;
   const W = weeks(y, m, st.ws), lc = LINE[st.line] || LINE.gray;
   const prev = m === 1 ? [y - 1, 12] : [y, m - 1], next = m === 12 ? [y + 1, 1] : [y, m + 1];
   const memo = half ? 0 : st.memo;
@@ -899,8 +902,19 @@ function MonthPage({ y, m, st, annMap, half }) {
         </div>`; })}
     </div>
     ${memo ? html`<div class="cl-memo">${Array.from({ length: memo }, () => html`<i></i>`)}</div>` : null}
-    ${bot ? html`<div class="cl-dbot"><b>이달의 메모</b>${bot === "list" && mL.length ? html`<div class="cl-dl">${mL.slice(0, 8).map(x => html`<span><em>${ymdw(pdate(x.d))}</em> ${x.t}</span>`)}</div>` : html`<div class="cl-dln">${Array.from({ length: 4 }, () => html`<i></i>`)}</div>`}</div>` : null}
     <div class="cl-ft"><span>${legend.join("   ·   ")}</span><span>Blog J 달력 만들기</span></div>
+  </div>`;
+}
+
+/* ── 탁상 달력 A4 아래 반쪽: 날짜별 기록 줄 · 빈 줄 노트 ── */
+function NoteHalf({ y, m, st, annMap, kind }) {
+  const lc = LINE[st.line] || LINE.gray, days = new Date(y, m, 0).getDate(), rows = Math.ceil(days / 2);
+  const day = n => { const d = new Date(y, m - 1, n), k = ymd(d), hol = st.hol && HOL[k], col = dayColor(st, d, hol);
+    return html`<div class="cl-nr"><b style=${{ color: col }}>${n}</b><span class="w" style=${{ color: col }}>${WK[d.getDay()]}</span><span class="tx">${hol ? html`<em>${hol}</em>` : null}${(annMap[k] || []).join(" · ")}</span></div>`; };
+  return html`<div class="cl-note" style=${{ "--lc": lc }}>
+    <div class="cl-nh"><b>${m}월 ${kind === "days" ? "날짜별 기록" : "메모"}</b><span>${y}</span></div>
+    ${kind === "days" ? html`<div class="cl-ng" style=${{ gridTemplateRows: `repeat(${rows},1fr)` }}>${Array.from({ length: days }, (_, i) => day(i + 1))}</div>`
+      : html`<div class="cl-nl">${Array.from({ length: 14 }, () => html`<i></i>`)}</div>`}
   </div>`;
 }
 
@@ -928,8 +942,9 @@ function App() {
   const nm = now.getMonth() === 11 ? [now.getFullYear() + 1, 1] : [now.getFullYear(), now.getMonth() + 2];
   const [st, setSt] = useState(() => {
     const s = { kind: "month", paper: "land", year: Math.min(MYEAR1, Math.max(MYEAR0, nm[0])), m0: nm[1], count: 1, ws: 0,
-      hol: true, lun: "key", term: true, son: false, trad: true, memos: [], deskBot: "none", holList: true,
+      hol: true, lun: "key", term: true, son: false, trad: true, memos: [], deskBot: "next", holList: true,
       line: "gray", red: true, blue: true, other: true, minis: true, memo: 0, motto: "", ...loadC("set", {}) };
+    if (s.deskBot === "list") s.deskBot = "days"; else if (s.deskBot !== "days" && s.deskBot !== "lines") s.deskBot = "next";
     if (TAB0 === "month" || TAB0 === "year" || TAB0 === "desk") s.kind = TAB0;
     if (s.year < MYEAR0 || s.year > MYEAR1) s.year = MYEAR0;
     return s; });
@@ -940,6 +955,7 @@ function App() {
   useEffect(() => { document.title = "달력 만들기 | Blog J"; }, []);
 
   const months = monthList(st);
+  const deskNote = st.kind === "desk" && (st.deskBot === "days" || st.deskBot === "lines");
   const years = st.kind === "year" ? [st.year] : [...new Set(months.map(x => x[0]))];
   const annMap = useMemo(() => memoMapFor(st), [st.memos]);
   const noHol = st.hol ? years.filter(y => !HOL_YEARS.includes(y)) : [];
@@ -947,6 +963,10 @@ function App() {
   const [pw] = PAGE[paper];
   let pages;
   if (st.kind === "year") pages = [html`<div class=${"cl-pg " + paper}><${YearPage} y=${st.year} st=${st} /></div>`];
+  else if (st.kind === "desk" && deskNote) pages = months.map(([y, m]) => html`<div class="cl-pg desk">
+      <div class="cl-half"><${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} half=${true} /></div>
+      <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
+      <div class="cl-half"><${NoteHalf} y=${y} m=${m} st=${st} annMap=${annMap} kind=${st.deskBot} /></div></div>`);
   else if (st.kind === "desk") { pages = []; for (let i = 0; i < months.length; i += 2) pages.push(html`<div class="cl-pg desk">
       <div class="cl-half"><${MonthPage} y=${months[i][0]} m=${months[i][1]} st=${st} annMap=${annMap} half=${true} /></div>
       ${months[i + 1] ? html`<div class="cl-cut"><span>자르는 선</span></div>` : html`<div style=${{ height: "2mm" }}></div>`}
@@ -982,7 +1002,7 @@ function App() {
             : html`<p class="note">A4 세로 한 장에 A5 가로 크기로 두 달이 들어가요. 가운데 자르는 선대로 잘라 탁상 달력 받침이나 링에 끼워 쓰세요.</p>`}`}
         ${cur === 1 && html`<div class="dd2"><div><label class="f">연도</label><select value=${st.year} onChange=${e => up("year", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div>
             ${st.kind !== "year" ? html`<div><label class="f">시작 달</label><select value=${st.m0} onChange=${e => up("m0", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}월</option>`)}</select></div>` : null}</div>
-          ${st.kind !== "year" ? html`<label class="f">몇 달</label><select value=${st.count} onChange=${e => up("count", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}달${st.kind === "desk" ? ` (${Math.ceil((i + 1) / 2)}장)` : ` (${i + 1}장)`}</option>`)}</select>
+          ${st.kind !== "year" ? html`<label class="f">몇 달</label><select value=${st.count} onChange=${e => up("count", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}달${st.kind === "desk" && !deskNote ? ` (${Math.ceil((i + 1) / 2)}장)` : ` (${i + 1}장)`}</option>`)}</select>
             <div class="chips cl-quick"><button class="chip" onClick=${() => quick(now.getFullYear(), now.getMonth() + 1, 1)}>이번 달</button><button class="chip" onClick=${() => quick(nm[0], nm[1], 1)}>다음 달</button>${yrs.filter(y => y > now.getFullYear() || (y === now.getFullYear() && now.getMonth() === 0)).slice(0, 2).map(y => html`<button class="chip" onClick=${() => quick(y, 1, 12)}>${y}년 1~12월</button>`)}<button class="chip" onClick=${() => quick(now.getFullYear() + (now.getMonth() >= 2 ? 1 : 0), 3, 12)}>3월 시작 학년도</button></div>` : null}
           <label class="f">한 주의 시작</label><${Seg} value=${st.ws} options=${[[0, "일요일부터"], [1, "월요일부터"]]} onChange=${v => up("ws", v)} />
           <p class="hint">공휴일은 2026 · 2027 · 2028년을 넣었어요(한국천문연구원 월력요항 기준).</p>`}
@@ -1006,8 +1026,8 @@ function App() {
           ${st.kind !== "year" ? html`<label class="chk"><input type="checkbox" checked=${st.other} onChange=${e => up("other", e.target.checked)} /> 앞뒤 달 날짜 흐리게 보이기</label>` : null}
           ${st.kind === "month" ? html`<label class="chk"><input type="checkbox" checked=${st.minis} onChange=${e => up("minis", e.target.checked)} /> 위에 지난달 · 다음 달 작은 달력</label>
             <label class="f">아래 메모 줄</label><${Seg} value=${st.memo} options=${[[0, "없음"], [3, "3줄"], [5, "5줄"]]} onChange=${v => up("memo", v)} />` : null}
-          ${st.kind === "desk" ? html`<label class="f">달력 아래 칸 <span class="muted">탁상 달력</span></label><${Seg} value=${st.deskBot || "none"} options=${[["none", "없음"], ["list", "이달의 날짜 메모"], ["lines", "빈 메모 줄"]]} onChange=${v => up("deskBot", v)} />
-            <p class="hint">${st.deskBot === "list" ? "3단계에서 넣은 날짜 메모가 그 달 아래에 목록으로 들어가요(메모가 없으면 빈 줄)." : st.deskBot === "lines" ? "손으로 쓸 수 있는 메모 줄 4줄이 들어가요." : "달력 칸을 크게 써요."}</p>` : null}
+          ${st.kind === "desk" ? html`<label class="f">A4 아래 반쪽 <span class="muted">탁상 달력</span></label><${Seg} value=${st.deskBot || "next"} options=${[["next", "다음 달 달력"], ["days", "날짜별 기록 줄"], ["lines", "빈 줄 노트"]]} onChange=${v => up("deskBot", v)} />
+            <p class="hint">${st.deskBot === "days" ? "A4 아래쪽에 그달 1일~말일 날짜 줄이 들어가요. 한 장에 한 달 · 3단계 날짜 메모와 공휴일이 그 날짜 줄에 미리 적혀요." : st.deskBot === "lines" ? "A4 아래쪽이 줄만 있는 노트가 돼요. 한 장에 한 달." : "A4 한 장에 두 달(위 · 아래)을 넣어요."}</p>` : null}
           <label class="f">머리 글귀 <span class="muted">선택 · 예: 우리 가족 2027</span></label><input type="text" value=${st.motto} maxlength="30" placeholder="비워 두면 넣지 않아요" onInput=${e => up("motto", e.target.value)} />
           <p class="note">인쇄 창에서 <b>배율 「실제 크기(100%)」</b>, <b>여백 「없음」</b>, <b>「배경 그래픽」 켜기</b>로 인쇄하세요. 「PDF로 저장」을 고르면 파일로 받을 수 있어요.</p>`}
         </div>

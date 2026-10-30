@@ -877,7 +877,9 @@ function App() {
     ${!EMBED && html`<div class="foot">Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>`}
   </div>`;
 }
-(async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (!(await BJ_GATE.check(TOOL, T))) return; render(html`<${App} />`, document.getElementById("root")); })();
+/* 블로그 경유 잠금: 시험 기간(10-30 제이)에는 끔 — 공식 출시(대표 글 발행) 때 true로 */
+const GATE_ON = false;
+(async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return; render(html`<${App} />`, document.getElementById("root")); })();
 
 /* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알려 iframe 높이를 자동으로 맞춤 */
 (function(){ if(!EMBED || window.parent===window) return;

@@ -1079,6 +1079,20 @@ body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr))}
 .tlbar .tstat .num{font-size:11.5px;opacity:.7;margin-left:2px}
 @media(max-width:600px){.tlbar .tstat{margin-left:0;flex-basis:100%}.tlbar .tstat .aot{width:48px}}
 
+/* 10-31: 연도 드롭다운(보기 옆) */
+.tlbar .tysel{position:relative;display:inline-flex}
+.tlbar .tysel select{appearance:none;-webkit-appearance:none;min-height:36px;padding:6px 32px 6px 12px;border-radius:12px;border:0;background:var(--in-bg,#e7e0d2);box-shadow:var(--in,inset 2px 2px 5px rgba(160,140,108,.35));font:inherit;font-size:13.5px;font-weight:600;color:var(--ink,#1f2125);cursor:pointer}
+.tlbar .tysel::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-70%) rotate(45deg);pointer-events:none;opacity:.6}
+@media(max-width:600px){.tlbar .tyear{margin-top:0}}
+
+/* 10-31: 모니터 전체 폭 */
+body.pc.wide .pcbar,body.pc.wide .pcl,body.pc.wide .pcl.full,body.pc.wide .pcl.full.nar,body.pc.wide .pcl.tw,body.pc.wide .pfoot{max-width:none}
+body.pc.wide .pcbar{padding-left:32px;padding-right:32px}
+body.pc.wide .pcl.full,body.pc.wide .pcl.tw{padding-left:32px;padding-right:32px;box-sizing:border-box}
+body.pc.wide .pc2{grid-template-columns:minmax(0,1fr) 400px}
+body.pc.wide .pc2.wide{grid-template-columns:minmax(0,1fr)}
+.sgc .sgr>span{white-space:nowrap}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -1973,6 +1987,10 @@ function scrSet() {
       <div class="sgr"><span>지도</span><div class="vt mini">${Object.entries(MAPA).map(([k, n]) => `<button class="${mapApp() === k ? "on" : ""}" data-mapset="${k}">${n}</button>`).join("")}</div></div>
       <div class="sgr"><span>길안내</span><div class="vt mini">${Object.entries(NAVA).map(([k, n]) => `<button class="${navApp() === k ? "on" : ""}" data-navset="${k}">${navNm[k] || n}</button>`).join("")}</div></div>
       <p class="hint">해외 여행은 지도 · 길안내 모두 구글 지도예요. 티맵은 휴대폰 전용(PC에서는 네이버 지도). 지도 · 길안내 단추는 일정에 「지도 위치」를 넣은 것만 켜져요.</p></section>
+    ${DEV === "pc" ? `<section class="sgc"><h4>${I('<rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/>')} 화면 <small>PC</small></h4>
+      <div class="sgr"><span>화면 폭</span><div class="vt mini"><button class="${D.set.wide === true ? "" : "on"}" data-wideset="0">보통</button><button class="${D.set.wide === true ? "on" : ""}" data-wideset="1">모니터 전체 폭</button></div></div>
+      <div class="sgr"><span>전체 화면</span><button class="btn sm" data-fullscr>${fsOn() ? "전체 화면 끝내기" : "전체 화면으로 보기"}</button></div>
+      <p class="hint">「모니터 전체 폭」은 큰 모니터에서 여행 카드 · 일정 · 사진을 옆으로 더 많이 보여 줘요. 전체 화면은 키보드 <b>F11</b>로도 켜고 끌 수 있어요(끄기는 Esc).</p></section>` : ""}
     <section class="sgc"><h4>${IC.cloud} 저장 위치 <small id="usage"></small></h4>
       <p class="sgstat ${ok ? "sgok" : "sgwn"}">${ok ? IC.ok : IC.warn}${ok ? "저절로 저장되고 있어요." : "휴대폰과 PC를 같이 쓰려면 구글 드라이브를 연결하세요."}</p>
       ${gdBox()}
@@ -2523,6 +2541,7 @@ function pcBar() { const on = S.scr === "set" ? "set" : "list";
   <nav class="pcnav"><button class="${on === "list" ? "on" : ""}" data-gohome>${IC.plane}내 여행</button></nav><span class="sp"></span>${stBar()}<span class="hd pcgd">${instBtn(true)}</span><button class="ib pcset ${on === "set" ? "on" : ""}" data-go="set" aria-label="설정" title="설정">${IC.gear}</button></header>`; }
 function render(top) {
   const pc = isPC(); document.body.classList.toggle("pc", pc);
+  document.body.classList.toggle("wide", pc && D.set.wide === true);   /* 10-31 제이: PC 화면 전체 폭으로 보기 */
   if (pc && S.scr === "item") S.scr = "trip";
   const b = $(".app .body"), y = b ? b.scrollTop : 0, wy = window.scrollY;
   let main;
@@ -2784,6 +2803,16 @@ new MutationObserver(() => { clearTimeout(fitIph._t); fitIph._t = setTimeout(fit
 window.addEventListener("resize", () => { clearTimeout(fitIph._r); fitIph._r = setTimeout(fitIph, 80); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && S.pg && S.pv == null) { S.pg = null; render(); e.preventDefault(); } });
 
+/* 10-31 제이: 화면 넓게 · 전체 화면 */
+function fsOn() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-wideset],[data-fullscr]"); if (!b) return;
+  if (b.dataset.wideset != null) { D.set.wide = b.dataset.wideset === "1"; await setMeta("set", D.set).catch(() => {}); return render(); }
+  try { if (fsOn()) await (document.exitFullscreen || document.webkitExitFullscreen).call(document); else await (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement); }
+  catch (er) { toast("전체 화면을 열지 못했어요 — 키보드 F11을 눌러 보세요."); }
+});
+document.addEventListener("fullscreenchange", () => { if (S.scr === "set") render(); });
+
 /* ───────── 10-30: 사진 현지 시간대 · 시간 · 장소 묶음 · 내 여행 찾기 · 정렬 · 분류 ───────── */
 const TZS = [[540, "UTC+9 한국 · 일본"], [480, "UTC+8 중국 · 대만 · 홍콩 · 필리핀 · 싱가포르 · 말레이시아 · 발리"], [420, "UTC+7 베트남 · 태국 · 캄보디아 · 라오스 · 자카르타"], [390, "UTC+6:30 미얀마"], [345, "UTC+5:45 네팔"], [330, "UTC+5:30 인도 · 스리랑카"], [300, "UTC+5 몰디브"], [240, "UTC+4 두바이"], [180, "UTC+3 튀르키예"], [120, "UTC+2 그리스 · 이집트 · 유럽 중부(서머타임)"], [60, "UTC+1 유럽 중부(겨울) · 영국(서머타임)"], [0, "UTC+0 영국 · 포르투갈(겨울)"], [600, "UTC+10 괌 · 사이판 · 호주 동부(겨울)"], [660, "UTC+11 호주 동부(서머타임)"], [720, "UTC+12 뉴질랜드(겨울)"], [780, "UTC+13 뉴질랜드(서머타임)"], [-240, "UTC−4 미국 동부(서머타임)"], [-300, "UTC−5 미국 동부(겨울)"], [-420, "UTC−7 미국 서부(서머타임)"], [-480, "UTC−8 미국 서부(겨울)"], [-600, "UTC−10 하와이"]];
 const tzName = m => { const f = TZS.find(x => x[0] === m); if (f) return f[1]; const h = Math.floor(Math.abs(m) / 60), mm = Math.abs(m) % 60; return `UTC${m < 0 ? "−" : "+"}${h}${mm ? ":" + String(mm).padStart(2, "0") : ""}`; };
@@ -2859,8 +2888,11 @@ function tlState() { return S.tl || (S.tl = { q: "", cat: "" }); }
 const TSTATS = { all: "모두", plan: "계획", done: "다녀옴" };
 const tstatK = () => TSTATS[D.set.tstat] ? D.set.tstat : "all";
 const tstatOf = t => phase(t).k === "after" ? "done" : "plan";
+/* 10-31 제이: 연도별 보기 — 입력된 여행의 시작 연도만 드롭다운에(연도가 하나면 그 연도만) */
+const tYears = () => [...new Set(D.items.map(t => (t.start || "").slice(0, 4)).filter(y => /^\d{4}$/.test(y)))].sort((a, b) => b.localeCompare(a));
+const tyearK = () => { const y = tlState().year || ""; return y && tYears().includes(y) ? y : ""; };
 function tFiltered() { const A = tlState(), q = A.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const st = tstatK(); return D.items.filter(t => (!A.cat || catOf(t) === A.cat) && (st === "all" || tstatOf(t) === st) && q.every(w => tripHay(t).includes(w))); }
+  const st = tstatK(), yr = tyearK(); return D.items.filter(t => (!A.cat || catOf(t) === A.cat) && (st === "all" || tstatOf(t) === st) && (!yr || (t.start || "").startsWith(yr)) && q.every(w => tripHay(t).includes(w))); }
 function tSorted(L) { const k = tsortK(), C = tCats();
   const near = (a, b) => { const pa = phase(a), pb = phase(b), r = x => x.k === "on" ? 0 : x.k === "before" ? 1 : 2; return r(pa) - r(pb) || (r(pa) === 2 ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start)); };
   if (k === "date") return L.slice().sort((a, b) => b.start.localeCompare(a.start));
@@ -2868,7 +2900,7 @@ function tSorted(L) { const k = tsortK(), C = tCats();
   if (k === "cat") return L.slice().sort((a, b) => C.indexOf(catOf(a)) - C.indexOf(catOf(b)) || near(a, b));
   return L.slice().sort(near); }
 function tResHtml() {
-  const L = tSorted(tFiltered()), v = tview(); if (!L.length) return `<div class="empty sm"><p>${tlState().q ? "찾는 여행이 없어요." : tstatK() === "plan" ? "계획 중인 여행이 없어요." : tstatK() === "done" ? "다녀온 여행이 없어요." : "이 카테고리에 여행이 없어요."}</p></div>`;
+  const L = tSorted(tFiltered()), v = tview(); if (!L.length) return `<div class="empty sm"><p>${tlState().q ? "찾는 여행이 없어요." : tstatK() === "plan" ? (tyearK() ? tyearK() + "년에 " : "") + "계획 중인 여행이 없어요." : tstatK() === "done" ? (tyearK() ? tyearK() + "년에 " : "") + "다녀온 여행이 없어요." : tyearK() ? tyearK() + "년 여행이 없어요." : "이 카테고리에 여행이 없어요."}</p></div>`;
   if (tsortK() === "cat" && !tlState().cat) { const G = []; L.forEach(t => { const c = catOf(t), g = G[G.length - 1]; if (g && g.c === c) g.L.push(t); else G.push({ c, L: [t] }); });
     return G.map(g => `<div class="tgh">${IC.folder}${esc(g.c)} <small class="num">${g.L.length}</small></div><div class="tlist v-${v}">${g.L.map(tripCard).join("")}</div>`).join(""); }
   return `<div class="tlist v-${v}">${L.map(tripCard).join("")}</div>`; }
@@ -2876,7 +2908,8 @@ function tToolbar() { const A = tlState(), C = tCats(), n = c => D.items.filter(
   return `<div class="tlbar"><div class="atop"><div class="srch in">${IC.find}<input id="tq" value="${esc(A.q)}" placeholder="여행 이름 · 일정 · 장소 · 메모로 찾기" autocomplete="off" enterkeyhint="search"></div></div>
     <div class="aopt"><span class="aot">카테고리</span><div class="chips"><button class="chip ${!A.cat ? "on" : ""}" data-tlcat="">전체 <small class="num">${D.items.length}</small></button>${C.map(c => `<button class="chip ${A.cat === c ? "on" : ""}" data-tlcat="${esc(c)}">${esc(c)} <small class="num">${n(c)}</small></button>`).join("")}<button class="chip add" data-sheet="tcats">${IC.pen} 고치기</button></div></div>
     <div class="aopt asr"><span class="aot">정렬</span><div class="vt mini asort">${Object.entries(TSORTS).map(([k, nm]) => `<button class="${tsortK() === k ? "on" : ""}" data-tlsort="${k}">${nm}</button>`).join("")}</div>
-      <div class="tstat"><span class="aot">보기</span><div class="vt mini asort">${Object.entries(TSTATS).map(([k, nm]) => `<button class="${tstatK() === k ? "on" : ""}" data-tlstat="${k}">${nm}${k === "all" ? "" : ` <small class="num">${D.items.filter(t => tstatOf(t) === k).length}</small>`}</button>`).join("")}</div></div></div>
+      <div class="tstat"><span class="aot">보기</span><div class="vt mini asort">${Object.entries(TSTATS).map(([k, nm]) => `<button class="${tstatK() === k ? "on" : ""}" data-tlstat="${k}">${nm}${k === "all" ? "" : ` <small class="num">${D.items.filter(t => tstatOf(t) === k).length}</small>`}</button>`).join("")}</div></div>
+      <div class="tstat tyear"><span class="aot">연도</span><label class="tysel"><select id="tyear" aria-label="연도별 보기"><option value="">모든 연도</option>${tYears().map(y => `<option value="${y}" ${tyearK() === y ? "selected" : ""}>${y}년 (${D.items.filter(t => (t.start || "").startsWith(y)).length})</option>`).join("")}</select></label></div></div>
     ${tviewBar()}</div>`; }
 function tcatSheet() { const C = tCats(), n = c => D.items.filter(t => catOf(t) === c).length;
   return `<b class="sht">${IC.folder} 카테고리 고치기</b><p class="hint">국내 · 해외 · 캠핑처럼 내 여행을 나눌 이름을 직접 만들어요. 카테고리를 정하지 않은 여행은 「어디로」(국내 · 해외)에 따라 들어가요.</p>
@@ -2923,6 +2956,7 @@ document.addEventListener("click", async e => {
     const it = newIt({ time: tm, memo: `사진 ${c.ps.length}장으로 만든 일정`, ...(c.ll ? { place: `https://www.google.com/maps/search/?api=1&query=${c.ll.lat.toFixed(5)},${c.ll.lng.toFixed(5)}`, ll: { lat: +c.ll.lat.toFixed(5), lng: +c.ll.lng.toFixed(5) } } : {}) });
     S.day = c.day; toast("일정 이름을 넣고 저장하면 이 사진들이 붙어요."); return startItem(it, c.day, true); }
 });
+document.addEventListener("change", e => { if (e.target.id !== "tyear") return; tlState().year = e.target.value; const R = $("#tres"); if (R) R.innerHTML = tResHtml(); });
 document.addEventListener("input", e => { if (e.target.id !== "tq") return; tlState().q = e.target.value; const R = $("#tres"); if (R) R.innerHTML = tResHtml(); });
 document.addEventListener("change", async e => { const el = e.target; if (el.dataset.phtz == null) return; const t = TR(); if (!t) return; t.tz = el.value === "" ? null : +el.value; await saveTrip(t); render(); toast(t.tz == null ? "사진에 적힌 시각 그대로 나눠요." : `${tzName(t.tz)} 기준으로 다시 나눴어요.`); });
 

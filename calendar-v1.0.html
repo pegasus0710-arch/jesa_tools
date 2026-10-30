@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>달력 출력 | Blog J</title><meta name="description" content="2026 · 2027 · 2028년 달력을 공휴일 · 음력 · 24절기 · 손 없는 날 · 우리 집 기념일과 함께 A4 · A5로 인쇄 — 월간 · 연간 · 탁상 달력" />
+<title>달력 만들기 | Blog J</title><meta name="description" content="2026 · 2027 · 2028년 달력을 공휴일 · 음력 · 24절기 · 손 없는 날 · 우리 집 기념일과 함께 A4 · A5로 인쇄 — 월간 · 연간 · 탁상 달력" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%237a4b2a%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2010h18l10%2010v34H20z%22%2F%3E%3Cpath%20d%3D%22M27%2032h14M27%2042h14%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2253%22%20cy%3D%2253%22%20r%3D%228%22%20fill%3D%22%23e08a3e%22%20stroke%3D%22%237a4b2a%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E" />
 <style>
 
@@ -459,6 +459,66 @@ body,button,input,select{font-family:var(--font)}
 @media(max-width:600px){.t-cal .ruler{padding:10px 8px}.t-cal .ruler ol{gap:2px}.t-cal .ruler button{font-size:12.5px;padding:22px 4px 4px;white-space:normal;line-height:1.25;overflow:visible}.t-cal .ruler button .rn{display:block;margin:0 0 1px}.t-cal .wp-h,.t-cal .wp-b,.t-cal .wp-f{padding-left:18px;padding-right:18px}.t-cal .wp-h h2{font-size:21px}}
 .t-cal .brand .lg{box-shadow:4px 6px 12px rgba(20,90,100,.35),-3px -3px 8px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.18)}
 
+/* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
+   1) 깊이는 3단만: 판(바탕) · 카드(머리카락 선 + 아주 옅은 그림자) · 들어감(입력 · 고르기 바탕)
+   2) 이중 그림자(어두운 + 흰 빛) 없앰 → 흐릿함 · 뭉개짐 제거
+   3) 모서리 4단계: 8 · 10 · 14 · 18px
+   4) 고른 것 = 남색 선(1.5px) + 남색 글자, 주 버튼 = 앰버 한 곳(평평하게) */
+:root{
+  --paper:#ece7dd;--panel:#f6f2eb;--card:#fbf9f5;--tint:#efe9df;--in-bg:#efe9df;--up-bg:#f6f2eb;--pr-bg:#f2ede4;--press-bg:#f2ede4;--tray:#e9e3d8;--hover:#f3eee6;
+  --hair:rgba(90,74,50,.12);--hair2:rgba(90,74,50,.2);
+  --up:0 0 0 1px rgba(90,74,50,.07),0 1px 2px rgba(90,74,50,.05),0 10px 28px -12px rgba(90,74,50,.18);
+  --up-s:0 0 0 1px rgba(90,74,50,.09),0 1px 2px rgba(90,74,50,.06);
+  --in:inset 0 0 0 1px rgba(90,74,50,.1);
+  --press:inset 0 0 0 1.5px var(--navy,#20263a);
+  --sh-paper:0 1px 3px rgba(0,0,0,.06),0 14px 34px -14px rgba(60,48,30,.28);
+  --r-s:8px;--r:10px;--r-m:14px;--r-l:18px;
+}
+/* 버튼: 평평하게, 그림자는 선 하나 */
+.btn{border-radius:var(--r);box-shadow:var(--up-s);font-weight:600;transition:background .12s,box-shadow .12s}
+.btn:hover{background:var(--hover);box-shadow:0 0 0 1px var(--navy,#20263a)}
+.btn:active{transform:none;box-shadow:inset 0 0 0 1.5px var(--navy,#20263a)}
+.btn.sm{border-radius:var(--r-s)}
+.btn.go{background:var(--amber,#e08a3e);color:#fff;box-shadow:0 1px 2px rgba(150,90,30,.25),inset 0 -1px 0 rgba(0,0,0,.08);outline:0}
+.btn.go:hover{background:#d47f35;box-shadow:0 1px 2px rgba(150,90,30,.25),0 0 0 3px rgba(224,138,62,.22);outline:0}
+.btn.nv,.btn.p,.btn.accent{background:var(--navy,#20263a);color:#fff;box-shadow:0 1px 2px rgba(20,24,40,.25)}
+.btn.nv:hover,.btn.p:hover,.btn.accent:hover{background:#2c3450;box-shadow:0 0 0 3px rgba(32,38,58,.16)}
+.ib{box-shadow:var(--up-s);border-radius:var(--r)}
+.ib:hover{box-shadow:0 0 0 1px var(--navy,#20263a)}
+/* 고르기(세그먼트): 바탕은 들어감 한 장, 고른 칸은 흰 카드 + 머리카락 선 */
+.vt,.seg,.tvbar{background:var(--tint);box-shadow:var(--in);border-radius:var(--r);padding:3px;gap:2px}
+.vt button,.seg button,.tvbar button{border-radius:var(--r-s);font-weight:600}
+.vt button.on,.seg button.on,.tvbar button.on{background:var(--card);color:var(--ink,#1f2125);font-weight:700;box-shadow:0 0 0 1px rgba(90,74,50,.12),0 1px 3px rgba(90,74,50,.12)}
+/* 칩: 테두리만, 고른 칩은 남색 선 + 남색 글자 */
+.chip{background:transparent;box-shadow:inset 0 0 0 1px var(--hair2);border-radius:999px;padding:7px 13px;font-weight:600}
+.chip:hover{background:var(--card);box-shadow:inset 0 0 0 1px var(--navy,#20263a)}
+.chip.on,.chip.on:hover{background:var(--card);color:var(--navy,#20263a);box-shadow:inset 0 0 0 1.5px var(--navy,#20263a);font-weight:700}
+/* 입력: 들어감 대신 흰 바탕 + 선 (읽기 쉬움) */
+.inp,input.inp,select.inp,textarea.inp{background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
+.inp:focus{box-shadow:inset 0 0 0 1.5px var(--navy,#20263a),0 0 0 3px rgba(32,38,58,.1);outline:0}
+.srch{background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
+.srch:focus-within{box-shadow:inset 0 0 0 1.5px var(--navy,#20263a),0 0 0 3px rgba(32,38,58,.1)}
+/* 카드 · 줄 */
+.tcard,.row,.sgc,.pg{box-shadow:var(--up-s);border-radius:var(--r-m)}
+.tcard:hover,.tgt:hover,.tlist .tcard.trip:hover{box-shadow:0 0 0 1px var(--navy,#20263a),0 6px 18px -10px rgba(32,38,58,.3)}
+body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div{box-shadow:var(--up);border-radius:var(--r-l)}
+.sheet .in,.sheet>div{border-radius:var(--r-l) var(--r-l) 0 0}
+/* 이름표(섹션 머리): 작게 · 자간 · 흐린 먹 */
+.lbl{font-size:12.5px;letter-spacing:.06em;color:var(--ink3);font-weight:700}
+.sgc h4{font-size:14px;letter-spacing:-.01em}
+/* 안내 상자: 상자 대신 왼쪽 선 하나 */
+.note,.note.w,.stnote{background:transparent;box-shadow:none;border-radius:0;border-left:3px solid var(--hair2);padding:4px 0 4px 12px}
+.note.w{border-left-color:#d98a1a}
+/* 작은 표 · 뱃지 */
+.okb,.dd{border-radius:6px}
+/* 도구 작업대(3.0 틀): 교정대 · 작업 패널 · 눈금자 */
+.tray{background:var(--tray);box-shadow:var(--in);border-radius:var(--r-l)}
+.wp{box-shadow:var(--up);border-radius:var(--r-l)}
+.ruler{box-shadow:var(--in);background:var(--tint)}
+.tcard.on,.tcard.on:hover{box-shadow:inset 0 0 0 1.5px var(--navy,#20263a)}
+.wp-f{box-shadow:0 -1px 0 var(--hair)}
+.brand .lg,.pcbar .lg{box-shadow:0 1px 2px rgba(0,0,0,.18),inset 0 -2px 0 rgba(0,0,0,.1)!important}
+
 </style></head><body><div id="root"></div>
 <script>
 /* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
@@ -566,7 +626,7 @@ const BJ_GATE = (() => {
 
 </script>
 <script>
-/* ══════════ 달력 출력 v1.0 · Blog J ══════════ */
+/* ══════════ 달력 만들기 v1.0 · Blog J ══════════ */
 const APP_VER = "1.0";
 const { h, render } = preact;
 const { useState, useEffect, useMemo, useRef } = preactHooks;
@@ -672,7 +732,7 @@ const Seg = ({ value, options, onChange }) => html`<div class="seg">${options.ma
 const HOL={"2026-01-01": "신정", "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴", "2026-03-01": "삼일절", "2026-03-02": "대체공휴일", "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-05-25": "대체공휴일", "2026-06-03": "지방선거", "2026-06-06": "현충일", "2026-07-17": "제헌절", "2026-08-15": "광복절", "2026-08-17": "대체공휴일", "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴", "2026-10-03": "개천절", "2026-10-05": "대체공휴일", "2026-10-09": "한글날", "2026-12-25": "성탄절", "2027-01-01": "신정", "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴", "2027-02-09": "대체공휴일", "2027-03-01": "삼일절", "2027-05-01": "노동절", "2027-05-03": "대체공휴일", "2027-05-05": "어린이날", "2027-05-13": "부처님오신날", "2027-06-06": "현충일", "2027-07-17": "제헌절", "2027-07-19": "대체공휴일", "2027-08-15": "광복절", "2027-08-16": "대체공휴일", "2027-09-14": "추석 연휴", "2027-09-15": "추석", "2027-09-16": "추석 연휴", "2027-10-03": "개천절", "2027-10-04": "대체공휴일", "2027-10-09": "한글날", "2027-10-11": "대체공휴일", "2027-12-25": "성탄절", "2027-12-27": "대체공휴일", "2028-01-01": "신정", "2028-01-26": "설날 연휴", "2028-01-27": "설날", "2028-01-28": "설날 연휴", "2028-03-01": "삼일절", "2028-04-12": "국회의원선거", "2028-05-01": "노동절", "2028-05-02": "부처님오신날", "2028-05-05": "어린이날", "2028-06-06": "현충일", "2028-07-17": "제헌절", "2028-08-15": "광복절", "2028-10-02": "추석 연휴", "2028-10-03": "추석 · 개천절", "2028-10-04": "추석 연휴", "2028-10-05": "대체공휴일", "2028-10-09": "한글날", "2028-12-25": "성탄절"};
 const HOL_YEARS=[2026,2027,2028];
 const TERMS={"2026-01-05": "소한", "2026-01-20": "대한", "2026-02-04": "입춘", "2026-02-19": "우수", "2026-03-05": "경칩", "2026-03-20": "춘분", "2026-04-05": "청명", "2026-04-20": "곡우", "2026-05-05": "입하", "2026-05-21": "소만", "2026-06-06": "망종", "2026-06-21": "하지", "2026-07-07": "소서", "2026-07-23": "대서", "2026-08-07": "입추", "2026-08-23": "처서", "2026-09-07": "백로", "2026-09-23": "추분", "2026-10-08": "한로", "2026-10-23": "상강", "2026-11-07": "입동", "2026-11-22": "소설", "2026-12-07": "대설", "2026-12-22": "동지", "2027-01-05": "소한", "2027-01-20": "대한", "2027-02-04": "입춘", "2027-02-19": "우수", "2027-03-06": "경칩", "2027-03-21": "춘분", "2027-04-05": "청명", "2027-04-20": "곡우", "2027-05-06": "입하", "2027-05-21": "소만", "2027-06-06": "망종", "2027-06-21": "하지", "2027-07-07": "소서", "2027-07-23": "대서", "2027-08-08": "입추", "2027-08-23": "처서", "2027-09-08": "백로", "2027-09-23": "추분", "2027-10-08": "한로", "2027-10-24": "상강", "2027-11-08": "입동", "2027-11-22": "소설", "2027-12-07": "대설", "2027-12-22": "동지", "2028-01-06": "소한", "2028-01-20": "대한", "2028-02-04": "입춘", "2028-02-19": "우수", "2028-03-05": "경칩", "2028-03-20": "춘분", "2028-04-04": "청명", "2028-04-19": "곡우", "2028-05-05": "입하", "2028-05-20": "소만", "2028-06-05": "망종", "2028-06-21": "하지", "2028-07-06": "소서", "2028-07-22": "대서", "2028-08-07": "입추", "2028-08-22": "처서", "2028-09-07": "백로", "2028-09-22": "추분", "2028-10-08": "한로", "2028-10-23": "상강", "2028-11-07": "입동", "2028-11-22": "소설", "2028-12-06": "대설", "2028-12-21": "동지"};
-/* ══════════ 달력 출력 v1.0 ══════════ */
+/* ══════════ 달력 만들기 v1.0 ══════════ */
 const TOOL = "calendar";
 const LS = "cal1:";
 const loadC = (k, d) => { try { const v = localStorage.getItem(LS + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
@@ -753,7 +813,7 @@ function MonthPage({ y, m, st, annMap, half }) {
         </div>`; })}
     </div>
     ${memo ? html`<div class="cl-memo">${Array.from({ length: memo }, () => html`<i></i>`)}</div>` : null}
-    <div class="cl-ft"><span>${legend.join("   ·   ")}</span><span>Blog J 달력 출력</span></div>
+    <div class="cl-ft"><span>${legend.join("   ·   ")}</span><span>Blog J 달력 만들기</span></div>
   </div>`;
 }
 
@@ -769,7 +829,7 @@ function YearPage({ y, st }) {
     <div class="cl-yh"><b>${y}</b><span>년 달력</span>${st.motto ? html`<em>${st.motto}</em>` : null}</div>
     <div class="cl-yg">${Array.from({ length: 12 }, (_, i) => html`<${Mini} y=${y} m=${i + 1} st=${st} big=${true} />`)}</div>
     ${rows.length ? html`<div class="cl-yl" style=${{ gridTemplateRows: `repeat(${Math.ceil(rows.length / (land ? 4 : 3))},auto)`, gridAutoFlow: "column" }}>${rows.map(r => html`<span><b>${ymdw(r.from)}${r.to > r.from ? " ~ " + ymdw(r.to) : ""}</b> ${r.base === "설날" || r.base === "추석" ? r.base + (r.to > r.from ? " 연휴" : "") : r.n}</span>`)}</div>` : null}
-    <div class="cl-ft"><span>${st.hol ? (HOL_YEARS.includes(y) ? "빨간 날 = 공휴일 · 대체공휴일 (한국천문연구원 월력요항 기준)" : y + "년 공휴일은 아직 발표 전이라 표시하지 않았어요") : ""}</span><span>Blog J 달력 출력</span></div>
+    <div class="cl-ft"><span>${st.hol ? (HOL_YEARS.includes(y) ? "빨간 날 = 공휴일 · 대체공휴일 (한국천문연구원 월력요항 기준)" : y + "년 공휴일은 아직 발표 전이라 표시하지 않았어요") : ""}</span><span>Blog J 달력 만들기</span></div>
   </div>`;
 }
 
@@ -790,7 +850,7 @@ function App() {
   const [cur, setCur] = useState(0);
   const go = i => { setCur(i); if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" }); };
   useEffect(() => saveC("set", st), [st]);
-  useEffect(() => { document.title = "달력 출력 | Blog J"; }, []);
+  useEffect(() => { document.title = "달력 만들기 | Blog J"; }, []);
 
   const months = monthList(st);
   const years = st.kind === "year" ? [st.year] : [...new Set(months.map(x => x[0]))];
@@ -821,7 +881,7 @@ function App() {
   return html`<div class=${"app t-cal" + (EMBED ? " embed" : "")}>
     <style>${`@media print{@page{size:A4 ${paper === "land" ? "landscape" : "portrait"};margin:0}}`}</style>
     <div class="top">
-      ${!EMBED && html`<div class="brand"><span class="lg">${h(Icon, { name: "calendar", size: 26, sw: 2 })}<i></i></span><div><small>BLOG J 무료 도구 · 생활 · v${APP_VER}</small><b>달력 출력</b></div></div>`}
+      ${!EMBED && html`<div class="brand"><span class="lg">${h(Icon, { name: "calendar", size: 26, sw: 2 })}<i></i></span><div><small>BLOG J 무료 도구 · 생활 · v${APP_VER}</small><b>달력 만들기</b></div></div>`}
     </div>
     <div class="lay wb">
       <nav class="ruler" aria-label="진행 단계"><ol>${STEPS.map((x, i) => html`<li><button class=${i === cur ? "cur" : i < cur ? "done" : ""} aria-current=${i === cur ? "step" : null} onClick=${() => go(i)}>${i === cur ? html`<i class="bead"></i>` : null}<span class="rn">0${i + 1}</span>${x[0]}</button></li>`)}</ol></nav>

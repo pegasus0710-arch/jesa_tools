@@ -1056,6 +1056,21 @@ body.pc .tlist.v-list{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
 .chip.add{display:inline-flex;align-items:center;gap:4px;color:var(--ink2)}.chip.add svg{width:15px;height:15px}
 .tcpick{display:flex;flex-wrap:wrap;gap:6px}
 .tcrow{display:flex;align-items:center;gap:6px}.tcrow span{flex:1}.tcrow small{color:var(--ink3);margin-left:4px}
+/* 10-30 설정: 작게 · 묶음 카드 */
+.setg{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));align-items:start}
+.sgc{background:var(--card,#f4efe6);border-radius:16px;box-shadow:var(--up-s);padding:14px 16px}
+.sgc h4{display:flex;align-items:center;gap:7px;margin:0 0 10px;font-size:15px;font-weight:800}.sgc h4 svg{width:18px;height:18px;color:var(--cat,#1f7f8f)}.sgc h4 small{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--ink3)}
+.sgr{display:flex;align-items:center;gap:10px;margin:6px 0}.sgr>span{width:46px;flex-shrink:0;font-size:13.5px;font-weight:700;color:var(--ink2)}.sgr .vt{flex:1;margin:0}.sgr .vt button{font-size:13.5px;min-height:36px;padding:6px 8px}
+.sgc .hint{margin:8px 0 0;font-size:12.5px;line-height:1.5}
+.sgstat{display:flex;align-items:center;gap:6px;margin:0 0 6px;font-size:13.5px;font-weight:700}.sgstat svg{width:17px;height:17px;flex-shrink:0}.sgstat.sgok{color:var(--cat,#1f7f8f)}.sgstat.sgwn{color:#b5700f}
+.sgc .row{background:transparent;box-shadow:none;border-radius:0;padding:10px 2px;margin:0;border-top:1px solid rgba(160,140,108,.22);min-height:0;gap:10px}
+.sgc .row:hover{background:rgba(244,239,230,.6)}
+.sgc .row .t b{font-size:14px}.sgc .row .t small{font-size:12.5px;line-height:1.5}
+.sgc .row.mob{border-top:0;padding-top:0;align-items:flex-start}.sgc .row.mob .qr{width:92px;height:92px;flex-shrink:0;padding:6px}.sgc .row.mob .qr svg{width:100%;height:100%}
+.sgc .row2{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.sgc.sgh .row:first-of-type{border-top:0}
+body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sgr .vt{display:grid;grid-auto-columns:1fr;grid-auto-flow:column}
 
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
@@ -1086,6 +1101,66 @@ body.pc .tlist.v-list{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
 /* 설치 아이콘(10-28) — 점 없이, 남색 아이콘 */
 .stbar.ic .stc.ip{color:var(--navy)}.stbar.ic .stc.ip:after{display:none}
 .row.hlp{text-decoration:none;color:var(--ink)}.row.hlp>.i:last-child{width:17px;height:17px;color:var(--ink3);flex-shrink:0;margin-left:auto}
+
+/* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
+   1) 깊이는 3단만: 판(바탕) · 카드(머리카락 선 + 아주 옅은 그림자) · 들어감(입력 · 고르기 바탕)
+   2) 이중 그림자(어두운 + 흰 빛) 없앰 → 흐릿함 · 뭉개짐 제거
+   3) 모서리 4단계: 8 · 10 · 14 · 18px
+   4) 고른 것 = 남색 선(1.5px) + 남색 글자, 주 버튼 = 앰버 한 곳(평평하게) */
+:root{
+  --paper:#ece7dd;--panel:#f6f2eb;--card:#fbf9f5;--tint:#efe9df;--in-bg:#efe9df;--up-bg:#f6f2eb;--pr-bg:#f2ede4;--press-bg:#f2ede4;--tray:#e9e3d8;--hover:#f3eee6;
+  --hair:rgba(90,74,50,.12);--hair2:rgba(90,74,50,.2);
+  --up:0 0 0 1px rgba(90,74,50,.07),0 1px 2px rgba(90,74,50,.05),0 10px 28px -12px rgba(90,74,50,.18);
+  --up-s:0 0 0 1px rgba(90,74,50,.09),0 1px 2px rgba(90,74,50,.06);
+  --in:inset 0 0 0 1px rgba(90,74,50,.1);
+  --press:inset 0 0 0 1.5px var(--navy,#20263a);
+  --sh-paper:0 1px 3px rgba(0,0,0,.06),0 14px 34px -14px rgba(60,48,30,.28);
+  --r-s:8px;--r:10px;--r-m:14px;--r-l:18px;
+}
+/* 버튼: 평평하게, 그림자는 선 하나 */
+.btn{border-radius:var(--r);box-shadow:var(--up-s);font-weight:600;transition:background .12s,box-shadow .12s}
+.btn:hover{background:var(--hover);box-shadow:0 0 0 1px var(--navy,#20263a)}
+.btn:active{transform:none;box-shadow:inset 0 0 0 1.5px var(--navy,#20263a)}
+.btn.sm{border-radius:var(--r-s)}
+.btn.go{background:var(--amber,#e08a3e);color:#fff;box-shadow:0 1px 2px rgba(150,90,30,.25),inset 0 -1px 0 rgba(0,0,0,.08);outline:0}
+.btn.go:hover{background:#d47f35;box-shadow:0 1px 2px rgba(150,90,30,.25),0 0 0 3px rgba(224,138,62,.22);outline:0}
+.btn.nv,.btn.p,.btn.accent{background:var(--navy,#20263a);color:#fff;box-shadow:0 1px 2px rgba(20,24,40,.25)}
+.btn.nv:hover,.btn.p:hover,.btn.accent:hover{background:#2c3450;box-shadow:0 0 0 3px rgba(32,38,58,.16)}
+.ib{box-shadow:var(--up-s);border-radius:var(--r)}
+.ib:hover{box-shadow:0 0 0 1px var(--navy,#20263a)}
+/* 고르기(세그먼트): 바탕은 들어감 한 장, 고른 칸은 흰 카드 + 머리카락 선 */
+.vt,.seg,.tvbar{background:var(--tint);box-shadow:var(--in);border-radius:var(--r);padding:3px;gap:2px}
+.vt button,.seg button,.tvbar button{border-radius:var(--r-s);font-weight:600}
+.vt button.on,.seg button.on,.tvbar button.on{background:var(--card);color:var(--ink,#1f2125);font-weight:700;box-shadow:0 0 0 1px rgba(90,74,50,.12),0 1px 3px rgba(90,74,50,.12)}
+/* 칩: 테두리만, 고른 칩은 남색 선 + 남색 글자 */
+.chip{background:transparent;box-shadow:inset 0 0 0 1px var(--hair2);border-radius:999px;padding:7px 13px;font-weight:600}
+.chip:hover{background:var(--card);box-shadow:inset 0 0 0 1px var(--navy,#20263a)}
+.chip.on,.chip.on:hover{background:var(--card);color:var(--navy,#20263a);box-shadow:inset 0 0 0 1.5px var(--navy,#20263a);font-weight:700}
+/* 입력: 들어감 대신 흰 바탕 + 선 (읽기 쉬움) */
+.inp,input.inp,select.inp,textarea.inp{background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
+.inp:focus{box-shadow:inset 0 0 0 1.5px var(--navy,#20263a),0 0 0 3px rgba(32,38,58,.1);outline:0}
+.srch{background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
+.srch:focus-within{box-shadow:inset 0 0 0 1.5px var(--navy,#20263a),0 0 0 3px rgba(32,38,58,.1)}
+/* 카드 · 줄 */
+.tcard,.row,.sgc,.pg{box-shadow:var(--up-s);border-radius:var(--r-m)}
+.tcard:hover,.tgt:hover,.tlist .tcard.trip:hover{box-shadow:0 0 0 1px var(--navy,#20263a),0 6px 18px -10px rgba(32,38,58,.3)}
+body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div{box-shadow:var(--up);border-radius:var(--r-l)}
+.sheet .in,.sheet>div{border-radius:var(--r-l) var(--r-l) 0 0}
+/* 이름표(섹션 머리): 작게 · 자간 · 흐린 먹 */
+.lbl{font-size:12.5px;letter-spacing:.06em;color:var(--ink3);font-weight:700}
+.sgc h4{font-size:14px;letter-spacing:-.01em}
+/* 안내 상자: 상자 대신 왼쪽 선 하나 */
+.note,.note.w,.stnote{background:transparent;box-shadow:none;border-radius:0;border-left:3px solid var(--hair2);padding:4px 0 4px 12px}
+.note.w{border-left-color:#d98a1a}
+/* 작은 표 · 뱃지 */
+.okb,.dd{border-radius:6px}
+/* 도구 작업대(3.0 틀): 교정대 · 작업 패널 · 눈금자 */
+.tray{background:var(--tray);box-shadow:var(--in);border-radius:var(--r-l)}
+.wp{box-shadow:var(--up);border-radius:var(--r-l)}
+.ruler{box-shadow:var(--in);background:var(--tint)}
+.tcard.on,.tcard.on:hover{box-shadow:inset 0 0 0 1.5px var(--navy,#20263a)}
+.wp-f{box-shadow:0 -1px 0 var(--hair)}
+.brand .lg,.pcbar .lg{box-shadow:0 1px 2px rgba(0,0,0,.18),inset 0 -2px 0 rgba(0,0,0,.1)!important}
 
 
 </style></head>
@@ -1804,27 +1879,27 @@ function scrCheck() {
 /* ── 설정 ── */
 function scrSet() {
   const dev = DEV === "ios-safari" ? `<div class="warn"><b>지금 사파리에서 쓰고 있어요.</b><br>홈 화면에 추가해야 일정이 안전하게 남아요. <button class="lk" data-guide>방법 보기</button></div>` : "";
-  const lb = D.set.lastBackup;
-  return hd("설정") + `<div class="body">${dev}
-    <div class="lbl"><span>지도 (국내)</span></div>
-    <div class="maps">${Object.entries(MAPA).map(([k, n]) => `<button class="opt ${mapApp() === k ? "on1" : ""}" data-mapset="${k}"><span><b>${n}</b><small>${k === "naver" ? "장소 검색 · 대중교통이 강해요" : "장소 검색 · 카카오 장소 정보"}</small></span>${mapApp() === k ? IC.ok : ""}</button>`).join("")}</div>
-    <div class="lbl"><span>길안내 (국내)</span></div>
-    <div class="maps">${Object.entries(NAVA).map(([k, n]) => `<button class="opt ${navApp() === k ? "on1" : ""}" data-navset="${k}"><span><b>${n}</b><small>${k === "naver" ? "네이버 지도 길찾기" : k === "kakao" ? "카카오맵 길찾기" : "자동차 길안내 — 휴대폰 전용(PC에서는 네이버 지도로 열어요)"}</small></span>${navApp() === k ? IC.ok : ""}</button>`).join("")}</div>
-    <p class="hint">해외 여행은 지도 · 길안내 모두 구글 지도예요. 지도 · 길안내 단추는 일정에 「지도 위치」를 넣은 것만 켜져요 — 지도 링크(구글 · 네이버 · 카카오)를 넣으면 그 지도로 바로 열려요.</p>
-    <div class="lbl"><span>저장 위치</span><span id="usage"></span></div>
-    <div class="stnote ${gdOn() || D.dir ? "ok" : "warn"}">${gdOn() || D.dir ? IC.ok : IC.save}<p><b>휴대폰과 PC를 같이 쓰려면 구글 드라이브를 연결하세요.</b><br>고칠 때마다 저절로 저장되고, 휴대폰을 바꿔도 그대로예요.</p></div>
-    ${gdBox()}
-    ${CAN_DIR && !ANDROID ? (D.dir ? `<div class="row">${IC.folder}<div class="t"><b>저장 폴더: 「${esc(D.dir.name)}」 <span class="okb" style="${D.dirPerm === "granted" ? "" : "background:var(--red)"}">${D.dirPerm === "granted" ? "연결됨" : "다시 연결 필요"}</span></b><small>일정 · 사진이 이 폴더에도 자동 저장돼요.</small><div class="row2">${D.dirPerm !== "granted" ? `<button class="btn sm nv" data-dirperm>다시 연결</button>` : ""}<button class="btn sm" data-undir>연결 끊기</button></div></div></div>`
-      : `<button class="row" data-sheet="store">${IC.folder}<div class="t"><b>내 PC 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>PC 한 대에서만 쓰면 폴더 저장도 좋아요.</small></div></button>`) : ""}
-    ${mobileBox()}
-    <div class="lbl"><span>백업</span></div>
-    <button class="row" data-backup>${IC.save}<div class="t"><b>백업 만들기</b><small>여행 ${D.items.length}개 · 사진 ${D.items.reduce((a, r) => a + (r.photos || []).length, 0)}장을 파일 하나로 · 마지막 백업: ${lb ? ymdw(new Date(lb)) : "없음"}</small></div></button>
-    <label class="row">${IC.copy}<div class="t"><b>백업에서 되살리기</b><small>다른 휴대폰 · PC에서 만든 백업 파일(.zip)</small></div><input type="file" accept=".zip,application/zip" hidden id="restore"></label>
-    ${helpBox()}
+  const lb = D.set.lastBackup, nPh = D.items.reduce((a, r) => a + (r.photos || []).length, 0), ok = gdOn() || D.dir;
+  const navNm = { naver: "네이버", kakao: "카카오", tmap: "티맵" };
+  return hd("설정") + `<div class="body">${dev}<div class="setg">
+    <section class="sgc"><h4>${IC.map} 지도 · 길안내 <small>국내 여행</small></h4>
+      <div class="sgr"><span>지도</span><div class="vt mini">${Object.entries(MAPA).map(([k, n]) => `<button class="${mapApp() === k ? "on" : ""}" data-mapset="${k}">${n}</button>`).join("")}</div></div>
+      <div class="sgr"><span>길안내</span><div class="vt mini">${Object.entries(NAVA).map(([k, n]) => `<button class="${navApp() === k ? "on" : ""}" data-navset="${k}">${navNm[k] || n}</button>`).join("")}</div></div>
+      <p class="hint">해외 여행은 지도 · 길안내 모두 구글 지도예요. 티맵은 휴대폰 전용(PC에서는 네이버 지도). 지도 · 길안내 단추는 일정에 「지도 위치」를 넣은 것만 켜져요.</p></section>
+    <section class="sgc"><h4>${IC.cloud} 저장 위치 <small id="usage"></small></h4>
+      <p class="sgstat ${ok ? "sgok" : "sgwn"}">${ok ? IC.ok : IC.warn}${ok ? "저절로 저장되고 있어요." : "휴대폰과 PC를 같이 쓰려면 구글 드라이브를 연결하세요."}</p>
+      ${gdBox()}
+      ${CAN_DIR && !ANDROID ? (D.dir ? `<div class="row">${IC.folder}<div class="t"><b>저장 폴더: 「${esc(D.dir.name)}」 <span class="okb" style="${D.dirPerm === "granted" ? "" : "background:var(--red)"}">${D.dirPerm === "granted" ? "연결됨" : "다시 연결 필요"}</span></b><small>일정 · 사진이 이 폴더에도 자동 저장돼요.</small><div class="row2">${D.dirPerm !== "granted" ? `<button class="btn sm nv" data-dirperm>다시 연결</button>` : ""}<button class="btn sm" data-undir>연결 끊기</button></div></div></div>`
+      : `<button class="row" data-sheet="store">${IC.folder}<div class="t"><b>내 PC 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>PC 한 대에서만 쓰면 폴더 저장도 좋아요.</small></div></button>`) : ""}</section>
+    ${DEV === "pc" ? `<section class="sgc">${mobileBox().replace('<div class="lbl"><span>휴대폰에서도 쓰기</span></div>', `<h4>${IC.home} 휴대폰에서도 쓰기</h4>`)}</section>` : ""}
+    <section class="sgc"><h4>${IC.save} 백업 <small>마지막: ${lb ? ymdw(new Date(lb)) : "없음"}</small></h4>
+      <p class="hint">여행 ${D.items.length}개 · 사진 ${nPh}장을 파일(.zip) 하나로 받아 두거나, 다른 기기에서 만든 백업으로 되살려요.</p>
+      <div class="row2"><button class="btn sm nv" data-backup>${IC.save} 백업 만들기</button><label class="btn sm">${IC.copy} 백업에서 되살리기<input type="file" accept=".zip,application/zip" hidden id="restore"></label></div></section>
+    <section class="sgc sgh">${helpBox().replace('<div class="lbl"><span>도움말</span></div>', `<h4>${IC_HELP} 도움말</h4>`)}</section>
+    </div>
     <div class="foot">여행 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>
   </div>`;
 }
-
 
 /* ───────── 아래에서 올라오는 창 ───────── */
 function sheetHtml() {

@@ -1109,6 +1109,17 @@ body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
 #pvimg.lzx{opacity:.85}
 .sgc .lzbox{margin-top:10px}
 
+/* 10-31 제이: 일정마다 바로 옆에서 확인 */
+.itr .ckin{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:8px 12px 10px;border-top:1px dashed rgba(160,140,108,.35);background:rgba(245,109,3,.06)}
+.itr .ckin .ckq{flex-shrink:0;font-size:13px;font-weight:800;color:#9a5a17}
+.itr .ckin .ck4{flex:1;margin:0;gap:6px}
+.itr .ckin .ck4 button{min-height:36px;font-size:13px}
+.itr .ckin.open{display:block}
+.itr .ckin.open .g2{margin-top:2px}
+.ckline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;margin:0 0 10px;border-radius:12px;background:rgba(245,109,3,.1);font-size:13.5px;color:var(--ink2)}
+.ckline span{flex:1;min-width:0}.ckline b{color:#9a5a17}
+@media(max-width:600px){.itr .ckin{flex-direction:column;align-items:stretch;gap:5px;padding:7px 10px 9px}.itr .ckin .ck4{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.itr .ckin .ck4 button{min-height:34px;font-size:12.5px;padding:2px;letter-spacing:-.03em}.itr .ckin .ckq{font-size:12.5px}}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -1623,7 +1634,7 @@ async function importFile(file) { const big = await shrink(file, 1280, 0.82), th
 /* ───────── 여행 자료 ───────── */
 const KINDS = ["구경", "식사", "카페", "이동", "비행기", "숙소", "쇼핑", "자유", "선택관광", "기타"];
 const KGRP = { 구경: "구경", 카페: "식사", 식사: "식사", 이동: "교통", 비행기: "교통", 숙소: "숙소", 쇼핑: "쇼핑", 자유: "구경", 선택관광: "구경", 기타: "기타" };
-const STATES = { done: "했어요", changed: "고쳐서 확정", skip: "안 했어요" };
+const STATES = { done: "완료", changed: "바꿔서 완료", skip: "안 함" };   /* 10-31 제이: 일정마다 바로 옆에서 확인 */
 const WDN = ["일", "월", "화", "수", "목", "금", "토"];
 const won = n => (Math.round(+n || 0)).toLocaleString("ko-KR");
 const numIn = v => +String(v == null ? "" : v).replace(/[^\d]/g, "") || 0;
@@ -1838,6 +1849,11 @@ const TTABS = [["plan", "일정", "cal"], ["cost", "경비", "won"], ["prep", "�
 const PTABS = [["list", "준비물 · 할 일", "check"], ["note", "메모 · 주의사항", "note"], ["link", "참고 사이트", "globe"]];
 function dayChips(t) { const ti = dayDiff(t.start, today());
   return `<div class="days">${t.days.map((d, i) => `<button class="${S.day === i ? "on" : ""}" data-day="${i}"><b>${i + 1}일째</b><small>${mdw(dOf(t, i))}${i === ti ? " · 오늘" : ""}</small></button>`).join("")}<button class="add" data-dayadd aria-label="하루 더하기">${IC.plus}</button></div>`; }
+/* 10-31 제이: 지난 일정 확인을 위쪽 한꺼번에가 아니라 일정마다 바로 옆에서 — 완료 · 바꿔서 완료 · 다른 날로 · 안 함 */
+function ckForm(it, o) { return `<div class="g2"><div><label class="f">실제 시간</label>${timeSel(`data-act="${it.id}:time"`, o.time)}</div><div><label class="f">실제 비용${it.per ? "(1인)" : ""}</label><input class="inp num" inputmode="numeric" data-money data-act="${it.id}:cost" value="${o.cost != null ? won(o.cost) : ""}" placeholder="0"></div></div><label class="f">실제 장소</label><input class="inp" data-act="${it.id}:place" value="${esc(o.place)}"><div class="row2"><button class="btn sm" data-ckcancel="${it.id}">취소</button><button class="btn sm nv" data-ckfix="${it.id}">바꿔서 완료</button></div>`; }
+const CKB = it => `<button data-ck="done:${it.id}">완료</button><button data-ck="fix:${it.id}">바꿔서 완료</button><button data-ck="move:${it.id}">다른 날로</button><button data-ck="skip:${it.id}">안 함</button>`;
+function ckInline(t, it) { if (it.state || !pending(t).some(x => x.it.id === it.id)) return ""; const o = (S.chk || {})[it.id];
+  return `<div class="ckin${o ? " open" : ""}">${o ? ckForm(it, o) : `<span class="ckq">다녀왔나요?</span><div class="ck4 sm">${CKB(it)}</div>`}</div>`; }
 function itRow(t, it, i) {
   const c = planCost(t, it), ph = (t.photos || []).filter(p => p.it === it.id && PURL[p.id]);
   const st = it.state ? `<em class="sb ${it.state}">${STATES[it.state]}</em>` : "";
@@ -1848,6 +1864,7 @@ function itRow(t, it, i) {
     <span class="cs num">${c ? won(c) : ""}${it.per && c ? `<small>1인 ${won(it.cost)}</small>` : ""}</span></button>
     <span class="mp ${mapOn(it) ? "" : "mpoff"}">${mapOn(it) ? `<button data-map="${it.id}" data-iday="${i}" title="${isUrl(placeOf(it)) ? URLK[urlKind(placeOf(it))] : mapLbl(t)}에서 보기">${IC.map}<em>지도</em></button><button data-nav="${it.id}" data-iday="${i}" title="${t.abroad ? "구글 지도" : NAVA[navApp()]} 길안내">${IC.nav}<em>길안내</em></button>`
       : `<button data-mapin="${it.id}" data-iday="${i}" title="지도 위치(이름 · 주소 · 지도 링크)를 넣으면 켜져요">${IC.map}<em>지도</em></button><button data-mapin="${it.id}" data-iday="${i}" title="지도 위치(이름 · 주소 · 지도 링크)를 넣으면 켜져요">${IC.nav}<em>길안내</em></button>`}</span>
+    ${ckInline(t, it)}
     ${ph.length ? `<span class="iph" data-n="${ph.length}">${ph.slice().sort((a, b) => a.t - b.t).map(p => `<img src="${PURL[p.id].t}" alt="" data-pvid="${p.id}" data-pvit="${it.id}" loading="lazy">`).join("")}<button class="iph-more" data-pgall="${it.id}" hidden aria-label="사진 모두 보기"></button></span>` : ""}</div>`;
 }
 function planTab(t) {
@@ -1898,7 +1915,7 @@ function prepTab(t) { const k = S.ptab || "list";
 function scrTrip() {
   const t = TR(); if (!t) { S.scr = "list"; return scrList(); }
   S.day = Math.min(S.day || 0, t.days.length - 1); const tab = S.ttab || "plan", pd = pending(t), p = phase(t);
-  const chk = pd.length && (!t.later || p.k === "after") ? `<button class="bn2 ckb" data-go="check"><div class="t"><b>지난 일정 ${pd.length}개 — 실제로 한 대로 남길까요?</b><br>했어요 · 고쳐서 · 다른 날로 · 안 했어요</div>${IC.next}</button>` : "";
+  const chk = pd.length ? `<div class="ckline"><span><b>확인할 일정 ${pd.length}개</b> — 일정마다 「완료 · 바꿔서 완료 · 다른 날로 · 안 함」을 눌러 주세요</span>${pd.length > 1 ? `<button class="btn sm" data-ckall>${IC.ok} 모두 완료</button>` : ""}</div>` : "";
   const tabs = `<div class="vt ttab">${TTABS.map(([k, n, ic]) => `<button class="${tab === k ? "on" : ""}" data-ttab="${k}">${IC[ic]}${n}</button>`).join("")}</div>`;
   ensPrep(t); const body = tab === "cost" ? costTab(t) : tab === "prep" ? prepTab(t) : tab === "photo" ? photoTab(t) : planTab(t);
   const sub = `${mdw(dOf(t, 0))} ~ ${mdw(dOf(t, t.days.length - 1))} · ${t.people}명 · ${t.type === "pkg" ? "패키지" : "자유여행"}`;
@@ -1988,8 +2005,8 @@ function scrCheck() {
   const rowH = ({ i, it }) => { const o = (S.chk || {})[it.id];
     return `<div class="tcard ck3 ${o ? "open" : ""}"><div class="ckh"><span class="num">${i + 1}일째 ${esc(it.time || "")}</span><b>${esc(it.title)}</b><span class="num">${planCost(t, it) ? won(planCost(t, it)) : ""}</span></div>
       ${o ? `<div class="g2"><div><label class="f">실제 시간</label>${timeSel(`data-act="${it.id}:time"`, o.time)}</div><div><label class="f">실제 비용${it.per ? "(1인)" : ""}</label><input class="inp num" inputmode="numeric" data-money data-act="${it.id}:cost" value="${o.cost != null ? won(o.cost) : ""}" placeholder="0"></div></div><label class="f">실제 장소</label><input class="inp" data-act="${it.id}:place" value="${esc(o.place)}"><div class="row2"><button class="btn sm" data-ckcancel="${it.id}">취소</button><button class="btn sm nv" data-ckfix="${it.id}">이대로 확정</button></div>`
-        : `<div class="ck4"><button data-ck="done:${it.id}">했어요</button><button data-ck="fix:${it.id}">고쳐서</button><button data-ck="move:${it.id}">다른 날로</button><button data-ck="skip:${it.id}">안 했어요</button></div>`}</div>`; };
-  const all = L.length ? `<button class="btn ckall" data-ckall>${IC.ok}<span>${L.length > 1 ? `남은 ${L.length}개 모두 「했어요」` : "「했어요」로 확정"}</span><small>계획대로 다녀왔으면 한 번에</small></button>` : "";   /* 10-28 제이: 모두 했어요 강조 */
+        : `<div class="ck4">${CKB(it)}</div>`}</div>`; };
+  const all = L.length ? `<button class="btn ckall" data-ckall>${IC.ok}<span>${L.length > 1 ? `남은 ${L.length}개 모두 「완료」` : "「완료」로 확정"}</span><small>계획대로 다녀왔으면 한 번에</small></button>` : "";   /* 10-28 제이: 모두 했어요 강조 */
   return hd("지난 일정 확인", backBtn()) + `<div class="body"><p class="hint">시간이 지난 일정 ${L.length}개 — 실제로 한 대로 남기면 「다녀와서」 정리와 실제 경비에 그대로 쓰여요.</p>
     ${all}
     ${L.length ? L.map(rowH).join("") : `<div class="empty sm"><p>확인할 일정이 없어요.</p></div>`}
@@ -2737,7 +2754,7 @@ document.addEventListener("click", async e => {
       await saveTrip(t); S.paste = null; S.day = 0; hist.pop(); S.scr = "trip"; render(true); return toast(`${r.days.length}일 · 일정 ${n}개를 넣었어요. 틀린 곳은 눌러서 고치세요.`); }
   }
   /* 지난 일정 확인 */
-  if (S.scr === "check") {
+  if (S.scr === "check" || S.scr === "trip") {   /* 10-31: 일정 화면에서도 바로 확인 */
     const find = id => { for (const dd of t.days) { const x = dd.items.find(y => y.id === id); if (x) return x; } return null; };
     if (d.ck) { const [k, id] = d.ck.split(":"), it = find(id); if (!it) return;
       if (k === "done") { it.state = "done"; it.act = null; }

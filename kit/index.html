@@ -124,9 +124,9 @@ const WK = "일월화수목금토", p2 = n => String(n).padStart(2, "0");
 const ymdw = d => `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}(${WK[d.getDay()]})`;
 const STANDALONE = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 const Q = new URLSearchParams(location.search);
-const GROUPS = [["life", "생활 · 기록", "#195455"], ["work", "돈 · 업무", "#0A1931"], ["rite", "제사 · 의례", "#B83D06"]];
-const WORK_NAMES = /자기소개서|견적서|차트|매매|가계부/;
-function groupOf(t) { if (t.area === "rite" || t.category === "의례" || /축문|지방|제사/.test(t.name)) return "rite"; if (t.area === "money" || WORK_NAMES.test(t.name)) return "work"; return "life"; }
+/* 10-31 제이: 묶음 = 블로그 메인 탭과 같게, 색 = 앱 아이콘 분야색(common/appicon.py) */
+const GROUPS = [["rite", "제사 · 의례", "#B83D06"], ["doc", "문서 · 이미지", "#1F5F8B"], ["money", "돈 관리", "#0A1931"], ["life", "생활", "#195455"]];
+function groupOf(t) { if (t.area === "rite" || t.category === "의례" || /축문|지방|제사/.test(t.name)) return "rite"; if (t.area === "money" || t.category === "재무") return "money"; if (t.area === "doc" || t.category === "문서") return "doc"; return "life"; }
 function howOf(t) { const ty = t.type || []; if (t.app && ty.includes("설치")) return "app"; if (ty.includes("온라인") || t.run) return "web"; return "dl"; }
 const TG = { app: "앱", web: "블로그 ↗", dl: "받기 ↗" };
 const HOW = { app: "앱 열기", web: "블로그에서 실행 ↗", dl: "받아서 쓰기 ↗", wait: "공개 예정" };
@@ -149,7 +149,7 @@ function render() {
   if (keepFocus) { const q = document.getElementById("q"); q.focus(); try { q.setSelectionRange(pos, pos); } catch (e) {} }
 }
 function topHtml() {
-  return `<header class="top"><span class="lg" aria-hidden="true">J<i></i></span><div class="bt"><small>BLOG J · 내 PC에 설치한 앱</small><b>무료 도구 키트</b></div>
+  return `<header class="top"><span class="lg" aria-hidden="true"><svg aria-hidden="true" width="62%" height="62%" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 13.5v6M13.5 16.5h6"/></svg><i></i></span><div class="bt"><small>BLOG J · 내 PC에 설치한 앱</small><b>무료 도구 키트</b></div>
     <label class="srch">${IC.search}<input id="q" type="search" placeholder="도구 찾기 — 예: 달력, 라벨, 지방" aria-label="도구 찾기" value="${esc(S.q)}"></label>
     ${window._bip && !STANDALONE ? `<button class="hb fill" data-act="install">${IC.dl}<span class="hide-m">PC에 설치</span></button>` : ""}
     <a class="hb hide-m" href="${BLOG}" target="_blank" rel="noopener">블로그 열기 ${IC.ext}</a>
@@ -157,7 +157,7 @@ function topHtml() {
 }
 function visibleTools() {
   const d = S.data; if (!d) return [];
-  return (d.tools || []).filter(t => !t.hide).map(t => ({ ...t, g: groupOf(t), how: howOf(t), wait: t.open && Date.parse(t.open) > Date.now() }));
+  return (d.tools || []).filter(t => !t.hide && !/무료 도구 키트/.test(t.name)).map(t => ({ ...t, g: groupOf(t), how: howOf(t), wait: t.open && Date.parse(t.open) > Date.now() }));
 }
 function soonTools() { const d = S.data; if (!d) return []; return (d.soon || []).filter(t => !t.hide).map(t => ({ ...t, g: groupOf(t), how: "wait", wait: true, soon: true })); }
 function newest(ts) { const now = Date.now(); return ts.filter(t => t.open && Date.parse(t.open) <= now).sort((a, b) => Date.parse(b.open) - Date.parse(a.open))[0]; }
@@ -221,7 +221,7 @@ function asideHtml() {
 }
 function footMini() { return `<div class="foot-m"><span>키트 v${KIT_VER}</span><a href="${BLOG}" target="_blank" rel="noopener">Blog J 블로그 ↗</a></div>`; }
 function renderInstall() {
-  document.getElementById("root").innerHTML = `<div class="inst"><span class="lg" aria-hidden="true">J<i></i></span><h1>무료 도구 키트 설치</h1>
+  document.getElementById("root").innerHTML = `<div class="inst"><span class="lg" aria-hidden="true"><svg aria-hidden="true" width="62%" height="62%" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 13.5v6M13.5 16.5h6"/></svg><i></i></span><h1>무료 도구 키트 설치</h1>
     <p>Blog J 무료 도구를 PC 창 하나에 모아 둡니다.<br>설치한 앱은 바로 열고, 온라인 도구는 블로그 실행 카드로 이어집니다.</p>
     ${window._bip ? `<button class="hb fill" data-act="install" style="height:48px;padding:0 24px">${IC.dl} 지금 설치</button>` : `<p style="margin:0">주소창 오른쪽의 설치 아이콘(⊕)을 누르거나, 크롬 메뉴 ⋮ → 「전송, 저장, 공유」 → 「페이지를 앱으로 설치」를 누르세요.</p>`}
     <p style="margin-top:18px;font-size:13px">설치 · 삭제 방법: <a href="${BLOG}/790" target="_blank" rel="noopener">Blog J 앱 설치 · 삭제 방법</a> · <a href="./">설치하지 않고 쓰기</a></p></div>`;

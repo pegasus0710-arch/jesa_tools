@@ -1,5 +1,5 @@
 {
- "_설명": "Blog J 스킨이 읽는 도구 목록(2026-10-28 메인 개편). 도구를 추가하면 메인 · 사이드바에 자동 반영. category: 색(의례 · 디지털 · 학습 · 재무 · 건강) / area: 메인 탭(rite 제사·의례 · doc 문서·이미지 · money 돈 관리 · life 생활 · learn 학습 — 없으면 category로 정함) / icon: 아이콘 이름 / type: 쓰는 방법 「온라인」 「다운로드」 「설치」(여러 개면 첫 번째가 아이콘 점) / open: 공개 시각 — 맨 위 「새로 나온 무료 도구」는 공개된 도구 중 open이 가장 최근인 3개, 이 시각 전에는 메인에서 흐린 「공개 예정」 아이콘 / rank: 사이드바 「인기 도구」 순위(1~8, 매주 월요일 점검 때 고침) · prev: 지난주 순위(없으면 오르내림 표시 없음) / short: 짧은 설명 / hide: 숨기기 / count: 아이콘 하나가 여러 프로그램을 묶을 때 그 수(「무료 도구 N가지」에 더해짐) / soon: 곧 나올 도구 — 메인 아이콘 칸 맨 뒤에 흐린 「곧 공개」로(링크 없음, 도구 수에 안 셈, hide면 안 보임) / tabs: 메인 영역 탭 / guides: 메인 「안내」 줄 / areas: 예전 스킨용(새 스킨은 안 씀) / run: 메인 아이콘을 누르면 열 실행 카드(launch.html?tool=…, n = 이름, q = tool&tab) — 여러 개면 창 안에서 고름 / app: 설치형 앱 주소(누르면 새 창) / run · app 둘 다 없으면 글(link)로 이동 / ver: 버전(무료 도구 전체 페이지) / img: 앱 아이콘 그림(설치형은 그 앱의 icon-192.png, 나머지는 icons/apps/이름.png) — 메인 · 사이드 · 무료 도구 전체 페이지에 그대로 / news: 도구 키트 앱의 「블로그 새 글」(no 글 번호 · t 제목 · at 공개 시각 — 이 시각 전에는 안 보임, 새 글을 올릴 때 한 줄 추가)",
+ "_설명": "Blog J 스킨이 읽는 도구 목록(2026-10-28 메인 개편). 도구를 추가하면 메인 · 사이드바에 자동 반영. category: 색(의례 앰버 · 디지털=생활 초록 · 문서 파랑 · 서류 자주 · 재무 남색 · 학습 초록 — 10-31 앱 아이콘 분야색과 같음) / area: 메인 탭(rite 제사·의례 · doc 문서·이미지 · money 돈 관리 · life 생활 · learn 학습 — 없으면 category로 정함) / icon: 아이콘 이름 / type: 쓰는 방법 「온라인」 「다운로드」 「설치」(여러 개면 첫 번째가 아이콘 점) / open: 공개 시각 — 맨 위 「새로 나온 무료 도구」는 공개된 도구 중 open이 가장 최근인 3개, 이 시각 전에는 메인에서 흐린 「공개 예정」 아이콘 / rank: 사이드바 「인기 도구」 순위(1~8, 매주 월요일 점검 때 고침) · prev: 지난주 순위(없으면 오르내림 표시 없음) / short: 짧은 설명 / hide: 숨기기 / count: 아이콘 하나가 여러 프로그램을 묶을 때 그 수(「무료 도구 N가지」에 더해짐) / soon: 곧 나올 도구 — 메인 아이콘 칸 맨 뒤에 흐린 「곧 공개」로(링크 없음, 도구 수에 안 셈, hide면 안 보임) / tabs: 메인 영역 탭 / guides: 메인 「안내」 줄 / areas: 예전 스킨용(새 스킨은 안 씀) / run: 메인 아이콘을 누르면 열 실행 카드(launch.html?tool=…, n = 이름, q = tool&tab) — 여러 개면 창 안에서 고름 / app: 설치형 앱 주소(누르면 새 창) / run · app 둘 다 없으면 글(link)로 이동 / ver: 버전(무료 도구 전체 페이지) / img: 앱 아이콘 그림(설치형은 그 앱의 icon-192.png, 나머지는 icons/apps/이름.png) — 메인 · 사이드 · 무료 도구 전체 페이지에 그대로 / news: 도구 키트 앱의 「블로그 새 글」(no 글 번호 · t 제목 · at 공개 시각 — 이 시각 전에는 안 보임, 새 글을 올릴 때 한 줄 추가) / kit: 블로그 메인 「무료 도구 키트 PC에 설치」 홍보 칸(스킨이 읽음, 10-31)",
  "tabs": [
   {
    "id": "rite",
@@ -9,7 +9,7 @@
   {
    "id": "doc",
    "name": "문서 · 이미지",
-   "category": "디지털"
+   "category": "문서"
   },
   {
    "id": "money",
@@ -66,7 +66,7 @@
   },
   {
    "name": "PDF 편집 도구",
-   "category": "디지털",
+   "category": "문서",
    "area": "doc",
    "icon": "doc",
    "type": [
@@ -89,7 +89,7 @@
   },
   {
    "name": "이미지 도구",
-   "category": "디지털",
+   "category": "문서",
    "area": "doc",
    "icon": "image",
    "type": [
@@ -112,7 +112,7 @@
   },
   {
    "name": "차트 만들기",
-   "category": "디지털",
+   "category": "문서",
    "area": "doc",
    "icon": "chart",
    "type": [
@@ -134,7 +134,7 @@
   },
   {
    "name": "자기소개서 쓰기",
-   "category": "디지털",
+   "category": "서류",
    "area": "doc",
    "icon": "pen",
    "type": [
@@ -151,7 +151,7 @@
   },
   {
    "name": "견적서 발행기",
-   "category": "재무",
+   "category": "서류",
    "area": "money",
    "icon": "receipt",
    "type": [
@@ -323,7 +323,7 @@
   },
   {
    "name": "사진 뷰어",
-   "category": "디지털",
+   "category": "문서",
    "area": "doc",
    "icon": "camera",
    "type": [
@@ -339,7 +339,7 @@
   },
   {
    "name": "이미지 편집기",
-   "category": "디지털",
+   "category": "문서",
    "area": "doc",
    "icon": "image",
    "type": [
@@ -352,19 +352,35 @@
    "img": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/icon-192.png",
    "ver": "2.0",
    "open": "2026-11-18T09:00:00+09:00"
+  },
+  {
+   "name": "무료 도구 키트",
+   "category": "디지털",
+   "area": "life",
+   "icon": "grid",
+   "type": [
+    "설치"
+   ],
+   "desc": "Blog J 무료 도구를 PC 창 하나에 — 바탕화면 아이콘 하나로 바로 실행, 새 도구는 저절로 추가",
+   "short": "무료 도구를 PC 아이콘 하나로",
+   "link": "https://luvbong.tistory.com/803",
+   "open": "2026-10-31T17:00:00+09:00",
+   "ver": "1.0",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/kit/",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/kit/icon-192.png"
   }
  ],
  "soon": [
   {
    "name": "글자수 세기 · 맞춤법",
-   "category": "디지털",
+   "category": "문서",
    "area": "doc",
    "icon": "list",
    "desc": "공백 포함·제외 글자수와 자주 틀리는 맞춤법·띄어쓰기 점검 — 자소서 쓸 때"
   },
   {
    "name": "사진 콜라주",
-   "category": "디지털",
+   "category": "문서",
    "area": "doc",
    "icon": "grid",
    "desc": "여러 장을 한 장으로, 칸마다 위치·확대 조절",
@@ -405,7 +421,7 @@
   },
   {
    "name": "문서·이미지",
-   "category": "디지털",
+   "category": "문서",
    "icon": "doc",
    "desc": "PDF·사진 정리",
    "link": "https://luvbong.tistory.com/category/Blog J 무료 도구/문서·이미지 도구"
@@ -509,6 +525,19 @@
    "no": 798,
    "t": "이미지 편집기 v2.0 — 여러 장 한 번에 편집",
    "at": "2026-11-18T09:00:00+09:00"
+  },
+  {
+   "no": 803,
+   "t": "무료 도구 키트 — Blog J 무료 도구를 PC 아이콘 하나로",
+   "at": "2026-10-31T17:00:00+09:00"
   }
- ]
+ ],
+ "kit": {
+  "name": "무료 도구 키트",
+  "t": "Blog J 무료 도구를 PC 바탕화면 아이콘 하나로",
+  "d": "설치하면 도구 목록이 한 창에 — 새 도구도 저절로 추가",
+  "install": "https://pegasus0710-arch.github.io/jesa_tools/kit/?install=1",
+  "link": "https://luvbong.tistory.com/803",
+  "img": "https://pegasus0710-arch.github.io/jesa_tools/kit/icon-192.png"
+ }
 }

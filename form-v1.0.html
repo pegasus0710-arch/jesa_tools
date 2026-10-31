@@ -366,7 +366,7 @@ details.adv[open]{box-shadow:var(--in);background:var(--in-bg)}
 /* ── 무료 양식 전용 ── */
 :root{--cat:#1f7f8f;--catbg:#e3f3f5;--font:"BJCal","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--head:"BJCal","Pretendard",sans-serif;--font-head:"BJCal","Pretendard",sans-serif}
 body,button,input,select{font-family:var(--font)}
-.app.t-form .lay.wb{grid-template-columns:460px minmax(0,1fr)}
+
 .brand .lg svg{color:#f3efe4}
 .fm-grp{margin-bottom:12px;border-radius:16px;background:var(--in-bg);box-shadow:var(--in);padding:6px}
 .fm-gh{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 14px;border-radius:12px;background:transparent;border:0;cursor:pointer;color:inherit;text-align:left}
@@ -405,6 +405,33 @@ body,button,input,select{font-family:var(--font)}
 .t-form .brand .lg{box-shadow:4px 6px 12px rgba(20,90,100,.35),-3px -3px 8px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.18)}
 
 .fm-pg.paper{padding:0}.fm-pg.paper svg{width:210mm;height:297mm;display:block}
+/* 10-31 양식 고르기: 왼쪽 큰 분류 · 오른쪽 이름 2열 · 찾기 */
+@media(min-width:1061px){.app.t-form .lay.wb{grid-template-columns:520px minmax(0,1fr)}}
+.fm-find{display:flex;align-items:center;gap:8px;height:46px;padding:0 12px;border-radius:12px;background:var(--in-bg);box-shadow:var(--in);margin-bottom:12px;color:var(--ink3)}
+.fm-find input{flex:1;min-width:0;border:0;background:transparent;font-size:15px;color:var(--ink);outline:0;height:100%}
+.fm-find input::-webkit-search-cancel-button{display:none}
+.fm-clr{border:0;background:transparent;font-size:22px;line-height:1;color:var(--ink3);cursor:pointer;width:30px;height:30px;border-radius:8px}
+.fm-find:focus-within{box-shadow:var(--in),inset 0 0 0 2px #0a1931}
+.fm-pick{display:grid;grid-template-columns:128px minmax(0,1fr);gap:10px;align-items:start}
+.fm-cats{display:flex;flex-direction:column;gap:6px;padding:6px;border-radius:14px;background:var(--in-bg);box-shadow:var(--in)}
+.fm-cat{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;padding:9px 11px;border:0;border-radius:10px;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.fm-cat b{font-size:15px;font-weight:800;line-height:1.3}.fm-cat small{font-size:12.5px;color:var(--ink3);font-weight:500}
+.fm-cat:hover{box-shadow:inset 0 0 0 1.5px rgba(10,25,49,.35)}
+.fm-cat.on{background:var(--card-bg,#f4efe6);box-shadow:inset 0 0 0 2px #0a1931,2px 3px 6px rgba(60,50,30,.14)}
+.fm-cat.has::after{content:"";position:absolute;right:9px;top:13px;width:7px;height:7px;border-radius:50%;background:#f56d03}
+.fm-names{min-width:0}
+.fm-qh{margin:2px 2px 8px;font-size:13px;color:var(--ink3)}
+.fm-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fm-nm{position:relative;display:flex;align-items:center;min-height:40px;padding:6px 22px 6px 11px;border:0;border-radius:10px;background:var(--card-bg,#f4efe6);box-shadow:2px 3px 6px rgba(60,50,30,.13),-2px -2px 5px rgba(255,255,255,.7);font-size:14px;font-weight:600;color:var(--ink);text-align:left;line-height:1.3;cursor:pointer;word-break:keep-all}
+.fm-nm:hover{box-shadow:inset 0 0 0 1.5px #0a1931,2px 3px 6px rgba(60,50,30,.13)}
+.fm-nm:active{transform:translateY(1px)}
+.fm-nm.on{box-shadow:inset 0 0 0 2px #0a1931;font-weight:800}
+.fm-nm.on i{position:absolute;right:9px;top:50%;margin-top:-3.5px;width:7px;height:7px;border-radius:50%;background:#f56d03}
+.fm-desc{display:flex;flex-direction:column;gap:3px;margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--in-bg);box-shadow:var(--in)}
+.fm-desc b{font-size:17px}.fm-desc small{font-size:13.5px;color:var(--ink3);line-height:1.5}
+@media(max-width:600px){.fm-pick{grid-template-columns:1fr}.fm-cats{flex-direction:row;flex-wrap:wrap}.fm-cat{flex:1 1 auto;width:auto;padding:7px 11px}.fm-cat.has::after{right:4px;top:6px}}
+.fm-find input,.fm-find input:focus{box-shadow:none!important;background:transparent!important;padding:0!important;border:0!important;height:100%!important;border-radius:0!important}
+.fm-pick>*{min-width:0}
 
 /* 색(10-30 제이 지정): 초록 #0a1931 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #0a1931(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
@@ -777,6 +804,7 @@ function App() {
   const [sel, setSel] = useState(() => { const q = Q.get("f"); if (q && byId(q)) return q; const g = (GROUPS.find(x => x[2] === TAB0) || [])[0] || null; const s = loadC("sel", "resume"); return g ? FORMS.find(f => f.group === g).id : (byId(s) ? s : "resume"); });
   const [open, setOpen] = useState(() => (byId(sel) || FORMS[0]).group);
   const [cur, setCur] = useState(0);
+  const [q, setQ] = useState("");
   const go = i => { setCur(i); if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" }); };
   useEffect(() => saveC("sel", sel), [sel]);
   useEffect(() => { document.title = "무료 양식 | Blog J"; }, []);
@@ -796,12 +824,17 @@ function App() {
       <section class="wp">
         <div class="wp-h"><span class="k">0${cur + 1} / 02</span><h2>${STEPS[cur][1]}</h2><p>${STEPS[cur][2]}</p></div>
         <div class="wp-b">
-        ${cur === 0 && html`${GROUPS.map(([g, sub]) => { const list = FORMS.filter(f => f.group === g), on = open === g;
-            return html`<div class=${"fm-grp" + (on ? " on" : "")}>
-              <button class="fm-gh" aria-expanded=${on} onClick=${() => setOpen(on ? "" : g)}><b>${g}</b><small>${sub} · ${list.length}가지</small>${h(Icon, { name: "chevR", size: 18, style: { marginLeft: "auto", transform: on ? "rotate(-90deg)" : "rotate(90deg)" } })}</button>
-              ${on ? html`<div class="fm-list">${list.map(f => html`<button class=${"tcard fm-it" + (sel === f.id ? " on" : "")} onClick=${() => setSel(f.id)}><span><b>${f.name}</b><small>${f.desc}</small></span>${sel === f.id ? html`<i></i>` : null}</button>`)}</div>` : null}
-            </div>`; })}
-          <p class="hint">모두 A4 한 장 · 46가지예요. 회사 · 기관에 정해진 양식이 있으면 그 양식을 먼저 쓰세요.</p>`}
+        ${cur === 0 && (() => { const qq = q.trim().replace(/\s+/g, ""); const list = qq ? FORMS.filter(f => (f.name + f.desc + f.group).replace(/\s+/g, "").includes(qq)) : FORMS.filter(f => f.group === open);
+          return html`<div class="fm-find">${h(Icon, { name: "search", size: 18 })}<input type="search" placeholder="양식 이름으로 찾기 (예: 사직, 원고지)" value=${q} onInput=${e => setQ(e.target.value)} />${q ? html`<button class="fm-clr" aria-label="지우기" onClick=${() => setQ("")}>×</button>` : null}</div>
+          <div class="fm-pick">
+            <div class="fm-cats" role="tablist">${GROUPS.map(([g]) => { const n = FORMS.filter(f => f.group === g).length, on = !qq && open === g;
+              return html`<button role="tab" aria-selected=${on} class=${"fm-cat" + (on ? " on" : "") + (F.group === g ? " has" : "")} onClick=${() => { setQ(""); setOpen(g); }}><b>${g}</b><small>${n}가지</small></button>`; })}</div>
+            <div class="fm-names">${qq ? html`<p class="fm-qh">「${q.trim()}」 찾은 양식 ${list.length}가지</p>` : null}
+              <div class="fm-grid">${list.map(f => html`<button class=${"fm-nm" + (sel === f.id ? " on" : "")} title=${f.desc} onClick=${() => setSel(f.id)}>${f.name}${sel === f.id ? html`<i></i>` : null}</button>`)}</div>
+              ${qq && !list.length ? html`<p class="hint">찾는 양식이 없어요. 다른 낱말로 찾아보세요.</p>` : null}</div>
+          </div>
+          <div class="fm-desc"><span class="k">고른 양식 · ${F.group}</span><b>${F.name}</b><small>${F.desc}</small></div>
+          <p class="hint">모두 A4 한 장 · ${FORMS.length}가지예요. 회사 · 기관에 정해진 양식이 있으면 그 양식을 먼저 쓰세요.</p>`; })()}
         ${cur === 1 && html`<div class="fm-sel"><span class="k">고른 양식</span><b>${F.name}</b><button class="btn s" onClick=${() => go(0)}>다른 양식</button></div>
           <button class="btn go fm-print" onClick=${() => window.print()}>${h(Icon, { name: "printer", size: 20 })} 바로 인쇄 · PDF로 저장</button>
           <p class="hint">손으로 써서 낼 때는 바로 인쇄하면 돼요. 인쇄 창에서 배율 「실제 크기(100%)」 · 여백 「없음」으로 고르세요.</p>

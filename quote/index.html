@@ -212,6 +212,11 @@ h3.sec:first-child{margin-top:0}
   #main input,#main select,#main textarea{font-size:16px}
 }
 
+.pprev{max-height:38vh;overflow:auto;margin-top:8px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(31,33,37,.12);background:#fff}.pprev:empty{display:none}
+.pprev table{width:100%;border-collapse:collapse;font-size:13px}.pprev th{position:sticky;top:0;background:#f1ebe1;font-weight:700;color:var(--t2,#5b5547);padding:6px 8px;text-align:left;white-space:nowrap}
+.pprev td{padding:5px 8px;border-top:1px solid #eee5d8;white-space:nowrap}.pprev .r{text-align:right;font-variant-numeric:tabular-nums}.pprev em{color:#c23a2b;font-style:normal}
+.pprev .muted{margin:6px 8px}.pp-sum{margin:0;padding:8px;text-align:right;font-size:13.5px;border-top:1px solid #eee5d8}
+
 /* BJ31-APPLIED */
 /* 색(10-30 제이 지정): 초록 #0a1931 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #0a1931(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
@@ -1066,11 +1071,16 @@ function docXlsx(d){d=d&&d.id?d:S.cur;if(!d)return;flush();const cl=(d.clientId?
 function pasteDlg(cb,itemsOnly){const o=document.createElement('div');o.className='ov';const cols=itemsOnly?'품목 · 규격 · 단위 · 단가 · 분류':'품목 · 규격 · 수량 · 단위 · 단가';
   o.innerHTML=`<div class="dlg" role="dialog" aria-label="엑셀에서 붙여넣기"><h3>엑셀에서 붙여넣기</h3>${XLEX(itemsOnly?{ta:"#pTx",cols:["품목","규격","단위","단가","분류"],num:[3],rows:[["A4 복사용지","80g 500매","박스","28,000","사무용품"],["볼펜","0.5mm 검정","자루","800","사무용품"],["설치비","기본","회","50,000","작업비"]],note:"열 순서는 <b>"+cols+"</b> 그대로 맞춰 주세요. 1행 머리글은 있어도 되고(자동으로 건너뜀), 칸이 모자라면 비워 둬도 돼요. 단가는 쉼표가 있어도 돼요."}
    :{ta:"#pTx",cols:["품목","규격","수량","단위","단가"],num:[2,4],rows:[["A4 복사용지","80g 500매","10","박스","28,000"],["볼펜","0.5mm 검정","50","자루","800"],["설치비","기본","1","회","50,000"]],note:"열 순서는 <b>"+cols+"</b> 그대로 맞춰 주세요. 1행 머리글은 있어도 되고(자동으로 건너뜀), 칸이 모자라면 비워 둬도 돼요. 단가는 쉼표가 있어도 돼요."})}
-   <textarea id="pTx" rows="8" placeholder="${itemsOnly?'A4 복사용지\t80g 500매\t박스\t28000\t사무용품':'A4 복사용지\t80g 500매\t10\t박스\t28000'}" style="font-family:Consolas,monospace;font-size:13px"></textarea><p class="muted" id="pInfo" style="margin:6px 0 0"></p>
+   <textarea id="pTx" rows="8" placeholder="${itemsOnly?'A4 복사용지\t80g 500매\t박스\t28000\t사무용품':'A4 복사용지\t80g 500매\t10\t박스\t28000'}" style="font-family:Consolas,monospace;font-size:13px"></textarea><p class="muted" id="pInfo" style="margin:6px 0 0"></p><div id="pPrev" class="pprev"></div>
    <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn" id="pX">닫기</button><button class="btn p" id="pOk">넣기</button></div></div>`;
   document.body.appendChild(o);const tx=o.querySelector('#pTx');tx.focus();
   const parse=()=>tx.value.split(/\r?\n/).map(l=>l.split('\t')).filter(c=>c.join('').trim()).map(c=>itemsOnly?{name:(c[0]||'').trim(),spec:(c[1]||'').trim(),unit:(c[2]||'').trim(),price:numIn(c[3]||0),cat:(c[4]||'').trim()}:{name:(c[0]||'').trim(),spec:(c[1]||'').trim(),qty:String(numIn(c[2]||1)||1),unit:(c[3]||'').trim(),price:numIn(c[4]||0)}).filter(r=>r.name&&!/^(품목|품명|품목명|상품명)$/.test(r.name));
-  tx.oninput=()=>{const r=parse();o.querySelector('#pInfo').textContent=r.length?`${r.length}줄을 읽었어요. 첫 줄: ${r[0].name}${r[0].price?' · '+won(r[0].price)+'원':''}`:'';};
+  /* 10-31 제이: 붙여넣으면 바로 표로 미리보기 — 어느 칸이 어디로 들어가는지 확인한 뒤 「넣기」 */
+  tx.oninput=()=>{const r=parse();const dx=o.querySelector('.xlx');if(dx&&r.length)dx.open=false;o.querySelector('#pInfo').textContent=r.length?`${r.length}줄을 읽었어요 — 아래 표로 확인하고 「넣기」를 누르세요.`:'';
+    const H=itemsOnly?['품목','규격','단위','단가','분류']:['품목','규격','수량','단위','단가','금액'];
+    const row=x=>itemsOnly?[esc(x.name),esc(x.spec),esc(x.unit),x.price?won(x.price):'<em>0</em>',esc(x.cat)]:[esc(x.name),esc(x.spec),esc(x.qty),esc(x.unit),x.price?won(x.price):'<em>0</em>',won(Math.round(numIn(x.qty)*numIn(x.price)))];
+    const num=itemsOnly?[3]:[2,4,5];
+    o.querySelector('#pPrev').innerHTML=r.length?`<table><thead><tr><th>#</th>${H.map((h,i)=>`<th${num.includes(i)?' class="r"':''}>${h}</th>`).join('')}</tr></thead><tbody>${r.slice(0,50).map((x,k)=>`<tr><td>${k+1}</td>${row(x).map((v,i)=>`<td${num.includes(i)?' class="r"':''}>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>${r.length>50?`<p class="muted">… ${r.length-50}줄 더</p>`:''}${!itemsOnly?`<p class="pp-sum">합계(공급가액) <b>${won(r.reduce((a,x)=>a+Math.round(numIn(x.qty)*numIn(x.price)),0))}원</b></p>`:''}`:'';};
   o.querySelector('#pX').onclick=()=>o.remove();o.querySelector('#pOk').onclick=()=>{const r=parse();if(!r.length){toast('읽은 줄이 없어요 — 엑셀 칸을 복사해서 붙여넣어 주세요.');return;}o.remove();cb(r);};}
 
 /* ── 내 정보 ── */

@@ -1134,6 +1134,16 @@ body.pc .setg{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
 .tgt.up{box-shadow:0 0 0 3px #1f7f8f,var(--up-s)}.tgt.up.now{box-shadow:0 0 0 3px #f56d03,var(--up-s)}
 .tgt.up.nop{background:#1f6f7d}
 
+/* 10-31 제이: 일정 아래 사진은 작게(누르면 크게) · 오른쪽 지도 · 길안내 칸 밑으로 들어가지 않게 */
+.iph{--tile:56px;gap:5px;padding:0 64px 10px 68px}
+body.pc .iph{--tile:64px}
+.iph img,.iph-more{border-radius:8px}.iph-more{font-size:16px}
+@media (max-width:420px){.iph{--tile:52px;padding:0 60px 10px 12px}}
+/* 크게 보기 → 목록으로 보기 */
+.vw2-list{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:7px 12px;background:rgba(255,255,255,.14);color:#fff;font:700 13.5px/1 inherit;cursor:pointer;margin-left:6px;flex-shrink:0}
+.vw2-list svg{width:17px;height:17px}.vw2-list:hover{background:rgba(255,255,255,.24)}
+@media (max-width:600px){.vw2-list span{display:none}.vw2-list::after{content:"목록"}.vw2-list{padding:8px 10px}}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -2185,8 +2195,9 @@ function pvList() { const t = TR(); if (!t) return []; return (t.photos || []).f
 /* 코스 사진 모두 보기(10-28 제이): 「+N」을 누르면 화면 가득 큰 사진 목록, 누르면 한 장 크게 */
 function gallery() {
   const t = TR(); if (!t) return ""; let it = null; t.days.forEach(d => d.items.forEach(x => { if (x.id === S.pg) it = x; }));
-  const P = (t.photos || []).filter(p => PURL[p.id] && p.it === S.pg).sort((a, b) => a.t - b.t); if (!P.length) return "";
-  return `<div class="pv vw2 pg2" role="dialog" aria-label="사진 모두 보기"><div class="vw2-top"><b>${esc(it ? it.title : "")}</b><span class="k">사진 ${P.length}장</span><span class="k n"></span><button class="vw2-x" data-pgx aria-label="닫기">${IC.x}</button></div>
+  /* 10-31 제이: 크게 보기의 「목록으로 보기」 — S.pg = "*" 이면 이 여행 사진 모두 */
+  const P = (t.photos || []).filter(p => PURL[p.id] && (S.pg === "*" || p.it === S.pg)).sort((a, b) => phT(t, a) - phT(t, b)); if (!P.length) return "";
+  return `<div class="pv vw2 pg2" role="dialog" aria-label="사진 모두 보기"><div class="vw2-top"><b>${esc(S.pg === "*" ? (t.name || "여행") + " — 모든 사진" : it ? it.title : "")}</b><span class="k">사진 ${P.length}장</span><span class="k n"></span><button class="vw2-x" data-pgx aria-label="닫기">${IC.x}</button></div>
     <div class="pg2-grid">${P.map((p, k) => `<button data-pgi="${k}"><img src="${PURL[p.id].t}" alt="" loading="lazy"><em class="num">${phT(t, p) ? hmOf(phT(t, p)) : ""}</em></button>`).join("")}</div></div>`;
 }
 function viewer() {
@@ -2194,6 +2205,7 @@ function viewer() {
   let it = null; (t.days || []).forEach(d => d.items.forEach(x => { if (x.id === rec.it) it = x; }));
   const when = rec.t || rec.u ? (() => { const lt = phT(t, rec), d = new Date(lt); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(lt)}${rec.lm ? " (파일 시간)" : ""}`; })() : "";
   return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span><span class="k n num">${i + 1} / ${L.length}</span>
+    ${L.length > 1 ? `<button class="vw2-list" data-pvgrid aria-label="목록으로 보기" title="사진을 목록으로 한 번에 보기">${IC.grid || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'}<span>목록으로 보기</span></button>` : ""}
     <button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button><button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
     <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f || p.t}" alt="" draggable="false"></div>
       ${L.length > 1 ? `<button class="vw2-nav l" data-pvm="-1" ${i === 0 ? "disabled" : ""} aria-label="이전 사진">${IC.back}</button><button class="vw2-nav r" data-pvm="1" ${i >= L.length - 1 ? "disabled" : ""} aria-label="다음 사진">${IC.next}</button>` : ""}
@@ -2739,7 +2751,8 @@ document.addEventListener("click", async e => {
   if (d.pvid) { e.stopPropagation(); if (S.ttab === "photo" || S.scr !== "trip") { S.phId = d.pvid; S.sheet = "phit"; return render(); } S.pvIt = d.pvit || null; S.pv = pvList().findIndex(p => p.id === d.pvid); return render(); }
   if (d.pgall) { S.pg = d.pgall; return render(); }
   if (d.pgx != null) { S.pg = null; return render(); }
-  if (d.pgi != null) { S.pvIt = S.pg; S.pv = +d.pgi; return render(); }
+  if (d.pgi != null) { S.pvIt = S.pg === "*" ? null : S.pg; S.pv = +d.pgi; return render(); }
+  if (d.pvgrid != null) { S.pg = S.pvIt || "*"; S.pv = null; return render(); }
   if (d.pvi != null) { S.pv = +d.pvi; return render(); }
   if (d.pvx != null) { S.pv = null; if (!S.pg) S.pvIt = null; return render(); }
   if (d.tview) { D.set.tview = d.tview; await setMeta("set", D.set).catch(() => {}); return render(); }

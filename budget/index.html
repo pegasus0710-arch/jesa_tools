@@ -1974,7 +1974,7 @@ function MoveNote({ onGo }) {
   const k = GS_CFG.pfx + "gs:movenote"; const [x, setX] = useState(() => { try { return localStorage.getItem(k) === "off"; } catch (e) { return false; } });
   if (x || GS.hasTx()) return null;
   const close = () => { try { localStorage.setItem(k, "off"); } catch (e) {} setX(true); };
-  return html`<div class="note gsmove"><b>v1.0(내려받은 파일)을 쓰셨나요?</b> 그 기록은 이 앱으로 저절로 오지 않아요. v1.0에서 「설정 › 저장·백업 › 백업 파일 내려받기」를 한 뒤, 여기 <b>「설정 › 저장 · 동기화 › 백업 파일에서 복원」</b>을 누르면 그대로 옮겨져요(쓰던 폴더가 있으면 「폴더 선택 → 폴더에서 불러오기」).
+  return html`<div class="note gsmove"><b>v1.0(내려받은 파일)을 쓰셨나요?</b> 그 기록은 이 앱으로 저절로 오지 않아요. v1.0에서 「설정 › 저장·백업 › 백업 파일 내려받기」를 한 뒤, 여기 <b>「설정 › 저장 · 동기화 › 백업에서 되살리기 → 파일 직접 고르기」</b>로 그 파일을 고르면 그대로 옮겨져요(쓰던 폴더가 있으면 「폴더 선택 → 폴더에서 불러오기」).
     <div class="row" style="margin-top:8px;justify-content:flex-start"><button class="btn s p" style="flex:0" onClick=${onGo}>옮기러 가기</button><button class="btn s g" style="flex:0" onClick=${close}>처음 써요 · 닫기</button></div></div>`;
 }
 

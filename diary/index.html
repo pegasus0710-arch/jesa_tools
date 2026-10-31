@@ -370,19 +370,19 @@ const face = (v, sz = 24, col) => { const m = moodOf(v) || MOODS[2]; return `<sv
 
 /* ── 칸 (설정에서 켜고 끔) ── */
 const PARTS = [
-  { g: "하루 쪽에 넣을 칸", items: [["weather", "날씨", "직접 고르기"], ["mood", "기분 도장", "5가지"], ["photo", "사진", "하루 4장"], ["sticker", "스티커 붙이기", "Blog J가 그린 스티커"], ["todo", "오늘 할 일", "못 한 일은 내일로"], ["check", "매일 체크리스트", "습관 · 반복"], ["meal", "식사", "아침 · 점심 · 저녁 · 간식"], ["workout", "운동", "종류 · 시간"], ["money", "쓴 돈", "줄마다 · 합계"], ["thanks", "감사 한 줄", ""], ["people", "만난 사람", ""], ["question", "오늘의 질문", "쓸 말 없을 때"], ["lastyear", "1년 전 오늘", ""]] },
+  { g: "하루 쪽에 넣을 칸", items: [["weather", "날씨", "직접 고르기"], ["sleep", "기상 · 취침 시간", "잠잔 시간 자동 계산"], ["mood", "기분 도장", "5가지"], ["photo", "사진", "하루 4장"], ["sticker", "스티커 붙이기", "Blog J가 그린 스티커"], ["todo", "오늘 할 일", "못 한 일은 내일로"], ["check", "매일 체크리스트", "습관 · 반복"], ["meal", "식사", "아침 · 점심 · 저녁 · 간식"], ["workout", "운동", "종류 · 시간"], ["money", "쓴 돈", "줄마다 · 합계"], ["thanks", "감사 한 줄", ""], ["people", "만난 사람", ""], ["question", "오늘의 질문", "쓸 말 없을 때"], ["lastyear", "1년 전 오늘", ""]] },
   { g: "계획", items: [["pday", "일간 계획", "시간 · 할 일"], ["pweek", "주간 계획", "한 주 한 장"], ["pmonth", "월간 계획", "달마다 목표"], ["routine", "생활 루틴 · 생활계획표", "시간 되면 했는지 묻고 자동 기록"], ["school", "학교 시간표", "교시 · 준비물 · 학원"], ["trip", "여행 일정", "시간 · 장소 → 일기에 자동"]] },
-  { g: "따로 쪽 (인덱스 탭)", items: [["vow", "나의 다짐", "매일 맨 위 한 줄"], ["year", "1년 계획표", "올해 목표 · 12달"], ["wish", "위시리스트", "갖고 싶은 · 하고 싶은"], ["idea", "아이디어 기록", "떠오른 생각 · 태그"], ["asset", "자산 기록", "한 달에 한 번 합계"], ["memo", "임시 메모장", "날짜 없이 바로"]] }
+  { g: "따로 쪽 (인덱스 탭)", items: [["vow", "나의 다짐", "매일 맨 위 한 줄"], ["year", "1년 계획표", "올해 목표 · 12달"], ["wish", "위시리스트", "갖고 싶은 것 · 가격"], ["bucket", "버킷리스트", "기한 · D-day · 이룬 날"], ["idea", "아이디어 기록", "떠오른 생각 · 태그"], ["asset", "자산 기록", "한 달에 한 번 합계"], ["memo", "임시 메모장", "날짜 없이 바로"]] }
 ];
 const PRESETS = [
   { id: "simple", name: "간단 일기", desc: "일기 · 기분 · 날씨 · 사진 · 스티커 · 1년 전 오늘. 쓰기 부담 없이 하루 한 장.", on: ["weather", "mood", "photo", "sticker", "question", "lastyear", "memo"] },
-  { id: "plan", name: "플래너", desc: "할 일 · 일간 · 주간 · 월간 계획 · 1년 계획표 · 나의 다짐 · 아이디어 기록.", on: ["weather", "mood", "todo", "pday", "pweek", "pmonth", "vow", "year", "idea", "memo"] },
-  { id: "life", name: "건강 · 살림", desc: "생활 루틴 · 매일 체크리스트 · 식사 · 운동 · 쓴 돈 · 위시리스트 · 자산 기록.", on: ["weather", "mood", "photo", "routine", "check", "meal", "workout", "money", "wish", "asset", "memo"] },
+  { id: "plan", name: "플래너", desc: "할 일 · 일간 · 주간 · 월간 계획 · 1년 계획표 · 나의 다짐 · 아이디어 기록.", on: ["weather", "mood", "todo", "pday", "pweek", "pmonth", "vow", "year", "bucket", "idea", "memo"] },
+  { id: "life", name: "건강 · 살림", desc: "생활 루틴 · 매일 체크리스트 · 식사 · 운동 · 쓴 돈 · 위시리스트 · 자산 기록.", on: ["weather", "mood", "sleep", "photo", "routine", "check", "meal", "workout", "money", "wish", "asset", "memo"] },
   { id: "all", name: "모두 켜기", desc: "전부 써 보고 안 쓰는 칸을 끄고 싶을 때.", on: null }
 ];
 const ALLK = PARTS.flatMap(g => g.items.map(i => i[0]));
 const on = k => !!(D.set.on && D.set.on[k]);
-const PAGES = [["days", "우리 집 날", "#e8d7b9", 1], ["vow", "다짐", "#cfe0da"], ["year", "1년", "#c9d8d3"], ["wish", "위시", "#e8d7b9"], ["idea", "생각", "#ead2c4"], ["asset", "자산", "#d6cdbd"], ["memo", "메모", "#ece3d5"], ["routine", "루틴", "#dfe9d3"], ["school", "시간표", "#e4eeea"], ["trip", "여행", "#d6e4df"]];
+const PAGES = [["days", "우리 집 날", "#e8d7b9", 1], ["vow", "다짐", "#cfe0da"], ["year", "1년", "#c9d8d3"], ["wish", "위시", "#e8d7b9"], ["bucket", "버킷", "#f0dcd6"], ["idea", "생각", "#ead2c4"], ["asset", "자산", "#d6cdbd"], ["memo", "메모", "#ece3d5"], ["routine", "루틴", "#dfe9d3"], ["school", "시간표", "#e4eeea"], ["trip", "여행", "#d6e4df"]];
 const pageOn = k => k === "days" || on(k) || (k === "routine" && on("check"));
 
 /* ── 저장소 (IndexedDB) ── */
@@ -401,10 +401,10 @@ const getMeta = async k => { const r = await st("meta", "readonly", o => o.get(k
 const setMeta = (k, v) => st("meta", "readwrite", o => o.put({ k, v }));
 
 /* ── 데이터 ── */
-const SECS = ["events", "vows", "years", "wish", "ideas", "assets", "memo", "routines", "checks", "life", "school", "trips", "weeks", "months", "stk"];
+const SECS = ["events", "vows", "years", "wish", "bucket", "ideas", "assets", "memo", "routines", "checks", "life", "school", "trips", "weeks", "months", "stk"];
 const D = {
   days: {},            /* "2026-10-31": { u, text, mood, wx, temp, todo[], sched[], ck{}, rt{}, meals{}, work, money[], thanks, people, photos[], stk[], tr{} } */
-  events: [], vows: [], years: {}, wish: [], ideas: [], assets: {}, memo: "", routines: [], checks: [], life: { wk: [], we: [] }, school: { per: 6, sat: false, grid: {}, prep: "", acad: "" }, trips: [], weeks: {}, months: {}, stk: {},
+  events: [], vows: [], years: {}, wish: [], bucket: [], ideas: [], assets: {}, memo: "", routines: [], checks: [], life: { wk: [], we: [] }, school: { per: 6, sat: false, grid: {}, prep: "", acad: "" }, trips: [], weeks: {}, months: {}, stk: {},
   su: {},              /* 묶음별 고친 시각(동기화 합치기용) */
   set: { on: null, preset: null, lock: null, gdOn: false, gdLast: 0, gdEmail: "", lastBackup: 0, pm: {}, setupDone: false }
 };
@@ -419,7 +419,7 @@ function save(now) {
   if (now) return go(); saveT = setTimeout(go, 500);
 }
 function packLocal() { const o = { v: 1, days: D.days, su: D.su, set: D.set }; SECS.forEach(s => o[s] = D[s]); return o; }
-function loadInto(o) { if (!o) return; D.days = o.days || {}; D.su = o.su || {}; SECS.forEach(s => { if (o[s] !== undefined) D[s] = o[s]; }); D.set = Object.assign(D.set, o.set || {}); D.set.pm = D.set.pm || {}; }
+function loadInto(o) { if (!o) return; D.days = o.days || {}; D.su = o.su || {}; SECS.forEach(s => { if (o[s] !== undefined) D[s] = o[s]; }); D.set = Object.assign(D.set, o.set || {}); D.set.pm = D.set.pm || {}; D.bucket = D.bucket || []; const old = (D.wish || []).filter(w => w.kind === "do"); if (old.length) { old.forEach(w => D.bucket.push({ id: "b" + uid(), name: w.name, due: "", done: w.done || "", note: "" })); D.wish = D.wish.filter(w => w.kind !== "do"); } }
 function paintSaved() { const el = $("#saved"); if (el) el.textContent = gdLabel(); }
 
 /* ── 사진 ── */
@@ -469,6 +469,7 @@ function evDate(e, y) {
   return y + "-" + p2(e.m) + "-" + p2(e.d);
 }
 function eventsOn(k) { const y = +k.slice(0, 4); return D.events.filter(e => evDate(e, y) === k); }
+function bucketDue(from, within) { return (D.bucket || []).filter(b => b.due && !b.done && b.due >= from && (pd(b.due) - pd(from)) / DAY <= within).map(b => ({ b, k: b.due, dd: Math.round((pd(b.due) - pd(from)) / DAY) })); }
 function nextEvents(from, n = 5, within = 400) {
   const out = [], y = +from.slice(0, 4);
   D.events.forEach(e => { for (const yy of [y, y + 1]) { const k = evDate(e, yy); if (k && k >= from && (pd(k) - pd(from)) / DAY <= within) { out.push({ e, k, dd: Math.round((pd(k) - pd(from)) / DAY) }); break; } } });
@@ -476,6 +477,10 @@ function nextEvents(from, n = 5, within = 400) {
 }
 const EVT = { birth: "생일", memorial: "기일", anniv: "기념일", plan: "일정", etc: "기타" };
 const QS = ["오늘 가장 많이 웃은 순간은?", "요즘 가장 자주 떠오르는 사람은?", "오늘 먹은 것 중 제일 맛있던 것은?", "오늘 나에게 고마웠던 점 하나는?", "지금 가장 듣고 싶은 말은?", "오늘 처음 해 본 일이 있나요?", "요즘 나를 웃게 하는 작은 것은?", "오늘 하루를 한 낱말로 하면?", "내일의 나에게 한 줄 남긴다면?", "최근에 산 것 중 가장 잘 산 것은?", "오늘 본 풍경 중 기억하고 싶은 것은?", "요즘 미루고 있는 일은 무엇인가요?", "오늘 누군가에게 해 준 친절은?", "요즘 자주 듣는 노래는?", "어릴 적 이맘때 기억나는 일은?", "올해 가장 잘한 결정은?", "오늘 몸 상태는 어땠나요?", "지금 창밖에는 무엇이 보이나요?", "이번 주말에 하고 싶은 일은?", "요즘 배우고 싶은 것은?", "오늘 가장 오래 생각한 것은?", "지금 가장 고마운 사람은?", "오늘 아쉬웠던 일 하나는?", "가 보고 싶은 곳 한 군데는?", "요즘 가장 편안한 시간은 언제인가요?", "오늘 들은 말 중 기억에 남는 말은?", "1년 뒤 오늘의 나는 무엇을 하고 있을까요?", "오늘 나를 힘들게 한 것은?", "요즘 기다려지는 일은?", "가족에게 하고 싶은 말이 있나요?", "오늘 날씨를 내 기분으로 바꾸면?", "이번 달 꼭 하고 싶은 한 가지는?", "오늘 정리하고 싶은 생각은?", "최근에 본 영상 · 책 중 좋았던 것은?", "요즘 나만의 작은 즐거움은?", "오늘 하루 점수를 매긴다면?"];
+/* 잠잔 시간 = 전날 쪽 「잠든 시간」 → 그날 「일어난 시간」 (잠든 시간이 낮 12시 전이면 자정 넘어 잔 것으로 봄) */
+const hmMin = s => { const m = String(s || "").match(/^(\d{1,2}):(\d{2})/); return m ? +m[1] * 60 + +m[2] : null; };
+function sleepMin(k) { const w = hmMin((D.days[k] || {}).wake), b = hmMin((D.days[addD(k, -1)] || {}).bed); if (w == null || b == null) return null; const m = w + (b >= 720 ? 1440 : 0) - b; return m > 0 && m < 1200 ? m : null; }
+const hhmm = m => m == null ? "" : Math.floor(m / 60) + "시간" + (m % 60 ? " " + (m % 60) + "분" : "");
 const qOf = k => QS[(Math.round(pd(k) / DAY) % QS.length + QS.length) % QS.length];
 
 /* ── 화면 상태 ── */
@@ -526,7 +531,8 @@ const ck = (on, attrs, no) => `<button class="ck ${on ? "on" : ""} ${no ? "no" :
 function dayView() {
   const k = S.date, d = dayOf(k) || {}, dt = pd(k), wd = dt.getDay();
   const hol = holOf(k), evs = eventsOn(k), nx = nextEvents(addD(k, 1), 1, 30)[0];
-  const sub = [lunarText(k), hol, ...evs.map(e => e.name), nx ? `D-${nx.dd + 1} ${nx.e.name}` : ""].filter(Boolean).join(" · ");
+  const bd = on("bucket") ? bucketDue(k, 7)[0] : null;
+  const sub = [lunarText(k), hol, ...evs.map(e => e.name), nx ? `D-${nx.dd + 1} ${nx.e.name}` : "", bd ? (bd.dd ? `D-${bd.dd}` : "오늘까지") + ` 버킷 「${bd.b.name}」` : ""].filter(Boolean).join(" · ");
   const m = d.mood ? moodOf(d.mood) : null;
   const vows = D.vows.filter(v => v && v.trim());
   const vow = on("vow") && vows.length ? vows[Math.round(dt / DAY) % vows.length] : "";
@@ -538,6 +544,7 @@ function dayView() {
       <button class="navb" data-day="1" aria-label="다음 날">›</button>
     </div>`;
   if (on("weather")) L += `<div class="wxr"><span class="lbl" style="width:38px">날씨</span>${WXS.map(([c, n, p]) => `<button class="wxb ${d.wx === c ? "on" : ""}" data-wx="${c}" aria-label="${n}" aria-pressed="${d.wx === c}" title="${n}">${I(p)}</button>`).join("")}<label><span class="sr">기온</span><input class="tmp" data-f="temp" placeholder="기온" value="${esc(d.temp || "")}" /></label></div>`;
+  if (on("sleep")) { const sm = sleepMin(k); L += `<div class="wxr"><span class="lbl" style="width:38px">잠</span><label class="li" style="border:0;gap:6px;min-height:0"><span class="foot">일어난 시간</span><input class="tm" type="time" data-f="wake" value="${esc(d.wake || "")}" style="width:104px" aria-label="일어난 시간" /></label>${!d.wake && k === today() ? `<button class="mini ln" data-now="wake">지금</button>` : ""}<label class="li" style="border:0;gap:6px;min-height:0"><span class="foot">잠든 시간</span><input class="tm" type="time" data-f="bed" value="${esc(d.bed || "")}" style="width:104px" aria-label="잠든 시간" /></label>${!d.bed && k === today() ? `<button class="mini ln" data-now="bed">지금</button>` : ""}${sm != null ? `<span class="chip on" title="전날 잠든 시간부터">잠 ${hhmm(sm)}</span>` : ""}</div>`; }
   if (vow) L += `<div class="vow"><b>나의 다짐</b>${esc(vow)}</div>`;
   if (on("trip")) L += tripAsk(k);
   if (on("routine")) L += routineBlk(k, d);
@@ -637,7 +644,7 @@ function monthView() {
   const L = `${bp ? `<div class="mhead" data-bg="${bp}"><span class="pen">이달의 사진</span><button class="mini ln" id="pmPick">사진 바꾸기</button></div>` : `<div class="banner"><span class="o">●</span><span style="flex:1">사진에 ★를 누르면 그 사진이 이 달 달력 머리에 들어가요(나만의 사진 달력)</span></div>`}
     <div class="ph"><button class="navb" data-mon="-1" aria-label="이전 달">‹</button><span class="big">${m}</span><span class="dmeta"><b>${y} · ${m}월</b><span>${cnt}일 씀</span></span><span style="margin-left:auto;display:flex;gap:4px"><button class="mini ln" data-go="week">한 주</button><button class="mini ln" data-go="year">한 해</button></span><button class="navb" data-mon="1" aria-label="다음 달">›</button></div>
     <div class="cal">${WD.map((w, i) => `<span class="w ${i === 0 ? "sun" : i === 6 ? "sat" : ""}">${w}</span>`).join("")}${cells}</div>`;
-  const up = nextEvents(ym + "-01", 6, 62);
+  const up = nextEvents(ym + "-01", 6, 62).concat(on("bucket") ? bucketDue(ym + "-01", 62).map(x => ({ k: x.k, e: { name: "버킷 · " + x.b.name } })) : []).sort((a, b) => a.k < b.k ? -1 : 1);
   let R = `<div class="ph"><span class="pen" style="font-size:34px">이달 정리</span></div>
    <div class="blk"><span class="lbl">우리 집 날 · 다가오는 날</span>${up.length ? up.map(x => `<div class="li"><span class="tm num" style="width:118px;font-weight:500;color:var(--sub)">${ymdw(x.k)}</span><span class="t">${esc(x.e.name)} ${x.e.cal === "lunar" ? `<small style="color:var(--faint)">음 ${x.e.m}.${x.e.d}</small>` : ""}</span></div>`).join("") : `<span class="foot">따로 쪽 › 우리 집 날에서 생일 · 기일 · 기념일을 넣어요(음력 자동)</span>`}<button class="add" data-page="days">+ 우리 집 날</button></div>`;
   if (on("pmonth")) R += `<div class="blk"><span class="lbl">이달의 계획 · 목표</span><textarea class="memo" style="min-height:160px" data-sec="months" data-key="${ym}">${esc(D.months[ym] || "")}</textarea></div>`;
@@ -650,8 +657,9 @@ function weekKey(k) { const d = pd(k), w = (d.getDay() + 6) % 7; d.setDate(d.get
 function weekView() {
   const s = weekKey(S.date), ks = [...Array(7)].map((_, i) => addD(s, i));
   const L = `<div class="ph"><button class="navb" data-wk="-7" aria-label="지난주">‹</button><span class="pen" style="font-size:36px;line-height:1">한 주</span><span class="dmeta"><b class="num">${ymdw(ks[0])} ~ ${ymdw(ks[6])}</b></span><button class="navb" data-wk="7" aria-label="다음 주" style="margin-left:auto">›</button></div>
-   <div class="wk">${ks.map(k => { const d = D.days[k] || {}, mo = d.mood ? moodOf(d.mood) : null, wd = pd(k).getDay(); const td = (d.todo || []); return `<button class="wr" data-goday="${k}"><span><span class="pen ${wd === 0 || holOf(k) ? "sun" : ""}">${pd(k).getDate()}</span> <span class="num" style="font-size:12.5px;color:var(--mute)">${WD[wd]}</span></span><span>${mo ? face(d.mood, 20) : ""}</span><span class="hand" style="font-size:14.5px;line-height:1.5">${esc((d.text || "").trim().split("\n")[0].slice(0, 80)) || `<span style="color:var(--faint)">—</span>`}${td.length ? `<br><small style="color:var(--mute)">할 일 ${td.filter(t => t.done).length}/${td.length}</small>` : ""}${(d.sched || []).length ? ` <small style="color:var(--g)">${esc(d.sched.map(x => (x.tm ? x.tm + " " : "") + x.t).join(" · ").slice(0, 60))}</small>` : ""}</span></button>`; }).join("")}</div>`;
-  const R = `<div class="ph"><span class="pen" style="font-size:34px">이번 주 계획</span></div>${on("pweek") ? `<textarea class="memo" data-sec="weeks" data-key="${s}" placeholder="이번 주에 할 일 · 목표">${esc(D.weeks[s] || "")}</textarea>` : `<span class="foot">설정 › 칸 고르기에서 「주간 계획」을 켜면 이 쪽에 한 주 계획을 적을 수 있어요</span>`}`;
+   <div class="wk">${ks.map(k => { const d = D.days[k] || {}, mo = d.mood ? moodOf(d.mood) : null, wd = pd(k).getDay(); const td = (d.todo || []); return `<button class="wr" data-goday="${k}"><span><span class="pen ${wd === 0 || holOf(k) ? "sun" : ""}">${pd(k).getDate()}</span> <span class="num" style="font-size:12.5px;color:var(--mute)">${WD[wd]}</span></span><span>${mo ? face(d.mood, 20) : ""}</span><span class="hand" style="font-size:14.5px;line-height:1.5">${esc((d.text || "").trim().split("\n")[0].slice(0, 80)) || `<span style="color:var(--faint)">—</span>`}${td.length ? `<br><small style="color:var(--mute)">할 일 ${td.filter(t => t.done).length}/${td.length}</small>` : ""}${on("sleep") && (d.wake || d.bed) ? ` <small style="color:var(--mute)">${d.wake ? "기상 " + d.wake : ""}${d.bed ? " · 취침 " + d.bed : ""}${sleepMin(k) != null ? " · 잠 " + hhmm(sleepMin(k)) : ""}</small>` : ""}${(d.sched || []).length ? ` <small style="color:var(--g)">${esc(d.sched.map(x => (x.tm ? x.tm + " " : "") + x.t).join(" · ").slice(0, 60))}</small>` : ""}</span></button>`; }).join("")}</div>`;
+  const sl = ks.map(sleepMin).filter(x => x != null), sa = sl.length ? Math.round(sl.reduce((a, b) => a + b, 0) / sl.length) : null;
+  const R = `<div class="ph"><span class="pen" style="font-size:34px">이번 주 계획</span>${on("sleep") && sa != null ? `<span class="chip on" style="margin-left:auto">평균 잠 ${hhmm(sa)} (${sl.length}일)</span>` : ""}</div>${on("pweek") ? `<textarea class="memo" data-sec="weeks" data-key="${s}" placeholder="이번 주에 할 일 · 목표">${esc(D.weeks[s] || "")}</textarea>` : `<span class="foot">설정 › 칸 고르기에서 「주간 계획」을 켜면 이 쪽에 한 주 계획을 적을 수 있어요</span>`}`;
   return book(L, R);
 }
 /* ── 한 해 ── */
@@ -670,7 +678,7 @@ function yearView() {
 }
 /* ── 따로 쪽 ── */
 function pagesView() {
-  const desc = { days: "생일 · 기일 · 기념일 (음력 자동)", vow: "매일 맨 위 한 줄", year: "올해 목표 · 12달", wish: "갖고 싶은 · 하고 싶은", idea: "떠오른 생각 · 태그", asset: "한 달에 한 번 합계", memo: "날짜 없이 바로", routine: "생활 루틴 · 체크리스트 · 생활계획표", school: "교시 · 준비물 · 학원", trip: "날짜별 시간 · 장소" };
+  const desc = { days: "생일 · 기일 · 기념일 (음력 자동)", vow: "매일 맨 위 한 줄", year: "올해 목표 · 12달", wish: "갖고 싶은 것 · 가격", bucket: "꼭 해 보고 싶은 일 · 기한 · D-day", idea: "떠오른 생각 · 태그", asset: "한 달에 한 번 합계", memo: "날짜 없이 바로", routine: "생활 루틴 · 체크리스트 · 생활계획표", school: "교시 · 준비물 · 학원", trip: "날짜별 시간 · 장소" };
   const P = PAGES.filter(p => pageOn(p[0]));
   return book1(`<div class="ph"><span class="pen" style="font-size:40px;line-height:1">따로 쪽</span><span class="foot" style="margin-left:auto">더 켜기: 설정 › 칸 고르기</span></div>
    <div class="pages">${P.map(([k, n, c]) => `<button class="pcard" data-page="${k}" style="background:${c}55"><b>${n}</b><span>${desc[k]}</span></button>`).join("")}</div>`);
@@ -686,8 +694,13 @@ const PAGEF = {
   vow: () => PH("나의 다짐") + `<span class="foot">한 줄에 하나씩. 날마다 돌아가며 하루 쪽 맨 위에 보여요.</span><textarea class="memo" style="font-size:20px;line-height:44px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,var(--line) 43px,var(--line) 44px)" data-sec="vows" data-lines="1" placeholder="하루 한 번, 하늘 보기.">${esc(D.vows.join("\n"))}</textarea>`,
   year: () => { const y = String(+S.ym.slice(0, 4)), Y = D.years[y] || { goals: [], m: {} }; return PH(y + " 계획", `<span style="margin-left:auto;display:flex;gap:4px"><button class="mini ln" data-yr2="-1">‹ ${+y - 1}</button><button class="mini ln" data-yr2="1">${+y + 1} ›</button></span>`) + `<div class="blk"><span class="lbl">올해 목표 <small>${Y.goals.filter(g => g.done).length} / ${Y.goals.length} 이룸</small></span>${Y.goals.map((g, i) => `<div class="li ${g.done ? "done" : ""}">${ck(g.done, `data-goal="${i}"`)}<input type="text" data-goalt="${i}" value="${esc(g.t)}" aria-label="목표" /><button class="x" data-goaldel="${i}" aria-label="지우기">×</button></div>`).join("")}<button class="add" id="goalAdd">+ 목표</button></div>
      <div class="blk"><span class="lbl">달마다</span><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));border-top:1px solid var(--dash);border-left:1px solid var(--dash)">${[...Array(12)].map((_, i) => `<label style="border-right:1px solid var(--dash);border-bottom:1px solid var(--dash);padding:6px 8px;min-height:74px;display:flex;flex-direction:column"><span class="pen" style="font-size:20px;color:var(--g)">${i + 1}월</span><textarea data-ym="${i + 1}" style="border:0;background:transparent;font-family:var(--hand);font-size:14px;resize:none;flex:1;outline:none;min-height:40px">${esc(Y.m[i + 1] || "")}</textarea></label>`).join("")}</div></div>`; },
-  wish: () => { const T = S.wt || "have"; const L = D.wish.filter(w => (w.kind || "have") === T); return PH("위시리스트", `<span style="margin-left:auto;display:flex;gap:4px"><button class="mini ${T === "have" ? "g" : "ln"}" data-wt="have">갖고 싶은</button><button class="mini ${T === "do" ? "g" : "ln"}" data-wt="do">하고 싶은</button></span>`) + `${L.map(w => { const i = D.wish.indexOf(w); return `<div class="li ${w.done ? "done" : ""}">${ck(!!w.done, `data-wdone="${i}"`)}<input type="text" data-wn="${i}" value="${esc(w.name)}" aria-label="이름" />${T === "have" ? `<input type="text" inputmode="numeric" data-wp="${i}" value="${w.price ? (+w.price).toLocaleString("ko-KR") : ""}" placeholder="가격" style="width:100px;text-align:right" aria-label="가격" />` : ""}${w.done ? `<span class="num" style="font-size:12px;color:var(--mute)">${ymdw(w.done)}</span>` : ""}<button class="x" data-wdel="${i}" aria-label="지우기">×</button></div>`; }).join("")}<button class="add" id="wishAdd">+ ${T === "have" ? "갖고 싶은 것" : "하고 싶은 것"}</button><span class="foot">이루면 체크 — 이룬 날 일기에도 한 줄 남아요</span>`; },
-  idea: () => PH("아이디어 기록", `<button class="mini g" id="ideaAdd" style="margin-left:auto">+ 떠오른 생각</button>`) + `<div class="note">${D.ideas.map((x, i) => `<div class="post"><span class="num" style="font-size:12px;color:var(--mute)">${ymdw(x.date)}</span><textarea data-idea="${i}" aria-label="생각">${esc(x.text)}</textarea><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="mini ln" data-ito="${i}" data-to="todo">→ 오늘 할 일</button><button class="mini ln" data-ito="${i}" data-to="wish">→ 위시</button><button class="x" data-idel="${i}" aria-label="지우기" style="margin-left:auto">×</button></span></div>`).join("") || `<div class="empty">떠오른 생각을 바로 적어 두세요</div>`}</div>`,
+  wish: () => { const T = "have"; const L = D.wish.filter(w => (w.kind || "have") === T); return PH("위시리스트", `<span class="foot" style="margin-left:auto">하고 싶은 일은 「버킷리스트」에</span>`) + `${L.map(w => { const i = D.wish.indexOf(w); return `<div class="li ${w.done ? "done" : ""}">${ck(!!w.done, `data-wdone="${i}"`)}<input type="text" data-wn="${i}" value="${esc(w.name)}" aria-label="이름" />${T === "have" ? `<input type="text" inputmode="numeric" data-wp="${i}" value="${w.price ? (+w.price).toLocaleString("ko-KR") : ""}" placeholder="가격" style="width:100px;text-align:right" aria-label="가격" />` : ""}${w.done ? `<span class="num" style="font-size:12px;color:var(--mute)">${ymdw(w.done)}</span>` : ""}<button class="x" data-wdel="${i}" aria-label="지우기">×</button></div>`; }).join("")}<button class="add" id="wishAdd">+ 갖고 싶은 것</button><span class="foot">이루면 체크 — 이룬 날 일기에도 한 줄 남아요</span>`; },
+  bucket: () => { const B = D.bucket, t0 = today(); const L = B.slice().sort((a, b) => (a.done ? 1 : 0) - (b.done ? 1 : 0) || ((a.due || "9999") < (b.due || "9999") ? -1 : (a.due || "9999") > (b.due || "9999") ? 1 : 0)); const dn = B.filter(b => b.done).length;
+    return PH("버킷리스트", `<span class="foot" style="margin-left:auto">${B.length}개 중 <b style="color:var(--g)">${dn}개</b> 이룸</span>`) + `<span class="foot">살면서 꼭 해 보고 싶은 일 · 기한을 정해 두면 D-day가 하루 쪽 · 달력에 보이고, 이루면 그날 일기에 한 줄 남아요.</span>
+     ${L.map(b => { const i = B.indexOf(b), dd = b.due && !b.done ? Math.round((pd(b.due) - pd(t0)) / DAY) : null; return `<div class="blk" style="border-bottom:1px dashed var(--line);padding:6px 0 8px"><div class="li" style="border:0">${ck(!!b.done, `data-bdone="${i}"`)}<input type="text" data-bn="${i}" value="${esc(b.name)}" placeholder="오로라 보기 · 한 달 살기 · 자격증" aria-label="버킷리스트" style="${b.done ? "text-decoration:line-through;color:var(--faint)" : ""}" />${dd != null ? `<span class="chip ${dd <= 30 ? "on" : ""}" style="${dd < 0 ? "background:#f3d9cf" : ""}">${dd > 0 ? "D-" + dd : dd === 0 ? "오늘까지" : "기한 지남 " + (-dd) + "일"}</span>` : ""}<button class="x" data-bdel="${i}" aria-label="지우기">×</button></div>
+       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding-left:26px">${b.done ? `<span class="num" style="font-size:12.5px;color:var(--g);font-weight:700">이룬 날 ${ymdw(b.done)}</span><input type="text" data-bnote="${i}" value="${esc(b.note || "")}" placeholder="한 줄 소감" style="flex:1;min-width:160px;border:0;border-bottom:1px dashed var(--dash);background:transparent;font-family:var(--hand);font-size:14.5px;outline:none" aria-label="소감" />` : `<span class="lbl">기한</span><label class="dfield" style="height:32px;min-width:140px;font-size:13.5px"><span class="num" id="bdl${i}T">${b.due ? ymdw(b.due) : "정하지 않음"}</span><input type="date" id="bdl${i}" data-bdl="${i}" value="${b.due || ""}" aria-label="기한" /></label><button class="mini ln" data-bq="${i}" data-q="y">올해 안</button><button class="mini ln" data-bq="${i}" data-q="1">1년 안</button><button class="mini ln" data-bq="${i}" data-q="5">5년 안</button>${b.due ? `<button class="mini ln" data-bq="${i}" data-q="">기한 없음</button>` : ""}`}</div></div>`; }).join("") || `<div class="empty">살면서 꼭 해 보고 싶은 일을 적어 보세요</div>`}
+     <button class="add" id="bAdd">+ 버킷리스트</button>`; },
+  idea: () => PH("아이디어 기록", `<button class="mini g" id="ideaAdd" style="margin-left:auto">+ 떠오른 생각</button>`) + `<div class="note">${D.ideas.map((x, i) => `<div class="post"><span class="num" style="font-size:12px;color:var(--mute)">${ymdw(x.date)}</span><textarea data-idea="${i}" aria-label="생각">${esc(x.text)}</textarea><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="mini ln" data-ito="${i}" data-to="todo">→ 오늘 할 일</button><button class="mini ln" data-ito="${i}" data-to="bucket">→ 버킷</button><button class="x" data-idel="${i}" aria-label="지우기" style="margin-left:auto">×</button></span></div>`).join("") || `<div class="empty">떠오른 생각을 바로 적어 두세요</div>`}</div>`,
   asset: () => { const ym = S.aym || ymOf(today()), rows = D.assets[ym] || [], sum = rows.reduce((a, r) => a + (+r.a || 0), 0); const ks = Object.keys(D.assets).sort().slice(-6); const prev = Object.keys(D.assets).sort().filter(x => x < ym).pop(); const ps = prev ? D.assets[prev].reduce((a, r) => a + (+r.a || 0), 0) : null; const mx = Math.max(1, ...ks.map(x => D.assets[x].reduce((a, r) => a + (+r.a || 0), 0)));
     return PH("자산 기록", `<span style="margin-left:auto;display:flex;gap:4px;align-items:center"><button class="mini ln" data-aym="-1">‹</button><b class="num" style="font-size:14px">${ym}</b><button class="mini ln" data-aym="1">›</button></span>`) + `<span class="foot">한 달에 한 번, 항목별 금액만 적으면 합계와 지난달 대비를 보여 줘요(가계부처럼 자세히 적지 않아요).</span>
      ${ks.length > 1 ? `<div class="bars">${ks.map(x => { const v = D.assets[x].reduce((a, r) => a + (+r.a || 0), 0); return `<span><i style="height:${Math.max(4, Math.round(v / mx * 96))}px"></i>${+x.slice(5)}월</span>`; }).join("")}</div>` : ""}
@@ -862,6 +875,7 @@ document.addEventListener("click", async e => {
   if (t.id === "moodBtn") return moodPop();
   if (ds.mood !== undefined) { const d = dayOf(k, true); d.mood = +ds.mood || 0; touchDay(k); closePop(); return rerenderKeep(); }
   if (ds.wx) { const d = dayOf(k, true); d.wx = d.wx === ds.wx ? "" : ds.wx; touchDay(k); return rerenderKeep(); }
+  if (ds.now) { const d = dayOf(k, true); d[ds.now] = nowHM(); touchDay(k); return rerenderKeep(); }
   if (t.id === "qNext") { const d = dayOf(k, true); d.qo = (d.qo || 0) + 1; touchDay(k); return rerenderKeep(); }
   if (ds.add) { const d = dayOf(k, true); (d[ds.add] = d[ds.add] || []).push(ds.add === "money" ? { t: "", a: 0 } : ds.add === "sched" ? { tm: "", t: "" } : { t: "", done: false }); touchDay(k); rerenderKeep(); const ins = $$(`[data-arr="${ds.add}"][data-key="t"]`); if (ins.length) ins[ins.length - 1].focus(); return; }
   if (ds.del) { const d = dayOf(k, true); d[ds.del].splice(+ds.i, 1); touchDay(k); return rerenderKeep(); }
@@ -904,9 +918,13 @@ document.addEventListener("click", async e => {
   if (t.id === "wishAdd") { D.wish.push({ id: "w" + uid(), kind: S.wt || "have", name: "", price: 0, done: "" }); touchSec("wish"); render(); const g = $$("[data-wn]"); if (g.length) g[g.length - 1].focus(); return; }
   if (ds.wdone !== undefined) { const w = D.wish[+ds.wdone]; w.done = w.done ? "" : today(); if (w.done && w.name) { const d = dayOf(today(), true); d.text = ((d.text || "").trim() + `\n[위시 이룸] ${w.name}`).trim(); touchDay(today()); } touchSec("wish"); return rerenderKeep(); }
   if (ds.wdel !== undefined) { D.wish.splice(+ds.wdel, 1); touchSec("wish"); return render(); }
+  if (t.id === "bAdd") { D.bucket.push({ id: "b" + uid(), name: "", due: "", done: "", note: "" }); touchSec("bucket"); render(); const g = $$("[data-bn]"); if (g.length) g[g.length - 1].focus(); return; }
+  if (ds.bdone !== undefined) { const b = D.bucket[+ds.bdone]; b.done = b.done ? "" : today(); if (b.done && b.name) { const d = dayOf(today(), true); d.text = ((d.text || "").trim() + `\n[버킷리스트 이룸] ${b.name}`).trim(); touchDay(today()); toast("축하해요! 오늘 일기에도 남겼어요"); } touchSec("bucket"); return render(); }
+  if (ds.bdel !== undefined) { if (!confirm("지울까요?")) return; D.bucket.splice(+ds.bdel, 1); touchSec("bucket"); return render(); }
+  if (ds.bq !== undefined) { const b = D.bucket[+ds.bq], y = new Date().getFullYear(); b.due = ds.q === "y" ? y + "-12-31" : ds.q ? addD(today(), Math.round(365.25 * +ds.q)) : ""; touchSec("bucket"); return render(); }
   if (t.id === "ideaAdd") { D.ideas.unshift({ id: "i" + uid(), date: today(), text: "" }); touchSec("ideas"); render(); const g = $("[data-idea]"); if (g) g.focus(); return; }
   if (ds.idel !== undefined) { D.ideas.splice(+ds.idel, 1); touchSec("ideas"); return render(); }
-  if (ds.ito) { const x = D.ideas[+ds.ito]; if (ds.to === "todo") { const d = dayOf(today(), true); (d.todo = d.todo || []).push({ t: x.text.split("\n")[0], done: false }); touchDay(today()); toast("오늘 할 일에 넣었어요"); } else { D.wish.push({ id: "w" + uid(), kind: "do", name: x.text.split("\n")[0], price: 0, done: "" }); touchSec("wish"); toast("위시리스트(하고 싶은)에 넣었어요"); } return; }
+  if (ds.ito) { const x = D.ideas[+ds.ito]; if (ds.to === "todo") { const d = dayOf(today(), true); (d.todo = d.todo || []).push({ t: x.text.split("\n")[0], done: false }); touchDay(today()); toast("오늘 할 일에 넣었어요"); } else { D.bucket.push({ id: "b" + uid(), name: x.text.split("\n")[0], due: "", done: "", note: "" }); touchSec("bucket"); toast("버킷리스트에 넣었어요"); } return; }
   if (ds.aym) { const [y, m] = (S.aym || ymOf(today())).split("-").map(Number); S.aym = ymOf(ymd(new Date(y, m - 1 + +ds.aym, 1))); return render(); }
   if (t.id === "assetAdd") { const ym = S.aym || ymOf(today()); (D.assets[ym] = D.assets[ym] || []).push({ n: "", a: 0 }); touchSec("assets"); render(); const g = $$("[data-an]"); if (g.length) g[g.length - 1].focus(); return; }
   if (t.id === "assetCopy") { const ym = S.aym || ymOf(today()), prev = Object.keys(D.assets).sort().filter(x => x < ym).pop(); D.assets[ym] = D.assets[prev].map(r => ({ n: r.n, a: r.a })); touchSec("assets"); return render(); }
@@ -955,6 +973,9 @@ document.addEventListener("input", e => {
   if (ds.scf) { D.school[ds.scf] = t.value; touchSec("school"); return; }
   if (ds.tn !== undefined) { D.trips[+ds.tn].name = t.value; touchSec("trips"); return; }
   if (ds.ti !== undefined && ds.ii) { const it = D.trips[+ds.ti].items.find(x => x.id === ds.ii); it[ds.key] = t.value; touchSec("trips"); return; }
+  if (ds.bn !== undefined) { D.bucket[+ds.bn].name = t.value; touchSec("bucket"); return; }
+  if (ds.bnote !== undefined) { D.bucket[+ds.bnote].note = t.value; touchSec("bucket"); return; }
+  if (ds.bdl !== undefined) { D.bucket[+ds.bdl].due = t.value; touchSec("bucket"); }
   if (t.type === "date" && $("#" + t.id + "T")) { $("#" + t.id + "T").textContent = t.value ? ymdw(t.value) : "날짜 고르기"; return; }
 });
 document.addEventListener("change", e => {
@@ -965,6 +986,8 @@ document.addEventListener("change", e => {
   if (t.id === "scSat") { D.school.sat = t.checked; touchSec("school"); return render(); }
   if (t.dataset.ti !== undefined && t.dataset.key === "date") return render();
   if (t.dataset.rtt) return render();
+  if (t.dataset.f === "wake" || t.dataset.f === "bed") return rerenderKeep();
+  if (t.dataset.bdl !== undefined) return render();
 });
 document.addEventListener("focusout", e => { const t = e.target; if (t.dataset && (t.dataset.lf !== undefined)) { const r = $(".pie"); if (r) r.outerHTML = pie(D.life[S.lw === "we" ? "we" : "wk"]); } });
 /* 금액 칸: 치는 대로 천 단위 쉼표(커서 위치 유지) */

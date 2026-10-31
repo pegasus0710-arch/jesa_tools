@@ -216,6 +216,27 @@
    "img": "https://pegasus0710-arch.github.io/jesa_tools/recipe/icon-192.png"
   },
   {
+   "name": "김치 양념 계산기",
+   "category": "디지털",
+   "area": "life",
+   "icon": "jar",
+   "type": [
+    "온라인"
+   ],
+   "desc": "절임배추 kg · 포기 수만 넣으면 고춧가루 · 젓갈 · 마늘 · 찹쌀풀 양을 — 김치 18가지 · 장보기 목록",
+   "short": "김장 양념 · 김치 18가지",
+   "link": "https://luvbong.tistory.com/805",
+   "open": "2026-11-08T09:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "김치 양념 계산기",
+     "q": "kimchi&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/kimchi.png"
+  },
+  {
    "name": "라벨 출력기",
    "category": "디지털",
    "area": "life",
@@ -531,6 +552,11 @@
    "no": 802,
    "t": "2027년 달력 무료 — 공휴일 · 음력 · 손 없는 날",
    "at": "2026-11-06T20:00:00+09:00"
+  },
+  {
+   "no": 805,
+   "t": "김장 양념 계산기 — 절임배추 kg만 넣으면 김치 18가지",
+   "at": "2026-11-08T09:00:00+09:00"
   },
   {
    "no": 804,

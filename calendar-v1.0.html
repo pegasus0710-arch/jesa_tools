@@ -477,6 +477,49 @@ body,button,input,select{font-family:var(--font)}
 .cl-nr .tx{font-size:2.8mm;color:#1f2125;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:1.4mm}
 .cl-nr .tx em{font-style:normal;color:#8a8272;font-size:2.5mm;margin-right:1.6mm}
 .cl-nl{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}.cl-nl i{display:block;border-bottom:.25mm solid var(--lc)}
+/* 주간 일정표 */
+.cl-wp{width:100%;height:100%;padding:9mm 11mm 7mm;display:flex;flex-direction:column}
+.cl-wh2{display:flex;align-items:flex-end;justify-content:space-between;gap:6mm;border-bottom:.6mm solid #1f2125;padding-bottom:2.4mm;margin-bottom:2.6mm}
+.cl-wttl{display:flex;align-items:baseline;gap:3mm;white-space:nowrap}
+.cl-wno{font-size:3.2mm;font-weight:800;letter-spacing:.18em;color:#fff;background:#1f2125;padding:1mm 2mm;border-radius:1mm;align-self:center}
+.cl-wttl b{font-size:8.5mm;font-weight:800;letter-spacing:-.03em;line-height:1}
+.cl-wyr{font-size:4.2mm;font-weight:700;color:#6f6857}
+.cl-wp .cl-motto{align-self:flex-end;text-align:right}
+.cl-wg{flex:1;min-height:0;display:grid;border-left:.25mm solid var(--lc)}
+.cl-wcol,.cl-wtc{display:flex;flex-direction:column;border-right:.25mm solid var(--lc);min-width:0}
+.cl-wd{height:17mm;flex:none;padding:1.4mm 1.6mm;border-top:.6mm solid #1f2125;border-bottom:.35mm solid #1f2125;overflow:hidden}
+.cl-wsp{height:17mm;flex:none;border-top:.6mm solid #1f2125;border-bottom:.35mm solid #1f2125}
+.cl-wdt{display:flex;align-items:baseline;gap:1.2mm;white-space:nowrap}
+.cl-wdt b{font-size:6.2mm;font-weight:800;line-height:1}
+.cl-wdt span{font-size:3.2mm;font-weight:800}
+.cl-wdt small{font-size:2.3mm;color:#8a8272;margin-left:auto}
+.cl-wdt em{font-style:normal;font-size:2.3mm;font-weight:700;color:#6f6857;order:-1}
+.cl-wtg{display:flex;flex-direction:column;gap:.3mm;margin-top:1mm}
+.cl-wtg span{font-size:2.35mm;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cl-wtg .h{font-weight:800}.cl-wtg .t,.cl-wtg .s{color:#6f6857}.cl-wtg .e{font-weight:700}
+.cl-wtg .e::before{content:"";display:inline-block;width:1.2mm;height:1.2mm;border-radius:50%;background:#1f2125;margin-right:.7mm;vertical-align:.25mm}
+.cl-wbody{flex:1;min-height:0;display:flex;flex-direction:column}
+.cl-whr{flex:1;border-bottom:.25mm solid var(--lc);position:relative}
+.cl-whr:nth-child(even){background:rgba(31,33,37,.025)}
+.cl-wtc .cl-whr span{position:absolute;top:.6mm;right:1.4mm;font-size:2.5mm;font-weight:700;color:#8a8272;font-variant-numeric:tabular-nums}
+.cl-whr.tri{background:none}
+.cl-wtc .cl-whr.tri span{top:50%;transform:translateY(-50%);right:auto;left:50%;transform:translate(-50%,-50%);writing-mode:vertical-rl;letter-spacing:.3em;font-size:2.8mm;color:#6f6857}
+.cl-wfree{flex:1;background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(8mm - .25mm),var(--lc) calc(8mm - .25mm),var(--lc) 8mm);opacity:.6}
+.cl-wtd{display:flex;flex-direction:column;gap:3mm;padding-left:3mm;border-top:.6mm solid #1f2125;padding-top:2mm;min-width:0}
+.cl-wbx{display:flex;flex-direction:column}.cl-wbx b{font-size:3.2mm;font-weight:800;margin-bottom:1mm}
+.cl-wck{display:flex;align-items:flex-end;gap:1.6mm;height:7.4mm;border-bottom:.25mm solid var(--lc)}
+.cl-wck i{width:3mm;height:3mm;border:.3mm solid #6f6857;border-radius:.6mm;flex:none;margin-bottom:1mm}
+.cl-wbx.m{flex:1;min-height:0}.cl-wln{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}.cl-wln i{border-bottom:.25mm solid var(--lc)}
+/* 세로: 하루 한 줄 */
+.cl-wrows{flex:1;min-height:0;display:flex;flex-direction:column;border-top:.25mm solid var(--lc)}
+.cl-wr{flex:1;display:grid;grid-template-columns:40mm minmax(0,1fr);border-bottom:.25mm solid var(--lc);min-height:0}
+.cl-wd.cl-wdr{height:auto;border:0;border-right:.25mm solid var(--lc);padding:1.8mm 2mm}
+.cl-wd.cl-wdr .cl-wdt b{font-size:7mm}
+.cl-wrl{display:flex;flex-direction:column;justify-content:space-evenly;padding:0 3mm}.cl-wrl i{border-bottom:.2mm dashed var(--lc)}
+.cl-wp.port .cl-wtd{flex-direction:row;border-top:0;padding:2.4mm 0 0;gap:5mm;height:52mm;flex:none}
+.cl-wp.port .cl-wbx{flex:1}
+.cl-wp .cl-ft{margin-top:2mm}
+.cl-wdt0{max-width:380px}
 
 /* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
@@ -600,18 +643,23 @@ body.pc .pmain,body.pc .pcp>div,body.pc .pc2>div{box-shadow:var(--up);border-rad
 .btn.go.w:hover,.btn.w.nv:hover{box-shadow:var(--up3s),inset 0 0 0 1.5px var(--navy,#195455)!important}
 .btn.go.w:active,.btn.w.nv:active{box-shadow:var(--press3)!important}
 /* 눈금자 구슬: 지금 위치를 알려 주듯 살짝 반짝임(10-30 제이) — 퍼지는 고리 + 은은한 빛, 움직임 줄이기 설정이면 멈춤 */
-.ruler .bead{animation:bjBeadGlow 2.6s ease-in-out infinite}
-.ruler .bead::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
+.ruler .bead,.ruler-dot,.ruler .rdot{animation:bjBeadGlow 2.6s ease-in-out infinite}
+.ruler .bead::after,.ruler-dot::after,.ruler .rdot::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(245,109,3,.55);animation:bjBeadRing 2.6s ease-out infinite;pointer-events:none}
 @keyframes bjBeadGlow{0%,100%{filter:brightness(1);box-shadow:2px 3px 5px rgba(120,70,20,.35),inset 2px 2px 3px rgba(255,255,255,.45)}50%{filter:brightness(1.18);box-shadow:0 0 10px 3px rgba(255,150,50,.55),inset 2px 2px 3px rgba(255,255,255,.6)}}
 @keyframes bjBeadRing{0%{transform:scale(1);opacity:.75}70%,100%{transform:scale(2.3);opacity:0}}
-@media (prefers-reduced-motion:reduce){.ruler .bead::after{animation-duration:4s}.ruler .bead{animation-duration:4s}}
-@media print{.ruler .bead,.ruler .bead::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.ruler .bead::after,.ruler-dot::after,.ruler .rdot::after{animation-duration:4s}.ruler .bead,.ruler-dot,.ruler .rdot{animation-duration:4s}}
+@media print{.ruler .bead,.ruler .bead::after,.ruler-dot,.ruler-dot::after,.ruler .rdot,.ruler .rdot::after{animation:none}}
 /* 고르기 칸(select) · 체크 — 입력칸과 같이 카드 바탕 + 선, 체크는 앱 색 */
 select,.t-cal select,select.inp{background-color:var(--card)!important;box-shadow:inset 0 0 0 1px var(--hair2)!important;border-radius:var(--r)!important}
 select:focus{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.12)!important;outline:0}
 input[type=checkbox],input[type=radio]{accent-color:var(--navy,#195455)}
 input[type=text]:not(.inp),input[type=number]:not(.inp){background:var(--card);box-shadow:inset 0 0 0 1px var(--hair2);border-radius:var(--r)}
 input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:inset 0 0 0 1.5px var(--navy,#195455),0 0 0 3px rgba(25,84,85,.12);outline:0}
+/* 10-30 밤: 떠 있는 「+」 단추 — 주황 단추 금지(3.1 2-1) → 앱 색 */
+.fab{background:var(--navy,#195455);color:#fff;box-shadow:0 1px 2px rgba(15,55,56,.25),0 8px 20px -6px rgba(15,55,56,.45)}
+.fab:hover{background:#12403f}
+/* 10-30 밤: 머리 막대 안 눈금자(라벨 · 김치)도 3.1 6번 — 홈 · 바탕 상자 없이 */
+.bar-in .ruler::before{display:none!important}
 
 </style></head><body><div id="root"></div>
 <script>
@@ -934,7 +982,41 @@ function YearPage({ y, st }) {
   </div>`;
 }
 
-const STEPS = [["달력 모양", "어떤 달력을 뽑을까요?", "한 달 한 장 · 1년 한 장 · 탁상용 중에서 골라요"], ["기간", "언제부터 몇 달인가요?", "연도와 시작 달, 시작 요일을 정해요"], ["표시할 것", "달력에 무엇을 넣을까요?", "공휴일 · 음력 · 절기 · 손 없는 날 · 날짜 메모"], ["꾸미기 · 인쇄", "모양을 다듬고 인쇄해요", "선 색 · 머리 글귀 · 메모 줄을 고르고 인쇄 · PDF로 저장"]];
+
+/* ── 주간 일정표(10-31 제이) ── */
+function weekStart(d, ws) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() - ws + 7) % 7)); return x; }
+function isoWeek(d) { const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return Math.ceil(((t - y0) / 86400000 + 1) / 7); }
+function weekList(st) { const s0 = weekStart(pdate(st.wd || ymd(new Date())), st.ws), out = []; for (let i = 0; i < (st.wc || 1); i++) { const d = new Date(s0); d.setDate(s0.getDate() + i * 7); out.push(d); } return out; }
+const HOURS = Array.from({ length: 16 }, (_, i) => i + 7);
+function DayHead({ d, st, annMap, row }) {
+  const I = dayInfo(d, st, annMap), col = dayColor(st, d, I.hol);
+  const tags = [I.hol && html`<span class="h" style=${{ color: st.red ? RED : "#1f2125" }}>${I.hol}</span>`, I.trad && html`<span class="t">${I.trad}</span>`, I.term && html`<span class="t">${I.term}</span>`, ...I.ev.map(e => html`<span class="e">${e}</span>`), I.son && html`<span class="s">손 없는 날</span>`].filter(Boolean);
+  return html`<div class=${"cl-wd" + (row ? " cl-wdr" : "")}>
+    <div class="cl-wdt"><b style=${{ color: col }}>${d.getDate()}</b><span style=${{ color: col }}>${WK[d.getDay()]}</span>${I.lun ? html`<small>${I.lun}</small>` : null}${d.getDate() === 1 || row ? html`<em>${d.getMonth() + 1}월</em>` : null}</div>
+    <div class="cl-wtg">${tags}</div></div>`;
+}
+function WeekPage({ d0, st, annMap, land }) {
+  const lc = LINE[st.line] || LINE.gray, days = Array.from({ length: 7 }, (_, i) => { const d = new Date(d0); d.setDate(d0.getDate() + i); return d; });
+  const d6 = days[6], same = d0.getMonth() === d6.getMonth();
+  const range = `${d0.getMonth() + 1}월 ${d0.getDate()}일 ~ ${same ? "" : d6.getMonth() + 1 + "월 "}${d6.getDate()}일`;
+  const legend = [st.hol && "빨간 날 = 공휴일 · 대체공휴일", st.lun !== "off" && "음 = 음력", st.term && "절기 = 24절기"].filter(Boolean);
+  const head = html`<div class="cl-wh2"><div class="cl-wttl"><span class="cl-wno">WEEK ${isoWeek(d0)}</span><b>${range}</b><span class="cl-wyr">${d0.getFullYear()}${same ? "" : ""}</span></div>${st.motto ? html`<div class="cl-motto">${st.motto}</div>` : null}</div>`;
+  const ft = html`<div class="cl-ft"><span>${legend.join("   ·   ")}</span><span>Blog J 달력 만들기</span></div>`;
+  const todo = html`<div class="cl-wtd"><div class="cl-wbx"><b>이번 주 할 일</b>${Array.from({ length: land ? 9 : 6 }, () => html`<div class="cl-wck"><i></i><span></span></div>`)}</div>
+    <div class="cl-wbx m"><b>메모</b><div class="cl-wln">${Array.from({ length: land ? 6 : 5 }, () => html`<i></i>`)}</div></div></div>`;
+  if (!land) return html`<div class="cl-wp port" style=${{ "--lc": lc }}>${head}
+    <div class="cl-wrows">${days.map(d => html`<div class="cl-wr"><${DayHead} d=${d} st=${st} annMap=${annMap} row=${true} /><div class="cl-wrl">${Array.from({ length: 3 }, () => html`<i></i>`)}</div></div>`)}</div>
+    ${st.wtodo ? todo : null}${ft}</div>`;
+  const t = st.wtime || "hour";
+  return html`<div class="cl-wp land" style=${{ "--lc": lc }}>${head}
+    <div class="cl-wg" style=${{ gridTemplateColumns: `${t === "off" ? "" : "11mm "}repeat(7,minmax(0,1fr))${st.wtodo ? " 52mm" : ""}` }}>
+      ${t === "off" ? null : html`<div class="cl-wtc"><div class="cl-wsp"></div><div class="cl-wbody">${t === "hour" ? HOURS.map(h => html`<div class="cl-whr"><span>${p2(h)}</span></div>`) : ["오전", "오후", "저녁"].map(x => html`<div class="cl-whr tri"><span>${x}</span></div>`)}</div></div>`}
+      ${days.map(d => html`<div class="cl-wcol"><${DayHead} d=${d} st=${st} annMap=${annMap} /><div class="cl-wbody">${t === "hour" ? HOURS.map(() => html`<div class="cl-whr"></div>`) : t === "tri" ? [0, 1, 2].map(() => html`<div class="cl-whr tri"></div>`) : html`<div class="cl-wfree"></div>`}</div></div>`)}
+      ${st.wtodo ? todo : null}
+    </div>${ft}</div>`;
+}
+
+const STEPS = [["달력 모양", "어떤 달력을 뽑을까요?", "한 달 한 장 · 1년 한 장 · 탁상용 · 주간 일정표 중에서 골라요"], ["기간", "언제부터 얼마 동안인가요?", "연도와 시작 달, 시작 요일을 정해요"], ["표시할 것", "달력에 무엇을 넣을까요?", "공휴일 · 음력 · 절기 · 손 없는 날 · 날짜 메모"], ["꾸미기 · 인쇄", "모양을 다듬고 인쇄해요", "선 색 · 머리 글귀 · 메모 줄을 고르고 인쇄 · PDF로 저장"]];
 const NEXT = ["다음: 기간", "다음: 표시할 것", "다음: 꾸미기 · 인쇄"];
 
 function App() {
@@ -942,10 +1024,10 @@ function App() {
   const nm = now.getMonth() === 11 ? [now.getFullYear() + 1, 1] : [now.getFullYear(), now.getMonth() + 2];
   const [st, setSt] = useState(() => {
     const s = { kind: "month", paper: "land", year: Math.min(MYEAR1, Math.max(MYEAR0, nm[0])), m0: nm[1], count: 1, ws: 0,
-      hol: true, lun: "key", term: true, son: false, trad: true, memos: [], deskBot: "next", holList: true,
+      hol: true, lun: "key", term: true, son: false, trad: true, memos: [], deskBot: "next", holList: true, wd: ymd(weekStart(new Date(), 1)), wc: 1, wtime: "hour", wtodo: true,
       line: "gray", red: true, blue: true, other: true, minis: true, memo: 0, motto: "", ...loadC("set", {}) };
     if (s.deskBot === "list") s.deskBot = "days"; else if (s.deskBot !== "days" && s.deskBot !== "lines") s.deskBot = "next";
-    if (TAB0 === "month" || TAB0 === "year" || TAB0 === "desk") s.kind = TAB0;
+    if (TAB0 === "month" || TAB0 === "year" || TAB0 === "desk" || TAB0 === "week") s.kind = TAB0;
     if (s.year < MYEAR0 || s.year > MYEAR1) s.year = MYEAR0;
     return s; });
   const up = (k, v) => setSt(p => ({ ...p, [k]: v }));
@@ -954,15 +1036,17 @@ function App() {
   useEffect(() => saveC("set", st), [st]);
   useEffect(() => { document.title = "달력 만들기 | Blog J"; }, []);
 
-  const months = monthList(st);
+  const months = st.kind === "week" ? [] : monthList(st);
+  const wks = st.kind === "week" ? weekList(st) : [];
   const deskNote = st.kind === "desk" && (st.deskBot === "days" || st.deskBot === "lines");
-  const years = st.kind === "year" ? [st.year] : [...new Set(months.map(x => x[0]))];
+  const years = st.kind === "year" ? [st.year] : st.kind === "week" ? [...new Set(wks.flatMap(d => [d.getFullYear(), new Date(d.getFullYear(), d.getMonth(), d.getDate() + 6).getFullYear()]))] : [...new Set(months.map(x => x[0]))];
   const annMap = useMemo(() => memoMapFor(st), [st.memos]);
   const noHol = st.hol ? years.filter(y => !HOL_YEARS.includes(y)) : [];
   const paper = st.kind === "desk" ? "port" : st.paper;
   const [pw] = PAGE[paper];
   let pages;
-  if (st.kind === "year") pages = [html`<div class=${"cl-pg " + paper}><${YearPage} y=${st.year} st=${st} /></div>`];
+  if (st.kind === "week") pages = wks.map(d0 => html`<div class=${"cl-pg " + paper}><${WeekPage} d0=${d0} st=${st} annMap=${annMap} land=${paper === "land"} /></div>`);
+  else if (st.kind === "year") pages = [html`<div class=${"cl-pg " + paper}><${YearPage} y=${st.year} st=${st} /></div>`];
   else if (st.kind === "desk" && deskNote) pages = months.map(([y, m]) => html`<div class="cl-pg desk">
       <div class="cl-half"><${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} half=${true} /></div>
       <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
@@ -980,11 +1064,11 @@ function App() {
 
   const yrs = []; for (let y = MYEAR0; y <= MYEAR1; y++) yrs.push(y);
   const setMemo = (i, k, v) => setSt(p => ({ ...p, memos: (p.memos || []).map((a, j) => j === i ? { ...a, [k]: v } : a) }));
-  const inRange = d => { const k = d.slice(0, 7); return st.kind === "year" ? d.startsWith(st.year + "-") : months.some(([y, m]) => `${y}-${p2(m)}` === k); };
-  const newMemoDate = () => { const t = new Date(), tk = ymd(t); if (inRange(tk)) return tk; const f = st.kind === "year" ? [st.year, 1] : months[0]; return `${f[0]}-${p2(f[1])}-01`; };
+  const inRange = d => { if (st.kind === "week") { const t = pdate(d); return wks.some(w => t >= w && t < new Date(w.getFullYear(), w.getMonth(), w.getDate() + 7)); } const k = d.slice(0, 7); return st.kind === "year" ? d.startsWith(st.year + "-") : months.some(([y, m]) => `${y}-${p2(m)}` === k); };
+  const newMemoDate = () => { const t = new Date(), tk = ymd(t); if (inRange(tk)) return tk; if (st.kind === "week") return ymd(wks[0]); const f = st.kind === "year" ? [st.year, 1] : months[0]; return `${f[0]}-${p2(f[1])}-01`; };
   const quick = (y, m, c) => setSt(p => ({ ...p, year: y, m0: m, count: c }));
   const sheetsN = pages.length;
-  const kindName = { month: "한 달 한 장", year: "1년 한 장", desk: "탁상 달력" }[st.kind];
+  const kindName = { month: "한 달 한 장", year: "1년 한 장", desk: "탁상 달력", week: "주간 일정표" }[st.kind];
   const paperName = st.kind === "desk" ? "A4 세로에 A5 두 장" : "A4 " + (st.paper === "land" ? "가로" : "세로");
 
   return html`<div class=${"app t-cal" + (EMBED ? " embed" : "")}>
@@ -997,10 +1081,17 @@ function App() {
       <section class="wp">
         <div class="wp-h"><span class="k">0${cur + 1} / 04</span><h2>${STEPS[cur][1]}</h2><p>${STEPS[cur][2]}</p></div>
         <div class="wp-b">
-        ${cur === 0 && html`<div class="cl-kinds">${[["month", "한 달 한 장", "칸이 큰 월간 달력 · 메모 줄"], ["year", "1년 한 장", "12달을 한 장에 · 공휴일 목록"], ["desk", "탁상 달력", "A5 크기 · 아래쪽은 다음 달이나 노트"]].map(([k, t, s]) => html`<button class=${"tcard cl-kind" + (st.kind === k ? " on" : "")} onClick=${() => up("kind", k)}><span><b>${t}</b><small>${s}</small></span>${st.kind === k ? html`<i></i>` : null}</button>`)}</div>
+        ${cur === 0 && html`<div class="cl-kinds">${[["month", "한 달 한 장", "칸이 큰 월간 달력 · 메모 줄"], ["year", "1년 한 장", "12달을 한 장에 · 공휴일 목록"], ["desk", "탁상 달력", "A5 크기 · 아래쪽은 다음 달이나 노트"], ["week", "주간 일정표", "한 주 한 장 · 7일 칸 · 시간 줄 · 할 일"]].map(([k, t, s]) => html`<button class=${"tcard cl-kind" + (st.kind === k ? " on" : "")} onClick=${() => up("kind", k)}><span><b>${t}</b><small>${s}</small></span>${st.kind === k ? html`<i></i>` : null}</button>`)}</div>
           ${st.kind !== "desk" ? html`<label class="f">종이</label><${Seg} value=${st.paper} options=${[["land", "A4 가로"], ["port", "A4 세로"]]} onChange=${v => up("paper", v)} />`
             : html`<p class="note">A4 세로 한 장의 위쪽에 A5 크기 달력이 들어가요. 아래쪽에는 다음 달 달력이나 날짜별 기록 줄 · 빈 줄 노트를 넣을 수 있어요(4단계). 가운데 선대로 잘라 탁상 달력 받침에 끼우거나, 접어서 세워 쓰세요.</p>`}`}
-        ${cur === 1 && html`<div class="dd2"><div><label class="f">연도</label><select value=${st.year} onChange=${e => up("year", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div>
+        ${cur === 1 && st.kind === "week" && html`<label class="f">시작 주 <span class="muted">고른 날이 들어 있는 주부터</span></label>
+          <label class="cl-dt cl-wdt0"><span>${ymdw(wks[0])} ~ ${ymdw(new Date(wks[0].getFullYear(), wks[0].getMonth(), wks[0].getDate() + 6))}</span><input type="date" value=${st.wd} min=${MYEAR0 + "-01-01"} max=${MYEAR1 + "-12-31"} onInput=${e => e.target.value && up("wd", e.target.value)} onClick=${e => { try { e.target.showPicker(); } catch (_) {} }} aria-label="시작 주 고르기" /></label>
+          <label class="f">몇 주</label><select value=${st.wc} onChange=${e => up("wc", +e.target.value)}>${[1, 2, 3, 4, 5, 6, 8, 10, 13].map(n => html`<option value=${n}>${n}주 (${n}장)</option>`)}</select>
+          <div class="chips cl-quick">${[["이번 주", 0, 1], ["다음 주", 7, 1], ["앞으로 4주", 0, 4]].map(([t, add, c]) => html`<button class="chip" onClick=${() => { const d = new Date(); d.setDate(d.getDate() + add); setSt(p => ({ ...p, wd: ymd(d), wc: c })); }}>${t}</button>`)}
+            <button class="chip" onClick=${() => { const d = new Date(nm[0], nm[1] - 1, 1), e = new Date(nm[0], nm[1], 0), a = weekStart(d, st.ws), n = Math.round((weekStart(e, st.ws) - a) / (7 * DAY)) + 1; setSt(p => ({ ...p, wd: ymd(d), wc: n })); }}>다음 달 전체(${nm[1]}월)</button></div>
+          <label class="f">한 주의 시작</label><${Seg} value=${st.ws} options=${[[1, "월요일부터"], [0, "일요일부터"]]} onChange=${v => up("ws", v)} />
+          <p class="hint">공휴일은 2026 · 2027 · 2028년을 넣었어요(한국천문연구원 월력요항 기준).</p>`}
+        ${cur === 1 && st.kind !== "week" && html`<div class="dd2"><div><label class="f">연도</label><select value=${st.year} onChange=${e => up("year", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div>
             ${st.kind !== "year" ? html`<div><label class="f">시작 달</label><select value=${st.m0} onChange=${e => up("m0", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}월</option>`)}</select></div>` : null}</div>
           ${st.kind !== "year" ? html`<label class="f">몇 달</label><select value=${st.count} onChange=${e => up("count", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}달${st.kind === "desk" && !deskNote ? ` (${Math.ceil((i + 1) / 2)}장)` : ` (${i + 1}장)`}</option>`)}</select>
             <div class="chips cl-quick"><button class="chip" onClick=${() => quick(now.getFullYear(), now.getMonth() + 1, 1)}>이번 달</button><button class="chip" onClick=${() => quick(nm[0], nm[1], 1)}>다음 달</button>${yrs.filter(y => y > now.getFullYear() || (y === now.getFullYear() && now.getMonth() === 0)).slice(0, 2).map(y => html`<button class="chip" onClick=${() => quick(y, 1, 12)}>${y}년 1~12월</button>`)}<button class="chip" onClick=${() => quick(now.getFullYear() + (now.getMonth() >= 2 ? 1 : 0), 3, 12)}>3월 시작 학년도</button></div>` : null}
@@ -1026,6 +1117,8 @@ function App() {
           ${st.kind !== "year" ? html`<label class="chk"><input type="checkbox" checked=${st.other} onChange=${e => up("other", e.target.checked)} /> 앞뒤 달 날짜 흐리게 보이기</label>` : null}
           ${st.kind === "month" ? html`<label class="chk"><input type="checkbox" checked=${st.minis} onChange=${e => up("minis", e.target.checked)} /> 위에 지난달 · 다음 달 작은 달력</label>
             <label class="f">아래 메모 줄</label><${Seg} value=${st.memo} options=${[[0, "없음"], [3, "3줄"], [5, "5줄"]]} onChange=${v => up("memo", v)} />` : null}
+          ${st.kind === "week" ? html`${st.paper === "land" ? html`<label class="f">하루 칸 나누기</label><${Seg} value=${st.wtime || "hour"} options=${[["hour", "1시간 (07~22시)"], ["tri", "오전 · 오후 · 저녁"], ["off", "나누지 않기"]]} onChange=${v => up("wtime", v)} />` : html`<p class="hint">A4 세로는 하루가 한 줄(가로 띠)이에요. 시간 칸은 A4 가로에서 고를 수 있어요.</p>`}
+            <label class="chk"><input type="checkbox" checked=${st.wtodo} onChange=${e => up("wtodo", e.target.checked)} /> 「이번 주 할 일 · 메모」 칸 넣기</label>` : null}
           ${st.kind === "desk" ? html`<label class="f">A4 아래 반쪽 <span class="muted">탁상 달력</span></label><${Seg} value=${st.deskBot || "next"} options=${[["next", "없음"], ["days", "날짜별 기록 줄"], ["lines", "빈 줄 노트"]]} onChange=${v => up("deskBot", v)} />
             <p class="hint">${st.deskBot === "days" ? "A4 아래쪽에 그달 1일~말일 날짜 줄이 들어가요. 한 장에 한 달 · 3단계 날짜 메모와 공휴일이 그 날짜 줄에 미리 적혀요." : st.deskBot === "lines" ? "A4 아래쪽이 줄만 있는 노트가 돼요. 한 장에 한 달." : st.count > 1 ? "A4 아래쪽에는 다음 달 달력이 들어가요(한 장에 두 달)." : "A4 아래쪽은 비워 둬요. 2단계 「몇 달」을 2달 이상 고르면 아래쪽에 다음 달 달력이 들어가요."}</p>` : null}
           <label class="f">머리 글귀 <span class="muted">선택 · 예: 우리 가족 2027</span></label><input type="text" value=${st.motto} maxlength="30" placeholder="비워 두면 넣지 않아요" onInput=${e => up("motto", e.target.value)} />
@@ -1039,7 +1132,7 @@ function App() {
         <div class="tray-h"><b>미리보기</b><span class="k">${kindName} · ${paperName} · ${sheetsN}장</span></div>
         ${noHol.length ? html`<div class="notice">${h(Icon, { name: "info", size: 18 })}<span><b>${noHol.join(" · ")}년 공휴일은 아직 발표 전이에요.</b> 그해 날짜에는 빨간 날을 넣지 않았어요(일요일은 빨간색).</span></div>` : null}
         <div class="sheets cl-sheets" ref=${shRef}><div class="scaler">${pages}</div></div>
-        <div class="tray-f k"><span>${st.kind === "year" ? st.year + "년" : months.length ? `${months[0][0]}년 ${months[0][1]}월${months.length > 1 ? ` ~ ${months[months.length - 1][0]}년 ${months[months.length - 1][1]}월` : ""}` : ""}</span><span>인쇄 배율 100% · 여백 없음</span></div>
+        <div class="tray-f k"><span>${st.kind === "week" ? `${ymdw(wks[0])} ~ ${ymdw(new Date(wks[wks.length - 1].getFullYear(), wks[wks.length - 1].getMonth(), wks[wks.length - 1].getDate() + 6))}` : st.kind === "year" ? st.year + "년" : months.length ? `${months[0][0]}년 ${months[0][1]}월${months.length > 1 ? ` ~ ${months[months.length - 1][0]}년 ${months[months.length - 1][1]}월` : ""}` : ""}</span><span>인쇄 배율 100% · 여백 없음</span></div>
       </section>
     </div>
     <p class="priv">${h(Icon, { name: "info", size: 15 })} 공휴일은 한국천문연구원 월력요항(2026 · 2027 · 2028년) 기준이고, 임시공휴일은 발표되면 반영합니다. 24절기는 천문 계산으로 넣었고 2027 · 2028년 공식 발표와 날짜가 같아요. 입력한 메모는 이 기기 브라우저에만 저장됩니다.</p>

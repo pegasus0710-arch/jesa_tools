@@ -865,7 +865,7 @@ function App() {
   </div>`;
 }
 /* 블로그 경유 잠금: 대표 글 발행 시각부터 — 날짜는 글 예약 때 정함 */
-const GATE_ON = Date.now() >= Date.parse("2099-01-01T00:00:00+09:00");
+const GATE_ON = Date.now() >= Date.parse("2026-11-08T20:00:00+09:00");   // 대표 글 공개(2026-11-08(일) 20:00)부터 블로그 경유 잠금
 (async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return; render(html`<${App} />`, document.getElementById("root")); })();
 
 /* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알려 iframe 높이를 자동으로 맞춤 */

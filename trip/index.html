@@ -1179,6 +1179,18 @@ body.pc .iph{--tile:64px}
 @keyframes upcDot{0%{box-shadow:0 0 0 0 rgba(245,109,3,.6);opacity:1}70%{box-shadow:0 0 0 7px rgba(245,109,3,0);opacity:.55}100%{box-shadow:0 0 0 0 rgba(245,109,3,0);opacity:1}}
 @media (prefers-reduced-motion:reduce){.upc::after,.upc-dot{animation:none}}
 
+/* 10-31 제이: 「다녀왔나요?」 — 작고 깔끔하게, 대신 눈에 띄게(주황 점 깜빡 · 「완료」는 진한 단추) */
+.itr .ckin{display:flex;flex-direction:row;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:7px 12px 8px 68px;border-top:1px solid rgba(245,109,3,.28);background:linear-gradient(90deg,rgba(245,109,3,.10),rgba(245,109,3,.02))}
+.itr .ckin .ckq{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:#b5520a}
+.ckq-dot{width:8px;height:8px;border-radius:50%;background:#f56d03;animation:upcDot 1.6s ease-out infinite;flex-shrink:0}
+.itr .ckin .ck4.ckb2{display:flex;flex:0 1 auto;flex-wrap:wrap;gap:5px;margin:0}
+.itr .ckin .ck4.ckb2 button{flex:0 0 auto;min-height:30px;height:30px;padding:0 11px;font-size:12.5px;font-weight:700;border-radius:9px;background:#fcf9f4;color:#1f2125;box-shadow:inset 0 0 0 1px rgba(31,33,37,.16);border:0}
+.itr .ckin .ck4.ckb2 button:first-child{background:#1f7f8f;color:#fff;box-shadow:none}
+.itr .ckin .ck4.ckb2 button:last-child{color:#6f6857}
+.itr .ckin .ck4.ckb2 button:hover{box-shadow:inset 0 0 0 1.5px #1f7f8f}
+@media(max-width:600px){.itr .ckin{flex-direction:row;padding:7px 10px 8px;gap:5px 8px}.itr .ckin .ck4.ckb2{display:flex;grid-template-columns:none}.itr .ckin .ck4.ckb2 button{min-height:30px;padding:0 9px;font-size:12.5px}}
+@media (prefers-reduced-motion:reduce){.ckq-dot{animation:none}}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -2062,7 +2074,7 @@ function dayChips(t) { const ti = dayDiff(t.start, today());
 function ckForm(it, o) { return `<div class="g2"><div><label class="f">실제 시간</label>${timeSel(`data-act="${it.id}:time"`, o.time)}</div><div><label class="f">실제 비용${it.per ? "(1인)" : ""}</label><input class="inp num" inputmode="numeric" data-money data-act="${it.id}:cost" value="${o.cost != null ? won(o.cost) : ""}" placeholder="0"></div></div><label class="f">실제 장소</label><input class="inp" data-act="${it.id}:place" value="${esc(o.place)}"><div class="row2"><button class="btn sm" data-ckcancel="${it.id}">취소</button><button class="btn sm nv" data-ckfix="${it.id}">바꿔서 완료</button></div>`; }
 const CKB = it => `<button data-ck="done:${it.id}">완료</button><button data-ck="fix:${it.id}">바꿔서 완료</button><button data-ck="move:${it.id}">다른 날로</button><button data-ck="skip:${it.id}">안 함</button>`;
 function ckInline(t, it) { if (it.state || !pending(t).some(x => x.it.id === it.id)) return ""; const o = (S.chk || {})[it.id];
-  return `<div class="ckin${o ? " open" : ""}">${o ? ckForm(it, o) : `<span class="ckq">다녀왔나요?</span><div class="ck4 sm">${CKB(it)}</div>`}</div>`; }
+  return `<div class="ckin${o ? " open" : ""}">${o ? ckForm(it, o) : `<span class="ckq"><i class="ckq-dot"></i>다녀왔나요?</span><div class="ck4 sm ckb2">${CKB(it)}</div>`}</div>`; }
 function itRow(t, it, i) {
   const c = planCost(t, it), ph = (t.photos || []).filter(p => p.it === it.id && PURL[p.id]);
   const st = it.state ? `<em class="sb ${it.state}">${STATES[it.state]}</em>` : "";

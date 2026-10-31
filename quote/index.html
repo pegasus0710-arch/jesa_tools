@@ -10,7 +10,8 @@
 <script>
 /* PC 설치형(10-30 다운로드형 → 설치형) — 휴대폰 · 태블릿은 「PC용」 안내 */
 (function(){var ua=navigator.userAgent,m=/Android|iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-if(m){document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML='<div style="font-family:sans-serif;max-width:420px;margin:60px auto;padding:24px;background:#f1ebe1;border-radius:18px;color:#1f2125;line-height:1.7"><b style="font-size:19px">견적서 발행기는 PC용이에요</b><p style="color:#5b5547">PC 크롬 · 엣지에서 이 주소를 열어 설치해 주세요. 휴대폰용은 준비 중이에요.</p><a href="https://luvbong.tistory.com" style="color:#0A1931;font-weight:700">Blog J 블로그로 가기 ›</a></div>';});}
+/* 10-31 제이: 휴대폰에서도 씀(구글 드라이브로 PC와 같이) — 설치 문구만 기기에 맞게 */
+var IOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),IL=m?"휴대폰에 앱으로 설치":"PC에 앱으로 설치";
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(function(){});
 /* 설치 단추 — 설치 안 한 PC 브라우저에서 늘 오른쪽 아래(설치한 앱 창에서는 안 보임).
    브라우저 설치 창을 띄울 수 있으면 바로, 아니면(이미 설치 · 지원 안 함) 방법 안내. ?install=1 이면 안내를 먼저 펼침 */
@@ -19,11 +20,11 @@ window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();bip
 function guide(){var g=document.getElementById("bjinstg");if(g){g.style.display=g.style.display==="none"?"block":"none";return;}
 g=document.createElement("div");g.id="bjinstg";
 g.style.cssText="position:fixed;right:18px;bottom:74px;z-index:9999;width:330px;max-width:calc(100vw - 36px);box-sizing:border-box;background:#f4efe6;color:#1f2125;border-radius:16px;padding:16px 18px;font:14px/1.65 sans-serif;box-shadow:4px 8px 22px rgba(40,44,60,.3)";
-g.innerHTML='<b style="font-size:15px">PC에 앱으로 설치하기</b><div style="color:#5b5547;margin-top:6px">크롬 · 엣지 <b style="color:#1f2125">주소창 오른쪽 설치 아이콘</b>(모니터 + 아래 화살표)을 누르거나,<br>오른쪽 위 <b style="color:#1f2125">⋮ 메뉴 → 전송, 저장 및 공유 → 「견적서 발행기」 설치</b>를 누르세요.<br>이미 설치했다면 바탕화면 · 시작 메뉴의 <b style="color:#1f2125">견적서 발행기</b>로 여세요.</div><a href="https://luvbong.tistory.com/790" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#0A1931;font-weight:700">설치 · 삭제 방법 자세히 ›</a>';
+g.innerHTML=(m?'<b style="font-size:15px">휴대폰에 앱으로 설치하기</b><div style="color:#5b5547;margin-top:6px">'+(IOS?'사파리 아래 <b style="color:#1f2125">공유 단추(□↑) → 「홈 화면에 추가」</b>를 누르세요. 홈 화면에 추가해야 저장한 문서가 오래 안전하게 남아요.':'크롬 오른쪽 위 <b style="color:#1f2125">⋮ 메뉴 → 「홈 화면에 추가」 또는 「앱 설치」</b>를 누르세요. 삼성 인터넷은 <b style="color:#1f2125">≡ 메뉴 → 「현재 페이지 추가 → 홈 화면」</b>.')+'</div>':'<b style="font-size:15px">PC에 앱으로 설치하기</b><div style="color:#5b5547;margin-top:6px">크롬 · 엣지 <b style="color:#1f2125">주소창 오른쪽 설치 아이콘</b>(모니터 + 아래 화살표)을 누르거나,<br>오른쪽 위 <b style="color:#1f2125">⋮ 메뉴 → 전송, 저장 및 공유 → 「견적서 발행기」 설치</b>를 누르세요.<br>이미 설치했다면 바탕화면 · 시작 메뉴의 <b style="color:#1f2125">견적서 발행기</b>로 여세요.</div>')+'<a href="https://luvbong.tistory.com/790" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#0A1931;font-weight:700">설치 · 삭제 방법 자세히 ›</a>';
 document.body.appendChild(g);}
-document.addEventListener("DOMContentLoaded",function(){if(st||m)return;
-var x=document.createElement("button");x.id="bjinst";x.type="button";x.title="PC에 앱으로 설치 — 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요";
-x.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span>PC에 앱으로 설치</span><i aria-label="닫기">×</i>';
+document.addEventListener("DOMContentLoaded",function(){if(st)return;
+var x=document.createElement("button");x.id="bjinst";x.type="button";x.title=IL;
+x.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span>'+IL+'</span><i aria-label="닫기">×</i>';
 x.style.cssText="position:fixed;right:18px;bottom:18px;z-index:9999;display:flex;align-items:center;gap:8px;border:0;border-radius:14px;padding:11px 12px 11px 15px;background:#0A1931;color:#fff;font:700 14px/1 sans-serif;box-shadow:4px 6px 14px rgba(40,44,60,.35);cursor:pointer";
 x.querySelector("i").style.cssText="font-style:normal;font-size:18px;opacity:.7;margin-left:4px;padding:0 4px";
 x.addEventListener("click",function(ev){if(ev.target.tagName==="I"){x.style.display="none";var g=document.getElementById("bjinstg");if(g)g.style.display="none";return;}
@@ -33,7 +34,7 @@ document.body.appendChild(x);
 var off=false;try{off=localStorage.getItem("bjquote:instbar")==="off";}catch(e){}
 if(!off){x.style.display="none";var bar=document.createElement("div");bar.id="bjinstbar";
 bar.style.cssText="position:relative;z-index:9998;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px max(16px,calc((100vw - 1320px)/2));background:#0A1931;color:#fff;font:600 14.5px/1.5 sans-serif";
-bar.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e08a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span style="flex:1;min-width:220px">견적서 발행기를 <b style="color:#ffffff">PC에 앱으로 설치</b>하면 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요. 가입 없이 무료이고, 인터넷이 되면 늘 새 버전으로 열려요. 전에 내려받은 파일로 쓰던 자료는 「저장할 곳 고르기」에서 그때 고른 폴더(또는 「견적서 발행기」 폴더)를 다시 고르면 그대로 이어져요.</span><button type="button" data-a="i" style="border:0;border-radius:10px;padding:9px 16px;background:#fcf9f4;color:#1f2125;font:800 14px/1 sans-serif;cursor:pointer">PC에 앱으로 설치</button><button type="button" data-a="x" aria-label="안내 닫기" title="닫기 — 다음에는 오른쪽 아래 단추로" style="border:0;background:transparent;color:#fff;opacity:.75;font:400 22px/1 sans-serif;cursor:pointer;padding:2px 6px">×</button>';
+bar.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e08a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 15.5v4h15v-4"/></svg><span style="flex:1;min-width:220px">'+(m?'견적서 발행기를 <b style="color:#ffffff">휴대폰에 앱으로 설치</b>하면 홈 화면 아이콘으로 바로 열려요. 구글 드라이브를 연결하면 PC에서 만든 거래처 · 품목 · 문서를 휴대폰에서도 그대로 써요.':'견적서 발행기를 <b style="color:#ffffff">PC에 앱으로 설치</b>하면 바탕화면 · 시작 메뉴 아이콘으로 바로 열려요. 가입 없이 무료이고, 인터넷이 되면 늘 새 버전으로 열려요. 전에 내려받은 파일로 쓰던 자료는 「저장할 곳 고르기」에서 그때 고른 폴더(또는 「견적서 발행기」 폴더)를 다시 고르면 그대로 이어져요.')+'</span><button type="button" data-a="i" style="border:0;border-radius:10px;padding:9px 16px;background:#fcf9f4;color:#1f2125;font:800 14px/1 sans-serif;cursor:pointer">'+IL+'</button><button type="button" data-a="x" aria-label="안내 닫기" title="닫기 — 다음에는 오른쪽 아래 단추로" style="border:0;background:transparent;color:#fff;opacity:.75;font:400 22px/1 sans-serif;cursor:pointer;padding:2px 6px">×</button>';
 bar.addEventListener("click",function(ev){var b=ev.target.closest("button");if(!b)return;
  if(b.getAttribute("data-a")==="x"){bar.remove();try{localStorage.setItem("bjquote:instbar","off");}catch(e){}x.style.display="flex";return;}
  if(bip){bip.prompt();bip.userChoice.then(function(r){if(r&&r.outcome==="accepted")bar.remove();bip=null;});}else{guide();var g=document.getElementById("bjinstg");if(g){g.style.top="64px";g.style.bottom="auto";}}});
@@ -173,9 +174,43 @@ h3.sec:first-child{margin-top:0}
 }
 .dtq{position:relative;display:flex;align-items:center;min-height:40px;padding:0 34px 0 12px;border-radius:10px;background:var(--card,#fcf9f4);box-shadow:inset 0 0 0 1px rgba(90,74,50,.18);cursor:pointer;font-variant-numeric:tabular-nums}
 .dtq span{flex:1;white-space:nowrap}
-.dtq::after{content:"";position:absolute;right:12px;top:50%;width:14px;height:14px;margin-top:-7px;border:2px solid currentColor;border-radius:3px;opacity:.55}
+.dtq::after{content:"";position:absolute;right:12px;top:50%;width:14px;height:13px;margin-top:-7px;border:2px solid currentColor;border-top-width:4px;border-radius:3px;opacity:.55}
 .dtq input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;margin:0}
 .dtq input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+
+/* 10-31 제이: 휴대폰 · 구글 드라이브 · 보내기 */
+.top{position:relative}
+.gdc{order:3;margin-left:10px;display:inline-flex;align-items:center;gap:6px;border:0;border-radius:11px;padding:7px 11px;background:var(--panel,#f7f2ea);color:var(--t2,#5b5547);font:700 13px/1 inherit;box-shadow:inset 0 0 0 1px rgba(31,33,37,.12);cursor:pointer;position:relative}
+.gdc i{width:8px;height:8px;border-radius:50%;background:#c9c2b4}.gdc.ok i{background:#2f8f5b}.gdc.warn i{background:#f56d03}.gdc.bad i{background:#c23a2b}.gdc.busy i{background:#0a1931;animation:qpl 1s infinite}
+@keyframes qpl{50%{opacity:.3}}
+.sendr{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:8px 0 10px}.sendr>span{font-size:13px;font-weight:800;color:var(--t2,#5b5547)}.sendr small{font-size:12.5px;color:var(--t3,#6f6857);flex-basis:100%}
+.qgate{display:flex;flex-direction:column;gap:10px;max-width:460px}.qgate .btn{height:auto;min-height:52px;padding:10px 18px;font-size:16px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left}.qgate .btn small{font-size:12.5px;font-weight:600;opacity:.8}
+.qbusy{position:fixed;inset:0;z-index:10030;display:grid;place-items:center;background:rgba(20,22,30,.35);color:#fff;font:700 16px/1.4 sans-serif}
+@media(max-width:680px){
+  .work{grid-template-columns:1fr!important}
+  .top{flex-wrap:wrap}.gdc span{display:none}.gdc{padding:8px 10px;order:1;margin-left:auto}.top .tabs{order:2}
+  .g3{grid-template-columns:repeat(2,minmax(0,1fr))}.g3>.f:first-child{grid-column:1/-1}
+  .lines thead{display:none}
+  .lines,.lines tbody{display:block}
+  .lines tr{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:10px;margin-bottom:8px;border-radius:12px;background:var(--panel,#f7f2ea);box-shadow:inset 0 0 0 1px rgba(31,33,37,.1)}
+  .lines td{padding:0;display:block;min-width:0}
+  .lines td:nth-child(1){grid-column:1/6;grid-row:1}.lines td:nth-child(7){grid-column:6/7;grid-row:1;text-align:right}
+  .lines td:nth-child(2),.lines td:nth-child(3),.lines td:nth-child(4){grid-column:span 2}
+  .lines td:nth-child(5){grid-column:1/4}.lines td:nth-child(6){grid-column:4/7;align-self:end;font-size:15px;padding:0 2px 8px}
+  .lines td:nth-child(2)::before{content:"규격"}.lines td:nth-child(3)::before{content:"수량"}.lines td:nth-child(4)::before{content:"단위"}.lines td:nth-child(5)::before{content:"단가"}
+  .lines td::before{display:block;font-size:12.5px;color:var(--t3,#6f6857);margin:0 0 2px 2px}
+  .lines input{font-size:16px;padding:8px}
+  .lines .x{width:36px;height:36px;font-size:18px}
+  .tbl.dlist thead{display:none}.tbl.dlist,.tbl.dlist tbody{display:block}
+  .tbl.dlist tr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 8px;padding:12px 4px;border-bottom:1px solid var(--line)}
+  .tbl.dlist td{padding:0;border:0;display:block;min-width:0}
+  .tbl.dlist td:nth-child(4),.tbl.dlist td:nth-child(5){grid-column:1/-1;font-size:14px}.tbl.dlist td:nth-child(5){color:var(--t2,#5b5547)}
+  .tbl.dlist td:nth-child(6){grid-column:1/-1;text-align:left!important;font-size:16px}
+  .tbl.dlist td:nth-child(7){grid-column:1/-1;white-space:normal!important;display:flex;flex-wrap:wrap;gap:6px}
+  .tbl.dlist td:nth-child(7) .lk{padding:6px 10px;border-radius:9px;background:var(--panel,#f7f2ea);box-shadow:inset 0 0 0 1px rgba(31,33,37,.12)}
+  .tbl.dlist .chip{writing-mode:horizontal-tb;white-space:nowrap}
+  #main input,#main select,#main textarea{font-size:16px}
+}
 
 /* BJ31-APPLIED */
 /* 색(10-30 제이 지정): 초록 #0a1931 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #0a1931(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
@@ -374,6 +409,274 @@ ${o.note ? `<p class="xlx-p">${o.note}</p>` : ""}<button type="button" class="xl
     (document.head || document.documentElement).appendChild(st);
   }
 })();
+</script><script>/* ══ 공통: 백업 (2026-10-31 제이) ══
+   ① 주기 알림 — 마지막 백업 뒤 정한 날짜(기본 7일)가 지나면 화면 아래 작은 카드 「지금 백업 · 3일 뒤에」
+   ② 백업 폴더 기억 — PC · 안드로이드 크롬은 백업 폴더를 한 번 정하면(데이터 폴더가 있으면 그 안 「백업」 자동) 다음부터 누르면 바로 그 폴더에 저장, 최근 10개만 남김
+   ③ 되살리기 — 기억한 폴더의 백업을 최신순으로 보여 주고 하나 누르면 끝. 기억이 없으면(브라우저 데이터를 지운 뒤) 「백업 폴더 고르기」 → 그 폴더에서 최신 백업을 찾아 줌
+   아이폰 · 폴더를 못 쓰는 브라우저 = 공유 창(파일에 저장) · 다운로드 + 파일 고르기
+   쓰는 법: BKUP.setup({ app, name, prefix, ext, mime, make, restore, count, dataDir, done })
+            BKUP.run() 백업 · BKUP.restore() 되살리기 · BKUP.settings() 백업 설정 · BKUP.info() 상태 */
+(function () {
+  "use strict";
+  const CAN = typeof window.showDirectoryPicker === "function";
+  const AND = /Android/i.test(navigator.userAgent);
+  const MOB = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+  const WD = ["일", "월", "화", "수", "목", "금", "토"];
+  const p2 = n => String(n).padStart(2, "0");
+  const ymd = d => `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+  const ymdw = d => `${ymd(d)}(${WD[d.getDay()]})`;
+  const E = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const mb = n => n >= 1048576 ? (n / 1048576).toFixed(1) + "MB" : Math.max(1, Math.round(n / 1024)) + "KB";
+  let O = null, st = { last: 0, every: 7, later: 0, first: 0 }, dir = null, ready = null;
+
+  /* 저장: 이 앱 전용 IndexedDB (폴더 손잡이는 IndexedDB에만 넣을 수 있음) */
+  function idb() { return new Promise((res, rej) => { const r = indexedDB.open("bj-backup", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+  async function kget(k) { try { const db = await idb(); return await new Promise(res => { const q = db.transaction("kv").objectStore("kv").get(O.app + ":" + k); q.onsuccess = () => res(q.result); q.onerror = () => res(undefined); }); } catch (e) { return undefined; } }
+  async function kset(k, v) { try { const db = await idb(); await new Promise(res => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").put(v, O.app + ":" + k); t.oncomplete = res; t.onerror = res; }); } catch (e) {} }
+  async function kdel(k) { try { const db = await idb(); await new Promise(res => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").delete(O.app + ":" + k); t.oncomplete = res; t.onerror = res; }); } catch (e) {} }
+  const saveSt = () => kset("st", st);
+
+  function toast(m) { if (typeof O.toast === "function") return O.toast(m); let t = document.querySelector(".bkx-toast"); if (!t) { t = document.createElement("div"); t.className = "bkx-toast"; document.body.appendChild(t); } t.textContent = m; t.classList.add("on"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("on"), 2800); }
+  async function perm(h, ask) { if (!h) return false; try { const o = { mode: "readwrite" }; if (await h.queryPermission(o) === "granted") return true; return ask ? (await h.requestPermission(o)) === "granted" : false; } catch (e) { return false; } }
+  const isBk = n => n.startsWith(O.prefix) && n.toLowerCase().endsWith("." + O.ext);
+  async function listIn(h) { const L = []; try { for await (const [n, e] of h.entries()) if (e.kind === "file" && isBk(n)) { const f = await e.getFile(); L.push({ name: n, size: f.size, time: f.lastModified, h: e }); } } catch (e) {} return L.sort((a, b) => b.name.localeCompare(a.name) || b.time - a.time); }
+  const bkFolderName = () => O.name.replace(/\s/g, "") + "_백업";
+
+  /* 백업 폴더 정하기: 데이터 폴더가 있으면 그 안 「백업」, 아니면 고르는 창(사진 폴더에서 시작 → 안에 「앱이름_백업」을 만듦) */
+  async function autoDir() {
+    if (dir || !CAN || typeof O.dataDir !== "function") return dir;
+    try { const d = await O.dataDir(); if (d && await perm(d, false)) { dir = await d.getDirectoryHandle("백업", { create: true }); await kset("dir", dir); } } catch (e) {}
+    return dir;
+  }
+  async function pickDir(forRestore) {
+    let h; try { h = await window.showDirectoryPicker({ mode: "readwrite", id: "bjbk-" + O.app, startIn: AND ? undefined : "pictures" }); }
+    catch (e) { if (e.name !== "AbortError") toast("폴더를 열지 못했어요: " + e.message); return null; }
+    let t = h;
+    try {
+      if (!(await listIn(h)).length) {
+        let sub = null; for (const n of [bkFolderName(), "백업"]) { try { sub = await h.getDirectoryHandle(n); if ((await listIn(sub)).length) break; sub = null; } catch (e) { sub = null; } }
+        if (sub) t = sub; else if (!forRestore && !/백업/.test(h.name)) t = await h.getDirectoryHandle(bkFolderName(), { create: true });
+      }
+    } catch (e) {}
+    dir = t; await kset("dir", t); return t;
+  }
+
+  async function writeTo(h, name, blob) {
+    const fh = await h.getFileHandle(name, { create: true }), w = await fh.createWritable(); await w.write(blob); await w.close();
+    const L = await listIn(h), keep = O.keep || 10;
+    for (const x of L.slice(keep)) { try { await h.removeEntry(x.name); } catch (e) {} }
+  }
+  function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }
+
+  async function run(opt) {
+    opt = opt || {}; await ready;
+    const useDir = CAN && !opt.file;
+    /* 폴더 허용은 누른 직후에 물어야 함(백업 만드는 동안 기다리면 브라우저가 막음) → 폴더부터 */
+    if (useDir) { await autoDir(); if (!dir || !(await perm(dir, true))) { if (!(await pickDir(false))) return false; } }
+    let blob; try { blob = await O.make(); } catch (e) { toast("백업을 만들지 못했어요: " + (e && e.message || e)); return false; }
+    if (!blob) return false;
+    const n = new Date(), name = `${O.prefix}${ymd(n)}_${p2(n.getHours())}${p2(n.getMinutes())}.${O.ext}`;
+    let where = "";
+    if (useDir) {
+      try { await writeTo(dir, name, blob); where = `「${dir.name}」 폴더`; }
+      catch (e) { toast("폴더에 쓰지 못했어요 — 파일로 받을게요."); download(blob, name); where = "다운로드 폴더"; }
+    } else {
+      const file = new File([blob], name, { type: O.mime || "application/octet-stream" });
+      if (MOB && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: name }); where = "공유한 곳"; } catch (e) { if (e && e.name === "AbortError") return false; download(blob, name); where = "다운로드 폴더"; } }
+      else { download(blob, name); where = "다운로드 폴더"; }
+    }
+    st.last = Date.now(); st.later = 0; await saveSt(); hideRemind();
+    try { O.done && O.done(st.last); } catch (e) {}
+    toast(`백업했어요 (${mb(blob.size)}) — ${where}`);
+    return true;
+  }
+
+  /* ── 창 ── */
+  function modal(html, bind) {
+    closeModal(); const o = document.createElement("div"); o.className = "bkx-ov"; o.innerHTML = `<div class="bkx-m" role="dialog" aria-modal="true">${html}</div>`;
+    o.addEventListener("click", e => { if (e.target === o || e.target.closest("[data-bkx-x]")) closeModal(); });
+    document.body.appendChild(o); bind && bind(o); return o;
+  }
+  function closeModal() { const o = document.querySelector(".bkx-ov"); if (o) o.remove(); }
+  function pickFile() { const i = document.createElement("input"); i.type = "file"; i.accept = "." + O.ext + (O.accept ? "," + O.accept : ""); i.onchange = async () => { const f = i.files[0]; if (f) { closeModal(); await O.restore(f); } }; i.click(); }
+
+  async function restore() {
+    await ready; if (!CAN) return pickFile();
+    await autoDir();
+    const has = dir && await perm(dir, false);
+    const head = `<div class="bkx-h"><b>백업에서 되살리기</b><button class="bkx-c" data-bkx-x aria-label="닫기">×</button></div>`;
+    if (!dir) return modal(`${head}<p class="bkx-p">백업을 넣어 둔 폴더를 고르면 <b>그 폴더에서 가장 최근 백업</b>을 찾아 보여 드려요. (${E(bkFolderName())} 폴더나 그 위 폴더를 골라도 돼요)</p>
+      <div class="bkx-r"><button class="bkx-b go" data-bkx-pick>백업 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
+        o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
+        o.querySelector("[data-bkx-file]").onclick = pickFile; });
+    if (!has) return modal(`${head}<p class="bkx-p">기억해 둔 백업 폴더 <b>「${E(dir.name)}」</b>를 열려면 허용이 한 번 필요해요.</p>
+      <div class="bkx-r"><button class="bkx-b go" data-bkx-ok>폴더 열기(허용)</button><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
+        o.querySelector("[data-bkx-ok]").onclick = async () => { if (await perm(dir, true)) restore(); };
+        o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
+        o.querySelector("[data-bkx-file]").onclick = pickFile; });
+    const L = await listIn(dir);
+    modal(`${head}<p class="bkx-p">백업 폴더 <b>「${E(dir.name)}」</b> · ${L.length ? `백업 ${L.length}개 — 맨 위가 가장 최근이에요.` : "아직 백업이 없어요."}</p>
+      ${L.length ? `<div class="bkx-l">${L.map((x, i) => { const d = new Date(x.time); return `<button class="bkx-it${i ? "" : " new"}" data-bkx-i="${i}"><span><b>${ymdw(d)} ${p2(d.getHours())}:${p2(d.getMinutes())}</b><small>${E(x.name)} · ${mb(x.size)}</small></span>${i ? "" : "<em>최근</em>"}<i>되살리기</i></button>`; }).join("")}</div>` : ""}
+      <div class="bkx-r"><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
+        o.querySelectorAll("[data-bkx-i]").forEach(b => b.onclick = async () => { const x = L[+b.dataset.bkxI]; closeModal(); await O.restore(await x.h.getFile()); });
+        o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
+        o.querySelector("[data-bkx-file]").onclick = pickFile; });
+  }
+
+  function info() { const days = st.last ? Math.floor((Date.now() - st.last) / 864e5) : null; return { last: st.last, days, every: st.every, dir: dir ? dir.name : "", canDir: CAN, lastText: st.last ? ymdw(new Date(st.last)) : "없음" }; }
+  async function settings() {
+    await ready; await autoDir(); const I = info();
+    modal(`<div class="bkx-h"><b>백업 설정</b><button class="bkx-c" data-bkx-x aria-label="닫기">×</button></div>
+      <div class="bkx-kv"><span>마지막 백업</span><b>${I.lastText}${I.days != null ? ` <small>(${I.days ? I.days + "일 전" : "오늘"})</small>` : ""}</b></div>
+      ${CAN ? `<div class="bkx-kv"><span>백업 폴더</span><b>${I.dir ? E(I.dir) : "아직 안 정함"}</b><button class="bkx-b sm" data-bkx-pick>${I.dir ? "바꾸기" : "정하기"}</button></div>
+        <p class="bkx-p sm">백업은 이 폴더에 바로 저장되고 최근 ${O.keep || 10}개만 남겨요. 되살릴 때도 이 폴더에서 찾아요. USB · 원드라이브처럼 다른 곳에 두면 더 안전해요.${AND ? "<br>폴더 고르는 창: ⋮ 또는 「새 폴더」 → 이름 → 「이 폴더 사용」 → 「허용」" : ""}</p>`
+      : `<p class="bkx-p sm">이 브라우저는 폴더에 바로 저장할 수 없어서, 백업하면 ${MOB ? "공유 창이 열려요 — 「파일에 저장」(아이폰) · 내 드라이브 · 카톡 나에게 보내기 등에 두세요" : "다운로드 폴더에 받아져요"}. 되살릴 때는 그 파일을 고르면 돼요.</p>`}
+      <div class="bkx-kv"><span>백업 알림</span><select class="bkx-sel" data-bkx-ev>${[[3, "3일마다"], [7, "7일마다(권장)"], [14, "14일마다"], [30, "30일마다"], [0, "알리지 않음"]].map(([v, n]) => `<option value="${v}" ${st.every === v ? "selected" : ""}>${n}</option>`).join("")}</select></div>
+      <div class="bkx-r"><button class="bkx-b go" data-bkx-run>지금 백업</button><button class="bkx-b" data-bkx-rs>백업에서 되살리기</button></div>`, o => {
+        const p = o.querySelector("[data-bkx-pick]"); if (p) p.onclick = async () => { if (await pickDir(false)) settings(); };
+        o.querySelector("[data-bkx-ev]").onchange = async e => { st.every = +e.target.value; await saveSt(); toast(st.every ? `${st.every}일마다 백업을 알려 드려요.` : "백업 알림을 껐어요."); };
+        o.querySelector("[data-bkx-run]").onclick = async () => { closeModal(); await run(); };
+        o.querySelector("[data-bkx-rs]").onclick = () => restore(); });
+  }
+
+  /* ── 주기 알림 ── */
+  function hideRemind() { const r = document.querySelector(".bkx-rm"); if (r) r.remove(); }
+  async function remind() {
+    await ready; if (!st.every || document.querySelector(".bkx-rm") || document.querySelector(".bkx-ov")) return;
+    let n = 0; try { n = O.count ? await O.count() : 1; } catch (e) {} if (!n) return;
+    const now = Date.now(); if (!st.first) { st.first = now; await saveSt(); }
+    const base = st.last || st.first; if (now - base < st.every * 864e5 || now < st.later) return;
+    if (typeof O.quiet === "function" && O.quiet()) return;
+    await autoDir(); const days = st.last ? Math.floor((now - st.last) / 864e5) : null;
+    const r = document.createElement("div"); r.className = "bkx-rm"; r.setAttribute("role", "status");
+    r.innerHTML = `<div class="bkx-rt"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><small>${CAN ? (dir ? `누르면 「${E(dir.name)}」 폴더에 바로 저장돼요.` : "백업 폴더를 한 번 정하면 다음부터는 누르기만 하면 돼요.") : "휴대폰을 바꾸거나 앱을 지워도 되살릴 수 있게 파일로 받아 두세요."}</small></div>
+      <div class="bkx-rb"><button class="bkx-b go" data-bkx-now>지금 백업</button><button class="bkx-b" data-bkx-later>3일 뒤에</button><button class="bkx-c" data-bkx-set aria-label="백업 설정" title="백업 설정">⋯</button></div>`;
+    r.querySelector("[data-bkx-now]").onclick = async () => { await run(); };
+    r.querySelector("[data-bkx-later]").onclick = async () => { st.later = Date.now() + 3 * 864e5; await saveSt(); hideRemind(); toast("3일 뒤에 다시 알려 드릴게요."); };
+    r.querySelector("[data-bkx-set]").onclick = () => { hideRemind(); settings(); };
+    document.body.appendChild(r);
+  }
+
+  const CSS = `
+.bkx-ov{position:fixed;inset:0;z-index:10050;background:rgba(20,22,30,.5);display:grid;place-items:center;padding:16px;box-sizing:border-box}
+.bkx-m{width:min(480px,100%);max-height:88vh;overflow:auto;background:#f7f2ea;color:#1f2125;border-radius:18px;padding:16px 18px 18px;box-shadow:0 24px 60px rgba(0,0,0,.3);box-sizing:border-box;font-size:14px;text-align:left}
+.bkx-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}.bkx-h b{flex:1;font-size:17px}
+.bkx-c{border:0;background:#ece3d5;color:#5b5547;width:36px;height:36px;border-radius:10px;font-size:20px;line-height:1;cursor:pointer;flex-shrink:0}
+.bkx-p{margin:0 0 12px;line-height:1.6;color:#3a3a3a}.bkx-p.sm{font-size:12.5px;color:#5b5547;margin-top:-4px}
+.bkx-r{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bkx-b{font:inherit;font-size:14px;font-weight:700;min-height:42px;padding:8px 14px;border-radius:11px;border:0;background:#fcf9f4;color:#20263a;box-shadow:inset 0 0 0 1.5px rgba(32,38,58,.25);cursor:pointer}
+.bkx-b.go{background:#20263a;color:#fff;box-shadow:none}.bkx-b.sm{min-height:34px;padding:5px 10px;font-size:13px}
+.bkx-b:active{transform:translateY(1px)}
+.bkx-l{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow:auto;padding:2px}
+.bkx-it{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;border:0;border-radius:12px;padding:10px 12px;background:#fcf9f4;box-shadow:inset 0 0 0 1px rgba(31,33,37,.1);cursor:pointer;color:#1f2125}
+.bkx-it.new{box-shadow:inset 0 0 0 2px #20263a}
+.bkx-it span{flex:1;min-width:0}.bkx-it b{display:block;font-size:14.5px;font-variant-numeric:tabular-nums}.bkx-it small{display:block;font-size:12.5px;color:#6f6857;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bkx-it em{font-style:normal;font-size:12.5px;font-weight:800;color:#b5600f}.bkx-it i{font-style:normal;font-size:13px;font-weight:800;color:#20263a;white-space:nowrap}
+.bkx-kv{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(160,140,108,.25)}.bkx-kv span{width:84px;flex-shrink:0;color:#5b5547;font-weight:700;font-size:13.5px}.bkx-kv b{flex:1;min-width:0;overflow-wrap:anywhere}
+.bkx-sel{flex:1;font:inherit;font-size:14px;min-height:40px;border-radius:10px;border:1px solid #d8cfbf;background:#fcf9f4;padding:0 8px}
+.bkx-rm{position:fixed;z-index:10040;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom));width:min(560px,calc(100% - 24px));box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 14px;border-radius:16px;background:#f7f2ea;color:#1f2125;box-shadow:0 14px 40px rgba(40,34,20,.28),inset 0 0 0 1.5px rgba(224,138,62,.55);font-size:14px;text-align:left}
+.bkx-rt{flex:1 1 240px;min-width:0}.bkx-rt b{display:block;font-size:15px}.bkx-rt small{display:block;font-size:12.5px;color:#5b5547;line-height:1.5;margin-top:2px}
+.bkx-rb{display:flex;gap:6px;align-items:center}.bkx-rb .bkx-b{min-height:38px;padding:6px 12px}.bkx-rb .bkx-c{width:38px;height:38px}
+@media (max-width:760px){.bkx-rm{bottom:calc(86px + env(safe-area-inset-bottom))}.bkx-rb{width:100%}.bkx-rb .bkx-b{flex:1}}
+.bkx-toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10060;background:#20263a;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .2s}.bkx-toast.on{opacity:1}`;
+
+  window.BKUP = {
+    setup(o) {
+      O = Object.assign({ ext: "zip", mime: "application/zip", keep: 10 }, o);
+      if (!document.getElementById("bkx-css")) { const s = document.createElement("style"); s.id = "bkx-css"; s.textContent = CSS; (document.head || document.documentElement).appendChild(s); }
+      ready = (async () => { const s = await kget("st"); if (s) st = Object.assign(st, s); if (o.legacyLast && !st.last) { try { const l = await o.legacyLast(); if (l) st.last = l; } catch (e) {} } dir = (await kget("dir")) || null; })();
+      setTimeout(remind, o.delay || 5000);
+      return ready;
+    },
+    run, restore, settings, remind, info: () => info(),
+    ready: () => ready,
+    canDir: CAN,
+    async forget() { dir = null; await kdel("dir"); }
+  };
+})();
+</script><script>/* ══ 공통: 화면의 문서(HTML)를 그림 · PDF로 (2026-10-31 제이 — 휴대폰에서도 이미지 · PDF로 보내기) ══
+   화면에 놓인 자리 그대로 그림: 바탕색 · 테두리(실선 · 점선) · 그림(도장 등) · 글자(한 글자씩).
+   PAINT.page(els, {dpi, wmm, hmm}) → canvas  (els = 한 쪽에 들어갈 요소들, 첫 요소의 왼쪽 위가 종이 왼쪽 위)
+   PAINT.pdf([{w,h,b}]) → A4 PDF Blob · PAINT.jpeg(canvas) → {w,h,b,blob}
+   PAINT.send(blob, 파일이름) — 휴대폰 = 공유 창, PC = 다운로드 */
+(function () {
+  "use strict";
+  const MOB = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+  const clear = c => !c || c === "transparent" || /rgba\([^)]*,\s*0\)$/.test(c);
+  function fit(iw, ih, bw, bh, f) { if (f === "fill" || !f) return [0, 0, bw, bh]; if (f === "none") return [(bw - iw) / 2, (bh - ih) / 2, iw, ih];
+    const k = f === "cover" ? Math.max(bw / iw, bh / ih) : Math.min(bw / iw, bh / ih); return [(bw - iw * k) / 2, (bh - ih * k) / 2, iw * k, ih * k]; }
+  function paintInto(root, ctx, X, Y, k) {
+    const all = [root, ...root.querySelectorAll("*")], hidden = new Set();
+    for (const el of all) {
+      if (el.parentElement && hidden.has(el.parentElement)) { hidden.add(el); continue; }
+      const cs = getComputedStyle(el); if (cs.display === "none" || cs.visibility === "hidden" || +cs.opacity === 0) { hidden.add(el); continue; }
+      const r = el.getBoundingClientRect(); if (!r.width && !r.height) continue;
+      const x = X(r.left), y = Y(r.top), w = r.width * k, h = r.height * k;
+      if (!clear(cs.backgroundColor)) { ctx.fillStyle = cs.backgroundColor; const rad = (parseFloat(cs.borderTopLeftRadius) || 0) * k; ctx.beginPath(); if (rad && ctx.roundRect) ctx.roundRect(x, y, w, h, rad); else ctx.rect(x, y, w, h); ctx.fill(); }
+      if (el.tagName === "IMG" && el.complete && el.naturalWidth) { const f = fit(el.naturalWidth, el.naturalHeight, w, h, cs.objectFit); ctx.save(); ctx.globalAlpha = +cs.opacity || 1; ctx.drawImage(el, x + f[0], y + f[1], f[2], f[3]); ctx.restore(); }
+      if (el.tagName === "CANVAS") { try { ctx.drawImage(el, x, y, w, h); } catch (e) {} }
+      for (const [s, ax] of [["Top", 0], ["Right", 1], ["Bottom", 2], ["Left", 3]]) {
+        const bw = parseFloat(cs["border" + s + "Width"]) || 0, st = cs["border" + s + "Style"], col = cs["border" + s + "Color"];
+        if (!bw || st === "none" || st === "hidden" || clear(col)) continue;
+        const lw = Math.max(bw * k, 1); ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(st === "dashed" ? [lw * 3, lw * 2] : st === "dotted" ? [lw, lw * 1.5] : []);
+        ctx.beginPath();
+        if (ax === 0) { ctx.moveTo(x, y + lw / 2); ctx.lineTo(x + w, y + lw / 2); } else if (ax === 2) { ctx.moveTo(x, y + h - lw / 2); ctx.lineTo(x + w, y + h - lw / 2); }
+        else if (ax === 1) { ctx.moveTo(x + w - lw / 2, y); ctx.lineTo(x + w - lw / 2, y + h); } else { ctx.moveTo(x + lw / 2, y); ctx.lineTo(x + lw / 2, y + h); }
+        ctx.stroke(); ctx.restore();
+      }
+      const ow = parseFloat(cs.outlineWidth) || 0;
+      if (ow && cs.outlineStyle !== "none" && !clear(cs.outlineColor)) { const off = (parseFloat(cs.outlineOffset) || 0) * k, lw = Math.max(ow * k, 1); ctx.save(); ctx.strokeStyle = cs.outlineColor; ctx.lineWidth = lw; ctx.setLineDash(cs.outlineStyle === "dashed" ? [lw * 3, lw * 2] : cs.outlineStyle === "dotted" ? [lw, lw * 1.5] : []); ctx.strokeRect(x - off - lw / 2, y - off - lw / 2, w + 2 * off + lw, h + 2 * off + lw); ctx.restore(); }
+    }
+    /* 글자: 화면에 놓인 자리 그대로 한 글자씩 */
+    const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), rg = document.createRange(); let n;
+    while ((n = tw.nextNode())) {
+      const t = n.nodeValue; if (!t.trim()) continue; const pe = n.parentElement; if (!pe || hidden.has(pe)) continue;
+      const c = getComputedStyle(pe), fs = parseFloat(c.fontSize) * k, vert = /vertical/.test(c.writingMode);
+      ctx.font = `${c.fontStyle} ${c.fontWeight} ${fs}px ${c.fontFamily}`; ctx.fillStyle = c.color;
+      const m = ctx.measureText("가Hg"), asc = m.fontBoundingBoxAscent || fs * .88, dsc = m.fontBoundingBoxDescent || fs * .24;
+      for (let i = 0; i < t.length; i++) { let ch = t[i]; if (/\s/.test(ch)) continue;
+        if (/[\uD800-\uDBFF]/.test(ch) && i + 1 < t.length) { ch += t[i + 1]; rg.setStart(n, i); rg.setEnd(n, i + 2); i++; } else { rg.setStart(n, i); rg.setEnd(n, i + 1); }
+        const q = rg.getClientRects()[0]; if (!q || !q.width) continue;
+        if (vert) { ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(ch, X(q.left + q.width / 2), Y(q.top + q.height / 2)); ctx.textAlign = "start"; continue; }
+        ctx.textBaseline = "alphabetic"; const qh = q.height * k; ctx.fillText(ch, X(q.left), Y(q.top) + (qh - (asc + dsc)) / 2 + asc); }
+    }
+  }
+  async function page(els, o) {
+    o = Object.assign({ dpi: 200, wmm: 210, hmm: 297 }, o || {});
+    try { await document.fonts.ready; } catch (e) {}
+    await Promise.all([...els].flatMap(e => [...e.querySelectorAll("img")]).map(im => im.complete ? 0 : new Promise(r => { im.onload = im.onerror = r; })));
+    const W = Math.round(o.wmm / 25.4 * o.dpi), H = Math.round(o.hmm / 25.4 * o.dpi), cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    const ctx = cv.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    const P = els[0].getBoundingClientRect(), k = W / (o.wpx || P.width), X = v => (v - P.left) * k, Y = v => (v - P.top) * k;
+    for (const el of els) paintInto(el, ctx, X, Y, k);
+    return cv;
+  }
+  async function jpeg(cv, q) { const blob = await new Promise(r => cv.toBlob(r, "image/jpeg", q || .92)); return { w: cv.width, h: cv.height, blob, b: new Uint8Array(await blob.arrayBuffer()) }; }
+  function pdf(jpgs) {
+    const te = new TextEncoder(), parts = [], offs = []; let len = 0;
+    const put = x => { const b = typeof x === "string" ? te.encode(x) : x; parts.push(b); len += b.length; };
+    const obj = (id, body) => { offs[id] = len; put(`${id} 0 obj\n`); body(); put("\nendobj\n"); };
+    const n = jpgs.length, PW = 595.28, PH = 841.89;
+    put("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+    obj(1, () => put("<< /Type /Catalog /Pages 2 0 R >>"));
+    obj(2, () => put(`<< /Type /Pages /Count ${n} /Kids [${jpgs.map((_, i) => `${3 + i * 3} 0 R`).join(" ")}] >>`));
+    jpgs.forEach((j, i) => { const pid = 3 + i * 3, cid = pid + 1, iid = pid + 2, cs = `q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
+      obj(pid, () => put(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${iid} 0 R >> >> /Contents ${cid} 0 R >>`));
+      obj(cid, () => put(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`));
+      obj(iid, () => { put(`<< /Type /XObject /Subtype /Image /Width ${j.w} /Height ${j.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${j.b.length} >>\nstream\n`); put(j.b); put("\nendstream"); }); });
+    const total = 3 + n * 3, xref = len;
+    put(`xref\n0 ${total}\n0000000000 65535 f \n` + offs.slice(1).map(o => String(o).padStart(10, "0") + " 00000 n \n").join(""));
+    put(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+    return new Blob(parts, { type: "application/pdf" });
+  }
+  async function send(blob, name, files) {
+    const L = files || [new File([blob], name, { type: blob.type })];
+    if (MOB && navigator.canShare && navigator.canShare({ files: L })) { try { await navigator.share({ files: L, title: name }); return "shared"; } catch (e) { if (e && e.name === "AbortError") return "cancel"; } }
+    for (const f of L) { const a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }
+    return "saved";
+  }
+  window.PAINT = { page, jpeg, pdf, send, MOB };
+})();
 </script></head>
 <body>
 <div id="root"></div>
@@ -405,8 +708,8 @@ const kvGet=k=>kv('readonly',s=>s.get(k)),kvSet=(k,v)=>kv('readwrite',s=>s.put(v
 const LS='bjquote:';const lget=(k,d)=>{try{const v=localStorage.getItem(LS+k);return v?JSON.parse(v):d;}catch(e){return d;}};const lset=(k,v)=>{try{localStorage.setItem(LS+k,JSON.stringify(v));}catch(e){}};
 const FILE='견적서발행기.json';
 const ST={root:null,name:'',
-  async write(n,t){const f=await this.root.getFileHandle(n,{create:true});const w=await f.createWritable();await w.write(t);await w.close();},
-  async read(n){try{const f=await this.root.getFileHandle(n);return await (await f.getFile()).text();}catch(e){return null;}}};
+  async write(n,t){if(!this.root)return;const f=await this.root.getFileHandle(n,{create:true});const w=await f.createWritable();await w.write(t);await w.close();},
+  async read(n){if(!this.root)return null;try{const f=await this.root.getFileHandle(n);return await (await f.getFile()).text();}catch(e){return null;}}};
 async function pickFolder(){let h=await window.showDirectoryPicker({id:'bjquote',mode:'readwrite',startIn:'documents'});
   let ours=false;try{await h.getFileHandle(FILE);ours=true;}catch(e){}
   if(!ours)h=await h.getDirectoryHandle('견적서 발행기',{create:true});
@@ -417,7 +720,19 @@ async function permOk(h,ask){if(!h.queryPermission)return true;const o={mode:'re
 const D={v:1,me:{},clients:[],items:[],docs:[],set:{vat:'sep',valid:30,copies:2}};
 const S={tab:'edit',cur:null,q:'',ftype:'all',fy:'',fm:'',zoom:lget('zoom',0)};
 let saveT=null;function save(){clearTimeout(saveT);saveT=setTimeout(flush,400);}
-async function flush(){clearTimeout(saveT);saveT=null;if(!ST.root)return;try{const day=lget('bakday','');if(day!==today()){const o=await ST.read(FILE);if(o)await ST.write('견적서발행기_어제.json',o);lset('bakday',today());}await ST.write(FILE,JSON.stringify(D,null,1));}catch(e){toast('저장하지 못했어요 — 폴더 권한을 확인해 주세요.');}}
+/* 10-31 제이: 휴대폰에서도 — 늘 이 기기(IndexedDB)에 저장, 폴더를 고르면 폴더에도, 구글 드라이브를 연결하면 드라이브에도 */
+let SNAP=null;
+const noUp=(k,v)=>k==='updated'?undefined:v;
+function snapNow(){const m={};for(const c of ['docs','clients','items'])for(const x of D[c]||[])m[x.id]=JSON.stringify(x,noUp);return {m,me:JSON.stringify(D.me||{}),set:JSON.stringify(D.set||{})};}
+function stampChanges(){const now=Date.now();if(!SNAP){SNAP=snapNow();return;}D.gone=D.gone||{};const seen=new Set();
+  for(const c of ['docs','clients','items'])for(const x of D[c]||[]){if(!x.id)x.id=rid(c[0]);seen.add(x.id);const j=JSON.stringify(x,noUp);if(SNAP.m[x.id]!==j){if(c!=='docs'||SNAP.m[x.id]!=null||!x.updated)x.updated=Math.max(now,x.updated||0);}}
+  for(const id in SNAP.m)if(!seen.has(id))D.gone[id]=now;
+  for(const id in D.gone)if(now-D.gone[id]>180*864e5)delete D.gone[id];
+  if(JSON.stringify(D.me||{})!==SNAP.me)D.meAt=now;if(JSON.stringify(D.set||{})!==SNAP.set)D.setAt=now;SNAP=snapNow();}
+async function flush(){clearTimeout(saveT);saveT=null;stampChanges();const txt=JSON.stringify(D,null,1);
+  try{await kvSet('data',txt);}catch(e){}
+  if(ST.root){try{const day=lget('bakday','');if(day!==today()){const o=await ST.read(FILE);if(o)await ST.write('견적서발행기_어제.json',o);lset('bakday',today());}await ST.write(FILE,txt);}catch(e){toast('폴더에 저장하지 못했어요 — 폴더 권한을 확인해 주세요. (이 기기에는 저장됐어요)');}}
+  QG.touch();}
 
 /* 계산 */
 function calc(doc){const mode=doc.vat||'sep';let supply=0,tax=0;const rows=(doc.lines||[]).map(l=>{const amt=Math.round(numIn(l.qty)*numIn(l.price));let sp,tx;
@@ -429,11 +744,11 @@ const isBlank=d=>!d.clientId&&!(d.client&&d.client.name)&&!(d.lines||[]).some(l=
 
 /* 그리기 */
 function render(){const r=$('#root');
-  r.innerHTML=`<header class="top"><span class="badge">${ICON}</span><div class="ttl"><small>Blog J 무료 도구 · 내 PC</small><b>견적서 발행기</b></div>
+  r.innerHTML=`<header class="top"><span class="badge">${ICON}</span><div class="ttl"><small>Blog J 무료 도구 · ${PAINT.MOB?'휴대폰 · PC':'내 PC'}</small><b>견적서 발행기</b></div><button class="gdc" id="gdChip" data-gd type="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5z"/></svg><i></i><span></span></button>
   <nav class="tabs">${[['edit','문서 작성'],['list','발행 목록'],['clients','거래처'],['items','품목'],['me','내 정보'],['set','설정 · 백업']].map(([k,l])=>`<button data-tab="${k}" class="${S.tab===k?'on':''}">${l}</button>`).join('')}</nav></header>
   <div id="main"></div>
-  <div class="foot"><span>문서 <b class="num">${D.docs.filter(d=>!isBlank(d)).length}</b>개 · 거래처 <b class="num">${D.clients.length}</b> · 품목 <b class="num">${D.items.length}</b></span><span>저장 폴더: <b>${esc(ST.name)}</b> — 이 PC 폴더에만 저장돼요</span><span style="flex:1"></span><span>견적서 발행기 v1.0 · Blog J <span class="muted" title="만든 때">2026-10-21(수)</span></span></div>`;
-  r.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanup();S.tab=b.dataset.tab;render();});
+  <div class="foot"><span>문서 <b class="num">${D.docs.filter(d=>!isBlank(d)).length}</b>개 · 거래처 <b class="num">${D.clients.length}</b> · 품목 <b class="num">${D.items.length}</b></span><span>${ST.root?`저장 폴더: <b>${esc(ST.name)}</b>`:'이 기기 브라우저에 저장'}${QG.m().on?' · 내 구글 드라이브':''} — 우리 서버 없음</span><span style="flex:1"></span><span>견적서 발행기 v1.0 · Blog J <span class="muted" title="만든 때">2026-10-21(수)</span></span></div>`;
+  r.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanup();S.tab=b.dataset.tab;render();});$('#gdChip').onclick=gdTap;paintGd();
   ({edit:renderEdit,list:renderList,clients:renderClients,items:renderItems,me:renderMe,set:renderSet})[S.tab]();}
 const ICON='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M10 11h5M10 15h5M10 19h3"/></svg>';
 function cleanup(){if(S.cur&&isBlank(S.cur)){D.docs=D.docs.filter(d=>d!==S.cur);S.cur=null;save();}}
@@ -444,10 +759,11 @@ function renderEdit(){
   const d=S.cur;const T=TYPES[d.type];const meOk=!!(D.me&&D.me.name);
   $('#main').innerHTML=`<div class="work"><section class="panel edit" id="ed"></section><section class="stage"><div class="bar"><b style="font-size:14px">미리보기 — A4</b><span class="muted" id="pgInfo"></span><span style="flex:1"></span>
     <label class="muted row" style="gap:6px">크기<input type="range" id="zoom" min="0" max="3" step="1" value="${S.zoom}" style="width:90px;accent-color:#20263a"></label>
-    <button class="btn s" id="pXl">엑셀로 저장</button><button class="btn s" id="pPrint">인쇄 · PDF로 저장</button></div><div id="pv"></div>${meOk?'':'<p class="muted" style="margin:8px 0 0">공급자 칸이 비어 있어요 — 「내 정보」에 상호 · 사업자번호를 먼저 넣으세요.</p>'}</section></div>`;
+    <button class="btn s" id="pXl">엑셀로 저장</button><button class="btn s" id="pPrint">인쇄 · PDF로 저장</button></div>
+    <div class="sendr"><span>${PAINT.MOB?'보내기':'파일로 저장'}</span><button class="btn s" id="pPdf">PDF${PAINT.MOB?' 보내기':' 파일'}</button><button class="btn s" id="pJpg">이미지${PAINT.MOB?' 보내기':' 파일'}</button><small>${PAINT.MOB?'카톡 · 문자 · 메일로 바로 보내거나 파일에 저장':'A4 그대로 — 메일 첨부 · 카톡 PC로 보낼 때'}</small></div><div id="pv"></div>${meOk?'':'<p class="muted" style="margin:8px 0 0">공급자 칸이 비어 있어요 — 「내 정보」에 상호 · 사업자번호를 먼저 넣으세요.</p>'}</section></div>`;
   drawEditor();drawPreview();
   $('#zoom').oninput=e=>{S.zoom=+e.target.value;lset('zoom',S.zoom);fitPreview();};
-  $('#pPrint').onclick=doPrint;$('#pXl').onclick=()=>docXlsx();
+  $('#pPrint').onclick=doPrint;$('#pXl').onclick=()=>docXlsx();$('#pPdf').onclick=()=>docExport(S.cur,'pdf');$('#pJpg').onclick=()=>docExport(S.cur,'jpg');
 }
 function drawEditor(){const d=S.cur;const E=$('#ed');const c=calc(d);
   const cl=D.clients.find(x=>x.id===d.clientId);
@@ -559,7 +875,7 @@ function renderList(){const docs=D.docs.filter(d=>!isBlank(d));const q=S.q.trim(
   const L=docs.filter(d=>(S.ftype==='all'||d.type===S.ftype)&&(!S.fy||(d.date||'').slice(0,4)===S.fy)&&(!S.fm||(d.date||'').slice(5,7)===S.fm)&&(!q||[d.no,(d.client&&d.client.name)||'',(D.clients.find(x=>x.id===d.clientId)||{}).name||'',d.lines.map(l=>l.name).join(' '),d.note||''].join(' ').toLowerCase().includes(q)));
   $('#main').innerHTML=`<section class="panel" style="margin-top:12px"><div class="row" style="margin-bottom:12px"><div class="seg">${[['all','전체'],['quote','견적서'],['stmt','거래명세서'],['bill','청구서']].map(([k,l])=>`<button data-ft="${k}" class="${S.ftype===k?'on':''}">${l}</button>`).join('')}</div>
    <select id="lY" aria-label="연도" style="width:auto"><option value="">전체 연도</option>${years.map(y=>`<option value="${y}" ${S.fy===y?'selected':''}>${y}년</option>`).join('')}</select><select id="lM" aria-label="월" style="width:auto" ${S.fy?'':'disabled'}><option value="">전체 월</option>${[...Array(12)].map((_,i)=>{const m=String(i+1).padStart(2,'0');const c=S.fy?docs.filter(d=>(d.date||'').slice(0,7)===S.fy+'-'+m&&(S.ftype==='all'||d.type===S.ftype)).length:0;return `<option value="${m}" ${S.fm===m?'selected':''}>${i+1}월${c?` (${c})`:''}</option>`;}).join('')}</select><input type="search" id="lq" placeholder="번호 · 거래처 · 품목 · 비고로 찾기" value="${esc(S.q)}" style="max-width:280px"><span style="flex:1"></span><span class="muted num">${L.length}개 · 합계 ${won(L.reduce((n,d)=>n+calc(d).total,0))}원</span><button class="btn s" id="lCsv">목록을 엑셀로</button><button class="btn p s" id="lNew">+ 새 견적서</button></div>
-   ${L.length?`<div class="wrapt"><table class="tbl"><thead><tr><th>종류</th><th>번호</th><th>날짜</th><th>거래처</th><th>품목</th><th style="text-align:right">합계</th><th></th></tr></thead><tbody>${L.map(d=>{const c=calc(d);const cn=(D.clients.find(x=>x.id===d.clientId)||d.client||{}).name||'—';const it=d.lines.filter(l=>l.name);return `<tr class="clk" data-open="${d.id}"><td><span class="chip ${TYPES[d.type].chip}">${TYPES[d.type].name}</span></td><td class="num">${esc(d.no)}</td><td class="num">${esc(ymdwQ(d.date))}</td><td>${esc(cn)}</td><td>${esc(it[0]?it[0].name:'')}${it.length>1?` 외 ${it.length-1}건`:''}</td><td class="num" style="text-align:right;font-weight:600">${won(c.total)}</td><td style="white-space:nowrap"><button class="lk" data-pr="${d.id}">인쇄</button> <button class="lk" data-xl="${d.id}">엑셀</button> <button class="lk" data-cp="${d.id}">복사</button> <button class="lk red" data-dl="${d.id}">삭제</button></td></tr>`;}).join('')}</tbody></table></div>`:`<div class="empty">${docs.length?'찾는 문서가 없어요.':'아직 만든 문서가 없어요.<br>「+ 새 견적서」로 시작해 보세요.'}</div>`}</section>`;
+   ${L.length?`<div class="wrapt"><table class="tbl dlist"><thead><tr><th>종류</th><th>번호</th><th>날짜</th><th>거래처</th><th>품목</th><th style="text-align:right">합계</th><th></th></tr></thead><tbody>${L.map(d=>{const c=calc(d);const cn=(D.clients.find(x=>x.id===d.clientId)||d.client||{}).name||'—';const it=d.lines.filter(l=>l.name);return `<tr class="clk" data-open="${d.id}"><td><span class="chip ${TYPES[d.type].chip}">${TYPES[d.type].name}</span></td><td class="num">${esc(d.no)}</td><td class="num">${esc(ymdwQ(d.date))}</td><td>${esc(cn)}</td><td>${esc(it[0]?it[0].name:'')}${it.length>1?` 외 ${it.length-1}건`:''}</td><td class="num" style="text-align:right;font-weight:600">${won(c.total)}</td><td style="white-space:nowrap"><button class="lk" data-pr="${d.id}">인쇄</button> <button class="lk" data-sp="${d.id}">${PAINT.MOB?'보내기':'PDF'}</button> <button class="lk" data-xl="${d.id}">엑셀</button> <button class="lk" data-cp="${d.id}">복사</button> <button class="lk red" data-dl="${d.id}">삭제</button></td></tr>`;}).join('')}</tbody></table></div>`:`<div class="empty">${docs.length?'찾는 문서가 없어요.':'아직 만든 문서가 없어요.<br>「+ 새 견적서」로 시작해 보세요.'}</div>`}</section>`;
   document.querySelectorAll('[data-ft]').forEach(b=>b.onclick=()=>{S.ftype=b.dataset.ft;renderList();});
   $('#lY').onchange=e=>{S.fy=e.target.value;if(!S.fy)S.fm='';renderList();};$('#lM').onchange=e=>{S.fm=e.target.value;renderList();};
   const lq=$('#lq');let comp=false;lq.addEventListener('compositionstart',()=>comp=true);lq.addEventListener('compositionend',()=>{comp=false;S.q=lq.value;renderList();const n=$('#lq');n.focus();n.setSelectionRange(n.value.length,n.value.length);});lq.oninput=()=>{if(comp)return;S.q=lq.value;renderList();const n=$('#lq');n.focus();n.setSelectionRange(n.value.length,n.value.length);};
@@ -574,6 +890,7 @@ function renderList(){const docs=D.docs.filter(d=>!isBlank(d));const q=S.q.trim(
   document.querySelectorAll('[data-open]').forEach(tr=>tr.onclick=e=>{if(e.target.closest('button'))return;S.cur=D.docs.find(d=>d.id===tr.dataset.open);S.tab='edit';render();});
   document.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>doPrint(D.docs.find(d=>d.id===b.dataset.pr)));
   document.querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>{const s=D.docs.find(d=>d.id===b.dataset.cp);const n=newDoc(s.type,s);n.from='';S.cur=n;S.tab='edit';save();render();toast('복사해서 새로 만들었어요 — 번호 '+n.no);});
+  document.querySelectorAll('[data-sp]').forEach(b=>b.onclick=e=>{e.stopPropagation();docExport(D.docs.find(d=>d.id===b.dataset.sp),'pdf');});
   document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>{const s=D.docs.find(d=>d.id===b.dataset.dl);if(!confirm(`「${s.no}」을(를) 삭제할까요? 되돌릴 수 없어요.`))return;D.docs=D.docs.filter(d=>d!==s);if(S.cur===s)S.cur=null;save();renderList();toast('삭제했어요.');});}
 
 /* ── 거래처 ── */
@@ -778,17 +1095,25 @@ function renderSet(){$('#main').innerHTML=`<div style="display:grid;grid-templat
  <section class="panel"><b style="font-size:17px">새 문서 기본값</b><div class="f" style="margin-top:10px"><span class="lbl">부가세</span><div class="seg">${[['sep','별도'],['inc','포함'],['none','없음']].map(([k,l])=>`<button data-sv="${k}" class="${(D.set.vat||'sep')===k?'on':''}">${l}</button>`).join('')}</div></div>
   <div class="f"><span class="lbl">견적 유효기간(일)</span><input type="number" id="sValid" min="0" value="${D.set.valid||30}"></div>
   <p class="muted" style="margin:0">세액은 줄마다 공급가액의 10%(원 아래 버림). 「포함」은 금액 ÷ 1.1을 공급가액(반올림)으로, 나머지를 세액으로 계산해요. 세금계산서가 아니라 견적 · 명세용 계산이에요.</p></section>
- <section class="panel"><b style="font-size:17px">저장 · 백업</b><p style="margin:8px 0 10px;font-size:14.5px">저장 폴더: <b>${esc(ST.name)}</b> — 「견적서발행기.json」 하나에 모두 저장되고, 하루 전 사본도 남겨요.</p>
-  <div class="row"><button class="btn" id="bDir">다른 폴더로 바꾸기</button><button class="btn" id="bOut">백업 파일 받기</button><label class="btn">백업 불러오기<input type="file" id="bIn" accept=".json" hidden></label></div>
+ <section class="panel"><b style="font-size:17px">저장 · 동기화 · 백업</b>
+  <h3 class="sec" style="margin-top:12px">이 기기</h3><p style="margin:0 0 10px;font-size:14.5px">${ST.root?`저장 폴더: <b>${esc(ST.name)}</b> — 「견적서발행기.json」 하나에 모두 저장되고, 하루 전 사본도 남겨요. 이 브라우저에도 사본이 있어요.`:`<b>이 기기 브라우저</b>에 저장 중이에요. ${window.showDirectoryPicker?'폴더를 정하면 폴더에도 파일로 저장돼요.':'브라우저 데이터를 지우면 사라지니 구글 드라이브나 백업을 함께 쓰세요.'}`}</p>
+  ${window.showDirectoryPicker?`<div class="row"><button class="btn" id="bDir">${ST.root?'다른 폴더로 바꾸기':'폴더에도 저장하기'}</button></div>`:''}
+  <h3 class="sec" style="margin-top:16px">구글 드라이브 — PC · 휴대폰 같이 쓰기</h3>
+  ${QG.http()?(QG.m().on?`<p style="margin:0 0 8px;font-size:14.5px">연결됨${QG.m().email?` <b>${esc(QG.m().email)}</b>`:''} · 마지막 동기화 ${QG.m().last?esc(ymdwQ((d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date(QG.m().last))))+' '+String(new Date(QG.m().last).getHours()).padStart(2,'0')+':'+String(new Date(QG.m().last).getMinutes()).padStart(2,'0'):'아직 없음'}${QG.err?`<br><span style="color:var(--red)">${esc(QG.err)}</span>`:''}</p>
+    <div class="row"><button class="btn p" id="gSync" data-gd>지금 동기화</button><button class="btn" id="gOff" data-gd>연결 끊기</button></div>`
+   :`<p style="margin:0 0 8px;font-size:14.5px">내 구글 드라이브에 「견적서발행기」 폴더를 만들어 저장하고, 같은 구글 계정으로 연결한 PC · 휴대폰과 자동으로 맞춰요. 이 앱이 만든 파일만 볼 수 있는 권한(drive.file)이라 다른 드라이브 파일은 보지 않아요.</p><div class="row"><button class="btn p" id="gOn" data-gd>구글 드라이브 연결</button></div>`)
+   :'<p class="muted" style="margin:0">구글 드라이브는 웹 주소(github.io)에서 열었을 때만 연결돼요.</p>'}
+  <h3 class="sec" style="margin-top:16px">백업 파일</h3><p class="muted" style="margin:0 0 8px">마지막 백업 ${esc(BKUP.info().lastText)} · ${BKUP.info().canDir?(BKUP.info().dir?`백업 폴더 「${esc(BKUP.info().dir)}」에 바로 저장`:'처음 한 번 백업 폴더를 정하면 다음부터 바로 저장'):'공유 창으로 「파일에 저장」 · 내 드라이브 등에'} · ${BKUP.info().every?BKUP.info().every+'일마다 알림':'알림 꺼짐'}</p>
+  <div class="row"><button class="btn" id="bOut">백업 만들기</button><button class="btn" id="bIn">백업에서 되살리기</button><button class="btn" id="bSet">백업 설정</button></div>
   <h3 class="sec" style="margin-top:16px">예시로 써 보기</h3><div class="row"><button class="btn" id="bDemo">예시 넣어 보기</button><button class="btn red" id="bWipe">모두 지우기</button></div><p class="muted" style="margin:6px 0 0">예시는 가상 회사 · 가상 거래처예요(설명용).</p></section></div>`;
   document.querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{D.set.vat=b.dataset.sv;save();renderSet();});
   $('#sValid').oninput=e=>{D.set.valid=+e.target.value||0;save();};
-  $('#bDir').onclick=async()=>{try{await flush();const old=JSON.stringify(D);await pickFolder();const ex=await ST.read(FILE);if(ex&&confirm('고른 폴더에 이미 저장된 내용이 있어요. 그것을 열까요?\n(취소 = 지금 내용을 그 폴더에 저장)'))load(JSON.parse(ex));else await ST.write(FILE,old);render();toast('「'+ST.name+'」 폴더에 저장합니다.');}catch(e){}};
-  $('#bOut').onclick=()=>dl('견적서발행기_백업_'+today()+'.json',JSON.stringify(D,null,1),'application/json');
-  $('#bIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());if(!Array.isArray(j.docs))throw 0;if(!confirm(`백업(문서 ${j.docs.length}개)으로 바꿀까요? 지금 내용은 사라져요.`))return;load(j);S.cur=null;save();render();toast('불러왔어요.');}catch(x){toast('백업 파일이 아니에요.');}};
+  if($('#gOn'))$('#gOn').onclick=()=>qgSync({ask:true,toast:true});if($('#gSync'))$('#gSync').onclick=()=>qgSync({ask:true,toast:true});if($('#gOff'))$('#gOff').onclick=()=>{if(confirm('구글 드라이브 연결을 끊을까요? 이 기기 · 드라이브의 자료는 그대로 남아요.'))qgOff();};
+  if($('#bDir'))$('#bDir').onclick=async()=>{try{await flush();const old=JSON.stringify(D);await pickFolder();await kvSet('mode','dir');const ex=await ST.read(FILE);if(ex&&confirm('고른 폴더에 이미 저장된 내용이 있어요. 그것을 열까요?\n(취소 = 지금 내용을 그 폴더에 저장)'))load(JSON.parse(ex));else await ST.write(FILE,old);render();toast('「'+ST.name+'」 폴더에 저장합니다.');}catch(e){}};
+  $('#bOut').onclick=()=>BKUP.run().then(()=>renderSet());$('#bIn').onclick=()=>BKUP.restore();$('#bSet').onclick=()=>BKUP.settings();
   $('#bDemo').onclick=()=>{fillDemo();S.cur=D.docs[0];S.tab='edit';save();render();toast('예시를 넣었어요 — 다 보셨으면 「모두 지우기」로 지우고 시작하세요.');};
   $('#bWipe').onclick=()=>{if(!confirm('내 정보 · 거래처 · 품목 · 문서를 모두 지울까요? (하루 전 사본은 남아요)'))return;D.me={};D.clients=[];D.items=[];D.docs=[];S.cur=null;save();render();};}
-function load(j){D.me=j.me||{};D.clients=j.clients||[];D.items=j.items||[];D.docs=j.docs||[];D.set=Object.assign({vat:'sep',valid:30,copies:2},j.set||{});}
+function load(j){D.me=j.me||{};D.clients=j.clients||[];D.items=j.items||[];D.docs=j.docs||[];D.set=Object.assign({vat:'sep',valid:30,copies:2},j.set||{});D.gone=j.gone||{};D.meAt=j.meAt||0;D.setAt=j.setAt||0;SNAP=snapNow();}
 function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
 function fillDemo(){
   if(!D.me.name)D.me=Object.assign({name:'(예시) 블루문 인테리어',bizno:'000-00-00000',ceo:'김예시',tel:'02-000-0000',email:'example@example.com',addr:'서울시 ○○구 ○○로 00 (설명용 가상 주소)',biztype:'건설업',bizitem:'실내 인테리어',bank:'○○은행',account:'000-000000-00-000',holder:'김예시'},D.me);
@@ -804,17 +1129,86 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 
 /* 시작 */
 function gate(html){$('#root').innerHTML=`<section class="panel gate">${html}</section>`;}
-async function boot(){const t=await ST.read(FILE);if(t){try{load(JSON.parse(t));}catch(e){toast('저장 파일을 읽지 못했어요 — 「견적서발행기_어제.json」을 확인해 주세요.');}}
+async function boot(){let t=await ST.read(FILE);if(!t)t=await kvGet('data').catch(()=>null);if(t){try{load(JSON.parse(t));}catch(e){toast('저장 파일을 읽지 못했어요 — 「견적서발행기_어제.json」을 확인해 주세요.');}}
   S.tab=D.me&&D.me.name?'edit':'me';render();if(S.tab==='me')toast('먼저 「내 정보」에 상호 · 사업자번호를 넣어 주세요.');}
 async function start(){
   try{db=await idb();}catch(e){gate('<h2>크롬 · 엣지에서 열어 주세요</h2><p>이 브라우저에서는 저장 공간을 쓸 수 없어요.</p>');return;}
-  if(!window.showDirectoryPicker){gate('<h2>크롬 · 엣지에서 열어 주세요</h2><p>견적서 발행기는 거래처 · 품목 · 문서를 <b>내가 고른 폴더에 파일로</b> 저장해요.<br>이 기능은 PC의 크롬 · 엣지에서만 돼요.</p>');return;}
-  const h=await kvGet('dir');
+  const FS=!!window.showDirectoryPicker,h=FS?await kvGet('dir'):null,local=await kvGet('data').catch(()=>null);
+  const noDir=async()=>{await kvSet('mode','local');ST.root=null;ST.name='';boot();};
+  if(!h&&(local||(await kvGet('mode'))==='local'))return boot();
+  if(!h){gate(`<h2 style="margin:0 0 8px">견적서 발행기 — 저장할 곳 고르기</h2><p style="line-height:1.7;margin:0 0 14px">거래처 · 품목 · 만든 문서는 <b>${FS?'이 기기 폴더나 브라우저':'이 휴대폰 브라우저'}</b>에 저장돼요. 인터넷(우리 서버)에는 올라가지 않아요.<br><b>구글 드라이브를 연결</b>하면 PC와 휴대폰에서 같은 자료를 같이 써요(내 드라이브에만 저장).</p>
+    <div class="qgate">${FS&&!PAINT.MOB?`<button class="btn p" id="pick">이 PC 폴더에 저장 <small>추천 — 폴더째 복사하면 백업</small></button>`:''}<button class="btn ${FS&&!PAINT.MOB?'':'p'}" id="nodir">${FS&&!PAINT.MOB?'폴더 없이 시작 <small>브라우저에 저장 · 구글 드라이브와 함께</small>':'시작하기 <small>이 휴대폰에 저장 · 구글 드라이브로 PC와 같이</small>'}</button>${FS&&PAINT.MOB?`<button class="btn" id="pick">휴대폰 폴더에도 저장 <small>선택</small></button>`:''}</div>
+    <p class="muted" style="margin:12px 0 0">${PAINT.MOB?'휴대폰은 홈 화면에 앱으로 설치해서 쓰면 더 안전해요. 시작한 뒤 「설정 · 백업」에서 구글 드라이브를 연결하세요.':'폴더를 고를 때 「파일을 수정하도록 허용할까요?」라고 물으면 <b>허용</b>을 눌러 주세요. PC에서 쓰던 폴더가 있으면 그 폴더를 고르면 그대로 이어져요.'}</p>`);
+    const pk=$('#pick');if(pk)pk.onclick=async()=>{try{await pickFolder();await kvSet('mode','dir');boot();}catch(e){if(e&&e.name!=='AbortError')toast('폴더를 열지 못했어요.');}};$('#nodir').onclick=noDir;return;}
   if(h&&await permOk(h,false)){ST.root=h;ST.name=h.name;return boot();}
-  if(h){gate(`<h2>저장 폴더를 다시 열어 주세요</h2><p>브라우저가 보안을 위해 처음 열 때마다 폴더 사용을 다시 물어요.<br>저장 폴더: <b>${esc(h.name)}</b></p><div class="row" style="margin-top:14px"><button class="btn p" id="reo">「${esc(h.name)}」 폴더 열기</button><button class="btn" id="oth">다른 폴더 고르기</button></div>`);
+  if(h){gate(`<h2>저장 폴더를 다시 열어 주세요</h2><p>브라우저가 보안을 위해 처음 열 때마다 폴더 사용을 다시 물어요.<br>저장 폴더: <b>${esc(h.name)}</b></p><div class="row" style="margin-top:14px"><button class="btn p" id="reo">「${esc(h.name)}」 폴더 열기</button><button class="btn" id="oth">다른 폴더 고르기</button>${local?'<button class="btn" id="nod">폴더 없이 이 기기 저장본으로 열기</button>':''}</div>`);
+    if($('#nod'))$('#nod').onclick=()=>{ST.root=null;ST.name='';boot();};
     $('#reo').onclick=async()=>{if(await permOk(h,true)){ST.root=h;ST.name=h.name;boot();}else toast('폴더를 허용해야 열 수 있어요.');};$('#oth').onclick=async()=>{try{await pickFolder();boot();}catch(e){}};return;}
   gate(`<h2 style="margin:0 0 8px">견적서 발행기 — 저장할 곳 고르기</h2><p style="line-height:1.7;margin:0 0 14px">거래처 · 품목 · 만든 문서를 <b>이 PC 폴더에 파일로</b> 저장해요. 인터넷에 올라가지 않아요.<br>아래 단추를 누르고 <b>「문서」</b>처럼 아무 폴더나 고르면, 그 안에 「견적서 발행기」 폴더가 생겨요.<br>원드라이브 · 구글 드라이브 폴더 안에 두면 다른 PC에서도 같이 쓸 수 있어요.</p><button class="btn p" id="pick" style="height:50px;padding:0 24px;font-size:16px">저장할 곳 고르기</button><p class="muted" style="margin:12px 0 0">브라우저가 「파일을 수정하도록 허용할까요?」라고 물으면 <b>허용</b>을 눌러 주세요.</p>`);
   $('#pick').onclick=async()=>{try{await pickFolder();boot();}catch(e){if(e&&e.name!=='AbortError')toast('폴더를 열지 못했어요.');}};}
+/* ══ 10-31 제이: 구글 드라이브 동기화 — 내 드라이브 「견적서발행기」 폴더의 견적서발행기.json 하나(권한 drive.file = 이 앱이 만든 파일만)
+   맞추기: 문서 · 거래처 · 품목은 하나씩 「나중에 고친 것」, 지운 것도 반영 · 내 정보 · 설정은 나중에 고친 쪽. 우리 서버 없음 */
+const QG_CLIENT="1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com",QG_SCOPE="https://www.googleapis.com/auth/drive.file",QG_DIR="견적서발행기",QG_FILE="견적서발행기.json";
+const QG={token:null,exp:0,stc:null,busy:false,again:false,err:'',fid:null,fileId:null,
+  m(){if(!this._m)this._m=Object.assign({on:false,email:'',last:0},lget('gd',{}));return this._m;},save(){lset('gd',this.m());},
+  http(){return location.protocol==='https:'||location.hostname==='localhost';},live(){return !!this.token&&Date.now()<this.exp-60000;},
+  state(){const m=this.m();if(!this.http())return['off','웹 주소에서만'];if(!m.on)return['warn','미연결'];if(this.busy)return['busy','동기화 중…'];if(this.err)return['bad','다시 연결'];return this.live()?['ok','연결됨']:['warn','누르면 동기화'];},
+  touch(){if(!this.m().on||!this.live())return paintGd();clearTimeout(this._t);this._t=setTimeout(()=>qgSync({}),2500);}};
+function qgLoad(){return new Promise((ok,no)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return ok();const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=()=>ok();sc.onerror=()=>no(new Error('구글 로그인 도구를 불러오지 못했어요 — 인터넷을 확인해 주세요'));document.head.appendChild(sc);});}
+async function qgToken(ask){if(QG.live())return QG.token;await qgLoad();const m=QG.m();return new Promise((ok,no)=>{const tc=google.accounts.oauth2.initTokenClient({client_id:QG_CLIENT,scope:QG_SCOPE,hint:m.email||undefined,login_hint:m.email||undefined,
+  callback:r=>{if(r.error)return no(new Error(r.error_description||r.error));QG.token=r.access_token;QG.exp=Date.now()+(+r.expires_in||3600)*1000;ok(QG.token);},
+  error_callback:e=>no(new Error(e&&e.type==='popup_failed_to_open'?'구글 창이 막혔어요 — 주소창에서 팝업을 허용한 뒤 다시 눌러 주세요':'구글 연결이 취소됐어요'))});tc.requestAccessToken({prompt:ask&&!m.on?'consent':''});});}
+async function qgApi(url,opt={},retry=true){const t=await qgToken(false);const r=await fetch(url.startsWith('http')?url:'https://www.googleapis.com/drive/v3/'+url,{...opt,headers:{...(opt.headers||{}),Authorization:'Bearer '+t}});
+  if(r.status===401&&retry){QG.token=null;return qgApi(url,opt,false);}if(!r.ok){let msg=r.status+'';try{const j=await r.json();msg=(j.error&&j.error.message)||msg;}catch(e){}throw new Error('드라이브 응답 오류: '+msg);}return r;}
+const qq=x=>encodeURIComponent(x);
+async function qgFolder(){if(QG.fid)return QG.fid;const r=await (await qgApi(`files?q=${qq(`name='${QG_DIR}' and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id)&spaces=drive`)).json();
+  if(r.files&&r.files.length)return QG.fid=r.files[0].id;const c=await (await qgApi('files?fields=id',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:QG_DIR,mimeType:'application/vnd.google-apps.folder'})})).json();return QG.fid=c.id;}
+function qMerge(L,R){const gone={};for(const g of [R.gone||{},L.gone||{}])for(const k in g)gone[k]=Math.max(gone[k]||0,g[k]);const out={v:1};
+  for(const c of ['docs','clients','items']){const m=new Map();for(const x of R[c]||[])m.set(x.id,x);for(const x of L[c]||[]){const y=m.get(x.id);if(!y||(x.updated||0)>=(y.updated||0))m.set(x.id,x);}
+    let arr=[...m.values()].filter(x=>{const g=gone[x.id];if(g&&g>=(x.updated||0))return false;if(g)delete gone[x.id];return true;});
+    if(c==='docs')arr.sort((a,b)=>(b.created||0)-(a.created||0));else{const ord=new Map((L[c]||[]).map((x,i)=>[x.id,i]));arr.sort((a,b)=>(ord.has(a.id)?ord.get(a.id):1e9)-(ord.has(b.id)?ord.get(b.id):1e9));}out[c]=arr;}
+  const lm=(L.meAt||0)>=(R.meAt||0);out.me=lm?L.me:R.me;out.meAt=Math.max(L.meAt||0,R.meAt||0);if(!out.me||!out.me.name)out.me=(lm?R.me:L.me)&&(lm?R.me:L.me).name?(lm?R.me:L.me):out.me;
+  out.set=(L.setAt||0)>=(R.setAt||0)?L.set:R.set;out.setAt=Math.max(L.setAt||0,R.setAt||0);out.gone=gone;return out;}
+async function qgSync(o){if(QG.busy){QG.again=true;return;}QG.busy=true;QG.err='';paintGd();
+  try{await qgToken(!!o.ask);if(saveT)await flush();stampChanges();const fid=await qgFolder();
+    const L=JSON.parse(JSON.stringify(D));let R=null,rid0=QG.fileId;
+    const lst=await (await qgApi(`files?q=${qq(`'${fid}' in parents and name='${QG_FILE}' and trashed=false`)}&fields=files(id,modifiedTime)&orderBy=modifiedTime desc`)).json();
+    if(lst.files&&lst.files.length){rid0=QG.fileId=lst.files[0].id;try{R=JSON.parse(await (await qgApi(`files/${rid0}?alt=media`)).text());}catch(e){R=null;}}
+    const M=R?qMerge(L,R):L,mt=JSON.stringify(M);
+    if(JSON.stringify(L)!==mt){const cur=S.cur&&S.cur.id;load(M);if(cur)S.cur=D.docs.find(x=>x.id===cur)||null;try{await kvSet('data',JSON.stringify(D,null,1));if(ST.root)await ST.write(FILE,JSON.stringify(D,null,1));}catch(e){}
+      const ae=document.activeElement;if(!(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render();if(o.toast!==false)toast('다른 기기에서 바뀐 내용을 받았어요.');}
+    if(!R||JSON.stringify(R)!==mt){const meta=rid0?{}:{name:QG_FILE,parents:[fid]};const fd=new FormData();fd.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));fd.append('file',new Blob([mt],{type:'application/json'}));
+      const r=await (await qgApi(`https://www.googleapis.com/upload/drive/v3/files${rid0?'/'+rid0:''}?uploadType=multipart&fields=id`,{method:rid0?'PATCH':'POST',body:fd})).json();QG.fileId=r.id;}
+    const m=QG.m();if(!m.email){try{const a=await (await qgApi('about?fields=user(emailAddress)')).json();m.email=(a.user&&a.user.emailAddress)||'';}catch(e){}}
+    m.on=true;m.last=Date.now();QG.save();if(o.toast)toast('구글 드라이브와 맞췄어요.');qgPrep();
+  }catch(e){QG.err=e.message;if(o.toast!==false)toast('구글 드라이브: '+e.message);}
+  QG.busy=false;paintGd();if(S.tab==='set')renderSet();if(QG.again){QG.again=false;setTimeout(()=>qgSync({toast:false}),600);}}
+function qgOff(){const m=QG.m();try{if(QG.token&&google.accounts.oauth2.revoke)google.accounts.oauth2.revoke(QG.token);}catch(e){}QG.token=null;QG.fid=null;QG.fileId=null;QG.stc=null;m.on=false;m.email='';QG.save();toast('연결을 끊었어요. 드라이브의 「견적서발행기」 폴더는 그대로 남아요.');paintGd();if(S.tab==='set')renderSet();}
+/* 열 때: 브라우저는 한 번 누르기 전에는 구글 창을 막음 → 화면을 처음 누를 때 조용히 연결해 맞춤 */
+function qgPrep(){const m=QG.m();if(!m.on||!QG.http()||QG.stc||!m.email)return;qgLoad().then(()=>{QG.stc=google.accounts.oauth2.initTokenClient({client_id:QG_CLIENT,scope:QG_SCOPE,hint:m.email,login_hint:m.email,
+  callback:r=>{if(r.error)return paintGd();QG.token=r.access_token;QG.exp=Date.now()+(+r.expires_in||3600)*1000;qgSync({toast:false});},error_callback:()=>paintGd()});}).catch(()=>{});}
+document.addEventListener('click',e=>{if(!QG.stc||QG.busy||QG.live()||e.target.closest('[data-gd]'))return;if(QG.sil&&Date.now()-QG.sil<10*60000)return;QG.sil=Date.now();try{QG.stc.requestAccessToken({prompt:'none'});}catch(er){}},true);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&QG.m().on&&QG.live())qgSync({toast:false});});
+setTimeout(qgPrep,800);
+function paintGd(){const b=$('#gdChip');if(!b)return;const [k,t]=QG.state();b.className='gdc '+k;b.title='구글 드라이브: '+t;b.querySelector('span').textContent=t;}
+function gdTap(){const m=QG.m();if(!QG.http())return toast('구글 드라이브는 웹 주소(github.io)에서 열었을 때만 돼요.');if(QG.busy)return;qgSync({ask:true,toast:true});}
+
+/* ══ 10-31 제이: 문서를 이미지 · PDF로 — 휴대폰은 공유 창(카톡 · 메일 · 파일), PC는 저장 ══ */
+async function docExport(d,kind){d=d&&d.id?d:S.cur;if(!d||isBlank(d))return toast('먼저 문서를 작성해 주세요.');await flush();
+  const busy=document.body.appendChild(Object.assign(document.createElement('div'),{className:'qbusy',textContent:(kind==='pdf'?'PDF':'이미지')+' 만드는 중…'}));
+  const box=document.createElement('div');box.style.cssText='position:fixed;left:-20000px;top:0;width:793.7px;background:#fff';box.innerHTML=`<div class="paper">${sheetHtml(d)}</div>`;document.body.appendChild(box);placeStamps(box);
+  try{const sh=[...box.querySelectorAll('.sheet')],pages=[];let g=[];sh.forEach((x,i)=>{if(x.classList.contains('half')){g.push(x);if(g.length===2||x.classList.contains('pend')||i===sh.length-1){pages.push(g);g=[];}}else pages.push([x]);});
+    const J=[];for(const pg of pages)J.push(await PAINT.jpeg(await PAINT.page(pg,{dpi:200,wpx:pg[0].getBoundingClientRect().width}),.9));
+    const cl=(d.clientId?(D.clients.find(x=>x.id===d.clientId)||d.client):d.client)||{},base=`${TYPES[d.type].name}_${d.no}${cl.name?'_'+cl.name:''}`.replace(/[\\/:*?"<>|]/g,'');
+    let r;if(kind==='pdf')r=await PAINT.send(PAINT.pdf(J),base+'.pdf');else{const F=J.map((j,i)=>new File([j.blob],base+(J.length>1?`_${i+1}쪽`:'')+'.jpg',{type:'image/jpeg'}));r=await PAINT.send(F[0],F[0].name,F);}
+    if(r==='saved')toast(`${kind==='pdf'?'PDF':'이미지'}로 저장했어요 — 「다운로드」 폴더를 보세요.`);
+  }catch(e){console.error(e);toast('파일을 만들지 못했어요 — 「인쇄 · PDF로 저장」을 써 주세요.');}
+  box.remove();busy.remove();}
+const BK_IN='견적서발행기';
+BKUP.setup({app:'quote',name:'견적서 발행기',prefix:'견적서발행기_백업_',ext:'json',mime:'application/json',make:async()=>{await flush();return new Blob([JSON.stringify(D,null,1)],{type:'application/json'});},
+  count:()=>D.docs.filter(d=>!isBlank(d)).length+D.clients.length,dataDir:()=>ST.root,toast,
+  restore:async f=>{try{const j=JSON.parse(await f.text());if(!Array.isArray(j.docs))throw 0;if(!confirm(`백업(문서 ${j.docs.length}개)으로 바꿀까요? 지금 내용은 사라져요.`))return;const keep=D.gone||{};load(j);D.gone=Object.assign({},j.gone||{});for(const c of ['docs','clients','items'])for(const x of D[c])x.updated=Date.now();SNAP=snapNow();S.cur=null;save();render();toast('백업으로 되살렸어요.');}catch(x){toast('견적서 발행기 백업 파일이 아니에요.');}}});
+
 start();
 window.addEventListener('beforeunload',()=>{if(saveT)flush();});
 </script>

@@ -416,6 +416,11 @@ label.f .muted{font-weight:500;font-size:13px}
 .ruler .bead{z-index:2}
 @media (max-width:640px){.ruler li:has(>button.done)::after{right:-4px}.ruler li:has(>button.cur)::after{width:50%}}
 
+/* 10-31: 파일로 저장 · 보내기 */
+.jbx{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--in-bg,#ece3d5);display:flex;flex-direction:column;gap:6px}
+.jbx>b{font-size:14.5px}.jbx>span,.jbx>small{font-size:12.5px;line-height:1.55;color:var(--ink2,#5b5547)}
+.jbx-r{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0}.jbx-r .btn{justify-content:center}
+
 /* BJ31-APPLIED */
 /* 색(10-30 제이 지정): 초록 #b83d06 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #b83d06(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
@@ -1045,6 +1050,7 @@ function App(){
   const up=(k,v)=>setInp(p=>({...p,[k]:v})); const upP=(k,v)=>setPr(p=>({...p,[k]:v}));
   const texts=slots.map(f=>renderText(f,inp,mode));
   const doPrint=()=>{ if(!slots.length) return alert("지방 대상을 먼저 선택하세요"); window.print(); };
+  const _d=new Date(),fname=`지방_${(slots.map(f=>f.label).join("·")||"").replace(/[\\/:*?"<>|\s()]/g,"")}_${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,"0")}-${String(_d.getDate()).padStart(2,"0")}`;
   // 미리보기 배율: A4 210×297mm
   const prevRef=useRef(); const [scale,setScale]=useState(2.2);
   useEffect(()=>{ const c=()=>{ const el=prevRef.current; if(!el) return; const byW=(el.clientWidth-64)/210; const byH=(window.innerHeight-250)/297; setScale(Math.max(1.1,Math.min(2.4,byW,window.innerWidth>1060?byH:byW))); }; c(); window.addEventListener("resize",c); return ()=>window.removeEventListener("resize",c); },[tab]);
@@ -1093,7 +1099,10 @@ function App(){
             <div><label class="f"> </label><button class="btn w" onClick=${()=>setPr({...DEF_PRINT})}>기본값으로</button></div>
           </div>
           <div class="sw"><div class="grow"><div class="t">점선 가이드</div><div class="d">오려낼 선을 함께 인쇄합니다</div></div><button class="tog ${pr.guide?"on":""}" aria-pressed=${pr.guide?"true":"false"} aria-label="점선 가이드" onClick=${()=>upP("guide",!pr.guide)}></button></div>
-          <div class="note"><${Icon} name="printer" size=${18} /><span>인쇄 창에서 <b>A4 · 세로 · 여백 없음 · 배율 100%(실제 크기)</b>로 맞춰 주세요.</span></div>`;
+          <div class="note"><${Icon} name="printer" size=${18} /><span>인쇄 창에서 <b>A4 · 세로 · 여백 없음 · 배율 100%(실제 크기)</b>로 맞춰 주세요.</span></div>
+          <div class="jbx"><b>파일로 저장 · 보내기</b><span>${JB_MOB?"공유 창이 열려요 — 카톡으로 보내 PC에서 인쇄하거나, 프린터 앱 · 파일 앱에 저장하세요.":"A4 한 장 그대로 저장돼요. 다른 PC나 인쇄소에서 뽑을 때 쓰세요."}</span>
+            <div class="jbx-r"><button class="btn" disabled=${!slots.length} onClick=${()=>jbExport("pdf",fname)}><${Icon} name="doc" size=${17} /> PDF${JB_MOB?" 보내기":"로 저장"}</button><button class="btn" disabled=${!slots.length} onClick=${()=>jbExport("jpg",fname)}><${Icon} name="download" size=${17} /> 이미지${JB_MOB?" 보내기":"로 저장"}</button></div>
+            <small>PDF로 인쇄할 때도 배율은 「실제 크기(100%)」로 — 그래야 지방틀 크기가 맞아요.</small></div>`;
   const BODY=[S0,S1,S2,S3][step];
   const nextOK=step!==1||forms.length>0;
   return html`<div class="app ${EMBED?"embed":""} t-${tab}">
@@ -1121,5 +1130,45 @@ function App(){
     <div class="print-only"><${Sheet} sc=${96/25.4} /></div>
     <div class="foot">${EMBED?html`<a href="#" onClick=${e=>{ e.preventDefault(); const q=new URLSearchParams(location.search); const p={}; ["tab","cat","opt"].forEach(k=>{ if(q.get(k)) p[k]=q.get(k); }); if(!BJ_GATE.openWindow("jibang",p)) alert("새 창이 막혔어요. 주소창 오른쪽의 팝업 차단을 풀어 주세요"); }}>새 창으로 열기 ↗</a> · `:null}Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>
   </div>`;
+}
+
+/* ══ 10-31 제이: 휴대폰에서도 지방을 이미지 · PDF로 저장 · 보내기 ══
+   미리보기 지방을 A4 200dpi 그림으로 그림(글자는 화면 자리 그대로 한 글자씩) → JPG 또는 A4 PDF.
+   휴대폰 = 공유 창(카톡 · 프린터 앱 · 파일), PC = 다운로드 */
+const JB_MOB=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent));
+const JB_DPI=200;
+async function jbCanvas(){
+  const pg=document.querySelector(".pv-box .sheet"); if(!pg) return null;
+  try{ await document.fonts.ready; }catch(e){}
+  const W=Math.round(210/25.4*JB_DPI),H=Math.round(297/25.4*JB_DPI),cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+  const ctx=cv.getContext("2d"),P=pg.getBoundingClientRect(),k=W/P.width,X=x=>(x-P.left)*k,Y=y=>(y-P.top)*k;
+  ctx.fillStyle="#fff"; ctx.fillRect(0,0,W,H);
+  for(const jb of pg.querySelectorAll(".jb")){
+    const r=jb.getBoundingClientRect();
+    if(jb.classList.contains("guide")){ ctx.save(); ctx.strokeStyle="#666"; ctx.lineWidth=.3/25.4*JB_DPI; ctx.setLineDash([2/25.4*JB_DPI,1.4/25.4*JB_DPI]); ctx.strokeRect(X(r.left)+1,Y(r.top)+1,r.width*k-2,r.height*k-2); ctx.restore(); }
+    const t=jb.querySelector(".txt"); if(!t) continue; const c=getComputedStyle(t);
+    ctx.fillStyle=c.color||"#000"; ctx.font=`${c.fontWeight} ${parseFloat(c.fontSize)*k}px ${c.fontFamily}`; ctx.textAlign="center"; ctx.textBaseline="middle";
+    const tw=document.createTreeWalker(t,NodeFilter.SHOW_TEXT),rg=document.createRange(); let n;
+    while((n=tw.nextNode())){ const s=n.nodeValue; for(let i=0;i<s.length;i++){ const ch=s[i]; if(!ch.trim()) continue; rg.setStart(n,i); rg.setEnd(n,i+1); const q=rg.getBoundingClientRect(); if(!q.width) continue; ctx.fillText(ch,X(q.left+q.width/2),Y(q.top+q.height/2)); } }
+  }
+  return cv;
+}
+function jbPdf(jpg,w,h){ const te=new TextEncoder(),parts=[],offs=[]; let len=0; const put=x=>{ const b=typeof x==="string"?te.encode(x):x; parts.push(b); len+=b.length; };
+  const obj=(id,body)=>{ offs[id]=len; put(`${id} 0 obj\n`); body(); put("\nendobj\n"); }; const PW=595.28,PH=841.89,cs=`q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
+  put("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n"); obj(1,()=>put("<< /Type /Catalog /Pages 2 0 R >>")); obj(2,()=>put("<< /Type /Pages /Count 1 /Kids [3 0 R] >>"));
+  obj(3,()=>put(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>`));
+  obj(4,()=>put(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`));
+  obj(5,()=>{ put(`<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`); put(jpg); put("\nendstream"); });
+  const xref=len; put(`xref\n0 6\n0000000000 65535 f \n`+offs.slice(1).map(o=>String(o).padStart(10,"0")+" 00000 n \n").join("")); put(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+  return new Blob(parts,{type:"application/pdf"}); }
+function jbToast(m){ let t=document.querySelector(".jb-toast"); if(!t){ t=document.createElement("div"); t.className="jb-toast"; t.style.cssText="position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;background:#1f2125;color:#fff;padding:10px 16px;border-radius:12px;font:600 14px/1.4 sans-serif;max-width:90vw;transition:opacity .2s;opacity:0;pointer-events:none"; document.body.appendChild(t); } t.textContent=m; t.style.opacity=1; clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity=0,2600); }
+async function jbExport(kind,name){
+  const cv=await jbCanvas(); if(!cv) return jbToast("지방 대상을 먼저 선택하세요.");
+  const jb=await new Promise(r=>cv.toBlob(r,"image/jpeg",.92)); let blob=jb,fn=name+".jpg";
+  if(kind==="pdf"){ blob=jbPdf(new Uint8Array(await jb.arrayBuffer()),cv.width,cv.height); fn=name+".pdf"; }
+  const file=new File([blob],fn,{type:blob.type});
+  if(JB_MOB&&navigator.canShare&&navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],title:fn}); return; }catch(e){ if(e&&e.name==="AbortError") return; } }
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fn; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  jbToast(`${kind==="pdf"?"PDF":"이미지"}로 저장했어요 — 다운로드 폴더를 보세요.`);
 }
 (async () => { const T = new URLSearchParams(location.search).get("tab") || "print"; if (!(await BJ_GATE.check("jibang", T))) return; render(html`<${App} />`, document.getElementById("root")); })(); </script></body></html>

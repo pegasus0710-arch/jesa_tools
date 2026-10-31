@@ -642,6 +642,13 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .bn2 .bn-in{background:var(--amber);color:#fff;font-weight:800}
 .bn2 .bn-x{min-height:32px;padding:2px 8px;color:#8a6a3a;font-weight:600;align-self:flex-start}
 
+/* 10-31 제이: 휴대폰 다시 점검 — 작은 글씨(12.5px 아래) · 누르기 작은 단추 */
+.okb{font-size:12.5px!important}
+.vt small.num,.chip small.num,.tcat small.num{font-size:12.5px!important}
+.lth{font-size:12.5px!important}
+.it-act em,button[data-map] em,button[data-nav] em{font-size:12.5px!important}
+@media (max-width:760px){.lvs button,.lvs>*{min-height:36px}.vt button{min-height:34px}}
+
 /* ── 스크랩 노트 ── */
 .tabs.t3{grid-template-columns:repeat(3,1fr)}
 .tabs.t3 button .bd{right:18%}
@@ -1135,7 +1142,7 @@ function banner() {
   if (D.set.banner && DEV === "ios-safari") h += `<div class="bn2"><div class="t"><b>아이폰은 홈 화면에 추가해서 쓰세요</b><br>사파리에서 그냥 쓰면 오래 안 열 때 스크랩이 지워질 수 있어요.</div><button data-guide>방법 보기</button></div>`;
   const lb = D.set.lastBackup, days = lb ? Math.floor((Date.now() - lb) / 864e5) : null;
   if (typeof gdOn === "function" && gdOn()) return h;
-  if (!CAN_DIR && D.items.length >= 5 && !D.dir && (days == null || days >= 30)) h += `<div class="bn2 soft"><div class="t"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><br>휴대폰을 바꾸거나 저장이 지워질 때를 대비해요.</div><button data-backup>백업</button></div>`;
+  if (false) h += `<div class="bn2 soft"><div class="t"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><br>휴대폰을 바꾸거나 저장이 지워질 때를 대비해요.</div><button data-backup>백업</button></div>`;
   return h;
 }
 
@@ -1311,8 +1318,9 @@ function scrSet() {
     ${mobileBox()}
     <div class="lbl"><span>가져오기 · 백업</span></div>
     <button class="row" data-sheet="import">${IC.imp}<div class="t"><b>크롬 · 엣지 즐겨찾기 가져오기</b><small>브라우저의 「즐겨찾기 내보내기」 파일(.html)을 넣으면 폴더대로, 또는 주소로 자동 분류해 넣어요. 같은 주소는 한 번만.</small></div></button>
-    <button class="row" data-backup>${IC.save}<div class="t"><b>백업 만들기</b><small>스크랩 ${D.items.length}개 · 사진 ${D.items.reduce((a, r) => a + (r.photos || []).length, 0)}장을 파일 하나로${IS_MOBILE() ? " → 카톡 나에게 · 드라이브 · 파일 앱" : ""}<br>마지막 백업: ${lb ? ymdw(lb) : "없음"}</small></div></button>
-    <label class="row">${IC.copy}<div class="t"><b>백업에서 되살리기</b><small>다른 휴대폰 · PC에서 만든 백업 파일(.zip)을 넣어요. 같은 스크랩은 더 최근 것으로.</small></div><input type="file" accept=".zip,application/zip" hidden id="restore"></label>
+    <button class="row" data-backup>${IC.save}<div class="t"><b>백업 만들기</b><small>스크랩 ${D.items.length}개 · 사진 ${D.items.reduce((a, r) => a + (r.photos || []).length, 0)}장을 파일 하나로${IS_MOBILE() ? " → 카톡 나에게 · 드라이브 · 파일 앱" : ""}<br>마지막 백업: ${lb ? ymdw(lb) : "없음"} · ${bkHint()}</small></div></button>
+    <button class="row" data-bkrs>${IC.copy}<div class="t"><b>백업에서 되살리기</b><small>${BKUP.info().dir ? `백업 폴더에서 최근 백업을 골라요.` : "백업 폴더를 고르면 가장 최근 백업을 찾아 줘요(파일을 직접 골라도 돼요)."} 같은 스크랩은 더 최근 것으로.</small></div></button>
+    <button class="row" data-bkset>${IC.folder}<div class="t"><b>백업 설정</b><small>백업 폴더 · 알림 주기(3 · 7 · 14 · 30일)</small></div></button>
     <div class="lbl"><span>정리</span></div>
     <button class="row" data-sheet="cats">${IC.folder}<div class="t"><b>분류 관리</b><small>${(D.cats || []).map(c => esc(c.n) + (c.s.length ? ` (${c.s.length})` : "")).join(" · ") || "없음"}</small></div></button>
     <button class="row" data-sheet="tags"><span class="hs">#</span><div class="t"><b>태그 관리</b><small>${allTags().length}개 · 이름 바꾸기 · 지우기</small></div></button>
@@ -1456,14 +1464,16 @@ async function importData(o, getPhoto) {
   if (o.cats && ((fresh && o.cats.length && !D.set.catsAt) || (o.catsAt || 0) > (D.set.catsAt || 0))) { D.cats = o.cats.map(c => ({ n: c.n, s: c.s.slice() })); if (o.catsAt) D.set.catsAt = o.catsAt; }
   await saveMeta(); return { nr, np };
 }
-async function makeBackup() {
+async function bkBlob() {
   const enc = new TextEncoder(), files = [{ name: "scrap-note.json", data: enc.encode(JSON.stringify(exportObj())) }];
   for (const r of D.items) for (const p of r.photos || []) { const o = await st("photos", "readonly", s => s.get(p.id)); if (o) files.push({ name: "photos/" + p.id + ".jpg", data: new Uint8Array(await o.blob.arrayBuffer()) }); }
-  const blob = makeZip(files), name = `스크랩노트_백업_${today()}.zip`, file = new File([blob], name, { type: "application/zip" });
-  if (IS_MOBILE() && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: name }); } catch (e) { if (e && e.name === "AbortError") return; download(blob, name); } }
-  else download(blob, name);
-  D.set.lastBackup = Date.now(); await setMeta("set", D.set); render(); toast(`백업을 만들었어요 (${(blob.size / 1048576).toFixed(1)}MB).`);
+  return makeZip(files);
 }
+/* 10-31 제이: 백업 = common/bkup.js (주기 알림 · 백업 폴더 기억 · 그 폴더에서 되살리기) */
+async function makeBackup() { return BKUP.run(); }
+function bkSetup() { return BKUP.setup({ app: "scrap", name: "스크랩 노트", prefix: "스크랩노트_백업_", make: bkBlob, restore: f => restore(f), count: () => D.items.length, dataDir: () => (D.dir && D.dirPerm === "granted" ? D.dir : null), legacyLast: () => D.set.lastBackup || 0,
+  toast, done: async t => { D.set.lastBackup = t; await setMeta("set", D.set).catch(() => {}); if (S.scr === "set") render(); } }); }
+function bkHint() { const I = BKUP.info(); return (I.canDir ? (I.dir ? `백업 폴더 「${esc(I.dir)}」에 바로 저장 · 최근 10개 보관` : "처음 한 번 백업 폴더를 정하면 다음부터 누르기만 하면 돼요") : (IS_MOBILE() ? "공유 창 → 「파일에 저장」 · 내 드라이브 · 카톡 나에게 등에 두세요" : "다운로드 폴더에 받아져요")) + ` · ${I.every ? I.every + "일마다 알림" : "알림 꺼짐"}`; }
 function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }
 async function restore(file) {
   try { const z = await readZip(await file.arrayBuffer()); const j = z["scrap-note.json"]; if (!j) throw new Error("스크랩 노트 백업이 아니에요");
@@ -1800,6 +1810,8 @@ document.addEventListener("click", async e => {
   if (d.nobanner != null) { D.set.banner = false; setMeta("set", D.set); S.sheet = null; return render(); }
   if (d.install != null) { if (window._bip) { const ev = window._bip; ev.prompt(); try { const r = await ev.userChoice; if (r && r.outcome === "accepted") window._bip = null; } catch (er) {} render(); } return; }
   if (d.backup != null) return makeBackup();
+  if (d.bkrs != null) return BKUP.restore();
+  if (d.bkset != null) return BKUP.settings();
   if (d.hidedir != null) { D.set.hideDir = true; await setMeta("set", D.set); toast("닫았어요. 구글 드라이브 연결을 끊으면 다시 보여요."); return render(); }
   if (d.pickown != null) { const ok = await pickDir(); if (ok) { S.sheet = null; render(); } return; }
   if (d.pickrec != null) { const ok = await pickDir(true); if (ok) { S.sheet = null; render(); } return; }
@@ -1968,10 +1980,197 @@ document.addEventListener("click", async e => {
   render(true);
   if (shared) { const it = fromShared(q.get("title"), q.get("text"), q.get("url")); if (it) { it._shared = true; startEdit(it); } else toast("공유로 받은 내용이 비어 있어요."); }
   if (D.dir && D.dirPerm === "granted") syncFromFolder();
+  bkSetup().then(() => { if (S.scr === "set") render(); });
   /* 새 버전 알림 — 받은 파일(다운로드판)일 때만, 5초 제한, 읽기만 */
   if (!/github\.io$/.test(location.hostname) && navigator.onLine !== false) { try { const ac = new AbortController(); setTimeout(() => ac.abort(), 5000);
     const v = await (await fetch("https://pegasus0710-arch.github.io/jesa_tools/versions.json", { signal: ac.signal, cache: "no-store" })).json(); const lt = v && v.scrap && v.scrap.latest;
     if (lt && lt.split(".").map(Number).reduce((a, n, i) => a || (n !== (VER.split(".").map(Number)[i] || 0) ? (n > (VER.split(".").map(Number)[i] || 0) ? 1 : -1) : 0), 0) > 0) { S.newVer = lt; render(); } } catch (e) {} }
+})();
+
+/* ══ 공통: 백업 (2026-10-31 제이) ══
+   ① 주기 알림 — 마지막 백업 뒤 정한 날짜(기본 7일)가 지나면 화면 아래 작은 카드 「지금 백업 · 3일 뒤에」
+   ② 백업 폴더 기억 — PC · 안드로이드 크롬은 백업 폴더를 한 번 정하면(데이터 폴더가 있으면 그 안 「백업」 자동) 다음부터 누르면 바로 그 폴더에 저장, 최근 10개만 남김
+   ③ 되살리기 — 기억한 폴더의 백업을 최신순으로 보여 주고 하나 누르면 끝. 기억이 없으면(브라우저 데이터를 지운 뒤) 「백업 폴더 고르기」 → 그 폴더에서 최신 백업을 찾아 줌
+   아이폰 · 폴더를 못 쓰는 브라우저 = 공유 창(파일에 저장) · 다운로드 + 파일 고르기
+   쓰는 법: BKUP.setup({ app, name, prefix, ext, mime, make, restore, count, dataDir, done })
+            BKUP.run() 백업 · BKUP.restore() 되살리기 · BKUP.settings() 백업 설정 · BKUP.info() 상태 */
+(function () {
+  "use strict";
+  const CAN = typeof window.showDirectoryPicker === "function";
+  const AND = /Android/i.test(navigator.userAgent);
+  const MOB = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+  const WD = ["일", "월", "화", "수", "목", "금", "토"];
+  const p2 = n => String(n).padStart(2, "0");
+  const ymd = d => `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+  const ymdw = d => `${ymd(d)}(${WD[d.getDay()]})`;
+  const E = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const mb = n => n >= 1048576 ? (n / 1048576).toFixed(1) + "MB" : Math.max(1, Math.round(n / 1024)) + "KB";
+  let O = null, st = { last: 0, every: 7, later: 0, first: 0 }, dir = null, ready = null;
+
+  /* 저장: 이 앱 전용 IndexedDB (폴더 손잡이는 IndexedDB에만 넣을 수 있음) */
+  function idb() { return new Promise((res, rej) => { const r = indexedDB.open("bj-backup", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+  async function kget(k) { try { const db = await idb(); return await new Promise(res => { const q = db.transaction("kv").objectStore("kv").get(O.app + ":" + k); q.onsuccess = () => res(q.result); q.onerror = () => res(undefined); }); } catch (e) { return undefined; } }
+  async function kset(k, v) { try { const db = await idb(); await new Promise(res => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").put(v, O.app + ":" + k); t.oncomplete = res; t.onerror = res; }); } catch (e) {} }
+  async function kdel(k) { try { const db = await idb(); await new Promise(res => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").delete(O.app + ":" + k); t.oncomplete = res; t.onerror = res; }); } catch (e) {} }
+  const saveSt = () => kset("st", st);
+
+  function toast(m) { if (typeof O.toast === "function") return O.toast(m); let t = document.querySelector(".bkx-toast"); if (!t) { t = document.createElement("div"); t.className = "bkx-toast"; document.body.appendChild(t); } t.textContent = m; t.classList.add("on"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("on"), 2800); }
+  async function perm(h, ask) { if (!h) return false; try { const o = { mode: "readwrite" }; if (await h.queryPermission(o) === "granted") return true; return ask ? (await h.requestPermission(o)) === "granted" : false; } catch (e) { return false; } }
+  const isBk = n => n.startsWith(O.prefix) && n.toLowerCase().endsWith("." + O.ext);
+  async function listIn(h) { const L = []; try { for await (const [n, e] of h.entries()) if (e.kind === "file" && isBk(n)) { const f = await e.getFile(); L.push({ name: n, size: f.size, time: f.lastModified, h: e }); } } catch (e) {} return L.sort((a, b) => b.name.localeCompare(a.name) || b.time - a.time); }
+  const bkFolderName = () => O.name.replace(/\s/g, "") + "_백업";
+
+  /* 백업 폴더 정하기: 데이터 폴더가 있으면 그 안 「백업」, 아니면 고르는 창(사진 폴더에서 시작 → 안에 「앱이름_백업」을 만듦) */
+  async function autoDir() {
+    if (dir || !CAN || typeof O.dataDir !== "function") return dir;
+    try { const d = await O.dataDir(); if (d && await perm(d, false)) { dir = await d.getDirectoryHandle("백업", { create: true }); await kset("dir", dir); } } catch (e) {}
+    return dir;
+  }
+  async function pickDir(forRestore) {
+    let h; try { h = await window.showDirectoryPicker({ mode: "readwrite", id: "bjbk-" + O.app, startIn: AND ? undefined : "pictures" }); }
+    catch (e) { if (e.name !== "AbortError") toast("폴더를 열지 못했어요: " + e.message); return null; }
+    let t = h;
+    try {
+      if (!(await listIn(h)).length) {
+        let sub = null; for (const n of [bkFolderName(), "백업"]) { try { sub = await h.getDirectoryHandle(n); if ((await listIn(sub)).length) break; sub = null; } catch (e) { sub = null; } }
+        if (sub) t = sub; else if (!forRestore && !/백업/.test(h.name)) t = await h.getDirectoryHandle(bkFolderName(), { create: true });
+      }
+    } catch (e) {}
+    dir = t; await kset("dir", t); return t;
+  }
+
+  async function writeTo(h, name, blob) {
+    const fh = await h.getFileHandle(name, { create: true }), w = await fh.createWritable(); await w.write(blob); await w.close();
+    const L = await listIn(h), keep = O.keep || 10;
+    for (const x of L.slice(keep)) { try { await h.removeEntry(x.name); } catch (e) {} }
+  }
+  function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }
+
+  async function run(opt) {
+    opt = opt || {}; await ready;
+    const useDir = CAN && !opt.file;
+    /* 폴더 허용은 누른 직후에 물어야 함(백업 만드는 동안 기다리면 브라우저가 막음) → 폴더부터 */
+    if (useDir) { await autoDir(); if (!dir || !(await perm(dir, true))) { if (!(await pickDir(false))) return false; } }
+    let blob; try { blob = await O.make(); } catch (e) { toast("백업을 만들지 못했어요: " + (e && e.message || e)); return false; }
+    if (!blob) return false;
+    const n = new Date(), name = `${O.prefix}${ymd(n)}_${p2(n.getHours())}${p2(n.getMinutes())}.${O.ext}`;
+    let where = "";
+    if (useDir) {
+      try { await writeTo(dir, name, blob); where = `「${dir.name}」 폴더`; }
+      catch (e) { toast("폴더에 쓰지 못했어요 — 파일로 받을게요."); download(blob, name); where = "다운로드 폴더"; }
+    } else {
+      const file = new File([blob], name, { type: O.mime || "application/octet-stream" });
+      if (MOB && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: name }); where = "공유한 곳"; } catch (e) { if (e && e.name === "AbortError") return false; download(blob, name); where = "다운로드 폴더"; } }
+      else { download(blob, name); where = "다운로드 폴더"; }
+    }
+    st.last = Date.now(); st.later = 0; await saveSt(); hideRemind();
+    try { O.done && O.done(st.last); } catch (e) {}
+    toast(`백업했어요 (${mb(blob.size)}) — ${where}`);
+    return true;
+  }
+
+  /* ── 창 ── */
+  function modal(html, bind) {
+    closeModal(); const o = document.createElement("div"); o.className = "bkx-ov"; o.innerHTML = `<div class="bkx-m" role="dialog" aria-modal="true">${html}</div>`;
+    o.addEventListener("click", e => { if (e.target === o || e.target.closest("[data-bkx-x]")) closeModal(); });
+    document.body.appendChild(o); bind && bind(o); return o;
+  }
+  function closeModal() { const o = document.querySelector(".bkx-ov"); if (o) o.remove(); }
+  function pickFile() { const i = document.createElement("input"); i.type = "file"; i.accept = "." + O.ext + (O.accept ? "," + O.accept : ""); i.onchange = async () => { const f = i.files[0]; if (f) { closeModal(); await O.restore(f); } }; i.click(); }
+
+  async function restore() {
+    await ready; if (!CAN) return pickFile();
+    await autoDir();
+    const has = dir && await perm(dir, false);
+    const head = `<div class="bkx-h"><b>백업에서 되살리기</b><button class="bkx-c" data-bkx-x aria-label="닫기">×</button></div>`;
+    if (!dir) return modal(`${head}<p class="bkx-p">백업을 넣어 둔 폴더를 고르면 <b>그 폴더에서 가장 최근 백업</b>을 찾아 보여 드려요. (${E(bkFolderName())} 폴더나 그 위 폴더를 골라도 돼요)</p>
+      <div class="bkx-r"><button class="bkx-b go" data-bkx-pick>백업 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
+        o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
+        o.querySelector("[data-bkx-file]").onclick = pickFile; });
+    if (!has) return modal(`${head}<p class="bkx-p">기억해 둔 백업 폴더 <b>「${E(dir.name)}」</b>를 열려면 허용이 한 번 필요해요.</p>
+      <div class="bkx-r"><button class="bkx-b go" data-bkx-ok>폴더 열기(허용)</button><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
+        o.querySelector("[data-bkx-ok]").onclick = async () => { if (await perm(dir, true)) restore(); };
+        o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
+        o.querySelector("[data-bkx-file]").onclick = pickFile; });
+    const L = await listIn(dir);
+    modal(`${head}<p class="bkx-p">백업 폴더 <b>「${E(dir.name)}」</b> · ${L.length ? `백업 ${L.length}개 — 맨 위가 가장 최근이에요.` : "아직 백업이 없어요."}</p>
+      ${L.length ? `<div class="bkx-l">${L.map((x, i) => { const d = new Date(x.time); return `<button class="bkx-it${i ? "" : " new"}" data-bkx-i="${i}"><span><b>${ymdw(d)} ${p2(d.getHours())}:${p2(d.getMinutes())}</b><small>${E(x.name)} · ${mb(x.size)}</small></span>${i ? "" : "<em>최근</em>"}<i>되살리기</i></button>`; }).join("")}</div>` : ""}
+      <div class="bkx-r"><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
+        o.querySelectorAll("[data-bkx-i]").forEach(b => b.onclick = async () => { const x = L[+b.dataset.bkxI]; closeModal(); await O.restore(await x.h.getFile()); });
+        o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
+        o.querySelector("[data-bkx-file]").onclick = pickFile; });
+  }
+
+  function info() { const days = st.last ? Math.floor((Date.now() - st.last) / 864e5) : null; return { last: st.last, days, every: st.every, dir: dir ? dir.name : "", canDir: CAN, lastText: st.last ? ymdw(new Date(st.last)) : "없음" }; }
+  async function settings() {
+    await ready; await autoDir(); const I = info();
+    modal(`<div class="bkx-h"><b>백업 설정</b><button class="bkx-c" data-bkx-x aria-label="닫기">×</button></div>
+      <div class="bkx-kv"><span>마지막 백업</span><b>${I.lastText}${I.days != null ? ` <small>(${I.days ? I.days + "일 전" : "오늘"})</small>` : ""}</b></div>
+      ${CAN ? `<div class="bkx-kv"><span>백업 폴더</span><b>${I.dir ? E(I.dir) : "아직 안 정함"}</b><button class="bkx-b sm" data-bkx-pick>${I.dir ? "바꾸기" : "정하기"}</button></div>
+        <p class="bkx-p sm">백업은 이 폴더에 바로 저장되고 최근 ${O.keep || 10}개만 남겨요. 되살릴 때도 이 폴더에서 찾아요. USB · 원드라이브처럼 다른 곳에 두면 더 안전해요.${AND ? "<br>폴더 고르는 창: ⋮ 또는 「새 폴더」 → 이름 → 「이 폴더 사용」 → 「허용」" : ""}</p>`
+      : `<p class="bkx-p sm">이 브라우저는 폴더에 바로 저장할 수 없어서, 백업하면 ${MOB ? "공유 창이 열려요 — 「파일에 저장」(아이폰) · 내 드라이브 · 카톡 나에게 보내기 등에 두세요" : "다운로드 폴더에 받아져요"}. 되살릴 때는 그 파일을 고르면 돼요.</p>`}
+      <div class="bkx-kv"><span>백업 알림</span><select class="bkx-sel" data-bkx-ev>${[[3, "3일마다"], [7, "7일마다(권장)"], [14, "14일마다"], [30, "30일마다"], [0, "알리지 않음"]].map(([v, n]) => `<option value="${v}" ${st.every === v ? "selected" : ""}>${n}</option>`).join("")}</select></div>
+      <div class="bkx-r"><button class="bkx-b go" data-bkx-run>지금 백업</button><button class="bkx-b" data-bkx-rs>백업에서 되살리기</button></div>`, o => {
+        const p = o.querySelector("[data-bkx-pick]"); if (p) p.onclick = async () => { if (await pickDir(false)) settings(); };
+        o.querySelector("[data-bkx-ev]").onchange = async e => { st.every = +e.target.value; await saveSt(); toast(st.every ? `${st.every}일마다 백업을 알려 드려요.` : "백업 알림을 껐어요."); };
+        o.querySelector("[data-bkx-run]").onclick = async () => { closeModal(); await run(); };
+        o.querySelector("[data-bkx-rs]").onclick = () => restore(); });
+  }
+
+  /* ── 주기 알림 ── */
+  function hideRemind() { const r = document.querySelector(".bkx-rm"); if (r) r.remove(); }
+  async function remind() {
+    await ready; if (!st.every || document.querySelector(".bkx-rm") || document.querySelector(".bkx-ov")) return;
+    let n = 0; try { n = O.count ? await O.count() : 1; } catch (e) {} if (!n) return;
+    const now = Date.now(); if (!st.first) { st.first = now; await saveSt(); }
+    const base = st.last || st.first; if (now - base < st.every * 864e5 || now < st.later) return;
+    if (typeof O.quiet === "function" && O.quiet()) return;
+    await autoDir(); const days = st.last ? Math.floor((now - st.last) / 864e5) : null;
+    const r = document.createElement("div"); r.className = "bkx-rm"; r.setAttribute("role", "status");
+    r.innerHTML = `<div class="bkx-rt"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><small>${CAN ? (dir ? `누르면 「${E(dir.name)}」 폴더에 바로 저장돼요.` : "백업 폴더를 한 번 정하면 다음부터는 누르기만 하면 돼요.") : "휴대폰을 바꾸거나 앱을 지워도 되살릴 수 있게 파일로 받아 두세요."}</small></div>
+      <div class="bkx-rb"><button class="bkx-b go" data-bkx-now>지금 백업</button><button class="bkx-b" data-bkx-later>3일 뒤에</button><button class="bkx-c" data-bkx-set aria-label="백업 설정" title="백업 설정">⋯</button></div>`;
+    r.querySelector("[data-bkx-now]").onclick = async () => { await run(); };
+    r.querySelector("[data-bkx-later]").onclick = async () => { st.later = Date.now() + 3 * 864e5; await saveSt(); hideRemind(); toast("3일 뒤에 다시 알려 드릴게요."); };
+    r.querySelector("[data-bkx-set]").onclick = () => { hideRemind(); settings(); };
+    document.body.appendChild(r);
+  }
+
+  const CSS = `
+.bkx-ov{position:fixed;inset:0;z-index:10050;background:rgba(20,22,30,.5);display:grid;place-items:center;padding:16px;box-sizing:border-box}
+.bkx-m{width:min(480px,100%);max-height:88vh;overflow:auto;background:#f7f2ea;color:#1f2125;border-radius:18px;padding:16px 18px 18px;box-shadow:0 24px 60px rgba(0,0,0,.3);box-sizing:border-box;font-size:14px;text-align:left}
+.bkx-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}.bkx-h b{flex:1;font-size:17px}
+.bkx-c{border:0;background:#ece3d5;color:#5b5547;width:36px;height:36px;border-radius:10px;font-size:20px;line-height:1;cursor:pointer;flex-shrink:0}
+.bkx-p{margin:0 0 12px;line-height:1.6;color:#3a3a3a}.bkx-p.sm{font-size:12.5px;color:#5b5547;margin-top:-4px}
+.bkx-r{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bkx-b{font:inherit;font-size:14px;font-weight:700;min-height:42px;padding:8px 14px;border-radius:11px;border:0;background:#fcf9f4;color:#20263a;box-shadow:inset 0 0 0 1.5px rgba(32,38,58,.25);cursor:pointer}
+.bkx-b.go{background:#20263a;color:#fff;box-shadow:none}.bkx-b.sm{min-height:34px;padding:5px 10px;font-size:13px}
+.bkx-b:active{transform:translateY(1px)}
+.bkx-l{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow:auto;padding:2px}
+.bkx-it{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;border:0;border-radius:12px;padding:10px 12px;background:#fcf9f4;box-shadow:inset 0 0 0 1px rgba(31,33,37,.1);cursor:pointer;color:#1f2125}
+.bkx-it.new{box-shadow:inset 0 0 0 2px #20263a}
+.bkx-it span{flex:1;min-width:0}.bkx-it b{display:block;font-size:14.5px;font-variant-numeric:tabular-nums}.bkx-it small{display:block;font-size:12.5px;color:#6f6857;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bkx-it em{font-style:normal;font-size:12.5px;font-weight:800;color:#b5600f}.bkx-it i{font-style:normal;font-size:13px;font-weight:800;color:#20263a;white-space:nowrap}
+.bkx-kv{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(160,140,108,.25)}.bkx-kv span{width:84px;flex-shrink:0;color:#5b5547;font-weight:700;font-size:13.5px}.bkx-kv b{flex:1;min-width:0;overflow-wrap:anywhere}
+.bkx-sel{flex:1;font:inherit;font-size:14px;min-height:40px;border-radius:10px;border:1px solid #d8cfbf;background:#fcf9f4;padding:0 8px}
+.bkx-rm{position:fixed;z-index:10040;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom));width:min(560px,calc(100% - 24px));box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 14px;border-radius:16px;background:#f7f2ea;color:#1f2125;box-shadow:0 14px 40px rgba(40,34,20,.28),inset 0 0 0 1.5px rgba(224,138,62,.55);font-size:14px;text-align:left}
+.bkx-rt{flex:1 1 240px;min-width:0}.bkx-rt b{display:block;font-size:15px}.bkx-rt small{display:block;font-size:12.5px;color:#5b5547;line-height:1.5;margin-top:2px}
+.bkx-rb{display:flex;gap:6px;align-items:center}.bkx-rb .bkx-b{min-height:38px;padding:6px 12px}.bkx-rb .bkx-c{width:38px;height:38px}
+@media (max-width:760px){.bkx-rm{bottom:calc(86px + env(safe-area-inset-bottom))}.bkx-rb{width:100%}.bkx-rb .bkx-b{flex:1}}
+.bkx-toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10060;background:#20263a;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .2s}.bkx-toast.on{opacity:1}`;
+
+  window.BKUP = {
+    setup(o) {
+      O = Object.assign({ ext: "zip", mime: "application/zip", keep: 10 }, o);
+      if (!document.getElementById("bkx-css")) { const s = document.createElement("style"); s.id = "bkx-css"; s.textContent = CSS; (document.head || document.documentElement).appendChild(s); }
+      ready = (async () => { const s = await kget("st"); if (s) st = Object.assign(st, s); if (o.legacyLast && !st.last) { try { const l = await o.legacyLast(); if (l) st.last = l; } catch (e) {} } dir = (await kget("dir")) || null; })();
+      setTimeout(remind, o.delay || 5000);
+      return ready;
+    },
+    run, restore, settings, remind, info: () => info(),
+    ready: () => ready,
+    canDir: CAN,
+    async forget() { dir = null; await kdel("dir"); }
+  };
 })();
 
 /* ───────── 설치 화면 (블로그 「설치하기」 → 앱주소?install=1) ─────────

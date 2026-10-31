@@ -2,7 +2,7 @@
  "id": "/jesa_tools/quote/",
  "name": "견적서 발행기 | Blog J",
  "short_name": "견적서 발행기",
- "description": "견적서 · 거래명세서 · 청구서를 칸만 채워 PDF · 인쇄 · 엑셀로 — 내 PC 폴더에 저장, Blog J 무료 도구",
+ "description": "견적서 · 거래명세서 · 청구서를 칸만 채워 PDF · 이미지 · 인쇄 · 엑셀로 — PC · 휴대폰, 구글 드라이브로 같이 쓰기, Blog J 무료 도구",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",

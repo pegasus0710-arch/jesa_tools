@@ -1191,6 +1191,21 @@ body.pc .iph{--tile:64px}
 @media(max-width:600px){.itr .ckin{flex-direction:row;padding:7px 10px 8px;gap:5px 8px}.itr .ckin .ck4.ckb2{display:flex;grid-template-columns:none}.itr .ckin .ck4.ckb2 button{min-height:30px;padding:0 9px;font-size:12.5px}}
 @media (prefers-reduced-motion:reduce){.ckq-dot{animation:none}}
 
+/* 10-31 제이: 사진 위치 표시 · 지도 바로가기 */
+.phloc{display:inline-flex;align-items:center;gap:3px;font-size:13px;font-weight:700;color:var(--ink2);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.phloc svg{width:14px;height:14px;color:#1f7f8f;flex-shrink:0}
+.pgh .phmap{margin-left:8px}
+.vw2-loc{display:inline-flex;align-items:center;gap:6px;min-width:0;white-space:nowrap;overflow:hidden}.vw2-loc svg{width:14px;height:14px}
+.vw2-loc .phmap{color:#9fd6de;font-size:12.5px;margin-left:4px}
+@media (max-width:600px){.vw2-top{flex-wrap:wrap}.vw2-loc{flex-basis:100%;order:9;font-size:12.5px;padding-top:2px}}
+/* 위치 줄은 묶음 제목 아래 한 줄로, 지도 · 길안내는 작은 단추 */
+.pgh{flex-wrap:wrap}
+.phrow{flex-basis:100%;display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:6px;min-width:0}
+.phrow .phloc{flex:0 1 auto;margin-right:2px}
+.phrow .phmap,.vw2-loc .phmap{display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 10px;border:0;border-radius:8px;font:700 12.5px/1 inherit;text-decoration:none;cursor:pointer;background:#e2eef1;color:#1f6f7d;box-shadow:inset 0 0 0 1px rgba(31,127,143,.3);margin:0}
+.phrow .phmap:hover{box-shadow:inset 0 0 0 1.5px #1f7f8f}
+.vw2-loc .phmap{background:rgba(255,255,255,.12);color:#cfeff3;box-shadow:none;height:26px}
+@media (max-width:600px){.vw2-top .vw2-loc{display:flex!important;flex-basis:100%;order:9;font-size:12.5px;padding-top:4px;color:#d9dde8}}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -1963,10 +1978,10 @@ function mapUrls(t, it, nav) {
   if (url && !ll) return { web: url, link: true, label: URLK[uk] };   /* 좌표 없는 네이버 · 카카오 링크 → 그 지도에서 「길찾기」 */
   const app = nav ? navApp() : mapApp();
   const kweb = nav && ll ? `https://map.kakao.com/link/to/${e(q)},${ll.lat},${ll.lng}` : ll ? `https://map.kakao.com/link/map/${e(q)},${ll.lat},${ll.lng}` : `https://map.kakao.com/link/search/${e(q)}`;
-  const nweb = `https://map.naver.com/p/search/${e(q)}`;
+  const nweb = ll ? `https://map.naver.com/p/search/${ll.lat},${ll.lng}` : `https://map.naver.com/p/search/${e(q)}`;   /* 10-31: 좌표가 있으면 좌표로(사진 위치 등) */
   const web = app === "kakao" ? kweb : nweb;   /* 티맵은 PC 웹이 없어 네이버 웹 지도로 */
   let path, scheme;
-  if (app === "naver") { scheme = "nmap"; path = nav && ll ? `route/car?dlat=${ll.lat}&dlng=${ll.lng}&dname=${e(q)}&appname=${an}` : `search?query=${e(q)}&appname=${an}`; }
+  if (app === "naver") { scheme = "nmap"; path = nav && ll ? `route/car?dlat=${ll.lat}&dlng=${ll.lng}&dname=${e(q)}&appname=${an}` : ll ? `place?lat=${ll.lat}&lng=${ll.lng}&name=${e(q)}&appname=${an}` : `search?query=${e(q)}&appname=${an}`; }
   else if (app === "kakao") { scheme = "kakaomap"; path = nav && ll ? `route?ep=${ll.lat},${ll.lng}&by=CAR` : ll ? `look?p=${ll.lat},${ll.lng}` : `search?q=${e(q)}`; }
   else { scheme = "tmap"; path = ll ? `route?rGoName=${e(q)}&rGoX=${ll.lng}&rGoY=${ll.lat}` : `search?name=${e(q)}`; }
   return { web, app: scheme + "://" + path, intent: `intent://${path}#Intent;scheme=${scheme};package=${PKG[app]};S.browser_fallback_url=${e(web)};end`, label: NAVA[app], direct: !!(nav && ll) || (app === "tmap") };
@@ -2344,7 +2359,7 @@ function viewer() {
   const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i], t = TR() || {}, rec = (t.photos || []).find(x => x.id === p.id) || {};
   let it = null; (t.days || []).forEach(d => d.items.forEach(x => { if (x.id === rec.it) it = x; }));
   const when = rec.t || rec.u ? (() => { const lt = phT(t, rec), d = new Date(lt); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(lt)}${rec.lm ? " (파일 시간)" : ""}`; })() : "";
-  return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span><span class="k n num">${i + 1} / ${L.length}</span>
+  return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span>${rec.ll ? `<span class="k vw2-loc">${IC.pin}${esc(llText(t, rec.ll))} ${llLinks(t, rec.ll, it ? nameOf(it) : "")}</span>` : ""}<span class="k n num">${i + 1} / ${L.length}</span>
     ${L.length > 1 ? `<button class="vw2-list" data-pvgrid aria-label="목록으로 보기" title="사진을 목록으로 한 번에 보기">${IC.grid || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'}<span>목록으로 보기</span></button>` : ""}
     <button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button><button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
     <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f || p.t}" alt="" draggable="false"></div>
@@ -2908,6 +2923,7 @@ document.addEventListener("click", async e => {
   if (d.pgall) { S.pg = d.pgall; return render(); }
   if (d.pgx != null) { S.pg = null; return render(); }
   if (d.pgi != null) { S.pvIt = S.pg === "*" ? null : S.pg; S.pv = +d.pgi; return render(); }
+  if (d.ll && d.llnav != null) { e.stopPropagation(); const [la, ln] = d.ll.split(",").map(Number); return openApp(mapUrls(t || TR(), { ll: { lat: la, lng: ln }, title: d.lln || "사진 찍은 곳", place: "" }, d.llnav === "1")); }
   if (d.pvgrid != null) { S.pg = S.pvIt || "*"; S.pv = null; return render(); }
   if (d.pvi != null) { S.pv = +d.pvi; return render(); }
   if (d.pvx != null) { S.pv = null; if (!S.pg) S.pvIt = null; return render(); }
@@ -3134,6 +3150,13 @@ function bestShift(t) {
   for (let o = -12; o <= 12; o++) { if (!o) continue; const n = hits(o); if (n > best.n) best = { o, n }; }
   return best.o && best.n >= cur + Math.max(3, Math.ceil(P.length * 0.1)) ? { o: best.o, n: best.n, cur } : null;
 }
+/* 10-31 제이: 사진 위치 — 일정 장소(좌표가 있는 일정)와 가까우면 「○○ 근처」, 아니면 좌표. 지도 · 길안내는 설정한 지도 앱으로(해외 = 구글) */
+function itLL(it) { if (it.ll) return it.ll; const p = placeOf(it); return isUrl(p) ? parseLL(p) : null; }
+function llNear(t, ll) { let best = null; (t.days || []).forEach(d => d.items.forEach(it => { const q = itLL(it); if (!q) return; const k = kmBetween(ll, q); if (k <= 1.5 && (!best || k < best.k)) best = { k, n: nameOf(it) }; })); return best; }
+function llText(t, ll) { const b = llNear(t, ll); return b ? `${b.n} 근처${b.k >= 0.1 ? ` (${b.k < 1 ? Math.round(b.k * 1000) + "m" : b.k.toFixed(1) + "km"})` : ""}` : `${ll.lat.toFixed(5)}, ${ll.lng.toFixed(5)}`; }
+function llLinks(t, ll, label) { const it = { ll, title: label || "사진 찍은 곳", place: "" }, m = mapUrls(t, it, false), n = mapUrls(t, it, true);
+  const a = `data-ll="${(+ll.lat).toFixed(6)},${(+ll.lng).toFixed(6)}" data-lln="${esc(label || "사진 찍은 곳")}"`;
+  return `<button type="button" class="lk phmap" ${a} data-llnav="0" title="${esc(m.label || "지도")}에서 보기">${IC.map}지도</button><button type="button" class="lk phmap" ${a} data-llnav="1" title="${esc(n.label || "")} 길안내">${IC.nav || IC.map}길안내</button>`; }
 function photoTab(t) {
   const P = (t.photos || []).filter(p => PURL[p.id]), v = S.phv || "it";
   let h = `<label class="btn go w">${IC.img} 여행 사진 고르기<input type="file" accept="image/*" multiple hidden data-phpick></label>
@@ -3155,7 +3178,7 @@ function photoTab(t) {
   S.phcl = [];
   const clCard = (c, mk) => { const k = S.phcl.push(c) - 1, its = {}; c.ps.forEach(p => { if (p.it) its[p.it] = (its[p.it] || 0) + 1; });
     const topIt = Object.entries(its).sort((a, b) => b[1] - a[1])[0], ti = topIt && itOf(topIt[0]);
-    const map = c.ll ? `<a class="lk phmap" href="https://www.google.com/maps/search/?api=1&query=${c.ll.lat.toFixed(5)},${c.ll.lng.toFixed(5)}" target="_blank" rel="noopener">${IC.map}지도</a>` : "";
+    const map = c.ll ? `<span class="phrow"><span class="phloc">${IC.pin}${esc(llText(t, c.ll))}</span>${llLinks(t, c.ll, ti ? nameOf(ti[1]) : "")}</span>` : "";
     const mkb = mk && c.day >= 0 ? `<button class="btn sm" data-phmk="${k}">${IC.plus} 일정으로 만들기</button>` : "";
     return grp(`${hm2(c.from)}${c.to - c.from >= 60e3 ? " ~ " + hm2(c.to) : ""}${ti ? " · " + esc(ti[1].title || "일정") : ""}`, `${c.ps.length}장${c.ll ? "" : " · 위치 정보 없음"}`, c.ps, map + mkb); };
   const dayHead = i => `<div class="phday">${i >= 0 ? `${i + 1}일째 <small>${mdw(dOf(t, i))}</small>` : "여행 날짜 밖"}</div>`;

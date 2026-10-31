@@ -198,6 +198,8 @@ input[type=color]{width:38px;height:34px;border:1px solid var(--line2);border-ra
 .grid.ro td.bad{background:#fdecea;color:var(--danger)}
 .pm-empty{height:100%;min-height:160px;display:grid;place-items:center;color:var(--ink3);font-size:13.5px}
 .pm-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid var(--line);background:var(--bg)}
+.pm-l{overflow:auto;min-height:0;padding-right:2px}
+@media(max-width:760px){.pm-b{grid-template-rows:auto auto}.pm-l,.pm-r{min-height:auto}.pm-l{overflow:visible}}
 @media(max-width:760px){.pm{padding:0}.pm-in{border-radius:0;height:100%}.pm-b{grid-template-columns:1fr;overflow:auto}#pmta{min-height:160px}.pm-t{min-height:200px}}
 .bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#f7f6f2;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
 .bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(25,84,85,.08)}
@@ -354,7 +356,62 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 /* 10-30 밤: 머리 막대 안 눈금자(라벨 · 김치)도 3.1 6번 — 홈 · 바탕 상자 없이 */
 .bar-in .ruler::before{display:none!important}
 
-</style></head><body><div id="root"></div>
+</style><script>/* ══ 공통: 엑셀 붙여넣기 「엑셀 표 예시」 (2026-10-31) ══
+   엑셀 화면처럼 생긴 예시 표(열 문자 A·B·C · 행 번호 · 1행 머리글 · 초록 선택 테두리)
+   + 복사 순서 3단계 + 「이 예시를 붙여넣어 보기」(대상 입력칸에 그대로 채움).
+   XLEX({ cols:[…], rows:[[…]…], ta:"#입력칸", note:"…", open:true, num:[숫자 열 번호…] }) → HTML 문자열 */
+(function () {
+  const E = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const L = i => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i];
+  window.XLEX = function (o) {
+    const cols = o.cols, rows = o.rows, nC = cols.length, nR = rows.length + 1, num = o.num || [];
+    const all = [cols].concat(rows), tsv = all.map(r => r.join("\t")).join("\n");
+    const cell = (v, r, c) => {
+      const k = [r === 0 ? "xlx-hd" : "", num.indexOf(c) >= 0 && r > 0 ? "xlx-n" : "", r === 0 ? "xlx-st" : "", r === nR - 1 ? "xlx-sb" : "", c === 0 ? "xlx-sl" : "", c === nC - 1 ? "xlx-sr" : ""].filter(Boolean).join(" ");
+      return `<td class="${k}">${E(v)}${r === nR - 1 && c === nC - 1 ? '<i class="xlx-fh"></i>' : ""}</td>`;
+    };
+    return `<details class="xlx"${o.open === false ? "" : " open"}><summary><b>엑셀 표 예시</b><span>${E(o.sum || "엑셀에 이렇게 적고 복사해서 붙여넣으세요")}</span></summary>
+<div class="xlx-w"><table class="xlx-t"><thead><tr><th class="xlx-c"></th>${cols.map((_, i) => `<th>${L(i)}</th>`).join("")}</tr></thead><tbody>${all.map((r, ri) => `<tr><th>${ri + 1}</th>${r.map((v, ci) => cell(v, ri, ci)).join("")}</tr>`).join("")}</tbody></table></div>
+<ol class="xlx-s"><li>엑셀에서 <b>A1 칸(머리글)부터 마지막 칸까지</b> 마우스로 끌어 고르기 — 위 초록 테두리만큼</li><li><b>Ctrl + C</b> (복사)</li><li>${E(o.where || "아래 칸")}을 누르고 <b>Ctrl + V</b> (붙여넣기)</li></ol>
+${o.note ? `<p class="xlx-p">${o.note}</p>` : ""}<button type="button" class="xlx-b" data-xlfill="${E(tsv)}" data-xlta="${E(o.ta)}">이 예시를 붙여넣어 보기</button></details>`;
+  };
+  if (!window.__xlxOn) {
+    window.__xlxOn = 1;
+    document.addEventListener("click", e => {
+      const b = e.target.closest && e.target.closest("[data-xlfill]"); if (!b) return;
+      e.preventDefault(); e.stopPropagation();
+      const t = document.querySelector(b.dataset.xlta); if (!t) return;
+      Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(t, b.dataset.xlfill);
+      t.dispatchEvent(new Event("input", { bubbles: true })); t.focus();
+    }, true);
+    const st = document.createElement("style");
+    st.textContent = `
+.xlx{margin:0 0 10px;padding:10px 12px 12px;border-radius:12px;background:#f4efe6;box-shadow:inset 0 0 0 1px rgba(31,33,37,.1);text-align:left}
+.xlx>summary{cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;list-style:none;font-size:14px;color:#1f2125}
+.xlx>summary::-webkit-details-marker{display:none}
+.xlx>summary::before{content:"";width:7px;height:7px;border:solid #5b5547;border-width:0 2px 2px 0;transform:rotate(-45deg);margin-right:2px;align-self:center;transition:transform .15s}
+.xlx[open]>summary::before{transform:rotate(45deg)}
+.xlx>summary span{font-size:12.5px;color:#5b5547}
+.xlx-w{margin-top:8px;overflow-x:auto;background:#fff;border:1px solid #c9c9c9;border-radius:4px;-webkit-overflow-scrolling:touch}
+.xlx-t{border-collapse:collapse;font:12.5px/1.35 "Malgun Gothic","맑은 고딕",system-ui,sans-serif;color:#1f2125;white-space:nowrap;min-width:100%}
+.xlx-t th{background:#f0f0f0;color:#555;font-weight:400;border:1px solid #d4d4d4;padding:3px 8px;text-align:center;min-width:22px}
+.xlx-t thead th{border-top:0}.xlx-t tr>th:first-child{border-left:0}
+.xlx-t th.xlx-c{background:#e6e6e6}
+.xlx-t td{border:1px solid #d4d4d4;padding:4px 9px;position:relative;background:#fff}
+.xlx-t td.xlx-hd{font-weight:700;background:#f7f9f7}
+.xlx-t td.xlx-n{text-align:right;font-variant-numeric:tabular-nums}
+.xlx-t td.xlx-st{border-top:2px solid #217346}.xlx-t td.xlx-sb{border-bottom:2px solid #217346}
+.xlx-t td.xlx-sl{border-left:2px solid #217346}.xlx-t td.xlx-sr{border-right:2px solid #217346}
+.xlx-fh{position:absolute;right:-4px;bottom:-4px;width:6px;height:6px;background:#217346;border:1px solid #fff}
+.xlx-s{margin:8px 0 0;padding-left:20px;font-size:13px;line-height:1.6;color:#1f2125}
+.xlx-s b{color:#1f2125}
+.xlx-p{margin:6px 0 0;font-size:12.5px;line-height:1.55;color:#5b5547}
+.xlx-b{margin-top:8px;font:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:9px;border:0;background:#fcf9f4;color:#20263a;box-shadow:inset 0 0 0 1.5px rgba(32,38,58,.35);cursor:pointer}
+.xlx-b:hover{box-shadow:inset 0 0 0 2px #20263a}.xlx-b:active{transform:translateY(1px)}`;
+    (document.head || document.documentElement).appendChild(st);
+  }
+})();
+</script></head><body><div id="root"></div>
 <script>
 /* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
    허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
@@ -1157,7 +1214,7 @@ function pasteModal() {
   return `<div class="pm" role="dialog" aria-modal="true" aria-label="엑셀에서 붙여넣기"><div class="pm-in">
     <div class="pm-h"><h3>${IC(I.paste, 20)} 엑셀에서 붙여넣기</h3><button class="pm-x" data-act="pmclose" aria-label="닫기">×</button></div>
     <div class="pm-b">
-      <div class="pm-l"><p class="pm-s"><b>1</b> 엑셀에서 표 범위를 복사(Ctrl+C)한 뒤, 아래 칸을 누르고 Ctrl+V</p>
+      <div class="pm-l"><p class="pm-s"><b>1</b> 엑셀에서 표 범위를 복사(Ctrl+C)한 뒤, 아래 칸을 누르고 Ctrl+V</p>${XLEX({ta:"#pmta",open:!PM.text.trim(),cols:["월","2025년","2026년"],num:[1,2],rows:[["1월","128","142"],["2월","115","131"],["3월","140","156"],["4월","152","149"]],note:"<b>A열 = 항목</b>(가로축에 놓일 이름), <b>1행 = 계열 이름</b>(범례), 나머지 칸 = 숫자예요. 계열(2025년 · 2026년)은 8개까지 넣을 수 있어요. 숫자에 쉼표 · 원 · % 가 붙어 있어도 돼요."})}
         <textarea id="pmta" placeholder="여기에 붙여넣기 (Ctrl+V)&#10;&#10;예)&#10;월	2025년	2026년&#10;1월	128	142&#10;2월	115	131">${esc(PM.text)}</textarea>
         <label class="chk"><input type="checkbox" data-pm="head" ${PM.head ? "checked" : ""}> 첫 줄은 범례(계열) 이름</label>
         <label class="chk"><input type="checkbox" data-pm="flip" ${PM.flip ? "checked" : ""}> 행과 열 바꾸기 <span class="muted">항목이 첫 줄에 가로로 있을 때</span></label></div>

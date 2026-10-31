@@ -1295,6 +1295,62 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div><div id="busy"><div>사진 넣는 중…</div></div>
 <script>
+/* ══ 공통: 엑셀 붙여넣기 「엑셀 표 예시」 (2026-10-31) ══
+   엑셀 화면처럼 생긴 예시 표(열 문자 A·B·C · 행 번호 · 1행 머리글 · 초록 선택 테두리)
+   + 복사 순서 3단계 + 「이 예시를 붙여넣어 보기」(대상 입력칸에 그대로 채움).
+   XLEX({ cols:[…], rows:[[…]…], ta:"#입력칸", note:"…", open:true, num:[숫자 열 번호…] }) → HTML 문자열 */
+(function () {
+  const E = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const L = i => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i];
+  window.XLEX = function (o) {
+    const cols = o.cols, rows = o.rows, nC = cols.length, nR = rows.length + 1, num = o.num || [];
+    const all = [cols].concat(rows), tsv = all.map(r => r.join("\t")).join("\n");
+    const cell = (v, r, c) => {
+      const k = [r === 0 ? "xlx-hd" : "", num.indexOf(c) >= 0 && r > 0 ? "xlx-n" : "", r === 0 ? "xlx-st" : "", r === nR - 1 ? "xlx-sb" : "", c === 0 ? "xlx-sl" : "", c === nC - 1 ? "xlx-sr" : ""].filter(Boolean).join(" ");
+      return `<td class="${k}">${E(v)}${r === nR - 1 && c === nC - 1 ? '<i class="xlx-fh"></i>' : ""}</td>`;
+    };
+    return `<details class="xlx"${o.open === false ? "" : " open"}><summary><b>엑셀 표 예시</b><span>${E(o.sum || "엑셀에 이렇게 적고 복사해서 붙여넣으세요")}</span></summary>
+<div class="xlx-w"><table class="xlx-t"><thead><tr><th class="xlx-c"></th>${cols.map((_, i) => `<th>${L(i)}</th>`).join("")}</tr></thead><tbody>${all.map((r, ri) => `<tr><th>${ri + 1}</th>${r.map((v, ci) => cell(v, ri, ci)).join("")}</tr>`).join("")}</tbody></table></div>
+<ol class="xlx-s"><li>엑셀에서 <b>A1 칸(머리글)부터 마지막 칸까지</b> 마우스로 끌어 고르기 — 위 초록 테두리만큼</li><li><b>Ctrl + C</b> (복사)</li><li>${E(o.where || "아래 칸")}을 누르고 <b>Ctrl + V</b> (붙여넣기)</li></ol>
+${o.note ? `<p class="xlx-p">${o.note}</p>` : ""}<button type="button" class="xlx-b" data-xlfill="${E(tsv)}" data-xlta="${E(o.ta)}">이 예시를 붙여넣어 보기</button></details>`;
+  };
+  if (!window.__xlxOn) {
+    window.__xlxOn = 1;
+    document.addEventListener("click", e => {
+      const b = e.target.closest && e.target.closest("[data-xlfill]"); if (!b) return;
+      e.preventDefault(); e.stopPropagation();
+      const t = document.querySelector(b.dataset.xlta); if (!t) return;
+      Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(t, b.dataset.xlfill);
+      t.dispatchEvent(new Event("input", { bubbles: true })); t.focus();
+    }, true);
+    const st = document.createElement("style");
+    st.textContent = `
+.xlx{margin:0 0 10px;padding:10px 12px 12px;border-radius:12px;background:#f4efe6;box-shadow:inset 0 0 0 1px rgba(31,33,37,.1);text-align:left}
+.xlx>summary{cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;list-style:none;font-size:14px;color:#1f2125}
+.xlx>summary::-webkit-details-marker{display:none}
+.xlx>summary::before{content:"";width:7px;height:7px;border:solid #5b5547;border-width:0 2px 2px 0;transform:rotate(-45deg);margin-right:2px;align-self:center;transition:transform .15s}
+.xlx[open]>summary::before{transform:rotate(45deg)}
+.xlx>summary span{font-size:12.5px;color:#5b5547}
+.xlx-w{margin-top:8px;overflow-x:auto;background:#fff;border:1px solid #c9c9c9;border-radius:4px;-webkit-overflow-scrolling:touch}
+.xlx-t{border-collapse:collapse;font:12.5px/1.35 "Malgun Gothic","맑은 고딕",system-ui,sans-serif;color:#1f2125;white-space:nowrap;min-width:100%}
+.xlx-t th{background:#f0f0f0;color:#555;font-weight:400;border:1px solid #d4d4d4;padding:3px 8px;text-align:center;min-width:22px}
+.xlx-t thead th{border-top:0}.xlx-t tr>th:first-child{border-left:0}
+.xlx-t th.xlx-c{background:#e6e6e6}
+.xlx-t td{border:1px solid #d4d4d4;padding:4px 9px;position:relative;background:#fff}
+.xlx-t td.xlx-hd{font-weight:700;background:#f7f9f7}
+.xlx-t td.xlx-n{text-align:right;font-variant-numeric:tabular-nums}
+.xlx-t td.xlx-st{border-top:2px solid #217346}.xlx-t td.xlx-sb{border-bottom:2px solid #217346}
+.xlx-t td.xlx-sl{border-left:2px solid #217346}.xlx-t td.xlx-sr{border-right:2px solid #217346}
+.xlx-fh{position:absolute;right:-4px;bottom:-4px;width:6px;height:6px;background:#217346;border:1px solid #fff}
+.xlx-s{margin:8px 0 0;padding-left:20px;font-size:13px;line-height:1.6;color:#1f2125}
+.xlx-s b{color:#1f2125}
+.xlx-p{margin:6px 0 0;font-size:12.5px;line-height:1.55;color:#5b5547}
+.xlx-b{margin-top:8px;font:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:9px;border:0;background:#fcf9f4;color:#20263a;box-shadow:inset 0 0 0 1.5px rgba(32,38,58,.35);cursor:pointer}
+.xlx-b:hover{box-shadow:inset 0 0 0 2px #20263a}.xlx-b:active{transform:translateY(1px)}`;
+    (document.head || document.documentElement).appendChild(st);
+  }
+})();
+
 /* ───────── 여행 노트 v1.0 · Blog J ───────── */
 const VER = "1.0";
 const IS_SAMSUNG = /SamsungBrowser/i.test(navigator.userAgent);
@@ -1994,6 +2050,7 @@ function scrPaste() {
   return hd("일정 붙여넣기", backBtn()) + `<div class="body">${P.fromLink ? `<p class="hint lk2">${IC.link} 「${esc(P.title || "여행사 페이지")}」에서 가져온 글이에요 — 아래 미리보기를 확인하고 「이대로 넣기」</p>` : ""}
     <textarea class="inp pta" id="pta" placeholder="1일차  인천 출발&#10;11.11 수 20:35 인천(ICN) 출발 제주항공 7C2401&#10;아침: 불포함 / 점심: 불포함 / 저녁: 기내식&#10;2일차 …">${esc(P.text || "")}</textarea>
     <div class="row2"><button class="btn sm" data-pclip>${IC.paste} 복사한 것 붙여넣기</button><button class="btn sm" data-sheet="pstd">붙여넣기 표준 보기</button>${P.text ? `<button class="btn sm" data-pclear>비우기</button>` : ""}</div>
+    ${P.text ? "" : XLEX({ ta: "#pta", open: false, where: "위 붙여넣기 칸", sum: "엑셀로 정리한 일정은 이렇게 — 머리글에 일차 · 시간 · 일정이 있어야 해요", cols: ["일차", "날짜", "시간", "일정", "장소", "비용(원)"], num: [5], rows: [["1일차", "2026-11-12", "09:00", "김포공항 출발", "김포국제공항", ""], ["1일차", "2026-11-12", "12:30", "점심 · 고기국수", "자매국수 본점", "24,000"], ["2일차", "2026-11-13", "10:00", "성산일출봉", "성산일출봉", "10,000"]], note: "같은 날 일정은 일차를 같게 적어요. 장소 · 비용은 비워도 되고, 비용은 쉼표가 있어도 돼요. 「보내기 · 엑셀 · 인쇄 → 엑셀로 받기」로 받은 표도 그대로 붙여넣을 수 있어요." })}
     ${has ? `<label class="f">지금 있는 일정은</label><div class="vt">${[["add", "뒤에 더하기"], ["rep", "모두 바꾸기"]].map(([k, n]) => `<button class="${(P.mode || "add") === k ? "on" : ""}" data-pmode="${k}">${n}</button>`).join("")}</div>` : ""}
     <div id="pprev">${pastePrev()}</div></div>
     <div class="btmbar"><button class="btn go" data-pgo ${P.res && P.res.days.some(d => d.items.length || d.title) ? "" : "disabled"}>이대로 넣기</button></div>`;

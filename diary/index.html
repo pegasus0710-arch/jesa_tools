@@ -573,7 +573,7 @@ function dayView() {
       <div class="pols">${(d.photos || []).map((p, i) => `<div class="pol"><span class="tape" aria-hidden="true"></span><button style="border:0;padding:0;background:none;display:block;width:100%" data-view="${p.id}" aria-label="크게 보기"><img data-pid="${p.id}" alt="" /></button><input class="cap" data-arr="photos" data-i="${i}" data-key="cap" value="${esc(p.cap || "")}" placeholder="한 줄" aria-label="사진 설명" /><button class="star ${p.star ? "on" : ""}" data-star="${i}" aria-label="이달의 사진으로" title="이달의 사진(사진 달력)">★</button><button class="del" data-delp="${i}" aria-label="사진 지우기">×</button></div>`).join("")}</div>
       ${(d.stk || []).map((s, i) => stkHtml(s, i)).join("")}
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">${on("photo") && (d.photos || []).length < 4 ? `<label class="dashb" style="display:inline-flex;align-items:center;cursor:pointer">+ 사진<input type="file" accept="image/*" multiple id="phIn" class="sr" /></label>` : ""}${on("sticker") ? `<button class="dashb" id="stkBtn">+ 스티커</button><button class="dashb" id="tapeBtn">+ 글자 테이프</button>` : ""}</div>`;
+    <div style="display:flex;gap:8px;flex-wrap:wrap">${on("photo") && (d.photos || []).length < 4 ? `<label class="dashb" style="display:inline-flex;align-items:center;cursor:pointer">+ 사진<input type="file" accept="image/*" multiple id="phIn" class="sr" /></label><button class="dashb" id="phPaste" title="PC는 Ctrl+V도 돼요">복사한 사진 붙여넣기</button>` : ""}${on("sticker") ? `<button class="dashb" id="stkBtn">+ 스티커</button><button class="dashb" id="tapeBtn">+ 글자 테이프</button>` : ""}</div>`;
 
   /* 오른쪽 쪽 */
   const qi = (Math.round(dt / DAY) + (d.qo || 0)) % QS.length;
@@ -909,6 +909,7 @@ document.addEventListener("click", async e => {
   if (ds.view) return viewer(ds.view);
   if (ds.star !== undefined) { const d = dayOf(k, true), p = d.photos[+ds.star]; p.star = !p.star; touchDay(k); toast(p.star ? "이달의 사진(사진 달력)으로 골랐어요" : "이달의 사진에서 뺐어요"); return rerenderKeep(); }
   if (ds.delp !== undefined) { if (!confirm("이 사진을 지울까요?")) return; const d = dayOf(k, true), p = d.photos.splice(+ds.delp, 1)[0]; await delPhoto(p.id); touchDay(k); return rerenderKeep(); }
+  if (t.id === "phPaste") return pastePhoto();
   if (t.id === "stkBtn") return stkPop();
   if (ds.stkt) { $$("[data-stkt]").forEach(b => b.classList.toggle("on", b === t)); $("#sgrid").innerHTML = sgrid(ds.stkt); return; }
   if (ds.stkadd) { const d = dayOf(k, true); (d.stk = d.stk || []).push({ k: ds.stkadd, x: 40 + Math.random() * 40, y: 30 + Math.random() * 40, r: Math.round(Math.random() * 20 - 10), w: 74 }); touchDay(k); closePop(); return rerenderKeep(); }
@@ -1022,6 +1023,19 @@ const tempFmt = v => String(v || "").replace(/[°℃]/g, "").replace(/\s*[~〜�
 document.addEventListener("focusout", e => { const t = e.target; if (t.dataset && t.dataset.f === "temp") { const v = tempFmt(t.value); if (v !== t.value) { t.value = v; const d = dayOf(S.date, true); d.temp = v; touchDay(S.date); } } if (t.dataset && (t.dataset.lf !== undefined)) { const r = $(".pie"); if (r) r.outerHTML = pie(D.life[S.lw === "we" ? "we" : "wk"]); } });
 /* 금액 칸: 치는 대로 천 단위 쉼표(커서 위치 유지) */
 function moneyFmt(t) { const v = t.value, pos = t.selectionStart, before = v.slice(0, pos).replace(/[^\d]/g, "").length; const n = v.replace(/[^\d]/g, ""); const f = n ? (+n).toLocaleString("ko-KR") : ""; t.value = f; let c = 0, i = 0; for (; i < f.length && c < before; i++) if (/\d/.test(f[i])) c++; t.setSelectionRange(i, i); }
+/* 사진 붙여넣기 — 단추(클립보드 읽기) + Ctrl+V (공통기능지도: 레시피 노트 방식) */
+async function pastePhoto() {
+  if (!navigator.clipboard || !navigator.clipboard.read) return toast(IOS || ANDROID ? "이 브라우저는 붙여넣기 단추를 쓸 수 없어요 — 「+ 사진」으로 골라 주세요" : "Ctrl+V로 붙여 넣어 주세요");
+  try { const items = await navigator.clipboard.read(); const fs = [];
+    for (const it of items) { const ty = it.types.find(t => t.startsWith("image/")); if (ty) { const b = await it.getType(ty); fs.push(new File([b], "붙여넣은사진." + (ty.split("/")[1] || "png"), { type: ty })); } }
+    if (!fs.length) return toast("복사한 사진이 없어요 — 사진에서 「복사」한 뒤 눌러 주세요"); addPhotos(fs);
+  } catch (e) { toast(e.name === "NotAllowedError" ? "붙여넣기를 허용해 주세요(주소창 옆 권한) — 또는 Ctrl+V" : "붙여넣지 못했어요: " + e.message); }
+}
+document.addEventListener("paste", e => {
+  if (S.v !== "day" || !on("photo") || !LOCK.open && D.set.lock) return;
+  const fs = [...(e.clipboardData && e.clipboardData.items || [])].filter(i => i.kind === "file" && i.type.startsWith("image/")).map(i => i.getAsFile()).filter(Boolean);
+  if (!fs.length) return; e.preventDefault(); addPhotos(fs); toast("사진을 붙여 넣었어요");
+});
 async function addPhotos(files) {
   const d = dayOf(S.date, true); d.photos = d.photos || []; const room = 4 - d.photos.length; const fs = [...files].slice(0, room);
   if (files.length > room) toast(`하루 4장까지 — ${fs.length}장만 넣어요`);

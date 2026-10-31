@@ -649,6 +649,10 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .it-act em,button[data-map] em,button[data-nav] em{font-size:12.5px!important}
 @media (max-width:760px){.lvs button,.lvs>*{min-height:36px}.vt button{min-height:34px}}
 
+/* 10-31 제이: 연결한 폴더 경로 */
+.dpath{display:flex;align-items:center;gap:6px;margin:6px 0 4px;padding:6px 10px;border-radius:9px;background:rgba(160,140,108,.12);font-size:13px;color:var(--ink2);min-width:0}
+.dpath svg{width:16px;height:16px;flex-shrink:0}.dpath code{font:600 13px/1.4 ui-monospace,Consolas,"Malgun Gothic",monospace;overflow-wrap:anywhere;white-space:normal}
+
 /* ── 스크랩 노트 ── */
 .tabs.t3{grid-template-columns:repeat(3,1fr)}
 .tabs.t3 button .bd{right:18%}
@@ -1312,7 +1316,7 @@ function scrSet() {
     <div class="lbl"><span>저장 위치</span><span id="usage"></span></div>
     <div class="stnote ${gdOn() || D.dir ? "ok" : "warn"}">${gdOn() || D.dir ? IC.ok : IC.save}<p><b>둘 다 써도 되고, 하나는 꼭 연결해 두세요.</b><br>휴대폰과 PC를 같이 쓰면 <b>구글 드라이브</b>, PC 한 대에서만 쓰면 <b>내 PC 폴더</b>를 추천해요. 연결해 두면 담고 고칠 때마다 저절로 저장돼요.</p></div>
     ${gdBox()}
-    ${CAN_DIR ? (D.dir ? `<div class="row">${IC.folder}<div class="t"><b>저장 폴더: 「${esc(D.dir.name)}」 <span class="okb" style="${D.dirPerm === "granted" ? "" : "background:var(--red)"}">${D.dirPerm === "granted" ? "연결됨" : "다시 연결 필요"}</span></b><small>스크랩 · 사진이 이 폴더에 자동 저장돼요. 브라우저 기록을 지워도 폴더는 그대로예요.</small><div class="row2">${D.dirPerm !== "granted" ? `<button class="btn sm nv" data-dirperm>다시 연결</button>` : ""}<button class="btn sm" data-pickown>다른 폴더로 옮기기</button><button class="btn sm" data-undir>연결 끊기</button></div></div></div>`
+    ${CAN_DIR ? (D.dir ? `<div class="row">${IC.folder}<div class="t"><b>저장 폴더: 「${esc(D.dir.name)}」 <span class="okb" style="${D.dirPerm === "granted" ? "" : "background:var(--red)"}">${D.dirPerm === "granted" ? "연결됨" : "다시 연결 필요"}</span></b>${dirPathRow()}<small>스크랩 · 사진이 이 폴더에 자동 저장돼요. 브라우저 기록을 지워도 폴더는 그대로예요.</small><div class="row2">${D.dirPerm !== "granted" ? `<button class="btn sm nv" data-dirperm>다시 연결</button>` : ""}<button class="btn sm" data-pickown>다른 폴더로 바꾸기</button><button class="btn sm" data-undir>연결 끊기</button></div></div></div>`
       : gdOn() ? (D.set.hideDir ? "" : `<div class="row">${IC.folder}<div class="t"><b>이 기기 폴더에도 저장하기 <span class="lt">— 선택</span></b><small>구글 드라이브에 저장 중이라 폴더는 없어도 돼요. 이 기기에도 한 벌 더 두고 싶을 때만 지정하세요.</small><div class="row2"><button class="btn sm" ${ANDROID ? "data-pickown" : 'data-sheet="store"'}>폴더 지정</button><button class="btn sm" data-hidedir>닫기</button></div></div></div>`)
       : `<button class="row" ${ANDROID ? "data-pickown" : 'data-sheet="store"'}>${IC.folder}<div class="t"><b>${ANDROID ? "스크랩 저장 폴더 지정하기" : "내 PC 폴더에 저장하기"}</b><small>지금은 브라우저 안에만 저장 중이에요. 폴더에 저장하면 브라우저 기록을 지워도 안전해요.</small></div></button>`) : ""}
     ${mobileBox()}
@@ -1471,7 +1475,7 @@ async function bkBlob() {
 }
 /* 10-31 제이: 백업 = common/bkup.js (주기 알림 · 백업 폴더 기억 · 그 폴더에서 되살리기) */
 async function makeBackup() { return BKUP.run(); }
-function bkSetup() { return BKUP.setup({ app: "scrap", name: "스크랩 노트", prefix: "스크랩노트_백업_", make: bkBlob, restore: f => restore(f), count: () => D.items.length, dataDir: () => (D.dir && D.dirPerm === "granted" ? D.dir : null), legacyLast: () => D.set.lastBackup || 0,
+function bkSetup() { return BKUP.setup({ app: "scrap", name: "스크랩 노트", prefix: "스크랩노트_백업_", make: bkBlob, restore: f => restore(f), count: () => D.items.length, dataDir: () => (D.dir && D.dirPerm === "granted" ? D.dir : null), dataPath: () => D.dirPath, legacyLast: () => D.set.lastBackup || 0,
   toast, done: async t => { D.set.lastBackup = t; await setMeta("set", D.set).catch(() => {}); if (S.scr === "set") render(); } }); }
 function bkHint() { const I = BKUP.info(); return (I.canDir ? (I.dir ? `백업 폴더 「${esc(I.dir)}」에 바로 저장 · 최근 10개 보관` : "처음 한 번 백업 폴더를 정하면 다음부터 누르기만 하면 돼요") : (IS_MOBILE() ? "공유 창 → 「파일에 저장」 · 내 드라이브 · 카톡 나에게 등에 두세요" : "다운로드 폴더에 받아져요")) + ` · ${I.every ? I.every + "일마다 알림" : "알림 꺼짐"}`; }
 function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); }
@@ -1504,6 +1508,9 @@ async function folderWrite() {
 async function syncFromFolder() { const o = await readFolder(); if (o) { try { const r = await importData(o, folderPhoto); if (r.nr) toast(`저장 폴더에서 스크랩 ${r.nr}개를 불러왔어요.`); } catch (e) { toast(e.message); } } await folderWrite(); render(); }
 const hasJson = async h => { try { await h.getFileHandle(FJ); return true; } catch (e) { return false; } };
 const README = "이 폴더는 「스크랩 노트」(Blog J 무료 도구)의 저장 폴더예요.\r\n\r\n· 스크랩(링크 · 유튜브 · 글 · 사진 · 메모)이 이 폴더에 자동으로 저장돼요.\r\n· 브라우저 기록(사이트 데이터)을 지웠거나 브라우저를 다시 설치했다면,\r\n  스크랩 노트를 열고 「전에 쓰던 폴더 다시 연결」 → 이 폴더를 고르면 그대로 이어져요.\r\n· 새 PC로 옮길 때는 이 폴더를 통째로 복사해 가서 같은 방법으로 고르면 돼요.\r\n· 스크랩노트.json 파일과 사진 폴더는 지우거나 고치지 마세요.\r\n\r\nhttps://luvbong.tistory.com\r\n";
+/* 10-31 제이: 연결한 폴더가 어디인지 — 브라우저는 보안상 앞부분(C:\\Users\\…)을 알려 주지 않아서, 고른 폴더부터 보여 줌 */
+function dirPathText() { const p = D.dirPath || (D.dir ? D.dir.name : ""); return p ? "…\\" + p.split(" › ").join("\\") : ""; }
+function dirPathRow() { return D.dir ? `<span class="dpath" title="브라우저는 보안상 폴더의 앞부분 경로(C:\\Users\\… 등)를 알려 주지 않아요">${IC.folder}<code>${esc(dirPathText())}</code></span>` : ""; }
 async function pickDir(rec) {
   let h; try { h = await window.showDirectoryPicker({ mode: "readwrite", id: rec ? "bj-scrap-rec" : "bj-scrap-note", startIn: ANDROID ? undefined : "pictures" }); }
   catch (e) { if (e.name !== "AbortError") toast("폴더를 열지 못했어요: " + e.message); return false; }
@@ -1515,6 +1522,7 @@ async function pickDir(rec) {
       else { let empty = true; for await (const [n] of h.entries()) { if (!/^(\.|desktop\.ini$|Thumbs\.db$)/i.test(n)) { empty = false; break; } }
         if ((rec || !empty) && h.name !== "스크랩노트") target = await h.getDirectoryHandle("스크랩노트", { create: true }); } }
     D.dir = target; D.dirPerm = "granted"; await setMeta("dir", target).catch(() => {});
+    D.dirPath = target === h ? h.name : h.name + " › " + target.name; await setMeta("dirpath", D.dirPath).catch(() => {});
     if (!found) { try { const f = await target.getFileHandle("스크랩노트_안내.txt", { create: true }); const w = await f.createWritable(); await w.write("﻿" + README); await w.close(); } catch (e) {} }
     D.set.storeAsked = true; await setMeta("set", D.set);
     await syncFromFolder();
@@ -1969,7 +1977,7 @@ document.addEventListener("click", async e => {
     D.items = (await getAll("items")) || [];
     D.cats = (await getMeta("cats")) || null; Object.assign(D.set, (await getMeta("set")) || {});
     const ph = (await getAll("photos")) || []; ph.forEach(p => { PURL[p.id] = { f: URL.createObjectURL(p.blob), t: URL.createObjectURL(p.th || p.blob) }; });
-    try { D.dir = (await getMeta("dir")) || null; if (D.dir && D.dir.queryPermission) D.dirPerm = await D.dir.queryPermission({ mode: "readwrite" }); } catch (e) { D.dir = null; }
+    try { D.dirPath = (await getMeta("dirpath")) || ""; D.dir = (await getMeta("dir")) || null; if (D.dir && D.dir.queryPermission) D.dirPerm = await D.dir.queryPermission({ mode: "readwrite" }); } catch (e) { D.dir = null; }
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   } else toast("이 브라우저는 저장을 막고 있어요 — 시크릿 창이면 일반 창으로 열어 주세요.");
   if (D.cats == null) { D.cats = DEF_CATS.map(([n, s]) => ({ n, s: s.slice() })); await setMeta("cats", D.cats).catch(() => {}); }
@@ -2005,7 +2013,9 @@ document.addEventListener("click", async e => {
   const ymdw = d => `${ymd(d)}(${WD[d.getDay()]})`;
   const E = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const mb = n => n >= 1048576 ? (n / 1048576).toFixed(1) + "MB" : Math.max(1, Math.round(n / 1024)) + "KB";
-  let O = null, st = { last: 0, every: 7, later: 0, first: 0 }, dir = null, ready = null;
+  let O = null, st = { last: 0, every: 7, later: 0, first: 0 }, dir = null, dpath = "", ready = null;
+  /* 10-31 제이: 백업 폴더 경로 표시 — 브라우저는 앞부분(C:\\Users\\…)을 알려 주지 않아 고른 폴더부터 */
+  const ptext = () => dir ? "…\\" + (dpath || dir.name).split(" › ").join("\\") : "";
 
   /* 저장: 이 앱 전용 IndexedDB (폴더 손잡이는 IndexedDB에만 넣을 수 있음) */
   function idb() { return new Promise((res, rej) => { const r = indexedDB.open("bj-backup", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
@@ -2023,7 +2033,7 @@ document.addEventListener("click", async e => {
   /* 백업 폴더 정하기: 데이터 폴더가 있으면 그 안 「백업」, 아니면 고르는 창(사진 폴더에서 시작 → 안에 「앱이름_백업」을 만듦) */
   async function autoDir() {
     if (dir || !CAN || typeof O.dataDir !== "function") return dir;
-    try { const d = await O.dataDir(); if (d && await perm(d, false)) { dir = await d.getDirectoryHandle("백업", { create: true }); await kset("dir", dir); } } catch (e) {}
+    try { const d = await O.dataDir(); if (d && await perm(d, false)) { dir = await d.getDirectoryHandle("백업", { create: true }); await kset("dir", dir); let dp = ""; try { dp = (O.dataPath && O.dataPath()) || d.name; } catch (e) { dp = d.name; } dpath = dp + " › 백업"; await kset("dpath", dpath); } } catch (e) {}
     return dir;
   }
   async function pickDir(forRestore) {
@@ -2036,7 +2046,7 @@ document.addEventListener("click", async e => {
         if (sub) t = sub; else if (!forRestore && !/백업/.test(h.name)) t = await h.getDirectoryHandle(bkFolderName(), { create: true });
       }
     } catch (e) {}
-    dir = t; await kset("dir", t); return t;
+    dir = t; await kset("dir", t); dpath = t === h ? h.name : h.name + " › " + t.name; await kset("dpath", dpath); return t;
   }
 
   async function writeTo(h, name, blob) {
@@ -2056,7 +2066,7 @@ document.addEventListener("click", async e => {
     const n = new Date(), name = `${O.prefix}${ymd(n)}_${p2(n.getHours())}${p2(n.getMinutes())}.${O.ext}`;
     let where = "";
     if (useDir) {
-      try { await writeTo(dir, name, blob); where = `「${dir.name}」 폴더`; }
+      try { await writeTo(dir, name, blob); where = ptext(); }
       catch (e) { toast("폴더에 쓰지 못했어요 — 파일로 받을게요."); download(blob, name); where = "다운로드 폴더"; }
     } else {
       const file = new File([blob], name, { type: O.mime || "application/octet-stream" });
@@ -2087,13 +2097,13 @@ document.addEventListener("click", async e => {
       <div class="bkx-r"><button class="bkx-b go" data-bkx-pick>백업 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
         o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
         o.querySelector("[data-bkx-file]").onclick = pickFile; });
-    if (!has) return modal(`${head}<p class="bkx-p">기억해 둔 백업 폴더 <b>「${E(dir.name)}」</b>를 열려면 허용이 한 번 필요해요.</p>
+    if (!has) return modal(`${head}<p class="bkx-p">기억해 둔 백업 폴더 <b class="bkx-path">${E(ptext())}</b>를 열려면 허용이 한 번 필요해요.</p>
       <div class="bkx-r"><button class="bkx-b go" data-bkx-ok>폴더 열기(허용)</button><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
         o.querySelector("[data-bkx-ok]").onclick = async () => { if (await perm(dir, true)) restore(); };
         o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
         o.querySelector("[data-bkx-file]").onclick = pickFile; });
     const L = await listIn(dir);
-    modal(`${head}<p class="bkx-p">백업 폴더 <b>「${E(dir.name)}」</b> · ${L.length ? `백업 ${L.length}개 — 맨 위가 가장 최근이에요.` : "아직 백업이 없어요."}</p>
+    modal(`${head}<p class="bkx-p">백업 폴더 <b class="bkx-path">${E(ptext())}</b><br>${L.length ? `백업 ${L.length}개 — 맨 위가 가장 최근이에요.` : "아직 백업이 없어요."}</p>
       ${L.length ? `<div class="bkx-l">${L.map((x, i) => { const d = new Date(x.time); return `<button class="bkx-it${i ? "" : " new"}" data-bkx-i="${i}"><span><b>${ymdw(d)} ${p2(d.getHours())}:${p2(d.getMinutes())}</b><small>${E(x.name)} · ${mb(x.size)}</small></span>${i ? "" : "<em>최근</em>"}<i>되살리기</i></button>`; }).join("")}</div>` : ""}
       <div class="bkx-r"><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
         o.querySelectorAll("[data-bkx-i]").forEach(b => b.onclick = async () => { const x = L[+b.dataset.bkxI]; closeModal(); await O.restore(await x.h.getFile()); });
@@ -2101,13 +2111,13 @@ document.addEventListener("click", async e => {
         o.querySelector("[data-bkx-file]").onclick = pickFile; });
   }
 
-  function info() { const days = st.last ? Math.floor((Date.now() - st.last) / 864e5) : null; return { last: st.last, days, every: st.every, dir: dir ? dir.name : "", canDir: CAN, lastText: st.last ? ymdw(new Date(st.last)) : "없음" }; }
+  function info() { const days = st.last ? Math.floor((Date.now() - st.last) / 864e5) : null; return { last: st.last, days, every: st.every, dir: dir ? dir.name : "", path: ptext(), canDir: CAN, lastText: st.last ? ymdw(new Date(st.last)) : "없음" }; }
   async function settings() {
     await ready; await autoDir(); const I = info();
     modal(`<div class="bkx-h"><b>백업 설정</b><button class="bkx-c" data-bkx-x aria-label="닫기">×</button></div>
       <div class="bkx-kv"><span>마지막 백업</span><b>${I.lastText}${I.days != null ? ` <small>(${I.days ? I.days + "일 전" : "오늘"})</small>` : ""}</b></div>
-      ${CAN ? `<div class="bkx-kv"><span>백업 폴더</span><b>${I.dir ? E(I.dir) : "아직 안 정함"}</b><button class="bkx-b sm" data-bkx-pick>${I.dir ? "바꾸기" : "정하기"}</button></div>
-        <p class="bkx-p sm">백업은 이 폴더에 바로 저장되고 최근 ${O.keep || 10}개만 남겨요. 되살릴 때도 이 폴더에서 찾아요. USB · 원드라이브처럼 다른 곳에 두면 더 안전해요.${AND ? "<br>폴더 고르는 창: ⋮ 또는 「새 폴더」 → 이름 → 「이 폴더 사용」 → 「허용」" : ""}</p>`
+      ${CAN ? `<div class="bkx-kv"><span>백업 폴더</span><b class="bkx-path">${I.dir ? E(I.path) : "아직 안 정함"}</b><button class="bkx-b sm" data-bkx-pick>${I.dir ? "바꾸기" : "정하기"}</button></div>
+        <p class="bkx-p sm">백업은 이 폴더에 바로 저장되고 최근 ${O.keep || 10}개만 남겨요. 되살릴 때도 이 폴더에서 찾아요. USB · 원드라이브처럼 다른 곳에 두면 더 안전해요. (앞부분 경로 C:\\Users\\… 는 브라우저가 보안상 알려 주지 않아서, 고른 폴더부터 보여 드려요.)${AND ? "<br>폴더 고르는 창: ⋮ 또는 「새 폴더」 → 이름 → 「이 폴더 사용」 → 「허용」" : ""}</p>`
       : `<p class="bkx-p sm">이 브라우저는 폴더에 바로 저장할 수 없어서, 백업하면 ${MOB ? "공유 창이 열려요 — 「파일에 저장」(아이폰) · 내 드라이브 · 카톡 나에게 보내기 등에 두세요" : "다운로드 폴더에 받아져요"}. 되살릴 때는 그 파일을 고르면 돼요.</p>`}
       <div class="bkx-kv"><span>백업 알림</span><select class="bkx-sel" data-bkx-ev>${[[3, "3일마다"], [7, "7일마다(권장)"], [14, "14일마다"], [30, "30일마다"], [0, "알리지 않음"]].map(([v, n]) => `<option value="${v}" ${st.every === v ? "selected" : ""}>${n}</option>`).join("")}</select></div>
       <div class="bkx-r"><button class="bkx-b go" data-bkx-run>지금 백업</button><button class="bkx-b" data-bkx-rs>백업에서 되살리기</button></div>`, o => {
@@ -2127,7 +2137,7 @@ document.addEventListener("click", async e => {
     if (typeof O.quiet === "function" && O.quiet()) return;
     await autoDir(); const days = st.last ? Math.floor((now - st.last) / 864e5) : null;
     const r = document.createElement("div"); r.className = "bkx-rm"; r.setAttribute("role", "status");
-    r.innerHTML = `<div class="bkx-rt"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><small>${CAN ? (dir ? `누르면 「${E(dir.name)}」 폴더에 바로 저장돼요.` : "백업 폴더를 한 번 정하면 다음부터는 누르기만 하면 돼요.") : "휴대폰을 바꾸거나 앱을 지워도 되살릴 수 있게 파일로 받아 두세요."}</small></div>
+    r.innerHTML = `<div class="bkx-rt"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><small>${CAN ? (dir ? `누르면 ${E(ptext())} 폴더에 바로 저장돼요.` : "백업 폴더를 한 번 정하면 다음부터는 누르기만 하면 돼요.") : "휴대폰을 바꾸거나 앱을 지워도 되살릴 수 있게 파일로 받아 두세요."}</small></div>
       <div class="bkx-rb"><button class="bkx-b go" data-bkx-now>지금 백업</button><button class="bkx-b" data-bkx-later>3일 뒤에</button><button class="bkx-c" data-bkx-set aria-label="백업 설정" title="백업 설정">⋯</button></div>`;
     r.querySelector("[data-bkx-now]").onclick = async () => { await run(); };
     r.querySelector("[data-bkx-later]").onclick = async () => { st.later = Date.now() + 3 * 864e5; await saveSt(); hideRemind(); toast("3일 뒤에 다시 알려 드릴게요."); };
@@ -2151,6 +2161,7 @@ document.addEventListener("click", async e => {
 .bkx-it span{flex:1;min-width:0}.bkx-it b{display:block;font-size:14.5px;font-variant-numeric:tabular-nums}.bkx-it small{display:block;font-size:12.5px;color:#6f6857;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bkx-it em{font-style:normal;font-size:12.5px;font-weight:800;color:#b5600f}.bkx-it i{font-style:normal;font-size:13px;font-weight:800;color:#20263a;white-space:nowrap}
 .bkx-kv{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(160,140,108,.25)}.bkx-kv span{width:84px;flex-shrink:0;color:#5b5547;font-weight:700;font-size:13.5px}.bkx-kv b{flex:1;min-width:0;overflow-wrap:anywhere}
+.bkx-path{font:600 13px/1.45 ui-monospace,Consolas,"Malgun Gothic",monospace;overflow-wrap:anywhere}
 .bkx-sel{flex:1;font:inherit;font-size:14px;min-height:40px;border-radius:10px;border:1px solid #d8cfbf;background:#fcf9f4;padding:0 8px}
 .bkx-rm{position:fixed;z-index:10040;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom));width:min(560px,calc(100% - 24px));box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 14px;border-radius:16px;background:#f7f2ea;color:#1f2125;box-shadow:0 14px 40px rgba(40,34,20,.28),inset 0 0 0 1.5px rgba(224,138,62,.55);font-size:14px;text-align:left}
 .bkx-rt{flex:1 1 240px;min-width:0}.bkx-rt b{display:block;font-size:15px}.bkx-rt small{display:block;font-size:12.5px;color:#5b5547;line-height:1.5;margin-top:2px}
@@ -2162,14 +2173,14 @@ document.addEventListener("click", async e => {
     setup(o) {
       O = Object.assign({ ext: "zip", mime: "application/zip", keep: 10 }, o);
       if (!document.getElementById("bkx-css")) { const s = document.createElement("style"); s.id = "bkx-css"; s.textContent = CSS; (document.head || document.documentElement).appendChild(s); }
-      ready = (async () => { const s = await kget("st"); if (s) st = Object.assign(st, s); if (o.legacyLast && !st.last) { try { const l = await o.legacyLast(); if (l) st.last = l; } catch (e) {} } dir = (await kget("dir")) || null; })();
+      ready = (async () => { const s = await kget("st"); if (s) st = Object.assign(st, s); if (o.legacyLast && !st.last) { try { const l = await o.legacyLast(); if (l) st.last = l; } catch (e) {} } dpath = (await kget("dpath")) || ""; dir = (await kget("dir")) || null; })();
       setTimeout(remind, o.delay || 5000);
       return ready;
     },
     run, restore, settings, remind, info: () => info(),
     ready: () => ready,
     canDir: CAN,
-    async forget() { dir = null; await kdel("dir"); }
+    async forget() { dir = null; dpath = ""; await kdel("dir"); await kdel("dpath"); }
   };
 })();
 

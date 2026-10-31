@@ -444,6 +444,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--brand-ink);box-shadow
 .cat,.ver{font-size:12.5px!important}.sum .t,.foot,.foot a{font-size:12.5px!important}
 @media(max-width:700px){.set{grid-template-columns:minmax(0,1fr)!important}.set>*{min-width:0}.set .row{flex-wrap:wrap}.ops{flex-wrap:wrap;justify-content:flex-end}.item{flex-wrap:wrap}.btn.w{white-space:normal}.set .panel{overflow-wrap:anywhere}}
 
+/* 10-31 제이: 연결한 폴더 경로 */
+.dpath{font:600 13px/1.5 ui-monospace,Consolas,"Malgun Gothic",monospace;background:rgba(160,140,108,.14);padding:2px 7px;border-radius:6px;overflow-wrap:anywhere}
+
 
 /* 3.1: 분야 배지 = 앱 색 */
 .cat{background:rgba(10,25,49,.1)!important;color:#0a1931!important}
@@ -606,7 +609,9 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
   const ymdw = d => `${ymd(d)}(${WD[d.getDay()]})`;
   const E = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const mb = n => n >= 1048576 ? (n / 1048576).toFixed(1) + "MB" : Math.max(1, Math.round(n / 1024)) + "KB";
-  let O = null, st = { last: 0, every: 7, later: 0, first: 0 }, dir = null, ready = null;
+  let O = null, st = { last: 0, every: 7, later: 0, first: 0 }, dir = null, dpath = "", ready = null;
+  /* 10-31 제이: 백업 폴더 경로 표시 — 브라우저는 앞부분(C:\\Users\\…)을 알려 주지 않아 고른 폴더부터 */
+  const ptext = () => dir ? "…\\" + (dpath || dir.name).split(" › ").join("\\") : "";
 
   /* 저장: 이 앱 전용 IndexedDB (폴더 손잡이는 IndexedDB에만 넣을 수 있음) */
   function idb() { return new Promise((res, rej) => { const r = indexedDB.open("bj-backup", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
@@ -624,7 +629,7 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
   /* 백업 폴더 정하기: 데이터 폴더가 있으면 그 안 「백업」, 아니면 고르는 창(사진 폴더에서 시작 → 안에 「앱이름_백업」을 만듦) */
   async function autoDir() {
     if (dir || !CAN || typeof O.dataDir !== "function") return dir;
-    try { const d = await O.dataDir(); if (d && await perm(d, false)) { dir = await d.getDirectoryHandle("백업", { create: true }); await kset("dir", dir); } } catch (e) {}
+    try { const d = await O.dataDir(); if (d && await perm(d, false)) { dir = await d.getDirectoryHandle("백업", { create: true }); await kset("dir", dir); let dp = ""; try { dp = (O.dataPath && O.dataPath()) || d.name; } catch (e) { dp = d.name; } dpath = dp + " › 백업"; await kset("dpath", dpath); } } catch (e) {}
     return dir;
   }
   async function pickDir(forRestore) {
@@ -637,7 +642,7 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
         if (sub) t = sub; else if (!forRestore && !/백업/.test(h.name)) t = await h.getDirectoryHandle(bkFolderName(), { create: true });
       }
     } catch (e) {}
-    dir = t; await kset("dir", t); return t;
+    dir = t; await kset("dir", t); dpath = t === h ? h.name : h.name + " › " + t.name; await kset("dpath", dpath); return t;
   }
 
   async function writeTo(h, name, blob) {
@@ -657,7 +662,7 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
     const n = new Date(), name = `${O.prefix}${ymd(n)}_${p2(n.getHours())}${p2(n.getMinutes())}.${O.ext}`;
     let where = "";
     if (useDir) {
-      try { await writeTo(dir, name, blob); where = `「${dir.name}」 폴더`; }
+      try { await writeTo(dir, name, blob); where = ptext(); }
       catch (e) { toast("폴더에 쓰지 못했어요 — 파일로 받을게요."); download(blob, name); where = "다운로드 폴더"; }
     } else {
       const file = new File([blob], name, { type: O.mime || "application/octet-stream" });
@@ -688,13 +693,13 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
       <div class="bkx-r"><button class="bkx-b go" data-bkx-pick>백업 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
         o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
         o.querySelector("[data-bkx-file]").onclick = pickFile; });
-    if (!has) return modal(`${head}<p class="bkx-p">기억해 둔 백업 폴더 <b>「${E(dir.name)}」</b>를 열려면 허용이 한 번 필요해요.</p>
+    if (!has) return modal(`${head}<p class="bkx-p">기억해 둔 백업 폴더 <b class="bkx-path">${E(ptext())}</b>를 열려면 허용이 한 번 필요해요.</p>
       <div class="bkx-r"><button class="bkx-b go" data-bkx-ok>폴더 열기(허용)</button><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
         o.querySelector("[data-bkx-ok]").onclick = async () => { if (await perm(dir, true)) restore(); };
         o.querySelector("[data-bkx-pick]").onclick = async () => { if (await pickDir(true)) restore(); };
         o.querySelector("[data-bkx-file]").onclick = pickFile; });
     const L = await listIn(dir);
-    modal(`${head}<p class="bkx-p">백업 폴더 <b>「${E(dir.name)}」</b> · ${L.length ? `백업 ${L.length}개 — 맨 위가 가장 최근이에요.` : "아직 백업이 없어요."}</p>
+    modal(`${head}<p class="bkx-p">백업 폴더 <b class="bkx-path">${E(ptext())}</b><br>${L.length ? `백업 ${L.length}개 — 맨 위가 가장 최근이에요.` : "아직 백업이 없어요."}</p>
       ${L.length ? `<div class="bkx-l">${L.map((x, i) => { const d = new Date(x.time); return `<button class="bkx-it${i ? "" : " new"}" data-bkx-i="${i}"><span><b>${ymdw(d)} ${p2(d.getHours())}:${p2(d.getMinutes())}</b><small>${E(x.name)} · ${mb(x.size)}</small></span>${i ? "" : "<em>최근</em>"}<i>되살리기</i></button>`; }).join("")}</div>` : ""}
       <div class="bkx-r"><button class="bkx-b" data-bkx-pick>다른 폴더 고르기</button><button class="bkx-b" data-bkx-file>파일 직접 고르기</button></div>`, o => {
         o.querySelectorAll("[data-bkx-i]").forEach(b => b.onclick = async () => { const x = L[+b.dataset.bkxI]; closeModal(); await O.restore(await x.h.getFile()); });
@@ -702,13 +707,13 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
         o.querySelector("[data-bkx-file]").onclick = pickFile; });
   }
 
-  function info() { const days = st.last ? Math.floor((Date.now() - st.last) / 864e5) : null; return { last: st.last, days, every: st.every, dir: dir ? dir.name : "", canDir: CAN, lastText: st.last ? ymdw(new Date(st.last)) : "없음" }; }
+  function info() { const days = st.last ? Math.floor((Date.now() - st.last) / 864e5) : null; return { last: st.last, days, every: st.every, dir: dir ? dir.name : "", path: ptext(), canDir: CAN, lastText: st.last ? ymdw(new Date(st.last)) : "없음" }; }
   async function settings() {
     await ready; await autoDir(); const I = info();
     modal(`<div class="bkx-h"><b>백업 설정</b><button class="bkx-c" data-bkx-x aria-label="닫기">×</button></div>
       <div class="bkx-kv"><span>마지막 백업</span><b>${I.lastText}${I.days != null ? ` <small>(${I.days ? I.days + "일 전" : "오늘"})</small>` : ""}</b></div>
-      ${CAN ? `<div class="bkx-kv"><span>백업 폴더</span><b>${I.dir ? E(I.dir) : "아직 안 정함"}</b><button class="bkx-b sm" data-bkx-pick>${I.dir ? "바꾸기" : "정하기"}</button></div>
-        <p class="bkx-p sm">백업은 이 폴더에 바로 저장되고 최근 ${O.keep || 10}개만 남겨요. 되살릴 때도 이 폴더에서 찾아요. USB · 원드라이브처럼 다른 곳에 두면 더 안전해요.${AND ? "<br>폴더 고르는 창: ⋮ 또는 「새 폴더」 → 이름 → 「이 폴더 사용」 → 「허용」" : ""}</p>`
+      ${CAN ? `<div class="bkx-kv"><span>백업 폴더</span><b class="bkx-path">${I.dir ? E(I.path) : "아직 안 정함"}</b><button class="bkx-b sm" data-bkx-pick>${I.dir ? "바꾸기" : "정하기"}</button></div>
+        <p class="bkx-p sm">백업은 이 폴더에 바로 저장되고 최근 ${O.keep || 10}개만 남겨요. 되살릴 때도 이 폴더에서 찾아요. USB · 원드라이브처럼 다른 곳에 두면 더 안전해요. (앞부분 경로 C:\\Users\\… 는 브라우저가 보안상 알려 주지 않아서, 고른 폴더부터 보여 드려요.)${AND ? "<br>폴더 고르는 창: ⋮ 또는 「새 폴더」 → 이름 → 「이 폴더 사용」 → 「허용」" : ""}</p>`
       : `<p class="bkx-p sm">이 브라우저는 폴더에 바로 저장할 수 없어서, 백업하면 ${MOB ? "공유 창이 열려요 — 「파일에 저장」(아이폰) · 내 드라이브 · 카톡 나에게 보내기 등에 두세요" : "다운로드 폴더에 받아져요"}. 되살릴 때는 그 파일을 고르면 돼요.</p>`}
       <div class="bkx-kv"><span>백업 알림</span><select class="bkx-sel" data-bkx-ev>${[[3, "3일마다"], [7, "7일마다(권장)"], [14, "14일마다"], [30, "30일마다"], [0, "알리지 않음"]].map(([v, n]) => `<option value="${v}" ${st.every === v ? "selected" : ""}>${n}</option>`).join("")}</select></div>
       <div class="bkx-r"><button class="bkx-b go" data-bkx-run>지금 백업</button><button class="bkx-b" data-bkx-rs>백업에서 되살리기</button></div>`, o => {
@@ -728,7 +733,7 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
     if (typeof O.quiet === "function" && O.quiet()) return;
     await autoDir(); const days = st.last ? Math.floor((now - st.last) / 864e5) : null;
     const r = document.createElement("div"); r.className = "bkx-rm"; r.setAttribute("role", "status");
-    r.innerHTML = `<div class="bkx-rt"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><small>${CAN ? (dir ? `누르면 「${E(dir.name)}」 폴더에 바로 저장돼요.` : "백업 폴더를 한 번 정하면 다음부터는 누르기만 하면 돼요.") : "휴대폰을 바꾸거나 앱을 지워도 되살릴 수 있게 파일로 받아 두세요."}</small></div>
+    r.innerHTML = `<div class="bkx-rt"><b>${days == null ? "아직 백업이 없어요" : `마지막 백업이 ${days}일 전이에요`}</b><small>${CAN ? (dir ? `누르면 ${E(ptext())} 폴더에 바로 저장돼요.` : "백업 폴더를 한 번 정하면 다음부터는 누르기만 하면 돼요.") : "휴대폰을 바꾸거나 앱을 지워도 되살릴 수 있게 파일로 받아 두세요."}</small></div>
       <div class="bkx-rb"><button class="bkx-b go" data-bkx-now>지금 백업</button><button class="bkx-b" data-bkx-later>3일 뒤에</button><button class="bkx-c" data-bkx-set aria-label="백업 설정" title="백업 설정">⋯</button></div>`;
     r.querySelector("[data-bkx-now]").onclick = async () => { await run(); };
     r.querySelector("[data-bkx-later]").onclick = async () => { st.later = Date.now() + 3 * 864e5; await saveSt(); hideRemind(); toast("3일 뒤에 다시 알려 드릴게요."); };
@@ -752,6 +757,7 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 .bkx-it span{flex:1;min-width:0}.bkx-it b{display:block;font-size:14.5px;font-variant-numeric:tabular-nums}.bkx-it small{display:block;font-size:12.5px;color:#6f6857;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bkx-it em{font-style:normal;font-size:12.5px;font-weight:800;color:#b5600f}.bkx-it i{font-style:normal;font-size:13px;font-weight:800;color:#20263a;white-space:nowrap}
 .bkx-kv{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(160,140,108,.25)}.bkx-kv span{width:84px;flex-shrink:0;color:#5b5547;font-weight:700;font-size:13.5px}.bkx-kv b{flex:1;min-width:0;overflow-wrap:anywhere}
+.bkx-path{font:600 13px/1.45 ui-monospace,Consolas,"Malgun Gothic",monospace;overflow-wrap:anywhere}
 .bkx-sel{flex:1;font:inherit;font-size:14px;min-height:40px;border-radius:10px;border:1px solid #d8cfbf;background:#fcf9f4;padding:0 8px}
 .bkx-rm{position:fixed;z-index:10040;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom));width:min(560px,calc(100% - 24px));box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 14px;border-radius:16px;background:#f7f2ea;color:#1f2125;box-shadow:0 14px 40px rgba(40,34,20,.28),inset 0 0 0 1.5px rgba(224,138,62,.55);font-size:14px;text-align:left}
 .bkx-rt{flex:1 1 240px;min-width:0}.bkx-rt b{display:block;font-size:15px}.bkx-rt small{display:block;font-size:12.5px;color:#5b5547;line-height:1.5;margin-top:2px}
@@ -763,14 +769,14 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
     setup(o) {
       O = Object.assign({ ext: "zip", mime: "application/zip", keep: 10 }, o);
       if (!document.getElementById("bkx-css")) { const s = document.createElement("style"); s.id = "bkx-css"; s.textContent = CSS; (document.head || document.documentElement).appendChild(s); }
-      ready = (async () => { const s = await kget("st"); if (s) st = Object.assign(st, s); if (o.legacyLast && !st.last) { try { const l = await o.legacyLast(); if (l) st.last = l; } catch (e) {} } dir = (await kget("dir")) || null; })();
+      ready = (async () => { const s = await kget("st"); if (s) st = Object.assign(st, s); if (o.legacyLast && !st.last) { try { const l = await o.legacyLast(); if (l) st.last = l; } catch (e) {} } dpath = (await kget("dpath")) || ""; dir = (await kget("dir")) || null; })();
       setTimeout(remind, o.delay || 5000);
       return ready;
     },
     run, restore, settings, remind, info: () => info(),
     ready: () => ready,
     canDir: CAN,
-    async forget() { dir = null; await kdel("dir"); }
+    async forget() { dir = null; dpath = ""; await kdel("dir"); await kdel("dpath"); }
   };
 })();
 </script><script>/* ══ 공통: 엑셀 붙여넣기 「엑셀 표 예시」 (2026-10-31) ══
@@ -1280,8 +1286,8 @@ function DataSettings({db}){
   const reset=()=>{ if(prompt("모든 데이터를 삭제합니다. 삭제하려면 '삭제'라고 입력하세요")==="삭제"){ Store.clearAll(); try{ localStorage.removeItem(GS.MK); }catch(e){} location.reload(); } };
   return html`<${GdSection} /><div class="sec"><h3>이 기기 저장 · 폴더</h3><div class="desc">기록은 늘 <b>이 기기 브라우저 안</b>에 먼저 저장돼요(인터넷 없어도 됨). 브라우저 데이터를 지우면 함께 사라지니 위 구글 드라이브 동기화나 아래 폴더 저장 · 백업을 함께 쓰세요.</div>
     ${FS_OK?html`
-      <div class="sw"><div class="grow"><div class="t">내 PC 폴더에 함께 저장</div><div class="d">${dirName?`연결됨: ${dirName} — 저장할 때마다 연도별 파일(매매일지_2026.json)과 settings.json을 폴더에 기록`:"저장할 때마다 선택한 폴더에 연도별 파일로 기록합니다"}</div></div>
-        ${dirName?html`<button class="btn s" onClick=${disconnect}>해제</button>`:html`<button class="btn s p" onClick=${connect}>폴더 선택</button>`}</div>
+      <div class="sw"><div class="grow"><div class="t">내 PC 폴더에 함께 저장</div><div class="d">${dirName?html`연결됨 <code class="dpath">…\\${dirName}</code><br />저장할 때마다 연도별 파일(매매일지_2026.json)과 settings.json을 폴더에 기록`:"저장할 때마다 선택한 폴더에 연도별 파일로 기록합니다"}</div></div>
+        ${dirName?html`<span class="row" style="gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn s" onClick=${connect}>다른 폴더로 바꾸기</button><button class="btn s" onClick=${disconnect}>해제</button></span>`:html`<button class="btn s p" onClick=${connect}>폴더 선택</button>`}</div>
       ${dirName?html`<div class="row" style="margin-bottom:8px"><button class="btn" onClick=${()=>db.writeAllToFolder().then(refresh).then(()=>toast("폴더에 저장했습니다"))}>지금 폴더에 저장</button><button class="btn" onClick=${loadFromFolder}>폴더에서 불러오기</button></div>
         <div class="muted">폴더 파일: ${files.filter(f=>/\.json$/.test(f)).join(", ")||"(없음)"}</div>`:null}
       <div class="muted" style="margin-top:6px">브라우저를 다시 열면 보안상 폴더 접근 허용을 한 번 더 물어볼 수 있습니다.</div>`

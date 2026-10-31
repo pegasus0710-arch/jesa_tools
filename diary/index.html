@@ -330,9 +330,9 @@ mark{background:#fbe3a6;color:inherit}
 .stkbar{z-index:8}
 .stkbar button.on{background:var(--g);color:#fff}
 .book.dropon{outline:2px dashed #195455;outline-offset:4px}
-.ltools{position:absolute;left:-30px;top:150px;display:flex;flex-direction:column;gap:6px;z-index:0}
-.ltool{width:28px;border:0;border-radius:7px 0 0 7px;background:#e7dcc8;color:var(--ink);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer}
-.ltool .i{width:15px;height:15px}
+.ltools{position:absolute;left:-31px;top:150px;display:flex;flex-direction:column;gap:6px;z-index:0}
+.ltool{width:30px;border:1px solid #cdbfa6;border-right:0;border-radius:8px 0 0 8px;background:var(--paper);color:var(--g);font-weight:700;box-shadow:-2px 2px 5px rgba(80,60,30,.18);font-size:12.5px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer}
+.ltool .i{width:16px;height:16px}
 .ltool span{writing-mode:vertical-rl;letter-spacing:1px}
 .ltool:hover{width:33px;margin-left:-5px;background:var(--g);color:#fff}
 .toolrow{display:none;gap:8px;flex-wrap:wrap}
@@ -366,6 +366,11 @@ mark{background:#fbe3a6;color:inherit}
 @media (min-width:901px){.pg>.dayph{min-height:84px;box-sizing:border-box;align-items:flex-end}.qtoday{margin:0}.pg.l:has(>.dayph),.pg.r:has(>.dayph){padding-top:12px}}
 
 .ib .dot.ok{background:#3e9b5f}.ib .dot.err{background:#c23a2b}.ib .dot.busy{animation:gdp 1s infinite alternate}@keyframes gdp{to{opacity:.25}}
+
+.diary.clip{overflow:hidden;resize:none;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent);mask-image:linear-gradient(to bottom,#000 80%,transparent);cursor:text}
+.dmore{align-self:center;height:34px;padding:0 18px;border:1.5px solid var(--g);border-radius:17px;background:var(--paper);color:var(--g);font-size:13.5px;font-weight:700;margin-top:-4px}
+.dmore small{font-weight:500;color:var(--mute)}
+.dmore[hidden]{display:none}
 
 </style></head>
 <body>
@@ -546,7 +551,8 @@ function evDate(e, y) {
 }
 function eventsOn(k) { const y = +k.slice(0, 4); return D.events.filter(e => evDate(e, y) === k); }
 /* TO DO: 기한(due)이 있는 할 일은 그날 하루 쪽 「할 일」에 나오고, 오늘 쪽에는 기한 지난 일도 나옴 — 어디서 체크 · 고쳐도 같은 할 일 */
-function tasksFor(k) { const t0 = today(); return D.tasks.filter(x => x.due === k || (k === t0 && x.due && x.due < t0 && !x.done) || x.done === k).sort((a, b) => (a.done ? 1 : 0) - (b.done ? 1 : 0) || (a.due < b.due ? -1 : a.due > b.due ? 1 : 0)); }
+/* 할 일이 하루 쪽에 뜨는 날: 넣은 날(from)부터 기한까지 매일 · 기한이 지나도 안 했으면 오늘 쪽에 · 기한 없으면 오늘 쪽에 · 한 날에는 체크된 채로 */
+function tasksFor(k) { const t0 = today(); return D.tasks.filter(x => x.done ? x.done === k : x.due ? ((k >= (x.from || (x.due < t0 ? x.due : t0)) && k <= x.due) || (k === t0 && x.due < t0)) : k === t0).sort((a, b) => (a.done ? 1 : 0) - (b.done ? 1 : 0) || (a.due < b.due ? -1 : a.due > b.due ? 1 : 0)); }
 function bucketDue(from, within) { return (D.bucket || []).filter(b => b.due && !b.done && b.due >= from && (pd(b.due) - pd(from)) / DAY <= within).map(b => ({ b, k: b.due, dd: Math.round((pd(b.due) - pd(from)) / DAY) })); }
 function nextEvents(from, n = 5, within = 400) {
   const out = [], y = +from.slice(0, 4);
@@ -636,8 +642,8 @@ function dayView() {
   if (on("routine")) L += routineBlk(k, d);
   const parts = [];
   if (on("todo")) { const ts = tasksFor(k), t0 = today(); parts.push(`<div class="blk"><span class="lbl">할 일 <small>${ts.filter(t => t.done).length} / ${ts.length}</small></span>
-    ${ts.map(t => { const late = !t.done && t.due < k ? Math.round((pd(k) - pd(t.due)) / DAY) : 0; return `<div class="li ${t.done ? "done" : ""}">${ck(!!t.done, `data-task="${t.id}"`)}<input type="text" data-tk="${t.id}" value="${esc(t.t)}" aria-label="할 일" />${late ? `<span class="chip" style="background:#f3d9cf;font-size:11.5px;height:22px" title="기한 ${ymdw(t.due)}">${late}일 지남</span>` : ""}<button class="x" data-tdue="${t.id}" aria-label="다른 날로 미루기" title="내일로 미루기">→</button><button class="x" data-tkdel="${t.id}" aria-label="지우기">×</button></div>`; }).join("")}
-    <button class="add" data-tadd="${k}">+ 할 일</button>${k === t0 ? "" : ""}<button class="add" data-page="todo" style="padding-top:0">전체 TO DO 리스트 ›</button></div>`); }
+    ${ts.map(t => { const late = !t.done && t.due < k ? Math.round((pd(k) - pd(t.due)) / DAY) : 0; return `<div class="li ${t.done ? "done" : ""}">${ck(!!t.done, `data-task="${t.id}"`)}<input type="text" data-tk="${t.id}" value="${esc(t.t)}" aria-label="할 일" />${late ? `<span class="chip" style="background:#f3d9cf;font-size:11.5px;height:22px" title="기한 ${ymdw(t.due)}">${late}일 지남</span>` : ""}${!t.done && t.due && t.due >= k ? `<span class="chip" style="font-size:11.5px;height:22px;flex-shrink:0" title="기한 ${ymdw(t.due)}">${t.due === k ? "오늘까지" : "D-" + Math.round((pd(t.due) - pd(k)) / DAY)}</span>` : ""}<button class="x" data-tdue="${t.id}" aria-label="다른 날로 미루기" title="내일로 미루기">→</button><button class="x" data-tkdel="${t.id}" aria-label="지우기">×</button></div>`; }).join("")}
+    <button class="add" data-tadd="${k}">+ 할 일</button>${k === t0 ? "" : ""}</div>`); }
   if (on("pday") || evs.length || (d.sched || []).length) parts.push(`<div class="blk"><span class="lbl">일정 · 계획</span>
     ${evs.map(e => `<div class="li"><span class="tm">${esc(EVT[e.type] || "")}</span><span class="t">${esc(e.name)}${e.cal === "lunar" ? ` <small style="color:var(--faint)">음 ${e.m}.${e.d}</small>` : ""}</span>${e.type === "memorial" ? `<a href="https://luvbong.tistory.com/727" target="_blank" rel="noopener" style="font-size:12.5px">지방 ›</a>` : ""}</div>`).join("")}
     ${(d.sched || []).map((t, i) => `<div class="li"><input class="tm" data-arr="sched" data-i="${i}" data-key="tm" value="${esc(t.tm || "")}" placeholder="시간" aria-label="시간" /><input type="text" data-arr="sched" data-i="${i}" data-key="t" value="${esc(t.t)}" aria-label="일정" /><button class="x" data-del="sched" data-i="${i}" aria-label="지우기">×</button></div>`).join("")}
@@ -654,7 +660,7 @@ function dayView() {
   let R = `<div class="ph dayph" style="align-items:flex-end"><span class="lbl">오늘 이야기</span>${on("question") ? `<span class="hand" style="font-size:14.5px;color:var(--faint)">Q. ${esc(QS[(qi + QS.length) % QS.length])}</span><button class="mini" id="qNext" style="margin-left:auto">다른 질문</button>` : ""}</div>
     ${quoteToday(k)}
     ${on("title") ? `<label class="sr" for="dtt">제목</label><input id="dtt" data-f="title" value="${esc(d.title || "")}" placeholder="오늘의 제목" style="border:0;border-bottom:1px dashed var(--dash);background:transparent;font-family:var(--hand);font-size:22px;font-weight:700;padding:6px 2px;outline:none;color:var(--ink);width:100%" />` : ""}
-    <label class="sr" for="dtx">오늘 이야기</label><textarea class="diary" id="dtx" data-f="text" placeholder="한 줄만 써도 괜찮아요">${esc(d.text || "")}</textarea>`;
+    <label class="sr" for="dtx">오늘 이야기</label><textarea class="diary" id="dtx" data-f="text" placeholder="한 줄만 써도 괜찮아요">${esc(d.text || "")}</textarea><button class="dmore" id="dMore" hidden>더보기</button>`;
   if (on("trip")) R += tripLog(k, d);
   const g = [];
   if (on("meal")) g.push(`<div class="fl full"><span class="lbl">식사</span><div class="meals">${[["b", "아침"], ["l", "점심"], ["d", "저녁"], ["s", "간식"]].map(([x, n]) => `<label>${n}<input data-meal="${x}" value="${esc((d.meals || {})[x] || "")}" style="border:0;border-bottom:1px dashed var(--dash);background:transparent;font-family:var(--hand);font-size:15px;padding:4px 0;outline:none;color:var(--ink)" /></label>`).join("")}</div></div>`);
@@ -665,7 +671,6 @@ function dayView() {
   if (g.length) R += `<div class="grid2">${g.join("")}</div>`;
   if (on("lastyear")) { const ly = [1, 2, 3].map(n => { const kk = (+k.slice(0, 4) - n) + k.slice(4); const dd = D.days[kk]; return dd && (dd.text || "").trim() ? { n, kk, t: dd.text.trim().split("\n")[0] } : null; }).filter(Boolean)[0];
     if (ly) R += `<button class="ly" data-goday="${ly.kk}" style="margin-top:auto"><span class="pen">${ly.n}년 전 오늘</span><span><span class="num">${ymdw(ly.kk)}</span> ${esc(ly.t.slice(0, 70))}</span></button>`; }
-  R += `<span class="foot">켜 둔 칸만 보여요 · 설정 › 칸 고르기</span>`;
   return book(L, R, deco ? decoLayer(d) + `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "");
 }
 function stkHtml(s, i) {
@@ -885,8 +890,14 @@ function render() {
   const V = { day: dayView, week: weekView, month: monthView, year: yearView, pages: pagesView, page: pageView, find: findView, set: setView }[S.v] || dayView;
   $("#root").innerHTML = header() + `<main class="wrap">${dirBanner() || gdBanner()}${V()}</main>` + bnav();
   fillPhotos($("#root"));
-  if (S.v === "day") { const t = $("#dtx"); if (t) grow(t); anchorDeco(); }
+  if (S.v === "day") { const t = $("#dtx"); if (t) growDiary(t); anchorDeco(); }
 }
+/* 하루 일기 — 쓸 때는 다 보이고, 읽을 때 길면 적당한 곳에서 접고 「더보기」 */
+function growDiary(t) { t.style.height = "auto"; const full = Math.max(t.scrollHeight + 4, 250), lim = (innerWidth > 900 ? 15 : 12) * 36 + 4;
+  const clip = full > lim + 72 && S.dexp !== S.date && document.activeElement !== t; t.style.height = (clip ? lim : full) + "px"; t.classList.toggle("clip", clip);
+  const b = $("#dMore"); if (b) { b.hidden = full <= lim + 72; b.innerHTML = clip ? `더보기 <small>· ${Math.round((full - lim) / 36)}줄 더</small> ▾` : "접기 ▴"; } }
+document.addEventListener("focusin", e => { if (e.target.id === "dtx" && e.target.classList.contains("clip")) { S.dexp = S.date; growDiary(e.target); } });
+document.addEventListener("click", e => { if (e.target.closest("#dMore")) { e.stopImmediatePropagation(); const t = $("#dtx"); if (!t) return; if (t.classList.contains("clip")) { S.dexp = S.date; growDiary(t); } else { S.dexp = null; t.blur(); growDiary(t); const r = t.getBoundingClientRect(); if (r.top < 0) window.scrollBy(0, r.top - 90); } } }, true);
 function grow(t) { t.style.height = "auto"; t.style.height = Math.max(t.scrollHeight + 4, 250) + "px"; }
 function rerenderKeep() { const y = window.scrollY, a = document.activeElement, id = a && a.id; render(); window.scrollTo(0, y); if (id && $("#" + id)) $("#" + id).focus(); }
 
@@ -999,7 +1010,7 @@ document.addEventListener("click", async e => {
   if (ds.add) { const d = dayOf(k, true); (d[ds.add] = d[ds.add] || []).push(ds.add === "money" ? { t: "", a: 0 } : ds.add === "sched" ? { tm: "", t: "" } : { t: "", done: false }); touchDay(k); rerenderKeep(); const ins = $$(`[data-arr="${ds.add}"][data-key="t"]`); if (ins.length) ins[ins.length - 1].focus(); return; }
   if (ds.del) { const d = dayOf(k, true); d[ds.del].splice(+ds.i, 1); touchDay(k); return rerenderKeep(); }
   if (ds.task) { const x = D.tasks.find(t => t.id === ds.task); x.done = x.done ? "" : (S.v === "day" ? (x.due && x.due > S.date ? today() : S.date) : today()); touchSec("tasks"); return rerenderKeep(); }
-  if (ds.tadd) { const x = { id: "k" + uid(), t: "", due: ds.tadd, done: "", memo: "" }; D.tasks.push(x); touchSec("tasks"); rerenderKeep(); const el = $(`[data-tk="${x.id}"]`); if (el) el.focus(); return; }
+  if (ds.tadd) { const x = { id: "k" + uid(), t: "", due: ds.tadd, from: ds.tadd, done: "", memo: "" }; D.tasks.push(x); touchSec("tasks"); rerenderKeep(); const el = $(`[data-tk="${x.id}"]`); if (el) el.focus(); return; }
   if (ds.tkdel) { D.tasks = D.tasks.filter(t => t.id !== ds.tkdel); touchSec("tasks"); return rerenderKeep(); }
   if (ds.tdue) { const x = D.tasks.find(t => t.id === ds.tdue); x.due = addD(S.v === "day" && S.date > today() ? S.date : today(), 1); touchSec("tasks"); toast(`${ymdw(x.due)}로 미뤘어요`); return rerenderKeep(); }
   if (ds.ly !== undefined) { S.ly = ds.ly; S.lp = 1; return render(); }
@@ -1072,7 +1083,7 @@ document.addEventListener("click", async e => {
   if (ds.tdel !== undefined) { if (!confirm("이 여행을 지울까요?")) return; D.trips.splice(+ds.tdel, 1); touchSec("trips"); return render(); }
   if (t.id === "tripImp") return tripImport();
 });
-function addTask() { const i = $("#tNew"); if (!i || !i.value.trim()) return; const t0 = today(); const q = S.tq ?? "0"; const due = q === "0" ? t0 : q === "1" ? addD(t0, 1) : q === "w" ? addD(t0, 6 - ((pd(t0).getDay() + 6) % 7)) : q === "d" ? (S.tqd || "") : ""; D.tasks.push({ id: "k" + uid(), t: i.value.trim(), due, done: "", memo: "" }); touchSec("tasks"); rerenderKeep(); const n = $("#tNew"); if (n) { n.value = ""; n.focus(); } toast(due ? `${ymdw(due)} 할 일로 넣었어요` : "기한 없이 넣었어요"); }
+function addTask() { const i = $("#tNew"); if (!i || !i.value.trim()) return; const t0 = today(); const q = S.tq ?? "0"; const due = q === "0" ? t0 : q === "1" ? addD(t0, 1) : q === "w" ? addD(t0, 6 - ((pd(t0).getDay() + 6) % 7)) : q === "d" ? (S.tqd || "") : ""; D.tasks.push({ id: "k" + uid(), t: i.value.trim(), due, from: t0, done: "", memo: "" }); touchSec("tasks"); rerenderKeep(); const n = $("#tNew"); if (n) { n.value = ""; n.focus(); } toast(due ? `${ymdw(due)} 할 일로 넣었어요` : "기한 없이 넣었어요"); }
 function evRead(p) { const e = p._e; if ($("#evOnce")) e.once = $("#evOnce").value || e.once; if ($("#evM")) { e.m = +$("#evM").value; e.d = +$("#evD").value; e.leap = !!($("#evL") && $("#evL").checked); } }
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closePop(); const v = $(".viewer"); if (v) v.remove(); } if (e.key === "Enter" && e.target.id === "tNew") { e.preventDefault(); addTask(); } if (e.key === "Enter" && e.target.matches("[data-tk]") && S.v === "day") { e.preventDefault(); const b = $("[data-tadd]"); if (b) b.click(); } if (e.key === "Enter" && e.target.matches("[data-arr=sched]")) { e.preventDefault(); const b = $(`[data-add="${e.target.dataset.arr}"]`); if (b) b.click(); } if ($(".lock") && /^[0-9]$/.test(e.key)) pinKey(e.key); if ($(".lock") && e.key === "Backspace") pinKey("back"); if ($(".lock") && e.key === "Enter" && (pinMode === "set1" || pinMode === "set2")) pinKey("ok"); });
 
@@ -1081,7 +1092,7 @@ document.addEventListener("input", e => {
   const t = e.target, ds = t.dataset, k = S.date;
   if (t.id === "fq") { S.q = t.value; if (S.v !== "find") { S.v = "find"; render(); const f = $("#fq"); f.focus(); f.setSelectionRange(f.value.length, f.value.length); } else { const y = t.selectionStart; render(); const f = $("#fq"); f.focus(); f.setSelectionRange(y, y); } return; }
   if (t.id === "fq2") { S.q = t.value; const y = t.selectionStart; render(); const f = $("#fq2"); f.focus(); f.setSelectionRange(y, y); return; }
-  if (ds.f) { const d = dayOf(k, true); d[ds.f] = t.value; if (t.id === "dtx") grow(t); touchDay(k); return; }
+  if (ds.f) { const d = dayOf(k, true); d[ds.f] = t.value; if (t.id === "dtx") growDiary(t); touchDay(k); return; }
   if (ds.meal) { const d = dayOf(k, true); d.meals = d.meals || {}; d.meals[ds.meal] = t.value; touchDay(k); return; }
   if (ds.arr) { const d = dayOf(k, true); d[ds.arr][+ds.i][ds.key] = t.value; touchDay(k); return; }
   if (ds.money !== undefined) { const v = numOf(t.value); moneyFmt(t); const d = dayOf(k, true); d.money[+ds.money].a = v; touchDay(k); return; }

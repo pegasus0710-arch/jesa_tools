@@ -316,6 +316,9 @@ mark{background:#fbe3a6;color:inherit}
 }
 @media (prefers-reduced-motion:reduce){.sw .tr::after{transition:none}}
 
+.deskhint{position:absolute;inset:14px 8px;display:flex;align-items:center;justify-content:center;text-align:center;border:1.5px dashed #d8cdb9;border-radius:10px;color:var(--mute);font-family:var(--ui);font-size:13px;line-height:1.7;pointer-events:none;padding:10px}
+.desk.dropon{outline:2px dashed #195455;outline-offset:2px;background:rgba(25,84,85,.05)}
+
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
@@ -594,6 +597,7 @@ function dayView() {
   if (on("photo") || on("sticker")) L += `<div class="desk" id="desk">
       <div class="pols">${(d.photos || []).map((p, i) => `<div class="pol"><span class="tape" aria-hidden="true"></span><button style="border:0;padding:0;background:none;display:block;width:100%" data-view="${p.id}" aria-label="크게 보기"><img data-pid="${p.id}" alt="" /></button><input class="cap" data-arr="photos" data-i="${i}" data-key="cap" value="${esc(p.cap || "")}" placeholder="한 줄" aria-label="사진 설명" /><button class="star ${p.star ? "on" : ""}" data-star="${i}" aria-label="이달의 사진으로" title="이달의 사진(사진 달력)">★</button><button class="del" data-delp="${i}" aria-label="사진 지우기">×</button></div>`).join("")}</div>
       ${(d.stk || []).map((s, i) => stkHtml(s, i)).join("")}
+      ${!(d.photos || []).length && !(d.stk || []).length ? `<div class="deskhint">사진 · 스티커를 붙이는 자리예요<br />${on("photo") ? "아래 「+ 사진」 · 「붙여넣기」, PC는 사진 파일을 여기로 끌어 놓아도 돼요" : "아래 「+ 스티커」 · 「+ 글자 테이프」"}<br />스티커 · 테이프는 끌어서 아무 데나 옮겨요</div>` : ""}
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">${on("photo") && (d.photos || []).length < 4 ? `<label class="dashb" style="display:inline-flex;align-items:center;cursor:pointer">+ 사진<input type="file" accept="image/*" multiple id="phIn" class="sr" /></label><button class="dashb" id="phPaste" title="PC는 Ctrl+V도 돼요">복사한 사진 붙여넣기</button>` : ""}${on("sticker") ? `<button class="dashb" id="stkBtn">+ 스티커</button><button class="dashb" id="tapeBtn">+ 글자 테이프</button>` : ""}</div>`;
 
@@ -1115,6 +1119,11 @@ async function tripImport() {
 function ideaSizeSave() { let ch = false; $$("[data-idea]").forEach(t => { const x = D.ideas[+t.dataset.idea]; if (!x) return; const h = Math.round(t.offsetHeight); if (h && t.style.height && Math.abs(h - (x.h || 0)) > 2) { x.h = h; ch = true; } }); if (ch) touchSec("ideas"); }
 document.addEventListener("pointerup", () => { if ($("[data-idea]")) setTimeout(ideaSizeSave, 0); });
 document.addEventListener("touchend", () => { if ($("[data-idea]")) setTimeout(ideaSizeSave, 0); }, { passive: true });
+
+/* 사진 파일을 하루 쪽 사진 자리로 끌어 놓기 (PC) */
+document.addEventListener("dragover", e => { const k = e.target.closest && e.target.closest("#desk"); if (!k || S.v !== "day" || !on("photo") || ![...(e.dataTransfer.types || [])].includes("Files")) return; e.preventDefault(); k.classList.add("dropon"); });
+document.addEventListener("dragleave", e => { const k = e.target.closest && e.target.closest("#desk"); if (k && !k.contains(e.relatedTarget)) k.classList.remove("dropon"); });
+document.addEventListener("drop", e => { const k = e.target.closest && e.target.closest("#desk"); if (!k || S.v !== "day" || !on("photo")) return; e.preventDefault(); k.classList.remove("dropon"); const fs = [...(e.dataTransfer.files || [])].filter(f => f.type.startsWith("image/")); if (!fs.length) return toast("사진 파일만 넣을 수 있어요"); addPhotos(fs); });
 
 /* ───────── 이 기기 폴더에도 저장 (지침 7번 PC 저장 폴더 표준 · 공통기능지도 「용량 큰 앱 = 기기 폴더」) ─────────
    PC 크롬 · 엣지 · 안드로이드 크롬: 고른 폴더 안 「일기노트」 폴더에 일기노트.json + 사진/ 을 자동으로 씀(원본 한 벌 더).

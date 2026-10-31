@@ -1134,7 +1134,7 @@ async function pickDir() {
     if (await hasJson(h)) found = true;
     else { let sub = null; try { sub = await h.getDirectoryHandle("일기노트"); } catch (e) {}
       if (sub && await hasJson(sub)) { target = sub; found = true; }
-      else if (h.name !== "일기노트") target = await h.getDirectoryHandle("일기노트", { create: true }); }
+      else if (h.name !== "일기노트" && !ANDROID) { try { target = await h.getDirectoryHandle("일기노트", { create: true }); } catch (e) { target = h; } } }
     DIR.h = target; DIR.perm = "granted"; DIR.written = new Set(); await setMeta("dir", target).catch(() => {});
     D.set.dirName = target === h ? h.name : h.name + " › " + target.name; D.set.dirOn = true; save();
     if (!found) { try { const f = await target.getFileHandle("일기노트_안내.txt", { create: true }); const w = await f.createWritable(); await w.write("﻿" + DREADME); await w.close(); } catch (e) {} }
@@ -1146,7 +1146,7 @@ async function pickDir() {
 async function dirPerm() { if (!DIR.h) return pickDir(); try { DIR.perm = await DIR.h.requestPermission({ mode: "readwrite" }); } catch (e) { DIR.perm = "denied"; } if (DIR.perm === "granted") { await dirRead(); await dirWrite(true); toast("폴더에 다시 연결했어요"); } render(); }
 async function dirOff() { if (!confirm("폴더 연결을 끊을까요? (폴더 안 파일은 그대로 남아요)")) return; DIR.h = null; DIR.perm = null; D.set.dirOn = false; D.set.dirName = ""; await st("meta", "readwrite", o => o.delete("dir")).catch(() => {}); save(); render(); }
 const dirOk = () => DIR.h && DIR.perm === "granted";
-async function photoDir(create) { return DIR.h.getDirectoryHandle("사진", { create: !!create }); }
+async function photoDir(create) { try { return await DIR.h.getDirectoryHandle("사진", { create: !!create }); } catch (e) { if (e.name === "NotAllowedError" || e.name === "InvalidModificationError" || e.name === "TypeMismatchError") return DIR.h; throw e; } }
 /* 폴더 → 이 기기 (합치기) */
 async function dirRead() {
   if (!dirOk()) return 0;
@@ -1180,7 +1180,7 @@ async function dirWrite(all) {
 /* 이 기기에 없는 사진은 폴더에서 */
 async function photoFromDir(id) {
   if (!dirOk()) return null;
-  try { const pd2 = await photoDir(false); let f = null, enc = false; try { f = await (await pd2.getFileHandle(id + ".jpg")).getFile(); } catch (e) { f = await (await pd2.getFileHandle(id + ".bin")).getFile(); enc = true; }
+  try { const pd2 = await photoDir(false).catch(() => DIR.h); let f = null, enc = false; try { f = await (await pd2.getFileHandle(id + ".jpg")).getFile(); } catch (e) { f = await (await pd2.getFileHandle(id + ".bin")).getFile(); enc = true; }
     let b = new Uint8Array(await f.arrayBuffer()); if (enc) { if (!LOCK.key) return null; b = await decBytes(LOCK.key, b); }
     const blob = new Blob([b], { type: "image/jpeg" }), th = await shrink(blob, 400, 0.8); await st("photos", "readwrite", s => s.put({ id, blob, th })); return { blob, th };
   } catch (e) { return null; }

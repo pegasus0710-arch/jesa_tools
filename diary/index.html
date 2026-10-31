@@ -347,21 +347,25 @@ mark{background:#fbe3a6;color:inherit}
 .mcat{height:32px;padding:0 13px;border:0;border-radius:8px 8px 3px 3px;background:#efe6d6;font-size:13.5px;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
 .mcat small{font-size:11.5px;color:var(--mute)}
 .mcat.on{background:var(--g);color:#fff;font-weight:700}.mcat.on small{color:#cfe0da}
-.qlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px}
-.qcard{position:relative;background:#fbf7ee;border:1px solid #e6dcc8;border-radius:4px;padding:18px 16px 10px 22px;box-shadow:0 2px 6px rgba(80,60,30,.10);display:flex;flex-direction:column;gap:8px}
-.qcard::before{content:"\201C";position:absolute;left:6px;top:-6px;font-size:42px;color:#c9b99a;font-family:Georgia,serif}
-.qcard .qt{border:0;background:transparent;font-family:var(--pen);font-size:22px;line-height:1.45;resize:vertical;min-height:84px;outline:none;color:var(--ink)}
-.qmeta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-top:1px dashed var(--dash);padding-top:6px}
-.qmeta input{border:0;background:transparent;font-size:13px;outline:none;min-width:0}
-.qsrc{flex:1 1 160px;display:flex;align-items:center;gap:4px;color:var(--sub);font-size:13px}.qsrc input{flex:1}
-.qcat{width:84px;background:#efe6d6!important;border-radius:6px;padding:3px 6px!important}
-.qd{font-size:11.5px;color:var(--mute)}
+.qnote{position:relative;padding-left:46px;display:flex;flex-direction:column;gap:26px;padding-top:6px}
+.qnote::before{content:"";position:absolute;left:30px;top:0;bottom:0;width:1.5px;background:#e8b9ad}
+.qent{display:flex;flex-direction:column}
+.qhead{display:flex;align-items:center;gap:8px;min-height:28px}
+.qd{font-size:12px;color:var(--mute)}
+.qcat{width:96px;border:0;border-bottom:1px dashed var(--dash);background:transparent;font-size:12.5px;color:var(--sub);outline:none;padding:2px 0}
+.qhead .x,.qhead .bstar{opacity:.55}.qent:hover .qhead .x,.qent:focus-within .qhead .x,.qhead .bstar.on{opacity:1}
+.qt{border:0;outline:none;resize:vertical;width:100%;font-family:var(--pen);font-size:24px;line-height:40px;padding:0 4px;color:var(--ink);background:transparent repeating-linear-gradient(to bottom,transparent 0,transparent 39px,var(--line) 39px,var(--line) 40px);background-attachment:local;min-height:80px}
+.qsrc{align-self:flex-end;display:flex;align-items:center;gap:6px;font-family:var(--pen);font-size:21px;color:var(--sub);width:min(100%,340px)}
+.qsrc input{flex:1;border:0;background:transparent;outline:none;font-family:var(--pen);font-size:21px;color:var(--sub);min-width:0;text-align:left}
+@media (max-width:900px){.qnote{padding-left:26px}.qnote::before{left:14px}.qt{font-size:21px;line-height:36px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 35px,var(--line) 35px,var(--line) 36px)}}
 .qtoday{display:block;width:100%;text-align:left;border:0;background:#f6efe2;border-radius:6px;padding:10px 14px;margin-bottom:4px;cursor:pointer}
 .qtoday .pen{font-size:21px;line-height:1.35;color:var(--ink)}.qtoday small{display:block;font-size:12px;color:var(--sub);margin-top:2px}
-.qmeta .bstar{font-size:18px}.qmeta .bstar.on{color:#d79b20}
+.qhead .bstar{font-size:18px}.qhead .bstar.on{color:#d79b20}
 @media (max-width:900px){.hd{flex-wrap:nowrap}.hd .ttl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:0 1 auto}.todayb{flex-shrink:0}.hd .ib{flex-shrink:0}}
 .toolrow .dashb{display:inline-flex;align-items:center;cursor:pointer}
-@media (min-width:901px){.pg>.dayph{min-height:104px;box-sizing:border-box;align-items:flex-end}.qtoday{margin:0}}
+@media (min-width:901px){.pg>.dayph{min-height:84px;box-sizing:border-box;align-items:flex-end}.qtoday{margin:0}.pg.l:has(>.dayph),.pg.r:has(>.dayph){padding-top:12px}}
+
+.ib .dot.ok{background:#3e9b5f}.ib .dot.err{background:#c23a2b}.ib .dot.busy{animation:gdp 1s infinite alternate}@keyframes gdp{to{opacity:.25}}
 
 </style></head>
 <body>
@@ -1290,7 +1294,7 @@ async function photoFromDir(id) {
     const blob = new Blob([b], { type: "image/jpeg" }), th = await shrink(blob, 400, 0.8); await st("photos", "readwrite", s => s.put({ id, blob, th })); return { blob, th };
   } catch (e) { return null; }
 }
-function dirChip() { if (!CAN_DIR || IOS) return ""; const need = !DIR.h || DIR.perm !== "granted"; if (!DIR.h && !Object.values(D.days).some(d => (d.photos || []).length)) return `<button class="ib" id="dirGo" aria-label="이 기기 폴더에 저장" title="이 기기 폴더에도 저장">${I(IC.folder)}</button>`; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}${need ? `<span class="dot"></span>` : ""}</button>`; }
+function dirChip() { if (!CAN_DIR || IOS) return ""; const need = !DIR.h || DIR.perm !== "granted"; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}<span class="dot ${need ? "" : "ok"}"></span></button>`; }
 function dirBox() {
   if (!CAN_DIR || IOS) return "";
   const nm = ANDROID ? "휴대폰 폴더" : "PC 폴더";
@@ -1415,12 +1419,10 @@ function quoteView() {
   return PH("좋은 글", `<button class="mini g" id="qAdd" style="margin-left:auto">+ 좋은 글</button>`)
     + `<div class="mcats"><button class="mcat ${!F ? "on" : ""}" data-qf="">모두 <small class="num">${D.quotes.length}</small></button><button class="mcat ${F === "★" ? "on" : ""}" data-qf="★">★ 아끼는 글</button>${cats.filter(c => D.quotes.some(q => q.cat === c)).map(c => `<button class="mcat ${F === c ? "on" : ""}" data-qf="${esc(c)}">${esc(c)}</button>`).join("")}</div>`
     + `<datalist id="qcats">${cats.map(c => `<option value="${esc(c)}">`).join("")}</datalist>`
-    + `<div class="qlist">${L.map(q => { const i = D.quotes.indexOf(q); return `<div class="qcard">
-        <textarea class="qt" data-qk="${i}" data-qkey="t" rows="3" placeholder="마음에 남은 문장" aria-label="좋은 글">${esc(q.t || "")}</textarea>
-        <div class="qmeta"><span class="qsrc">— <input data-qk="${i}" data-qkey="src" value="${esc(q.src || "")}" placeholder="누가 · 어디서 (책 · 영화 · 사람)" aria-label="출처" /></span>
-        <input class="qcat" data-qk="${i}" data-qkey="cat" list="qcats" value="${esc(q.cat || "")}" placeholder="분류" aria-label="분류" />
-        <span class="num qd">${q.date ? ymdw(q.date) : ""}</span>
-        <button class="bstar ${q.fav ? "on" : ""}" data-qfav="${i}" aria-label="아끼는 글">★</button><button class="x" data-qdel="${i}" aria-label="지우기">×</button></div></div>`; }).join("") || `<div class="empty">${F ? "이 분류에 적은 글이 없어요" : "책 · 영화 · 누군가의 말 — 마음에 남은 문장을 모아 두세요"}</div>`}</div>`
+    + `<div class="qnote">${L.map(q => { const i = D.quotes.indexOf(q), n = Math.max(2, (q.t || "").split("\n").length + Math.floor((q.t || "").length / 38)); return `<div class="qent">
+        <div class="qhead"><span class="num qd">${q.date ? ymdw(q.date) : ""}</span><input class="qcat" data-qk="${i}" data-qkey="cat" list="qcats" value="${esc(q.cat || "")}" placeholder="분류" aria-label="분류" /><span style="flex:1"></span><button class="bstar ${q.fav ? "on" : ""}" data-qfav="${i}" aria-label="아끼는 글" title="아끼는 글">★</button><button class="x" data-qdel="${i}" aria-label="지우기">×</button></div>
+        <textarea class="qt" data-qk="${i}" data-qkey="t" rows="${Math.min(12, n)}" placeholder="마음에 남은 문장을 적어요" aria-label="좋은 글">${esc(q.t || "")}</textarea>
+        <div class="qsrc">— <input data-qk="${i}" data-qkey="src" value="${esc(q.src || "")}" placeholder="누가 · 어디서 (책 · 영화 · 사람)" aria-label="출처" /></div></div>`; }).join("") || `<div class="empty">${F ? "이 분류에 적은 글이 없어요" : "책 · 영화 · 누군가의 말 — 마음에 남은 문장을 모아 두세요"}</div>`}</div>`
     + `<span class="foot">켜 두면 하루 쪽 오른쪽 위에 날마다 한 편씩 돌아가며 보여요</span>`;
 }
 /* 하루 쪽에 오늘의 좋은 글 한 편 */
@@ -1528,7 +1530,7 @@ async function gdSync(opt = {}) {
 }
 let gdT; function gdAuto() { if (!gdOn() || !GD.token || Date.now() > GD.exp - 60000) return; clearTimeout(gdT); gdT = setTimeout(() => gdSync({ toast: false }), 3000); }
 function gdLabel() { if (GD.busy) return "동기화하는 중…"; if (!gdOn()) return "저장됨 · 이 기기"; if (GD.err) return "동기화 안 됨"; return D.set.gdLast ? "드라이브 " + p2(new Date(D.set.gdLast).getHours()) + ":" + p2(new Date(D.set.gdLast).getMinutes()) : "드라이브"; }
-function gdChip() { return `<button class="ib" id="gdGo" aria-label="${gdOn() ? "지금 동기화" : "구글 드라이브 연결"}" title="${gdOn() ? "지금 동기화" : "구글 드라이브 연결 — PC · 휴대폰 같이 쓰기"}">${I(gdOn() && !GD.err ? IC.cloudok : IC.cloud)}${!gdOn() || GD.err || (dirtyGd && !GD.token) ? `<span class="dot"></span>` : ""}</button>`; }
+function gdChip() { return `<button class="ib" id="gdGo" aria-label="${gdOn() ? "지금 동기화" : "구글 드라이브 연결"}" title="${gdOn() ? "지금 동기화" : "구글 드라이브 연결 — PC · 휴대폰 같이 쓰기"}">${I(gdOn() && !GD.err ? IC.cloudok : IC.cloud)}<span class="dot ${!gdOn() ? "" : GD.err ? "err" : GD.busy ? "busy" : dirtyGd && !GD.token ? "" : "ok"}"></span></button>`; }
 function paintGd(m) { const s = $("#saved"); if (s) s.textContent = m || gdLabel(); const b = $("#gdGo"); if (b) b.outerHTML = gdChip(); }
 function gdBox() { return `<div class="li" style="font-family:var(--ui)">${I(IC.cloud)}<span class="t" style="font-family:var(--ui)">구글 드라이브 동기화 <small style="color:var(--mute)">${gdOn() ? esc(D.set.gdEmail || "연결됨") + " · 「일기노트」 폴더" : "PC · 휴대폰 같이 · 기기를 바꿔도 안전"}</small></span>${gdOn() ? `<button class="mini g" id="gdGo">지금 동기화</button><button class="mini ln" id="gdOff">끊기</button>` : `<button class="mini g" id="gdGo">연결</button>`}</div>`; }
 function gdBanner() { if (gdOn() || S.v === "set" || Object.keys(D.days).length < 3 || !gdHttp()) return ""; return `<div class="banner"><span class="o">●</span><span style="flex:1">구글 드라이브를 연결해 두면 휴대폰 · PC가 같이 맞춰지고, 기기를 바꿔도 일기가 남아요</span><button class="mini g" id="gdGo">연결</button></div>`; }

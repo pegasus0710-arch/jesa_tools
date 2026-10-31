@@ -1163,6 +1163,22 @@ body.pc .iph{--tile:64px}
 .timg td.t{width:58px;font-weight:700}.timg td.k{width:62px;color:#555}.timg td span{color:#555}.timg .m{font-size:12.5px;color:#555}
 .timg section p{margin:6px 0 0;font-size:13px;color:#333}.timg .pfoot2{margin-top:12px;font-size:12px;color:#777;text-align:right}
 
+/* 10-31 제이(B안): 다가오는 여행 칩 — 바탕을 다른 아이콘과 다르게 + 살짝 반짝 + 깜빡이는 주황 점 */
+.upc-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 16px 10px;margin-top:-4px}
+.upc-row::-webkit-scrollbar{display:none}
+.pcbar .upc-row{padding:2px 4px;margin:0 10px 0 0;max-width:56vw}
+.upc{position:relative;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px 0 11px;border:0;border-radius:12px;cursor:pointer;overflow:hidden;
+  background:linear-gradient(135deg,#e2eef1,#cfe4e8);color:#1f2125;font:700 13.5px/1 inherit;white-space:nowrap;box-shadow:inset 0 0 0 1.5px rgba(31,127,143,.35),2px 3px 8px rgba(31,127,143,.18)}
+.upc svg{width:17px;height:17px;color:#1f7f8f;flex-shrink:0}
+.upc b{color:#c35f12;font-weight:800}
+.upc.now{background:linear-gradient(135deg,#fdf0de,#f8dcb7);box-shadow:inset 0 0 0 1.5px rgba(245,109,3,.6),2px 3px 8px rgba(245,109,3,.25)}
+.upc::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-18deg);animation:upcShine 4.5s ease-in-out infinite;pointer-events:none}
+.upc-dot{position:absolute;right:5px;top:5px;width:7px;height:7px;border-radius:50%;background:#f56d03;box-shadow:0 0 0 0 rgba(245,109,3,.6);animation:upcDot 1.6s ease-out infinite}
+.upc:hover{box-shadow:inset 0 0 0 2px #1f7f8f,2px 3px 8px rgba(31,127,143,.22)}.upc:active{transform:translateY(1px)}
+@keyframes upcShine{0%,62%{left:-60%}100%{left:130%}}
+@keyframes upcDot{0%{box-shadow:0 0 0 0 rgba(245,109,3,.6);opacity:1}70%{box-shadow:0 0 0 7px rgba(245,109,3,0);opacity:.55}100%{box-shadow:0 0 0 0 rgba(245,109,3,0);opacity:1}}
+@media (prefers-reduced-motion:reduce){.upc::after,.upc-dot{animation:none}}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -2801,7 +2817,7 @@ function tabsHtml() { const on = S.scr === "set" ? "set" : S.scr === "list" ? "l
   return `<nav class="tabs t3"><button class="${on === "list" ? "on" : ""}" data-gohome>${IC.plane}내 여행</button><button class="${on === "trip" ? "on" : ""}" data-today ${ct ? "" : "disabled"}>${IC.cal}${ct && phase(ct).k === "on" ? "오늘" : "다음 여행"}</button><button class="${on === "set" ? "on" : ""}" data-go="set">${IC.gear}설정</button></nav>`; }
 function pcBar() { const on = S.scr === "set" ? "set" : "list";
   return `<header class="pcbar"><span class="lg">${IC.plane}<i></i></span><span class="bn"><small>BLOG J 무료 도구 · 생활</small><b>여행 노트</b></span>
-  <nav class="pcnav"><button class="${on === "list" ? "on" : ""}" data-gohome>${IC.plane}내 여행</button></nav><span class="sp"></span>${stBar()}<span class="hd pcgd">${instBtn(true)}</span><button class="ib pcset ${on === "set" ? "on" : ""}" data-go="set" aria-label="설정" title="설정">${IC.gear}</button></header>`; }
+  <nav class="pcnav"><button class="${on === "list" ? "on" : ""}" data-gohome>${IC.plane}내 여행</button></nav><span class="sp"></span>${upChips()}${stBar()}<span class="hd pcgd">${instBtn(true)}</span><button class="ib pcset ${on === "set" ? "on" : ""}" data-go="set" aria-label="설정" title="설정">${IC.gear}</button></header>`; }
 function render(top) {
   const pc = isPC(); document.body.classList.toggle("pc", pc);
   document.body.classList.toggle("wide", pc && D.set.wide === true);   /* 10-31 제이: PC 화면 전체 폭으로 보기 */
@@ -3186,6 +3202,14 @@ function tcatSheet() { const C = tCats(), n = c => D.items.filter(t => catOf(t) 
   return `<b class="sht">${IC.folder} 카테고리 고치기</b><p class="hint">국내 · 해외 · 캠핑처럼 내 여행을 나눌 이름을 직접 만들어요. 카테고리를 정하지 않은 여행은 「어디로」(국내 · 해외)에 따라 들어가요.</p>
     ${C.map((c, i) => `<div class="mrow tcrow"><span>${esc(c)} <small>${n(c)}개</small></span><button class="ib s" data-tcmv="${i}:-1" ${i ? "" : "disabled"} aria-label="위로">${IC.up}</button><button class="ib s" data-tcren="${esc(c)}" aria-label="이름 바꾸기">${IC.pen}</button><button class="ib s" data-tcdel="${esc(c)}" aria-label="지우기">${IC.trash}</button></div>`).join("")}
     <button class="btn w" data-tcadd="0">${IC.plus} 새 카테고리</button>`; }
+/* 10-31 제이(B안): 머리줄에 다가오는 여행 · 여행 중 칩 — 여러 개면 옆으로, 이름은 짧게, 바탕을 달리하고 살짝 반짝 + 깜빡이는 주황 점 */
+function upTrips() { return D.items.filter(t => phase(t).k !== "after").sort((a, b) => (phase(a).k === "on" ? -1 : 0) - (phase(b).k === "on" ? -1 : 0) || a.start.localeCompare(b.start)); }
+function upChips() {
+  const L = upTrips(); if (!L.length) return "";
+  const sh = n => { n = (n || "여행").trim(); const a = [...n]; return a.length > 6 ? a.slice(0, 5).join("") + "…" : n; };
+  return `<div class="upc-row" role="list" aria-label="다가오는 여행">${L.map(t => { const p = phase(t), on = p.k === "on";
+    return `<button class="upc${on ? " now" : ""}" role="listitem" data-trip="${t.id}" title="${esc(t.name || "여행")} · ${ymdw(dOf(t, 0))} ${on ? "여행 중" : "출발"}"><i class="upc-dot"></i>${IC.plane}<span class="upc-n">${esc(sh(t.name))}</span><b class="num">${on ? (p.i + 1) + "일째" : p.n === 0 ? "D-day" : "D-" + p.n}</b></button>`; }).join("")}</div>`;
+}
 function scrList() {
   const right = `${stBar()}${instBtn()}`;
   const empty = `<div class="empty"><b>첫 여행을 만들어 보세요</b><p>날짜만 고르면 1일째 · 2일째가 저절로 생겨요.<br>여행사 패키지 일정은 통째로 복사해서 붙여넣으면 날짜별로 정리돼요.</p><button class="btn go w" data-newtrip>${IC.plus} 새 여행 만들기</button></div>`;
@@ -3193,7 +3217,7 @@ function scrList() {
   setTimeout(autoTips, 400);
   const tipB = `<button class="btn sm tipb" data-tips>${IC_HELP} 이렇게 써요</button>`;
   if (isPC()) return `<div class="pc2 wide"><div>${hd("내 여행", "", `<span class="hdr2">${tipB}<button class="btn nv sm" data-newtrip>${IC.plus} 새 여행</button></span>`)}<div class="body">${list}</div></div></div>`;
-  return hd("여행 노트", "", `<button class="ib" data-tips aria-label="이렇게 써요" title="이렇게 써요">${IC_HELP}</button>` + right) + `<div class="body">${list}</div>${D.items.length ? `<button class="fab" data-newtrip aria-label="새 여행">${IC.plus}</button>` : ""}`;
+  return hd("여행 노트", "", `<button class="ib" data-tips aria-label="이렇게 써요" title="이렇게 써요">${IC_HELP}</button>` + right) + upChips() + `<div class="body">${list}</div>${D.items.length ? `<button class="fab" data-newtrip aria-label="새 여행">${IC.plus}</button>` : ""}`;
 }
 /* 「이렇게 써요」: 앱을 열 때 한 번 살짝 띄웠다가 사라짐(머리의 단추로 다시 보기) */
 function showTips(auto) {

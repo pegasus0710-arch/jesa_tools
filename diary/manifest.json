@@ -1,0 +1,31 @@
+{
+ "id": "/jesa_tools/diary/",
+ "name": "일기 노트 | Blog J",
+ "short_name": "일기 노트",
+ "description": "종이 다이어리처럼 쓰는 일기 · 기분 · 사진 · 스티커 · 루틴 · 우리 집 날 — Blog J 무료 도구",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#e6dccb",
+ "theme_color": "#e6dccb",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512-mask.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

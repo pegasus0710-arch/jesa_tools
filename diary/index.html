@@ -354,7 +354,8 @@ const IC = {
   dl: '<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/>',
   check: '<path d="M5 12l5 5 9-10"/>',
   img: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 3 3-2 4 3"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>'
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
 };
 const WXS = [
   ["sun", "맑음", '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>'],
@@ -415,7 +416,7 @@ function touchDay(k) { const d = dayOf(k, true); d.u = Date.now(); save(); }
 function touchSec(s) { D.su[s] = Date.now(); save(); }
 function save(now) {
   clearTimeout(saveT);
-  const go = async () => { try { await setMeta("data", packLocal()); } catch (e) { toast("저장하지 못했어요: " + e.message); } dirtyGd = true; if (typeof gdAuto === "function") gdAuto(); paintSaved(); };
+  const go = async () => { try { await setMeta("data", packLocal()); } catch (e) { toast("저장하지 못했어요: " + e.message); } dirtyGd = true; if (typeof gdAuto === "function") gdAuto(); if (typeof dirAuto === "function") dirAuto(); paintSaved(); };
   if (now) return go(); saveT = setTimeout(go, 500);
 }
 function packLocal() { const o = { v: 1, days: D.days, su: D.su, set: D.set }; SECS.forEach(s => o[s] = D[s]); return o; }
@@ -436,7 +437,7 @@ async function addPhoto(file) {
   PURL[id] = { f: URL.createObjectURL(big), t: URL.createObjectURL(th) }; return id;
 }
 async function photoUrl(id, big) {
-  if (!PURL[id]) { const o = await st("photos", "readonly", s => s.get(id)); if (!o) return ""; PURL[id] = { f: URL.createObjectURL(o.blob), t: URL.createObjectURL(o.th || o.blob) }; }
+  if (!PURL[id]) { let o = await st("photos", "readonly", s => s.get(id)); if (!o && typeof photoFromDir === "function") o = await photoFromDir(id); if (!o) return ""; PURL[id] = { f: URL.createObjectURL(o.blob), t: URL.createObjectURL(o.th || o.blob) }; }
   return big ? PURL[id].f : PURL[id].t;
 }
 async function delPhoto(id) { await st("photos", "readwrite", o => o.delete(id)).catch(() => {}); if (PURL[id]) { URL.revokeObjectURL(PURL[id].f); URL.revokeObjectURL(PURL[id].t); delete PURL[id]; } }
@@ -514,6 +515,7 @@ function header() {
     <label class="find"><span class="sr">찾기</span>${I(IC.find)}<input id="fq" placeholder="일기 · 태그 · 날짜 찾기" value="${esc(S.q)}" /></label>
     <span class="sync" id="saved">${gdLabel()}</span>
     ${instBtn()}
+    ${dirChip()}
     ${gdChip()}
     ${D.set.lock ? `<button class="ib" id="lockNow" aria-label="지금 잠그기" title="지금 잠그기">${I(IC.lock)}</button>` : ""}
     <button class="ib" data-go="set" aria-label="설정 · 칸 고르기" title="설정 · 칸 고르기">${I(IC.set)}</button>
@@ -755,6 +757,7 @@ function setView() {
    <div class="blk" style="margin-top:auto;padding-top:14px;border-top:1px dashed var(--dash)"><span class="lbl">지키기 · 옮기기</span>
      <div class="li" style="font-family:var(--ui)">${I(IC.lock)}<span class="t" style="font-family:var(--ui)">비밀번호 잠금 <small style="color:var(--mute)">드라이브에도 잠긴 채로</small></span><button class="mini ${D.set.lock ? "ln" : "g"}" id="lockSet">${D.set.lock ? "바꾸기 · 끄기" : "켜기"}</button></div>
      ${gdBox()}
+     ${dirBox()}
      <div class="li" style="font-family:var(--ui)">${I(IC.dl)}<span class="t" style="font-family:var(--ui)">백업 파일 <small style="color:var(--mute)">${D.set.lastBackup ? "마지막 " + ymdw(ymd(new Date(D.set.lastBackup))) : "아직 없음"}</small></span><button class="mini ln" id="bkOut">받기</button><label class="mini ln" style="display:inline-flex;align-items:center;cursor:pointer">불러오기<input type="file" accept=".json,application/json" id="bkIn" class="sr" /></label></div>
      ${qrRow()}
      ${instRow()}
@@ -771,7 +774,7 @@ function render() {
   if (D.set.lock && !LOCK.open) return lockView();
   if (!D.set.setupDone && S.v !== "set") S.v = "set";
   const V = { day: dayView, week: weekView, month: monthView, year: yearView, pages: pagesView, page: pageView, find: findView, set: setView }[S.v] || dayView;
-  $("#root").innerHTML = header() + `<main class="wrap">${gdBanner()}${V()}</main>` + bnav();
+  $("#root").innerHTML = header() + `<main class="wrap">${dirBanner() || gdBanner()}${V()}</main>` + bnav();
   fillPhotos($("#root"));
   if (S.v === "day") { const t = $("#dtx"); if (t) grow(t); }
 }
@@ -1043,6 +1046,93 @@ async function tripImport() {
   });
 }
 
+/* ───────── 이 기기 폴더에도 저장 (지침 7번 PC 저장 폴더 표준 · 공통기능지도 「용량 큰 앱 = 기기 폴더」) ─────────
+   PC 크롬 · 엣지 · 안드로이드 크롬: 고른 폴더 안 「일기노트」 폴더에 일기노트.json + 사진/ 을 자동으로 씀(원본 한 벌 더).
+   아이폰은 폴더를 쓸 수 없음 → 구글 드라이브 + 백업 파일 */
+const CAN_DIR = typeof window.showDirectoryPicker === "function";
+const DIR = { h: null, perm: null, written: new Set(), busy: false };
+const DREADME = "일기 노트(Blog J) 저장 폴더입니다.\r\n\r\n· 일기노트.json = 일기 · 일정 · 따로 쪽 기록 (비밀번호를 걸면 잠긴 채로 저장)\r\n· 사진 폴더 = 일기에 붙인 사진\r\n\r\n이 폴더를 지우거나 옮기면 앱에서 「폴더 다시 연결」을 눌러 주세요.\r\n백업할 때는 이 폴더를 통째로 복사해 두면 됩니다.\r\n만든 곳: https://luvbong.tistory.com\r\n";
+async function dirBoot() {
+  if (!CAN_DIR) return; try { const h = await getMeta("dir"); if (h) { DIR.h = h; DIR.perm = await h.queryPermission({ mode: "readwrite" }); } } catch (e) {}
+}
+async function hasJson(h) { try { await h.getFileHandle("일기노트.json"); return true; } catch (e) { return false; } }
+async function pickDir() {
+  let h; try { h = await window.showDirectoryPicker({ mode: "readwrite", id: "bj-diary-note", startIn: ANDROID ? undefined : "pictures" }); }
+  catch (e) { if (e.name !== "AbortError") toast("폴더를 열지 못했어요: " + e.message); return; }
+  let target = h, found = false;
+  try {
+    if (await hasJson(h)) found = true;
+    else { let sub = null; try { sub = await h.getDirectoryHandle("일기노트"); } catch (e) {}
+      if (sub && await hasJson(sub)) { target = sub; found = true; }
+      else if (h.name !== "일기노트") target = await h.getDirectoryHandle("일기노트", { create: true }); }
+    DIR.h = target; DIR.perm = "granted"; DIR.written = new Set(); await setMeta("dir", target).catch(() => {});
+    D.set.dirName = target === h ? h.name : h.name + " › " + target.name; D.set.dirOn = true; save();
+    if (!found) { try { const f = await target.getFileHandle("일기노트_안내.txt", { create: true }); const w = await f.createWritable(); await w.write("﻿" + DREADME); await w.close(); } catch (e) {} }
+    else await dirRead();
+    await dirWrite(true);
+    toast(found ? `「${target.name}」 폴더에 다시 연결했어요 — 기록을 합쳤어요` : `「${target.name}」 폴더에 자동 저장해요`); render();
+  } catch (e) { toast("폴더에 저장하지 못했어요: " + e.message); }
+}
+async function dirPerm() { if (!DIR.h) return pickDir(); try { DIR.perm = await DIR.h.requestPermission({ mode: "readwrite" }); } catch (e) { DIR.perm = "denied"; } if (DIR.perm === "granted") { await dirRead(); await dirWrite(true); toast("폴더에 다시 연결했어요"); } render(); }
+async function dirOff() { if (!confirm("폴더 연결을 끊을까요? (폴더 안 파일은 그대로 남아요)")) return; DIR.h = null; DIR.perm = null; D.set.dirOn = false; D.set.dirName = ""; await st("meta", "readwrite", o => o.delete("dir")).catch(() => {}); save(); render(); }
+const dirOk = () => DIR.h && DIR.perm === "granted";
+async function photoDir(create) { return DIR.h.getDirectoryHandle("사진", { create: !!create }); }
+/* 폴더 → 이 기기 (합치기) */
+async function dirRead() {
+  if (!dirOk()) return 0;
+  try {
+    const f = await (await DIR.h.getFileHandle("일기노트.json")).getFile(); let o = JSON.parse(await f.text());
+    if (o.enc) { if (!LOCK.key || !D.set.lock || D.set.lock.salt !== o.lock.salt) { const pin = prompt("폴더의 일기가 비밀번호로 잠겨 있어요 — 비밀번호"); if (!pin) return 0; const key = await tryPin(o.lock, pin); if (!key) { toast("비밀번호가 달라요"); return 0; } LOCK.key = key; D.set.lock = o.lock; } o = JSON.parse(new TextDecoder().decode(await decBytes(LOCK.key, unhex(o.data)))); }
+    const n = mergeIn(o); await setMeta("data", packLocal()); return n;
+  } catch (e) { return 0; }
+}
+/* 이 기기 → 폴더 (고칠 때마다, 사진은 없는 것만) */
+let dirT;
+function dirAuto() { if (!dirOk()) return; clearTimeout(dirT); dirT = setTimeout(() => dirWrite(), 1500); }
+async function dirWrite(all) {
+  if (!dirOk() || DIR.busy) return; DIR.busy = true;
+  try {
+    const locked = !!(D.set.lock && LOCK.key);
+    let body = JSON.stringify(syncObj());
+    if (locked) body = JSON.stringify({ v: 1, app: "bj-diary-note", enc: 1, lock: D.set.lock, data: hex(await encBytes(LOCK.key, new TextEncoder().encode(body))) });
+    const fh = await DIR.h.getFileHandle("일기노트.json", { create: true }); const w = await fh.createWritable(); await w.write(body); await w.close();
+    const pd2 = await photoDir(true), ext = locked ? ".bin" : ".jpg";
+    for (const d of Object.values(D.days)) for (const p of d.photos || []) {
+      const n = p.id + ext; if (DIR.written.has(n) && !all) continue;
+      let exists = false; try { await pd2.getFileHandle(n); exists = true; } catch (e) {}
+      if (!exists) { const o = await st("photos", "readonly", s => s.get(p.id)); if (!o) continue; let b = o.blob; if (locked) b = new Blob([await encBytes(LOCK.key, new Uint8Array(await o.blob.arrayBuffer()))]); const ph = await pd2.getFileHandle(n, { create: true }); const ww = await ph.createWritable(); await ww.write(b); await ww.close(); }
+      DIR.written.add(n);
+    }
+    D.set.dirLast = Date.now();
+  } catch (e) { if (e.name === "NotAllowedError") { DIR.perm = "prompt"; render(); } }
+  DIR.busy = false;
+}
+/* 이 기기에 없는 사진은 폴더에서 */
+async function photoFromDir(id) {
+  if (!dirOk()) return null;
+  try { const pd2 = await photoDir(false); let f = null, enc = false; try { f = await (await pd2.getFileHandle(id + ".jpg")).getFile(); } catch (e) { f = await (await pd2.getFileHandle(id + ".bin")).getFile(); enc = true; }
+    let b = new Uint8Array(await f.arrayBuffer()); if (enc) { if (!LOCK.key) return null; b = await decBytes(LOCK.key, b); }
+    const blob = new Blob([b], { type: "image/jpeg" }), th = await shrink(blob, 400, 0.8); await st("photos", "readwrite", s => s.put({ id, blob, th })); return { blob, th };
+  } catch (e) { return null; }
+}
+function dirChip() { if (!CAN_DIR || IOS) return ""; const need = !DIR.h || DIR.perm !== "granted"; if (!DIR.h && !Object.values(D.days).some(d => (d.photos || []).length)) return `<button class="ib" id="dirGo" aria-label="이 기기 폴더에 저장" title="이 기기 폴더에도 저장">${I(IC.folder)}</button>`; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}${need ? `<span class="dot"></span>` : ""}</button>`; }
+function dirBox() {
+  if (!CAN_DIR || IOS) return "";
+  const nm = ANDROID ? "휴대폰 폴더" : "PC 폴더";
+  if (!DIR.h) return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm}에도 저장 <small style="color:var(--mute)">${ANDROID ? "「⋮ → 새 폴더 → 일기노트」를 만들어 그 폴더에서 「이 폴더 사용」" : "사진 폴더 아래 「일기노트」 폴더를 만들어 자동 저장"} · 사진이 많아지면 꼭</small></span><button class="mini g" id="dirGo">연결</button></div>`;
+  const g = DIR.perm === "granted";
+  return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm} <small style="color:${g ? "var(--g)" : "var(--o)"}">${g ? "연결됨" : "다시 연결 필요"} · ${esc(D.set.dirName || DIR.h.name)}</small></span>${g ? "" : `<button class="mini g" id="dirPerm">다시 연결</button>`}<button class="mini ln" id="dirGo">바꾸기</button><button class="mini ln" id="dirOff">끊기</button></div>`;
+}
+function dirBanner() {
+  if (!CAN_DIR || IOS || S.v === "set") return "";
+  if (DIR.h && DIR.perm !== "granted") return `<div class="banner"><span class="o">●</span><span style="flex:1">저장 폴더 「${esc(D.set.dirName || DIR.h.name)}」에 다시 연결해 주세요 — 브라우저를 다시 열면 한 번 허용이 필요해요</span><button class="mini g" id="dirPerm">다시 연결</button></div>`;
+  const ph = Object.values(D.days).reduce((a, d) => a + (d.photos || []).length, 0);
+  if (!DIR.h && ph >= 5 && !(D.set.dirHide && Date.now() < D.set.dirHide)) return `<div class="banner"><span class="o">●</span><span style="flex:1">사진이 ${ph}장 — 이 기기 폴더도 연결해 두면 브라우저 기록을 지워도 일기 · 사진이 남아요</span><button class="mini g" id="dirGo">폴더 연결</button><button class="mini ln" id="dirHide">7일 숨기기</button></div>`;
+  return "";
+}
+document.addEventListener("click", e => { const t = e.target.closest("button"); if (!t) return;
+  if (t.id === "dirGo") { e.stopImmediatePropagation(); pickDir(); } else if (t.id === "dirPerm") { e.stopImmediatePropagation(); dirPerm(); } else if (t.id === "dirOff") { e.stopImmediatePropagation(); dirOff(); } else if (t.id === "dirInfo") { e.stopImmediatePropagation(); S.v = "set"; render(); } else if (t.id === "dirHide") { e.stopImmediatePropagation(); D.set.dirHide = Date.now() + 7 * DAY; save(); render(); } }, true);
+
 /* ───────── 구글 드라이브 (내 드라이브 「일기노트」 폴더 · drive.file — 이 앱이 만든 파일만) ───────── */
 const GD_CLIENT_ID = "1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com";
 const GD_SCOPE = "https://www.googleapis.com/auth/drive.file";
@@ -1114,6 +1204,7 @@ async function gdSync(opt = {}) {
     const want = new Set(); Object.values(D.days).forEach(d => (d.photos || []).forEach(p => want.add(p.id)));
     for (const id of want) {
       const have = await st("photos", "readonly", s => s.get(id));
+      if (!have && await photoFromDir(id)) continue;   /* 폴더에 있는 사진은 드라이브에서 받지 않음 */
       if (!have) { const f = files[id + ".jpg"] || files[id + ".bin"]; if (f) { let b = new Uint8Array(await gdGet(f.id)); if (f.name.endsWith(".bin")) { if (!LOCK.key) continue; b = await decBytes(LOCK.key, b); } const blob = new Blob([b], { type: "image/jpeg" }); const th = await shrink(blob, 400, 0.8); await st("photos", "readwrite", s => s.put({ id, blob, th })); np++; } }
       else if (!files[id + ext]) { paintGd(`사진 올리는 중…`); let body = have.blob; if (locked) body = new Blob([await encBytes(LOCK.key, new Uint8Array(await have.blob.arrayBuffer()))]); await gdUpload(id + ext, body); }
     }
@@ -1173,6 +1264,7 @@ async function boot() {
   try { db = await idbOpen(); } catch (e) { toast("이 브라우저는 저장을 쓸 수 없어요(사생활 보호 창이면 일반 창에서)"); }
   try { loadInto(await getMeta("data")); } catch (e) {}
   if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  await dirBoot(); if (DIR.h && DIR.perm === "granted" && !Object.keys(D.days).length) await dirRead();
   if (!D.set.on) { S.v = "set"; }
   const q = new URLSearchParams(location.search);
   render();

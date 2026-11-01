@@ -459,7 +459,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-01(일) 15:19";
+const BUILD = "2026-11-01(일) 15:22";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -578,8 +578,11 @@ let saveT = null, dirtyGd = false;
 function dayOf(k, make) { let d = D.days[k]; if (!d && make) d = D.days[k] = { u: 0 }; return d; }
 function touchDay(k) { const d = dayOf(k, true); d.u = Date.now(); save(); }
 function touchSec(s) { D.su[s] = Date.now(); save(); }
+/* 11-01 제이: PC에서 바꾼 설정(켜 둔 칸 · 묶음 · 쪽 설정 · 독서 목표)이 휴대폰에 안 오던 문제 — 설정이 바뀌면 그때 시각을 남겨 동기화 때 나중에 바꾼 쪽을 따름 */
+const setShare = () => JSON.stringify({ on: D.set.on || {}, preset: D.set.preset || "", pm: D.set.pm || {}, setupDone: !!D.set.setupDone, bookGoal: D.set.bookGoal || {} });
+function setStamp() { const h = setShare(); if (D.set._sh === undefined) { D.set._sh = h; return; } if (D.set._sh !== h) { D.set._sh = h; D.su.set = Date.now(); } }
 function save(now) {
-  clearTimeout(saveT);
+  clearTimeout(saveT); try { setStamp(); } catch (e) {}
   const go = async () => { try { await setMeta("data", packLocal()); } catch (e) { toast("저장하지 못했어요: " + e.message); } dirtyGd = true; if (typeof gdAuto === "function") gdAuto(); if (typeof dirAuto === "function") dirAuto(); paintSaved(); };
   if (now) return go(); saveT = setTimeout(go, 500);
 }
@@ -1452,7 +1455,10 @@ async function dirWrite(all) {
       DIR.written.add(n);
     }
     D.set.dirLast = Date.now();
-  } catch (e) { if (e.name === "NotAllowedError") { DIR.perm = "prompt"; render(); } }
+    DIR.err = "";
+  } catch (e) { /* 11-01: 휴대폰에서 폴더를 골라도 초록 점이 안 뜨던 문제 — 실패 이유를 화면에 남기고, 허용 상태는 실제로 다시 물어서 정함 */
+    DIR.err = (e.name || "오류") + (e.message ? " — " + e.message : ""); let q = "prompt"; try { q = await DIR.h.queryPermission({ mode: "readwrite" }); } catch (e2) {}
+    DIR.perm = q; toast("폴더에 저장하지 못했어요: " + DIR.err.slice(0, 80)); render(); }
   DIR.busy = false;
 }
 /* 이 기기에 없는 사진은 폴더에서 */
@@ -1463,13 +1469,13 @@ async function photoFromDir(id) {
     const blob = new Blob([b], { type: "image/jpeg" }), th = await shrink(blob, 400, 0.8); await st("photos", "readwrite", s => s.put({ id, blob, th })); return { blob, th };
   } catch (e) { return null; }
 }
-function dirChip() { if (!CAN_DIR || IOS) return ""; const need = !DIR.h || DIR.perm !== "granted"; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}<span class="dot ${!need ? "ok" : ANDROID && DIR.h && typeof gdOn === "function" && gdOn() ? "idle" : ""}"></span></button>`; }
+function dirChip() { if (!CAN_DIR || IOS) return ""; const need = !DIR.h || DIR.perm !== "granted"; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}<span class="dot ${!need && DIR.err ? "err" : !need ? "ok" : ANDROID && DIR.h && typeof gdOn === "function" && gdOn() ? "idle" : ""}"></span></button>`; }
 function dirBox() {
   if (!CAN_DIR || IOS) return "";
   const nm = ANDROID ? "휴대폰 폴더" : "PC 폴더";
   if (!DIR.h) return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm}에도 저장 <small style="color:var(--mute)">${ANDROID ? "「⋮ → 새 폴더 → 일기노트」를 만들어 그 폴더에서 「이 폴더 사용」" : "사진 폴더 아래 「일기노트」 폴더를 만들어 자동 저장"} · 사진이 많아지면 꼭</small></span><button class="mini g" id="dirGo">연결</button></div>`;
   const g = DIR.perm === "granted";
-  return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm} <small style="color:${g ? "var(--g)" : "var(--o)"}">${g ? "연결됨" : ANDROID ? "이번에 열 때 폴더 다시 고르기" : "다시 연결 필요"} · ${esc(D.set.dirName || DIR.h.name)}${!g && ANDROID ? `<br><span style="color:var(--mute)">휴대폰 크롬은 앱을 다시 열면 폴더 허용이 풀려요 — 「폴더 고르기」에서 같은 폴더를 고르면 이어서 저장해요${typeof gdOn === "function" && gdOn() ? " · 구글 드라이브에는 지금도 저장되고 있어요" : ""}</span>` : ""}</small></span>${g ? "" : `<button class="mini g" id="dirPerm">${ANDROID ? "폴더 고르기" : "다시 연결"}</button>`}<button class="mini ln" id="dirGo">바꾸기</button><button class="mini ln" id="dirOff">끊기</button></div>`;
+  return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm} <small style="color:${g ? "var(--g)" : "var(--o)"}">${g ? (DIR.err ? "연결됨 · 저장 실패" : "연결됨") : ANDROID ? "이번에 열 때 폴더 다시 고르기" : "다시 연결 필요"} · ${esc(D.set.dirName || DIR.h.name)}${DIR.err ? `<br><span style="color:#c23a2b">마지막 저장 실패: ${esc(DIR.err.slice(0, 120))}</span>` : ""}${!g && ANDROID ? `<br><span style="color:var(--mute)">휴대폰 크롬은 앱을 다시 열면 폴더 허용이 풀려요 — 「폴더 고르기」에서 같은 폴더를 고르면 이어서 저장해요${typeof gdOn === "function" && gdOn() ? " · 구글 드라이브에는 지금도 저장되고 있어요" : ""}</span>` : ""}</small></span>${g ? "" : `<button class="mini g" id="dirPerm">${ANDROID ? "폴더 고르기" : "다시 연결"}</button>`}<button class="mini ln" id="dirGo">바꾸기</button><button class="mini ln" id="dirOff">끊기</button></div>`;
 }
 function dirBanner() {
   if (!CAN_DIR || IOS || S.v === "set") return "";
@@ -1721,13 +1727,13 @@ async function gdUpload(name, blob, id) {
   return (await gdApi(`https://www.googleapis.com/upload/drive/v3/files${id ? "/" + id : ""}?uploadType=multipart&fields=id,name,modifiedTime`, { method: id ? "PATCH" : "POST", body: fd })).json();
 }
 const gdGet = async id => (await gdApi(`files/${id}?alt=media`)).arrayBuffer();
-function syncObj() { const o = { v: 1, app: "bj-diary-note", days: D.days, su: D.su, set: { on: D.set.on, preset: D.set.preset, pm: D.set.pm, setupDone: D.set.setupDone } }; SECS.forEach(s => o[s] = D[s]); return o; }
+function syncObj() { const o = { v: 1, app: "bj-diary-note", days: D.days, su: D.su, set: { on: D.set.on, preset: D.set.preset, pm: D.set.pm, setupDone: D.set.setupDone, bookGoal: D.set.bookGoal || {} } }; SECS.forEach(s => o[s] = D[s]); return o; }
 function mergeIn(o) {
   let nd = 0;
   Object.keys(o.days || {}).forEach(k => { const a = D.days[k], b = o.days[k]; if (!a || (b.u || 0) > (a.u || 0)) { D.days[k] = b; nd++; } });
   const rs = o.su || {};
   SECS.forEach(s => { if ((rs[s] || 0) > (D.su[s] || 0) && o[s] !== undefined) { D[s] = o[s]; D.su[s] = rs[s]; } });
-  if ((rs.set || 0) > (D.su.set || 0) && o.set) { Object.assign(D.set, { on: o.set.on, preset: o.set.preset, pm: o.set.pm || {}, setupDone: o.set.setupDone || D.set.setupDone }); D.su.set = rs.set; }
+  if ((rs.set || 0) > (D.su.set || 0) && o.set) { Object.assign(D.set, { on: o.set.on, preset: o.set.preset, pm: o.set.pm || {}, setupDone: o.set.setupDone || D.set.setupDone, bookGoal: o.set.bookGoal || D.set.bookGoal || {} }); D.su.set = rs.set; D.set._sh = setShare(); }
   return nd;
 }
 async function gdSync(opt = {}) {

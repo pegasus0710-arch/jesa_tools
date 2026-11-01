@@ -1025,6 +1025,10 @@ async function gdUpload(name, text, id) {
 }
 const gdText = async id => (await gdApi(`files/${id}?alt=media`)).text();
 const gsIds = async txt => { try { const o = await Store.unpack(txt); return Array.isArray(o) ? o.map(x => x.id) : null; } catch (e) { return null; } };
+/* 11-01 동기화 점검: 마지막으로 맞춘 내용(바탕)을 내역 · 설정 묶음마다 짧은 지문으로 기억 — 둘 다 바뀌었을 때 「이 기기에서 안 고친 것」은 다른 기기 것을 따름 */
+const gsH = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); };
+const gsBase = async (n, txt) => { try { const o = await Store.unpack(txt); if (GS.isYear(n)) return Array.isArray(o) ? Object.fromEntries(o.map(x => [x.id, gsH(JSON.stringify(x))])) : null; if (n === "settings.json" && o && typeof o === "object") return Object.fromEntries(Object.keys(o).map(k => [k, gsH(JSON.stringify(o[k]))])); return null; } catch (e) { return null; } };
+const gsHas = (B, id) => Array.isArray(B) ? B.includes(id) : !!(B && Object.prototype.hasOwnProperty.call(B, id));
 const gsSalt = txt => { try { const o = JSON.parse(txt || "null"); return o && o.enc ? o.salt || "?" : ""; } catch (e) { return ""; } };
 
 /* 맞추기 — 파일마다: 드라이브만 바뀜 = 받기 / 이 기기만 바뀜 = 올리기 / 둘 다 = 합치기(연도 파일은 내역 하나하나를 id로 합침, 지운 것도 반영) */
@@ -1036,8 +1040,10 @@ GS.sync = async function (opt = {}) {
   try {
     await gdToken(!!opt.interactive);
     const files = await gdList(), first = !Object.keys(m.rev).length;
-    const pull = async (n, f, txt) => { if (txt == null) txt = await gdText(f.id); localStorage.setItem(this.key(n), txt); m.rev[n] = f.modifiedTime; m.base[n] = this.isYear(n) ? await gsIds(txt) : null; delete m.dirty[n]; pulled++; };
-    const push = async (n, f) => { const txt = localStorage.getItem(this.key(n)); if (txt == null) return; const r = await gdUpload(n, txt, f && f.id); files[n] = r; m.rev[n] = r.modifiedTime; m.base[n] = this.isYear(n) ? await gsIds(txt) : null; delete m.dirty[n]; pushed++; };
+    /* 11-01: 바탕이 비었거나 예전 모양(id 목록)이면 — 이 기기가 안 고친 파일은 지금 내용이 곧 바탕(잠금이 바뀌어 받은 뒤 지운 내역이 되살아나던 문제) */
+    await this.fillBase();
+    const pull = async (n, f, txt) => { if (txt == null) txt = await gdText(f.id); localStorage.setItem(this.key(n), txt); m.rev[n] = f.modifiedTime; m.base[n] = await gsBase(n, txt); delete m.dirty[n]; pulled++; };
+    const push = async (n, f) => { const txt = localStorage.getItem(this.key(n)); if (txt == null) return; const r = await gdUpload(n, txt, f && f.id); files[n] = r; m.rev[n] = r.modifiedTime; m.base[n] = await gsBase(n, txt); delete m.dirty[n]; pushed++; };
     /* ① 암호 잠금이 다르면(다른 기기에서 암호를 켜거나 바꿈) 내역을 합칠 수 없음 → 드라이브 것으로 바꾸고 다시 열기(잠금 화면에서 그 암호) */
     const rs = files["settings.json"];
     let rsTxt = null;
@@ -1045,7 +1051,7 @@ GS.sync = async function (opt = {}) {
     if (rs && rs.modifiedTime !== m.rev["settings.json"]) { const remoteSalt = gsSalt(rsTxt), localSalt = Store.key ? Store.salt || "" : gsSalt(localStorage.getItem(this.key("settings.json")));
       if (remoteSalt !== localSalt) {
         const hasLocal = this.hasTx();
-        if (hasLocal && !confirm(`구글 드라이브의 ${GS_CFG.app}${remoteSalt ? "는 암호 잠금이 걸려 있어서" : "는 암호 잠금이 꺼져 있어서"} 이 기기 것과 합칠 수 없어요.\n\n[확인] 드라이브 것으로 이 기기를 바꿔요 (이 기기 기록은 먼저 백업 파일로 받아 둬요)\n[취소] 동기화를 멈춰요`)) throw new Error("암호 잠금이 기기마다 달라요 — 두 기기의 암호 잠금을 같게 맞춰 주세요");
+        if (hasLocal && !confirm(`구글 드라이브의 기록은 ${remoteSalt ? "암호 잠금이 걸려 있어서" : "암호 잠금이 꺼져 있어서"} 이 기기 것과 합칠 수 없어요.\n\n[확인] 드라이브 것으로 이 기기를 바꿔요 (이 기기 기록은 먼저 백업 파일로 받아 둬요)\n[취소] 동기화를 멈춰요`)) throw new Error("암호 잠금이 기기마다 달라요 — 두 기기의 암호 잠금을 같게 맞춰 주세요");
         if (hasLocal && window.__bjBackup) await window.__bjBackup("동기화전");
         this.importing = true;
         for (const n of this.localNames()) localStorage.removeItem(this.key(n));
@@ -1078,14 +1084,21 @@ GS.sync = async function (opt = {}) {
           else if (rch && !ldirty) await pull(n, f, n === "settings.json" ? rsTxt : null);
           else if (!rch && ldirty) await push(n, f);
           else if (rch && ldirty) {
-            if (n === "settings.json") { if (!m.rev[n]) await pull(n, f, rsTxt); else await push(n, f); }   /* 처음엔 드라이브 설정, 그다음엔 마지막에 고친 이 기기 설정 */
+            if (n === "settings.json") { if (!m.rev[n]) await pull(n, f, rsTxt); else {
+              /* 11-01: 설정도 묶음(분류 · 카드 · 계좌 · 고정비 · 화면 …)마다 — 이 기기에서 안 고친 묶음은 드라이브(다른 기기) 것을 씀. 둘 다 고친 묶음만 이 기기 것 */
+              const R = (await Store.unpack(rsTxt)) || {}, L = (await Store.unpack(loc)) || {}, B = m.base[n] && !Array.isArray(m.base[n]) ? m.base[n] : {}, out = { ...L };
+              for (const s of Object.keys(R)) if (!(s in L) || (B[s] != null && B[s] === gsH(JSON.stringify(L[s])))) out[s] = R[s];
+              if (this.locked()) throw new Error("잠겨서 동기화를 멈췄어요");
+              const txt = await Store.pack(out); localStorage.setItem(k, txt); const r = await gdUpload(n, txt, f.id); files[n] = r; m.rev[n] = r.modifiedTime; m.base[n] = await gsBase(n, txt); delete m.dirty[n]; pulled++; pushed++; } }   /* 처음엔 드라이브 설정, 그다음엔 마지막에 고친 이 기기 설정 */
             else if (this.isYear(n)) {
-              const R = (await Store.unpack(await gdText(f.id))) || [], L = (await Store.unpack(loc)) || [], B = new Set(m.base[n] || []);
+              const R = (await Store.unpack(await gdText(f.id))) || [], L = (await Store.unpack(loc)) || [], B = m.base[n] || {};
               const Lm = new Map(L.map(x => [x.id, x])), Rm = new Map(R.map(x => [x.id, x])), out = [];
               for (const id of new Set([...Lm.keys(), ...Rm.keys()])) { const a = Lm.get(id), b = Rm.get(id);
-                if (a && b) out.push(a); else if (a) { if (!B.has(id)) out.push(a); } else if (b) { if (!B.has(id)) out.push(b); } }
+                if (a && b) { const ha = gsH(JSON.stringify(a)), h0 = Array.isArray(B) ? null : B[id]; out.push(h0 != null && h0 === ha ? b : a); }   /* 11-01: 이 기기에서 안 고친 내역 = 다른 기기에서 고친 것(드라이브)을 씀 */
+                else if (a) { if (!gsHas(B, id)) out.push(a); } else if (b) { if (!gsHas(B, id)) out.push(b); } }
+              if (this.locked()) throw new Error("잠겨서 동기화를 멈췄어요");   /* 동기화 중에 잠기면 암호 없이 쓰지 않게 */
               out.sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
-              const txt = await Store.pack(out); localStorage.setItem(k, txt); const r = await gdUpload(n, txt, f.id); files[n] = r; m.rev[n] = r.modifiedTime; m.base[n] = out.map(x => x.id); delete m.dirty[n]; pulled++; pushed++;
+              const txt = await Store.pack(out); localStorage.setItem(k, txt); const r = await gdUpload(n, txt, f.id); files[n] = r; m.rev[n] = r.modifiedTime; m.base[n] = await gsBase(n, txt); delete m.dirty[n]; pulled++; pushed++;
             } else {   /* 시세 등: 종목마다 더 최근 날짜 */
               const R = (await Store.unpack(await gdText(f.id))) || {}, L = (await Store.unpack(loc)) || {}, out = { ...R };
               for (const [c, v] of Object.entries(L)) if (!out[c] || String((v && v.date) || "") >= String((out[c] && out[c].date) || "")) out[c] = v;
@@ -1105,6 +1118,12 @@ GS.sync = async function (opt = {}) {
   this.busy = false; this.paint();
   if (this.again) { this.again = false; setTimeout(() => this.sync({ toast: false }), 500); }
 };
+/* 11-01 동기화 점검: 바탕이 비었거나 예전 모양(id 목록)이면 — 이 기기가 안 고친 파일은 지금 내용이 곧 바탕.
+   잠금이 바뀌어 드라이브 것을 받으면 그때는 풀 수 없어 바탕이 비어 → 잠금을 푼 뒤 처음 고친 파일에서 지운 내역이 되살아나던 문제. 잠금을 풀자마자 채움 */
+GS.fillBase = async function () { if (this.locked()) return; const m = this.m(); let ch = 0;
+  for (const n of this.localNames()) if ((m.base[n] == null || Array.isArray(m.base[n])) && !m.dirty[n] && m.rev[n]) { const b = await gsBase(n, localStorage.getItem(this.key(n))); if (b) { m.base[n] = b; ch++; } }
+  if (ch) this.save(); };
+setInterval(() => { const l = GS.locked(); if (GS._wasL && !l && GS.m().on) GS.fillBase(); GS._wasL = l; }, 700);
 GS.connect = async function () {
   try { await gdToken(true); } catch (e) { this.err = e.message; this.paint(); if (typeof toast === "function") toast(e.message); return; }
   const m = this.m(); if (!Object.keys(m.rev).length) for (const n of this.localNames()) m.dirty[n] = 1;
@@ -1894,7 +1913,7 @@ function App(){
   useEffect(()=>{ if(!ready||window.__bjBk) return; window.__bjBk=1; BKUP.setup({ app:"trading", name:"매매일지", prefix:"매매일지_백업_", ext:"json", mime:"application/json", accept:".hb,application/json",
     make:()=>window.__bjDb.exportBackup(), count:()=>window.__bjCount||0, dataDir:()=>Store.dirHandle||null, dataFull:()=>{try{return localStorage.getItem("bj-trading-dfull")||"";}catch(e){return "";}}, toast,
     restore:async f=>{ if(!confirm("백업 파일로 현재 데이터를 모두 덮어씁니다. 계속할까요?")) return; toast(await window.__bjDb.importBackup(await f.text())); } }); },[ready]);
-  useEffect(()=>{ window.__bjLoadAll=loadAll; window.__bjBackup=async(t)=>{ dl(await db.exportBackup(),`매매일지_백업_${t||""}_${todayStr().replace(/-/g,"")}.json`); }; window.__bjGoData=()=>{ window.__bjSec="data"; setSk(k=>k+1); setView("set"); }; });
+  useEffect(()=>{ window.__bjLoadAll=async()=>{ const v=window.BJV&&window.BJV.view; await loadAll(); if(v&&window.BJV&&window.BJV.setView) window.BJV.setView(v); }; /* 11-01: 동기화로 받아도 보던 화면 그대로 */ window.__bjBackup=async(t)=>{ dl(await db.exportBackup(),`매매일지_백업_${t||""}_${todayStr().replace(/-/g,"")}.json`); }; window.__bjGoData=()=>{ window.__bjSec="data"; setSk(k=>k+1); setView("set"); }; });
 
   if(!ready) return html`<div class="lock"><div class="muted">불러오는 중…</div></div>`;
   if(locked) return html`<${LockScreen} onUnlock=${unlock} />`;

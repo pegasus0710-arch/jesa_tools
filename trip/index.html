@@ -2511,7 +2511,10 @@ async function importData(o, getPhoto) {
     const ex = D.items.find(x => x.id === id); if (ex && (ex.updated || 0) < t) { for (const p of ex.photos || []) await delPhoto(p.id); D.items = D.items.filter(x => x.id !== id); await delO("items", id).catch(() => {}); nr++; } }
   /* 10-30: 여행(글)을 먼저 모두 넣고 화면에 보여 준 뒤 사진을 받음 — 사진 수백 장을 다 받을 때까지 목록이 비어 있지 않게 */
   for (const r of o.items || []) { if ((D.set.gone[r.id] || 0) >= (r.updated || 0)) continue; const cur = D.items.find(x => x.id === r.id); if (cur && (cur.updated || 0) >= (r.updated || 0)) continue;
-    if (cur) for (const p of cur.photos || []) if (!(r.photos || []).some(x => x.id === p.id)) await delPhoto(p.id);
+    if (cur) for (const p of cur.photos || []) if (!(r.photos || []).some(x => x.id === p.id)) {
+      /* 11-01 동기화 점검: 아직 드라이브에 못 올린 새 사진(마지막 동기화 뒤에 넣은 것 = 다른 기기가 본 적 없음)은 지우지 말고 받은 쪽에 붙여 둠 */
+      if (typeof GD !== "undefined" && GD.importing && GD.files && !GD.files[p.id + ".jpg"] && parseInt(String(p.id).slice(1, 9), 36) > (D.set.gdLast || 0)) { r.photos = [...(r.photos || []), p]; r.updated = Date.now(); continue; }
+      await delPhoto(p.id); }
     const i = D.items.findIndex(x => x.id === r.id); if (i >= 0) D.items[i] = r; else D.items.push(r); await putO("items", r); nr++; }
   const calm = () => typeof render === "function" && !(typeof S !== "undefined" && S.sheet) && !(document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));   /* 입력 · 창이 열려 있으면 화면을 다시 그리지 않음 */
   if (nr) { try { await saveMeta(); if (calm()) render(); } catch (e) {} }

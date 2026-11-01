@@ -1520,7 +1520,10 @@ async function importData(o, getPhoto) {
   for (const r of o.items || []) { if ((D.set.gone[r.id] || 0) >= (r.updated || 0)) continue; const ex = D.items.find(x => x.id === r.id); if (ex && (ex.updated || 0) >= (r.updated || 0)) continue;
     for (const p of r.photos || []) if (await getPh(p.id, getPhoto)) np++;
     const cur = D.items.find(x => x.id === r.id); if (cur && (cur.updated || 0) >= (r.updated || 0)) continue; /* 받는 동안 이 기기에서 더 새로 고쳤으면 그대로 */
-    if (cur) for (const p of cur.photos || []) if (!(r.photos || []).some(x => x.id === p.id)) await delPhoto(p.id);
+    if (cur) for (const p of cur.photos || []) if (!(r.photos || []).some(x => x.id === p.id)) {
+      /* 11-01 동기화 점검: 아직 드라이브에 못 올린 새 사진(마지막 동기화 뒤에 넣은 것 = 다른 기기가 본 적 없음)은 지우지 말고 받은 쪽에 붙여 둠 */
+      if (typeof GD !== "undefined" && GD.importing && GD.files && !GD.files[p.id + ".jpg"] && parseInt(String(p.id).slice(1, 9), 36) > (D.set.gdLast || 0)) { r.photos = [...(r.photos || []), p]; r.updated = Date.now(); continue; }
+      await delPhoto(p.id); }
     const i = D.items.findIndex(x => x.id === r.id); if (i >= 0) D.items[i] = r; else D.items.push(r); await putO("items", r); nr++; }
   for (const r of D.items) for (const p of r.photos || []) if (!PURL[p.id] && await getPh(p.id, getPhoto)) np++;
   /* 분류: 나중에 고친 쪽을 그대로(합치면 지운 · 이름 바꾼 분류가 되살아남) */
@@ -1721,10 +1724,11 @@ async function gdSync(opt = {}) {
       GD.importing = true; try { got = await importData(o, async id => files[id + ".jpg"] ? await gdGet(files[id + ".jpg"].id) : null); } finally { GD.importing = false; }
     }
     const want = new Set(); for (const r of D.items) for (const p of r.photos || []) want.add(p.id + ".jpg");
-    let up = 0; for (const n of want) if (!files[n]) { const o = await st("photos", "readonly", s => s.get(n.replace(/\.jpg$/, ""))); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg"); } }
-    for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
+    /* 11-01 동기화 점검: 목록(스크랩노트.json)을 사진보다 먼저 — 사진을 올리다 앱을 닫아도 다른 기기에 스크랩이 감(레시피 · 여행 노트와 같은 순서) */
     D.set.savedAt = Date.now();
     await gdUpload("스크랩노트.json", new Blob([JSON.stringify(exportObj())], { type: "application/json" }), "application/json", files["스크랩노트.json"] && files["스크랩노트.json"].id);
+    let up = 0; for (const n of want) if (!files[n]) { const o = await st("photos", "readonly", s => s.get(n.replace(/\.jpg$/, ""))); if (o) { GD.msg = `사진 올리는 중 ${++up}…`; gdPaint(); await gdUpload(n, o.blob, "image/jpeg"); } }
+    for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
     if (!D.set.gdEmail) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user && a.user.emailAddress) { D.set.gdEmail = a.user.emailAddress; GD.stc = null; setTimeout(gdPrepSilent, 300); } } catch (er) {} }
     D.set.gdLast = Date.now(); D.set.gdOn = true; GD.syncedThisRun = true; GD.silentFail = false; await setMeta("set", D.set);
     GD.msg = got.nr || got.np ? `동기화했어요 — 받은 스크랩 ${got.nr}개 · 사진 ${got.np}장` : "동기화했어요";

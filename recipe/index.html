@@ -1878,7 +1878,10 @@ async function importData(o, getPhoto) {
     for (const p of r.photos || []) if (await getPh(p.id, getPhoto)) np++;
     /* 사진을 받는 동안 이 기기에서 더 새로 고쳤으면 그대로 둠 */
     const cur = D.recipes.find(x => x.id === r.id); if (cur && (cur.updated || 0) >= (r.updated || 0)) continue;
-    if (cur) for (const p of cur.photos || []) if (!(r.photos || []).some(x => x.id === p.id)) await delPhoto(p.id);
+    if (cur) for (const p of cur.photos || []) if (!(r.photos || []).some(x => x.id === p.id)) {
+      /* 11-01 동기화 점검: 아직 드라이브에 못 올린 새 사진(마지막 동기화 뒤에 넣은 것 = 다른 기기가 본 적 없음)은 지우지 말고 받은 쪽에 붙여 둠 */
+      if (typeof GD !== "undefined" && GD.importing && GD.files && !GD.files[p.id + ".jpg"] && parseInt(String(p.id).slice(1, 9), 36) > (D.set.gdLast || 0)) { r.photos = [...(r.photos || []), p]; r.updated = Date.now(); continue; }
+      await delPhoto(p.id); }
     const i = D.recipes.findIndex(x => x.id === r.id); if (i >= 0) D.recipes[i] = r; else D.recipes.push(r); await putO("recipes", r); nr++; }
   /* 전에 못 받은 사진(아직 안 올라왔거나 받다 끊긴 것)을 다시 받아 봄 */
   for (const r of D.recipes) for (const p of r.photos || []) if (!PURL[p.id] && await getPh(p.id, getPhoto)) np++;
@@ -1886,6 +1889,8 @@ async function importData(o, getPhoto) {
   D.shops.sort((a, b) => (b.created || "").localeCompare(a.created || ""));
   /* 분류: 나중에 고친 쪽을 그대로 씀(합치면 지운 · 이름 바꾼 분류가 되살아남) */
   if (o.cats && ((fresh && o.cats.length && !D.set.catsAt) || (o.catsAt || 0) > (D.set.catsAt || 0))) { D.cats = o.cats.slice(); if (o.catsAt) D.set.catsAt = o.catsAt; }
+  else if (o.cats && (D.set.catsAt || 0) <= 1 && (o.catsAt || 0) >= 1 && JSON.stringify(o.cats) !== JSON.stringify(D.cats)) { /* 11-01: 두 기기 모두 기본 세트만 고른 상태 → 드라이브 것 + 이 기기 레시피가 쓰는 분류만 덧붙임(두 세트가 섞이지 않게) */
+    const used = new Set(D.recipes.map(r => r.cat).filter(Boolean)); D.cats = o.cats.slice(); used.forEach(c => { if (!D.cats.includes(c)) D.cats.push(c); }); D.set.catsAt = 1; }
   else if (o.cats && !o.catsAt && !D.set.catsAt) { D.cats = D.cats || []; o.cats.forEach(c => { if (!D.cats.includes(c)) D.cats.push(c); }); }
   /* 있는 재료 목록도 나중에 고친 쪽을 씀(합치면 지운 재료가 되살아남) */
   if (o.pantry && (o.pantryAt || 0) > (D.set.pantryAt || 0)) { D.pantry = o.pantry.slice(); D.set.pantryAt = o.pantryAt; }
@@ -2144,7 +2149,7 @@ document.addEventListener("click", async e => {
   if (d.cdel) { const i = +d.cdel, old = D.cats[i], n = D.recipes.filter(r => r.cat === old).length; if (!confirm(`「${old}」 분류를 지울까요?${n ? ` 레시피 ${n}개는 「분류 없음」이 돼요.` : ""}`)) return; D.cats.splice(i, 1); for (const r of D.recipes.filter(r => r.cat === old)) { r.cat = ""; await saveRecipe(r); } if (S.cat === old) S.cat = "전체"; await saveCats(); return render(); }
   if (d.tren) { const old = d.tren, v = prompt("태그 이름 (다른 태그와 같게 하면 합쳐져요)", old); if (v && v.trim() && v.trim() !== old) { const nv = v.trim().replace(/^#/, ""); for (const r of D.recipes.filter(r => (r.tags || []).includes(old))) { r.tags = [...new Set(r.tags.map(t => t === old ? nv : t))]; await saveRecipe(r); } if (S.tag === old) S.tag = nv; } return render(); }
   if (d.tdelall) { const old = d.tdelall; if (!confirm(`#${old} 태그를 모든 레시피에서 뺄까요?`)) return; for (const r of D.recipes.filter(r => (r.tags || []).includes(old))) { r.tags = r.tags.filter(t => t !== old); await saveRecipe(r); } if (S.tag === old) S.tag = null; return render(); }
-  if (d.startcats) { if (D.cats != null) { S.sheet = null; render(); return toast("구글 드라이브에서 분류를 불러왔어요 — 설정 → 분류 관리에서 바꿀 수 있어요."); } D.cats = [["김치", "반찬", "국 · 찌개", "밥 · 면", "고기 · 해물", "간식 · 디저트", "기타"], ["한식", "중식", "일식", "양식", "기타"], []][+d.startcats]; await saveMeta(); S.sheet = null; return render(); }
+  if (d.startcats) { if (D.cats != null) { S.sheet = null; render(); return toast("구글 드라이브에서 분류를 불러왔어요 — 설정 → 분류 관리에서 바꿀 수 있어요."); } D.cats = [["김치", "반찬", "국 · 찌개", "밥 · 면", "고기 · 해물", "간식 · 디저트", "기타"], ["한식", "중식", "일식", "양식", "기타"], []][+d.startcats]; D.set.catsAt = 1; await setMeta("set", D.set).catch(() => {}); await saveMeta();   /* 11-01: 1 = 기본 세트만 고름(직접 고친 분류보다 늘 약함) */ S.sheet = null; return render(); }
   if (d.copyurl != null) { const u = mobileUrl(); try { await navigator.clipboard.writeText(u); toast("주소를 복사했어요. 카톡 나에게 보내서 휴대폰에서 여세요."); } catch (er) { prompt("복사해서 쓰세요", u); } return; }
   if (d.kc) { S.kc = d.kc; return render(); }
 });

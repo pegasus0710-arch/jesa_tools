@@ -1964,6 +1964,7 @@ async function askPerm(h, mode = "read") { try { let p = await h.queryPermission
 async function srcHandles() { return (await DB.get("srcH")) || {}; }
 async function srcHandleSet(id, h) { const m = await srcHandles(); if (h) m[id] = h; else delete m[id]; await DB.set("srcH", m); }
 
+const VHS = [];   /* 뒤로 가기용 보기 기록(11-01) */
 function App() {
   const PH = useRef([]), SRC = useRef(new Map());
   const [phase, setPhase] = useState("boot"), [ver, setVer] = useState(0), [tick, setTick] = useState(0), [recPerm, setRecPerm] = useState("none"), [recMode, setRecMode] = useState(null);
@@ -1981,7 +1982,10 @@ function App() {
   useEffect(() => { let raf = 0; TH.onDone = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; setTick(t => t + 1); }); }; return () => { TH.onDone = null; }; }, []);
   const flash = m => { setToast(m); clearTimeout(FLASH_T); FLASH_T = setTimeout(() => setToast(""), 3600); };
   const askP = a => new Promise(res => setAsk({ ...a, k: ++ASK_N, done: v => { setAsk(null); res(v); } }));
-  const setVs = v => { setVs0(v); setSel(new Set()); setFocusId(null); setDay(null); setViewer(false); };
+  const VSR = useRef(vs); VSR.current = vs;
+  const setVs = (v, back) => { /* 11-01 제이: 뒤로 가기 = 이전 폴더 · 보기로 — 옮길 때마다 지금 보기를 쌓아 둠 */
+    if (!back) { const c = VSR.current; if (c && JSON.stringify(c) !== JSON.stringify(v)) { VHS.push(c); if (VHS.length > 60) VHS.shift(); } }
+    setVs0(v); setSel(new Set()); setFocusId(null); setDay(null); setViewer(false); };
   const bump = () => setVer(v => v + 1);
   REC.onPerm = () => setRecPerm(REC.perm);
 
@@ -2236,11 +2240,11 @@ function App() {
       else if (e.key === "Escape" && sel.size) setSel(new Set());
       else if (e.key === "Backspace" && vs.k === "dir" && vs.path) { e.preventDefault(); setVs({ ...vs, path: vs.path.includes("/") ? vs.path.slice(0, vs.path.lastIndexOf("/")) : "" }); }
     }; document.addEventListener("keydown", k); return () => document.removeEventListener("keydown", k); }, [list, fIdx, viewer, phase, view, sel, ask, tagEd, store, vs]);
-  const BK = useRef({}); BK.current = { viewer, ask, tagEd };
+  const BK = useRef({}); BK.current = { viewer, ask, tagEd, setVs };
   useEffect(() => { if (phase !== "ready") return; let leaving = false;
     if (!history.state || !history.state.bjv) history.pushState({ bjv: 1 }, "");
     const onPop = async () => { if (leaving) return; history.pushState({ bjv: 1 }, ""); const b = BK.current;
-      if (b.ask) { b.ask.done(null); return; } if (b.viewer) { setViewer(false); return; } if (b.tagEd) { setTagEd(null); return; }
+      if (b.ask) { b.ask.done(null); return; } if (b.viewer) { setViewer(false); return; } if (b.tagEd) { setTagEd(null); return; } if (VHS.length) { b.setVs(VHS.pop(), true); return; }
       const v = await askP({ title: "사진 뷰어를 나갈까요?", icon: "alert", text: "「뒤로」를 눌러 이전 페이지로 가려고 해요. 태그 · 즐겨찾기는 이미 저장돼 있어요.", buttons: [["나가기", "out"], ["계속 보기", null, "p"]] });
       if (v === "out") { if (history.length < 3) { flash("이 창에는 이전 페이지가 없어요. 창(탭)을 닫으면 나가져요."); return; } leaving = true; window.removeEventListener("popstate", onPop); history.go(-2); } };
     window.addEventListener("popstate", onPop); return () => window.removeEventListener("popstate", onPop); }, [phase]);

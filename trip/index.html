@@ -2402,7 +2402,7 @@ function sheetHtml() {
   else if (k === "tcats") h = tcatSheet();
   else if (k === "phitm" && t) { const n = S.phSel ? S.phSel.size : 0; h = `<b class="sht">고른 사진 ${n}장을 붙일 일정</b>
     <div class="phl">${t.days.map((d, i) => d.items.map(it => `<button class="opt sm" data-phmset="${it.id}"><span><b>${i + 1}일째 ${esc(it.time)} ${esc(it.title)}</b></span></button>`).join("")).join("") || `<p class="hint">아직 일정이 없어요 — 일정을 먼저 넣어 주세요</p>`}</div>
-    <div class="row2"><button class="btn" data-phmset="">어느 일정도 아님</button></div>`; }
+    <div class="row2"><button class="btn nv" data-phmnew>＋ 새 일정으로 만들기</button><button class="btn" data-phmset="">어느 일정도 아님</button></div><p class="hint">새 일정은 고른 사진 중 가장 이른 찍은 시각 · 그날로 만들어져요. 이름을 넣고 저장하면 사진이 붙어요.</p>`; }
   else if (k === "phit" && t) { const p = (t.photos || []).find(x => x.id === S.phId); h = `<b class="sht">이 사진을 붙일 일정</b>${p && PURL[p.id] ? `<img class="phprev" src="${PURL[p.id].t}" alt="">` : ""}
     <div class="phl">${t.days.map((d, i) => d.items.map(it => `<button class="opt sm ${p && p.it === it.id ? "on1" : ""}" data-phset="${it.id}"><span><b>${i + 1}일째 ${esc(it.time)} ${esc(it.title)}</b></span></button>`).join("")).join("")}</div>
     <div class="row2"><button class="btn dl" data-phdel>${IC.trash} 사진 빼기</button><button class="btn" data-phset="">어느 일정도 아님</button><button class="btn nv" data-phview>크게 보기</button></div><button class="btn w" data-phcover style="margin-top:8px">${t.cover === S.phId ? "이 사진이 표지예요" : "이 사진을 여행 표지로"}</button>`; }
@@ -2977,6 +2977,7 @@ async function saveItemForm() {
   const it = { id: e.id, time: e.time, kind: e.kind, title: e.title.trim() || e.place.trim(), place: e.place.trim(), memo: e.memo, cost: +e.cost || 0, per: !!e.per, resv: e.resv.trim(), state: e.state || "", act: e.act || null, ll: e.ll || null };
   t.days.forEach(d => d.items = d.items.filter(x => x.id !== it.id)); const d = t.days[+e._day]; d.items.push(it); sortDay(d);
   for (const p of t.photos || []) if (!p.it || p.it === it.id) p.it = assignPh(t, p);
+  if (Array.isArray(e._ph) && e._ph.length) { const P = new Set(e._ph); for (const p of t.photos || []) if (P.has(p.id)) { p.it = it.id; p.man = true; } S.phSel = null; }   /* 11-01: 고른 사진으로 새 일정 */
   S.day = +e._day; S.edit = null; S.sel = null; await saveTrip(t);
   if (isPC()) render(); else goBack(); toast(e._new ? "넣었어요." : "저장했어요.");
 }
@@ -3397,7 +3398,7 @@ document.addEventListener("change", async e => { const el = e.target; if (el.dat
 
 /* 11-01 제이: 여행 사진 여러 장 골라 한 번에 일정 바꾸기(일정 없는 사진 · 다른 일정 사진 모두) — 붙인 사진은 손으로 붙인 사진(✓)이 되어 다시 나누기에도 그대로 */
 document.addEventListener("click", async e => {
-  const b = e.target.closest("[data-phsel],[data-phtog],[data-phgsel],[data-phsall],[data-phsnone],[data-phmulti],[data-phmset]"); if (!b) return; const d = b.dataset, t = TR(); if (!t) return;
+  const b = e.target.closest("[data-phsel],[data-phtog],[data-phgsel],[data-phsall],[data-phsnone],[data-phmulti],[data-phmset],[data-phmnew]"); if (!b) return; const d = b.dataset, t = TR(); if (!t) return;
   e.stopPropagation(); e.preventDefault();
   if (d.phsel != null) { S.phSel = S.phSel ? null : new Set(); return render(); }
   const SEL = S.phSel; if (d.phmset == null && !SEL) return;
@@ -3406,6 +3407,10 @@ document.addEventListener("click", async e => {
   if (d.phsall != null) { document.querySelectorAll("[data-phtog]").forEach(x => SEL.add(x.dataset.phtog)); return render(); }
   if (d.phsnone != null) { SEL.clear(); return render(); }
   if (d.phmulti != null) { if (!SEL.size) return toast("사진을 먼저 골라 주세요"); S.sheet = "phitm"; return render(); }
+  if (d.phmnew != null) { const S2 = S.phSel; if (!S2 || !S2.size) return; const L = (t.photos || []).filter(p => S2.has(p.id)), ts = L.map(p => phT(t, p)).filter(Boolean).sort((a, b) => a - b)[0];
+    let day = ts ? phDay(t, ts) : -1; if (day < 0) day = Math.min(Math.max(0, S.day || 0), t.days.length - 1); const ll = (L.find(p => p.ll) || {}).ll;
+    const it = newIt({ time: ts && phDay(t, ts) >= 0 ? hm2(ts) : "", memo: `사진 ${L.length}장으로 만든 일정`, ...(ll ? { place: `https://www.google.com/maps/search/?api=1&query=${ll.lat.toFixed(5)},${ll.lng.toFixed(5)}`, ll: { lat: +ll.lat.toFixed(5), lng: +ll.lng.toFixed(5) } } : {}) });
+    it._ph = [...S2]; S.sheet = null; S.day = day; toast(`일정 이름을 넣고 저장하면 고른 사진 ${L.length}장이 붙어요.`); return startItem(it, day, true); }
   if (d.phmset != null) { const S2 = S.phSel; if (!S2 || !S2.size) { S.sheet = null; return render(); } let n = 0; for (const p of t.photos || []) if (S2.has(p.id)) { p.it = d.phmset; p.man = !!d.phmset; n++; }
     if (!d.phmset) t.photos.forEach(p => { if (S2.has(p.id)) p.man = true; });
     await saveTrip(t); let nm = "어느 일정도 아님"; t.days.forEach(dd => dd.items.forEach(it => { if (it.id === d.phmset) nm = it.title || "일정"; }));

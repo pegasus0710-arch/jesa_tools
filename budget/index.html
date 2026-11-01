@@ -9,6 +9,29 @@
 <meta name="theme-color" content="#f0e8db" />
 <link rel="apple-touch-icon" href="icon-192.png" />
 <script>
+/* Blog J 공통 — 잠금 유지(11-01 제이: 새로고침할 때마다 잠기던 문제)
+   잠기는 때 = ① 앱을 새로 시작 ② 3분 넘게 다른 앱 · 10분 넘게 손대지 않음 ③ 「잠그기」.
+   푼 열쇠는 꺼낼 수 없는 형태로 이 기기 저장소에, 이름표는 탭(앱 창)이 닫히면 사라지는 sessionStorage에 */
+window.BJSESS = (function () {
+  const N = "bjsess_" + location.pathname, IH = 180000, IO = 600000;
+  const db = () => new Promise((r, j) => { const q = indexedDB.open("bj-sess", 1); q.onupgradeneeded = () => q.result.createObjectStore("k"); q.onsuccess = () => r(q.result); q.onerror = j; });
+  const put = async v => { const d = await db(); return new Promise(r => { const t = d.transaction("k", "readwrite"); t.objectStore("k").put(v, N); t.oncomplete = r; t.onerror = r; }); };
+  const get = async () => { const d = await db(); return new Promise(r => { const q = d.transaction("k").objectStore("k").get(N); q.onsuccess = () => r(q.result); q.onerror = () => r(null); }); };
+  let last = Date.now(), idle = null, hiddenAt = 0;
+  const has = () => { try { return !!sessionStorage.getItem(N); } catch (e) { return false; } };
+  const mark = n => { try { if (has()) sessionStorage.setItem(N + "_t", String(n)); } catch (e) {} };
+  ["pointerdown", "keydown", "wheel", "touchstart"].forEach(e => document.addEventListener(e, () => { const n = Date.now(); if (n - last > 5000) { last = n; mark(n); } }, { capture: true, passive: true }));
+  document.addEventListener("visibilitychange", () => { if (document.hidden) hiddenAt = Date.now(); else if (hiddenAt && Date.now() - hiddenAt > IH && idle) idle(); });
+  setInterval(() => { if (document.hidden) return; if (Date.now() - last > IO) { if (idle) idle(); } else mark(Date.now()); }, 30000);
+  return {
+    keep(key, salt) { try { let id = sessionStorage.getItem(N); if (!id) { id = Math.random().toString(36).slice(2); sessionStorage.setItem(N, id); } last = Date.now(); sessionStorage.setItem(N + "_t", String(last)); put({ id, key, salt }).catch(() => {}); } catch (e) {} },
+    drop() { try { sessionStorage.removeItem(N); sessionStorage.removeItem(N + "_t"); } catch (e) {} put(null).catch(() => {}); },
+    async restore(salt) { try { const id = sessionStorage.getItem(N), t = +sessionStorage.getItem(N + "_t") || 0; if (!id || Date.now() - t > IH) return null; const m = await get(); if (!m || m.id !== id || m.salt !== salt || !m.key) return null; last = Date.now(); return m.key; } catch (e) { return null; } },
+    onIdle(fn) { idle = fn; }
+  };
+})();
+</script>
+<script>
 /* 설치형(PWA) — 설치 안 한 웹 화면에서만 맨 위 안내 띠 · 설치 안내 창. ?install=1(블로그 「설치하기」)이면 안내 창을 먼저 */
 (function(){
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(function(){});
@@ -1835,12 +1858,12 @@ function App(){
   useEffect(()=>{ (async()=>{
     const h=await HDB.get(); if(h){ const p=await h.queryPermission({mode:"readwrite"}); if(p==="granted") Store.dirHandle=h; else setNeedPerm(true); }
     const raw=Store.rawSettings();
-    if(raw&&raw.enc){ setLocked(true); setReady(true); } else await loadAll();
+    if(raw&&raw.enc){ const k0=window.BJSESS?await BJSESS.restore(JSON.stringify(raw.salt)):null; let ok=false; if(k0){ try{ Store.key=k0; Store.salt=raw.salt; await decryptStr(k0,raw); await loadAll(); ok=true; }catch(e){ Store.key=null; Store.salt=null; } } setLocked(!ok); setReady(true); } else await loadAll();
   })(); },[]);
   const unlock=async(pw)=>{
-    const raw=Store.rawSettings(); try{ const {key}=await deriveKey(pw,raw.salt); Store.key=key; Store.salt=raw.salt; await decryptStr(key,raw); await loadAll(); setLocked(false); setTimeout(()=>{ if(GS.m().on&&GS.live()) GS.sync({toast:false}); else GS.paint(); },300); return true; }catch(e){ Store.key=null; return false; }
+    const raw=Store.rawSettings(); try{ const {key}=await deriveKey(pw,raw.salt); Store.key=key; Store.salt=raw.salt; await decryptStr(key,raw); await loadAll(); setLocked(false); if(window.BJSESS) BJSESS.keep(key,JSON.stringify(raw.salt)); setTimeout(()=>{ if(GS.m().on&&GS.live()) GS.sync({toast:false}); else GS.paint(); },300); return true; }catch(e){ Store.key=null; return false; }
   };
-  const lockNow=()=>{ if(!settings.security.enabled) return; Store.key=null; Store.salt=null; setSettings(null); setTxByYear({}); setLocked(true); setModal(null); };
+  const lockNow=()=>{ if(!settings||!settings.security.enabled) return; if(window.BJSESS) BJSESS.drop(); Store.key=null; Store.salt=null; setSettings(null); setTxByYear({}); setLocked(true); setModal(null); }; if(window.BJSESS) BJSESS.onIdle(()=>{ if(Store.key) lockNow(); });
   const reconnect=async()=>{ const h=await HDB.get(); if(!h) return setNeedPerm(false); try{ const p=await h.requestPermission({mode:"readwrite"}); if(p==="granted"){ Store.dirHandle=h; setNeedPerm(false); toast("폴더를 다시 연결했습니다"); } }catch(e){} };
 
   // ── 저장 API ──

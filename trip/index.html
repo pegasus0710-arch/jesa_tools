@@ -1207,6 +1207,13 @@ body.pc .iph{--tile:64px}
 @media (max-width:600px){.vw2-top .vw2-loc{display:flex!important;flex-basis:100%;order:9;font-size:12.5px;padding-top:4px;color:#d9dde8}}
 
 
+/* 11-01 여러 장 골라 일정 바꾸기 */
+.phselbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.phselbar small{color:var(--mute,#6f6857);font-size:13px}.phselbar b{font-size:14.5px}
+.phselbar:has(b){position:sticky;top:0;z-index:5;background:var(--paper,#f4efe6);padding:8px 10px;border-radius:12px;box-shadow:0 4px 12px rgba(80,60,30,.16)}
+.pgr button .phck{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:inset 0 0 0 2px #fff,0 1px 3px rgba(0,0,0,.35)}
+.pgr button.phon{outline:3px solid #195455;outline-offset:-3px}.pgr button.phon img{opacity:.78}
+.pgr button.phon .phck{background:#195455}.pgr button.phon .phck:after{content:"";position:absolute;left:7px;top:3.5px;width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -2381,6 +2388,9 @@ function sheetHtml() {
       <div class="row2">${t.days.length > 1 ? `<button class="btn dl" data-daydel="${i}">${IC.trash} 이 날 지우기</button>` : ""}<button class="btn nv" style="flex:1" data-daysave="${i}">저장</button></div>`; }
   else if (k === "move" && t) { const it = S.moveIt; h = `<b class="sht">「${esc(it.title)}」 어느 날로 옮길까요?</b>${t.days.map((d, i) => `<button class="opt" data-moveto="${i}"><span><b>${i + 1}일째 · ${mdw(dOf(t, i))}</b><small>${esc(d.title || "")} 일정 ${d.items.length}개</small></span></button>`).join("")}`; }
   else if (k === "tcats") h = tcatSheet();
+  else if (k === "phitm" && t) { const n = S.phSel ? S.phSel.size : 0; h = `<b class="sht">고른 사진 ${n}장을 붙일 일정</b>
+    <div class="phl">${t.days.map((d, i) => d.items.map(it => `<button class="opt sm" data-phmset="${it.id}"><span><b>${i + 1}일째 ${esc(it.time)} ${esc(it.title)}</b></span></button>`).join("")).join("") || `<p class="hint">아직 일정이 없어요 — 일정을 먼저 넣어 주세요</p>`}</div>
+    <div class="row2"><button class="btn" data-phmset="">어느 일정도 아님</button></div>`; }
   else if (k === "phit" && t) { const p = (t.photos || []).find(x => x.id === S.phId); h = `<b class="sht">이 사진을 붙일 일정</b>${p && PURL[p.id] ? `<img class="phprev" src="${PURL[p.id].t}" alt="">` : ""}
     <div class="phl">${t.days.map((d, i) => d.items.map(it => `<button class="opt sm ${p && p.it === it.id ? "on1" : ""}" data-phset="${it.id}"><span><b>${i + 1}일째 ${esc(it.time)} ${esc(it.title)}</b></span></button>`).join("")).join("")}</div>
     <div class="row2"><button class="btn dl" data-phdel>${IC.trash} 사진 빼기</button><button class="btn" data-phset="">어느 일정도 아님</button><button class="btn nv" data-phview>크게 보기</button></div><button class="btn w" data-phcover style="margin-top:8px">${t.cover === S.phId ? "이 사진이 표지예요" : "이 사진을 여행 표지로"}</button>`; }
@@ -3247,9 +3257,11 @@ function photoTab(t) {
     <p class="hint">${zTop ? `사진에 적힌 시간대: <b>${esc(tzName(+zTop[0]))}</b> ${zTop[1]}장. ` : ""}${nLm ? `시간 정보가 없어 파일 시간으로 넣은 사진(*) ${nLm}장 — 현지 시간대를 고르면 그 시간대로 다시 계산해요.` : "현지 시간대를 고르면 휴대폰 시간대가 틀렸던 사진도 현지 시각으로 맞춰져요."}</p></div>`;
   h += `<div class="offr"><span>그래도 어긋나면 시계 보정</span><button class="btn sm" data-off="-1">−1시간</button><b class="num">${t.off > 0 ? "+" : ""}${t.off || 0}시간</b><button class="btn sm" data-off="1">+1시간</button></div>`;
   h += `<div class="offr"><button class="btn sm nv" data-phremap>${IC.img} 찍은 시간으로 다시 나누기</button><small>${nMan ? `손으로 붙인 사진 ${nMan}장(✓)은 그대로` : "일정을 넣거나 시간을 고치면 저절로 다시 나눠요"}</small></div>`;
-  const tile = p => { const ts = phT(t, p); return `<button data-pvid="${p.id}"><img src="${PURL[p.id].t}" alt="" loading="lazy"><em class="num">${ts ? hm2(ts) : "시간 없음"}${p.lm ? "*" : ""}${p.man ? " ✓" : ""}</em></button>`; };
+  const SEL = S.phSel; /* 11-01 제이: 여러 장 골라 한 번에 일정 바꾸기 */
+  h = h.replace('<div class="offr">', `<div class="phselbar">${SEL ? `<b>${SEL.size}장 고름</b><button class="btn sm" data-phsall>보이는 사진 모두</button><button class="btn sm" data-phsnone>모두 풀기</button><button class="btn sm nv" data-phmulti ${SEL.size ? "" : "disabled"}>일정 바꾸기</button><button class="btn sm" data-phsel>끝내기</button>` : `<button class="btn sm nv" data-phsel>${IC.img} 여러 장 골라 일정 바꾸기</button><small>일정 없는 사진 · 다른 일정에 붙은 사진을 한 번에 옮겨요</small>`}</div><div class="offr">`);
+  const tile = p => { const ts = phT(t, p); if (SEL) return `<button data-phtog="${p.id}" class="${SEL.has(p.id) ? "phon" : ""}" aria-pressed="${SEL.has(p.id)}"><img src="${PURL[p.id].t}" alt="" loading="lazy"><i class="phck"></i><em class="num">${ts ? hm2(ts) : "시간 없음"}</em></button>`; return `<button data-pvid="${p.id}"><img src="${PURL[p.id].t}" alt="" loading="lazy"><em class="num">${ts ? hm2(ts) : "시간 없음"}${p.lm ? "*" : ""}${p.man ? " ✓" : ""}</em></button>`; };
   const sortT = L => L.slice().sort((a, b) => phT(t, a) - phT(t, b));
-  const grp = (title, sub, L, extra) => `<div class="tcard pg"><div class="pgh"><b>${title}</b><small>${sub}</small>${extra || ""}</div><div class="pgr">${sortT(L).map(tile).join("")}</div></div>`;
+  const grp = (title, sub, L, extra) => `<div class="tcard pg"><div class="pgh"><b>${title}</b><small>${sub}</small>${SEL ? `<button class="btn sm" data-phgsel="${L.map(p => p.id).join(",")}">${L.every(p => SEL.has(p.id)) ? "이 묶음 풀기" : "이 묶음 모두"}</button>` : extra || ""}</div><div class="pgr">${sortT(L).map(tile).join("")}</div></div>`;
   const itOf = id => { for (let i = 0; i < t.days.length; i++) { const it = t.days[i].items.find(x => x.id === id); if (it) return [i, it]; } return null; };
   S.phcl = [];
   const clCard = (c, mk) => { const k = S.phcl.push(c) - 1, its = {}; c.ps.forEach(p => { if (p.it) its[p.it] = (its[p.it] || 0) + 1; });
@@ -3365,6 +3377,23 @@ document.addEventListener("click", async e => {
 document.addEventListener("change", e => { if (e.target.id !== "tyear") return; tlState().year = e.target.value; const R = $("#tres"); if (R) R.innerHTML = tResHtml(); });
 document.addEventListener("input", e => { if (e.target.id !== "tq") return; tlState().q = e.target.value; const R = $("#tres"); if (R) R.innerHTML = tResHtml(); });
 document.addEventListener("change", async e => { const el = e.target; if (el.dataset.phtz == null) return; const t = TR(); if (!t) return; t.tz = el.value === "" ? null : +el.value; await saveTrip(t); render(); toast(t.tz == null ? "사진에 적힌 시각 그대로 나눠요." : `${tzName(t.tz)} 기준으로 다시 나눴어요.`); });
+
+/* 11-01 제이: 여행 사진 여러 장 골라 한 번에 일정 바꾸기(일정 없는 사진 · 다른 일정 사진 모두) — 붙인 사진은 손으로 붙인 사진(✓)이 되어 다시 나누기에도 그대로 */
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-phsel],[data-phtog],[data-phgsel],[data-phsall],[data-phsnone],[data-phmulti],[data-phmset]"); if (!b) return; const d = b.dataset, t = TR(); if (!t) return;
+  e.stopPropagation(); e.preventDefault();
+  if (d.phsel != null) { S.phSel = S.phSel ? null : new Set(); return render(); }
+  const SEL = S.phSel; if (d.phmset == null && !SEL) return;
+  if (d.phtog) { SEL.has(d.phtog) ? SEL.delete(d.phtog) : SEL.add(d.phtog); b.classList.toggle("phon", SEL.has(d.phtog)); b.setAttribute("aria-pressed", SEL.has(d.phtog)); const bar = document.querySelector(".phselbar b"); if (bar) bar.textContent = SEL.size + "장 고름"; const mb = document.querySelector("[data-phmulti]"); if (mb) mb.disabled = !SEL.size; return; }
+  if (d.phgsel != null) { const ids = d.phgsel.split(",").filter(Boolean), all = ids.every(i => SEL.has(i)); ids.forEach(i => all ? SEL.delete(i) : SEL.add(i)); return render(); }
+  if (d.phsall != null) { document.querySelectorAll("[data-phtog]").forEach(x => SEL.add(x.dataset.phtog)); return render(); }
+  if (d.phsnone != null) { SEL.clear(); return render(); }
+  if (d.phmulti != null) { if (!SEL.size) return toast("사진을 먼저 골라 주세요"); S.sheet = "phitm"; return render(); }
+  if (d.phmset != null) { const S2 = S.phSel; if (!S2 || !S2.size) { S.sheet = null; return render(); } let n = 0; for (const p of t.photos || []) if (S2.has(p.id)) { p.it = d.phmset; p.man = !!d.phmset; n++; }
+    if (!d.phmset) t.photos.forEach(p => { if (S2.has(p.id)) p.man = true; });
+    await saveTrip(t); let nm = "어느 일정도 아님"; t.days.forEach(dd => dd.items.forEach(it => { if (it.id === d.phmset) nm = it.title || "일정"; }));
+    S.phSel = null; S.sheet = null; toast(`사진 ${n}장을 「${nm}」${d.phmset ? "에 붙였어요" : "으로 옮겼어요"}`); return render(); }
+}, true);
 
 /* ───────── 10-31 제이: 가벼운 저장 — 사진이 많은 「추억 저장소」로 써도 브라우저가 무거워지지 않게 ─────────
    · 큰 사진의 원본 자리 = 구글 드라이브 · 이 기기 폴더. 브라우저(IndexedDB)에는 작은 사진(목록 · 모아 보기용)만 남김

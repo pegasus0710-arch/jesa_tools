@@ -1224,6 +1224,8 @@ body.pc .iph{--tile:64px}
 
 .phspc{height:0}@media (max-width:899px){.phspc{height:150px}}
 
+.phbot{margin-top:14px}
+
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
 .ipin{width:100%;max-width:460px}
@@ -3293,6 +3295,8 @@ function photoTab(t) {
       const nt = by[""].filter(p => !phT(t, p)); if (nt.length) h += grp("찍은 시간을 모르는 사진", `${nt.length}장 — 눌러서 일정 고르기`, nt); }
   }
   if (SEL) { h = h.slice(0, CUT) + `<div class="phwrap"><div class="phmain">` + h.slice(CUT) + `<div class="phspc"></div></div>${FLOAT}</div>`; }
+  /* 11-01 제이: 사진이 많으면 맨 아래에서도 바로 — 같은 두 단추를 아래에도 */
+  if (!SEL) h += `<div class="phtop phbot"><label class="btn go">${IC.img} 사진 넣기<input type="file" accept="image/*" multiple hidden data-phpick></label><button class="btn nv" data-phsel>${IC.check || ""} 여러 장 골라 일정 바꾸기</button></div>`;
   return h + `<p class="hint">* 사진 안에 찍은 시간 정보가 없어 파일 시간으로 넣은 사진이에요(메신저로 받은 사진 · 캡처 등). 위치는 사진에 GPS 정보가 있을 때만 보여요 — 휴대폰에서 고르면 위치를 빼고 넘겨주는 경우가 있어요.</p>`;
 }
 

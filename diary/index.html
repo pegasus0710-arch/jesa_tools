@@ -459,7 +459,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-01(일) 15:22";
+const BUILD = "2026-11-01(일) 15:50";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1398,7 +1398,11 @@ document.addEventListener("drop", e => { const k = e.target.closest && e.target.
    PC 크롬 · 엣지 · 안드로이드 크롬: 고른 폴더 안 「일기노트」 폴더에 일기노트.json + 사진/ 을 자동으로 씀(원본 한 벌 더).
    아이폰은 폴더를 쓸 수 없음 → 구글 드라이브 + 백업 파일 */
 const CAN_DIR = typeof window.showDirectoryPicker === "function";
-const DIR = { h: null, perm: null, written: new Set(), busy: false };
+const DIR = { h: null, perm: null, written: new Set(), busy: false, pickAt: 0 };
+/* 11-01 ③ 제이 캡처: 휴대폰 NotAllowedError(getFileHandle) — 휴대폰 크롬은 앱을 닫거나 한참 뒤로 보내면 폴더 쓰기 허용을 거둬 감(앱 안 상태는 허용으로 남아 있어 쓰다가 막힘).
+   → 막히면 빨간 오류 대신 「쉬는 중」(회색)으로 두고, 「폴더에 저장」 한 번이면 그때의 일기 · 사진을 모두 씀. 고른 직후에 막히면 그 폴더 자체가 안 되는 것 → 다른 폴더 안내. 실패 단계는 한국어로 */
+function dirErrKo(e, step) { const n = e && e.name; return step + " — " + (n === "NotAllowedError" ? "휴대폰이 이 폴더에 쓰기를 막았어요" : n === "NotFoundError" ? "폴더를 찾을 수 없어요(옮기거나 지웠어요)" : n === "QuotaExceededError" ? "저장 공간이 모자라요" : (n || "오류") + (e && e.message ? ": " + e.message : "")); }
+const dhm = t => { const d = new Date(t); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
 const DREADME = "일기 노트(Blog J) 저장 폴더입니다.\r\n\r\n· 일기노트.json = 일기 · 일정 · 따로 쪽 기록 (비밀번호를 걸면 잠긴 채로 저장)\r\n· 사진 폴더 = 일기에 붙인 사진\r\n\r\n이 폴더를 지우거나 옮기면 앱에서 「폴더 다시 연결」을 눌러 주세요.\r\n백업할 때는 이 폴더를 통째로 복사해 두면 됩니다.\r\n만든 곳: https://luvbong.tistory.com\r\n";
 async function dirBoot() {
   if (!CAN_DIR) return; try { const h = await getMeta("dir"); if (h) { DIR.h = h; DIR.perm = await h.queryPermission({ mode: "readwrite" }); } } catch (e) {}
@@ -1407,6 +1411,8 @@ async function hasJson(h) { try { await h.getFileHandle("일기노트.json"); re
 async function pickDir() {
   let h; try { h = await window.showDirectoryPicker({ mode: "readwrite", id: "bj-diary-note", startIn: ANDROID ? undefined : "pictures" }); }
   catch (e) { if (e.name !== "AbortError") toast("폴더를 열지 못했어요: " + e.message); return; }
+  if (ANDROID) { try { if ((await h.queryPermission({ mode: "readwrite" })) !== "granted") await h.requestPermission({ mode: "readwrite" }); } catch (e) {} }
+  DIR.pickAt = Date.now(); DIR.err = "";
   let target = h, found = false;
   try {
     if (await hasJson(h)) found = true;
@@ -1418,6 +1424,7 @@ async function pickDir() {
     if (!found) { try { const f = await target.getFileHandle("일기노트_안내.txt", { create: true }); const w = await f.createWritable(); await w.write("﻿" + DREADME); await w.close(); } catch (e) {} }
     else await dirRead();
     await dirWrite(true);
+    if (DIR.err) { toast(ANDROID ? "이 폴더에는 저장할 수 없어요 — 「⋮ → 새 폴더」로 「일기노트」 폴더를 새로 만들어 골라 주세요" : "폴더에 저장하지 못했어요: " + DIR.err); render(); return; }
     toast(found ? `「${target.name}」 폴더에 다시 연결했어요 — 기록을 합쳤어요` : `「${target.name}」 폴더에 자동 저장해요`); render();
   } catch (e) { toast("폴더에 저장하지 못했어요: " + e.message); }
 }
@@ -1441,24 +1448,25 @@ async function dirRead() {
 let dirT;
 function dirAuto() { if (!dirOk()) return; clearTimeout(dirT); dirT = setTimeout(() => dirWrite(), 1500); }
 async function dirWrite(all) {
-  if (!dirOk() || DIR.busy) return; DIR.busy = true;
+  if (!dirOk() || DIR.busy) return; DIR.busy = true; let step = "일기 파일 쓰기";
   try {
     const locked = !!(D.set.lock && LOCK.key);
     let body = JSON.stringify(syncObj());
     if (locked) body = JSON.stringify({ v: 1, app: "bj-diary-note", enc: 1, lock: D.set.lock, data: hex(await encBytes(LOCK.key, new TextEncoder().encode(body))) });
     const fh = await DIR.h.getFileHandle("일기노트.json", { create: true }); const w = await fh.createWritable(); await w.write(body); await w.close();
-    const pd2 = await photoDir(true), ext = locked ? ".bin" : ".jpg";
+    step = "사진 폴더 만들기"; const pd2 = await photoDir(true), ext = locked ? ".bin" : ".jpg";
     for (const pid of allPhotoIds()) { const p = { id: pid };
       const n = p.id + ext; if (DIR.written.has(n) && !all) continue;
       let exists = false; try { await pd2.getFileHandle(n); exists = true; } catch (e) {}
-      if (!exists) { const o = await st("photos", "readonly", s => s.get(p.id)); if (!o) continue; let b = o.blob; if (locked) b = new Blob([await encBytes(LOCK.key, new Uint8Array(await o.blob.arrayBuffer()))]); const ph = await pd2.getFileHandle(n, { create: true }); const ww = await ph.createWritable(); await ww.write(b); await ww.close(); }
+      step = "사진 저장"; if (!exists) { const o = await st("photos", "readonly", s => s.get(p.id)); if (!o) continue; let b = o.blob; if (locked) b = new Blob([await encBytes(LOCK.key, new Uint8Array(await o.blob.arrayBuffer()))]); const ph = await pd2.getFileHandle(n, { create: true }); const ww = await ph.createWritable(); await ww.write(b); await ww.close(); }
       DIR.written.add(n);
     }
     D.set.dirLast = Date.now();
     DIR.err = "";
-  } catch (e) { /* 11-01: 휴대폰에서 폴더를 골라도 초록 점이 안 뜨던 문제 — 실패 이유를 화면에 남기고, 허용 상태는 실제로 다시 물어서 정함 */
-    DIR.err = (e.name || "오류") + (e.message ? " — " + e.message : ""); let q = "prompt"; try { q = await DIR.h.queryPermission({ mode: "readwrite" }); } catch (e2) {}
-    DIR.perm = q; toast("폴더에 저장하지 못했어요: " + DIR.err.slice(0, 80)); render(); }
+  } catch (e) { /* 11-01: 실패 이유는 한국어로 남기고, 허용 상태는 실제로 다시 물어서 정함 */
+    let q = "prompt"; try { q = await DIR.h.queryPermission({ mode: "readwrite" }); } catch (e2) {}
+    if (ANDROID && e.name === "NotAllowedError" && Date.now() - DIR.pickAt > 8000) { DIR.err = ""; DIR.perm = q === "granted" ? "prompt" : q; render(); }   /* 쓰다가 허용이 거둬진 것 → 쉬는 중(오류 아님) */
+    else { DIR.err = dirErrKo(e, step); DIR.perm = q; if (Date.now() - DIR.pickAt > 8000) toast("폴더에 저장하지 못했어요: " + DIR.err); render(); } }
   DIR.busy = false;
 }
 /* 이 기기에 없는 사진은 폴더에서 */
@@ -1469,18 +1477,21 @@ async function photoFromDir(id) {
     const blob = new Blob([b], { type: "image/jpeg" }), th = await shrink(blob, 400, 0.8); await st("photos", "readwrite", s => s.put({ id, blob, th })); return { blob, th };
   } catch (e) { return null; }
 }
-function dirChip() { if (!CAN_DIR || IOS) return ""; const need = !DIR.h || DIR.perm !== "granted"; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}<span class="dot ${!need && DIR.err ? "err" : !need ? "ok" : ANDROID && DIR.h && typeof gdOn === "function" && gdOn() ? "idle" : ""}"></span></button>`; }
+document.addEventListener("visibilitychange", async () => { if (document.hidden || !DIR.h || DIR.perm !== "granted") return; try { const q = await DIR.h.queryPermission({ mode: "readwrite" }); if (q !== "granted") { DIR.perm = q; render(); } } catch (e) {} });
+function dirChip() { if (!CAN_DIR || IOS) return ""; const need = !DIR.h || DIR.perm !== "granted"; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}<span class="dot ${!need && DIR.err ? "err" : !need ? "ok" : ANDROID && DIR.h ? "idle" : ""}"></span></button>`; }
 function dirBox() {
   if (!CAN_DIR || IOS) return "";
   const nm = ANDROID ? "휴대폰 폴더" : "PC 폴더";
   if (!DIR.h) return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm}에도 저장 <small style="color:var(--mute)">${ANDROID ? "「⋮ → 새 폴더 → 일기노트」를 만들어 그 폴더에서 「이 폴더 사용」" : "사진 폴더 아래 「일기노트」 폴더를 만들어 자동 저장"} · 사진이 많아지면 꼭</small></span><button class="mini g" id="dirGo">연결</button></div>`;
   const g = DIR.perm === "granted";
+  if (ANDROID) { const gd = typeof gdOn === "function" && gdOn(), last = D.set.dirLast ? ymdw(ymd(new Date(D.set.dirLast))) + " " + dhm(D.set.dirLast) : "아직 없음";
+    return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm} <small style="color:${g && !DIR.err ? "var(--g)" : DIR.err ? "#c23a2b" : "var(--mute)"}">${g && !DIR.err ? "자동 저장 중" : DIR.err ? "저장 안 됨" : "쉬는 중"} · ${esc(D.set.dirName || DIR.h.name)} · 마지막 저장 ${last}${DIR.err ? `<br><span style="color:#c23a2b">${esc(DIR.err)}</span>` : ""}<br><span style="color:var(--mute)">휴대폰 크롬은 앱을 닫으면 폴더 쓰기를 쉬게 해요 — 「폴더에 저장」을 누르고 같은 폴더를 고르면 그때까지의 일기 · 사진을 모두 저장해요${gd ? " · 평소 저장은 구글 드라이브가 맡고 있어요" : ""}</span></small></span>${g && !DIR.err ? "" : `<button class="mini g" id="dirPerm">폴더에 저장</button>`}<button class="mini ln" id="dirGo">바꾸기</button><button class="mini ln" id="dirOff">끊기</button></div>`; }
   return `<div class="li" style="font-family:var(--ui)">${I(IC.folder)}<span class="t" style="font-family:var(--ui)">${nm} <small style="color:${g ? "var(--g)" : "var(--o)"}">${g ? (DIR.err ? "연결됨 · 저장 실패" : "연결됨") : ANDROID ? "이번에 열 때 폴더 다시 고르기" : "다시 연결 필요"} · ${esc(D.set.dirName || DIR.h.name)}${DIR.err ? `<br><span style="color:#c23a2b">마지막 저장 실패: ${esc(DIR.err.slice(0, 120))}</span>` : ""}${!g && ANDROID ? `<br><span style="color:var(--mute)">휴대폰 크롬은 앱을 다시 열면 폴더 허용이 풀려요 — 「폴더 고르기」에서 같은 폴더를 고르면 이어서 저장해요${typeof gdOn === "function" && gdOn() ? " · 구글 드라이브에는 지금도 저장되고 있어요" : ""}</span>` : ""}</small></span>${g ? "" : `<button class="mini g" id="dirPerm">${ANDROID ? "폴더 고르기" : "다시 연결"}</button>`}<button class="mini ln" id="dirGo">바꾸기</button><button class="mini ln" id="dirOff">끊기</button></div>`;
 }
 function dirBanner() {
   if (!CAN_DIR || IOS || S.v === "set") return "";
   if (DIR.h && DIR.perm !== "granted" && ANDROID && typeof gdOn === "function" && gdOn()) return "";
-  if (DIR.h && DIR.perm !== "granted") return `<div class="banner"><span class="o">●</span><span style="flex:1">저장 폴더 「${esc(D.set.dirName || DIR.h.name)}」에 다시 연결해 주세요 — ${ANDROID ? "휴대폰은 브라우저를 다시 열면 폴더를 한 번 다시 골라야 해요" : "브라우저를 다시 열면 한 번 허용이 필요해요"}</span><button class="mini g" id="dirPerm">다시 연결</button></div>`;
+  if (DIR.h && DIR.perm !== "granted") return `<div class="banner"><span class="o">●</span><span style="flex:1">저장 폴더 「${esc(D.set.dirName || DIR.h.name)}」에 다시 연결해 주세요 — ${ANDROID ? "휴대폰은 앱을 닫으면 폴더 쓰기를 쉬어요 · 「폴더에 저장」 → 같은 폴더 고르기" : "브라우저를 다시 열면 한 번 허용이 필요해요"}</span><button class="mini g" id="dirPerm">${ANDROID ? "폴더에 저장" : "다시 연결"}</button></div>`;
   const ph = Object.values(D.days).reduce((a, d) => a + (d.photos || []).length, 0);
   if (!DIR.h && ph >= 5 && !(D.set.dirHide && Date.now() < D.set.dirHide)) return `<div class="banner"><span class="o">●</span><span style="flex:1">사진이 ${ph}장 — 이 기기 폴더도 연결해 두면 브라우저 기록을 지워도 일기 · 사진이 남아요</span><button class="mini g" id="dirGo">폴더 연결</button><button class="mini ln" id="dirHide">7일 숨기기</button></div>`;
   return "";

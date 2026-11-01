@@ -379,7 +379,8 @@ mark{background:#fbe3a6;color:inherit}
  .mbar>*{pointer-events:auto}
  .mbar span{flex:1;font-size:12.5px;color:var(--sub);background:rgba(255,253,247,.94);padding:7px 11px;border-radius:9px;box-shadow:0 2px 8px rgba(80,60,30,.15)}
  .mbar button{display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 16px;border:1.5px solid var(--g);border-radius:21px;background:var(--paper);color:var(--g);font-size:14.5px;font-weight:700;box-shadow:0 3px 10px rgba(80,60,30,.22)}
- .mbar button .i{width:16px;height:16px}
+ .mbar button .i,.mbar .mph .i{width:16px;height:16px}
+ .mbar .mph{display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 16px;border:1.5px solid var(--g);border-radius:21px;background:var(--paper);color:var(--g);font-size:14.5px;font-weight:700;box-shadow:0 3px 10px rgba(80,60,30,.22);cursor:pointer;position:relative;overflow:hidden}
  .mbar button.on{background:var(--g);color:#fff}
  .book.m-view .deco>*,.book.m-edit .deco>*{pointer-events:none}
  .book.m-view .toolrow{display:none}
@@ -465,7 +466,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-01(일) 22:29";
+const BUILD = "2026-11-01(일) 23:16";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -767,7 +768,7 @@ function dayView() {
   if (on("lastyear")) { const ly = [1, 2, 3].map(n => { const kk = (+k.slice(0, 4) - n) + k.slice(4); const dd = D.days[kk]; return dd && (dd.text || "").trim() ? { n, kk, t: dd.text.trim().split("\n")[0] } : null; }).filter(Boolean)[0];
     if (ly) R += `<button class="ly" data-goday="${ly.kk}" style="margin-top:auto"><span class="pen">${ly.n}년 전 오늘</span><span><span class="num">${ymdw(ly.kk)}</span> ${esc(ly.t.slice(0, 70))}</span></button>`; }
   if (deco) { L += decoLayer(d, "L"); R += decoLayer(d, "R"); }
-  const mbar = `<div class="mbar">${dayMode() === "view" ? `<button id="mEdit">${I(IC.pen)}수정</button>${deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}` : `<span>${dayMode() === "edit" ? "쓰는 중" : "꾸미는 중 — 끌어서 옮기고, 눌러서 크기 · 돌리기"}</span>${dayMode() === "edit" && deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}<button id="mDone" class="on">${I(IC.check)}완료</button>`}</div>`;
+  const mbar = `<div class="mbar">${dayMode() === "view" ? `${on("photo") ? `<label class="mph" title="휴대폰 갤러리 · 카메라에서 사진 넣기">${I(IC.img)}사진<input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label>` : ""}<button id="mEdit">${I(IC.pen)}수정</button>${deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}` : `<span>${dayMode() === "edit" ? "쓰는 중" : "꾸미는 중 — 끌어서 옮기고, 눌러서 크기 · 돌리기"}</span>${dayMode() === "edit" && deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}<button id="mDone" class="on">${I(IC.check)}완료</button>`}</div>`;
   return book(L, R, deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "") + mbar;
 }
 function stkHtml(s, i) {
@@ -810,7 +811,7 @@ function tripLog(k, d) {
 /* 꾸미기 — 사진 · 스티커 · 글자 테이프를 하루 쪽(양쪽) 아무 데나: x = 책 너비 %, y = 책 위에서 px */
 function toolBtns(d, c) {
   const ph = on("photo") && (d.photos || []).length < 4, ic = x => c === "ltool" ? I(IC[x]) : "";
-  return (ph ? `<label class="${c}" title="사진 넣기 (PC는 사진 파일을 쪽 위로 끌어 놓아도 돼요)">${ic("img")}<span>${c === "ltool" ? "사진" : "+ 사진"}</span><input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label><button class="${c}" data-tool="phPaste" title="복사한 사진 붙여넣기 (PC는 Ctrl+V도 돼요)">${ic("clip")}<span>${c === "ltool" ? "붙여넣기" : "복사한 사진 붙여넣기"}</span></button>` : "")
+  return (ph ? `<label class="${c}" title="사진 넣기 (PC는 사진 파일을 쪽 위로 끌어 놓아도 돼요)">${ic("img")}<span>${c === "ltool" ? "사진" : "+ 사진 (갤러리)"}</span><input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label><button class="${c}" data-tool="phPaste" title="복사한 사진 붙여넣기 (PC는 Ctrl+V도 돼요)">${ic("clip")}<span>${c === "ltool" ? "붙여넣기" : "복사한 사진 붙여넣기"}</span></button>` : "")
     + (on("sticker") ? `<button class="${c}" data-tool="stkBtn">${ic("stkr")}<span>${c === "ltool" ? "스티커" : "+ 스티커"}</span></button><button class="${c}" data-tool="tapeBtn">${ic("tape")}<span>${c === "ltool" ? "글자 테이프" : "+ 글자 테이프"}</span></button>` : "");
 }
 function polHtml(p, i) {

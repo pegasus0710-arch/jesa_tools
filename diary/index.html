@@ -453,11 +453,13 @@ mark{background:#fbe3a6;color:inherit}
 .ytog{display:flex;gap:6px;margin:4px 0 10px}.ytog button{flex:1;height:36px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper2);font-weight:700;font-size:14px;color:var(--mute)}.ytog button.on{background:var(--g);border-color:var(--g);color:#fff}
 @media (max-width:900px){.ycal{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px}.yd{font-size:11.5px}}
 
+.ncatbtn{border:0;cursor:pointer;font-family:inherit}.ncatbtn:hover{box-shadow:inset 0 0 0 1.5px var(--g)}
+
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-01(일) 15:12";
+const BUILD = "2026-11-01(일) 15:19";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1600,7 +1602,7 @@ function noteList() {
 /* 내용 보기(읽기) */
 function noteRead(n) {
   const body = esc(n.body || "").split("\n").map(l => l.trim() ? l : "&nbsp;").join("<br>");
-  return `<div class="ph nhd"><button class="navb" id="nBack" aria-label="노트 목록으로">‹</button><span class="ncat" style="font-size:13px">${esc(n.cat || "")}</span><span style="margin-left:auto;display:flex;gap:6px"><button class="bstar ${n.fav ? "on" : ""}" id="nFav" aria-label="아끼는 노트" title="아끼는 노트" style="font-size:22px">★</button><button class="mini ln" id="nDel">지우기</button><button class="mini g" id="nEdit">수정</button></span></div>`
+  return `<div class="ph nhd"><button class="navb" id="nBack" aria-label="노트 목록으로">‹</button><button class="ncat ncatbtn" id="nCatMv" title="분류 바꾸기" aria-label="분류 바꾸기: 지금 ${esc(n.cat || "")}">${esc(n.cat || "")} ▾</button><span style="margin-left:auto;display:flex;gap:6px"><button class="bstar ${n.fav ? "on" : ""}" id="nFav" aria-label="아끼는 노트" title="아끼는 노트" style="font-size:22px">★</button><button class="mini ln" id="nDel">지우기</button><button class="mini g" id="nEdit">수정</button></span></div>`
     + `<h3 class="nrtitle">${esc(noteTitle(n))}</h3><div class="nrdate num">작성 ${ymdw(n.date || today())}${n.m ? ` · 수정 ${ymdw(ymdOf(n.m))}` : ""}</div>`
     + `<div class="nrbody">${body || `<span class="foot">내용이 없어요 — 「수정」을 눌러 적어 보세요</span>`}</div>`
     + `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px"><button class="mini ln" data-nto="todo">→ 오늘 할 일로</button>${on("bucket") ? `<button class="mini ln" data-nto="bucket">→ 버킷리스트로</button>` : ""}<button class="mini ln" id="nList" style="margin-left:auto">목록</button></div>`;
@@ -1625,9 +1627,11 @@ function quoteToday(k) { const L = (D.notes || []).filter(n => n.cat === "좋은
 document.addEventListener("click", e => { const t = e.target.closest("button"); if (!t) return; const ds = t.dataset; const stop = () => e.stopImmediatePropagation();
   if (ds.gonote) { stop(); S.v = "page"; S.page = "note"; S.nt = ds.gonote; render(); return window.scrollTo(0, 0); }
   if (ds.page === "note") { S.nt = null; }
-  if (S.v !== "page" || S.page !== "note") { if (!t.closest(".pop") || !(ds.ncren !== undefined || ds.ncup !== undefined || ds.ncdel !== undefined || t.id === "ncAdd2")) return; }
+  if (S.v !== "page" || S.page !== "note") { if (!t.closest(".pop") || !(ds.ncren !== undefined || ds.ncup !== undefined || ds.ncdel !== undefined || ds.ncmv !== undefined || t.id === "ncAdd2")) return; }
   if (t.id === "nAdd") { stop(); const c = S.nf && S.nf !== "★" ? S.nf : D.ncats[0]; const n = { id: "n" + uid(), cat: c, title: "", body: "", date: today(), u: Date.now(), isNew: 1 }; D.notes.unshift(n); S.nt = n.id; S.ne = true; render(); window.scrollTo(0, 0); const a = $("#nTitle"); if (a) a.focus(); return; }
   if (ds.nt) { stop(); S.nt = ds.nt; S.ne = false; render(); return window.scrollTo(0, 0); }
+  if (t.id === "nCatMv") { stop(); const n = noteById(S.nt); return pop(`<h2>분류 바꾸기</h2><p class="foot">「${esc(noteTitle(n))}」을 어느 분류로 옮길까요?</p><div class="mcats" style="margin:10px 0">${D.ncats.map(c => `<button class="mcat ${n.cat === c ? "on" : ""}" data-ncmv="${esc(c)}">${esc(c)}</button>`).join("")}<button class="mcat add" data-ncmv="+">+ 새 분류</button></div><div class="btns"><button class="btn" data-close>닫기</button></div>`); }
+  if (ds.ncmv !== undefined) { stop(); const n = noteById(S.nt); if (!n) return closePop(); let c = ds.ncmv; if (c === "+") { c = (prompt("새 분류 이름") || "").trim().slice(0, 12); if (!c) return; if (!D.ncats.includes(c)) { D.ncats.push(c); touchSec("ncats"); } } if (n.cat !== c) { n.cat = c; n.u = Date.now(); n.m = Date.now(); touchSec("notes"); toast(`「${c}」로 옮겼어요`); } closePop(); return render(); }
   if (t.id === "nEdit") { stop(); S.ne = true; render(); window.scrollTo(0, 0); noteGrow(); const a = $("#nBody"); if (a) a.focus(); return; }
   if (t.id === "nList") { stop(); noteLeave(); S.ne = false; render(); return window.scrollTo(0, 0); }
   if (t.id === "nDone") { stop(); const n = noteById(S.nt); const wasNew = n && n.isNew; noteLeave(); S.ne = false; if (n && D.notes.includes(n)) { S.nt = n.id; if (wasNew) toast("저장했어요"); } render(); return window.scrollTo(0, 0); }

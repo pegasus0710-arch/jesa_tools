@@ -521,6 +521,9 @@ body,button,input,select{font-family:var(--font)}
 .cl-wp .cl-ft{margin-top:2mm}
 .cl-wdt0{max-width:380px}
 
+/* 11-01: 스크롤 막대가 생겼다 없어지며 미리보기 배율이 오가 화면이 떨리던 문제 — 막대 자리를 늘 비워 둠 */
+html{scrollbar-gutter:stable}.cl-sheets{scrollbar-gutter:stable}
+
 /* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
    1) 깊이는 3단만: 판(바탕) · 카드(머리카락 선 + 아주 옅은 그림자) · 들어감(입력 · 고르기 바탕)
@@ -1059,7 +1062,7 @@ function App() {
 
   /* 미리보기 배율: 교정대 폭에 맞춤 */
   const shRef = useRef(null);
-  useEffect(() => { const el = shRef.current; if (!el) return; const fit = () => { const w = el.clientWidth - 24; el.style.setProperty("--z", Math.min(0.75, Math.max(0.2, w / (pw * 3.7795))).toFixed(3)); };
+  useEffect(() => { const el = shRef.current; if (!el) return; const fit = () => { const w = el.clientWidth - 24, z = Math.min(0.75, Math.max(0.2, w / (pw * 3.7795))), o = parseFloat(el.style.getPropertyValue("--z")) || 0; if (o && Math.abs(z - o) < 0.02) return; el.style.setProperty("--z", z.toFixed(3)); };   /* 11-01 제이: 1년 한 장에서 화면이 떨리던 문제 — 스크롤 막대가 생겼다 없어지며 배율이 두 값을 오감 → 막대 자리를 늘 비워 두고(scrollbar-gutter), 0.02 미만의 작은 변화는 무시 */
     fit(); const ro = window.ResizeObserver ? new ResizeObserver(fit) : null; ro && ro.observe(el); return () => ro && ro.disconnect(); }, [pw]);
 
   const yrs = []; for (let y = MYEAR0; y <= MYEAR1; y++) yrs.push(y);

@@ -57,10 +57,10 @@ a{color:var(--g)}
 .rings{position:relative;z-index:2;width:0;display:flex;flex-direction:column;justify-content:space-around;padding:30px 0}
 .rings span{width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--desk);box-shadow:inset 1px 1px 3px rgba(0,0,0,.35)}
 .ribbon{pointer-events:none;position:absolute;left:20px;top:-6px;width:18px;height:110px;background:var(--rib);clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%);z-index:3}
-.itabs{position:absolute;right:-30px;top:22px;display:flex;flex-direction:column;gap:4px;z-index:0}
-.itab{width:26px;min-height:54px;border:0;border-radius:0 7px 7px 0;font-size:12px;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;padding:6px 0;color:var(--ink)}
-.itab.on{width:31px;background:var(--g)!important;color:#fff;font-weight:700}
-.itab:hover{width:31px}
+.itabs{position:absolute;left:calc(100% - 6px);top:22px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:0}   /* 11-01 제이: 쪽 끝에 붙이고, 올리면 그 탭만 밖으로 — 묶음 전체가 움직이지 않게 */
+.itab{width:32px;min-height:54px;padding-left:6px!important;border:0;border-radius:0 7px 7px 0;font-size:12px;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;padding:6px 0;color:var(--ink)}
+.itab.on{width:37px;background:var(--g)!important;color:#fff;font-weight:700}
+.itab{transition:width .12s,background .12s,color .12s;cursor:pointer;box-shadow:2px 2px 5px rgba(80,60,30,.18)}.itab:hover{width:37px;background:var(--g)!important;color:#fff}
 
 /* 쪽 머리 */
 .ph{display:flex;align-items:flex-end;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:9px;flex-wrap:wrap}
@@ -465,7 +465,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-01(일) 16:19";
+const BUILD = "2026-11-01(일) 16:59";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";

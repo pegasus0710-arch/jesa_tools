@@ -293,6 +293,8 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 /* 10-30 밤: 머리 막대 안 눈금자(라벨 · 김치)도 3.1 6번 — 홈 · 바탕 상자 없이 */
 .bar-in .ruler::before{display:none!important}
 
+
+html{scrollbar-gutter:stable}.sheets{scrollbar-gutter:stable}
 </style></head><body><div id="root"></div>
 <script>
 /* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
@@ -800,7 +802,7 @@ function App() {
   const wrap = useRef(); const [scale, setScale] = useState(0.5);
   useEffect(() => { save("set", { ...s }); }, [s]);
   useEffect(() => { document.title = "쓰기 연습장 | Blog J"; Promise.all(["BJ-Andika", "BJ-NanumGothic", "BJ-NanumMyeongjo"].map(f => document.fonts.load('20px "' + f + '"', "가A"))).then(() => { calibrate(); setReady(true); }, () => setReady(true)); }, []);
-  useEffect(() => { const el = wrap.current; if (!el) return; const f = () => setScale(Math.min(1, (el.clientWidth - 4) / (PAGE_W * 3.7795))); f();
+  useEffect(() => { const el = wrap.current; if (!el) return; const f = () => { const n = Math.min(1, (el.clientWidth - 4) / (PAGE_W * 3.7795)); setScale(o => Math.abs(o - n) < 0.02 ? o : n); };   /* 11-01: 스크롤 막대 때문에 배율이 오가며 떨리지 않게 */ f();
     const ro = window.ResizeObserver ? new ResizeObserver(f) : null; ro && ro.observe(el); return () => ro && ro.disconnect(); }, []);
   const up = (k, v) => setS(p => ({ ...p, [k]: v }));
   const upMany = o => setS(p => ({ ...p, ...o }));

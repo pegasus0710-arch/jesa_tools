@@ -441,6 +441,9 @@ body,button,input,select{font-family:var(--font)}
 .fm-desc .fm-or{background:#efe8dc}
 .fm-or2{margin-bottom:12px}.fm-or2 .fm-or{margin-top:0}
 
+/* 11-01: 스크롤 막대 자리를 늘 비워 둠(미리보기 배율 떨림 방지) */
+html{scrollbar-gutter:stable}.sheets{scrollbar-gutter:stable}
+
 /* 색(10-30 제이 지정): 초록 #0a1931 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #0a1931(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
    1) 깊이는 3단만: 판(바탕) · 카드(머리카락 선 + 아주 옅은 그림자) · 들어감(입력 · 고르기 바탕)
@@ -820,7 +823,7 @@ function App() {
   const Orient = () => F.alt ? html`<div class="fm-or" role="group" aria-label="종이 방향">${[["세로", 0], ["가로", 1]].map(([t, l]) => html`<button class=${!!F.land === !!l ? "on" : ""} aria-pressed=${!!F.land === !!l} onClick=${() => { if (!!F.land !== !!l) setSel(F.alt); }}>${t}</button>`)}</div>` : null;
 
   const shRef = useRef(null);
-  useEffect(() => { const el = shRef.current; if (!el) return; const fit = () => { const w = el.clientWidth - 24; el.style.setProperty("--z", Math.min(F.land ? 0.62 : 0.75, Math.max(0.15, w / ((F.land ? 297 : 210) * 3.7795))).toFixed(3)); };
+  useEffect(() => { const el = shRef.current; if (!el) return; const fit = () => { const w = el.clientWidth - 24, z = Math.min(F.land ? 0.62 : 0.75, Math.max(0.15, w / ((F.land ? 297 : 210) * 3.7795))), o = parseFloat(el.style.getPropertyValue("--z")) || 0; if (o && Math.abs(z - o) < 0.02) return; el.style.setProperty("--z", z.toFixed(3)); };   /* 11-01: 스크롤 막대 때문에 배율이 오가며 떨리지 않게(달력 만들기와 같은 수정) */
     fit(); const ro = window.ResizeObserver ? new ResizeObserver(fit) : null; ro && ro.observe(el); return () => ro && ro.disconnect(); }, [F.land]);
 
   return html`<div class=${"app t-form" + (EMBED ? " embed" : "")}>

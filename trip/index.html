@@ -1405,6 +1405,37 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div><div id="busy"><div>사진 넣는 중…</div></div>
 <script>
+/* Blog J 공통 — 휴대폰 뒤로 가기(11-01 제이: 누르면 앱이 바로 닫힘)
+   한 번 누를 때마다 한 단계씩: 떠 있는 창 닫기 → 앱이 정한 단계(BJBACK.init({hook})) → 맨 처음이면
+   「뒤로 버튼을 한 번 더 누르면 앱이 닫혀요」 → 한 번 더 누르면 닫힘. 화면을 만지면 다시 걸림.
+   기준 = 일기 노트 d9.js. 쓰는 법: 앱 끝에 BJBACK.init({ ov: [...], hook: () => true/false }) */
+(function () {
+  const C = { ov: [".bkx-ov", ".fpx-ov"], btn: { ".ippg": "[data-ipclose],.ipx" }, hook: null };
+  let armed = false, busy = false;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  function arm() { if (history.state && history.state.bjg) { armed = true; return; } try { history.pushState(Object.assign({}, history.state || {}, { bjg: 1 }), ""); armed = true; } catch (e) {} }
+  const vis = e => e && e.isConnected && e.getClientRects().length > 0 && getComputedStyle(e).visibility !== "hidden";
+  function topOv() { const sel = C.ov.concat(Object.keys(C.btn)).join(","); if (!sel) return null; const L = [...document.querySelectorAll(sel)].filter(vis); return L[L.length - 1] || null; }
+  async function closeOv(o) {
+    for (const k in C.btn) if (o.matches(k)) { const b = o.querySelector(C.btn[k]); if (b) { b.click(); await wait(60); if (!vis(o)) return; } }
+    o.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true })); await wait(80); if (!vis(o)) return;   /* 바깥(어두운 곳) 누르기 */
+    o.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true })); await wait(80);   /* Esc */
+  }
+  function say(m) { let t = document.getElementById("bjbToast"); if (!t) { t = document.createElement("div"); t.id = "bjbToast"; t.setAttribute("role", "status"); t.style.cssText = "position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483000;background:rgba(31,33,37,.92);color:#fff;font:600 14.5px/1.4 SUIT,Pretendard,system-ui,sans-serif;padding:11px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);max-width:calc(100vw - 32px);text-align:center;pointer-events:none;transition:opacity .2s;opacity:0"; document.body.appendChild(t); }
+    t.textContent = m; t.style.opacity = "1"; clearTimeout(say.t); say.t = setTimeout(() => { t.style.opacity = "0"; }, 2400); }
+  window.addEventListener("popstate", async () => {
+    armed = false; if (busy) return; busy = true;
+    try {
+      const o = topOv(); if (o) { await closeOv(o); arm(); return; }
+      let done = false; if (C.hook) { try { done = !!(await C.hook()); } catch (e) { done = false; } }
+      if (done) { arm(); return; }
+      say("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요");   /* 다시 걸지 않음 → 한 번 더 누르면 나감 */
+    } finally { busy = false; }
+  });
+  ["pointerdown", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (!armed) arm(); }, true));
+  window.BJBACK = { init(o) { if (o) { if (o.ov) C.ov = C.ov.concat(o.ov); if (o.btn) Object.assign(C.btn, o.btn); if (o.hook) C.hook = o.hook; } }, arm, say };
+})();
+
 /* ══ 공통: 엑셀 붙여넣기 「엑셀 표 예시」 (2026-10-31) ══
    엑셀 화면처럼 생긴 예시 표(열 문자 A·B·C · 행 번호 · 1행 머리글 · 초록 선택 테두리)
    + 복사 순서 3단계 + 「이 예시를 붙여넣어 보기」(대상 입력칸에 그대로 채움).
@@ -2902,7 +2933,15 @@ function leaveEdit() { const E = S.edit; if (!E || !E._dirty) return true; retur
 function go(scr, extra) { if ((S.scr === "item" || S.scr === "info") && scr !== S.scr && !leaveEdit()) return; if (S.scr === "item" || S.scr === "info") S.edit = null;
   if (S.scr !== scr || extra) hist.push({ scr: S.scr, rid: S.rid }); Object.assign(S, extra || {}); S.scr = scr; S.sheet = null; S.pv = null; try { history.pushState({ n: hist.length }, ""); } catch (e) {} render(true); }
 function goBack() { if (S.scr === "item" || S.scr === "info") S.edit = null; const h = hist.pop(); if (!h) { S.scr = "list"; } else { S.scr = h.scr; S.rid = h.rid; } if (S.scr === "info" || S.scr === "item") return goBack(); S.sheet = null; S.pv = null; render(true); }
-window.addEventListener("popstate", () => { if (S.pv != null) { S.pv = null; render(); return; } if (S.sheet) { S.sheet = null; render(); return; } if ((S.scr === "item" || S.scr === "info") && !leaveEdit()) { try { history.pushState({ n: hist.length }, ""); } catch (e) {} return; } if (hist.length) goBack(); });
+BJBACK.init({ hook: () => { /* 11-01 휴대폰 뒤로 가기: 한 단계씩, 맨 처음이면 「한 번 더 누르면 닫혀요」 (common/bjback.js) */
+  if (S.instPg) { S.instPg = false; try { history.replaceState(history.state, "", location.pathname); } catch (e) {} render(); return true; }
+  if (S.pv != null) { S.pv = null; if (!S.pg) S.pvIt = null; render(); return true; }
+  if (S.pg) { S.pg = null; render(); return true; }
+  if (S.sheet) { S.sheet = null; render(); return true; }
+  if (S.scr === "item" || S.scr === "info") { if (!leaveEdit()) return true; }
+  if (hist.length) { goBack(); return true; }
+  if (S.scr !== "list") { S.scr = "list"; S.sheet = null; render(true); window.scrollTo(0, 0); return true; }
+  return false; } });
 function openTrip(id, day) { const t = RR(id); if (!t) return; let d = day; if (d == null) { const p = phase(t); d = p.k === "on" ? p.i : 0; } S.edit = null; S.sel = null; go("trip", { rid: id, day: d, ttab: "plan" }); }
 function startItem(it, i, isNew) { const t = TR(); const e = JSON.parse(JSON.stringify(it)); e._day = i; e._new = !!isNew; e._dirty = !!isNew; S.edit = e; S.sel = it.id;
   if (isPC()) { render(); const f = $(".emp [data-ef=title]"); if (f && isNew) f.focus(); } else go("item"); }

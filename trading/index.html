@@ -1879,6 +1879,7 @@ function App(){
   const allTx=Object.values(txByYear).flat();
   const rep=useMemo(()=>replay(settings,allTx,settings.prefs.mergeAccounts),[txByYear,settings]);
   const onPrice=(upd)=>{ const pr=clone(prices); const d=todayStr(); for(const k of Object.keys(upd)) pr[k]={price:upd[k],date:d}; savePrices(pr); };
+  window.BJV={view,setView,home:(settings&&settings.prefs&&settings.prefs.defaultView)||"hold"}; /* 11-01 뒤로 가기 */
   return html`<div class="app">
     <div class="top">
       <div class="brand"><span class="lg"><${Icon} name="trend" size=${20} sw=${2.4} /><span class="jmini">J</span></span>매매일지<span class="cat">재무</span><span class="ver">v${APP_VER}</span></div>
@@ -1948,4 +1949,38 @@ function MoveNote({ onGo }) {
 
 render(html`<${App} />`, document.getElementById("root"));
 
-</script></body></html>
+</script><script>
+/* Blog J 공통 — 휴대폰 뒤로 가기(11-01 제이: 누르면 앱이 바로 닫힘)
+   한 번 누를 때마다 한 단계씩: 떠 있는 창 닫기 → 앱이 정한 단계(BJBACK.init({hook})) → 맨 처음이면
+   「뒤로 버튼을 한 번 더 누르면 앱이 닫혀요」 → 한 번 더 누르면 닫힘. 화면을 만지면 다시 걸림.
+   기준 = 일기 노트 d9.js. 쓰는 법: 앱 끝에 BJBACK.init({ ov: [...], hook: () => true/false }) */
+(function () {
+  const C = { ov: [".bkx-ov", ".fpx-ov"], btn: { ".ippg": "[data-ipclose],.ipx" }, hook: null };
+  let armed = false, busy = false;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  function arm() { if (history.state && history.state.bjg) { armed = true; return; } try { history.pushState(Object.assign({}, history.state || {}, { bjg: 1 }), ""); armed = true; } catch (e) {} }
+  const vis = e => e && e.isConnected && e.getClientRects().length > 0 && getComputedStyle(e).visibility !== "hidden";
+  function topOv() { const sel = C.ov.concat(Object.keys(C.btn)).join(","); if (!sel) return null; const L = [...document.querySelectorAll(sel)].filter(vis); return L[L.length - 1] || null; }
+  async function closeOv(o) {
+    for (const k in C.btn) if (o.matches(k)) { const b = o.querySelector(C.btn[k]); if (b) { b.click(); await wait(60); if (!vis(o)) return; } }
+    o.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true })); await wait(80); if (!vis(o)) return;   /* 바깥(어두운 곳) 누르기 */
+    o.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true })); await wait(80);   /* Esc */
+  }
+  function say(m) { let t = document.getElementById("bjbToast"); if (!t) { t = document.createElement("div"); t.id = "bjbToast"; t.setAttribute("role", "status"); t.style.cssText = "position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483000;background:rgba(31,33,37,.92);color:#fff;font:600 14.5px/1.4 SUIT,Pretendard,system-ui,sans-serif;padding:11px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);max-width:calc(100vw - 32px);text-align:center;pointer-events:none;transition:opacity .2s;opacity:0"; document.body.appendChild(t); }
+    t.textContent = m; t.style.opacity = "1"; clearTimeout(say.t); say.t = setTimeout(() => { t.style.opacity = "0"; }, 2400); }
+  window.addEventListener("popstate", async () => {
+    armed = false; if (busy) return; busy = true;
+    try {
+      const o = topOv(); if (o) { await closeOv(o); arm(); return; }
+      let done = false; if (C.hook) { try { done = !!(await C.hook()); } catch (e) { done = false; } }
+      if (done) { arm(); return; }
+      say("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요");   /* 다시 걸지 않음 → 한 번 더 누르면 나감 */
+    } finally { busy = false; }
+  });
+  ["pointerdown", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (!armed) arm(); }, true));
+  window.BJBACK = { init(o) { if (o) { if (o.ov) C.ov = C.ov.concat(o.ov); if (o.btn) Object.assign(C.btn, o.btn); if (o.hook) C.hook = o.hook; } }, arm, say };
+})();
+
+BJBACK.init({ ov: [".ov"], hook: () => { const V = window.BJV; if (V && V.view !== V.home) { V.setView(V.home); window.scrollTo(0, 0); return true; } return false; } });
+</script>
+</body></html>

@@ -693,7 +693,7 @@ function dayView() {
   const recTop = (on("trip") ? tripAsk(k) : "") + (on("routine") ? routineBlk(k, d) : "");
   const parts = [], rec = [];
   if (on("todo")) { const ts = tasksFor(k), t0 = today(); parts.push(`<div class="blk"><span class="lbl">할 일 <small>${ts.filter(t => t.done).length} / ${ts.length}</small></span>
-    ${ts.map(t => { const late = !t.done && t.due < k ? Math.round((pd(k) - pd(t.due)) / DAY) : 0; return `<div class="li ${t.done ? "done" : ""}">${ck(!!t.done, `data-task="${t.id}"`)}<input type="text" data-tk="${t.id}" value="${esc(t.t)}" aria-label="할 일" />${late ? `<span class="chip" style="background:#f3d9cf;font-size:11.5px;height:22px" title="기한 ${ymdw(t.due)}">${late}일 지남</span>` : ""}${!t.done && t.due && t.due >= k ? `<span class="chip" style="font-size:11.5px;height:22px;flex-shrink:0" title="기한 ${ymdw(t.due)}">${t.due === k ? "오늘까지" : "D-" + Math.round((pd(t.due) - pd(k)) / DAY)}</span>` : ""}<button class="x" data-tdue="${t.id}" aria-label="다른 날로 미루기" title="내일로 미루기">→</button><button class="x" data-tkdel="${t.id}" aria-label="지우기">×</button></div>`; }).join("")}
+    ${ts.map(t => { const late = !t.done && t.due && t.due < k ? Math.round((pd(k) - pd(t.due)) / DAY) : 0; return `<div class="li ${t.done ? "done" : ""}">${ck(!!t.done, `data-task="${t.id}"`)}<input type="text" data-tk="${t.id}" value="${esc(t.t)}" aria-label="할 일" />${late ? `<span class="chip" style="background:#f3d9cf;font-size:11.5px;height:22px" title="기한 ${ymdw(t.due)}">${late}일 지남</span>` : ""}${!t.done && t.due && t.due >= k ? `<span class="chip" style="font-size:11.5px;height:22px;flex-shrink:0" title="기한 ${ymdw(t.due)}">${t.due === k ? "오늘까지" : "D-" + Math.round((pd(t.due) - pd(k)) / DAY)}</span>` : ""}<button class="x" data-tdue="${t.id}" aria-label="다른 날로 미루기" title="내일로 미루기">→</button><button class="x" data-tkdel="${t.id}" aria-label="지우기">×</button></div>`; }).join("")}
     <button class="add" data-tadd="${k}">+ 할 일</button>${k === t0 ? "" : ""}</div>`); }
   if (on("pday") || evs.length || (d.sched || []).length) parts.push(`<div class="blk"><span class="lbl">일정 · 계획</span>
     ${evs.map(e => `<div class="li"><span class="tm">${esc(EVT[e.type] || "")}</span><span class="t">${esc(e.name)}${e.cal === "lunar" ? ` <small style="color:var(--faint)">음 ${e.m}.${e.d}</small>` : ""}</span>${e.type === "memorial" ? `<a href="https://luvbong.tistory.com/727" target="_blank" rel="noopener" style="font-size:12.5px">지방 ›</a>` : ""}</div>`).join("")}
@@ -725,7 +725,7 @@ function dayView() {
     if (ly) R += `<button class="ly" data-goday="${ly.kk}" style="margin-top:auto"><span class="pen">${ly.n}년 전 오늘</span><span><span class="num">${ymdw(ly.kk)}</span> ${esc(ly.t.slice(0, 70))}</span></button>`; }
   if (deco) { L += decoLayer(d, "L"); R += decoLayer(d, "R"); }
   const mbar = `<div class="mbar">${dayMode() === "view" ? `<button id="mEdit">${I(IC.pen)}수정</button>${deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}` : `<span>${dayMode() === "edit" ? "쓰는 중" : "꾸미는 중 — 끌어서 옮기고, 눌러서 크기 · 돌리기"}</span>${dayMode() === "edit" && deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}<button id="mDone" class="on">${I(IC.check)}완료</button>`}</div>`;
-  return book(L, R, (deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "") + mbar);
+  return book(L, R, deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "") + mbar;
 }
 function stkHtml(s, i) {
   const st = `width:${s.w || 74}px;height:${s.t ? 36 : (s.w || 74)}px;transform:translate(-50%,-50%) rotate(${s.r || 0}deg)`;
@@ -1227,12 +1227,23 @@ const pgEl = pg => $("#pg" + pg) || $("#pgL");
 function pageAt(cx, cy) { const P = ["L", "R"].map(k => [k, $("#pg" + k)]).filter(x => x[1]).map(([k, el]) => [k, el.getBoundingClientRect()]);
   let best = P[0], bd = 1e9; for (const [k, r] of P) { const dx = cx < r.left ? r.left - cx : cx > r.right ? cx - r.right : 0, dy = cy < r.top ? r.top - cy : cy > r.bottom ? cy - r.bottom : 0, dd = dx + dy; if (dd < bd) { bd = dd; best = [k, r]; } }
   const [k, r] = best; return { pg: k, x: Math.round(Math.min(100, Math.max(0, (cx - r.left) / r.width * 100)) * 10) / 10, y: Math.round(Math.min(r.height, Math.max(0, cy - r.top))), h: Math.round(r.height) }; }
-function setPos(it, p) { if (isPhone()) { it.mp = { pg: p.pg, x: p.x, y: p.y }; if (!it.pg) Object.assign(it, { pg: p.pg, x: p.x, y: p.y, h: p.h }); } else { Object.assign(it, { pg: p.pg, x: p.x, y: p.y, h: p.h }); } it.a = 2; delete it.n; delete it.at; }
+/* 11-01 제이: PC(좌우 쪽)와 휴대폰(한 줄)은 칸 높이가 달라 쪽 높이 비율로 옮기면 사진이 엉뚱한 칸 위에 얹힘
+   → PC에서 둔 자리를 「바로 위 칸(묶음 · 칸) 기준」으로 함께 저장(an), 휴대폰은 같은 칸을 찾아 그 아래에 놓음 */
+function ancList(pe) { const seen = {}; return [...pe.querySelectorAll(".sec, .blk, .fl, .strow, .dayph")].filter(e => !e.closest(".deco")).map(e => { const lb = (e.querySelector(".lbl, h4") || e).textContent || "", k0 = e.className.split(" ")[0] + ":" + lb.replace(/[\d\s/·]+/g, "").slice(0, 10); seen[k0] = (seen[k0] || 0) + 1; return { e, k: k0 + "#" + seen[k0] }; }); }
+function ancAt(pg, y) { const pe = pgEl(pg); if (!pe) return null; const pr = pe.getBoundingClientRect(); let best = null, bt = -1;
+  for (const a of ancList(pe)) { const r = a.e.getBoundingClientRect(), t = r.top - pr.top; if (t <= y + 2 && t >= bt) { if (t > bt || !best) { best = a; bt = t; best.h = r.height; } } }
+  return best ? { k: best.k, dy: Math.round(y - bt), bh: Math.round(best.h) } : null; }
+function ancY(pg, an) { const pe = pgEl(pg); if (!pe || !an) return null; const a = ancList(pe).find(x => x.k === an.k); if (!a) return null; const pr = pe.getBoundingClientRect(), r = a.e.getBoundingClientRect(), t = r.top - pr.top;
+  return an.dy <= an.bh ? t + an.dy / Math.max(1, an.bh) * r.height : t + r.height + (an.dy - an.bh); }
+function setPos(it, p) { if (isPhone()) { it.mp = { pg: p.pg, x: p.x, y: p.y }; if (!it.pg) Object.assign(it, { pg: p.pg, x: p.x, y: p.y, h: p.h }); } else { Object.assign(it, { pg: p.pg, x: p.x, y: p.y, h: p.h }); it.an = ancAt(p.pg, p.y); } it.a = 2; delete it.n; delete it.at; }
 /* 그린 뒤 자리 잡기 */
-function placeDeco() { const d = dayOf(S.date); if (!d) return;
+function placeDeco() { const d = dayOf(S.date); if (!d) return; let mig = false;
   $$(".deco > .stk, .deco > .pol.fx").forEach(el => { const key = el.dataset.ph != null ? "p" + el.dataset.ph : "s" + el.dataset.stk, it = decoArr(d, key)[+key.slice(1)]; if (!it) return;
-    const p = posOf(it), pe = pgEl(p.pg), H = pe.getBoundingClientRect().height; const y = isPhone() && !p.m && p.h ? p.y / p.h * H : p.y;
-    el.style.left = p.x + "%"; el.style.top = Math.round(y) + "px"; }); }
+    const p = posOf(it), pe = pgEl(p.pg), pr = pe.getBoundingClientRect(), H = pr.height, W = pr.width; let y = p.y; if (isPhone() && !p.m) { const ay = it.an ? ancY(p.pg, it.an) : null; y = ay != null ? ay : p.h ? p.y / p.h * H : p.y; y = Math.max(0, Math.min(H - 40, y)); } else if (!isPhone() && it.a === 2 && !it.an && p.y != null) { it.an = ancAt(p.pg, p.y); if (it.an) mig = true; }
+    let w = it.w || (el.dataset.ph != null ? 168 : 74);
+    if (isPhone() && !p.m) { const f = Math.max(0.6, Math.min(1, W / 640)); w = Math.round(w * f); el.style.width = w + "px"; if (el.classList.contains("stk") && !it.t) el.style.height = w + "px"; }
+    const half = Math.min(w / 2, W / 2), cx = Math.max(half, Math.min(W - half, W * p.x / 100));
+    el.style.left = Math.round(cx) + "px"; el.style.top = Math.round(y) + "px"; }); if (mig) { /* 예전 사진에 칸 기준 붙이기 — 방금 동기화한 PC면 다른 기기로도 보내고(날짜 고친 시각 갱신), 아니면 이 기기에만 */ if (!(typeof gdOn === "function" && gdOn()) || Date.now() - (D.set.gdLast || 0) < 10 * 60000) touchDay(S.date); else save(); } }
 addEventListener("resize", () => { if (S.v === "day") { clearTimeout(window.__pdT); window.__pdT = setTimeout(() => { const was = document.body.dataset.ph, now = isPhone() ? "1" : "0"; if (was !== now) { document.body.dataset.ph = now; render(); } else placeDeco(); }, 150); } });
 function decoSel(key) { S.sel = key; $$(".deco .sel").forEach(x => x.classList.remove("sel")); const b0 = $(".stkbar"); if (b0) b0.remove(); if (!key) return; const el = $(key[0] === "p" ? `.pol.fx[data-ph="${key.slice(1)}"]` : `.stk[data-stk="${key.slice(1)}"]`); if (el) { el.classList.add("sel"); stkBar(el); } }
 document.addEventListener("pointerdown", e => {
@@ -1344,7 +1355,10 @@ async function pickDir() {
     toast(found ? `「${target.name}」 폴더에 다시 연결했어요 — 기록을 합쳤어요` : `「${target.name}」 폴더에 자동 저장해요`); render();
   } catch (e) { toast("폴더에 저장하지 못했어요: " + e.message); }
 }
-async function dirPerm() { if (!DIR.h) return pickDir(); try { DIR.perm = await DIR.h.requestPermission({ mode: "readwrite" }); } catch (e) { DIR.perm = "denied"; } if (DIR.perm === "granted") { await dirRead(); await dirWrite(true); toast("폴더에 다시 연결했어요"); } render(); }
+/* 11-01 제이: 휴대폰(안드로이드) 「다시 연결」이 계속 실패 — 안드로이드 크롬은 브라우저를 다시 열면 폴더 허용이 풀리고 허용 다시 묻기도 자주 실패 → 안드로이드는 바로 폴더 고르기(같은 폴더를 고르면 기록을 합침), PC는 허용 묻기 → 안 되면 다음 누름에 폴더 고르기 */
+async function dirPerm() { if (!DIR.h || ANDROID || DIR.repick) { if (DIR.h) toast(`전에 쓰던 「${D.set.dirName || DIR.h.name}」 폴더를 골라 「이 폴더 사용」 → 「허용」을 눌러 주세요`); DIR.repick = false; return pickDir(); }
+  try { DIR.perm = await DIR.h.requestPermission({ mode: "readwrite" }); } catch (e) { DIR.perm = "denied"; }
+  if (DIR.perm === "granted") { await dirRead(); await dirWrite(true); toast("폴더에 다시 연결했어요"); } else { DIR.repick = true; toast("허용이 안 됐어요 — 「다시 연결」을 한 번 더 누르면 폴더를 다시 고를 수 있어요"); } render(); }
 async function dirOff() { if (!confirm("폴더 연결을 끊을까요? (폴더 안 파일은 그대로 남아요)")) return; DIR.h = null; DIR.perm = null; D.set.dirOn = false; D.set.dirName = ""; await st("meta", "readwrite", o => o.delete("dir")).catch(() => {}); save(); render(); }
 const dirOk = () => DIR.h && DIR.perm === "granted";
 async function photoDir(create) { try { return await DIR.h.getDirectoryHandle("사진", { create: !!create }); } catch (e) { if (e.name === "NotAllowedError" || e.name === "InvalidModificationError" || e.name === "TypeMismatchError") return DIR.h; throw e; } }
@@ -1396,7 +1410,8 @@ function dirBox() {
 }
 function dirBanner() {
   if (!CAN_DIR || IOS || S.v === "set") return "";
-  if (DIR.h && DIR.perm !== "granted") return `<div class="banner"><span class="o">●</span><span style="flex:1">저장 폴더 「${esc(D.set.dirName || DIR.h.name)}」에 다시 연결해 주세요 — 브라우저를 다시 열면 한 번 허용이 필요해요</span><button class="mini g" id="dirPerm">다시 연결</button></div>`;
+  if (DIR.h && DIR.perm !== "granted" && ANDROID && typeof gdOn === "function" && gdOn()) return "";
+  if (DIR.h && DIR.perm !== "granted") return `<div class="banner"><span class="o">●</span><span style="flex:1">저장 폴더 「${esc(D.set.dirName || DIR.h.name)}」에 다시 연결해 주세요 — ${ANDROID ? "휴대폰은 브라우저를 다시 열면 폴더를 한 번 다시 골라야 해요" : "브라우저를 다시 열면 한 번 허용이 필요해요"}</span><button class="mini g" id="dirPerm">다시 연결</button></div>`;
   const ph = Object.values(D.days).reduce((a, d) => a + (d.photos || []).length, 0);
   if (!DIR.h && ph >= 5 && !(D.set.dirHide && Date.now() < D.set.dirHide)) return `<div class="banner"><span class="o">●</span><span style="flex:1">사진이 ${ph}장 — 이 기기 폴더도 연결해 두면 브라우저 기록을 지워도 일기 · 사진이 남아요</span><button class="mini g" id="dirGo">폴더 연결</button><button class="mini ln" id="dirHide">7일 숨기기</button></div>`;
   return "";
@@ -1558,6 +1573,28 @@ document.addEventListener("input", e => { const t = e.target;
   if (t.dataset.ncren !== undefined) { e.stopImmediatePropagation(); const i = +t.dataset.ncren, old = D.ncats[i], v = t.value.trim().slice(0, 12); if (!v || (D.ncats.includes(v) && v !== old)) return; D.ncats[i] = v; D.notes.forEach(n => { if (n.cat === old) n.cat = v; }); if (S.nf === old) S.nf = v; touchSec("ncats"); touchSec("notes"); }
 }, true);
 document.addEventListener("change", e => { if (e.target.dataset && e.target.dataset.ncren !== undefined) rerenderKeep(); });
+
+/* ── 휴대폰 뒤로 가기: 앱을 바로 나가지 않고 한 단계씩 (창 닫기 → 쓰기 끝내기 → 상세 → 하루 쪽 → 「한 번 더 누르면 닫혀요」) ── */
+const BACK = { armed: false };
+function backArm() { if (history.state && history.state.bjg) { BACK.armed = true; return; } try { history.pushState({ bjg: 1 }, ""); BACK.armed = true; } catch (e) {} }
+function appBack() {
+  if ($("#pop")) { closePop(); return true; }
+  if (typeof LOCK !== "undefined" && D.set.lock && !LOCK.open) return false;
+  if (!D.set.setupDone) return false;
+  if (S.v === "day" && S.sel) { decoSel(null); return true; }
+  if (S.v === "day" && isPhone() && S.mm && S.mmd === S.date && S.mm !== "view") { const d = dayOf(S.date) || {}; if ((d.text || d.title || "").trim()) { const a = document.activeElement; if (a && a.blur) a.blur(); S.mm = "view"; decoSel(null); rerenderKeep(); toast("저장했어요"); return true; } }
+  if (S.v === "page" && S.page === "note" && S.nt) { noteLeave(); save(); render(); return true; }
+  if (S.v === "page" && S.page === "book" && S.bk) { S.bk = null; render(); return true; }
+  if (S.v !== "day") { S.v = "day"; S.sel = null; render(); window.scrollTo(0, 0); return true; }
+  if (S.date !== today()) { S.date = today(); S.sel = null; render(); window.scrollTo(0, 0); return true; }
+  return false;
+}
+window.addEventListener("popstate", () => {
+  BACK.armed = false;
+  if (appBack()) { backArm(); return; }
+  toast("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요");   /* 다시 걸지 않음 → 한 번 더 누르면 그대로 나감, 화면을 만지면 다시 걸림 */
+});
+["pointerdown", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (!BACK.armed) backArm(); }, true));
 
 /* ───────── 구글 드라이브 (내 드라이브 「일기노트」 폴더 · drive.file — 이 앱이 만든 파일만) ───────── */
 const GD_CLIENT_ID = "1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com";

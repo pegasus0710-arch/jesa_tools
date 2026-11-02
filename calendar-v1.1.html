@@ -576,6 +576,21 @@ html{scrollbar-gutter:stable}.cl-sheets{scrollbar-gutter:stable}
 .cl-mpv{margin-left:auto;font-size:14px;font-weight:700;color:#1f2125;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:520px){.cl-mpv{flex-basis:100%;margin-left:0;max-width:100%}}
 
+/* 11-02 제이: 첫 화면 견본 갤러리 */
+.lay.wb.pick{grid-template-columns:minmax(0,1fr)!important}.lay.wb.pick .tray{display:none!important}.lay.wb.pick .wp{grid-column:1/-1;max-width:none}
+.cl-gal{display:flex;flex-direction:column;gap:18px}
+.cl-gg h3{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--ink,#1f2125)}
+.cl-gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px}
+.cl-gi{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:10px 10px 12px;border-radius:14px;border:2px solid transparent;background:var(--in-bg,#f4efe6);box-shadow:var(--up,0 2px 6px rgba(120,100,70,.18));cursor:pointer;text-align:left;font:inherit;color:inherit}
+.cl-gi:hover{border-color:var(--g,#195455)}.cl-gi.on{border-color:var(--g,#195455);background:#fff}
+.cl-gi b{font-size:15px;display:flex;align-items:center;gap:6px;margin-top:6px}.cl-gi small{font-size:13px;color:var(--ink3,#6f6857)}
+.cl-gon{font-style:normal;font-size:11.5px;font-weight:700;color:#fff;background:var(--g,#195455);border-radius:6px;padding:1px 6px}
+.cl-th{height:236px;display:flex;align-items:center;justify-content:center;background:#e7e0d2;border-radius:10px;overflow:hidden}
+.cl-thp{position:relative;display:block;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(60,50,30,.25)}
+.cl-thin{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
+.cl-thin .cl-pg{margin:0!important;box-shadow:none!important}
+@media(max-width:520px){.cl-gl{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cl-th{height:170px}.cl-gi{padding:8px}}
+
 /* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
    1) 깊이는 3단만: 판(바탕) · 카드(머리카락 선 + 아주 옅은 그림자) · 들어감(입력 · 고르기 바탕)
@@ -1126,7 +1141,64 @@ function WeekPage({ d0, st, annMap, land }) {
     </div>${ft}</div>`;
 }
 
-const STEPS = [["달력 모양", "어떤 달력을 뽑을까요?", "한 달 한 장 · 1년 한 장 · 탁상용 · 주간 일정표 중에서 골라요"], ["기간", "언제부터 얼마 동안인가요?", "연도와 시작 달, 시작 요일을 정해요"], ["표시할 것", "달력에 무엇을 넣을까요?", "공휴일 · 음력 · 절기 · 손 없는 날 · 날짜 메모"], ["꾸미기 · 인쇄", "모양을 다듬고 인쇄해요", "선 색 · 머리 글귀 · 메모 줄을 고르고 인쇄 · PDF로 저장"]];
+/* 11-02 제이: 한 장씩 만드는 부분을 함수로 — 미리보기와 첫 화면 견본 갤러리가 같이 씀 */
+function buildPages(st, phs, annMap, phSetPos) {
+  const months = st.kind === "week" ? [] : monthList(st), wks = st.kind === "week" ? weekList(st) : [];
+  const deskNote = st.kind === "desk" && (st.deskBot === "days" || st.deskBot === "lines"), paper = st.kind === "desk" ? "port" : st.paper;
+  let pages;
+  if (st.kind === "week") pages = wks.map(d0 => html`<div class=${"cl-pg " + paper}><${WeekPage} d0=${d0} st=${st} annMap=${annMap} land=${paper === "land"} /></div>`);
+  else if (st.kind === "year") pages = [html`<div class=${"cl-pg " + paper}><${YearPage} y=${st.year} st=${st} /></div>`];
+  else if (st.kind === "desk" && st.deskBot === "photo" && st.phCal === "year") pages = [html`<div class="cl-pg desk">
+      <div class="cl-half"><${PhotoHalf} src=${phs[st.year + "-y"]} fit=${st.phfit} pos=${(st.phpos || {})[st.year + "-y"]} onPos=${phSetPos && (v => phSetPos(st.year + "-y", v))} empty="4단계에서 1년 달력 사진을 넣어 주세요" /></div>
+      <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
+      <div class="cl-half"><${YearPage} y=${st.year} st=${st} half=${true} /></div></div>`];
+  else if (st.kind === "desk" && st.deskBot === "photo") pages = months.map(([y, m]) => html`<div class="cl-pg desk">
+      <div class="cl-half"><${PhotoHalf} src=${phs[y + "-" + m]} fit=${st.phfit} pos=${(st.phpos || {})[y + "-" + m]} onPos=${phSetPos && (v => phSetPos(y + "-" + m, v))} /></div>
+      <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
+      <div class="cl-half"><${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} half=${true} /></div></div>`);
+  else if (st.kind === "desk" && deskNote) pages = months.map(([y, m]) => html`<div class="cl-pg desk">
+      <div class="cl-half"><${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} half=${true} /></div>
+      <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
+      <div class="cl-half"><${NoteHalf} y=${y} m=${m} st=${st} annMap=${annMap} kind=${st.deskBot} /></div></div>`);
+  else if (st.kind === "desk") { pages = []; for (let i = 0; i < months.length; i += 2) pages.push(html`<div class="cl-pg desk">
+      <div class="cl-half"><${MonthPage} y=${months[i][0]} m=${months[i][1]} st=${st} annMap=${annMap} half=${true} /></div>
+      ${months[i + 1] ? html`<div class="cl-cut"><span>자르는 선</span></div>` : html`<div style=${{ height: "2mm" }}></div>`}
+      <div class="cl-half">${months[i + 1] ? html`<${MonthPage} y=${months[i + 1][0]} m=${months[i + 1][1]} st=${st} annMap=${annMap} half=${true} />` : null}</div></div>`); }
+  else pages = months.map(([y, m]) => html`<div class=${"cl-pg " + paper}>${st.mstyle === "plan" ? html`<${PlanPage} y=${y} m=${m} st=${st} annMap=${annMap} land=${paper === "land"} />` : html`<${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} />`}</div>`);
+  return pages;
+}
+
+/* 11-02 제이: 첫 화면 = 뽑을 수 있는 달력 견본 전부(실제 모양 그대로 작게) → 하나 고르면 다음 단계 */
+const SAMPLE_PH = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9dbbe0"/><stop offset="1" stop-color="#dfe8f2"/></linearGradient></defs><rect width="300" height="200" fill="url(#s)"/><circle cx="228" cy="52" r="17" fill="#fff4d6"/><path d="M0 128 Q60 96 120 118 T240 108 T300 116 V200 H0Z" fill="#b3c6d6"/><path d="M0 150 Q80 126 160 146 T300 140 V200 H0Z" fill="#eef2f6"/><g fill="#2e6052"><path d="M40 162l14-34 14 34z"/><path d="M76 168l11-26 11 26z"/><path d="M202 160l13-30 13 30z"/><path d="M238 168l10-22 10 22z"/></g></svg>');
+const VARS = [
+  ["한 달 한 장", [["m-land", "칸 달력 · 가로", "요일별 큰 칸 · 아래 메모 줄", { kind: "month", mstyle: "grid", paper: "land" }],
+                ["m-port", "칸 달력 · 세로", "냉장고 · 벽에 붙이기 좋게", { kind: "month", mstyle: "grid", paper: "port" }],
+                ["p-port", "계획 달력 · 세로", "하루 한 줄 + 이달의 목표 · 할 일", { kind: "month", mstyle: "plan", paper: "port" }],
+                ["p-land", "계획 달력 · 가로", "1~16일 · 17~31일 두 단", { kind: "month", mstyle: "plan", paper: "land" }]]],
+  ["1년 한 장", [["y-land", "1년 달력 · 가로", "12달 한눈에 · 공휴일 목록", { kind: "year", paper: "land" }],
+                ["y-port", "1년 달력 · 세로", "3 × 4 배치 · 공휴일 목록", { kind: "year", paper: "port" }]]],
+  ["탁상 달력 (A4 세로 = A5 두 장)", [["d-next", "두 달씩", "위 · 아래에 한 달씩, 잘라서 받침에", { kind: "desk", deskBot: "next" }],
+                ["d-days", "달력 + 날짜별 기록 줄", "1일~말일 한 줄씩 적는 칸", { kind: "desk", deskBot: "days" }],
+                ["d-lines", "달력 + 빈 줄 노트", "아래 반쪽은 메모장", { kind: "desk", deskBot: "lines" }],
+                ["d-photo", "사진 + 그달 달력", "달마다 내 사진 한 장", { kind: "desk", deskBot: "photo", phCal: "month" }],
+                ["d-pyear", "사진 + 1년 달력", "사진 한 장으로 1년 내내", { kind: "desk", deskBot: "photo", phCal: "year" }]]],
+  ["주간 일정표", [["w-land", "주간 · 가로", "7일 칸 · 1시간 칸 · 이번 주 할 일", { kind: "week", paper: "land" }],
+                ["w-port", "주간 · 세로", "하루 한 줄(가로 띠)", { kind: "week", paper: "port" }]]]];
+const varMatch = (st, pr) => Object.keys(pr).every(k => k === "phCal" ? (st.phCal || "month") === pr.phCal : k === "mstyle" ? (st.mstyle || "grid") === pr.mstyle : st[k] === pr[k]);
+const SAMPLE_PHS = new Proxy({}, { get: () => SAMPLE_PH });
+function Thumb({ st }) {
+  const pg = useMemo(() => buildPages(st, SAMPLE_PHS, memoMapFor(st), null)[0], [JSON.stringify(st)]);
+  const [pw, ph] = PAGE[st.kind === "desk" ? "desk" : st.paper], sm = window.innerWidth <= 520, W = sm ? 140 : 210, H = sm ? 160 : 230, k = Math.min(W / (pw * 3.7795), H / (ph * 3.7795));
+  return html`<span class="cl-th" aria-hidden="true"><span class="cl-thp" style=${{ width: pw * 3.7795 * k + "px", height: ph * 3.7795 * k + "px" }}><span class="cl-thin" style=${{ transform: `scale(${k})` }}>${pg}</span></span></span>`;
+}
+function Gallery({ st, onPick }) {
+  const base = { ...st, count: 2 };
+  return html`<div class="cl-gal">${VARS.map(([g, items]) => html`<div class="cl-gg"><h3>${g}</h3><div class="cl-gl">${items.map(([id, nm, ds, pr]) => { const on = varMatch(st, pr);
+    return html`<button class=${"cl-gi" + (on ? " on" : "")} aria-pressed=${on} onClick=${() => onPick(pr)}><${Thumb} st=${{ ...base, ...pr }} /><b>${nm}${on ? html`<i class="cl-gon">고른 모양</i>` : null}</b><small>${ds}</small></button>`; })}</div></div>`)}
+    <p class="hint">견본은 지금 고른 연도 · 달 · 메모로 그린 실제 모양이에요. 사진 자리는 견본 그림이고, 4단계에서 내 사진을 넣어요.</p></div>`;
+}
+
+const STEPS = [["달력 모양", "어떤 달력을 뽑을까요?", "견본을 보고 하나 누르면 다음 단계로 넘어가요"], ["기간", "언제부터 얼마 동안인가요?", "연도와 시작 달, 시작 요일을 정해요"], ["표시할 것", "달력에 무엇을 넣을까요?", "공휴일 · 음력 · 절기 · 손 없는 날 · 날짜 메모"], ["꾸미기 · 인쇄", "모양을 다듬고 인쇄해요", "선 색 · 머리 글귀 · 메모 줄을 고르고 인쇄 · PDF로 저장"]];
 const NEXT = ["다음: 기간", "다음: 표시할 것", "다음: 꾸미기 · 인쇄"];
 
 function App() {
@@ -1165,26 +1237,7 @@ function App() {
   const noHol = st.hol ? years.filter(y => !HOL_YEARS.includes(y)) : [];
   const paper = st.kind === "desk" ? "port" : st.paper;
   const [pw] = PAGE[paper];
-  let pages;
-  if (st.kind === "week") pages = wks.map(d0 => html`<div class=${"cl-pg " + paper}><${WeekPage} d0=${d0} st=${st} annMap=${annMap} land=${paper === "land"} /></div>`);
-  else if (st.kind === "year") pages = [html`<div class=${"cl-pg " + paper}><${YearPage} y=${st.year} st=${st} /></div>`];
-  else if (st.kind === "desk" && st.deskBot === "photo" && st.phCal === "year") pages = [html`<div class="cl-pg desk">
-      <div class="cl-half"><${PhotoHalf} src=${phs[st.year + "-y"]} fit=${st.phfit} pos=${(st.phpos || {})[st.year + "-y"]} onPos=${v => phSetPos(st.year + "-y", v)} empty="4단계에서 1년 달력 사진을 넣어 주세요" /></div>
-      <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
-      <div class="cl-half"><${YearPage} y=${st.year} st=${st} half=${true} /></div></div>`];
-  else if (st.kind === "desk" && st.deskBot === "photo") pages = months.map(([y, m]) => html`<div class="cl-pg desk">
-      <div class="cl-half"><${PhotoHalf} src=${phs[y + "-" + m]} fit=${st.phfit} pos=${(st.phpos || {})[y + "-" + m]} onPos=${v => phSetPos(y + "-" + m, v)} /></div>
-      <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
-      <div class="cl-half"><${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} half=${true} /></div></div>`);
-  else if (st.kind === "desk" && deskNote) pages = months.map(([y, m]) => html`<div class="cl-pg desk">
-      <div class="cl-half"><${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} half=${true} /></div>
-      <div class="cl-cut"><span>접는 선 · 자르는 선</span></div>
-      <div class="cl-half"><${NoteHalf} y=${y} m=${m} st=${st} annMap=${annMap} kind=${st.deskBot} /></div></div>`);
-  else if (st.kind === "desk") { pages = []; for (let i = 0; i < months.length; i += 2) pages.push(html`<div class="cl-pg desk">
-      <div class="cl-half"><${MonthPage} y=${months[i][0]} m=${months[i][1]} st=${st} annMap=${annMap} half=${true} /></div>
-      ${months[i + 1] ? html`<div class="cl-cut"><span>자르는 선</span></div>` : html`<div style=${{ height: "2mm" }}></div>`}
-      <div class="cl-half">${months[i + 1] ? html`<${MonthPage} y=${months[i + 1][0]} m=${months[i + 1][1]} st=${st} annMap=${annMap} half=${true} />` : null}</div></div>`); }
-  else pages = months.map(([y, m]) => html`<div class=${"cl-pg " + paper}>${st.mstyle === "plan" ? html`<${PlanPage} y=${y} m=${m} st=${st} annMap=${annMap} land=${paper === "land"} />` : html`<${MonthPage} y=${y} m=${m} st=${st} annMap=${annMap} />`}</div>`);
+  const pages = buildPages(st, phs, annMap, phSetPos);
 
   /* 미리보기 배율: 교정대 폭에 맞춤 */
   const shRef = useRef(null);
@@ -1205,16 +1258,12 @@ function App() {
     <div class="top">
       ${!EMBED && html`<div class="brand"><span class="lg">${h(Icon, { name: "calendar", size: 26, sw: 2 })}<i></i></span><div><small>BLOG J 무료 도구 · 생활 · v${APP_VER}</small><b>달력 만들기</b></div></div>`}
     </div>
-    <div class="lay wb">
+    <div class=${"lay wb" + (cur === 0 ? " pick" : "")}>
       <nav class="ruler" aria-label="진행 단계"><ol>${STEPS.map((x, i) => html`<li><button class=${i === cur ? "cur" : i < cur ? "done" : ""} aria-current=${i === cur ? "step" : null} onClick=${() => go(i)}>${i === cur ? html`<i class="bead"></i>` : null}<span class="rn">0${i + 1}</span>${x[0]}</button></li>`)}</ol></nav>
       <section class="wp">
         <div class="wp-h"><span class="k">0${cur + 1} / 04</span><h2>${STEPS[cur][1]}</h2><p>${STEPS[cur][2]}</p></div>
         <div class="wp-b">
-        ${cur === 0 && html`<div class="cl-kinds">${[["month", "한 달 한 장", "칸 달력 또는 날짜 줄 계획 달력"], ["year", "1년 한 장", "12달을 한 장에 · 공휴일 목록"], ["desk", "탁상 달력", "A5 크기 · 다음 달 · 노트 · 위에 사진"], ["week", "주간 일정표", "한 주 한 장 · 7일 칸 · 시간 줄 · 할 일"]].map(([k, t, s]) => html`<button class=${"tcard cl-kind" + (st.kind === k ? " on" : "")} onClick=${() => up("kind", k)}><span><b>${t}</b><small>${s}</small></span>${st.kind === k ? html`<i></i>` : null}</button>`)}</div>
-          ${st.kind === "month" ? html`<label class="f">모양</label><${Seg} value=${st.mstyle || "grid"} options=${[["grid", "칸 달력"], ["plan", "계획 달력"]]} onChange=${v => up("mstyle", v)} />
-            <p class="hint">${st.mstyle === "plan" ? "왼쪽은 하루 한 줄(날짜 옆에 일정 · 기록, 끝에 □ 체크), 오른쪽은 이달의 목표 · 할 일 · 중요한 날 · 메모예요. A4 세로 = 31줄 한 단, A4 가로 = 두 단." : "요일별 큰 칸에 날짜가 들어가는 보통 달력이에요."}</p>` : null}
-          ${st.kind !== "desk" ? html`<label class="f">종이</label><${Seg} value=${st.paper} options=${[["land", "A4 가로"], ["port", "A4 세로"]]} onChange=${v => up("paper", v)} />`
-            : html`<p class="note">A4 세로 한 장의 위쪽에 A5 크기 달력이 들어가요. 아래쪽에는 다음 달 달력이나 날짜별 기록 줄 · 빈 줄 노트를 넣을 수 있어요(4단계). 가운데 선대로 잘라 탁상 달력 받침에 끼우거나, 접어서 세워 쓰세요.</p>`}`}
+        ${cur === 0 && html`<${Gallery} st=${st} onPick=${pr => { setSt(p => ({ ...p, ...pr, count: pr.kind === "desk" && pr.deskBot === "next" ? Math.max(2, p.count) : p.count })); go(1); }} />`}
         ${cur === 1 && st.kind === "week" && html`<label class="f">시작 주 <span class="muted">고른 날이 들어 있는 주부터</span></label>
           <label class="cl-dt cl-wdt0"><span>${ymdw(wks[0])} ~ ${ymdw(new Date(wks[0].getFullYear(), wks[0].getMonth(), wks[0].getDate() + 6))}</span><input type="date" value=${st.wd} min=${MYEAR0 + "-01-01"} max=${MYEAR1 + "-12-31"} onInput=${e => e.target.value && up("wd", e.target.value)} onClick=${e => { try { e.target.showPicker(); } catch (_) {} }} aria-label="시작 주 고르기" /></label>
           <label class="f">몇 주</label><select value=${st.wc} onChange=${e => up("wc", +e.target.value)}>${[1, 2, 3, 4, 5, 6, 8, 10, 13].map(n => html`<option value=${n}>${n}주 (${n}장)</option>`)}</select>

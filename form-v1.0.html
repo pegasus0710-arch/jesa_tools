@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>무료 양식 | Blog J</title><meta name="description" content="이력서 · 자기소개서 · 사직서 · 재직증명서 · 회의록 · 지출결의서 · 출석부 등 빈 양식 67가지를 가입 없이 바로 인쇄하거나 PDF · Word · Excel · 한글 파일로 받기" />
+<title>무료 양식 | Blog J</title><meta name="description" content="이력서 · 자기소개서 · 사직서 · 재직증명서 · 회의록 · 지출결의서 · 출석부 등 빈 양식 67가지를 가입 없이 바로 인쇄하거나 PDF · Word · Excel · 한글 · 이미지 파일로 받기" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%237a4b2a%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2010h18l10%2010v34H20z%22%2F%3E%3Cpath%20d%3D%22M27%2032h14M27%2042h14%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2253%22%20cy%3D%2253%22%20r%3D%228%22%20fill%3D%22%23e08a3e%22%20stroke%3D%22%237a4b2a%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E" />
 <style>
 
@@ -381,7 +381,7 @@ body,button,input,select{font-family:var(--font)}
 .tcard.fm-f{height:auto;min-height:64px;padding:10px 12px;display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;box-sizing:border-box}
 .tcard.fm-f svg{margin-left:auto;flex-shrink:0;color:var(--ink2)}
 .fm-x{flex-shrink:0;width:42px;height:42px;border-radius:10px;display:grid;place-items:center;font-size:11.5px;font-weight:800;color:#fff;letter-spacing:-.02em}
-.x-pdf{background:#b4392b}.x-docx{background:#2b579a}.x-xlsx{background:#217346}.x-hwp{background:#1d6fb8}
+.x-pdf{background:#b4392b}.x-docx{background:#2b579a}.x-xlsx{background:#217346}.x-hwp{background:#1d6fb8}.x-png{background:#6b4fa0}
 @media(max-width:520px){.fm-dl{grid-template-columns:1fr}}
 .fm-sheets{max-height:none!important;overflow-x:hidden!important}
 .fm-sheets .scaler{display:flex;justify-content:center}
@@ -807,8 +807,9 @@ const FMT = [
   ["docx", "Word", "워드에서 입력", "doc"],
   ["xlsx", "Excel", "엑셀에서 입력", "doc"],
   ["hwp", "한글", "한글에서 입력", "doc"],
+  ["png", "이미지", "휴대폰 · 노트 앱에서", "img"],
 ];
-const STEPS = [["양식 고르기", "어떤 양식이 필요하세요?", "양식을 누르면 오른쪽에서 A4 모양을 바로 볼 수 있어요"], ["받기 · 인쇄", "인쇄하거나 파일로 받으세요", "가입 없이 바로 — PDF · Word · Excel · 한글"]];
+const STEPS = [["양식 고르기", "어떤 양식이 필요하세요?", "양식을 누르면 오른쪽에서 A4 모양을 바로 볼 수 있어요"], ["받기 · 인쇄", "인쇄하거나 파일로 받으세요", "가입 없이 바로 — PDF · Word · Excel · 한글 · 이미지"]];
 
 function App() {
   const byId = id => FORMS.find(f => f.id === id);
@@ -850,8 +851,8 @@ function App() {
         ${cur === 1 && html`<div class="fm-sel"><span class="k">고른 양식</span><b>${F.name}${F.land ? " (가로)" : ""}</b><button class="btn s" onClick=${() => go(0)}>다른 양식</button></div>
           ${F.alt ? html`<div class="fm-or2">${Orient()}</div>` : null}<button class="btn go fm-print" onClick=${() => window.print()}>${h(Icon, { name: "printer", size: 20 })} 바로 인쇄 · PDF로 저장</button>
           <p class="hint">손으로 써서 낼 때는 바로 인쇄하면 돼요. 인쇄 창에서 배율 「실제 크기(100%)」 · 여백 「없음」으로 고르세요.${F.land ? " 이 양식은 A4 가로예요 — 인쇄 창의 방향이 「가로」인지 확인하세요." : ""}</p>
-          <label class="f">파일로 받기 <span class="muted">${F.paper ? "PDF로 저장해 두고 필요할 때 인쇄" : "컴퓨터에서 칸에 직접 입력할 때"}</span></label>
-          ${F.paper ? html`<p class="hint">줄 · 칸만 있는 종이라 PDF로 드려요. 여러 장이 필요하면 인쇄 창에서 「매수」를 늘리세요.</p>` : null}<div class="fm-dl">${FMT.filter(x => !F.paper || x[0] === "pdf").map(([ext, name, sub]) => html`<a class="tcard fm-f" href=${DL + F.file + "." + ext} download=${F.name + (F.alt && F.land ? " 가로" : "") + (F.paper ? "." : " 양식.") + ext}><span class=${"fm-x x-" + ext}>${name}</span><span><b>${name}</b><small>${sub}</small></span>${h(Icon, { name: "download", size: 18 })}</a>`)}</div>
+          <label class="f">파일로 받기 <span class="muted">${F.paper ? "PDF는 인쇄용 · 이미지는 태블릿 노트 앱용" : "컴퓨터에서 칸에 직접 입력할 때 · 이미지는 휴대폰에서 바로 보기"}</span></label>
+          ${F.paper ? html`<p class="hint">줄 · 칸만 있는 종이라 손으로 쓰는 PDF와, 태블릿 노트 앱(굿노트 · 삼성 노트 등)에 넣어 쓰는 이미지로 드려요. 여러 장이 필요하면 인쇄 창에서 「매수」를 늘리세요.</p>` : null}<div class="fm-dl">${FMT.filter(x => !F.paper || x[0] === "pdf" || x[0] === "png").map(([ext, name, sub]) => html`<a class="tcard fm-f" href=${DL + F.file + "." + ext} download=${F.name + (F.alt && F.land ? " 가로" : "") + (F.paper ? "." : " 양식.") + ext}><span class=${"fm-x x-" + ext}>${name}</span><span><b>${name}</b><small>${sub}</small></span>${h(Icon, { name: "download", size: 18 })}</a>`)}</div>
           `}
         </div>
         <div class="wp-f">${cur > 0 ? html`<button class="btn" onClick=${() => go(cur - 1)}>${h(Icon, { name: "chevL", size: 18 })} 이전</button>` : null}

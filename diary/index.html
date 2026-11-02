@@ -521,11 +521,16 @@ mark{background:#fbe3a6;color:inherit}
 .nphmini{display:inline-flex;align-items:center;cursor:pointer;flex-shrink:0}
 .book.m-edit .deco>*{opacity:.28;transition:opacity .2s}
 
+/* 11-02 명언 목록 */
+.sayadd{border-bottom:2px solid var(--ink)}.sayadd input{flex:1;min-width:0;font-size:16px}
+.sayrow .sayno{width:34px;flex-shrink:0;color:var(--faint);font-size:12.5px;text-align:right;padding-right:6px}
+.sayrow input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--hand);font-size:17px;outline:none}
+
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-02(월) 23:22";
+const BUILD = "2026-11-02(월) 23:37";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -999,7 +1004,14 @@ const PAGEF = {
      ${G.filter(g => g[1].length).map(([n, L]) => `<div class="blk"><span class="lbl" style="${n === "기한 지남" ? "color:var(--red)" : ""}">${n} <small>${L.length}</small></span>${L.sort((a, b) => (a.due || "9") < (b.due || "9") ? -1 : 1).map(row).join("")}</div>`).join("") || `<div class="empty">할 일을 적어 보세요 — 기한을 넣으면 그날 하루 쪽에 나와요</div>`}`; },
   days: () => { const up = nextEvents(today(), 40, 400); return PH("우리 집 날", `<button class="mini g" id="evAdd" style="margin-left:auto">+ 넣기</button>`) + `<span class="foot">생일 · 기일은 음력으로 넣으면 해마다 양력 날짜로 바뀌어 하루 쪽 · 달력에 보여요.</span>
      ${D.events.length ? D.events.map((e, i) => { const nx = up.find(x => x.e === e); return `<div class="li"><span class="chip">${EVT[e.type] || ""}</span><span class="t">${esc(e.name)} <small style="color:var(--faint)">${e.once ? ymdw(e.once) : (e.cal === "lunar" ? "음력 " : "양력 ") + e.m + "월 " + e.d + "일" + (e.leap ? "(윤달)" : "")}</small></span>${nx ? `<span class="num" style="font-size:12.5px;color:var(--g)">${nx.dd === 0 ? "오늘" : "D-" + nx.dd} · ${ymdw(nx.k)}</span>` : ""}<button class="x" data-evedit="${i}" aria-label="고치기">✎</button><button class="x" data-evdel="${i}" aria-label="지우기">×</button></div>`; }).join("") : `<div class="empty">아직 없어요 — 「+ 넣기」로 가족 생일 · 기일 · 결혼기념일을 넣어 보세요</div>`}`; },
-  saying: () => { const n = (D.says || []).filter(s => (s || "").trim()).length; return PH("명언", `<span class="foot" style="margin-left:auto">${n}개</span>`) + `<span class="foot">명언을 한 줄에 하나씩 넣어요. 하루 쪽 맨 위에 날마다 하나씩 무작위로 나와요. 누가 한 말인지 적으려면 뒤에 「 — 이름」을 붙여요.</span><textarea class="memo" style="font-size:18px;line-height:44px;min-height:440px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,var(--line) 43px,var(--line) 44px)" data-sec="says" data-lines="1" placeholder="천 리 길도 한 걸음부터.\n오늘 할 일을 내일로 미루지 말자. — 나에게">${esc((D.says || []).join("\n"))}</textarea>${n ? "" : `<button class="mini ln" id="sayEx" style="margin-top:8px">예시 속담 5개 넣기</button>`}`; },
+  /* 11-02 제이: 명언 — 한 줄씩 목록, 20개마다 쪽 넘김 · 맨 위 칸에 적고 Enter(여러 줄 붙여넣기도 한 번에) */
+  saying: () => { D.says = (D.says || []).filter(x => (x || "").trim()); const L = D.says, per = 20, pages = Math.max(1, Math.ceil(L.length / per)), pg = Math.min(Math.max(1, S.sp || 1), pages), st0 = (pg - 1) * per;
+    const nums = []; for (let i = 1; i <= pages; i++) if (i === 1 || i === pages || Math.abs(i - pg) <= 2) nums.push(i); else if (nums[nums.length - 1] !== "…") nums.push("…");
+    return PH("명언", `<span class="foot" style="margin-left:auto">${L.length}개</span>`) + `<span class="foot">하루 쪽 맨 위에 날마다 하나씩 무작위로 나와요. 누가 한 말인지 적으려면 뒤에 「 — 이름」을 붙여요.</span>
+     <div class="li sayadd"><input type="text" id="sayNew" placeholder="새 명언을 적고 Enter" aria-label="새 명언" /><button class="mini g" id="sayAdd">넣기</button></div>
+     <div class="saylist">${L.slice(st0, st0 + per).map((t, k) => `<div class="li sayrow"><span class="num sayno">${st0 + k + 1}</span><input type="text" data-say="${st0 + k}" value="${esc(t)}" aria-label="명언 ${st0 + k + 1}" /><button class="x" data-saydel="${st0 + k}" aria-label="삭제" title="삭제">×</button></div>`).join("") || `<p class="foot" style="padding:14px 4px">아직 넣은 명언이 없어요.</p>`}</div>
+     ${pages > 1 ? `<div class="chips" style="justify-content:center;padding-top:10px"><button class="chip" data-sp="${pg - 1}" ${pg === 1 ? "disabled" : ""} aria-label="이전 쪽">‹</button>${nums.map(n => n === "…" ? `<span class="foot">…</span>` : `<button class="chip ${n === pg ? "on" : ""}" data-sp="${n}">${n}</button>`).join("")}<button class="chip" data-sp="${pg + 1}" ${pg === pages ? "disabled" : ""} aria-label="다음 쪽">›</button></div>` : ""}
+     ${L.length ? "" : `<button class="mini ln" id="sayEx" style="margin-top:8px">예시 속담 5개 넣기</button>`}<span class="foot" style="display:block;margin-top:8px">한 쪽에 20개 · 새 명언은 맨 위에 들어가요 · 여러 줄을 붙여 넣으면 한 줄에 하나씩</span>`; },
   vow: () => PH("나의 다짐") + `<span class="foot">한 줄에 하나씩. 날마다 돌아가며 하루 쪽 맨 위에 보여요.</span><textarea class="memo" style="font-size:20px;line-height:44px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,var(--line) 43px,var(--line) 44px)" data-sec="vows" data-lines="1" placeholder="하루 한 번, 하늘 보기.">${esc(D.vows.join("\n"))}</textarea>`,
   year: () => { const y = String(+S.ym.slice(0, 4)), Y = D.years[y] || { goals: [], m: {} }; return PH(y + " 계획", `<span style="margin-left:auto;display:flex;gap:4px"><button class="mini ln" data-yr2="-1">‹ ${+y - 1}</button><button class="mini ln" data-yr2="1">${+y + 1} ›</button></span>`) + `<div class="blk"><span class="lbl">올해 목표 <small>${Y.goals.filter(g => g.done).length} / ${Y.goals.length} 이룸</small></span>${Y.goals.map((g, i) => `<div class="li ${g.done ? "done" : ""}">${ck(g.done, `data-goal="${i}"`)}<input type="text" data-goalt="${i}" value="${esc(g.t)}" aria-label="목표" /><button class="x" data-goaldel="${i}" aria-label="지우기">×</button></div>`).join("")}<button class="add" id="goalAdd">+ 목표</button></div>
      <div class="blk"><span class="lbl">달마다</span><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));border-top:1px solid var(--dash);border-left:1px solid var(--dash)">${[...Array(12)].map((_, i) => `<label style="border-right:1px solid var(--dash);border-bottom:1px solid var(--dash);padding:6px 8px;min-height:74px;display:flex;flex-direction:column"><span class="pen" style="font-size:20px;color:var(--g)">${i + 1}월</span><textarea data-ym="${i + 1}" style="border:0;background:transparent;font-family:var(--hand);font-size:14px;resize:none;flex:1;outline:none;min-height:40px">${esc(Y.m[i + 1] || "")}</textarea></label>`).join("")}</div></div>`; },
@@ -1202,6 +1214,9 @@ document.addEventListener("click", async e => {
   if (ds.pin !== undefined) return pinKey(ds.pin);
   if (ds.close !== undefined) return closePop();
   if (ds.go) { S.vprev = S.v; if (ds.go === "set") { S.v = "set"; return render(); } if (ds.go === "find") { S.v = "find"; render(); const f = $("#fq2"); if (f) f.focus(); return; } S.v = ds.go; if (ds.go === "month" || ds.go === "year") S.ym = ymOf(S.date); render(); return window.scrollTo(0, 0); }
+  if (ds.sp) { S.sp = +ds.sp; render(); return window.scrollTo(0, 0); }
+  if (ds.saydel !== undefined) { D.says.splice(+ds.saydel, 1); touchSec("says"); return rerenderKeep(); }
+  if (t.id === "sayAdd") { sayAdd(); return; }
   if (t.id === "sayNext") { if (S.sayK !== S.date) { S.sayK = S.date; S.sayOff = 0; } S.sayOff++; render(); return; }
   if (t.id === "sayEx") { D.says = ["천 리 길도 한 걸음부터.", "티끌 모아 태산.", "시작이 반이다.", "가는 말이 고와야 오는 말이 곱다.", "낙숫물이 댓돌을 뚫는다."]; touchSec("says"); render(); return; }
   if (ds.page) { /* 11-02 제이: 노트를 열면 「★ 즐겨찾기」부터(즐겨찾기가 하나도 없으면 「모두」) */ if (ds.page === "note" && !(S.v === "page" && S.page === "note") && !S.nt) { S.nf = (D.notes || []).some(n => n.fav) ? "★" : ""; S.np = 1; S.nq = ""; } S.v = "page"; S.page = ds.page; if (ds.page === "book") S.bk = null; render(); return window.scrollTo(0, 0); }
@@ -1295,7 +1310,7 @@ document.addEventListener("click", async e => {
 });
 function addTask() { const i = $("#tNew"); if (!i || !i.value.trim()) return; const t0 = today(); const q = S.tq ?? "0"; const due = q === "0" ? t0 : q === "1" ? addD(t0, 1) : q === "w" ? addD(t0, 6 - ((pd(t0).getDay() + 6) % 7)) : q === "d" ? (S.tqd || "") : ""; D.tasks.push({ id: "k" + uid(), t: i.value.trim(), due, from: t0, done: "", memo: "" }); touchSec("tasks"); rerenderKeep(); const n = $("#tNew"); if (n) { n.value = ""; n.focus(); } toast(due ? `${ymdw(due)} 할 일로 넣었어요` : "기한 없이 넣었어요"); }
 function evRead(p) { const e = p._e; if ($("#evOnce")) e.once = $("#evOnce").value || e.once; if ($("#evM")) { e.m = +$("#evM").value; e.d = +$("#evD").value; e.leap = !!($("#evL") && $("#evL").checked); } }
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closePop(); const v = $(".viewer"); if (v) v.remove(); } if (e.key === "Enter" && e.target.id === "tNew") { e.preventDefault(); addTask(); } if (e.key === "Enter" && e.target.matches("[data-tk]") && S.v === "day") { e.preventDefault(); const b = $("[data-tadd]"); if (b) b.click(); } if (e.key === "Enter" && e.target.matches("[data-arr=sched]")) { e.preventDefault(); const b = $(`[data-add="${e.target.dataset.arr}"]`); if (b) b.click(); } if ($(".lock") && /^[0-9]$/.test(e.key)) pinKey(e.key); if ($(".lock") && e.key === "Backspace") pinKey("back"); if ($(".lock") && e.key === "Enter" && (pinMode === "set1" || pinMode === "set2")) pinKey("ok"); });
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "sayNew" && !e.isComposing) { e.preventDefault(); sayAdd(); return; } if (e.key === "Escape") { closePop(); const v = $(".viewer"); if (v) v.remove(); } if (e.key === "Enter" && e.target.id === "tNew") { e.preventDefault(); addTask(); } if (e.key === "Enter" && e.target.matches("[data-tk]") && S.v === "day") { e.preventDefault(); const b = $("[data-tadd]"); if (b) b.click(); } if (e.key === "Enter" && e.target.matches("[data-arr=sched]")) { e.preventDefault(); const b = $(`[data-add="${e.target.dataset.arr}"]`); if (b) b.click(); } if ($(".lock") && /^[0-9]$/.test(e.key)) pinKey(e.key); if ($(".lock") && e.key === "Backspace") pinKey("back"); if ($(".lock") && e.key === "Enter" && (pinMode === "set1" || pinMode === "set2")) pinKey("ok"); });
 
 /* ── 입력 (화면 전체를 다시 그리지 않음) ── */
 document.addEventListener("input", e => {
@@ -1306,6 +1321,7 @@ document.addEventListener("input", e => {
   if (ds.meal) { const d = dayOf(k, true); d.meals = d.meals || {}; d.meals[ds.meal] = t.value; touchDay(k); return; }
   if (ds.arr) { const d = dayOf(k, true); d[ds.arr][+ds.i][ds.key] = t.value; touchDay(k); return; }
   if (ds.money !== undefined) { const v = numOf(t.value); moneyFmt(t); const d = dayOf(k, true); d.money[+ds.money].a = v; touchDay(k); return; }
+  if (ds.say !== undefined) { D.says[+ds.say] = t.value; touchSec("says"); return; }
   if (ds.sec) { if (ds.key) D[ds.sec][ds.key] = t.value; else if (ds.lines) D[ds.sec] = t.value.split("\n"); else D[ds.sec] = t.value; touchSec(ds.sec); return; }
   if (ds.goalt !== undefined) { D.years[S.ym.slice(0, 4)].goals[+ds.goalt].t = t.value; touchSec("years"); return; }
   if (ds.ym) { const y = S.ym.slice(0, 4); D.years[y] = D.years[y] || { goals: [], m: {} }; D.years[y].m[ds.ym] = t.value; touchSec("years"); return; }
@@ -1490,6 +1506,10 @@ document.addEventListener("visibilitychange", () => { if (document.hidden) { S._
    → 파일 칸을 누를 때 붙잡아 두고, 고르고 돌아왔을 때 칸이 화면에서 빠져 있으면 잠깐 다시 붙여 같은 처리로 보냄 */
 document.addEventListener("click", e => { const inp = e.target.closest && e.target.closest('input[type="file"]'); if (!inp || inp._bjKeep) return; inp._bjKeep = 1;
   inp.addEventListener("change", () => { if (inp.isConnected || !inp.files || !inp.files.length) return; inp.style.display = "none"; document.body.appendChild(inp); inp.dispatchEvent(new Event("change", { bubbles: true })); setTimeout(() => inp.remove(), 0); }); }, true);
+
+/* 명언 넣기 — 여러 줄이면 한 줄에 하나씩, 맨 앞에 */
+function sayAdd(raw) { const i = $("#sayNew"); if (!i) return; const L = (raw != null ? raw : i.value).split(/\r?\n/).map(x => x.trim()).filter(Boolean); if (!L.length) return i.focus(); D.says = L.concat(D.says || []); touchSec("says"); S.sp = 1; render(); const n = $("#sayNew"); if (n) n.focus(); if (L.length > 1) toast(`${L.length}개를 넣었어요`); }
+document.addEventListener("paste", e => { const t = e.target; if (!t || t.id !== "sayNew") return; const tx = (e.clipboardData && e.clipboardData.getData("text")) || ""; if (!/\n/.test(tx.trim())) return; e.preventDefault(); sayAdd(tx); });
 
 /* ───────── 이 기기 폴더에도 저장 (지침 7번 PC 저장 폴더 표준 · 공통기능지도 「용량 큰 앱 = 기기 폴더」) ─────────
    PC 크롬 · 엣지 · 안드로이드 크롬: 고른 폴더 안 「일기노트」 폴더에 일기노트.json + 사진/ 을 자동으로 씀(원본 한 벌 더).

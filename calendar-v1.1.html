@@ -973,6 +973,8 @@ function dayInfo(d, st, annMap) {
   if (annMap[k]) out.ev = annMap[k];
   return out;
 }
+/* 11-02 제이: 「사진 + 1년 달력」도 1년 달력 — 기간은 연도만 */
+const YR = s => s.kind === "year" || (s.kind === "desk" && s.deskBot === "photo" && s.phCal === "year");
 function monthList(st) { const out = []; let y = st.year, m = st.m0; const n = st.kind === "year" ? 0 : st.count; for (let i = 0; i < n; i++) { out.push([y, m]); m++; if (m > 12) { m = 1; y++; } } return out; }
 function memoMapFor(st) { const map = {}; for (const m of st.memos || []) { if (!m.d || !(m.t || "").trim()) continue; (map[m.d] = map[m.d] || []).push({ t: m.t.trim(), c: m.c, s: m.s }); } return map; }
 /* 11-02 제이: 날짜 메모마다 글자 색 · 크기 */
@@ -1176,12 +1178,12 @@ const VARS = [
                 ["p-port", "계획 달력 · 세로", "하루 한 줄 + 이달의 목표 · 할 일", { kind: "month", mstyle: "plan", paper: "port" }],
                 ["p-land", "계획 달력 · 가로", "1~16일 · 17~31일 두 단", { kind: "month", mstyle: "plan", paper: "land" }]]],
   ["1년 한 장", [["y-land", "1년 달력 · 가로", "12달 한눈에 · 공휴일 목록", { kind: "year", paper: "land" }],
-                ["y-port", "1년 달력 · 세로", "3 × 4 배치 · 공휴일 목록", { kind: "year", paper: "port" }]]],
+                ["y-port", "1년 달력 · 세로", "3 × 4 배치 · 공휴일 목록", { kind: "year", paper: "port" }],
+                ["d-pyear", "사진 + 1년 달력", "A4 세로 · 위에 내 사진 한 장, 아래 12달", { kind: "desk", deskBot: "photo", phCal: "year" }]]],
   ["탁상 달력 (A4 세로 = A5 두 장)", [["d-next", "두 달씩", "위 · 아래에 한 달씩, 잘라서 받침에", { kind: "desk", deskBot: "next" }],
                 ["d-days", "달력 + 날짜별 기록 줄", "1일~말일 한 줄씩 적는 칸", { kind: "desk", deskBot: "days" }],
                 ["d-lines", "달력 + 빈 줄 노트", "아래 반쪽은 메모장", { kind: "desk", deskBot: "lines" }],
-                ["d-photo", "사진 + 그달 달력", "달마다 내 사진 한 장", { kind: "desk", deskBot: "photo", phCal: "month" }],
-                ["d-pyear", "사진 + 1년 달력", "사진 한 장으로 1년 내내", { kind: "desk", deskBot: "photo", phCal: "year" }]]],
+                ["d-photo", "사진 + 그달 달력", "달마다 내 사진 한 장", { kind: "desk", deskBot: "photo", phCal: "month" }]]],
   ["주간 일정표", [["w-land", "주간 · 가로", "7일 칸 · 1시간 칸 · 이번 주 할 일", { kind: "week", paper: "land" }],
                 ["w-port", "주간 · 세로", "하루 한 줄(가로 띠)", { kind: "week", paper: "port" }]]]];
 const varMatch = (st, pr) => Object.keys(pr).every(k => k === "phCal" ? (st.phCal || "month") === pr.phCal : k === "mstyle" ? (st.mstyle || "grid") === pr.mstyle : st[k] === pr[k]);
@@ -1213,7 +1215,7 @@ function App() {
     if (TAB0 === "plan") { s.kind = "month"; s.mstyle = "plan"; } if (TAB0 === "deskphoto") { s.kind = "desk"; s.deskBot = "photo"; }   /* v1.1 */
     if (s.year < MYEAR0 || s.year > MYEAR1) s.year = MYEAR0;
     /* 11-02 제이: 오래 지나 다시 열면 지난 기간이 그대로 남지 않게 — 고른 기간이 다 지났으면 이번 달부터, 주간은 이번 주부터 */
-    { const nowI = now.getFullYear() * 12 + now.getMonth(), endI = s.kind === "year" ? s.year * 12 + 11 : s.year * 12 + (s.m0 - 1) + (s.count || 1) - 1;
+    { const nowI = now.getFullYear() * 12 + now.getMonth(), endI = YR(s) ? s.year * 12 + 11 : s.year * 12 + (s.m0 - 1) + (s.count || 1) - 1;
       if (endI < nowI && now.getFullYear() <= MYEAR1) { s.year = Math.max(MYEAR0, now.getFullYear()); s.m0 = now.getMonth() + 1; }
       const tw = ymd(weekStart(now, 1)); if (!s.wd || s.wd < tw) s.wd = tw; }
     return s; });
@@ -1232,7 +1234,7 @@ function App() {
   const months = st.kind === "week" ? [] : monthList(st);
   const wks = st.kind === "week" ? weekList(st) : [];
   const deskNote = st.kind === "desk" && (st.deskBot === "days" || st.deskBot === "lines");
-  const years = st.kind === "year" ? [st.year] : st.kind === "week" ? [...new Set(wks.flatMap(d => [d.getFullYear(), new Date(d.getFullYear(), d.getMonth(), d.getDate() + 6).getFullYear()]))] : [...new Set(months.map(x => x[0]))];
+  const years = YR(st) ? [st.year] : st.kind === "week" ? [...new Set(wks.flatMap(d => [d.getFullYear(), new Date(d.getFullYear(), d.getMonth(), d.getDate() + 6).getFullYear()]))] : [...new Set(months.map(x => x[0]))];
   const annMap = useMemo(() => memoMapFor(st), [st.memos]);
   const noHol = st.hol ? years.filter(y => !HOL_YEARS.includes(y)) : [];
   const paper = st.kind === "desk" ? "port" : st.paper;
@@ -1246,12 +1248,12 @@ function App() {
 
   const yrs = []; for (let y = MYEAR0; y <= MYEAR1; y++) yrs.push(y);
   const setMemo = (i, k, v) => setSt(p => ({ ...p, memos: (p.memos || []).map((a, j) => j === i ? { ...a, [k]: v } : a) }));
-  const inRange = d => { if (st.kind === "week") { const t = pdate(d); return wks.some(w => t >= w && t < new Date(w.getFullYear(), w.getMonth(), w.getDate() + 7)); } const k = d.slice(0, 7); return st.kind === "year" ? d.startsWith(st.year + "-") : months.some(([y, m]) => `${y}-${p2(m)}` === k); };
+  const inRange = d => { if (st.kind === "week") { const t = pdate(d); return wks.some(w => t >= w && t < new Date(w.getFullYear(), w.getMonth(), w.getDate() + 7)); } const k = d.slice(0, 7); return YR(st) ? d.startsWith(st.year + "-") : months.some(([y, m]) => `${y}-${p2(m)}` === k); };
   const newMemoDate = () => ymd(new Date());   /* 11-02 제이: 새 메모는 늘 오늘 날짜로 시작(고른 기간 밖이면 메모 칸 아래에 안내) */
   const quick = (y, m, c) => setSt(p => ({ ...p, year: y, m0: m, count: c }));
   const sheetsN = pages.length;
-  const kindName = { month: "한 달 한 장", year: "1년 한 장", desk: "탁상 달력", week: "주간 일정표" }[st.kind];
-  const paperName = st.kind === "desk" ? "A4 세로에 A5 두 장" : "A4 " + (st.paper === "land" ? "가로" : "세로");
+  const kindName = YR(st) && st.kind === "desk" ? "1년 달력 + 사진" : { month: "한 달 한 장", year: "1년 한 장", desk: "탁상 달력", week: "주간 일정표" }[st.kind];
+  const paperName = YR(st) && st.kind === "desk" ? "A4 세로" : st.kind === "desk" ? "A4 세로에 A5 두 장" : "A4 " + (st.paper === "land" ? "가로" : "세로");
 
   return html`<div class=${"app t-cal" + (EMBED ? " embed" : "")}>
     <style>${`@media print{@page{size:A4 ${paper === "land" ? "landscape" : "portrait"};margin:0}}`}</style>
@@ -1261,7 +1263,7 @@ function App() {
     <div class=${"lay wb" + (cur === 0 ? " pick" : "")}>
       <nav class="ruler" aria-label="진행 단계"><ol>${STEPS.map((x, i) => html`<li><button class=${i === cur ? "cur" : i < cur ? "done" : ""} aria-current=${i === cur ? "step" : null} onClick=${() => go(i)}>${i === cur ? html`<i class="bead"></i>` : null}<span class="rn">0${i + 1}</span>${x[0]}</button></li>`)}</ol></nav>
       <section class="wp">
-        <div class="wp-h"><span class="k">0${cur + 1} / 04</span><h2>${STEPS[cur][1]}</h2><p>${STEPS[cur][2]}</p></div>
+        <div class="wp-h"><span class="k">0${cur + 1} / 04</span><h2>${cur === 1 && YR(st) ? "몇 년 달력인가요?" : STEPS[cur][1]}</h2><p>${cur === 1 && YR(st) ? "1년 달력은 연도와 한 주의 시작 요일만 정해요" : STEPS[cur][2]}</p></div>
         <div class="wp-b">
         ${cur === 0 && html`<${Gallery} st=${st} onPick=${pr => { setSt(p => ({ ...p, ...pr, count: pr.kind === "desk" && pr.deskBot === "next" ? Math.max(2, p.count) : p.count })); go(1); }} />`}
         ${cur === 1 && st.kind === "week" && html`<label class="f">시작 주 <span class="muted">고른 날이 들어 있는 주부터</span></label>
@@ -1272,9 +1274,9 @@ function App() {
           <label class="f">한 주의 시작</label><${Seg} value=${st.ws} options=${[[1, "월요일부터"], [0, "일요일부터"]]} onChange=${v => up("ws", v)} />
           <p class="hint">공휴일은 2026 · 2027 · 2028년을 넣었어요(한국천문연구원 월력요항 기준).</p>`}
         ${cur === 1 && st.kind !== "week" && html`<div class="dd2"><div><label class="f">연도</label><select value=${st.year} onChange=${e => up("year", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div>
-            ${st.kind !== "year" ? html`<div><label class="f">시작 달</label><select value=${st.m0} onChange=${e => up("m0", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}월</option>`)}</select></div>` : null}</div>
-          ${st.kind !== "year" ? html`<label class="f">몇 달</label><select value=${st.count} onChange=${e => up("count", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}달${st.kind === "desk" && !deskNote ? ` (${Math.ceil((i + 1) / 2)}장)` : ` (${i + 1}장)`}</option>`)}</select>
-            <div class="chips cl-quick"><button class="chip" onClick=${() => quick(now.getFullYear(), now.getMonth() + 1, 1)}>이번 달</button><button class="chip" onClick=${() => quick(nm[0], nm[1], 1)}>다음 달</button>${yrs.filter(y => y > now.getFullYear() || (y === now.getFullYear() && now.getMonth() === 0)).slice(0, 2).map(y => html`<button class="chip" onClick=${() => quick(y, 1, 12)}>${y}년 1~12월</button>`)}<button class="chip" onClick=${() => quick(now.getFullYear() + (now.getMonth() >= 2 ? 1 : 0), 3, 12)}>3월 시작 학년도</button></div>` : null}
+            ${!YR(st) ? html`<div><label class="f">시작 달</label><select value=${st.m0} onChange=${e => up("m0", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}월</option>`)}</select></div>` : null}</div>
+          ${!YR(st) ? html`<label class="f">몇 달</label><select value=${st.count} onChange=${e => up("count", +e.target.value)}>${Array.from({ length: 12 }, (_, i) => html`<option value=${i + 1}>${i + 1}달${st.kind === "desk" && !deskNote ? ` (${Math.ceil((i + 1) / 2)}장)` : ` (${i + 1}장)`}</option>`)}</select>
+            <div class="chips cl-quick"><button class="chip" onClick=${() => quick(now.getFullYear(), now.getMonth() + 1, 1)}>이번 달</button><button class="chip" onClick=${() => quick(nm[0], nm[1], 1)}>다음 달</button>${yrs.filter(y => y > now.getFullYear() || (y === now.getFullYear() && now.getMonth() === 0)).slice(0, 2).map(y => html`<button class="chip" onClick=${() => quick(y, 1, 12)}>${y}년 1~12월</button>`)}<button class="chip" onClick=${() => quick(now.getFullYear() + (now.getMonth() >= 2 ? 1 : 0), 3, 12)}>3월 시작 학년도</button></div>` : html`<div class="chips cl-quick">${yrs.map(y => html`<button class=${"chip" + (st.year === y ? " on" : "")} onClick=${() => up("year", y)}>${y}년</button>`)}</div>`}
           <label class="f">한 주의 시작</label><${Seg} value=${st.ws} options=${[[0, "일요일부터"], [1, "월요일부터"]]} onChange=${v => up("ws", v)} />
           <p class="hint">공휴일은 2026 · 2027 · 2028년을 넣었어요(한국천문연구원 월력요항 기준).</p>`}
         ${cur === 2 && html`<label class="chk"><input type="checkbox" checked=${st.hol} onChange=${e => up("hol", e.target.checked)} /> 공휴일 · 대체공휴일 (빨간 날)</label>
@@ -1324,7 +1326,7 @@ function App() {
         <div class="tray-h"><b>미리보기</b><span class="k">${kindName} · ${paperName} · ${sheetsN}장</span></div>
         ${noHol.length ? html`<div class="notice">${h(Icon, { name: "info", size: 18 })}<span><b>${noHol.join(" · ")}년 공휴일은 아직 발표 전이에요.</b> 그해 날짜에는 빨간 날을 넣지 않았어요(일요일은 빨간색).</span></div>` : null}
         <div class="sheets cl-sheets" ref=${shRef}><div class="scaler">${pages}</div></div>
-        <div class="tray-f k"><span>${st.kind === "week" ? `${ymdw(wks[0])} ~ ${ymdw(new Date(wks[wks.length - 1].getFullYear(), wks[wks.length - 1].getMonth(), wks[wks.length - 1].getDate() + 6))}` : st.kind === "year" ? st.year + "년" : months.length ? `${months[0][0]}년 ${months[0][1]}월${months.length > 1 ? ` ~ ${months[months.length - 1][0]}년 ${months[months.length - 1][1]}월` : ""}` : ""}</span><span>인쇄 배율 100% · 여백 없음</span></div>
+        <div class="tray-f k"><span>${st.kind === "week" ? `${ymdw(wks[0])} ~ ${ymdw(new Date(wks[wks.length - 1].getFullYear(), wks[wks.length - 1].getMonth(), wks[wks.length - 1].getDate() + 6))}` : YR(st) ? st.year + "년" : months.length ? `${months[0][0]}년 ${months[0][1]}월${months.length > 1 ? ` ~ ${months[months.length - 1][0]}년 ${months[months.length - 1][1]}월` : ""}` : ""}</span><span>인쇄 배율 100% · 여백 없음</span></div>
       </section>
     </div>
     <p class="priv">${h(Icon, { name: "info", size: 15 })} 공휴일은 한국천문연구원 월력요항(2026 · 2027 · 2028년) 기준이고, 임시공휴일은 발표되면 반영합니다. 24절기는 천문 계산으로 넣었고 2027 · 2028년 공식 발표와 날짜가 같아요. 입력한 메모는 이 기기 브라우저에만 저장됩니다.</p>

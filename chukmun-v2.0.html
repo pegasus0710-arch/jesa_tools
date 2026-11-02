@@ -935,7 +935,9 @@ function App() {
   const [cur, setCur] = useState(0); const curRef = useRef(0); curRef.current = cur;
   const stepRef = useRef(null); if (!stepRef.current) stepRef.current = ({ n, children }) => (n - 1 === curRef.current ? children : null);
   const Step = stepRef.current;
-  const go = i => { setCur(i); if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" }); };
+  /* 11-03: 브라우저 뒤로 · 앞으로 = 이전 · 다음 단계(글 속 iframe에서는 블로그 기록을 건드리지 않게 끔) */
+  const go = (i, pop) => { setCur(i); if (!pop && !EMBED && i !== cur) { try { history.pushState({ bjs: i }, ""); } catch (e) {} } if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: pop ? "auto" : "smooth" }); };
+  useEffect(() => { if (EMBED) return; try { history.replaceState({ bjs: 0 }, ""); } catch (e) {} const f = e => { const s = e.state && typeof e.state.bjs === "number" ? e.state.bjs : 0; go(s, true); }; window.addEventListener("popstate", f); return () => window.removeEventListener("popstate", f); }, []);
   useEffect(() => save("set", st), [st]);
   useEffect(() => { document.title = "축문 자동 작성 | Blog J"; }, []);
   const SJ = st.kind === "sije";

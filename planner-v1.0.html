@@ -1258,7 +1258,9 @@ function App() {
   const [focus, setFocus] = useState(null);
   const toggle = k => { setFocus(k); setSt(p => { const a = p.sel || []; return { ...p, sel: a.includes(k) ? a.filter(x => x !== k) : a.concat(k) }; }); };
   const [cur, setCur] = useState(0);
-  const go = i => { setCur(i); if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" }); };
+  /* 11-03: 브라우저 뒤로 · 앞으로 = 이전 · 다음 단계(글 속 iframe에서는 블로그 기록을 건드리지 않게 끔) */
+  const go = (i, pop) => { setCur(i); if (!pop && !EMBED && i !== cur) { try { history.pushState({ bjs: i }, ""); } catch (e) {} } if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: pop ? "auto" : "smooth" }); };
+  useEffect(() => { if (EMBED) return; try { history.replaceState({ bjs: 0 }, ""); } catch (e) {} const f = e => { const s = e.state && typeof e.state.bjs === "number" ? e.state.bjs : 0; go(s, true); }; window.addEventListener("popstate", f); return () => window.removeEventListener("popstate", f); }, []);
   useEffect(() => saveC("set", st), [st]);
   useEffect(() => { document.title = "다이어리 속지 만들기 | Blog J"; }, []);
   /* 인쇄 때만 모든 쪽을 그림(미리보기는 앞 12쪽) */
@@ -1310,7 +1312,7 @@ function App() {
           ${(st.sel || []).some(k => TN[k][3] === "note") ? html`<label class="f">노트 몇 장</label><select value=${st.notes} onChange=${e => up("notes", +e.target.value)}>${[2, 4, 6, 8, 10, 16, 20, 30].map(n => html`<option value=${n}>${n}장 (종류마다)</option>`)}</select>` : null}`}
         ${cur === 2 && html`<label class="chk"><input type="checkbox" checked=${st.hol} onChange=${e => up("hol", e.target.checked)} /> 공휴일 · 대체공휴일 (빨간 날 · 이름)</label>
           <label class="chk"><input type="checkbox" checked=${st.lun} onChange=${e => up("lun", e.target.checked)} /> 음력 날짜</label>
-          ${st.lun ? html`<${Seg} value=${st.lunAll ? 1 : 0} options=${[[0, "초하루 · 보름만(먼슬리)"], [1, "매일"]]} onChange=${v => up("lunAll", !!v)} /><p class="hint">데일리에는 음력이 늘 들어가요. 먼슬리 · 위클리는 고른 대로.</p>` : null}
+          ${st.lun ? html`<${Seg} value=${st.lunAll ? 1 : 0} options=${[[0, "초하루 · 보름만(먼슬리)"], [1, "매일"]]} onChange=${v => up("lunAll", !!v)} /><p class="hint">켜면 데일리에는 날마다 음력이 들어가요. 먼슬리 · 위클리는 고른 대로(초하루 · 보름만 또는 매일).</p>` : null}
           ${(st.sel || []).includes("habit") ? html`<label class="f">해빗 트래커 습관 <span class="muted">한 줄에 하나 · 15개까지 · 비우면 손으로 적어요</span></label><textarea rows="5" value=${st.habits} placeholder=${"물 8잔\n30분 걷기\n책 10쪽"} onInput=${e => up("habits", e.target.value)}></textarea>` : null}
           ${(st.sel || []).includes("newyear") ? html`<label class="f">신년 계획 분야 <span class="muted">쉼표로 6개까지 · 비우면 건강 · 돈 · 일 · 배움 · 관계 · 나</span></label><input type="text" value=${st.areas} maxlength="60" placeholder="건강, 돈, 일, 배움, 관계, 나" onInput=${e => up("areas", e.target.value)} />` : null}
           <p class="hint">입력한 내용은 이 기기 브라우저에만 저장돼요.</p>`}

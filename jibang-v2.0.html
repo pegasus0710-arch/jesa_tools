@@ -1063,7 +1063,9 @@ function App(){
     ["인쇄","크기 · 글씨체를 확인하고 인쇄하세요","한 번 정하면 이 브라우저에 저장돼요."]];
   const NEXT=["누구의 제사 고르기","직함 · 본관 확인","인쇄 설정","인쇄 / PDF 저장"];
   const [step,setStep]=useState(()=>PRE?1:0);
-  const go=i=>{ setStep(i); if(window.scrollY>0) window.scrollTo({top:0,behavior:"smooth"}); };
+  const go=(i,pop)=>{ setStep(i); if(!pop&&!EMBED&&i!==step){ try{ history.pushState({bjs:i},""); }catch(e){} } if(window.scrollY>0) window.scrollTo({top:0,behavior:pop?"auto":"smooth"}); };
+  /* 11-03: 브라우저 뒤로 · 앞으로 = 이전 · 다음 단계 */
+  useEffect(()=>{ if(EMBED) return; try{ history.replaceState({bjs:0},""); }catch(e){} const f=e=>{ const s=e.state&&typeof e.state.bjs==="number"?e.state.bjs:0; go(s,true); }; window.addEventListener("popstate",f); return ()=>window.removeEventListener("popstate",f); },[]);
   const Sheet=({sc})=>{ const W=210,H=297; const totalW=pr.w*2+pr.gap; const left=(W-totalW)/2; const top=(H-pr.h)/2+(+pr.offsetY||0);
     return html`<div class="sheet" style=${{width:W*sc+"px",height:H*sc+"px"}}>
       ${slots.map((f,i)=>{ const t=texts[i]; const n=[...t].length; const fs=Math.min(pr.w*0.62,(pr.h*0.86)/n*0.98)*sc; // mm→px

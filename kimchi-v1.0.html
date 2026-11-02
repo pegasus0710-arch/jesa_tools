@@ -1004,7 +1004,7 @@ function parseLines(txt) {
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   const d = b.dataset;
-  if (d.go != null) { if (S.edit) return; const i = +d.go; if (i <= S.step || i === S.step + 1) { S.step = i; if (i === 3) S.view = "one"; render(true); } return; }
+  if (d.go != null) { if (S.edit) return; const i = +d.go; if (i <= S.step || i === S.step + 1) { const pv = S.step; S.step = i; if (i === 3) S.view = "one"; render(true); if (pv !== i && !BJ_INFRAME) { try { history.pushState({ bjs: i }, ""); } catch (e) {} } } return; }
   if (d.exp != null) { const blob = new Blob([JSON.stringify({ kind: "bj-kimchi-my", v: 1, saved: new Date().toISOString().slice(0, 10), my: S.my }, null, 1)], { type: "application/json" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "내김치레시피_" + new Date().toISOString().slice(0, 10) + ".json"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 3000); toast("내 레시피를 파일로 보관했어요. 다른 PC · 브라우저에서 「파일 불러오기」로 넣을 수 있어요."); return; }
   if (d.new != null) { S.edit = blankMy(); render(true); return; }
   if (d.edit) { const m = S.my.find(x => x.id === d.edit); if (m) { S.edit = JSON.parse(JSON.stringify(m)); S.edit.saved = true; render(true); } return; }
@@ -1049,4 +1049,9 @@ document.addEventListener("input", e => {
 });
 document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "amt") { if (readAmt()) { S.step = 2; render(true); } } });
 (async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (!(await BJ_GATE.check("kimchi", T))) { const b = document.querySelector(".bar"); if (b) b.remove(); return; } render(); })();
-</script></body></html>
+</script>
+<script>/* 11-03: 브라우저 뒤로 · 앞으로 = 이전 · 다음 단계 */
+var BJ_INFRAME = (function(){try{return window.self!==window.top}catch(e){return true}})();
+if (!BJ_INFRAME) { try { history.replaceState({ bjs: 0 }, ""); } catch (e) {} window.addEventListener("popstate", function (e) { var s = e.state && typeof e.state.bjs === "number" ? e.state.bjs : 0; if (typeof S === "undefined" || s === S.step || S.edit) return; S.step = s; if (s === 3) S.view = "one"; render(true); }); }
+</script>
+</body></html>

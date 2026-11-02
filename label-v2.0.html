@@ -1166,6 +1166,7 @@ function drawRuler() {
   $("#rulerM").innerHTML = `<span>${cur + 1}/${n} ${st[cur].t}</span><span class="t"><i style="width:${(cur + 1) / n * 100}%"></i></span><a href="#mat">미리보기</a>`;
   $$("#ruler [data-go]").forEach(b => b.onclick = () => go(+b.dataset.go));
 }
+const BJ_INFRAME = (function(){try{return window.self!==window.top}catch(e){return true}})();
 function go(i) {
   if (S.step === 2 && i > 2) {
     if (DL_BUILD && S.kind === "addr") { S.d.addrMode = "orig"; S._mok = true; }
@@ -1178,7 +1179,10 @@ function go(i) {
   S._lackOk = false;
   if (!canGo(i)) return;
   if (i !== S.step) { S.lastDel = null; tipClose(); }
+  const _pv = S.step;
   S.step = i; S.page = 0;
+  /* 11-03: 브라우저 뒤로 · 앞으로 = 이전 · 다음 단계 */
+  if (!go._pop && !BJ_INFRAME && _pv !== i) { try { history.pushState({ bjs: i }, ""); } catch (e) {} }
   drawRuler(); drawPanel(); preview();
   if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" });   /* 단계가 바뀌면 맨 위로 — 미리보기 머리가 위 막대에 가리지 않게 */
 }
@@ -2410,5 +2414,10 @@ function start() {
   drawRuler(); drawPanel(); preview();
 }
 (async () => { if (!(await BJ_GATE.check("label", TAB || "all"))) return; start(); })();
+</script>
+
+<script>/* 11-03: 브라우저 뒤로 · 앞으로 */
+var BJ_INFRAME_ = (function(){try{return window.self!==window.top}catch(e){return true}})();
+if (!BJ_INFRAME_) { try { history.replaceState({ bjs: S.step || 0 }, ""); } catch (e) {} window.addEventListener("popstate", function (e) { var s = e.state && typeof e.state.bjs === "number" ? e.state.bjs : 0; if (s === S.step) return; go._pop = true; try { go(s); } finally { go._pop = false; } }); }
 </script>
 </body></html>

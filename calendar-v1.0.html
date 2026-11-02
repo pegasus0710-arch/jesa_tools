@@ -1038,7 +1038,9 @@ function App() {
     return s; });
   const up = (k, v) => setSt(p => ({ ...p, [k]: v }));
   const [cur, setCur] = useState(0);
-  const go = i => { setCur(i); if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" }); };
+  /* 11-03: 브라우저 뒤로 · 앞으로 = 이전 · 다음 단계(글 속 iframe에서는 블로그 기록을 건드리지 않게 끔) */
+  const go = (i, pop) => { setCur(i); if (!pop && !EMBED && i !== cur) { try { history.pushState({ bjs: i }, ""); } catch (e) {} } if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: pop ? "auto" : "smooth" }); };
+  useEffect(() => { if (EMBED) return; try { history.replaceState({ bjs: 0 }, ""); } catch (e) {} const f = e => { const s = e.state && typeof e.state.bjs === "number" ? e.state.bjs : 0; go(s, true); }; window.addEventListener("popstate", f); return () => window.removeEventListener("popstate", f); }, []);
   useEffect(() => saveC("set", st), [st]);
   useEffect(() => { document.title = "달력 만들기 | Blog J"; }, []);
 

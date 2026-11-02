@@ -465,6 +465,8 @@ mark{background:#fbe3a6;color:inherit}
 .ncpick .mcat{background:#fff}.ncpick .mcat.on{background:var(--g);color:#fff}
 .ncpick .ncfoot{flex-basis:100%;margin-top:2px}
 .nbread{margin-left:6px;font-size:13px}
+.nbgo{background:none;border:0;padding:6px 2px;cursor:pointer;color:inherit;font-family:inherit;text-decoration:underline dotted;text-underline-offset:3px;white-space:nowrap}
+.nbgo:hover{color:var(--ink,#1f2125)}
 @media (max-width:900px){.setupgo{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));z-index:6;margin:12px 0 0}.setupgo .btn{width:100%;box-shadow:0 6px 16px rgba(0,0,0,.18)}}
 @media (max-width:900px){.mini{height:36px;padding:0 12px}}
 
@@ -472,7 +474,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-02(월) 20:43";
+const BUILD = "2026-11-02(월) 21:22";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1663,12 +1665,12 @@ function noteList() {
 }
 /* 11-01 ② 제이: 분류 고르기 · 바꾸기를 한눈에 — 읽기 · 쓰기 모두 제목 위 「분류」 줄(고른 것 ✓), 읽기에서는 누르면 바로 옮김 */
 function catRow(n, read) {
-  return `<div class="ncpick" role="group" aria-label="분류"><span class="ncl">분류</span>${D.ncats.map(c => `<button class="mcat ${n.cat === c ? "on" : ""}" ${read ? "data-ncmv" : "data-ncat"}="${esc(c)}" aria-pressed="${n.cat === c}">${n.cat === c ? "✓ " : ""}${esc(c)}</button>`).join("")}<button class="mcat add" ${read ? `data-ncmv="+"` : `id="ncAdd"`}>+ 새 분류</button>${read ? `<span class="foot ncfoot">다른 분류를 누르면 바로 옮겨져요</span>` : ""}</div>`;
+  return `<div class="ncpick" role="group" aria-label="분류"><span class="ncl">분류</span>${D.ncats.map(c => `<button class="mcat ${n.cat === c ? "on" : ""}" ${read ? "data-ncgo" : "data-ncat"}="${esc(c)}" aria-pressed="${n.cat === c}">${n.cat === c ? "✓ " : ""}${esc(c)}</button>`).join("")}${read ? "" : `<button class="mcat add" id="ncAdd">+ 새 분류</button>`}${read ? `<span class="foot ncfoot">누르면 그 분류 목록으로 · 분류 옮기기는 「수정」에서</span>` : ""}</div>`;
 }
 /* 내용 보기(읽기) */
 function noteRead(n) {
   const body = esc(n.body || "").split("\n").map(l => l.trim() ? l : "&nbsp;").join("<br>");
-  return `<div class="ph nhd"><button class="navb" id="nBack" aria-label="노트 목록으로">‹</button><span class="foot nbread">노트 › ${esc(n.cat || "")}</span><span style="margin-left:auto;display:flex;gap:6px"><button class="bstar ${n.fav ? "on" : ""}" id="nFav" aria-label="아끼는 노트" title="아끼는 노트" style="font-size:22px">★</button><button class="mini ln" id="nDel">지우기</button><button class="mini g" id="nEdit">수정</button></span></div>`
+  return `<div class="ph nhd"><button class="navb" id="nBack" aria-label="노트 목록으로">‹</button><button class="foot nbread nbgo" data-ncgo="${esc(n.cat || "")}" title="이 분류 목록으로">노트 › ${esc(n.cat || "")}</button><span style="margin-left:auto;display:flex;gap:6px"><button class="bstar ${n.fav ? "on" : ""}" id="nFav" aria-label="아끼는 노트" title="아끼는 노트" style="font-size:22px">★</button><button class="mini ln" data-nlist="1">목록</button><button class="mini ln" id="nDel">지우기</button><button class="mini g" id="nEdit">수정</button></span></div>`
     + catRow(n, true)
     + `<h3 class="nrtitle">${esc(noteTitle(n))}</h3><div class="nrdate num">작성 ${ymdw(n.date || today())}${n.m ? ` · 수정 ${ymdw(ymdOf(n.m))}` : ""}</div>`
     + `<div class="nrbody">${body || `<span class="foot">내용이 없어요 — 「수정」을 눌러 적어 보세요</span>`}</div>`
@@ -1700,7 +1702,9 @@ document.addEventListener("click", e => { const t = e.target.closest("button"); 
   if (t.id === "nCatMv") { stop(); const n = noteById(S.nt); return pop(`<h2>분류 바꾸기</h2><p class="foot">「${esc(noteTitle(n))}」을 어느 분류로 옮길까요?</p><div class="mcats" style="margin:10px 0">${D.ncats.map(c => `<button class="mcat ${n.cat === c ? "on" : ""}" data-ncmv="${esc(c)}">${esc(c)}</button>`).join("")}<button class="mcat add" data-ncmv="+">+ 새 분류</button></div><div class="btns"><button class="btn" data-close>닫기</button></div>`); }
   if (ds.ncmv !== undefined) { stop(); const n = noteById(S.nt); if (!n) return closePop(); let c = ds.ncmv; if (c === "+") { c = (prompt("새 분류 이름") || "").trim().slice(0, 12); if (!c) return; if (!D.ncats.includes(c)) { D.ncats.push(c); touchSec("ncats"); } } if (n.cat !== c) { n.cat = c; n.u = Date.now(); n.m = Date.now(); touchSec("notes"); toast(`「${c}」로 옮겼어요`); } closePop(); return render(); }
   if (t.id === "nEdit") { stop(); S.ne = true; render(); window.scrollTo(0, 0); noteGrow(); const a = $("#nBody"); if (a) a.focus(); return; }
-  if (t.id === "nList") { stop(); noteLeave(); S.ne = false; render(); return window.scrollTo(0, 0); }
+  if (t.id === "nList" || ds.nlist !== undefined) { stop(); noteLeave(); S.ne = false; render(); return window.scrollTo(0, 0); }
+  /* 11-02 제이: 읽기에서 분류(또는 「노트 › 분류」)를 누르면 그 분류 목록으로 — 옮기기는 「수정」 화면에서 */
+  if (ds.ncgo !== undefined) { stop(); noteLeave(); S.ne = false; S.nf = ds.ncgo; S.np = 1; S.nq = ""; render(); return window.scrollTo(0, 0); }
   if (t.id === "nDone") { stop(); const n = noteById(S.nt); const wasNew = n && n.isNew; noteLeave(); S.ne = false; if (n && D.notes.includes(n)) { S.nt = n.id; if (wasNew) toast("저장했어요"); } render(); return window.scrollTo(0, 0); }
   if (t.id === "nBack") { stop(); const n = noteById(S.nt); if (S.ne && n && !n.isNew) { S.ne = false; return render(); } noteLeave(); S.ne = false; render(); return window.scrollTo(0, 0); }
   if (t.id === "nFav") { stop(); const n = noteById(S.nt); n.fav = !n.fav; n.u = Date.now(); touchSec("notes"); t.classList.toggle("on", n.fav); return; }

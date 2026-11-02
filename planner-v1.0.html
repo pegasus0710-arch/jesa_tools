@@ -683,6 +683,18 @@ html{scrollbar-gutter:stable}.cl-sheets{scrollbar-gutter:stable}
 .pl-holes{position:absolute;inset:0;pointer-events:none}
 .pl-holes i{position:absolute;border:.3mm dashed #9a917f;border-radius:50%;box-sizing:border-box}
 .pl-holes i::after{content:"";position:absolute;left:50%;top:50%;width:1.2mm;height:1.2mm;margin:-.6mm 0 0 -.6mm;border-radius:50%;background:#c8c0b0}
+.pl-no{position:absolute;bottom:1.2mm;left:50%;transform:translateX(-50%);z-index:3;font-size:4mm;font-weight:800;color:#fff;background:rgba(25,84,85,.85);border-radius:2mm;padding:.6mm 2mm;pointer-events:none}.pl-two .pl-no{left:25%}.pl-two .pl-no.r{left:75%}
+@media print{.pl-no{display:none!important}}
+
+/* 첫 화면: 왼쪽 작은 견본 · 오른쪽 크게 */
+.pl-pick .cl-gl{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+.pl-pick .cl-gal{gap:12px}.pl-pick .cl-gg h3{margin-bottom:6px}
+.pl-gi{padding:7px 7px 9px!important}.pl-gi .cl-th{height:122px}.pl-gi b{font-size:13.5px!important;margin-top:4px!important;gap:5px!important}
+.pl-gi.fo{box-shadow:0 0 0 3px rgba(245,109,3,.55),var(--up,0 2px 6px rgba(120,100,70,.18))}
+.cl-pg.pl-onepg{width:148.5mm;height:210mm;margin:0 auto}
+.pl-one{display:flex;justify-content:center}
+.tray-f .btn.s{margin-left:auto}
+@media(max-width:900px){.pl-gi .cl-th{height:170px}.pl-pick .cl-gl{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
@@ -1165,22 +1177,33 @@ function Note({ kind, st }) {
     <${Foot} name=${TN[kind][1]} /></div>`;
 }
 
-/* 기간 → 쪽 목록 */
-function monthList(st) { const out = []; let y = st.year, m = st.m0; for (let i = 0; i < st.count; i++) { out.push([y, m]); m++; if (m > 12) { m = 1; y++; } } return out; }
+/* 기간 → 쪽 목록 (11-03 제이: 기간은 년 · 월 · 주 · 일 단위로 원하는 만큼) */
+const pdt = k => { const [y, m, d] = k.split("-").map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+function rangeOf(st) {
+  if (st.unit === "y") return [new Date(st.y0, 0, 1), new Date(Math.max(st.y0, st.y1), 11, 31)];
+  if (st.unit === "w") { const a = weekStart(pdt(st.wd), st.ws); return [a, addDays(a, 7 * st.wc - 1)]; }
+  if (st.unit === "d") { const a = pdt(st.d1), b = pdt(st.d2); return b < a ? [a, a] : [a, b]; }
+  const a = pdt(st.my0 + "-01"), b0 = pdt(st.my1 + "-01"), b = b0 < a ? a : b0; return [a, new Date(b.getFullYear(), b.getMonth() + 1, 0)];
+}
+function monthList(st) { const [a, b] = rangeOf(st), out = []; let y = a.getFullYear(), m = a.getMonth() + 1; while (y * 12 + m <= b.getFullYear() * 12 + b.getMonth() + 1) { out.push([y, m]); m++; if (m > 12) { m = 1; y++; } } return out; }
 function pageList(st, limitPer) {
-  const sel = TYPES.map(t => t[0]).filter(k => (st.sel || []).includes(k)), months = monthList(st), out = [];
+  const sel = TYPES.map(t => t[0]).filter(k => (st.sel || []).includes(k)), months = monthList(st), [A, B] = rangeOf(st), out = [];
   const years = [...new Set(months.map(x => x[0]))];
   const P = (k, props, key) => out.push({ k, props, key });
   const lim = a => limitPer ? a.slice(0, limitPer) : a;
-  const weeksOf = (y, m, first) => { const r = []; let d = weekStart(new Date(y, m - 1, 1), st.ws); if (d.getMonth() !== m - 1 && !first) d.setDate(d.getDate() + 7); if (d.getMonth() !== m - 1 && first) { r.push(new Date(d)); d.setDate(d.getDate() + 7); } while (d.getMonth() === m - 1) { r.push(new Date(d)); d.setDate(d.getDate() + 7); } return r; };
-  const daysOf = (y, m) => L(new Date(y, m, 0).getDate()).map(i => new Date(y, m - 1, i + 1));
+  /* 주 = 기간에 걸친 주 모두, 시작한 달에 넣음(첫 주는 첫 달) */
+  const allW = []; for (let d = weekStart(A, st.ws); d <= B; d = addDays(d, 7)) allW.push(d);
+  const wOf = (y, m, i) => allW.filter(d => i === 0 ? (d.getFullYear() < y || (d.getFullYear() === y && d.getMonth() <= m - 1)) : (d.getFullYear() === y && d.getMonth() === m - 1));
+  const daysOf = (y, m) => L(new Date(y, m, 0).getDate()).map(i => new Date(y, m - 1, i + 1)).filter(d => d >= A && d <= B);
   const yearPart = () => { for (const y of lim(years)) { if (sel.includes("newyear")) P("newyear", { y }, "ny" + y); if (sel.includes("yearplan")) P("yearplan", { y }, "yp" + y); } };
   const monthPart = (y, m) => { if (sel.includes("monthly")) P("monthly", { y, m }, "m" + y + m); if (sel.includes("habit")) P("habit", { y, m }, "h" + y + m); };
-  const weekPart = (y, m) => { if (sel.includes("weekly")) for (const d0 of lim(weeksOf(y, m, y === months[0][0] && m === months[0][1]))) P("weekly", { d0 }, "w" + ymd(d0)); };
+  const weekPart = (y, m, i) => { if (sel.includes("weekly")) for (const d0 of lim(wOf(y, m, i))) P("weekly", { d0 }, "w" + ymd(d0)); };
   const dayPart = (y, m) => { for (const k of ["daily", "study"]) if (sel.includes(k)) for (const d of lim(daysOf(y, m))) P(k, { d }, k + ymd(d)); };
   yearPart();
-  if (st.order === "kind") { for (const [y, m] of lim(months)) monthPart(y, m); for (const [y, m] of lim(months)) weekPart(y, m); for (const [y, m] of lim(months)) dayPart(y, m); }
-  else for (const [y, m] of lim(months)) { monthPart(y, m); weekPart(y, m); dayPart(y, m); }
+  const M = lim(months);
+  if (st.order === "kind") { M.forEach(([y, m]) => monthPart(y, m)); M.forEach(([y, m], i) => weekPart(y, m, i)); M.forEach(([y, m]) => dayPart(y, m)); }
+  else M.forEach(([y, m], i) => { monthPart(y, m); weekPart(y, m, i); dayPart(y, m); });
   for (const k of ["lined", "grid", "dot"]) if (sel.includes(k)) for (const i of L(limitPer ? Math.min(limitPer, st.notes) : st.notes)) P(k, { kind: k }, k + i);
   return out;
 }
@@ -1199,40 +1222,41 @@ const COMP = { newyear: NewYear, yearplan: YearPlan, monthly: Monthly, habit: Ha
 const A5 = ({ p, st }) => { const pk = punchOf(st); return html`<div class="pl-a5" style=${{ "--lc": LINE[st.line] || LINE.gray, "--bm": (st.bind || pk ? 12 : 0) + "mm" }}>${h(COMP[p.k], { ...p.props, st })}${st.size === "a5" && pk ? html`<${Holes} kind=${pk} H=${210} />` : null}</div>`; };
 /* A4 = A5를 1.414배 / A5 = A4 가로 한 장에 두 쪽 + 자르는 선 */
 function sheets(list, st) {
-  if (st.size === "a4") { const pk = punchOf(st); return list.map(p => html`<div class="cl-pg port" key=${p.key}><div class="pl-up"><${A5} p=${p} st=${{ ...st, bind: st.bind || !!pk, punch: "" }} /></div>${pk ? html`<${Holes} kind=${pk} H=${297} />` : null}</div>`); }
-  const out = []; for (let i = 0; i < list.length; i += 2) out.push(html`<div class="cl-pg land pl-two" key=${list[i].key}><${A5} p=${list[i]} st=${st} /><div class="pl-cut"><span>자르는 선</span></div>${list[i + 1] ? html`<${A5} p=${list[i + 1]} st=${st} />` : html`<div class="pl-a5 empty"></div>`}</div>`);
+  if (st.size === "a4") { const pk = punchOf(st); return list.map((p, i) => html`<div class="cl-pg port" key=${p.key}><span class="pl-no">${i + 1}쪽</span><div class="pl-up"><${A5} p=${p} st=${{ ...st, bind: st.bind || !!pk, punch: "" }} /></div>${pk ? html`<${Holes} kind=${pk} H=${297} />` : null}</div>`); }
+  const out = []; for (let i = 0; i < list.length; i += 2) out.push(html`<div class="cl-pg land pl-two" key=${list[i].key}><span class="pl-no">${i + 1}쪽</span>${list[i + 1] ? html`<span class="pl-no r">${i + 2}쪽</span>` : null}<${A5} p=${list[i]} st=${st} /><div class="pl-cut"><span>자르는 선</span></div>${list[i + 1] ? html`<${A5} p=${list[i + 1]} st=${st} />` : html`<div class="pl-a5 empty"></div>`}</div>`);
   return out;
 }
 
 /* 첫 화면 견본 — 누르면 고르기 / 빼기(여러 개) */
-const TK = () => (window.innerWidth <= 520 ? 160 : 226) / (210 * 3.7795);
+const TK = () => (window.innerWidth <= 900 ? 150 : 104) / (210 * 3.7795);
 function Thumb({ k, st }) {
   const p = pageList({ ...st, sel: [k], count: 1, notes: 1 }, 1)[0];
   return html`<span class="cl-th" aria-hidden="true"><span class="cl-thp" style=${{ width: 148.5 * 3.7795 * TK() + "px", height: 210 * 3.7795 * TK() + "px" }}><span class="cl-thin" style=${{ transform: `scale(${TK()})` }}>${p ? html`<div class="pl-solo"><${A5} p=${p} st=${st} /></div>` : null}</span></span></span>`;
 }
-function Gallery({ st, toggle }) {
+/* 11-03 제이: 왼쪽 = 작은 견본, 누른 것은 오른쪽에 크게 */
+function Gallery({ st, toggle, focus }) {
   return html`<div class="cl-gal">${GROUPS.map(([g, ks]) => html`<div class="cl-gg"><h3>${g}</h3><div class="cl-gl">${ks.map(k => { const on = (st.sel || []).includes(k), t = TN[k];
-    return html`<button class=${"cl-gi" + (on ? " on" : "")} aria-pressed=${on} onClick=${() => toggle(k)}><${Thumb} k=${k} st=${st} /><b><span class=${"pl-cb" + (on ? " on" : "")}></span>${t[1]}${on ? html`<i class="cl-gon">고름</i>` : null}</b><small>${t[2]}</small></button>`; })}</div></div>`)}
-    <p class="hint">여러 개를 골라 한 번에 뽑을 수 있어요. 견본은 지금 고른 연도 · 달로 그린 실제 모양이에요.</p></div>`;
+    return html`<button class=${"cl-gi pl-gi" + (on ? " on" : "") + (focus === k ? " fo" : "")} aria-pressed=${on} onClick=${() => toggle(k)}><${Thumb} k=${k} st=${st} /><b><span class=${"pl-cb" + (on ? " on" : "")}></span>${t[1]}</b></button>`; })}</div></div>`)}
+    <p class="hint">누르면 고르고, 오른쪽에 크게 보여요. 다시 누르면 빠져요. 여러 개를 골라 한 번에 뽑을 수 있어요.</p></div>`;
 }
 
-const STEPS = [["속지 고르기", "어떤 속지를 뽑을까요?", "견본을 눌러 고르세요 — 여러 개 골라도 돼요"], ["기간", "언제 쓸 속지인가요?", "시작 달과 몇 달치를 정하면 날짜가 저절로 들어가요"], ["넣을 것", "속지에 무엇을 넣을까요?", "공휴일 · 음력 · 습관 이름 · 목표 분야"], ["크기 · 인쇄", "크기를 고르고 인쇄해요", "A4 · A5(A4에 두 쪽) · 제본 여백 · 선 색"]];
+const STEPS = [["속지 고르기", "어떤 속지를 뽑을까요?", "견본을 눌러 고르세요 — 여러 개 골라도 돼요"], ["기간", "언제 쓸 속지인가요?", "년 · 월 · 주 · 일 중 단위를 고르고 원하는 만큼 — 날짜가 저절로 들어가요"], ["넣을 것", "속지에 무엇을 넣을까요?", "공휴일 · 음력 · 습관 이름 · 목표 분야"], ["크기 · 인쇄", "크기를 고르고 인쇄해요", "A4 · A5(A4에 두 쪽) · 제본 여백 · 선 색"]];
 const NEXT = ["다음: 기간", "다음: 넣을 것", "다음: 크기 · 인쇄"];
 
 function App() {
   const now = new Date();
   const ny = now.getMonth() >= 9 ? now.getFullYear() + 1 : now.getFullYear();
   const [st, setSt] = useState(() => {
-    const s = { sel: ["monthly", "weekly"], year: Math.min(MYEAR1, Math.max(MYEAR0, ny)), m0: now.getMonth() >= 9 ? 1 : now.getMonth() + 1, count: 1, ws: 1, dated: true, order: "month",
+    const t0 = ymd(now), ym0 = ny > now.getFullYear() ? ny + "-01" : t0.slice(0, 7);
+    const s = { sel: ["monthly", "weekly"], unit: "m", y0: ny, y1: ny, my0: ym0, my1: ym0, wd: t0, wc: 4, d1: t0, d2: ymd(addDays(now, 6)), ws: 1, dated: true, order: "month",
       hol: true, lun: false, lunAll: false, habits: "", areas: "", notes: 4, size: "a5", bind: false, line: "gray", ...loadC("set", {}) };
     if (TAB0 && TN[TAB0]) s.sel = [TAB0];
-    if (s.year < MYEAR0 || s.year > MYEAR1) s.year = MYEAR0;
-    /* 고른 기간이 다 지났으면 이번 달부터(날짜 표기 규칙 · 지난 날짜가 남지 않게) */
-    const nowI = now.getFullYear() * 12 + now.getMonth(), endI = s.year * 12 + s.m0 - 1 + s.count - 1;
-    if (endI < nowI && now.getFullYear() <= MYEAR1) { s.year = Math.max(MYEAR0, now.getFullYear()); s.m0 = now.getMonth() + 1; }
+    /* 고른 기간이 다 지났으면 오늘 기준으로 다시(지난 날짜가 남지 않게) */
+    if (rangeOf(s)[1] < pdt(t0)) { const ym = t0.slice(0, 7); Object.assign(s, { y0: Math.max(s.y0, now.getFullYear()), y1: Math.max(s.y1, now.getFullYear()), my0: ym, my1: ym, wd: t0, d1: t0, d2: ymd(addDays(now, 6)) }); }
     return s; });
   const up = (k, v) => setSt(p => ({ ...p, [k]: v }));
-  const toggle = k => setSt(p => { const a = p.sel || []; return { ...p, sel: a.includes(k) ? a.filter(x => x !== k) : a.concat(k) }; });
+  const [focus, setFocus] = useState(null);
+  const toggle = k => { setFocus(k); setSt(p => { const a = p.sel || []; return { ...p, sel: a.includes(k) ? a.filter(x => x !== k) : a.concat(k) }; }); };
   const [cur, setCur] = useState(0);
   const go = i => { setCur(i); if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" }); };
   useEffect(() => saveC("set", st), [st]);
@@ -1247,11 +1271,14 @@ function App() {
   const sh = sheets(shown, st), nSheets = st.size === "a4" ? list.length : Math.ceil(list.length / 2);
   const months = monthList(st), years = [...new Set(months.map(x => x[0]))], noHol = st.hol && st.dated ? years.filter(y => !HOL_YEARS.includes(y)) : [];
   const cnt = {}; for (const p of list) cnt[p.k] = (cnt[p.k] || 0) + 1;
-  const shRef = useRef(null), pw = st.size === "a4" ? 210 : 297;
-  useEffect(() => { const el = shRef.current; if (!el) return; const fit = () => { const w = el.clientWidth - 24, z = Math.min(0.75, Math.max(0.2, w / (pw * 3.7795))), o = parseFloat(el.style.getPropertyValue("--z")) || 0; if (o && Math.abs(z - o) < 0.02) return; el.style.setProperty("--z", z.toFixed(3)); };
+  const fk = focus && TN[focus] ? focus : (st.sel || [])[0] || "monthly";
+  const fp = pageList({ ...st, sel: [fk], notes: 1 }, 1)[0];
+  const shRef = useRef(null), pw = cur === 0 ? 148.5 : st.size === "a4" ? 210 : 297;
+  useEffect(() => { const el = shRef.current; if (!el) return; const fit = () => { const w = el.clientWidth - 24, z = Math.min(cur === 0 ? 1.05 : 0.75, Math.max(0.2, w / (pw * 3.7795))), o = parseFloat(el.style.getPropertyValue("--z")) || 0; if (o && Math.abs(z - o) < 0.02) return; el.style.setProperty("--z", z.toFixed(3)); };
     fit(); const ro = window.ResizeObserver ? new ResizeObserver(fit) : null; ro && ro.observe(el); return () => ro && ro.disconnect(); }, [pw, cur]);
   const yrs = []; for (let y = MYEAR0; y <= MYEAR1; y++) yrs.push(y);
-  const endM = months[months.length - 1];
+  const YMS = []; for (const y of yrs) for (let m = 1; m <= 12; m++) YMS.push([y + "-" + p2(m), y + "년 " + m + "월"]);
+  const R = rangeOf(st);
   const big = (cnt.daily || 0) + (cnt.study || 0) > 62;
 
   return html`<div class=${"app t-cal t-pln" + (EMBED ? " embed" : "")}>
@@ -1259,18 +1286,25 @@ function App() {
     <div class="top">
       ${!EMBED && html`<div class="brand"><span class="lg">${h(Icon, { name: "pencil", size: 26, sw: 2 })}<i></i></span><div><small>BLOG J 무료 도구 · 생활 · v${APP_VER}</small><b>다이어리 속지 만들기</b></div></div>`}
     </div>
-    <div class=${"lay wb" + (cur === 0 ? " pick" : "")}>
+    <div class=${"lay wb" + (cur === 0 ? " pl-pick" : "")}>
       <nav class="ruler" aria-label="진행 단계"><ol>${STEPS.map((x, i) => html`<li><button class=${i === cur ? "cur" : i < cur ? "done" : ""} aria-current=${i === cur ? "step" : null} onClick=${() => go(i)}>${i === cur ? html`<i class="bead"></i>` : null}<span class="rn">0${i + 1}</span>${x[0]}</button></li>`)}</ol></nav>
       <section class="wp">
         <div class="wp-h"><span class="k">0${cur + 1} / 04</span><h2>${STEPS[cur][1]}</h2><p>${STEPS[cur][2]}</p></div>
         <div class="wp-b">
-        ${cur === 0 && html`<${Gallery} st=${st} toggle=${toggle} />`}
+        ${cur === 0 && html`<${Gallery} st=${st} toggle=${toggle} focus=${fk} />`}
         ${cur === 1 && html`<label class="chk"><input type="checkbox" checked=${st.dated} onChange=${e => up("dated", e.target.checked)} /> 날짜 넣기 <span class="muted">끄면 날짜 칸을 비워 두고 손으로 적어요(만년형)</span></label>
-          <div class="dd2"><div><label class="f">연도</label><select value=${st.year} onChange=${e => up("year", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div>
-            <div><label class="f">시작 달</label><select value=${st.m0} onChange=${e => up("m0", +e.target.value)}>${L(12).map(i => html`<option value=${i + 1}>${i + 1}월</option>`)}</select></div></div>
-          <label class="f">몇 달치</label><select value=${st.count} onChange=${e => up("count", +e.target.value)}>${L(12).map(i => html`<option value=${i + 1}>${i + 1}달${i + 1 === 12 ? " (1년)" : ""}</option>`)}</select>
-          <div class="chips cl-quick">${yrs.filter(y => y >= now.getFullYear()).slice(0, 2).map(y => html`<button class="chip" onClick=${() => setSt(p => ({ ...p, year: y, m0: 1, count: 12 }))}>${y}년 1년치</button>`)}<button class="chip" onClick=${() => setSt(p => ({ ...p, year: now.getFullYear() + (now.getMonth() >= 2 ? 1 : 0), m0: 3, count: 12 }))}>3월 시작 학년도</button><button class="chip" onClick=${() => setSt(p => ({ ...p, year: now.getFullYear(), m0: now.getMonth() + 1, count: 1 }))}>이번 달</button></div>
-          <p class="hint">${st.year}년 ${st.m0}월 ~ ${endM[0]}년 ${endM[1]}월. ${st.dated ? "신년 계획 · 연간 계획표는 그해마다 한 장, 먼슬리 · 해빗은 달마다, 위클리는 주마다, 데일리 · 스터디는 날마다 한 장이에요." : "날짜 칸은 비워 두고, 장 수만 이 기간만큼 만들어요."}</p>
+          <label class="f">기간 단위</label><${Seg} value=${st.unit} options=${[["y", "년"], ["m", "월"], ["w", "주"], ["d", "일"]]} onChange=${v => up("unit", v)} />
+          ${st.unit === "y" ? html`<div class="dd2"><div><label class="f">시작 연도</label><select value=${st.y0} onChange=${e => setSt(p => ({ ...p, y0: +e.target.value, y1: Math.max(p.y1, +e.target.value) }))}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div>
+              <div><label class="f">끝 연도</label><select value=${st.y1} onChange=${e => up("y1", +e.target.value)}>${yrs.filter(y => y >= st.y0).map(y => html`<option value=${y}>${y}년</option>`)}</select></div></div>` : null}
+          ${st.unit === "m" ? html`<div class="dd2"><div><label class="f">시작 달</label><select value=${st.my0} onChange=${e => setSt(p => ({ ...p, my0: e.target.value, my1: p.my1 < e.target.value ? e.target.value : p.my1 }))}>${YMS.map(([k, n]) => html`<option value=${k}>${n}</option>`)}</select></div>
+              <div><label class="f">끝 달</label><select value=${st.my1} onChange=${e => up("my1", e.target.value)}>${YMS.filter(([k]) => k >= st.my0).map(([k, n]) => html`<option value=${k}>${n}</option>`)}</select></div></div>` : null}
+          ${st.unit === "w" ? html`<label class="f">시작 주 <span class="muted">고른 날이 들어 있는 주부터</span></label>
+              <label class="cl-dt"><span>${ymdw(R[0])} ~ ${ymdw(addDays(R[0], 6))}</span><input type="date" value=${st.wd} min=${MYEAR0 + "-01-01"} max=${MYEAR1 + "-12-31"} onInput=${e => e.target.value && up("wd", e.target.value)} onClick=${e => { try { e.target.showPicker(); } catch (_) {} }} aria-label="시작 주 고르기" /></label>
+              <label class="f">몇 주</label><select value=${st.wc} onChange=${e => up("wc", +e.target.value)}>${[1, 2, 3, 4, 5, 6, 8, 10, 13, 26, 52].map(n => html`<option value=${n}>${n}주</option>`)}</select>` : null}
+          ${st.unit === "d" ? html`<div class="dd2"><div><label class="f">시작 날짜</label><label class="cl-dt"><span>${ymdw(pdt(st.d1))}</span><input type="date" value=${st.d1} min=${MYEAR0 + "-01-01"} max=${MYEAR1 + "-12-31"} onInput=${e => e.target.value && setSt(p => ({ ...p, d1: e.target.value, d2: p.d2 < e.target.value ? e.target.value : p.d2 }))} onClick=${e => { try { e.target.showPicker(); } catch (_) {} }} aria-label="시작 날짜" /></label></div>
+              <div><label class="f">끝 날짜</label><label class="cl-dt"><span>${ymdw(pdt(st.d2 < st.d1 ? st.d1 : st.d2))}</span><input type="date" value=${st.d2} min=${st.d1} max=${MYEAR1 + "-12-31"} onInput=${e => e.target.value && up("d2", e.target.value)} onClick=${e => { try { e.target.showPicker(); } catch (_) {} }} aria-label="끝 날짜" /></label></div></div>` : null}
+          <div class="chips cl-quick">${[["오늘", () => ({ unit: "d", d1: ymd(now), d2: ymd(now) })], ["이번 주", () => ({ unit: "w", wd: ymd(now), wc: 1 })], ["이번 달", () => ({ unit: "m", my0: ymd(now).slice(0, 7), my1: ymd(now).slice(0, 7) })], ["다음 달", () => { const d = new Date(now.getFullYear(), now.getMonth() + 1, 1), k = ymd(d).slice(0, 7); return { unit: "m", my0: k, my1: k }; }], ...yrs.filter(y => y >= now.getFullYear()).slice(0, 2).map(y => [y + "년 1년치", () => ({ unit: "y", y0: y, y1: y })]), ["3월 시작 학년도", () => { const y = now.getFullYear() + (now.getMonth() >= 2 ? 1 : 0); return { unit: "m", my0: y + "-03", my1: (y + 1) + "-02" }; }]].map(([t, f]) => html`<button class="chip" onClick=${() => setSt(p => ({ ...p, ...f() }))}>${t}</button>`)}</div>
+          <p class="hint"><b>${ymdw(R[0])} ~ ${ymdw(R[1])}</b> · ${Math.round((R[1] - R[0]) / DAY) + 1}일. ${st.dated ? "신년 계획 · 연간 계획표는 그해마다, 먼슬리 · 해빗은 이 기간이 걸친 달마다, 위클리는 걸친 주마다, 데일리 · 스터디는 날마다 한 장이에요." : "날짜 칸은 비워 두고, 장 수만 이 기간만큼 만들어요."}</p>
           <label class="f">한 주의 시작</label><${Seg} value=${st.ws} options=${[[1, "월요일부터"], [0, "일요일부터"]]} onChange=${v => up("ws", v)} />
           <label class="f">쪽 순서</label><${Seg} value=${st.order} options=${[["month", "달마다 묶기 (다이어리 순서)"], ["kind", "종류별로"]]} onChange=${v => up("order", v)} />
           ${(st.sel || []).some(k => TN[k][3] === "note") ? html`<label class="f">노트 몇 장</label><select value=${st.notes} onChange=${e => up("notes", +e.target.value)}>${[2, 4, 6, 8, 10, 16, 20, 30].map(n => html`<option value=${n}>${n}장 (종류마다)</option>`)}</select>` : null}`}
@@ -1293,12 +1327,16 @@ function App() {
           ${cur < 3 ? html`<button class="btn go" disabled=${!(st.sel || []).length} onClick=${() => go(cur + 1)}>${(st.sel || []).length ? NEXT[cur] : "속지를 하나 이상 골라 주세요"} ${h(Icon, { name: "chevR", size: 18 })}</button>`
             : html`<button class="btn go" disabled=${!list.length} onClick=${doPrint}>${h(Icon, { name: "printer", size: 18 })} 인쇄 · PDF로 저장</button>`}</div>
       </section>
-      <section class="tray res-card">
+      ${cur === 0 ? html`<section class="tray res-card">
+        <div class="tray-h"><b>${TN[fk][1]}</b><span class="k">${(st.sel || []).includes(fk) ? "고름 · " : ""}${TN[fk][2]}</span></div>
+        <div class="sheets cl-sheets pl-one" ref=${shRef}><div class="scaler"><div class="cl-pg pl-onepg"><${A5} p=${fp} st=${{ ...st, punch: "" }} /></div></div></div>
+        <div class="tray-f k"><span>견본 한 쪽(A5) · 지금 고른 기간의 첫 쪽</span><button class=${"btn s" + ((st.sel || []).includes(fk) ? "" : " go")} onClick=${() => toggle(fk)}>${(st.sel || []).includes(fk) ? "빼기" : "이 속지 고르기"}</button></div>
+      </section>` : html`<section class="tray res-card">
         <div class="tray-h"><b>미리보기</b><span class="k">${st.size === "a5" ? "A5 · A4 가로에 두 쪽" : "A4 세로"} · ${list.length}쪽 · 종이 ${nSheets}장</span></div>
         ${noHol.length ? html`<div class="notice">${h(Icon, { name: "info", size: 18 })}<span><b>${noHol.join(" · ")}년 공휴일은 아직 발표 전이에요.</b> 그해 날짜에는 빨간 날을 넣지 않았어요(일요일은 빨간색).</span></div>` : null}
         <div class="sheets cl-sheets" ref=${shRef}><div class="scaler">${list.length ? sh : html`<p class="hint" style=${{ padding: "40px 10px" }}>왼쪽에서 속지를 골라 주세요.</p>`}</div></div>
-        <div class="tray-f k"><span>${list.length > PREV && !all ? `앞 ${PREV}쪽만 보여요 · 인쇄하면 ${list.length}쪽 모두` : `${list.length}쪽`}</span><span>인쇄 배율 100% · 여백 없음</span></div>
-      </section>
+        <div class="tray-f k"><span>${list.length > PREV && !all ? `앞 ${PREV}쪽만 보여요 · 인쇄하면 ${list.length}쪽 모두` : `${list.length}쪽`} · 몇 쪽만 뽑으려면 인쇄 창 「페이지」에 ${st.size === "a5" ? "종이 번호(2쪽 = 1장)" : "쪽 번호"}</span><span>인쇄 배율 100% · 여백 없음</span></div>
+      </section>`}
     </div>
     <p class="priv">${h(Icon, { name: "info", size: 15 })} 공휴일은 한국천문연구원 월력요항(2026 · 2027 · 2028년) 기준이고, 임시공휴일은 발표되면 반영합니다. 속지 디자인은 Blog J가 직접 만든 것이라 개인 · 학교 · 모임에서 자유롭게 인쇄해 써도 돼요. 입력한 내용은 이 기기 브라우저에만 저장됩니다.</p>
     ${!EMBED && html`<div class="foot">Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>`}

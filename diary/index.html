@@ -466,12 +466,13 @@ mark{background:#fbe3a6;color:inherit}
 .ncpick .ncfoot{flex-basis:100%;margin-top:2px}
 .nbread{margin-left:6px;font-size:13px}
 @media (max-width:900px){.setupgo{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));z-index:6;margin:12px 0 0}.setupgo .btn{width:100%;box-shadow:0 6px 16px rgba(0,0,0,.18)}}
+@media (max-width:900px){.mini{height:36px;padding:0 12px}}
 
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-02(월) 19:32";
+const BUILD = "2026-11-02(월) 20:38";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1724,7 +1725,7 @@ document.addEventListener("change", e => { if (e.target.dataset && e.target.data
 
 /* ── 휴대폰 뒤로 가기: 앱을 바로 나가지 않고 한 단계씩 (창 닫기 → 쓰기 끝내기 → 상세 → 하루 쪽 → 「한 번 더 누르면 닫혀요」) ── */
 const BACK = { armed: false };
-function backArm() { if (history.state && history.state.bjg) { BACK.armed = true; return; } try { history.pushState({ bjg: 1 }, ""); BACK.armed = true; } catch (e) {} }
+function backArm() { window.__bjExit = false; if (history.state && history.state.bjg) { BACK.armed = true; return; } try { history.pushState({ bjg: 1 }, ""); BACK.armed = true; } catch (e) {} }
 function appBack() {
   if ($("#pop")) { closePop(); return true; }
   if (typeof LOCK !== "undefined" && D.set.lock && !LOCK.open) return false;
@@ -1738,9 +1739,10 @@ function appBack() {
   return false;
 }
 window.addEventListener("popstate", () => {
+  if (window.__bjExit) { history.back(); return; }   /* 11-02: 「한 번 더」 뒤에는 남은 기록을 건너뛰고 나감(새로고침 뒤 띠가 되풀이되던 문제) */
   BACK.armed = false;
   if (appBack()) { backArm(); return; }
-  toast("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요");   /* 다시 걸지 않음 → 한 번 더 누르면 그대로 나감, 화면을 만지면 다시 걸림 */
+  toast("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요"); window.__bjExit = true;   /* 다시 걸지 않음 → 한 번 더 누르면 그대로 나감, 화면을 만지면 다시 걸림 */
 });
 ["pointerdown", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (!BACK.armed) backArm(); }, true));
 

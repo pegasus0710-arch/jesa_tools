@@ -117,7 +117,7 @@ body.mini .foot-m a{font-weight:700;text-decoration:none}
   const C = { ov: [".bkx-ov", ".fpx-ov"], btn: { ".ippg": "[data-ipclose],.ipx" }, hook: null };
   let armed = false, busy = false;
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  function arm() { if (history.state && history.state.bjg) { armed = true; return; } try { history.pushState(Object.assign({}, history.state || {}, { bjg: 1 }), ""); armed = true; } catch (e) {} }
+  function arm() { window.__bjExit = false; if (history.state && history.state.bjg) { armed = true; return; } try { history.pushState(Object.assign({}, history.state || {}, { bjg: 1 }), ""); armed = true; } catch (e) {} }
   const vis = e => e && e.isConnected && e.getClientRects().length > 0 && getComputedStyle(e).visibility !== "hidden";
   function topOv() { const sel = C.ov.concat(Object.keys(C.btn)).join(","); if (!sel) return null; const L = [...document.querySelectorAll(sel)].filter(vis); return L[L.length - 1] || null; }
   async function closeOv(o) {
@@ -128,12 +128,12 @@ body.mini .foot-m a{font-weight:700;text-decoration:none}
   function say(m) { let t = document.getElementById("bjbToast"); if (!t) { t = document.createElement("div"); t.id = "bjbToast"; t.setAttribute("role", "status"); t.style.cssText = "position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483000;background:rgba(31,33,37,.92);color:#fff;font:600 14.5px/1.4 SUIT,Pretendard,system-ui,sans-serif;padding:11px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);max-width:calc(100vw - 32px);text-align:center;pointer-events:none;transition:opacity .2s;opacity:0"; document.body.appendChild(t); }
     t.textContent = m; t.style.opacity = "1"; clearTimeout(say.t); say.t = setTimeout(() => { t.style.opacity = "0"; }, 2400); }
   window.addEventListener("popstate", async () => {
-    armed = false; if (busy) return; busy = true;
+    armed = false; if (window.__bjExit) { history.back(); return; } if (busy) return; busy = true;
     try {
       const o = topOv(); if (o) { await closeOv(o); arm(); return; }
       let done = false; if (C.hook) { try { done = !!(await C.hook()); } catch (e) { done = false; } }
       if (done) { arm(); return; }
-      say("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요");   /* 다시 걸지 않음 → 한 번 더 누르면 나감 */
+      say("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요"); window.__bjExit = true;   /* 다시 걸지 않음 → 한 번 더 누르면 나감 */
     } finally { busy = false; }
   });
   ["pointerdown", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (!armed) arm(); }, true));
@@ -160,6 +160,9 @@ const GROUPS = [["rite", "제사 · 의례", "#B83D06"], ["doc", "문서 · 이�
 function groupOf(t) { if (t.area === "rite" || t.category === "의례" || /축문|지방|제사/.test(t.name)) return "rite"; if (t.area === "money" || t.category === "재무") return "money"; if (t.area === "doc" || t.category === "문서") return "doc"; return "life"; }
 function howOf(t) { const ty = t.type || []; if (t.app && ty.includes("설치")) return "app"; if (ty.includes("온라인") || t.run) return "web"; return "dl"; }
 const TG = { app: "앱", web: "블로그 ↗", dl: "받기 ↗" };
+/* 11-02: 휴대폰에서 PC 전용 앱(자기소개서 · 사진 뷰어 · 이미지 편집기 · 키트)은 「PC용」으로 — 눌러도 「PC용이에요」 화면이라 헛걸음 */
+const MOB = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+const pcOnly = t => MOB && !!t.app && /\/(jaso|photo|photo-editor|kit)\/?$/.test(t.app);
 const HOW = { app: "앱 열기", web: "블로그에서 실행 ↗", dl: "받아서 쓰기 ↗", wait: "공개 예정" };
 const IC = {
   search: '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6f6857" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
@@ -212,12 +215,12 @@ function navHtml() {
 function tileHtml(t, last) {
   const img = t.img ? `<img src="${esc(t.img)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;fb&quot; style=&quot;background:${(GROUPS.find(g => g[0] === t.g) || GROUPS[0])[2]}&quot;>${esc(t.name.slice(0, 1))}</span>'">`
     : `<span class="fb" style="background:${(GROUPS.find(g => g[0] === t.g) || GROUPS[0])[2]}">${esc(t.name.slice(0, 1))}</span>`;
-  const how = t.wait ? (t.soon ? "준비 중" : "공개 예정 " + ymdw(new Date(t.open))) : HOW[t.how];
+  const how = t.wait ? (t.soon ? "준비 중" : "공개 예정 " + ymdw(new Date(t.open))) : (pcOnly(t) ? "PC에서 설치해 쓰는 앱" : HOW[t.how]);
   const cls = "tile" + (last ? " last" : "") + (t.wait ? " soon" : "");
   const nw = NEWEST && NEWEST === t.name && isNew(t);
   const sub = last && S.use[t.name] ? "마지막으로 쓴 도구" : (nw ? "새로 나옴 · " : "") + (t.short || t.desc || "");
   return `<button class="${cls}" ${t.wait ? 'aria-disabled="true"' : `data-open="${esc(t.name)}"`}><span class="ic">${img}</span>
-    <span class="tx"><span class="nm">${esc(t.name)}</span><span class="ds">${esc(sub)}</span><span class="how ${t.wait ? "wait" : t.how}">${how}</span></span><span class="tg ${t.wait ? "wait" : t.how}">${t.wait ? (t.soon ? "준비 중" : ymdw(new Date(t.open))) : TG[t.how]}</span></button>`;
+    <span class="tx"><span class="nm">${esc(t.name)}</span><span class="ds">${esc(sub)}</span><span class="how ${t.wait ? "wait" : t.how}">${how}</span></span><span class="tg ${t.wait ? "wait" : t.how}">${t.wait ? (t.soon ? "준비 중" : ymdw(new Date(t.open))) : (pcOnly(t) ? "PC용" : TG[t.how])}</span></button>`;
 }
 let NEWEST = null;
 function mainHtml() {

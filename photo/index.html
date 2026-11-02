@@ -1580,7 +1580,7 @@ const HO_DB = { open() { return this.p || (this.p = new Promise((res, rej) => { 
 const VER_URL = "https://pegasus0710-arch.github.io/jesa_tools/versions.json";
 const verGt = (a, b) => { const x = String(a).split(".").map(Number), y = String(b).split(".").map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return false; };
 async function checkUpdate(key) {
-  try { const c = new AbortController(), t = setTimeout(() => c.abort(), 5000); const r = await fetch(VER_URL, { cache: "no-store", signal: c.signal }); clearTimeout(t); const v = (await r.json())[key];
+  try { if (navigator.onLine === false) return null; const c = new AbortController(), t = setTimeout(() => c.abort(), 5000); const r = await fetch(VER_URL, { cache: "no-store", signal: c.signal }); clearTimeout(t); const v = (await r.json())[key];
     if (!v || !v.latest || !verGt(v.latest, APP_VER) || !/^https:\/\/luvbong\.tistory\.com\//.test(v.post || "")) return null;
     let seen = null; try { seen = localStorage.getItem("bj-upd-" + key); } catch (e) {} return seen === v.latest ? null : v; } catch (e) { return null; } }
 /* ══════════ 지도 (구글 지도 · 켰을 때만, 고른 사진 한 장의 좌표) ══════════ */

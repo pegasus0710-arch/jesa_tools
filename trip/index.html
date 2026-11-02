@@ -1279,6 +1279,9 @@ body.pc .iph{--tile:64px}
 .stst{display:flex;align-items:center;gap:6px;margin:0 0 2px;font-size:13.5px;font-weight:700}.stst svg{width:16px;height:16px;flex-shrink:0}.stst.ok{color:var(--cat,#1f7f8f)}.stst.wn{color:#a85a14}
 code.bkp{display:block;margin-top:5px;font:600 12.5px/1.45 ui-monospace,Consolas,"Malgun Gothic",monospace;color:var(--ink,#1f2125);background:#f4efe6;border-radius:7px;padding:4px 8px;overflow-wrap:anywhere;word-break:break-all}
 
+/* 11-02 휴대폰 누르는 영역 넓히기(모양은 그대로) — 글자 단추(.lk) · 작은 칩 */
+@media (pointer:coarse){button.lk{position:relative}button.lk::before{content:"";position:absolute;left:-6px;right:-6px;top:-13px;bottom:-13px}}
+
 /* 색(10-30 제이 지정): 초록 #195455 · 바탕 베이지 #F0E8DB · 주황 #F56D03 — 메인 = 짙은 초록 #195455(고른 것 · 기능 · 로고 배지), 이벤트 = 진한 주황 #f56d03(주 단추 · 진행 표시) */
 /* ══ Blog J 디자인 3.1 「정돈」 — 3.0 위에 덮어쓰는 다듬기 (10-30) ══
    1) 깊이는 3단만: 판(바탕) · 카드(머리카락 선 + 아주 옅은 그림자) · 들어감(입력 · 고르기 바탕)
@@ -1432,7 +1435,7 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
   const C = { ov: [".bkx-ov", ".fpx-ov"], btn: { ".ippg": "[data-ipclose],.ipx" }, hook: null };
   let armed = false, busy = false;
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  function arm() { if (history.state && history.state.bjg) { armed = true; return; } try { history.pushState(Object.assign({}, history.state || {}, { bjg: 1 }), ""); armed = true; } catch (e) {} }
+  function arm() { window.__bjExit = false; if (history.state && history.state.bjg) { armed = true; return; } try { history.pushState(Object.assign({}, history.state || {}, { bjg: 1 }), ""); armed = true; } catch (e) {} }
   const vis = e => e && e.isConnected && e.getClientRects().length > 0 && getComputedStyle(e).visibility !== "hidden";
   function topOv() { const sel = C.ov.concat(Object.keys(C.btn)).join(","); if (!sel) return null; const L = [...document.querySelectorAll(sel)].filter(vis); return L[L.length - 1] || null; }
   async function closeOv(o) {
@@ -1443,12 +1446,12 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
   function say(m) { let t = document.getElementById("bjbToast"); if (!t) { t = document.createElement("div"); t.id = "bjbToast"; t.setAttribute("role", "status"); t.style.cssText = "position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483000;background:rgba(31,33,37,.92);color:#fff;font:600 14.5px/1.4 SUIT,Pretendard,system-ui,sans-serif;padding:11px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);max-width:calc(100vw - 32px);text-align:center;pointer-events:none;transition:opacity .2s;opacity:0"; document.body.appendChild(t); }
     t.textContent = m; t.style.opacity = "1"; clearTimeout(say.t); say.t = setTimeout(() => { t.style.opacity = "0"; }, 2400); }
   window.addEventListener("popstate", async () => {
-    armed = false; if (busy) return; busy = true;
+    armed = false; if (window.__bjExit) { history.back(); return; } if (busy) return; busy = true;
     try {
       const o = topOv(); if (o) { await closeOv(o); arm(); return; }
       let done = false; if (C.hook) { try { done = !!(await C.hook()); } catch (e) { done = false; } }
       if (done) { arm(); return; }
-      say("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요");   /* 다시 걸지 않음 → 한 번 더 누르면 나감 */
+      say("뒤로 버튼을 한 번 더 누르면 앱이 닫혀요"); window.__bjExit = true;   /* 다시 걸지 않음 → 한 번 더 누르면 나감 */
     } finally { busy = false; }
   });
   ["pointerdown", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (!armed) arm(); }, true));
@@ -2935,6 +2938,7 @@ function pcBar() { const on = S.scr === "set" ? "set" : "list";
   return `<header class="pcbar"><span class="lg">${IC.plane}<i></i></span><span class="bn"><small>BLOG J 무료 도구 · 생활</small><b>여행 노트</b></span>
   <nav class="pcnav"><button class="${on === "list" ? "on" : ""}" data-gohome>${IC.plane}내 여행</button></nav><span class="sp"></span>${upChips()}${stBar()}<span class="hd pcgd">${instBtn(true)}</span><button class="ib pcset ${on === "set" ? "on" : ""}" data-go="set" aria-label="설정" title="설정">${IC.gear}</button></header>`; }
 function render(top) {
+  if (S._boot) try { sessionStorage.setItem("trip:view", JSON.stringify({ scr: S.scr, rid: S.rid, day: S.day, ttab: S.ttab })); } catch (e) {}
   const pc = isPC(); document.body.classList.toggle("pc", pc);
   document.body.classList.toggle("wide", pc && D.set.wide === true);   /* 10-31 제이: PC 화면 전체 폭으로 보기 */
   if (pc && S.scr === "item") S.scr = "trip";
@@ -2968,7 +2972,7 @@ BJBACK.init({ hook: () => { /* 11-01 휴대폰 뒤로 가기: 한 단계씩, 맨
   if (S.scr !== "list") { S.scr = "list"; S.sheet = null; render(true); window.scrollTo(0, 0); return true; }
   return false; } });
 function openTrip(id, day) { const t = RR(id); if (!t) return; let d = day; if (d == null) { const p = phase(t); d = p.k === "on" ? p.i : 0; } S.edit = null; S.sel = null; go("trip", { rid: id, day: d, ttab: "plan" }); }
-function startItem(it, i, isNew) { const t = TR(); const e = JSON.parse(JSON.stringify(it)); e._day = i; e._new = !!isNew; e._dirty = !!isNew; S.edit = e; S.sel = it.id;
+function startItem(it, i, isNew) { const t = TR(); const e = JSON.parse(JSON.stringify(it)); e._day = i; e._new = !!isNew; e._dirty = !!isNew && Array.isArray(e._ph) && e._ph.length > 0;   /* 11-02: 빈 새 일정은 고친 게 없으면 묻지 않음 */ S.edit = e; S.sel = it.id;
   if (isPC()) { render(); const f = $(".emp [data-ef=title]"); if (f && isNew) f.focus(); } else go("item"); }
 async function saveItemForm() {
   const t = TR(), e = S.edit; if (!t || !e) return;
@@ -3190,7 +3194,9 @@ window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window
   try { history.replaceState({ n: 0 }, "", location.href); } catch (e) {}
   /* 여행 중이면 바로 그 여행의 오늘 */
   const ct = D.items.find(t => phase(t).k === "on"); if (ct && !S.sheet) { S.rid = ct.id; S.day = phase(ct).i; S.scr = "trip"; hist.push({ scr: "list", rid: null }); }
-  render(true);
+  /* 11-02: 새로고침 · 휴대폰이 앱을 내렸다 다시 열 때 — 보던 여행 · 날짜 · 탭으로 */
+  else { try { const v = JSON.parse(sessionStorage.getItem("trip:view") || "null"); if (v && v.rid && RR(v.rid) && ["trip", "photo", "cost", "prep", "map"].includes(v.scr) && SCR[v.scr]) { S.rid = v.rid; S.day = +v.day || 0; S.ttab = v.ttab || "plan"; S.scr = v.scr; hist.push({ scr: "list", rid: null }); } } catch (e) {} }
+  S._boot = true; render(true);
   if (D.dir && D.dirPerm === "granted") syncFromFolder();
   bkSetup().then(() => { if (S.scr === "set") render(); });
 })();

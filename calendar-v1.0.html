@@ -1032,6 +1032,9 @@ function App() {
     if (s.deskBot === "list") s.deskBot = "days"; else if (s.deskBot !== "days" && s.deskBot !== "lines") s.deskBot = "next";
     if (TAB0 === "month" || TAB0 === "year" || TAB0 === "desk" || TAB0 === "week") s.kind = TAB0;
     if (s.year < MYEAR0 || s.year > MYEAR1) s.year = MYEAR0;
+    { const now = new Date(), nowI = now.getFullYear() * 12 + now.getMonth(), endI = s.kind === "year" ? s.year * 12 + 11 : s.year * 12 + (s.m0 - 1) + (s.count || 1) - 1;   /* 11-02: 지난 기간이 남지 않게 */
+      if (endI < nowI && now.getFullYear() <= MYEAR1) { s.year = Math.max(MYEAR0, now.getFullYear()); s.m0 = now.getMonth() + 1; }
+      if (typeof weekStart === "function") { const tw = ymd(weekStart(now, 1)); if (!s.wd || s.wd < tw) s.wd = tw; } }
     return s; });
   const up = (k, v) => setSt(p => ({ ...p, [k]: v }));
   const [cur, setCur] = useState(0);
@@ -1068,7 +1071,7 @@ function App() {
   const yrs = []; for (let y = MYEAR0; y <= MYEAR1; y++) yrs.push(y);
   const setMemo = (i, k, v) => setSt(p => ({ ...p, memos: (p.memos || []).map((a, j) => j === i ? { ...a, [k]: v } : a) }));
   const inRange = d => { if (st.kind === "week") { const t = pdate(d); return wks.some(w => t >= w && t < new Date(w.getFullYear(), w.getMonth(), w.getDate() + 7)); } const k = d.slice(0, 7); return st.kind === "year" ? d.startsWith(st.year + "-") : months.some(([y, m]) => `${y}-${p2(m)}` === k); };
-  const newMemoDate = () => { const t = new Date(), tk = ymd(t); if (inRange(tk)) return tk; if (st.kind === "week") return ymd(wks[0]); const f = st.kind === "year" ? [st.year, 1] : months[0]; return `${f[0]}-${p2(f[1])}-01`; };
+  const newMemoDate = () => ymd(new Date());   /* 11-02 제이: 새 메모는 늘 오늘 날짜 */
   const quick = (y, m, c) => setSt(p => ({ ...p, year: y, m0: m, count: c }));
   const sheetsN = pages.length;
   const kindName = { month: "한 달 한 장", year: "1년 한 장", desk: "탁상 달력", week: "주간 일정표" }[st.kind];

@@ -921,11 +921,16 @@ function Sheet({ c, st, page }) {
 }
 function App() {
   const now = new Date();
-  const [st, setSt] = useState(() => ({ rel: "p1", dnK: "", dnH: "", selfH: "", selfK: "", feelH: "", feelK: "", who: "both", dead: "kao", nameK: "", nameH: "", titleK: "학생", titleH: "學生", bw: "김해", sn: "김", bwH: "", snH: "",
+  const [st, setSt] = useState(() => { const s0 = ({ rel: "p1", dnK: "", dnH: "", selfH: "", selfK: "", feelH: "", feelK: "", who: "both", dead: "kao", nameK: "", nameH: "", titleK: "학생", titleH: "學生", bw: "김해", sn: "김", bwH: "", snH: "",
     mode: "lunar", lm: 3, ld: 15, leap: false, year: now.getFullYear(), solar: "", out: "hanja", paper: "land", withRead: true,
     kind: "gije", sRel: "far", sGen: 5, sWho: "both", season: "fall", sPlace: "myo", withSan: false, sanH: "幼學", sanK: "유학", sFeelH: "", sFeelK: "",
     sMode: "lunar", sLm: 10, sLd: 1, sLeap: false, sYear: now.getFullYear(), sSolar: "",
-    ...load("set", {}), ...(REL[load("set", {}).rel] ? {} : { rel: "p1" }), ...(TAB0 === "sije" ? { kind: "sije" } : TAB0 === "gije" ? { kind: "gije" } : {}) }));
+    ...load("set", {}), ...(REL[load("set", {}).rel] ? {} : { rel: "p1" }), ...(TAB0 === "sije" ? { kind: "sije" } : TAB0 === "gije" ? { kind: "gije" } : {}) });
+    /* 11-02 제이: 해가 바뀐 뒤 다시 열면 지난해 · 지난 날짜가 그대로 남지 않게 — 올해로, 지난 양력 날짜는 비움 */
+    const y0 = now.getFullYear(), t0 = y0 + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+    if (!(s0.year >= y0)) s0.year = y0; if (!(s0.sYear >= y0)) s0.sYear = y0;
+    if (s0.solar && s0.solar < t0) s0.solar = ""; if (s0.sSolar && s0.sSolar < t0) s0.sSolar = "";
+    return s0; });
   const up = (k, v) => setSt(p => ({ ...p, [k]: v }));
   const [cur, setCur] = useState(0); const curRef = useRef(0); curRef.current = cur;
   const stepRef = useRef(null); if (!stepRef.current) stepRef.current = ({ n, children }) => (n - 1 === curRef.current ? children : null);

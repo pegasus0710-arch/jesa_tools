@@ -1236,8 +1236,8 @@ function Gallery({ st, toggle, focus }) {
     <p class="hint">누르면 고르고, 오른쪽에 크게 보여요. 다시 누르면 빠져요. 여러 개를 골라 한 번에 뽑을 수 있어요.</p></div>`;
 }
 
-const STEPS = [["속지 고르기", "어떤 속지를 뽑을까요?", "견본을 눌러 고르세요 — 여러 개 골라도 돼요"], ["기간", "언제 쓸 속지인가요?", "속지 종류마다 시작과 장 수를 정해요 — 날짜가 저절로 들어가요"], ["넣을 것", "속지에 무엇을 넣을까요?", "공휴일 · 음력 · 습관 이름 · 목표 분야"], ["크기 · 인쇄", "크기를 고르고 인쇄해요", "A4 · A5(A4에 두 쪽) · 제본 여백 · 선 색"]];
-const NEXT = ["다음: 기간", "다음: 넣을 것", "다음: 크기 · 인쇄"];
+const STEPS = [["속지 고르기", "어떤 속지를 뽑을까요?", "견본을 눌러 고르세요 — 여러 개 골라도 돼요"], ["크기 · 기간", "크기와 기간을 정해요", "속지 종류마다 시작과 장 수를 정해요 — 날짜가 저절로 들어가요"], ["넣을 것", "속지에 무엇을 넣을까요?", "공휴일 · 음력 · 습관 이름 · 목표 분야"], ["타공 · 인쇄", "구멍 자리 · 선 색을 고르고 인쇄해요", "타공 자리 · 제본 여백 · 선 색"]];
+const NEXT = ["다음: 크기 · 기간", "다음: 넣을 것", "다음: 타공 · 인쇄"];
 
 function App() {
   const now = new Date();
@@ -1293,7 +1293,9 @@ function App() {
         <div class="wp-h"><span class="k">0${cur + 1} / 04</span><h2>${STEPS[cur][1]}</h2><p>${STEPS[cur][2]}</p></div>
         <div class="wp-b">
         ${cur === 0 && html`<${Gallery} st=${st} toggle=${toggle} focus=${fk} />`}
-        ${cur === 1 && html`<label class="chk"><input type="checkbox" checked=${st.dated} onChange=${e => up("dated", e.target.checked)} /> 날짜 넣기 <span class="muted">끄면 날짜 칸을 비워 두고 손으로 적어요(만년형)</span></label>
+        ${cur === 1 && html`<label class="f">크기</label><${Seg} value=${st.size} options=${[["a5", "A5 (A4 가로에 두 쪽)"], ["a4", "A4 (한 장에 한 쪽)"]]} onChange=${v => up("size", v)} />
+          <p class="hint">${st.size === "a5" ? "A4 가로 한 장에 A5 두 쪽이 나란히 나와요. 가운데 자르는 선대로 자르면 A5 다이어리(6공 · 링 · 바인더)에 맞아요." : "A5로 만든 속지를 A4 크기로 키워서 뽑아요. 글씨 칸이 넓어져요."}</p>
+          <label class="chk"><input type="checkbox" checked=${st.dated} onChange=${e => up("dated", e.target.checked)} /> 날짜 넣기 <span class="muted">끄면 날짜 칸을 비워 두고 손으로 적어요(만년형)</span></label>
           ${(() => { const has = g => GRP[g].some(k => (st.sel || []).includes(k)), names = g => GRP[g].filter(k => (st.sel || []).includes(k)).map(k => TN[k][1]).join(" · ");
             const dt = (key, lab, txt) => html`<label class="cl-dt"><span>${txt}</span><input type="date" value=${st[key]} min=${MYEAR0 + "-01-01"} max=${MYEAR1 + "-12-31"} onInput=${e => e.target.value && up(key, e.target.value)} onClick=${e => { try { e.target.showPicker(); } catch (_) {} }} aria-label=${lab} /></label>`;
             const nsel = (key, arr, unit) => html`<select value=${st[key]} onChange=${e => up(key, +e.target.value)}>${arr.map(n => html`<option value=${n}>${n}${unit}</option>`)}</select>`;
@@ -1315,9 +1317,7 @@ function App() {
           ${(st.sel || []).includes("habit") ? html`<label class="f">해빗 트래커 습관 <span class="muted">한 줄에 하나 · 15개까지 · 비우면 손으로 적어요</span></label><textarea rows="5" value=${st.habits} placeholder=${"물 8잔\n30분 걷기\n책 10쪽"} onInput=${e => up("habits", e.target.value)}></textarea>` : null}
           ${(st.sel || []).includes("newyear") ? html`<label class="f">신년 계획 분야 <span class="muted">쉼표로 6개까지 · 비우면 건강 · 돈 · 일 · 배움 · 관계 · 나</span></label><input type="text" value=${st.areas} maxlength="60" placeholder="건강, 돈, 일, 배움, 관계, 나" onInput=${e => up("areas", e.target.value)} />` : null}
           <p class="hint">입력한 내용은 이 기기 브라우저에만 저장돼요.</p>`}
-        ${cur === 3 && html`<label class="f">크기</label><${Seg} value=${st.size} options=${[["a5", "A5 (A4 가로에 두 쪽)"], ["a4", "A4 (한 장에 한 쪽)"]]} onChange=${v => up("size", v)} />
-          <p class="hint">${st.size === "a5" ? "A4 가로 한 장에 A5 두 쪽이 나란히 나와요. 가운데 자르는 선대로 자르면 A5 다이어리(6공 · 링 · 바인더)에 맞아요." : "A5로 만든 속지를 A4 크기로 키워서 뽑아요. 글씨 칸이 넓어져요."}</p>
-          <label class="f">타공(구멍) 자리 표시 <span class="muted">펀치로 뚫을 자리에 동그라미를 찍어 줘요</span></label><${Seg} value=${punchOf(st)} options=${PUNCH[st.size]} onChange=${v => up("punch", v)} />
+        ${cur === 3 && html`<label class="f">타공(구멍) 자리 표시 <span class="muted">펀치로 뚫을 자리에 동그라미를 찍어 줘요</span></label><${Seg} value=${punchOf(st)} options=${PUNCH[st.size]} onChange=${v => up("punch", v)} />
           ${punchOf(st) ? html`<p class="hint">${{ "6": "A5 6공 링 바인더 규격(구멍 간격 19 · 19 · 70 · 19 · 19mm)이에요.", "2": "구멍 2개 · 80mm 간격, 가장자리에서 12mm(국제 표준 ISO 838)예요.", "4": "구멍 4개 · 80mm 간격, 가장자리에서 12mm(국제 표준 ISO 838)예요.", "20": "구멍 20개 · 9.5mm 간격(A5 20공 바인더)이에요.", "30": "구멍 30개 · 9.5mm 간격(A4 30공 바인더)이에요." }[punchOf(st)]} 동그라미 가운데에 펀치 구멍을 맞춰 뚫으세요. 쓰는 바인더와 간격이 다르면 한 장 먼저 뽑아 대 보세요. 왼쪽 여백은 저절로 넓어져요.</p>` : html`<label class="chk"><input type="checkbox" checked=${st.bind} onChange=${e => up("bind", e.target.checked)} /> 왼쪽 제본 여백 12mm <span class="muted">링 · 바인더 · 스테이플 자리</span></label>`}
           <label class="f">선 색</label><${Seg} value=${st.line} options=${[["gray", "연회색"], ["sky", "하늘"], ["pink", "연분홍"], ["green", "연초록"], ["navy", "남색"], ["ink", "진회색"]]} onChange=${v => up("line", v)} />
           <div class="pl-sum"><b>뽑을 것</b>${TYPES.filter(t => cnt[t[0]]).map(t => html`<span>${t[1]} ${cnt[t[0]]}쪽</span>`)}<span class="tot">모두 ${list.length}쪽 · 종이 ${nSheets}장</span></div>

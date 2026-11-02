@@ -530,7 +530,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-02(월) 23:37";
+const BUILD = "2026-11-02(월) 23:53";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1098,8 +1098,11 @@ function render() {
   if (S.v === "day") { applyDayMode(); const t = $("#dtx"); if (t) growDiary(t); anchorDeco(); document.body.dataset.ph = isPhone() ? "1" : "0"; }
 }
 /* 하루 일기 — 쓸 때는 다 보이고, 읽을 때 길면 적당한 곳에서 접고 「더보기」 */
-function growDiary(t) { t.style.height = "auto"; const full = Math.max(t.scrollHeight + 4, 250), lim = (innerWidth > 900 ? 15 : 12) * 36 + 4;
-  const clip = full > lim + 72 && S.dexp !== S.date && document.activeElement !== t; t.style.height = (clip ? lim : full) + "px"; t.classList.toggle("clip", clip);
+/* 11-02 제이: 긴 글에서 문단을 지우면 화면이 위로 튀던 문제 — 높이를 잠깐 auto로 줄일 때 페이지가 짧아져 스크롤이 당겨짐
+   → 재는 동안 바깥 높이를 붙잡아 두고, 스크롤 위치를 그대로 되돌림(노트 쓰기 칸도 같이) */
+function taGrow(t, set) { const y = window.scrollY, p = t.parentElement, ph = p ? p.style.minHeight : ""; if (p) p.style.minHeight = p.offsetHeight + "px"; t.style.height = "auto"; set(); if (p) p.style.minHeight = ph; if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y); }
+function growDiary(t) { let full = 0, lim = (innerWidth > 900 ? 15 : 12) * 36 + 4, clip = false;
+  taGrow(t, () => { full = Math.max(t.scrollHeight + 4, 250); clip = full > lim + 72 && S.dexp !== S.date && document.activeElement !== t; t.style.height = (clip ? lim : full) + "px"; }); t.classList.toggle("clip", clip);
   const b = $("#dMore"); if (b) { b.hidden = full <= lim + 72; b.innerHTML = clip ? `더보기 <small>· ${Math.round((full - lim) / 36)}줄 더</small> ▾` : "접기 ▴"; } if (typeof placeDeco === "function") placeDeco(); }
 document.addEventListener("focusin", e => { if (e.target.id === "dtx" && e.target.classList.contains("clip")) { S.dexp = S.date; growDiary(e.target); } });
 document.addEventListener("click", e => { if (e.target.closest("#dMore")) { e.stopImmediatePropagation(); const t = $("#dtx"); if (!t) return; if (t.classList.contains("clip")) { S.dexp = S.date; growDiary(t); } else { S.dexp = null; t.blur(); growDiary(t); const r = t.getBoundingClientRect(); if (r.top < 0) window.scrollBy(0, r.top - 90); } } }, true);
@@ -1785,7 +1788,7 @@ function noteOne(n) {
     + `<textarea class="nbody" id="nBody" placeholder="${S.ncd === "좋은 글" ? "마음에 남은 문장 — 아래 줄에 「— 누가 · 어디서」" : S.ncd === "생각" ? "떠오른 생각을 그대로" : "날짜 없이 바로 적어요"}" aria-label="내용">${esc(n.body || "")}</textarea>` + nPhotos(n, true)
     + `<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><button class="mini ln" data-nto="todo">→ 오늘 할 일로</button>${on("bucket") ? `<button class="mini ln" data-nto="bucket">→ 버킷리스트로</button>` : ""}<span class="foot" style="margin-left:auto">글은 적는 대로 저장 · 분류는 「저장」을 누르면 바뀌어요</span><button class="mini g" id="nDone2">저장</button></div>`;
 }
-function noteGrow() { const t = $("#nBody"); if (t) { t.style.height = "auto"; t.style.height = Math.max(t.scrollHeight + 4, 360) + "px"; } }
+function noteGrow() { const t = $("#nBody"); if (t) taGrow(t, () => { t.style.height = Math.max(t.scrollHeight + 4, 360) + "px"; }); }
 /* 11-02 제이: 노트에 사진 — 「+ 사진 넣기」 · 붙여넣기(Ctrl+V) · 끌어다 놓기, 한 노트 12장까지 */
 const NPMAX = 12;
 function nPhotos(n, edit) {

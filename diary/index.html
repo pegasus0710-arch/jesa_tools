@@ -465,12 +465,13 @@ mark{background:#fbe3a6;color:inherit}
 .ncpick .mcat{background:#fff}.ncpick .mcat.on{background:var(--g);color:#fff}
 .ncpick .ncfoot{flex-basis:100%;margin-top:2px}
 .nbread{margin-left:6px;font-size:13px}
+@media (max-width:900px){.setupgo{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));z-index:6;margin:12px 0 0}.setupgo .btn{width:100%;box-shadow:0 6px 16px rgba(0,0,0,.18)}}
 
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-01(일) 23:27";
+const BUILD = "2026-11-02(월) 19:32";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -995,8 +996,9 @@ function findView() {
 /* ── 설정 · 칸 고르기 ── */
 function setView() {
   const sw = (k, n, h) => `<button class="sw ${on(k) ? "on" : ""}" role="switch" aria-checked="${on(k)}" data-sw="${k}"><span class="tr"></span><span class="nm"><b>${n}</b>${h ? `<small>${h}</small>` : ""}</span></button>`;
-  const L = `<div class="ph"><span class="pen" style="font-size:40px;line-height:1">어떤 다이어리로 쓸까요?</span></div><span class="foot">고르면 필요한 칸이 한 번에 켜져요. 오른쪽에서 하나씩 켜고 끌 수 있어요.</span>
+  const L = `<div class="ph"><span class="pen" style="font-size:40px;line-height:1">어떤 다이어리로 쓸까요?</span></div><span class="foot">고르면 필요한 칸이 한 번에 켜져요. 「칸 고르기」에서 하나씩 켜고 끌 수 있어요.</span>
    ${PRESETS.map(p => `<button class="pre ${D.set.preset === p.id ? "on" : ""}" data-pre="${p.id}"><b>${p.name}</b><span>${p.desc}</span></button>`).join("")}
+   ${!D.set.setupDone ? `<div class="btns setupgo" style="margin-top:12px"><button class="btn g" id="setupOk2">이대로 시작</button></div>` : ""}
    <div class="blk" style="margin-top:auto;padding-top:14px;border-top:1px dashed var(--dash)"><span class="lbl">지키기 · 옮기기</span>
      <div class="li" style="font-family:var(--ui)">${I(IC.lock)}<span class="t" style="font-family:var(--ui)">비밀번호 잠금 <small style="color:var(--mute)">드라이브에도 잠긴 채로</small></span><button class="mini ${D.set.lock ? "ln" : "g"}" id="lockSet">${D.set.lock ? "바꾸기 · 끄기" : "켜기"}</button></div>
      ${gdBox()}
@@ -1181,7 +1183,7 @@ document.addEventListener("click", async e => {
   /* 설정 */
   if (ds.pre) { const p = PRESETS.find(x => x.id === ds.pre); const o = {}; (p.on || ALLK).forEach(x => o[x] = 1); D.set.on = o; D.set.preset = p.id; save(); return rerenderKeep(); }
   if (ds.sw) { D.set.on = D.set.on || {}; if (D.set.on[ds.sw]) delete D.set.on[ds.sw]; else D.set.on[ds.sw] = 1; D.set.preset = "custom"; save(); return rerenderKeep(); }
-  if (t.id === "setupOk") { D.set.setupDone = true; save(); if (D.set.preset === "book") { S.v = "page"; S.page = "book"; } else S.v = "day"; return render(); }
+  if (t.id === "setupOk" || t.id === "setupOk2") { D.set.setupDone = true; save(); if (D.set.preset === "book") { S.v = "page"; S.page = "book"; } else S.v = "day"; return render(); }
   if (t.id === "lockSet") { if (D.set.lock) { if (confirm("비밀번호를 끌까요? (「취소」 = 새 비밀번호로 바꾸기)")) { D.set.lock = null; LOCK.key = null; await save(true); toast("비밀번호를 껐어요"); if (gdOn()) gdSync({ toast: false }); return render(); } } pinMode = "set1"; pinBuf = ""; LOCK.open = false; return lockView(); }
   if (t.id === "lockNow") { return lockNowDo(); }
   if (t.id === "bkOut") return backupOut();

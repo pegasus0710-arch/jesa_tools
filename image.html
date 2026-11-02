@@ -640,7 +640,7 @@ function cropRatio(s) {
 }
 const ratioKey = r => r ? r.toFixed(5) : "none";
 
-/* 제출 규격 — 공식 안내에서 확인한 값만 (확인일 2026-09-28). 기관 공고가 바뀔 수 있어 제출 전 확인 안내 */
+/* 제출 규격 — 공식 안내에서 확인한 값만 (확인일 2026-09-28(월)). 기관 공고가 바뀔 수 있어 제출 전 확인 안내 */
 const PRESETS = [
   { id: "gosi", label: "공무원 채용시험 원서", w: 137, h: 177, kb: 350, src: "사이버국가고시센터 응시원서 안내 — 3.5×4.5cm(137×177px) 기준, 350KB 미만, JPG·PNG" },
   { id: "kpc", label: "KPC자격 원서 (ITQ 등)", w: 180, h: 240, kb: 500, src: "KPC자격 원서 사진 규정 — 3×4cm, 가로 115~235·세로 150~315px, 500KB 이하" },
@@ -912,7 +912,7 @@ function PresetStep({ s, up, n }) {
   const p = presetOf(s.preset);
   return html`<${Step} n=${n} title="어디에 제출하나요?" sub="규격을 고르면 크기·용량·형식을 한 번에 맞춥니다">
     <div class="presets">${PRESETS.map(x => html`<button class=${"pr " + (s.preset === x.id ? "on" : "")} onClick=${() => up("preset", x.id)}><b>${x.label}</b><span>${x.w}×${x.h}px${x.kb ? " · " + x.kb + "KB " + (x.id === "gosi" ? "미만" : "이하") : ""}</span></button>`)}</div>
-    <div class="note">${h(Icon, { name: "info", size: 14 })} <b>근거</b>: ${p.src}. 기관 공고는 바뀔 수 있으니 <b>제출 전 해당 공고를 꼭 확인</b>하세요. (확인일 2026-09-28)</div>
+    <div class="note">${h(Icon, { name: "info", size: 14 })} <b>근거</b>: ${p.src}. 기관 공고는 바뀔 수 있으니 <b>제출 전 해당 공고를 꼭 확인</b>하세요. (확인일 2026-09-28(월))</div>
     <p class="hint">얼굴이 가운데 오도록 <b>미리보기에서 네모를 끌어</b> 위치를 맞춘 뒤 변환하세요. 배경·표정 같은 촬영 기준은 이 도구가 바꾸지 않습니다.</p>
   </${Step}>`;
 }
@@ -928,7 +928,7 @@ function SizeStep({ s, up, n, upMany }) {
     <${Seg} value=${segVal} options=${opts} onChange=${onSeg} />
     ${s.submit && html`<div class="pbox"><div class="pbox-h">${h(Icon, { name: "idcard", size: 16 })} <b>어디에 제출하나요?</b><span>증명사진 · 원서 사진</span></div>
       <div class="presets">${PRESETS.map(x => html`<button class=${"pr " + (cur.id === x.id ? "on" : "")} onClick=${() => applyPreset(x)}><b>${x.label}</b><span>${x.w}×${x.h}px${x.kb ? " · " + x.kb + "KB " + (x.id === "gosi" ? "미만" : "이하") : ""}</span></button>`)}</div>
-      <div class="note">${h(Icon, { name: "info", size: 14 })} <b>근거</b>: ${cur.src}. 제출 전 해당 공고를 꼭 확인하세요. (확인일 2026-09-28) 얼굴 위치는 미리보기의 네모를 끌어 맞추세요.</div></div>`}
+      <div class="note">${h(Icon, { name: "info", size: 14 })} <b>근거</b>: ${cur.src}. 제출 전 해당 공고를 꼭 확인하세요. (확인일 2026-09-28(월)) 얼굴 위치는 미리보기의 네모를 끌어 맞추세요.</div></div>`}
     ${!s.submit && s.size === "long" && html`<label class="f">긴 변 (px) <span class="muted">가로·세로 중 긴 쪽</span></label><input type="number" inputmode="numeric" min="16" max="10000" value=${s.long} onInput=${e => up("long", +e.target.value || 0)} />
       <${Chips} value=${s.long} list=${[[800, "800 블로그"], [1280, "1280"], [1920, "1920 FHD"], [2560, "2560"]]} onPick=${v => up("long", v)} unit="px" />`}
     ${!s.submit && s.size === "width" && html`<label class="f">가로 (px)</label><input type="number" inputmode="numeric" min="16" max="10000" value=${s.width} onInput=${e => up("width", +e.target.value || 0)} />

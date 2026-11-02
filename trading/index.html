@@ -280,7 +280,7 @@ kbd{font-family:inherit;background:#efede5;border-radius:4px;padding:0 5px;font-
 .date-field .date-display.sat{color:var(--acc)}
 .date-field .date-native{position:absolute;left:0;bottom:0;width:1px;height:1px;opacity:0;padding:0;border:0;pointer-events:none}
 .date-icon-btn{cursor:pointer;font-size:15px;flex-shrink:0;line-height:1}
-.dd .date-field{display:flex}.dd .date-field .date-display{flex:1;width:auto!important}
+.dd .date-field{display:flex}.dd .date-field .date-display{flex:1;width:auto!important}.dd>*{min-width:0}.dd .date-field .date-display{min-width:0}@media (max-width:480px){.dd{gap:6px}.dd .date-field .date-display{padding-left:6px!important;padding-right:4px!important;letter-spacing:-.2px}}
 
 .ac{position:absolute;left:0;right:0;top:100%;z-index:5;background:#fff;border:1px solid var(--line2);border-radius:9px;box-shadow:var(--sh);max-height:240px;overflow:auto;margin-top:2px}
 .ac-i{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px}
@@ -1552,8 +1552,8 @@ function TxModal({db,init,holdings,onClose}){
     ${isTrade&&html`
       <div class="dd"><div><label class="f">단가</label><input inputmode="numeric" data-money value=${f.price} style="text-align:right" onInput=${e=>up("price",e.target.value)} /></div>
         <div><label class="f">수량</label><input inputmode="numeric" data-money value=${f.qty} style="text-align:right" onInput=${e=>up("qty",e.target.value)} /></div></div>
-      <div class="dd"><div><label class="f">수수료 <span class="muted">비우면 자동 ${autoFee.toLocaleString()}</span></label><input inputmode="numeric" data-money value=${f.fee} placeholder=${autoFee} style="text-align:right" onInput=${e=>up("fee",e.target.value)} /></div>
-        ${f.kind==="sell"?html`<div><label class="f">거래세 <span class="muted">비우면 자동 ${autoTax.toLocaleString()}</span></label><input inputmode="numeric" data-money value=${f.tax} placeholder=${autoTax} style="text-align:right" onInput=${e=>up("tax",e.target.value)} /></div>`
+      <div class="dd"><div><label class="f">수수료 <span class="muted">비우면 자동 ${autoFee.toLocaleString()}</span></label><input inputmode="numeric" data-money value=${f.fee} placeholder=${autoFee.toLocaleString()} style="text-align:right" onInput=${e=>up("fee",e.target.value)} /></div>
+        ${f.kind==="sell"?html`<div><label class="f">거래세 <span class="muted">비우면 자동 ${autoTax.toLocaleString()}</span></label><input inputmode="numeric" data-money value=${f.tax} placeholder=${autoTax.toLocaleString()} style="text-align:right" onInput=${e=>up("tax",e.target.value)} /></div>`
           :html`<div><label class="f">거래대금</label><div style="padding:8px 10px;font-weight:700;text-align:right">${(!isNaN(price)&&!isNaN(qty))?(price*qty).toLocaleString():"-"}원</div></div>`}</div>
       <label class="f">${f.kind==="buy"?"매수 사유":"매도 사유"} (선택)</label><input value=${f.reason} placeholder=${f.kind==="buy"?"예: 실적 개선 기대, 눌림목":"예: 목표가 도달, 손절"} onInput=${e=>up("reason",e.target.value)} />`}
     ${!isTrade&&html`<label class="f">금액</label><input inputmode="numeric" data-money value=${f.amount} style="text-align:right;font-weight:700" onInput=${e=>up("amount",e.target.value)} />`}

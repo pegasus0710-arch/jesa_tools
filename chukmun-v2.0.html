@@ -986,7 +986,7 @@ function App() {
               <div><label class="f">지내는 해</label><select value=${st.year} onChange=${e => up("year", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div></div>
               <label class="chk"><input type="checkbox" checked=${st.leap} onChange=${e => up("leap", e.target.checked)} /> 윤달에 돌아가셨어요</label>`
             : html`<label class="f">제사 날짜 (기일, 양력)</label><input type="date" value=${st.solar} onInput=${e => up("solar", e.target.value)} />`}
-          ${dt ? html`<div class="calc"><div><span>양력</span><b>${fmt(dt.solar)}</b></div><div><span>음력</span><b>${dt.ly}년 ${dt.leap ? "윤" : ""}${dt.lm}월 ${dt.ld}일</b></div>
+          ${dt ? html`<div class="calc"><div><span>양력</span><b>${fmt(dt.solar)}</b></div><div><span>음력</span><b>${dt.leap ? "(윤) " : ""}${dt.ly}-${String(dt.lm).padStart(2, "0")}-${String(dt.ld).padStart(2, "0")}</b></div>
               ${c && html`<div><span>간지</span><b>${c.yr.k}년 · ${c.sak.k}삭 · ${c.il.k}일</b></div>`}</div>
               ${dt.note && html`<p class="hint warn">${dt.note}</p>`}`
             : html`<p class="hint">${st.mode === "solar" ? "날짜를 골라 주세요." : "날짜를 계산할 수 없어요. 1901~2050년 안에서 골라 주세요."}</p>`}
@@ -1032,7 +1032,7 @@ function App() {
               <div><label class="f">지내는 해</label><select value=${st.sYear} onChange=${e => up("sYear", +e.target.value)}>${yrs.map(y => html`<option value=${y}>${y}년</option>`)}</select></div></div>
               <label class="chk"><input type="checkbox" checked=${st.sLeap} onChange=${e => up("sLeap", e.target.checked)} /> 윤달이에요</label>`
             : html`<label class="f">시제 날짜 (양력)</label><input type="date" value=${st.sSolar} onInput=${e => up("sSolar", e.target.value)} />`}
-          ${dt ? html`<div class="calc"><div><span>양력</span><b>${fmt(dt.solar)}</b></div><div><span>음력</span><b>${dt.ly}년 ${dt.leap ? "윤" : ""}${dt.lm}월 ${dt.ld}일</b></div>
+          ${dt ? html`<div class="calc"><div><span>양력</span><b>${fmt(dt.solar)}</b></div><div><span>음력</span><b>${dt.leap ? "(윤) " : ""}${dt.ly}-${String(dt.lm).padStart(2, "0")}-${String(dt.ld).padStart(2, "0")}</b></div>
               ${c && html`<div><span>간지</span><b>${c.yr.k}년 · ${c.sak.k}삭 · ${c.il.k}일</b></div>`}</div>
               ${dt.note && html`<p class="hint warn">${dt.note}</p>`}`
             : html`<p class="hint">${st.sMode === "solar" ? "날짜를 골라 주세요." : "날짜를 계산할 수 없어요. 1901~2050년 안에서 골라 주세요."}</p>`}

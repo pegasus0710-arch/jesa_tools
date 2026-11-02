@@ -873,7 +873,7 @@ function LunarInput({y,m,d,leap,onChange}){
   const years=[]; for(let yy=2050;yy>=1901;yy--) years.push(yy);
   const L=y?lunarMonths(+y):null; const months=L?L.months:Array.from({length:12},(_,i)=>({m:i+1,leap:false,days:30}));
   const cur=months.find(x=>x.m===+m&&x.leap===!!leap); const days=cur?cur.days:30;
-  const label=(y&&m&&d)?`${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}${leap?"(윤)":""}`:"";
+  const label=(y&&m&&d)?`${leap?"(윤) ":""}${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`:"";
   const set=(k,v)=>{ const n={y:+y||0,m:+m||0,d:+d||0,leap:!!leap,[k]:v}; if(k==="m"){ const [mm,lp]=String(v).split(":"); n.m=+mm; n.leap=lp==="1"; } if(n.y&&!lunarMonths(n.y)) n.y=n.y; const LL=n.y?lunarMonths(n.y):null; if(LL&&n.m){ const mo=LL.months.find(x=>x.m===n.m&&x.leap===n.leap)||LL.months.find(x=>x.m===n.m); if(mo){ n.leap=mo.leap; if(n.d>mo.days) n.d=mo.days; } } onChange(n); };
   return html`<span class="date-field" ref=${ref}>
     <input type="text" class="date-display" readonly value=${label} placeholder="음력 년-월-일" onClick=${()=>setOpen(o=>!o)} />
@@ -914,7 +914,7 @@ function Calc(){
     <div class="col-l"><div class="panel">
       <div class="sec-h">기일 (돌아가신 날짜)</div>
       <div class="seg"><button class=${c.cal==="solar"?"on":""} onClick=${()=>up("cal","solar")}>양력으로 입력</button><button class=${c.cal==="lunar"?"on":""} onClick=${()=>up("cal","lunar")}>음력으로 입력</button></div>
-      ${c.cal==="solar"?html`<label class="f">양력 기일</label><div class="row datrow"><${DateInput} value=${c.date} onInput=${e=>up("date",e.target.value)} />${lun?html`<span class="conv">음력 ${lun.y}년 ${lun.leap?"윤":""}${lun.m}월 ${lun.d}일</span>`:null}${c.date?html`<button class="btn s" onClick=${reset}>초기화</button>`:null}</div>`
+      ${c.cal==="solar"?html`<label class="f">양력 기일</label><div class="row datrow"><${DateInput} value=${c.date} onInput=${e=>up("date",e.target.value)} />${lun?html`<span class="conv">${lun.leap?"음력(윤)":"음력"} ${lun.y}-${String(lun.m).padStart(2,"0")}-${String(lun.d).padStart(2,"0")}</span>`:null}${c.date?html`<button class="btn s" onClick=${reset}>초기화</button>`:null}</div>`
       :html`<label class="f">음력 기일</label><div class="row datrow"><${LunarInput} y=${c.ly} m=${c.lm} d=${c.ld} leap=${c.leap} onChange=${n=>setC(p=>({...p,ly:n.y||"",lm:n.m||"",ld:n.d||"",leap:n.leap}))} />${base?html`<span class="conv">양력 ${fmtK(base)}</span>`:err?html`<span class="conv" style="color:#a6352e">${err}</span>`:null}${(c.ly||c.lm||c.ld)?html`<button class="btn s" onClick=${reset}>초기화</button>`:null}</div>`}
       <label class="f">장례 기간 <span class="muted">삼우제 계산용</span></label><select value=${c.funeral} onChange=${e=>up("funeral",+e.target.value)}><option value="3">3일장</option><option value="4">4일장</option><option value="5">5일장</option></select>
       <div class="note" style="margin-top:12px">${c.cal==="lunar"?"음력 기일은 해마다 양력 날짜가 달라집니다. 아래 표의 양력 날짜로 달력에 표시해 두세요.":"양력 기일은 매년 같은 날입니다. 집안에서 음력으로 지낸다면 '음력으로 입력'을 고르세요."}<br/>제사는 보통 기일 전날 저녁에 준비해 기일 첫 시간(자정 무렵)에 지내거나, 기일 저녁에 지냅니다.</div>
@@ -931,7 +931,7 @@ function Calc(){
     </div>
     <div class="col-r">
       ${!base?html`<div class="empty">기일을 입력하면 제사 날짜가 계산됩니다</div>`:html`
-        <div class="panel"><div class="sec-h">기일 기준: ${fmtK(base)}${lun?html` <span class="muted">· 음력 ${lun.y}년 ${lun.leap?"윤":""}${lun.m}월 ${lun.d}일</span>`:null}</div>
+        <div class="panel"><div class="sec-h">기일 기준: ${fmtK(base)}${lun?html` <span class="muted">· ${lun.leap?"음력(윤)":"음력"} ${lun.y}-${String(lun.m).padStart(2,"0")}-${String(lun.d).padStart(2,"0")}</span>`:null}</div>
           ${next?html`<div class="big-d"><div class="t">다음 제사 · ${nth}주기${nth===1?" (소상)":nth===2?" (대상)":""}</div><div class="v">${fmtK(next)}</div><div class="dd">${dday(next)}</div></div>`:null}
           <table class="tb res"><thead><tr><th>구분</th><th>날짜</th><th>D-day</th></tr></thead><tbody>
             ${rows.map(([n,h,d,desc])=>html`<tr class=${d>=today?"":"past"}><td><b>${n}</b> <span class="muted">${h}</span><div class="muted small">${desc}</div></td><td>${fmtK(d)}${c.cal==="solar"&&n.includes("주기")?null:null}</td><td class="mono">${dday(d)}</td></tr>`)}

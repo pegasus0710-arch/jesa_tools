@@ -556,7 +556,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-03(화) 23:37";
+const BUILD = "2026-11-03(화) 23:45";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1137,7 +1137,13 @@ function render() {
 function taGrow(t, set) { const y = window.scrollY, p = t.parentElement, ph = p ? p.style.minHeight : ""; if (p) p.style.minHeight = p.offsetHeight + "px"; t.style.height = "auto"; set(); if (p) p.style.minHeight = ph; if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y); }
 function growDiary(t) { let full = 0, lim = (innerWidth > 900 ? 15 : 12) * 36 + 4, clip = false;
   taGrow(t, () => { full = Math.max(t.scrollHeight + 4, 250); clip = full > lim + 72 && S.dexp !== S.date && document.activeElement !== t; t.style.height = (clip ? lim : full) + "px"; }); t.classList.toggle("clip", clip);
-  const b = $("#dMore"); if (b) { b.hidden = full <= lim + 72; b.innerHTML = clip ? `더보기 <small>· ${Math.round((full - lim) / 36)}줄 더</small> ▾` : "접기 ▴"; } if (typeof placeDeco === "function") placeDeco(); }
+  const b = $("#dMore"); if (b) { b.hidden = full <= lim + 72; b.innerHTML = clip ? `더보기 <small>· ${Math.round((full - lim) / 36)}줄 더</small> ▾` : "접기 ▴"; } if (!clip) fillLines(t); if (typeof placeDeco === "function") placeDeco(); }
+/* 11-03 제이: 쪽을 화면 아래까지 늘렸으면 줄선도 거기까지 — 쪽에 남는 높이만큼 일기 칸을 줄(36px) 단위로 늘림 */
+function fillLines(t) { const pg = t.closest(".pg"); if (!pg || !pg.offsetHeight) return; const cs = getComputedStyle(pg), gap = parseFloat(cs.rowGap) || 0;
+  const kids = [...pg.children].filter(e => !e.classList.contains("deco") && getComputedStyle(e).position !== "absolute" && e.offsetHeight > 0);
+  const used = kids.reduce((a, e) => a + e.offsetHeight + (parseFloat(getComputedStyle(e).marginTop) || 0) * (getComputedStyle(e).marginTop === "auto" ? 0 : 1), 0) + gap * Math.max(0, kids.length - 1);
+  const inner = pg.clientHeight - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0), slack = inner - used;
+  if (slack >= 36) t.style.height = (t.offsetHeight + Math.floor(slack / 36) * 36) + "px"; }
 document.addEventListener("focusin", e => { if (e.target.id === "dtx" && e.target.classList.contains("clip")) { S.dexp = S.date; growDiary(e.target); } });
 document.addEventListener("click", e => { if (e.target.closest("#dMore")) { e.stopImmediatePropagation(); const t = $("#dtx"); if (!t) return; if (t.classList.contains("clip")) { S.dexp = S.date; growDiary(t); } else { S.dexp = null; t.blur(); growDiary(t); const r = t.getBoundingClientRect(); if (r.top < 0) window.scrollBy(0, r.top - 90); } } }, true);
 function grow(t) { t.style.height = "auto"; t.style.height = Math.max(t.scrollHeight + 4, 250) + "px"; }

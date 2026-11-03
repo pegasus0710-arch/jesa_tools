@@ -580,7 +580,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-04(수) 00:11";
+const BUILD = "2026-11-04(수) 00:15";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1079,7 +1079,7 @@ const PAGEF = {
   wish: () => { const T = "have"; const L = D.wish.filter(w => (w.kind || "have") === T); return PH("위시리스트", `<span class="foot" style="margin-left:auto">하고 싶은 일은 「버킷리스트」에</span>`) + `${L.map(w => { const i = D.wish.indexOf(w); return `<div class="li ${w.done ? "done" : ""}">${ck(!!w.done, `data-wdone="${i}"`)}<input type="text" data-wn="${i}" value="${esc(w.name)}" aria-label="이름" />${T === "have" ? `<input type="text" inputmode="numeric" data-wp="${i}" value="${w.price ? (+w.price).toLocaleString("ko-KR") : ""}" placeholder="가격" style="width:100px;text-align:right" aria-label="가격" />` : ""}${w.done ? `<span class="num" style="font-size:12px;color:var(--mute)">${ymdw(w.done)}</span>` : ""}<button class="x" data-wdel="${i}" aria-label="지우기">×</button></div>${T === "have" ? wishLinkRow(w, i) : ""}`; }).join("")}<button class="add" id="wishAdd">+ 갖고 싶은 것</button><span class="foot">이루면 체크 — 이룬 날 일기에도 한 줄 남아요</span>`; },
   bucket: () => { const B = D.bucket, t0 = today(); const L = B.slice().sort((a, b) => (a.done ? 1 : 0) - (b.done ? 1 : 0) || (a.done ? (a.done < b.done ? 1 : -1) : ((a.due || "9999") < (b.due || "9999") ? -1 : (a.due || "9999") > (b.due || "9999") ? 1 : 0)));   /* 기한 빠른 것부터 · 기한 없는 것 아래 · 이룬 것 맨 아래(최근 순) */ const dn = B.filter(b => b.done).length;
     return PH("버킷리스트", `<span class="foot" style="margin-left:auto">${B.length}개 중 <b style="color:var(--g)">${dn}개</b> 이룸</span>`) + `<span class="foot">살면서 꼭 해 보고 싶은 일 · 기한을 정해 두면 D-day가 하루 쪽 · 달력에 보이고, 이루면 그날 일기에 한 줄 남아요.</span>
-     ${L.map(b => { const i = B.indexOf(b); return `<div class="bk ${b.done ? "done" : ""}"><div class="li" style="border:0">${ck(!!b.done, `data-bdone="${i}"`)}${bucketDue(b, i)}<input type="text" data-bn="${i}" value="${esc(b.name)}" placeholder="오로라 보기 · 한 달 살기 · 자격증" aria-label="버킷리스트" style="${b.done ? "text-decoration:line-through;color:var(--faint)" : ""}" /><button class="x" data-bdel="${i}" aria-label="지우기">×</button></div>
+     ${L.map(b => { const i = B.indexOf(b); return `<div class="bk ${b.done ? "done" : ""}"><div class="li" style="border:0">${ck(!!b.done, `data-bdone="${i}"`)}${bkDueChip(b, i)}<input type="text" data-bn="${i}" value="${esc(b.name)}" placeholder="오로라 보기 · 한 달 살기 · 자격증" aria-label="버킷리스트" style="${b.done ? "text-decoration:line-through;color:var(--faint)" : ""}" /><button class="x" data-bdel="${i}" aria-label="지우기">×</button></div>
        ${b.done ? `<div class="bknote"><input type="text" data-bnote="${i}" value="${esc(b.note || "")}" placeholder="한 줄 소감" aria-label="소감" /></div>` : ""}</div>`; }).join("") || `<div class="empty">살면서 꼭 해 보고 싶은 일을 적어 보세요</div>`}
      <button class="add" id="bAdd">+ 버킷리스트</button>`; },
   idea: () => PH("아이디어 기록", `<button class="mini g" id="ideaAdd" style="margin-left:auto">+ 떠오른 생각</button>`) + `<div class="note">${D.ideas.map((x, i) => `<div class="post"><span class="num" style="font-size:12px;color:var(--mute)">${ymdw(x.date)}</span><textarea data-idea="${i}" aria-label="생각"${x.h ? ` style="height:${x.h}px"` : ""}>${esc(x.text)}</textarea><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="mini ln" data-ito="${i}" data-to="todo">→ 오늘 할 일</button><button class="mini ln" data-ito="${i}" data-to="bucket">→ 버킷</button><button class="x" data-idel="${i}" aria-label="지우기" style="margin-left:auto">×</button></span></div>`).join("") || `<div class="empty">떠오른 생각을 바로 적어 두세요</div>`}</div>`,
@@ -1153,7 +1153,7 @@ function wishLinkRow(w, i) { const u = okUrl(w.link) ? w.link : "";
   return `<div class="wl"><input type="url" inputmode="url" data-wl="${i}" value="${esc(w.link || "")}" placeholder="상품 링크 붙여넣기 (쿠팡 · 네이버 쇼핑 …)" aria-label="상품 링크" />${u ? `<span class="chip wlshop">${esc(shopOf(u))}</span><a class="mini g wlgo" href="${esc(u)}" target="_blank" rel="noopener noreferrer">열기 ↗</a>` : ""}</div>`; }
 
 /* 11-04 제이: 버킷리스트 기한은 줄 앞에 작게(많아도 깔끔하게) — 누르면 기한 창 */
-function bucketDue(b, i) {
+function bkDueChip(b, i) {
   if (b.done) return `<span class="bkd done" title="이룬 날"><b>이룸</b><span class="num">${ymdw(b.done)}</span></span>`;
   if (!b.due) return `<button class="bkd none" data-bkd="${i}" title="기한 정하기"><b>기한</b><span>정하기</span></button>`;
   const dd = Math.round((pd(b.due) - pd(today())) / DAY);
@@ -1904,7 +1904,7 @@ function noteRead(n) {
   return noteHead(`<button class="mini ln" data-nlist="1">목록</button><button class="mini ln" id="nDel">삭제</button><button class="mini g" id="nEdit">수정</button>`, true) + noteTabs(n.cat)
     + `<div class="nrhead"><button class="nstar big${n.fav ? " on" : ""}" id="nFav" aria-label="즐겨찾기" title="즐겨찾기" aria-pressed="${!!n.fav}">★</button><h3 class="nrtitle">${esc(noteTitle(n))}</h3></div><div class="nrdate num"><span class="ncat">${esc(n.cat || "")}</span> 작성 ${ymdw(n.date || today())}${n.m ? ` · 수정 ${ymdw(ymdOf(n.m))}` : ""}</div>`
     + `<div class="nrbody">${body || ((n.photos || []).length ? "" : `<span class="foot">내용이 없어요 — 「수정」을 눌러 적어 보세요</span>`)}</div>` + nPhotos(n, false)
-    + `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px"><button class="mini ln" data-nto="todo">→ 오늘 할 일로</button>${on("bucket") ? `<button class="mini ln" data-nto="bucket">→ 버킷리스트로</button>` : ""}<button class="mini ln" id="nList" style="margin-left:auto">목록</button></div>`;
+    + `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px"><button class="mini ln" data-nto="todo">→ 오늘 할 일로</button>${on("bucket") ? `<button class="mini ln" data-nto="bucket">→ 버킷리스트로</button>` : ""}<button class="mini ln" id="nCopy" title="제목과 글 전체를 복사">복사</button>${navigator.share && matchMedia("(pointer:coarse)").matches ? `<button class="mini ln" id="nShare" title="카톡 · 문자 · 메일로 보내기">공유</button>` : ""}<button class="mini ln" id="nList" style="margin-left:auto">목록</button></div>`;
 }
 /* 쓰기 · 고치기 — 분류는 위 드롭다운에서 고르고 「저장」 때 바뀜 */
 function noteOne(n) {
@@ -1998,6 +1998,13 @@ document.addEventListener("change", e => { const t = e.target;
   if (t.id === "nCatSel") { let c = t.value; if (c === "+") { c = (prompt("새 분류 이름 (예: 쇼핑 · 연락처 · 회사)") || "").trim().slice(0, 12); if (!c) { t.value = S.ncd; return; } if (!D.ncats.includes(c)) { D.ncats.push(c); touchSec("ncats"); } } S.ncd = c; return rerenderKeep(); }
   if (t.id === "nSelCat") { const c = t.value; if (!c || !S.nsel || !S.nsel.size) return; const k = S.nsel.size; D.notes.forEach(n => { if (S.nsel.has(n.id) && n.cat !== c) { n.cat = c; n.u = Date.now(); n.m = Date.now(); } }); touchSec("notes"); toast(`${k}개를 「${c}」로 옮겼어요`); return rerenderKeep(); }
 });
+
+/* 11-04 제이: 노트 읽기 — 글 전체 복사(PC) · 공유(휴대폰: 카톡 · 문자 · 메일, 없으면 복사) */
+const noteShareText = n => { const t = noteTitle(n), b = (n.body || "").trim(); return (b.startsWith(t) ? b : (t + "\n\n" + b)).trim(); };
+async function copyText(s) { try { await navigator.clipboard.writeText(s); return true; } catch (e) { const ta = document.createElement("textarea"); ta.value = s; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;left:-9999px;top:0"; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (er) {} ta.remove(); return ok; } }
+document.addEventListener("click", async e => { const b = e.target.closest("#nCopy,#nShare"); if (!b) return; e.stopImmediatePropagation(); const n = noteById(S.nt); if (!n) return; const txt = noteShareText(n);
+  if (b.id === "nShare") { try { await navigator.share({ title: noteTitle(n), text: txt }); return; } catch (er) { if (er && er.name === "AbortError") return; } }
+  toast(await copyText(txt) ? "글 전체를 복사했어요 — 붙여넣기로 공유하세요" : "복사하지 못했어요 — 글을 길게 눌러 직접 복사해 주세요"); }, true);
 
 /* ── 휴대폰 뒤로 가기: 앱을 바로 나가지 않고 한 단계씩 (창 닫기 → 쓰기 끝내기 → 상세 → 하루 쪽 → 「한 번 더 누르면 닫혀요」) ── */
 const BACK = { armed: false };

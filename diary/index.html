@@ -204,8 +204,9 @@ a{color:var(--g)}
 .pre.on{background:#f3ece1;box-shadow:inset 2px 2px 6px rgba(150,128,95,.35),0 0 0 2px var(--g)}
 .pre b{font-size:17px}
 .pre span{font-family:var(--hand);font-size:14px;color:var(--sub);line-height:1.55}
-.ymap{display:grid;grid-template-columns:34px repeat(31,minmax(0,1fr));gap:3px;align-items:center}
-.ymap i{display:block;height:20px;border-radius:4px;box-shadow:0 0 0 1px rgba(90,74,50,.12)}
+.ymap{display:grid;grid-template-columns:24px repeat(12,minmax(0,1fr));gap:3px 4px;align-items:center}
+.ymap .ymm{text-align:center;font-size:11.5px}.ymap .ymd{text-align:right;padding-right:4px;font-size:11px}
+.ymap i{display:block;height:14px;border-radius:3px;box-shadow:0 0 0 1px rgba(90,74,50,.12)}
 .ymap i.no{box-shadow:none}
 .ymap span{font-size:12px;color:var(--mute)}
 .wk .wr{display:grid;grid-template-columns:110px 26px 1fr;gap:12px;align-items:start;padding:10px 0;border-bottom:1px dashed var(--line);border-left:0;border-right:0;border-top:0;background:transparent;text-align:left;width:100%}
@@ -310,7 +311,7 @@ mark{background:#fbe3a6;color:inherit}
  .bnav button{height:50px;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12.5px;color:var(--sub)}
  .bnav button.on{color:var(--g);font-weight:700}
  .wk .wr{grid-template-columns:86px 22px 1fr}
- .ymap{gap:1px}.ymap i{height:12px;border-radius:2px}
+ .ymap{gap:2px 3px}.ymap i{height:12px;border-radius:2px}
  .pols .pol{width:140px}.pol img{height:104px}
 }
 @media (prefers-reduced-motion:reduce){.sw .tr::after{transition:none}}
@@ -612,7 +613,7 @@ body.bgimg .hd .ttl{text-shadow:0 1px 6px rgba(255,255,255,.8)}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-04(수) 00:42";
+const BUILD = "2026-11-04(수) 00:44";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1039,7 +1040,9 @@ function weekView() {
 /* ── 한 해 ── */
 function yearView() {
   const y = +S.ym.slice(0, 4); let g = "";
-  for (let m = 1; m <= 12; m++) { g += `<span class="num">${m}월</span>`; const len = new Date(y, m, 0).getDate(); for (let d = 1; d <= 31; d++) { if (d > len) { g += `<i class="no"></i>`; continue; } const k = y + "-" + p2(m) + "-" + p2(d), dd = D.days[k], mo = dd && dd.mood ? moodOf(dd.mood) : null; g += `<i role="button" tabindex="0" data-goday="${k}" title="${ymdw(k)}" style="${mo ? "background:" + mo[2] + ";box-shadow:none" : dd && (dd.text || "").trim() ? "background:var(--line)" : ""}${k === today() ? ";outline:2px solid var(--o);outline-offset:1px" : ""}"></i>`; } }
+  /* 11-04 제이: 기분 지도를 세로로 — 가로 = 1~12월, 세로 = 1~31일 (다이어리 쪽 모양에 맞게) */
+  const LEN = [...Array(12)].map((_, i) => new Date(y, i + 1, 0).getDate());
+  for (let d = 1; d <= 31; d++) { g += `<span class="num ymd">${d === 1 || d % 5 === 0 ? d : ""}</span>`; for (let m = 1; m <= 12; m++) { if (d > LEN[m - 1]) { g += `<i class="no"></i>`; continue; } const k = y + "-" + p2(m) + "-" + p2(d), dd = D.days[k], mo = dd && dd.mood ? moodOf(dd.mood) : null; g += `<i role="button" tabindex="0" data-goday="${k}" title="${ymdw(k)}" style="${mo ? "background:" + mo[2] + ";box-shadow:none" : dd && (dd.text || "").trim() ? "background:var(--line)" : ""}${k === today() ? ";outline:2px solid var(--o);outline-offset:1px" : ""}"></i>`; } }
   const ks = Object.keys(D.days).filter(k => k.startsWith(y + "")), written = ks.filter(k => (D.days[k].text || "").trim()).length, photos = ks.reduce((a, k) => a + (D.days[k].photos || []).length, 0);
   let streak = 0; for (let k = today(); (D.days[k] && (D.days[k].text || "").trim()); k = addD(k, -1)) streak++;
   const mc = MOODS.map(m => ks.filter(k => D.days[k].mood && moodOf(D.days[k].mood) === m).length);
@@ -1050,7 +1053,7 @@ function yearView() {
    ${on("year") ? `<button class="ly" data-page="year"><span class="pen">1년 계획표</span><span>${y} 목표 · 12달 보기</span></button>` : ""}`;
   const head = `<div class="ph"><button class="navb" data-yr="-1" aria-label="지난해">‹</button><span class="big">${y}</span><span class="dmeta"><b>${isPhone() && S.yv !== "map" ? "연간 달력" : "한 해 기분 지도"}</b><span>${isPhone() && S.yv !== "map" ? "동그라미 = 기록한 날 · 색 = 기분" : "칸을 누르면 그날로"}</span></span><button class="navb" data-yr="1" aria-label="다음 해" style="margin-left:auto">›</button></div>`;
   const legend = `<div class="chips">${MOODS.map(m => `<span class="chip"><span class="ms" style="border-color:${m[2]};background:${m[2]}"></span>${m[1]}</span>`).join("")}<span class="chip"><span class="ms" style="border:2px solid var(--mute);background:transparent"></span>기분 없이 쓴 날</span></div>`;
-  const mapH = `<div class="ymap"><span></span>${[...Array(31)].map((_, i) => `<span style="text-align:center;font-size:10.5px">${(i + 1) % 5 === 0 || i === 0 ? i + 1 : ""}</span>`).join("")}${g}</div>`;
+  const mapH = `<div class="ymap"><span></span>${[...Array(12)].map((_, i) => `<span class="num ymm">${i + 1}월</span>`).join("")}${g}</div>`;
   let cal = "";
   for (let m = 1; m <= 12; m++) { const f = new Date(y, m - 1, 1).getDay(), len = new Date(y, m, 0).getDate(); let c = "";
     for (let i = 0; i < f; i++) c += `<span></span>`;

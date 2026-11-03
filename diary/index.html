@@ -530,6 +530,7 @@ mark{background:#fbe3a6;color:inherit}
  .pg.r{border-top:1px dashed var(--dash)}
  .pg.l::before,.dayb .pg.r::before{content:"";position:absolute;left:9px;top:18px;bottom:18px;width:9px;background:radial-gradient(circle,var(--desk) 4px,transparent 5px) 0 0/9px 46px repeat-y}
  .dayb[data-dp="L"] .pg.r,.dayb[data-dp="R"] .pg.l{display:none}
+ .book>.pg{flex:none}   /* 11-04: 세로로 쌓을 때 min-height가 내용보다 작게 줄여 글 · 칸이 쪽 밖으로 넘치던 것 */
  .dayb .pg.r{border-top:0}
  .dayb .pg{min-height:calc(100vh - 200px);min-height:calc(100dvh - 200px)}
  .dayb .pg,.dayb .pg.r{padding-bottom:64px}   /* 아래 「수정 · 꾸미기」 띠에 1쪽 · 2쪽 단추가 가리지 않게 */
@@ -556,7 +557,7 @@ mark{background:#fbe3a6;color:inherit}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-03(화) 23:58";
+const BUILD = "2026-11-04(수) 00:00";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";

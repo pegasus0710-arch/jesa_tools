@@ -3,10 +3,13 @@
     "latest": "1.0"
   },
   "image": {
-    "latest": "1.0"
+    "latest": "1.0",
+    "post": "https://luvbong.tistory.com/pages/image-tool"
   },
   "jibang": {
-    "latest": "1.0"
+    "latest": "2.0",
+    "post": "https://luvbong.tistory.com/727",
+    "note": "새 화면 · 관계 26가지 · 4단계로 더 쉽게"
   },
   "chukmun": {
     "latest": "1.0"
@@ -15,6 +18,38 @@
     "latest": "1.0"
   },
   "recipe": {
-    "latest": "1.0"
+    "latest": "1.0",
+    "post": "https://luvbong.tistory.com/788"
+  },
+  "budget": {
+    "latest": "1.1",
+    "post": "https://luvbong.tistory.com/725",
+    "note": "휴대폰 · PC에 설치해서 쓰는 앱으로 바뀌었어요(구글 드라이브 연결)"
+  },
+  "trading": {
+    "latest": "1.1",
+    "post": "https://luvbong.tistory.com/726",
+    "note": "휴대폰 · PC에 설치해서 쓰는 앱으로 바뀌었어요(구글 드라이브 연결)"
+  },
+  "label": {
+    "latest": "2.0",
+    "post": "https://luvbong.tistory.com/769",
+    "note": "새 화면 · 6단계 · 우편번호 자동 검색(온라인판)"
+  },
+  "editor": {
+    "latest": "2.0",
+    "post": "https://luvbong.tistory.com/798"
+  },
+  "quote": {
+    "latest": "1.0",
+    "post": "https://luvbong.tistory.com/784"
+  },
+  "jaso": {
+    "latest": "1.0",
+    "post": "https://luvbong.tistory.com/786"
+  },
+  "photo": {
+    "latest": "1.0",
+    "post": "https://luvbong.tistory.com/794"
   }
 }

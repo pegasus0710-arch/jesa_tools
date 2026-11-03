@@ -1136,7 +1136,7 @@ function IconG({name,x,y,size=24,color="#5a3a20",sw=2}){
 
 
 const Q = new URLSearchParams(location.search);
-const MODES = ["resize", "compress", "convert", "crop", "idphoto", "watermark", "all", "blog", "filter", "frame", "collage", "home"];
+const MODES = ["resize", "compress", "convert", "crop", "idphoto", "watermark", "all", "blog", "filter", "frame", "collage", "privacy", "home"];
 let MODE = MODES.includes(Q.get("tab")) ? Q.get("tab") : "home";
 const EMBED = Q.get("embed") === "1";
 const LS = "bjedit:";
@@ -1405,7 +1405,7 @@ let TITLE, SHOW, RUN_ICON;
 /* 시작 화면에서 기능을 고르면 같은 창 안에서 바꿔 끼움 (주소는 그대로 → 블로그 경유 확인 유지) */
 function setModeGlobals(m) {
   MODE = m;
-  TITLE = { home: "이미지 편집기", blog: "사진 편집 한 번에", filter: "사진 필터 · 보정", frame: "사진 테두리 넣기", collage: "사진 콜라주", all: "이미지 편집기", resize: "이미지 크기 줄이기", compress: "이미지 용량 줄이기", convert: "이미지 형식 바꾸기", crop: "사진 자르기 · 회전", idphoto: "증명사진 규격 맞추기", watermark: "사진 워터마크 넣기" }[m];
+  TITLE = { home: "이미지 편집기", blog: "사진 편집 한 번에", filter: "사진 필터 · 보정", frame: "사진 테두리 넣기", collage: "사진 콜라주", privacy: "얼굴 · 개인정보 가리기", all: "이미지 편집기", resize: "이미지 크기 줄이기", compress: "이미지 용량 줄이기", convert: "이미지 형식 바꾸기", crop: "사진 자르기 · 회전", idphoto: "증명사진 규격 맞추기", watermark: "사진 워터마크 넣기" }[m];
   SHOW = { crop: m === "all" || m === "crop", preset: m === "idphoto", size: m === "all" || m === "resize", fmt: m === "all" || m === "convert", qual: m === "all" || m === "compress" || m === "convert", wm: m === "all" || m === "watermark" };
   RUN_ICON = { compress: "compress", convert: "repeat", crop: "crop", idphoto: "idcard", watermark: "stamp" }[m] || "maximize";
 }
@@ -2200,45 +2200,65 @@ function applyMasks(src, masks) {
   return o;
 }
 
-/* ── 얼굴 찾기: 구글 MediaPipe 얼굴 검출(가까운 얼굴용 모델 + 사진을 조각내 작은 얼굴까지)을 처음 한 번 인터넷에서 받아 이 브라우저 안에서 돌림.
-   사진은 밖으로 나가지 않음. 인터넷이 없으면 실패 → 손으로 가리기 안내. */
-const FACE_CDN = "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4.1646425229/";
+/* ── 얼굴 찾기: YuNet 얼굴 검출 모델(OpenCV, MIT, 약 230KB) + ONNX 실행기(마이크로소프트, MIT)를 처음 한 번 인터넷에서 받아 이 브라우저 안에서 돌림.
+   사진은 밖으로 나가지 않음. 단체 사진의 작은 얼굴은 사진을 크게 키워 640px 조각으로 나눠 다시 찾음. 인터넷이 없으면 실패 → 손으로 가리기 안내.
+   (2026-11-03: 예전 MediaPipe 가까운 얼굴 모델은 단체 사진에서 놓침 · 옷 · 손을 얼굴로 잡는 일이 많아 바꿈) */
+const FACE_CDN = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/";
+const FACE_MODEL = "https://pegasus0710-arch.github.io/jesa_tools/facelib/yunet-2023mar.onnx";
+const FACE_MIN = .75;   /* 이보다 낮은 점수는 얼굴로 보지 않음(옷 · 손 · 그릇을 잘못 잡지 않게) */
 let FACE_P = null;
 function faceLib() {
   if (FACE_P) return FACE_P;
   FACE_P = new Promise((res, rej) => {
-    const base = window.BJ_FACE_BASE || FACE_CDN;
     if (navigator.onLine === false) { rej(new Error("offline")); return; }
-    const to = setTimeout(() => rej(new Error("timeout")), 25000);
+    const to = setTimeout(() => rej(new Error("timeout")), 40000);
     const go = async () => { try {
-      const fd = new window.FaceDetection({ locateFile: f => base + f });
-      fd.setOptions({ model: "short", minDetectionConfidence: .4 });   /* full 모델은 이 판에서 멈춤 → 가까운 얼굴용 short + 조각 검사로 작은 얼굴 보완 */
-      let cb = null; fd.onResults(r => { const f = cb; cb = null; f && f(r.detections || []); });
-      await fd.initialize(); clearTimeout(to);
-      res({ run: c => new Promise((ok, bad) => { cb = ok; fd.send({ image: c }).catch(bad); }) });
+      const ort = window.ort; ort.env.wasm.wasmPaths = window.BJ_FACE_BASE || FACE_CDN; ort.env.wasm.numThreads = 1;
+      const buf = await fetch(window.BJ_FACE_MODEL || FACE_MODEL, { cache: "force-cache" }).then(r => { if (!r.ok) throw new Error("model " + r.status); return r.arrayBuffer(); });
+      const ses = await ort.InferenceSession.create(buf, { executionProviders: ["wasm"] }); clearTimeout(to);
+      res({ run: async x => { const o = await ses.run({ input: new ort.Tensor("float32", x, [1, 3, 640, 640]) }); return o; } });
     } catch (e) { clearTimeout(to); rej(e); } };
-    if (window.FaceDetection) { go(); return; }
-    const s = document.createElement("script"); s.src = base + "face_detection.js"; s.crossOrigin = "anonymous";
+    if (window.ort && window.ort.InferenceSession) { go(); return; }
+    const s = document.createElement("script"); s.src = (window.BJ_FACE_BASE || FACE_CDN) + "ort.wasm.min.js"; s.crossOrigin = "anonymous";
     s.onload = go; s.onerror = () => { clearTimeout(to); rej(new Error("load")); }; document.head.appendChild(s);
   });
   FACE_P.catch(() => { FACE_P = null; });
   return FACE_P;
 }
 const iou = (a, b) => { const x1 = Math.max(a.x, b.x), y1 = Math.max(a.y, b.y), x2 = Math.min(a.x + a.w, b.x + b.w), y2 = Math.min(a.y + a.h, b.y + b.h), i = Math.max(0, x2 - x1) * Math.max(0, y2 - y1); return i / (a.w * a.h + b.w * b.h - i || 1); };
-/* 전체 + 겹친 4조각을 따로 검사해 작게 나온 얼굴까지 찾음 → 겹친 상자는 하나로 → 머리까지 덮게 조금 키움 */
+/* 640 × 640 조각 하나 → [{s, x, y, w, h}] (조각 안 px). YuNet: 칸마다 점수 = √(cls × obj), 상자 = (칸 + 값) × 보폭 */
+async function face640(lib, g, sx, sy) {
+  const d = g.getImageData(sx, sy, 640, 640).data, x = new Float32Array(3 * 640 * 640), N = 640 * 640;
+  for (let i = 0, j = 0; i < N; i++, j += 4) { x[i] = d[j + 2]; x[N + i] = d[j + 1]; x[2 * N + i] = d[j]; }   /* BGR · 0~255 그대로 */
+  const o = await lib.run(x), out = [];
+  for (const st of [8, 16, 32]) {
+    const cls = o["cls_" + st].data, obj = o["obj_" + st].data, bb = o["bbox_" + st].data, cols = 640 / st;
+    for (let i = 0; i < cls.length; i++) {
+      const s = Math.sqrt(Math.min(1, Math.max(0, cls[i])) * Math.min(1, Math.max(0, obj[i]))); if (s < FACE_MIN) continue;
+      const r = (i / cols) | 0, c = i % cols, cx = (c + bb[i * 4]) * st, cy = (r + bb[i * 4 + 1]) * st, w = Math.exp(bb[i * 4 + 2]) * st, h = Math.exp(bb[i * 4 + 3]) * st;
+      out.push({ s, x: cx - w / 2, y: cy - h / 2, w, h });
+    }
+  }
+  return out;
+}
+/* 사진 전체(긴 변 640) + 크게 키운 사진(1280 · 1920)을 겹친 640 조각으로 → 겹친 상자는 점수 높은 것 하나 → 머리까지 덮게 조금 키움 */
 async function findFaces(src) {
-  const lib = await faceLib(), out = [];
-  const W = src.width, H = src.height, parts = [[0, 0, 1, 1]];
-  if (Math.max(W, H) >= 700) for (const [px, py] of [[0, 0], [.4, 0], [0, .4], [.4, .4]]) parts.push([px, py, .6, .6]);
-  if (Math.max(W, H) >= 1400) for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) parts.push([i * .3, j * .3, .4, .4]);   /* 단체 사진 — 작게 나온 얼굴 */
-  for (const [px, py, pw, ph] of parts) {
-    const cw = Math.round(W * pw), ch = Math.round(H * ph), s = Math.min(1, 1280 / Math.max(cw, ch));
-    const c = document.createElement("canvas"); c.width = Math.round(cw * s); c.height = Math.round(ch * s); c.getContext("2d").drawImage(src, W * px, H * py, cw, ch, 0, 0, c.width, c.height);
-    const ds = await lib.run(c);
-    for (const d of ds) { const b = d.boundingBox; if (!b) continue; out.push({ x: px + (b.xCenter - b.width / 2) * pw, y: py + (b.yCenter - b.height / 2) * ph, w: b.width * pw, h: b.height * ph }); }
+  const lib = await faceLib(), W = src.width, H = src.height, all = [];
+  for (const L of [640, 1280, 1920]) {
+    if (L > 640 && Math.max(W, H) < L * .6) break;
+    const sc = L / Math.max(W, H), w = Math.round(W * sc), h = Math.round(H * sc);
+    const pw = Math.max(640, w), ph = Math.max(640, h);
+    const c = document.createElement("canvas"); c.width = pw; c.height = ph; const g = c.getContext("2d", { willReadFrequently: true });
+    g.fillStyle = "#000"; g.fillRect(0, 0, pw, ph); g.imageSmoothingQuality = "high"; g.drawImage(src, 0, 0, w, h);
+    const xs = [], ys = []; for (let v = 0; v <= pw - 640; v += 480) xs.push(v); if (xs[xs.length - 1] !== pw - 640) xs.push(pw - 640);
+    for (let v = 0; v <= ph - 640; v += 480) ys.push(v); if (ys[ys.length - 1] !== ph - 640) ys.push(ph - 640);
+    for (const y0 of ys) for (const x0 of xs) for (const b of await face640(lib, g, x0, y0)) all.push({ s: b.s, x: (b.x + x0) / sc / W, y: (b.y + y0) / sc / H, w: b.w / sc / W, h: b.h / sc / H });
   }
   const keep = [];
-  for (const b of out.sort((a, c) => c.w * c.h - a.w * a.h)) { const m = keep.find(k => iou(k, b) > .25); if (m) { const x2 = Math.max(m.x + m.w, b.x + b.w), y2 = Math.max(m.y + m.h, b.y + b.h); m.x = Math.min(m.x, b.x); m.y = Math.min(m.y, b.y); m.w = x2 - m.x; m.h = y2 - m.y; } else keep.push({ ...b }); }
+  for (const b of all.sort((a, c) => c.s - a.s)) {
+    const ov = keep.some(k => { const x1 = Math.max(k.x, b.x), y1 = Math.max(k.y, b.y), x2 = Math.min(k.x + k.w, b.x + b.w), y2 = Math.min(k.y + k.h, b.y + b.h), i = Math.max(0, x2 - x1) * Math.max(0, y2 - y1); return i / Math.min(k.w * k.h, b.w * b.h) > .4; });
+    if (!ov) keep.push(b);
+  }
   return keep.map(b => { const ex = b.w * .18, ey = b.h * .28; const x = Math.max(0, b.x - ex), y = Math.max(0, b.y - ey);
     return { id: maskId(), x, y, w: Math.min(1 - x, b.w + ex * 2), h: Math.min(1 - y, b.h + ey * 1.6), shape: "oval", mode: "blur", k: 7, color: "#111111", text: "", src: "face" }; });
 }
@@ -2688,7 +2708,7 @@ function SplitView({ a, b, busy, iw, ih, focus, showFocus, picking, onPick, onBi
   </div>`;
 }
 
-const ENTRY = { blog: { title: "사진 편집 한 번에", jump: 2 }, filter: { title: "사진 필터 · 보정", jump: 4 }, frame: { title: "사진 테두리 넣기", jump: 6 } };
+const ENTRY = { blog: { title: "사진 편집 한 번에", jump: 2 }, filter: { title: "사진 필터 · 보정", jump: 4 }, frame: { title: "사진 테두리 넣기", jump: 6 }, privacy: { title: "얼굴 · 개인정보 가리기", jump: 5 } };
 /* 100% 확대 보기: 실제 저장 크기 그대로, 누르고 있으면 보정 전 */
 function ZoomView({ z, onClose }) {
   /* 확대 보기: 끌어서 옮기기 · 휠/버튼으로 확대·축소(맞춤 ~ 400%) · 오른쪽 아래 전체 그림 + 지금 보는 곳 표시 */
@@ -2728,6 +2748,7 @@ function BlogApp({ back, entry = "blog", handoff }) {
   const [st, setSt] = useState(() => { const mine = load(SKEY, null); if (mine) return { ...BDEF, ...mine, wm: { ...BDEF.wm, ...(mine.wm || {}) } }; const v = { ...BDEF, ...load("blog11", {}) }; v.wm = { ...BDEF.wm, ...(v.wm || {}) };
     if (entry === "filter") Object.assign(v, { frame: "none" });                                   /* 필터만 쓰러 온 경우 테두리는 빼고 시작 */
     if (entry === "frame") Object.assign(v, { cat: "none", filter: "none", auto: false, vig: 0, of: "off" });   /* 테두리만 쓰러 온 경우 색은 그대로 */
+    if (entry === "privacy") { Object.assign(v, { cat: "none", filter: "none", auto: false, vig: 0, of: "off", frame: "none", size: 0, qmode: "orig", prefix: "가림" }); v.wm = { ...v.wm, on: false }; }   /* 가리기만: 색 · 크기 · 테두리는 그대로(원본 크기) */
     return v; });
   const [pick, setPick] = useState({}), [cropList, setCropList] = useState(null), [resume, setResume] = useState(null);
   const [toast, setToast] = useState(""), [drag, setDrag] = useState(false), [busy, setBusy] = useState(false), [prog, setProg] = useState(0), [outs, setOuts] = useState([]);
@@ -3064,7 +3085,7 @@ function BlogApp({ back, entry = "blog", handoff }) {
       </div>
       ${nav(3, 5, "다음: 가리기", false, true)}
     ${bigView}</section>`; }
-  else if (step === 5) body = html`<${MaskStep} ready=${ready} sel=${sel} setSelId=${setSelId} fxOf=${it => effOf(it, st)} commit=${commitCrop} flash=${flash} nav=${nav(4, 6, "다음: 테두리", false, true)} />`;
+  else if (step === 5) body = html`<${MaskStep} ready=${ready} sel=${sel} setSelId=${setSelId} fxOf=${it => effOf(it, st)} commit=${commitCrop} flash=${flash} auto=${entry === "privacy"} nav=${entry === "privacy" ? nav(1, 7, "다음: 저장", false, true) : nav(4, 6, "다음: 테두리", false, true)} />`;
   else if (step === 6) body = html`<section class="bcard">
       <div class="bh bh-row"><div><h2>6. 테두리 · 워터마크 <small>선택</small></h2><p>사진 둘레에 여백·테두리를, 사진 위에 블로그 이름을 넣어요. <b>모든 사진에 같게</b> 들어가고, 전체 크기는 3단계에서 고른 크기에 맞춥니다.</p></div>
         <div class="undo"><button class="btn s ghost" disabled=${!canUndo} onClick=${() => histGo(-1)}>${h(Icon, { name: "rotL", size: 15 })} 되돌리기</button><button class="btn s ghost" disabled=${!canRedo} onClick=${() => histGo(1)}>${h(Icon, { name: "rotR", size: 15 })}</button></div></div>
@@ -3120,7 +3141,7 @@ ${st.frame === "blur" ? null : html`<div class="swc">${FCOLORS.map(([c, l]) => h
         <button class="btn p w big" onClick=${zipAll}>${h(Icon, { name: "zip", size: 18 })} 전체 내려받기 (zip)</button>
         <p class="hint c">작업은 이 브라우저에 보관돼요. 다음에 열면 <b>이어서 하기</b>로 다시 불러올 수 있어요. <button class="lnk2" onClick=${clearAll}>작업 지우기</button></p>`}
       ${handoff && ready.length ? html`<${HandRow} me=${entry} n=${ready.length} busy=${hb} onPick=${handTo} />` : null}
-      ${nav(6, 0)}
+      ${nav(entry === "privacy" ? 5 : 6, 0)}
     </section>`;
 
   return html`<div class=${"app blog " + (EMBED ? "embed" : "")}>
@@ -3136,8 +3157,8 @@ ${st.frame === "blur" ? null : html`<div class="swc">${FCOLORS.map(([c, l]) => h
 
 /* ── 이어서 작업하기: 완성된 사진을 같은 창에서 다른 도구로 넘김 (다운로드 없이) ── */
 let INBOX = null;   /* { to, files } — 받는 도구가 처음 열릴 때 한 번 가져감 */
-const HAND_DEST = [["crop", "crop", "자르기 · 회전"], ["blog", "photos", "사진 편집"], ["filter", "sparkle", "필터 · 보정"], ["frame", "frame", "테두리"], ["collage", "grid", "콜라주"], ["compress", "compress", "용량 줄이기"], ["watermark", "stamp", "워터마크"]];
-const HAND_NAME = { crop: "사진 자르기", blog: "사진 편집", filter: "필터 · 보정", frame: "테두리", collage: "콜라주", compress: "용량 줄이기", watermark: "워터마크" };
+const HAND_DEST = [["crop", "crop", "자르기 · 회전"], ["blog", "photos", "사진 편집"], ["filter", "sparkle", "필터 · 보정"], ["frame", "frame", "테두리"], ["collage", "grid", "콜라주"], ["privacy", "shield", "가리기"], ["compress", "compress", "용량 줄이기"], ["watermark", "stamp", "워터마크"]];
+const HAND_NAME = { crop: "사진 자르기", blog: "사진 편집", filter: "필터 · 보정", frame: "테두리", collage: "콜라주", privacy: "가리기", compress: "용량 줄이기", watermark: "워터마크" };
 function useInbox(me, add) { useEffect(() => { if (INBOX && INBOX.to === me) { const f = INBOX.files; INBOX = null; add(f); } }, []); }
 function HandRow({ me, n, busy, onPick }) {
   return html`<div class="hand"><div class="hand-h">${h(Icon, { name: "repeat", size: 17 })}<b>이어서 작업하기</b><span>내려받지 않아도 완성된 사진${n > 1 ? " " + n + "장" : ""}이 그대로 넘어가요</span></div>
@@ -3145,6 +3166,7 @@ function HandRow({ me, n, busy, onPick }) {
 }
 /* ── 시작 화면 ── */
 const HOME_CARDS = [
+  ["privacy", "shield", "얼굴 · 개인정보 가리기", "얼굴은 자동으로 찾아 흐리게, 차 번호 · 송장은 손으로"],
   ["collage", "grid", "사진 콜라주", "가로·세로 칸 수 자유, 이어 붙이기, 원본 화질 유지"],
   ["idphoto", "idcard", "증명사진 규격 맞추기", "공무원 원서·여권 규격 크기와 용량을 한 번에"],
   ["resize", "maximize", "사진 크기 줄이기", "긴 변·가로·비율로 여러 장 한 번에"],
@@ -3172,7 +3194,7 @@ function Home({ go }) {
     ${!EMBED && html`<div class="foot">Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>`}
   </div>`;
 }
-const KEEP = ["blog", "filter", "frame", "collage", "crop"];   /* 이어서 작업할 때 화면을 숨겨 두고 상태를 그대로 지키는 도구 */
+const KEEP = ["blog", "filter", "frame", "collage", "crop", "privacy"];   /* 이어서 작업할 때 화면을 숨겨 두고 상태를 그대로 지키는 도구 */
 function Root() {
   const [mode, setMode] = useState(MODE), [alive, setAlive] = useState(() => KEEP.includes(MODE) ? [MODE] : []);
   const [keys, setKeys] = useState({}), [from, setFrom] = useState({});
@@ -3597,7 +3619,7 @@ function CropApp({ back, handoff }) {
 }
 
 /* ══════════ 5단계 가리기 화면 ══════════ */
-function MaskStep({ ready, sel, setSelId, fxOf, commit, flash, nav }) {
+function MaskStep({ ready, sel, setSelId, fxOf, commit, flash, nav, auto }) {
   const [view, setView] = useState(null), [act, setAct] = useState(null), [fstate, setFstate] = useState(""), [fbusy, setFbusy] = useState(false);
   const base = useRef({ key: "", c: null }), wrap = useRef(null), drag = useRef(null), [draft, setDraft] = useState(null);
   const masks = (sel && sel.masks) || [];
@@ -3632,6 +3654,8 @@ function MaskStep({ ready, sel, setSelId, fxOf, commit, flash, nav }) {
       setFstate("done:" + n); flash(n ? `얼굴 ${n}개를 찾아 흐리게 가렸어요. 놓친 얼굴은 사진 위를 끌어서 더하세요.` : "얼굴을 찾지 못했어요. 사진 위를 끌어서 직접 가려 주세요.");
     } catch (e) { console.warn(e); setFstate(e && e.message === "offline" ? "off" : "fail"); }
     finally { setFbusy(false); } };
+  const ran = useRef(false);
+  useEffect(() => { if (auto && !ran.current && ready.length && !ready.some(i => (i.masks || []).length)) { ran.current = true; faces(true); } }, [auto, ready.length]);
   const addBox = () => { const b = { id: maskId(), x: .35, y: .42, w: .3, h: .16, shape: "rect", mode: "fill", k: 7, color: "#111111", text: "", src: "hand" }; setM([...masks, b]); setAct(b.id); };
   const copyAll = () => { const others = ready.filter(i => i.id !== sel.id); others.forEach(i => commit(i.id, { masks: [...(i.masks || []), ...masks.map(m => ({ ...m, id: maskId() }))] })); flash(`가린 곳 ${masks.length}개를 다른 사진 ${others.length}장에도 같은 자리로 넣었어요.`); };
   const total = ready.reduce((a, i) => a + ((i.masks || []).length), 0);
@@ -3653,7 +3677,7 @@ function MaskStep({ ready, sel, setSelId, fxOf, commit, flash, nav }) {
           <b class="mk-t">${h(Icon, { name: "eye", size: 16 })} 얼굴 자동 찾기</b>
           <div class="mk-row"><button class="btn s p" disabled=${fbusy} onClick=${() => faces(false)}>${fbusy && fstate === "load" ? "준비하는 중…" : fbusy ? "찾는 중…" : "이 사진에서 찾기"}</button>${ready.length > 1 ? html`<button class="btn s ghost" disabled=${fbusy} onClick=${() => faces(true)}>모든 사진 ${ready.length}장</button>` : null}</div>
           ${fstate === "off" || fstate === "fail" ? html`<p class="mk-off">${h(Icon, { name: "alert", size: 15 })} <span><b>${fstate === "fail" ? "얼굴 찾기 도구를 불러오지 못했어요. (인터넷이 느리거나 막혀 있어요)" : "인터넷에 연결되지 않아 얼굴 자동 찾기를 쓸 수 없어요."}</b> 사진 위를 끌어서 직접 가려 주세요. 손으로 가리기는 인터넷 없이 돼요.</span></p>`
-            : html`<p class="hint">처음 한 번 얼굴 찾기 모델(약 6MB)을 인터넷에서 받아요. <b>사진은 밖으로 나가지 않고</b> 이 브라우저 안에서만 찾아요. 작게 나오거나 옆을 본 얼굴, 마스크 쓴 얼굴은 놓칠 수 있어요.</p>`}
+            : html`<p class="hint">처음 한 번 얼굴 찾기 도구(약 3MB)를 인터넷에서 받아요. <b>사진은 밖으로 나가지 않고</b> 이 브라우저 안에서만 찾아요. 아주 작게 나오거나 옆 · 뒤를 본 얼굴, 마스크 쓴 얼굴은 놓칠 수 있으니 꼭 눈으로 확인해 주세요.</p>`}
         </div>
         ${cur ? html`<div class="mk-box">
             <div class="mk-th"><b class="mk-t">${cur.src === "face" ? "얼굴" : "가린 곳"} ${masks.indexOf(cur) + 1} 고치기</b><button class="mk-trash" onClick=${() => { setM(masks.filter(m => m.id !== cur.id)); setAct(null); }} title="이 곳 가리기 삭제" aria-label="이 곳 가리기 삭제">${h(Icon, { name: "trash", size: 20 })}</button></div>

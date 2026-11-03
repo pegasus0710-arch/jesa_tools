@@ -303,6 +303,27 @@
    "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/planner.png"
   },
   {
+   "name": "파일 변환",
+   "category": "문서",
+   "area": "doc",
+   "icon": "swap",
+   "type": [
+    "온라인"
+   ],
+   "desc": "아이폰 사진(HEIC)을 JPG로 여러 장 한 번에 · 엑셀에서 깨지는 CSV 한글을 바로잡기, 파일은 밖으로 안 나감",
+   "short": "HEIC → JPG · CSV 한글 깨짐",
+   "link": "https://luvbong.tistory.com/809",
+   "open": "2026-11-14T20:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "파일 변환",
+     "q": "convert&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/convert.png"
+  },
+  {
    "name": "무료 양식",
    "category": "문서",
    "area": "doc",
@@ -408,7 +429,7 @@
    "type": [
     "설치"
    ],
-   "desc": "사진 여러 장을 한 번에 자르기 · 수평 · 크기 · 필터 · 테두리, 콜라주 · 증명사진 · 용량 줄이기",
+   "desc": "사진 여러 장을 한 번에 자르기 · 수평 · 크기 · 필터 · 테두리, 얼굴 자동 모자이크 · 콜라주 · 증명사진 · 용량 줄이기",
    "short": "여러 장 한 번에 · 필터 · 콜라주",
    "link": "https://luvbong.tistory.com/798",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/",
@@ -610,14 +631,29 @@
    "at": "2026-11-14T09:00:00+09:00"
   },
   {
+   "no": 809,
+   "t": "HEIC JPG 변환 무료 — 아이폰 사진 여러 장 한 번에",
+   "at": "2026-11-14T20:00:00+09:00"
+  },
+  {
    "no": 794,
    "t": "사진 뷰어 — PC 사진 폴더를 한곳에",
    "at": "2026-11-17T09:00:00+09:00"
   },
   {
+   "no": 810,
+   "t": "CSV 한글 깨짐 해결 — 엑셀에서 1분 변환",
+   "at": "2026-11-17T20:00:00+09:00"
+  },
+  {
    "no": 798,
    "t": "이미지 편집기 v2.0 — 여러 장 한 번에 편집",
    "at": "2026-11-18T09:00:00+09:00"
+  },
+  {
+   "no": 811,
+   "t": "얼굴 모자이크 무료 — 사진 속 얼굴 자동으로 흐리게",
+   "at": "2026-11-26T20:00:00+09:00"
   }
  ],
  "kit": {

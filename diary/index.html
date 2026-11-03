@@ -550,8 +550,10 @@ mark{background:#fbe3a6;color:inherit}
 }
 @media (prefers-reduced-motion:reduce){.pgin-r .pg,.pgin-l .pg{animation:none}}
 /* 11-03 제이: 하루 쪽이 화면 아래까지 — 빈 종이에 사진 · 스티커 자리(PC · 폴드) */
-@media (min-width:901px){.dayb{min-height:calc(100vh - 140px);min-height:calc(100dvh - 140px)}}
-@media (min-width:600px) and (max-width:900px){.dayb{min-height:calc(100vh - 220px);min-height:calc(100dvh - 220px)}}
+@media (min-width:901px){.book{min-height:calc(100vh - 140px);min-height:calc(100dvh - 140px)}}
+@media (min-width:600px) and (max-width:900px){.book{min-height:calc(100vh - 220px);min-height:calc(100dvh - 220px)}}
+/* 11-04 제이: 하루 · 한 주 · 한 달 · 한 해 · 부록 · 설정 모두 하루 쪽과 같은 높이 */
+@media (max-width:599px){.book{min-height:max(calc(100vh - 200px),640px);min-height:max(calc(100dvh - 200px),640px)}.book:not(.dayb)>.pg:last-of-type{flex:1 0 auto}}
 /* 할 일 날짜 바꾸기 창 · 그날 하기 / 그날까지 (11-04) */
 .tp-name{margin:-4px 0 10px;color:var(--sub);font-size:14px}
 .tp-q{display:flex;gap:6px;flex-wrap:wrap}
@@ -610,7 +612,7 @@ body.bgimg .hd .ttl{text-shadow:0 1px 6px rgba(255,255,255,.8)}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-04(수) 00:39";
+const BUILD = "2026-11-04(수) 00:42";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";

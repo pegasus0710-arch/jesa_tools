@@ -189,6 +189,15 @@ const TOOLS = {
   kimchi: { file: "kimchi-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "김치 양념 계산기", icon: "jar",
     tabs: {
     all: { title: "김치 양념 계산기", desc: "절임배추 kg이나 포기 수만 넣으면 고춧가루 · 젓갈 · 마늘 양이 자동으로 — 김치 18가지", chips: ["배추김치 · 깍두기 · 총각김치 등 18가지", "농촌진흥청 · 연구소 레시피", "맵기 · 젓갈 조절", "장보기 목록 · 이미지 저장"] } } },
+  game: { file: "game-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "복불복 게임", icon: "dice",   /* v1.0(11-03): 모임 · 내기용 복불복 6가지 — 휴대폰 한 대로 */
+    tabs: {
+    all: { title: "복불복 게임 — 오늘의 독박은 누구?", desc: "모임 · 회식 · 내기에서 30초면 끝나는 복불복 6가지 — 휴대폰 한 대를 돌려 가며, 가입 없이", chips: ["폭탄 돌리기 · 풍선 터뜨리기", "손가락 고르기 · 숫자 폭탄", "10초 맞히기 · 꽝 카드", "2~10명 · 벌칙 고르기"] },
+    bomb: { title: "폭탄 돌리기", desc: "언제 터질지 모르는 폭탄을 차례대로 넘겨요 — 들고 있을 때 터지면 독박", chips: ["12~40초 무작위", "소리 · 진동", "2~10명"] },
+    balloon: { title: "풍선 터뜨리기", desc: "한 사람이 1~3번 바람을 넣고 넘겨요 — 터뜨린 사람이 독박", chips: ["매번 다른 크기", "소리 · 진동", "2~10명"] },
+    finger: { title: "손가락 고르기", desc: "모두 화면에 손가락을 올리면 하나씩 통과 — 마지막 남은 손가락이 독박", chips: ["휴대폰 · 태블릿", "10초", "2~10명"] },
+    updown: { title: "숫자 폭탄 (업다운)", desc: "1~100 사이 숨은 숫자를 피해 가며 말해요 — 맞히면 독박", chips: ["범위가 점점 좁아짐", "숫자 단추", "2~10명"] },
+    watch: { title: "10초 맞히기", desc: "3초 뒤 숫자가 가려지는 시계로 10.00초에 멈추기 — 가장 먼 사람이 독박", chips: ["순위표", "0.01초까지", "2~10명"] },
+    cards: { title: "꽝 카드 뒤집기", desc: "사람 수만큼 카드 중 꽝 한 장 — 꽝을 뒤집은 사람이 독박", chips: ["카드 뒤집기", "소리 · 진동", "2~10명"] } } },
   chukmun: { file: "chukmun-v2.0.html", color: "#7a4b2a", tag: "#f4ebe3", name: "축문 자동 작성", icon: "doc",
     tabs: {
     all: { title: "축문 자동 작성", desc: "누구의 제사인지와 기일만 넣으면 간지까지 자동으로, 읽는 법·풀이와 함께 인쇄", chips: ["관계 17가지", "세차 · 삭 · 일진 자동", "한글 독음 · 풀이", "한글 축문"] },
@@ -249,6 +258,7 @@ const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-widt
 const ICON_PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>';
 const ICON_CHART = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-6M10 20v-9M15 20v-5M20 20V9"/><path d="M4 9l5-3 5 2 6-5"/></svg>';
 const ICON_TAG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>';
+const ICON_DICE = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.3" fill="#fff" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="#fff" stroke="none"/><circle cx="15" cy="9" r="1.3" fill="#fff" stroke="none"/><circle cx="9" cy="15" r="1.3" fill="#fff" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="#fff" stroke="none"/></svg>';
 const ICON_JAR = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8"/><path d="M9 3v3.5L6.5 9.2A3 3 0 0 0 6 10.9V19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8.1a3 3 0 0 0-.5-1.7L15 6.5V3"/><path d="M6 13h12"/></svg>';
 const ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>';
 const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
@@ -264,7 +274,7 @@ function render(state) {
   <div class="lc" style="--c:${TL.color};--ct:${TL.tag}">
     <div class="lc-main">
       <div class="lc-info">
-        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : TL.icon === "pencil" ? ICON_PEN : TL.icon === "chart" ? ICON_CHART : TL.icon === "tag" ? ICON_TAG : TL.icon === "jar" ? ICON_JAR : TL.icon === "calendar" ? ICON_CAL : ICON_DOC}<i></i></span><div><span class="lc-tag">BLOG J 무료 도구</span><h2>${esc(C.title)}</h2></div></div>
+        <div class="lc-head"><span class="lc-ic">${TL.icon === "printer" ? ICON_PRINT : TL.icon === "image" ? ICON_IMG : TL.icon === "pencil" ? ICON_PEN : TL.icon === "chart" ? ICON_CHART : TL.icon === "tag" ? ICON_TAG : TL.icon === "jar" ? ICON_JAR : TL.icon === "dice" ? ICON_DICE : TL.icon === "calendar" ? ICON_CAL : ICON_DOC}<i></i></span><div><span class="lc-tag">BLOG J 무료 도구</span><h2>${esc(C.title)}</h2></div></div>
         <p class="lc-desc">${esc(C.desc)}</p>
         <div class="lc-chips">${C.chips.map(c => `<span>${esc(c)}</span>`).join("")}</div>
       </div>

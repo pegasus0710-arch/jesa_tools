@@ -613,7 +613,7 @@ body.bgimg .hd .ttl{text-shadow:0 1px 6px rgba(255,255,255,.8)}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-04(수) 00:44";
+const BUILD = "2026-11-04(수) 00:52";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -2101,22 +2101,37 @@ if ("serviceWorker" in navigator && navigator.serviceWorker.controller) { let rl
 
 /* ── 책상 배경 (11-04 제이: PC는 다이어리 주변이 많이 남음 → 주변만 꾸미기) ──
    추천 무늬는 모두 코드로 그린 것(사진 · 남의 그림 없음). 자동 = 계절 · 그날 날씨 · 그날 기분에 따라. 내 사진 = 이 기기에만. 다이어리 종이는 그대로. */
+/* 11-04 제이: 「기본」을 더 고급스럽게 — 종이 결(아주 고운 잡티) + 위에서 드는 부드러운 빛 + 가장자리 살짝 어둡게. 질감은 모두 코드로 만든 SVG(사진 아님) */
+const SVGU = s => 'url("data:image/svg+xml,' + encodeURIComponent(s) + '")';
+const NOISE = (a, f = ".85", sz = 220) => SVGU(`<svg xmlns="http://www.w3.org/2000/svg" width="${sz}" height="${sz}"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="${f}" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .32 0 0 0 0 .25 0 0 0 0 .17 0 0 0 ${a} 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>`);
+const GRAIN = SVGU(`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300"><filter id="w"><feTurbulence type="fractalNoise" baseFrequency=".004 .09" numOctaves="4" seed="7" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .36 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .5 -.12"/></filter><rect width="100%" height="100%" filter="url(#w)"/></svg>`);
+const MARBLE = SVGU(`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900"><filter id="m"><feTurbulence type="fractalNoise" baseFrequency=".0035 .007" numOctaves="5" seed="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .45 0 0 0 0 .44 0 0 0 0 .42 1.6 -1.6 0 0 -.05"/><feComponentTransfer><feFuncA type="table" tableValues="0 0 .05 .28 .05 0 0"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#m)"/></svg>`);
+/* 나뭇잎 그림자 — 가지 하나에 잎 여러 장(직접 그린 모양) 흐리게 */
+const LEAF = (() => { let p = ""; const L = (x, y, r, s) => p += `<ellipse cx="${x}" cy="${y}" rx="${34 * s}" ry="${13 * s}" transform="rotate(${r} ${x} ${y})"/>`;
+  [[150, 120, 30, 1], [215, 175, -25, 1.1], [250, 250, 40, 1], [320, 300, -30, 1.2], [360, 380, 35, 1], [430, 430, -20, 1.1], [470, 510, 45, .9], [180, 220, 70, .8], [290, 360, 75, .9], [400, 470, 80, .8]].forEach(a => L(...a));
+  return SVGU(`<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700"><filter id="b"><feGaussianBlur stdDeviation="7"/></filter><g fill="rgba(70,72,45,.16)" filter="url(#b)"><path d="M90 60 Q300 260 520 600" stroke="rgba(70,72,45,.16)" stroke-width="5" fill="none"/>${p}</g></svg>`); })();
+const LIGHT = "radial-gradient(ellipse 70% 55% at 30% 0%,rgba(255,250,238,.55),transparent 70%)", VIG = "radial-gradient(ellipse 120% 90% at 50% 40%,transparent 55%,rgba(80,60,35,.16))";
 const BGS = [
-  ["base", "기본", "기본 책상", "var(--desk)"],
-  ["wood", "나무 책상", "추천", "repeating-linear-gradient(91deg,rgba(90,58,28,.10) 0 2px,transparent 2px 15px),repeating-linear-gradient(89deg,rgba(255,240,215,.10) 0 1px,transparent 1px 7px),linear-gradient(180deg,#cfa978,#bc915f)"],
-  ["linen", "리넨 천", "추천", "repeating-linear-gradient(0deg,rgba(120,100,70,.07) 0 1px,transparent 1px 4px),repeating-linear-gradient(90deg,rgba(120,100,70,.07) 0 1px,transparent 1px 4px),#e8dfcf"],
-  ["grid", "모눈 종이", "추천", "linear-gradient(rgba(25,84,85,.10) 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,rgba(25,84,85,.10) 1px,transparent 1px) 0 0/24px 24px,#eef0ea"],
-  ["dot", "점 노트", "추천", "radial-gradient(circle,rgba(90,74,50,.22) 1.4px,transparent 1.6px) 0 0/22px 22px,#efe8da"],
-  ["spring", "봄 · 꽃잎", "계절", "radial-gradient(ellipse 7px 4px at 30% 30%,#f2b8c6 60%,transparent 62%) 0 0/90px 90px,radial-gradient(ellipse 5px 3px at 70% 65%,#f7cdd7 60%,transparent 62%) 0 0/90px 90px,radial-gradient(ellipse 4px 6px at 55% 15%,#eda3b6 60%,transparent 62%) 0 0/130px 130px,linear-gradient(180deg,#fbf0f2,#f6e4e8)"],
-  ["summer", "여름 · 하늘", "계절", "repeating-radial-gradient(ellipse at 50% 120%,transparent 0 38px,rgba(255,255,255,.35) 38px 40px) 0 0/180px 60px,linear-gradient(180deg,#bfe0f0,#e8f4f8)"],
-  ["autumn", "가을 · 낙엽", "계절", "radial-gradient(ellipse 8px 5px at 25% 35%,#d98a3d 60%,transparent 62%) 0 0/110px 110px,radial-gradient(ellipse 6px 4px at 70% 70%,#b5502a 60%,transparent 62%) 0 0/110px 110px,radial-gradient(ellipse 5px 7px at 60% 20%,#e0b04a 60%,transparent 62%) 0 0/150px 150px,linear-gradient(180deg,#f3e2c7,#ead2ad)"],
-  ["winter", "겨울 · 눈", "계절", "radial-gradient(circle,#fff 2px,transparent 2.5px) 0 0/46px 46px,radial-gradient(circle,rgba(255,255,255,.8) 1.4px,transparent 1.8px) 23px 23px/46px 46px,linear-gradient(180deg,#cfdbe6,#e7eef4)"],
-  ["sunny", "맑은 날", "날씨", "radial-gradient(circle at 85% 8%,rgba(255,214,120,.55) 0 120px,transparent 300px),linear-gradient(180deg,#f8ecd2,#f2e5cc)"],
-  ["cloudy", "흐린 날", "날씨", "radial-gradient(ellipse 160px 60px at 20% 15%,rgba(255,255,255,.55) 60%,transparent 62%),radial-gradient(ellipse 200px 70px at 80% 35%,rgba(255,255,255,.45) 60%,transparent 62%),linear-gradient(180deg,#d9dde0,#e6e6e1)"],
-  ["rain", "비 오는 날", "날씨", "repeating-linear-gradient(105deg,transparent 0 22px,rgba(90,120,150,.18) 22px 23px,transparent 23px 47px) 0 0/100% 60px,linear-gradient(180deg,#cdd8e0,#dfe5e8)"],
-  ["calm", "차분한 초록", "기분", "linear-gradient(180deg,#d7e5df,#e9efe9)"],
-  ["warm", "따뜻한 살구", "기분", "linear-gradient(180deg,#f6dcc6,#f3e7d8)"],
-  ["soft", "포근한 라벤더", "기분", "linear-gradient(180deg,#e3dcef,#efeaf4)"],
+  ["base", "기본", "추천", `${LIGHT},${VIG},${NOISE(".11")},linear-gradient(180deg,#ebe2d2,#e0d4c0)`],
+  ["plain", "민무늬", "추천", "var(--desk)"],
+  ["linen", "리넨 천", "추천", `${LIGHT},${VIG},repeating-linear-gradient(0deg,rgba(120,98,68,.06) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(120,98,68,.06) 0 1px,transparent 1px 3px),${NOISE(".09", ".6")},#e7ddcb`],
+  ["wood", "원목 책상", "추천", `${LIGHT},${VIG},${GRAIN} 0 0/900px 300px,linear-gradient(180deg,#c9a173,#b48a5c)`],
+  ["marble", "대리석", "추천", `${LIGHT},${MARBLE} 0 0/900px 900px,${NOISE(".05")},linear-gradient(160deg,#f3f1ec,#e7e4dd)`],
+  ["window", "햇살 창가", "추천", `linear-gradient(118deg,transparent 0 18%,rgba(255,246,222,.65) 22% 38%,transparent 41% 45%,rgba(255,246,222,.6) 48% 64%,transparent 68%),${VIG},${NOISE(".08")},linear-gradient(180deg,#eadfca,#dccdb3)`],
+  ["leaf", "나뭇잎 그림자", "추천", `${LEAF} right -120px top -90px/700px 700px no-repeat,${LIGHT},${VIG},${NOISE(".09")},linear-gradient(180deg,#ece4d4,#e2d7c4)`],
+  ["wash", "수채 번짐", "추천", `radial-gradient(ellipse 40% 35% at 12% 18%,rgba(25,84,85,.13),transparent 70%),radial-gradient(ellipse 35% 30% at 88% 80%,rgba(245,109,3,.10),transparent 70%),radial-gradient(ellipse 30% 25% at 80% 15%,rgba(200,160,200,.13),transparent 70%),${NOISE(".08")},#efe8db`],
+  ["grid", "모눈 종이", "추천", `linear-gradient(rgba(25,84,85,.10) 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,rgba(25,84,85,.10) 1px,transparent 1px) 0 0/24px 24px,${NOISE(".06")},#eef0ea`],
+  ["dot", "점 노트", "추천", `radial-gradient(circle,rgba(90,74,50,.22) 1.4px,transparent 1.6px) 0 0/22px 22px,${NOISE(".06")},#efe8da`],
+  ["spring", "봄 · 꽃잎", "계절", `radial-gradient(ellipse 7px 4px at 30% 30%,#f2b8c6 60%,transparent 62%) 0 0/90px 90px,radial-gradient(ellipse 5px 3px at 70% 65%,#f7cdd7 60%,transparent 62%) 0 0/90px 90px,radial-gradient(ellipse 4px 6px at 55% 15%,#eda3b6 60%,transparent 62%) 0 0/130px 130px,${NOISE(".06")},linear-gradient(180deg,#fbf0f2,#f6e4e8)`],
+  ["summer", "여름 · 하늘", "계절", `repeating-radial-gradient(ellipse at 50% 120%,transparent 0 38px,rgba(255,255,255,.35) 38px 40px) 0 0/180px 60px,${NOISE(".05")},linear-gradient(180deg,#bfe0f0,#e8f4f8)`],
+  ["autumn", "가을 · 낙엽", "계절", `radial-gradient(ellipse 8px 5px at 25% 35%,#d98a3d 60%,transparent 62%) 0 0/110px 110px,radial-gradient(ellipse 6px 4px at 70% 70%,#b5502a 60%,transparent 62%) 0 0/110px 110px,radial-gradient(ellipse 5px 7px at 60% 20%,#e0b04a 60%,transparent 62%) 0 0/150px 150px,${NOISE(".06")},linear-gradient(180deg,#f3e2c7,#ead2ad)`],
+  ["winter", "겨울 · 눈", "계절", `radial-gradient(circle,#fff 2px,transparent 2.5px) 0 0/46px 46px,radial-gradient(circle,rgba(255,255,255,.8) 1.4px,transparent 1.8px) 23px 23px/46px 46px,linear-gradient(180deg,#cfdbe6,#e7eef4)`],
+  ["sunny", "맑은 날", "날씨", `radial-gradient(circle at 85% 8%,rgba(255,214,120,.55) 0 120px,transparent 300px),${NOISE(".06")},linear-gradient(180deg,#f8ecd2,#f2e5cc)`],
+  ["cloudy", "흐린 날", "날씨", `radial-gradient(ellipse 160px 60px at 20% 15%,rgba(255,255,255,.55) 60%,transparent 62%),radial-gradient(ellipse 200px 70px at 80% 35%,rgba(255,255,255,.45) 60%,transparent 62%),${NOISE(".05")},linear-gradient(180deg,#d9dde0,#e6e6e1)`],
+  ["rain", "비 오는 날", "날씨", `repeating-linear-gradient(105deg,transparent 0 22px,rgba(90,120,150,.18) 22px 23px,transparent 23px 47px) 0 0/100% 60px,linear-gradient(180deg,#cdd8e0,#dfe5e8)`],
+  ["calm", "차분한 초록", "기분", `${LIGHT},${NOISE(".06")},linear-gradient(180deg,#d7e5df,#e9efe9)`],
+  ["warm", "따뜻한 살구", "기분", `${LIGHT},${NOISE(".06")},linear-gradient(180deg,#f6dcc6,#f3e7d8)`],
+  ["soft", "포근한 라벤더", "기분", `${LIGHT},${NOISE(".06")},linear-gradient(180deg,#e3dcef,#efeaf4)`],
 ];
 const BGAUTO = [["season", "계절 따라", "봄 · 여름 · 가을 · 겨울 무늬가 달마다 저절로"], ["weather", "그날 날씨 따라", "하루 쪽에 고른 날씨 — 맑음 · 흐림 · 비 · 눈"], ["mood", "그날 기분 따라", "아주 좋음 · 좋음 · 보통 · 별로 · 힘듦 색"]];
 const bgOf = k => BGS.find(b => b[0] === k);
@@ -2132,12 +2147,12 @@ async function applyBg() {
   const k = bgKeyNow(), b = document.body; if (!b) return;
   if (k === "photo" && D.set.bgP) { const u = await photoUrl(D.set.bgP, true); const sig = "photo:" + u; if (BG_LAST === sig) return; BG_LAST = sig;
     b.style.background = u ? `linear-gradient(rgba(240,232,219,.18),rgba(240,232,219,.18)),url("${u}") center/cover ${innerWidth > 900 ? "fixed" : "scroll"} no-repeat,var(--desk)` : ""; b.classList.toggle("bgimg", !!u); return; }
-  const v = (bgOf(k) || BGS[0])[3]; if (BG_LAST === k) return; BG_LAST = k; b.classList.remove("bgimg"); b.style.background = k === "base" ? "" : v; b.style.backgroundAttachment = k === "base" ? "" : (innerWidth > 900 ? "fixed" : "scroll");
+  const v = (bgOf(k) || BGS[0])[3]; if (BG_LAST === k) return; BG_LAST = k; b.classList.remove("bgimg"); b.style.background = k === "plain" ? "" : v; b.style.backgroundAttachment = k === "plain" ? "" : (innerWidth > 900 ? "fixed" : "scroll");
 }
 function bgName() { const k = D.set.bg || "base"; if (k === "photo") return "내 사진"; const a = BGAUTO.find(x => x[0] === k); return a ? a[1] : (bgOf(k) || BGS[0])[1]; }
 function bgPop() {
-  const cur = D.set.bg || "base", sw = (k, n, v) => `<button class="bgsw ${cur === k ? "on" : ""}" data-bgk="${k}" title="${n}"><span class="bgp" style="background:${v}"></span><span class="bgn">${n}</span></button>`;
-  const grp = g => BGS.filter(b => b[2] === g || (g === "추천" && b[0] === "base")).map(b => sw(b[0], b[1], b[3])).join("");
+  const cur = D.set.bg || "base", sw = (k, n, v) => `<button class="bgsw ${cur === k ? "on" : ""}" data-bgk="${k}" title="${n}"><span class="bgp" style="background:${esc(v)};background-attachment:scroll"></span><span class="bgn">${n}</span></button>`;
+  const grp = g => BGS.filter(b => b[2] === g).map(b => sw(b[0], b[1], b[3])).join("");
   pop(`<h2>책상 배경</h2><p class="tp-name">다이어리 주변만 바뀌어요 · 종이는 그대로</p>
    <div class="bgg"><span class="lbl">추천</span><div class="bgrow">${grp("추천")}</div></div>
    <div class="bgg"><span class="lbl">계절 · 날씨 · 기분 무늬</span><div class="bgrow">${["계절", "날씨", "기분"].map(grp).join("")}</div></div>

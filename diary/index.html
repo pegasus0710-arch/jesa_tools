@@ -339,6 +339,14 @@ mark{background:#fbe3a6;color:inherit}
 .todayb{display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 12px;border:1.5px solid var(--g);border-radius:8px;background:var(--paper);color:var(--g);font-size:13.5px;font-weight:700;margin-left:6px}
 .todayb .i{width:15px;height:15px}
 .todayb.now{border-color:#d8cdb9;color:var(--mute);font-weight:500}
+.dnav{display:inline-flex;align-items:center;gap:4px;margin-left:6px;flex-shrink:0}
+.dnav .todayb{margin-left:0}
+.hnav{display:inline-flex;align-items:center;justify-content:center;width:30px;height:34px;padding:0 0 2px;border:1.5px solid #d8cdb9;border-radius:8px;background:var(--paper);color:var(--g);font-size:21px;font-weight:700;line-height:1;cursor:pointer}
+.hnav:hover{border-color:var(--g);background:var(--g);color:#fff}
+.mtools{margin:12px 0 4px;padding:0 4px;gap:6px;flex-wrap:nowrap}
+.mtools .dashb{flex:1 1 auto;justify-content:center;white-space:nowrap;padding:0 8px;font-size:13.5px;height:40px;border:1.5px solid var(--g);border-style:solid;background:var(--paper);color:var(--g);font-weight:700;box-shadow:0 2px 6px rgba(80,60,30,.14)}
+@media (max-width:900px){.dnav{margin-left:2px;gap:2px}.hnav{width:26px;height:32px;font-size:19px}}
+@media print{.dnav,.mtools{display:none!important}}
 @media (max-width:900px){.ltools{display:none}.toolrow{display:flex}.todayb{height:32px;padding:0 9px;font-size:13px;margin-left:0}.todayb .i{display:none}.pol.fx{padding:5px 5px 24px}.pol.fx .cap{font-size:17px}}
 @media print{.ltools,.rsz,.stkbar,.todayb{display:none!important}}
 
@@ -613,7 +621,7 @@ body.bgimg .hd .ttl{text-shadow:0 1px 6px rgba(255,255,255,.8)}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-04(수) 00:52";
+const BUILD = "2026-11-04(수) 23:20";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -844,7 +852,7 @@ function header() {
   return `<header class="hd">
     <span class="logo">${I(IC.book)}</span><span class="ttl">일기 노트</span>
     <nav class="tabs" aria-label="보기">${T.map(([k, n]) => `<button class="tab ${S.v === k ? "on" : ""}" data-go="${k}">${n}</button>`).join("")}<button class="tab ${S.v === "pages" || S.v === "page" ? "on" : ""}" data-go="pages">부록</button></nav>
-    <button class="todayb ${S.v === "day" && S.date === today() ? "now" : ""}" id="goToday" title="오늘 일기로 바로 가기">${I(IC.cal)}<span>오늘로</span></button>
+    <span class="dnav"><button class="hnav" data-hday="-1" aria-label="전날" title="전날">‹</button><button class="todayb ${S.v === "day" && S.date === today() ? "now" : ""}" id="goToday" title="오늘 일기로 바로 가기">${I(IC.cal)}<span>오늘로</span></button><button class="hnav" data-hday="1" aria-label="다음 날" title="다음 날">›</button></span>
     <span class="hsp"></span>
     <label class="find"><span class="sr">찾기</span>${I(IC.find)}<input id="fq" placeholder="일기 · 태그 · 날짜 찾기" value="${esc(S.q)}" /></label>
     <span class="sync" id="saved">${gdLabel()}</span>
@@ -909,7 +917,8 @@ function dayView() {
   if (parts.length) L += `<section class="sec"><h4>할 일 · 일정</h4><div class="row2">${parts.join("")}</div></section>`;
   if (recTop || rec.length) L += `<section class="sec"><h4>습관 · 기록</h4>${recTop}${rec.length ? `<div class="row2">${rec.join("")}</div>` : ""}</section>`;
   const deco = on("photo") || on("sticker");
-  if (deco) L += `<div class="toolrow">${toolBtns(d, "dashb")}</div>`;
+  /* 11-04 제이: 휴대폰은 사진 · 스티커 단추를 쪽 밖(1쪽 아래)으로 — PC는 그대로 */
+  if (deco && !isPhone()) L += `<div class="toolrow">${toolBtns(d, "dashb")}</div>`;
 
   /* 오른쪽 쪽 */
   const qi = (Math.round(dt / DAY) + (d.qo || 0)) % QS.length;
@@ -932,7 +941,8 @@ function dayView() {
   const pgsw = `<div class="pgsw" role="tablist" aria-label="하루 쪽 넘기기"><button role="tab" class="${dp === "L" ? "on" : ""}" data-dp="L" aria-selected="${dp === "L"}"><b>1</b>오늘 · 할 일</button><button role="tab" class="${dp === "R" ? "on" : ""}" data-dp="R" aria-selected="${dp === "R"}"><b>2</b>오늘 이야기</button></div>`;
   const pgnx = `<button class="pgnx" data-dp="${dp === "L" ? "R" : "L"}">${dp === "L" ? "2쪽 오늘 이야기 ›" : "‹ 1쪽 오늘 · 할 일"}</button>`;
   L += dp === "L" ? pgnx : ""; R += dp === "R" ? pgnx : "";
-  return pgsw + book(L, R, deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "").replace('<div class="book" id="book">', `<div class="book dayb" id="book" data-dp="${dp}">`) + mbar;
+  const mtools = deco && isPhone() && dp === "L" && dayMode() !== "view" ? `<div class="toolrow mtools" aria-label="사진 · 스티커 넣기">${toolBtns(d, "dashb mt")}</div>` : "";
+  return pgsw + book(L, R, deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "").replace('<div class="book" id="book">', `<div class="book dayb" id="book" data-dp="${dp}">`) + mtools + mbar;
 }
 function stkHtml(s, i) {
   const st = `width:${s.w || 74}px;height:${s.t ? 36 : (s.w || 74)}px;transform:translate(-50%,-50%) rotate(${s.r || 0}deg)`;
@@ -973,9 +983,9 @@ function tripLog(k, d) {
 
 /* 꾸미기 — 사진 · 스티커 · 글자 테이프를 하루 쪽(양쪽) 아무 데나: x = 책 너비 %, y = 책 위에서 px */
 function toolBtns(d, c) {
-  const ph = on("photo") && (d.photos || []).length < 4, ic = x => c === "ltool" ? I(IC[x]) : "";
-  return (ph ? `<label class="${c}" title="사진 넣기 (PC는 사진 파일을 쪽 위로 끌어 놓아도 돼요)">${ic("img")}<span>${c === "ltool" ? "사진" : "+ 사진 (갤러리)"}</span><input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label><button class="${c}" data-tool="phPaste" title="복사한 사진 붙여넣기 (PC는 Ctrl+V도 돼요)">${ic("clip")}<span>${c === "ltool" ? "붙여넣기" : "복사한 사진 붙여넣기"}</span></button>` : "")
-    + (on("sticker") ? `<button class="${c}" data-tool="stkBtn">${ic("stkr")}<span>${c === "ltool" ? "스티커" : "+ 스티커"}</span></button><button class="${c}" data-tool="tapeBtn">${ic("tape")}<span>${c === "ltool" ? "글자 테이프" : "+ 글자 테이프"}</span></button>` : "");
+  const ph = on("photo") && (d.photos || []).length < 4, ic = x => c === "ltool" ? I(IC[x]) : "", sh = c === "ltool" || c.indexOf(" mt") > 0;
+  return (ph ? `<label class="${c}" title="사진 넣기 (PC는 사진 파일을 쪽 위로 끌어 놓아도 돼요)">${ic("img")}<span>${c === "ltool" ? "사진" : sh ? "+ 사진" : "+ 사진 (갤러리)"}</span><input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label><button class="${c}" data-tool="phPaste" title="복사한 사진 붙여넣기 (PC는 Ctrl+V도 돼요)">${ic("clip")}<span>${c === "ltool" ? "붙여넣기" : sh ? "사진 붙여넣기" : "복사한 사진 붙여넣기"}</span></button>` : "")
+    + (on("sticker") ? `<button class="${c}" data-tool="stkBtn">${ic("stkr")}<span>${c === "ltool" ? "스티커" : "+ 스티커"}</span></button><button class="${c}" data-tool="tapeBtn">${ic("tape")}<span>${c === "ltool" ? "글자 테이프" : sh ? "+ 테이프" : "+ 글자 테이프"}</span></button>` : "");
 }
 function polHtml(p, i) {
   const w = p.w || 168, st = `width:${w}px;transform:translate(-50%,-50%) rotate(${p.r || 0}deg)`;
@@ -1368,6 +1378,7 @@ document.addEventListener("click", async e => {
   if (t.id === "sayEx") { D.says = ["천 리 길도 한 걸음부터.", "티끌 모아 태산.", "시작이 반이다.", "가는 말이 고와야 오는 말이 곱다.", "낙숫물이 댓돌을 뚫는다."]; touchSec("says"); render(); return; }
   if (ds.page) { /* 11-02 제이: 노트를 열면 「★ 즐겨찾기」부터(즐겨찾기가 하나도 없으면 「모두」) */ if (ds.page === "note" && !(S.v === "page" && S.page === "note") && !S.nt) { S.nf = (D.notes || []).some(n => n.fav) ? "★" : ""; S.np = 1; S.nq = ""; } S.v = "page"; S.page = ds.page; if (ds.page === "book") S.bk = null; render(); return window.scrollTo(0, 0); }
   if (ds.goday) { closePop(); S.vprev = S.v; S.date = ds.goday; S.v = "day"; render(); return window.scrollTo(0, 0); }
+  if (ds.hday) { const nk = addD(k, +ds.hday); if (S.v === "day" && $("#book")) { S.vprev = "day"; return flipTo(nk, +ds.hday); } S.vprev = S.v; S.date = nk; S.v = "day"; render(); return window.scrollTo(0, 0); }
   if (ds.day) { S.vprev = "day"; return flipTo(addD(k, +ds.day), +ds.day); }
   if (ds.mon) { const [y, m] = S.ym.split("-").map(Number), d = new Date(y, m - 1 + +ds.mon, 1); S.ym = ymOf(ymd(d)); return render(); }
   if (ds.wk) { S.date = addD(S.date, +ds.wk); return render(); }

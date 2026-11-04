@@ -324,6 +324,27 @@
    "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/convert.png"
   },
   {
+   "name": "무료 아이콘",
+   "category": "문서",
+   "area": "doc",
+   "icon": "image",
+   "type": [
+    "온라인"
+   ],
+   "desc": "Blog J가 직접 그린 선 아이콘 140개 · 색 스티커 178개 — 색 · 굵기 · 배경을 바꿔 그림 복사 · SVG · PNG로, 출처 표시 없이 무료",
+   "short": "선 아이콘 140 · 스티커 178",
+   "link": "https://luvbong.tistory.com/812",
+   "open": "2026-11-11T09:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "무료 아이콘",
+     "q": "icon&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/icon.png"
+  },
+  {
    "name": "무료 양식",
    "category": "문서",
    "area": "doc",
@@ -619,6 +640,11 @@
    "no": 808,
    "t": "2027 다이어리 속지 무료 인쇄",
    "at": "2026-11-10T20:00:00+09:00"
+  },
+  {
+   "no": 812,
+   "t": "무료 아이콘 — 직접 그린 선 아이콘 140개 · 색 스티커 178개",
+   "at": "2026-11-11T09:00:00+09:00"
   },
   {
    "no": 807,

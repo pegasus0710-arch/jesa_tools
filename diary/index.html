@@ -617,11 +617,16 @@ mark{background:#fbe3a6;color:inherit}
 @media (max-width:599px){.bgauto{grid-template-columns:minmax(0,1fr)}.bgsw{width:74px}.bgsw .bgp{width:66px;height:46px}}
 body.bgimg .hd .ttl{text-shadow:0 1px 6px rgba(255,255,255,.8)}
 
+/* 동기화 아이콘 3가지(11-04 제이 · 모든 앱): 동기화 중 = 주황 깜빡 · 미연결 = 회색 · 완료 = 녹색 */
+.ib .dot{background:#9a9384}.ib .dot.busy{background:#f56d03}.ib .dot.ok{background:#2f7d4f}
+.ib:has(.dot.ok) svg{color:#2f7d4f}.ib:has(.dot.busy) svg{color:#f56d03;animation:gdp .8s infinite alternate}.ib:has(.dot.err) svg{color:#c23a2b}
+@media (prefers-reduced-motion:reduce){.ib:has(.dot.busy) svg,.ib .dot.busy{animation:none}}
+
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-04(수) 23:20";
+const BUILD = "2026-11-05(목) 08:25";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -1794,7 +1799,7 @@ async function dirRead() {
 let dirT;
 function dirAuto() { if (!dirOk()) return; clearTimeout(dirT); dirT = setTimeout(() => dirWrite(), 1500); }
 async function dirWrite(all) {
-  if (!dirOk() || DIR.busy) return; DIR.busy = true; let step = "일기 파일 쓰기";
+  if (!dirOk() || DIR.busy) return; DIR.busy = true; paintDir(); let step = "일기 파일 쓰기";
   try {
     const locked = !!(D.set.lock && LOCK.key);
     let body = JSON.stringify(syncObj());
@@ -1813,8 +1818,10 @@ async function dirWrite(all) {
     let q = "prompt"; try { q = await DIR.h.queryPermission({ mode: "readwrite" }); } catch (e2) {}
     if (ANDROID && e.name === "NotAllowedError" && Date.now() - DIR.pickAt > 8000) { DIR.err = ""; DIR.perm = q === "granted" ? "prompt" : q; render(); }   /* 쓰다가 허용이 거둬진 것 → 쉬는 중(오류 아님) */
     else { DIR.err = dirErrKo(e, step); DIR.perm = q; if (Date.now() - DIR.pickAt > 8000) toast("폴더에 저장하지 못했어요: " + DIR.err); render(); } }
-  DIR.busy = false;
+  DIR.busy = false; paintDir();
 }
+/* 11-05 동기화 아이콘 3가지: 폴더에 쓰는 동안 주황 깜빡 */
+function paintDir() { const b = $("#dirInfo") || $("#dirPerm") || $("#dirGo"); if (b) b.outerHTML = dirChip(); }
 /* 이 기기에 없는 사진은 폴더에서 */
 async function photoFromDir(id) {
   if (!dirOk()) return null;
@@ -1824,7 +1831,7 @@ async function photoFromDir(id) {
   } catch (e) { return null; }
 }
 document.addEventListener("visibilitychange", async () => { if (document.hidden || !DIR.h || DIR.perm !== "granted") return; try { const q = await DIR.h.queryPermission({ mode: "readwrite" }); if (q !== "granted") { DIR.perm = q; render(); } } catch (e) {} });
-function dirChip() { if (!CAN_DIR || IOS || ANDROID) return ""; const need = !DIR.h || DIR.perm !== "granted"; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}<span class="dot ${!need && DIR.err ? "err" : !need ? "ok" : ANDROID && DIR.h ? "idle" : ""}"></span></button>`; }
+function dirChip() { if (!CAN_DIR || IOS || ANDROID) return ""; const need = !DIR.h || DIR.perm !== "granted"; return `<button class="ib" id="${DIR.h ? (need ? "dirPerm" : "dirInfo") : "dirGo"}" aria-label="${DIR.h ? (need ? "폴더 다시 연결" : "저장 폴더") : "이 기기 폴더에 저장"}" title="${DIR.h ? (need ? "폴더 다시 연결 필요" : "저장 폴더: " + esc(D.set.dirName || "")) : "이 기기 폴더에도 저장(사진이 많아지면 꼭)"}">${I(IC.folder)}<span class="dot ${!need && DIR.err ? "err" : !need && DIR.busy ? "busy" : !need ? "ok" : ANDROID && DIR.h ? "idle" : ""}"></span></button>`; }
 function dirBox() {
   if (!CAN_DIR || IOS) return "";
   const nm = ANDROID ? "휴대폰 폴더" : "PC 폴더";

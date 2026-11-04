@@ -573,6 +573,11 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 /* 10-30 밤: 머리 막대 안 눈금자(라벨 · 김치)도 3.1 6번 — 홈 · 바탕 상자 없이 */
 .bar-in .ruler::before{display:none!important}
 
+
+/* 동기화 아이콘 3가지(11-04 제이 · 모든 앱): 동기화 중 = 주황 깜빡 · 미연결 = 회색 · 완료 = 녹색 */
+@keyframes bjsyncb{from{opacity:1}to{opacity:.25}}
+.gsc.off svg{color:#9a9384}.gsc.ok svg{color:#2f7d4f}.gsc.busy svg{color:#f56d03;animation:bjsyncb .8s infinite alternate}.gsc.busy i{background:#fde7d3;color:#b85400}
+@media (prefers-reduced-motion:reduce){.gsc.busy svg{animation:none}}
 </style>
 <script>/* ══ 공통: 폴더의 정확한 전체 경로 (2026-10-31 제이 — 「글자가 작더라도 정확한 경로가 보여야 해」) ══
    웹 앱은 보안상 폴더의 전체 경로(C:\Users\…)를 알 수 없음 → 사용자가 탐색기 주소창을 한 번 복사해 붙여넣으면 그대로 기억해서 보여 줌.
@@ -942,8 +947,8 @@ const GS = {
   auto() { if (!this.m().on || !this.http()) return; if (!this.live()) return this.paint(); clearTimeout(this._t); this._t = setTimeout(() => this.sync({ toast: false }), 2500); },
   ago(t) { if (!t) return "아직 없음"; const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "방금" : m < 60 ? m + "분 전" : m < 1440 ? Math.round(m / 60) + "시간 전" : ymdw(new Date(t)); },
   pending() { return Object.keys(this.m().dirty).length > 0; },
-  state() { const m = this.m(); if (!this.http()) return ["off", "웹 주소에서만"]; if (!m.on) return ["warn", "미연결"]; if (this.busy) return ["busy", "동기화 중…"]; if (this.err) return ["bad", "다시 연결"];
-    if (this.live() || (!this.pending() && this.syncedRun)) return ["ok", "연결됨"]; return ["warn", "동기화 필요"]; },
+  state() { const m = this.m(); if (!this.http()) return ["off", "웹 주소에서만"]; if (!m.on) return ["off", "미연결"]; if (this.busy) return ["busy", "동기화 중…"]; if (this.err) return ["bad", "다시 연결"];
+    if (this.live() || (!this.pending() && this.syncedRun)) return ["ok", "연결됨"]; return ["off", "동기화 필요"]; },
 };
 const ymdw = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}(${"일월화수목금토"[d.getDay()]})`;
 function gdLoad() { return new Promise((res, rej) => { if (window.google && google.accounts && google.accounts.oauth2) return res(); const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true; s.onload = () => res(); s.onerror = () => rej(new Error("구글 로그인 도구를 불러오지 못했어요 (인터넷 확인)")); document.head.appendChild(s); }); }

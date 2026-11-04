@@ -733,6 +733,16 @@ button.off[data-go="kimchi"] small{color:var(--sub,#5b5547)}
 /* 설치 아이콘(10-28) — 점 없이, 남색 아이콘 */
 .stbar.ic .stc.ip{color:var(--navy)}.stbar.ic .stc.ip:after{display:none}
 .row.hlp{text-decoration:none;color:var(--ink)}.row.hlp>.i:last-child{width:17px;height:17px;color:var(--ink3);flex-shrink:0;margin-left:auto}
+/* 동기화 아이콘 3가지(11-04 제이 · 모든 앱): 동기화 중 = 주황 깜빡 · 미연결 = 회색 · 완료 = 녹색 */
+@keyframes bjsyncb{from{opacity:1}to{opacity:.25}}
+.stc .i{transition:color .2s}
+.stc.ok .i{color:#2f7d4f}
+.stc.off .i,.stc.warn .i{color:#9a9384}
+.stc.busy .i{color:#f56d03;animation:bjsyncb .8s infinite alternate}
+.stc.bad .i{color:var(--red,#c23a2b)}
+.stbar.ic .stc.off:after,.stbar.ic .stc.warn:after{background:#9a9384}
+.stbar.ic .stc.busy:after{background:#f56d03;animation:bjsyncb .8s infinite alternate}
+@media (prefers-reduced-motion:reduce){.stc.busy .i,.stbar.ic .stc.busy:after{animation:none}}
 
 /* 10-31 제이: 저장 위치 — 칸별(PC 폴더 · 구글 드라이브 · 사진 보관)로 나눠 정리 */
 .stb{background:var(--in-bg,#e7e0d2);border-radius:12px;padding:11px 12px 12px;margin-top:8px;box-shadow:inset 0 1px 2px rgba(120,100,70,.18)}
@@ -2366,15 +2376,15 @@ function instBtn(pc) { return `<span id="inst"></span>`; }   /* 10-28: 설치는
 function stBar() {
   const it = [];
   if (gdHttp()) { const live = GD.token && Date.now() < GD.exp - 60000;
-    if (!gdOn()) it.push(`<button class="stc warn" data-go="set" title="설정에서 구글 드라이브를 연결하면 휴대폰 · PC가 같은 레시피를 써요">${IC.cloud}<b>구글 드라이브</b><i>미연결</i></button>`);
+    if (!gdOn()) it.push(`<button class="stc off" data-go="set" title="설정에서 구글 드라이브를 연결하면 휴대폰 · PC가 같은 레시피를 써요">${IC.cloud}<b>구글 드라이브</b><i>미연결</i></button>`);
     else { const pend = (D.set.savedAt || 0) > (D.set.gdLast || 0) + 3000, ago = Date.now() - (D.set.gdLast || 0);
-      const [c, t] = GD.busy ? ["busy", "동기화 중…"] : GD.err ? ["bad", "다시 연결"] : live || (!pend && ago < 12 * 3600e3 && GD.syncedThisRun) ? ["ok", "연결됨"] : ["warn", "동기화 필요"];
+      const [c, t] = GD.busy ? ["busy", "동기화 중…"] : GD.err ? ["bad", "다시 연결"] : live || (!pend && ago < 12 * 3600e3 && GD.syncedThisRun) ? ["ok", "연결됨"] : ["off", "동기화 필요"];
       it.push(`<button class="stc ${c}" data-gdsync title="${esc(GD.err || "구글 드라이브 › " + GDF + " · 마지막: " + gdAgo(D.set.gdLast))}">${IC.cloud}<b>구글 드라이브</b><i>${t}</i></button>`); } }
   if (D.dir) { const ok = D.dirPerm === "granted";
     it.push(`<button class="stc ${ok ? "ok" : "bad"}" ${ok ? 'data-go="set"' : "data-dirperm"}>${IC.folder}<b>${esc(D.dir.name)}</b><i>${ok ? "연결됨" : "다시 연결"}</i></button>`); }
   else if (CAN_DIR && gdOn()) { if (!D.set.hideDir) it.push(`<button class="stc op" ${ANDROID ? "data-pickown" : 'data-sheet="store"'} title="구글 드라이브에 저장 중이라 폴더는 없어도 돼요 — 이 기기 폴더에도 저장하려면 눌러요">${IC.folder}<b>저장 폴더</b><i>선택</i></button>`); }
-  else if (CAN_DIR) it.push(`<button class="stc warn" ${ANDROID ? "data-pickown" : 'data-sheet="store"'} title="저장 폴더를 정하면 브라우저 기록을 지워도 레시피가 남아요">${IC.folder}<b>저장 폴더</b><i>미지정</i></button>`);
-  if (!it.length) it.push(`<button class="stc warn" data-go="set">${IC.save}<b>이 브라우저에만 저장</b><i>백업 권장</i></button>`);
+  else if (CAN_DIR) it.push(`<button class="stc off" ${ANDROID ? "data-pickown" : 'data-sheet="store"'} title="저장 폴더를 정하면 브라우저 기록을 지워도 레시피가 남아요">${IC.folder}<b>저장 폴더</b><i>미지정</i></button>`);
+  if (!it.length) it.push(`<button class="stc off" data-go="set">${IC.save}<b>이 브라우저에만 저장</b><i>백업 권장</i></button>`);
   return stIc(`<div class="stbar" id="stbar">${it.join("")}</div>`);
 }
 

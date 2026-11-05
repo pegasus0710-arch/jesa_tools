@@ -1359,6 +1359,31 @@ body.pc .pc2>div .body.rvb{display:block;max-width:1100px}
 .mp-lg{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:13.5px}.mp-lg span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 .mpset{flex-wrap:wrap;gap:6px}.mpset .chip{flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}.mpset .chip:not(.on){opacity:.55;text-decoration:line-through}
 .mp-g{flex-wrap:wrap}.mp-g button{white-space:nowrap}
+/* 11-05 제이(10:10): 보기 바꾸기 글자를 잘 보이게 + 사진 크기 밀대 */
+.rv-bar{gap:10px 16px}
+.rv-mode{display:inline-flex;align-items:center;gap:4px;padding:4px;border-radius:12px;background:var(--tint);box-shadow:var(--in)}
+.rv-mode .rv-ml{font-size:13px;font-weight:700;color:var(--ink2);padding:0 8px 0 6px;white-space:nowrap}
+.rv-mode button{border:0;background:none;height:36px;padding:0 14px;border-radius:9px;font:700 14.5px var(--ui,inherit);color:var(--ink);cursor:pointer;white-space:nowrap}
+.rv-mode button:hover{background:rgba(255,255,255,.6)}
+.rv-mode button.on{background:#195455;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.rv-sz{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink2);white-space:nowrap}
+.rv-sz svg{width:14px;height:14px;color:var(--ink3)}.rv-sz svg:last-of-type{width:20px;height:20px}
+.rv-sz input{width:150px;accent-color:#195455;cursor:pointer}
+.rv-hint{margin:2px 0 6px}
+.rvb .rv-ph{grid-template-columns:repeat(auto-fill,minmax(var(--rvs,150px),1fr))}.rv-t[hidden],.rv-more[hidden]{display:none!important}
+.rvb .rv-grid{grid-template-columns:repeat(auto-fill,minmax(var(--rvs,150px),1fr))}
+@media (max-width:899px){.rvb .rv-ph,.rvb .rv-grid{grid-template-columns:repeat(auto-fill,minmax(var(--rvs,96px),1fr))}.rv-sz input{width:120px}.rv-mode button{padding:0 11px;font-size:14px}}
+/* 지도 아래 목록 */
+.mp-list{margin-top:12px}.mp-lh{display:flex;align-items:baseline;gap:8px;margin:0 2px 8px}.mp-lh b{font-size:15.5px}.mp-lh small{color:var(--ink3);font-size:13px}
+.mp-lis{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.mp-li{display:flex;align-items:center;gap:10px;padding:8px;border:0;border-radius:12px;background:var(--card);box-shadow:var(--up-s);text-align:left;cursor:pointer;min-width:0}
+.mp-li:hover{box-shadow:0 0 0 2px #195455}.mp-li.on{box-shadow:0 0 0 2px #f56d03}
+.mp-li img,.mp-noimg{width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--tint)}
+.mp-noimg{display:flex;align-items:center;justify-content:center;color:var(--ink3)}.mp-noimg svg{width:20px;height:20px}
+.mp-lt{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}.mp-lt b{display:flex;align-items:center;gap:6px;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mp-lt small{font-size:12.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-li em{font-style:normal;font-size:12.5px;color:#195455;font-weight:700;white-space:nowrap}
+.vw2-go{display:inline-flex;gap:6px;margin-left:auto}.vw2-go button{display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 12px;border:0;border-radius:10px;background:rgba(255,255,255,.14);color:#fff;font:700 13.5px var(--ui,inherit);cursor:pointer;white-space:nowrap}.vw2-go button:hover{background:rgba(255,255,255,.26)}.vw2-go svg{width:16px;height:16px}
+@media (max-width:899px){.vw2-go button span{display:none}.vw2-go button{padding:0 10px}}
 
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
@@ -1816,6 +1841,7 @@ const IC = {
 };
 
 /* ── 저장소 (IndexedDB) ── */
+const BUILD = "2026-11-05(목) 10:13";   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
 const PL = () => D.items.filter(t => !t.ronly);   /* 11-05: 플랜만(사진으로 만든 기록은 빼고) */
 const DBN = "bj-trip-note2"; const DBN1 = "bj-trip-planner";   /* 11-04 v2.0: 새 저장소(v1.0과 따로) — 처음 열 때 v1.0 자료를 복사해 옴 */
 let db = null;
@@ -2499,7 +2525,7 @@ function scrSet() {
       <div class="row2"><button class="btn sm nv" data-backup>${IC.save} 백업 만들기</button><button class="btn sm" data-bkrs>${IC.copy} 백업에서 되살리기</button><button class="btn sm" data-bkset>백업 설정</button></div></section>
     <section class="sgc sgh">${helpBox().replace('<div class="lbl"><span>도움말</span></div>', `<h4>${IC_HELP} 도움말</h4>`)}</section>`;
   return hd("설정") + `<div class="body">${dev}<div class="setg">${setCols(secs)}</div>
-    ${DEV === "pc" ? "" : `<div class="foot">여행 노트 v${VER} · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>`}
+    ${DEV === "pc" ? "" : `<div class="foot">여행 노트 v${VER}(${BUILD} 판) · 내 기기${D.dir ? " · 저장 폴더" : ""}${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장돼요 · 가입 · 서버 없음<br>만든 곳: <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></div>`}
   </div>`;
 }
 
@@ -2572,7 +2598,8 @@ function sheetHtml() {
 }
 
 /* ───────── 사진 크게 보기 ───────── */
-function pvList() { const t = TR(); if (!t) return []; if (S.pvIds && S.scr === "recv") { const M = new Map((t.photos || []).map(p => [p.id, p])); return S.pvIds.filter(id => M.has(id) && PURL[id]).map(id => ({ id, f: PURL[id].f, t: PURL[id].t })); } return (t.photos || []).filter(p => PURL[p.id] && (!S.pvIt || p.it === S.pvIt)).sort((a, b) => a.t - b.t).map(p => ({ id: p.id, f: PURL[p.id].f, t: PURL[p.id].t })); }
+function pvList() { if (S.pvIds && S.scr === "map") { const M = new Set(D.items.flatMap(r => (r.photos || []).map(p => p.id))); return S.pvIds.filter(id => M.has(id) && PURL[id]).map(id => ({ id, f: PURL[id].f, t: PURL[id].t })); }
+  const t = TR(); if (!t) return []; if (S.pvIds && S.scr === "recv") { const M = new Map((t.photos || []).map(p => [p.id, p])); return S.pvIds.filter(id => M.has(id) && PURL[id]).map(id => ({ id, f: PURL[id].f, t: PURL[id].t })); } return (t.photos || []).filter(p => PURL[p.id] && (!S.pvIt || p.it === S.pvIt)).sort((a, b) => a.t - b.t).map(p => ({ id: p.id, f: PURL[p.id].f, t: PURL[p.id].t })); }
 /* 코스 사진 모두 보기(10-28 제이): 「+N」을 누르면 화면 가득 큰 사진 목록, 누르면 한 장 크게 */
 function gallery() {
   const t = TR(); if (!t) return ""; let it = null; t.days.forEach(d => d.items.forEach(x => { if (x.id === S.pg) it = x; }));
@@ -2582,12 +2609,12 @@ function gallery() {
     <div class="pg2-grid">${P.map((p, k) => `<button data-pgi="${k}"><img src="${PURL[p.id].t}" alt="" loading="lazy"><em class="num">${phT(t, p) ? hmOf(phT(t, p)) : ""}</em></button>`).join("")}</div></div>`;
 }
 function viewer() {
-  const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i], t = TR() || {}, rec = (t.photos || []).find(x => x.id === p.id) || {};
+  const L = pvList(); if (!L.length) return ""; const i = Math.min(S.pv, L.length - 1), p = L[i], mapv = S.scr === "map", t = (mapv ? D.items.find(r => (r.photos || []).some(x => x.id === p.id)) : TR()) || {}, rec = (t.photos || []).find(x => x.id === p.id) || {};
   let it = null; (t.days || []).forEach(d => d.items.forEach(x => { if (x.id === rec.it) it = x; }));
   const when = rec.t || rec.u ? (() => { const lt = phT(t, rec), d = new Date(lt); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(lt)}${rec.lm ? " (파일 시간)" : ""}`; })() : "";
-  return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span>${rec.ll ? `<span class="k vw2-loc">${IC.pin}${esc(llText(t, rec.ll))} ${S.scr === "recv" ? "" : llLinks(t, rec.ll, it ? nameOf(it) : "")}</span>` : ""}<span class="k n num">${i + 1} / ${L.length}</span>
-    ${L.length > 1 ? `<button class="vw2-list" data-pvgrid aria-label="목록으로 보기" title="사진을 목록으로 한 번에 보기">${IC.grid || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'}<span>목록으로 보기</span></button>` : ""}
-    ${S.scr === "recv" && S.pvK && /^[ic]:/.test(S.pvK) && typeof rvRepBtn === "function" ? rvRepBtn(t, p.id) : `<button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button>`}<button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
+  return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span>${rec.ll ? `<span class="k vw2-loc">${IC.pin}${esc(llText(t, rec.ll))} ${S.scr === "recv" || mapv ? "" : llLinks(t, rec.ll, it ? nameOf(it) : "")}</span>` : ""}<span class="k n num">${i + 1} / ${L.length}</span>
+    ${mapv ? `<span class="vw2-go">${t.rec || t.ronly ? `<button data-rvopen="${t.id}">${IC.img}<span>기록 보기</span></button>` : ""}${t.ronly ? "" : `<button data-mpplan="${t.id}">${IC.cal}<span>플랜 보기</span></button>`}</span>` : ""}${L.length > 1 && !mapv ? `<button class="vw2-list" data-pvgrid aria-label="목록으로 보기" title="사진을 목록으로 한 번에 보기">${IC.grid || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'}<span>목록으로 보기</span></button>` : ""}
+    ${mapv ? "" : S.scr === "recv" && S.pvK && /^[ic]:/.test(S.pvK) && typeof rvRepBtn === "function" ? rvRepBtn(t, p.id) : `<button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button>`}<button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
     <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f || p.t}" alt="" draggable="false"></div>
       ${L.length > 1 ? `<button class="vw2-nav l" data-pvm="-1" ${i === 0 ? "disabled" : ""} aria-label="이전 사진">${IC.back}</button><button class="vw2-nav r" data-pvm="1" ${i >= L.length - 1 ? "disabled" : ""} aria-label="다음 사진">${IC.next}</button>` : ""}
       <div class="zs2-bar"><div class="zs2-nav" id="pvnav" hidden><img src="${p.t}" alt="" draggable="false"><span></span></div>
@@ -2672,7 +2699,9 @@ async function readZip(buf) {
   return out;
 }
 function exportObj() { return { kind: "bj-trip-planner", v: 1, app: "여행 노트 " + VER, savedAt: D.set.savedAt || Date.now(), items: D.items, gone: D.set.gone || {}, set: { map: D.set.map, tcats: D.set.tcats, tcatsAt: D.set.tcatsAt, mapEx: D.set.mapEx, mapExAt: D.set.mapExAt } }; }
-async function getPh(id, getPhoto) { if (PURL[id]) return false; try { const b = await getPhoto(id); if (!b) return false; const th = await shrink(b, 420, 0.8); await putO("photos", { id, blob: b, th }); PURL[id] = { f: URL.createObjectURL(b), t: URL.createObjectURL(th) }; return true; } catch (e) { return false; } }
+async function getPh(id, getPhoto) { if (PURL[id]) return false; try { const b = await getPhoto(id); if (!b) return false;
+  /* 11-05: 폴더가 없는 기기(휴대폰)는 드라이브의 작은 사진만 받고, 큰 사진은 크게 볼 때 그때그때 */
+  if (b.thOnly) { await putO("photos", { id, th: b.thOnly, inD: true }); PURL[id] = { f: null, t: URL.createObjectURL(b.thOnly) }; if (typeof PHF !== "undefined") PHF[id] = { inF: false, inD: true, full: false }; return true; } const th = await shrink(b, 420, 0.8); await putO("photos", { id, blob: b, th }); PURL[id] = { f: URL.createObjectURL(b), t: URL.createObjectURL(th) }; return true; } catch (e) { return false; } }
 const okId = v => typeof v === "string" && /^[A-Za-z0-9_-]{1,40}$/.test(v);
 const str = (v, n) => typeof v === "string" ? v.slice(0, n) : "";
 /* 백업 · 드라이브 · 폴더에서 온 자료는 모양을 확인하고 받음(id · 주소 · 글 길이 · 아이콘) */
@@ -2796,13 +2825,18 @@ const gdOn = () => !!D.set.gdOn;
 const gdHttp = () => /^https?:$/.test(location.protocol) && !/^(file|null)/.test(location.origin);
 function gdLoad() { return new Promise((res, rej) => { if (window.google && google.accounts && google.accounts.oauth2) return res(); const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true; s.onload = () => res(); s.onerror = () => rej(new Error("구글 로그인 도구를 불러오지 못했어요 (인터넷 확인)")); document.head.appendChild(s); }); }
 /* 토큰 받기 — 처음엔 구글 창(계정 고르기 · 허용), 그다음부터는 조용히(창이 잠깐 뜰 수 있음) */
+/* 11-05 제이: 새로고침할 때마다 구글 창이 뜨던 것 → 받은 연결(1시간짜리)을 이 브라우저에 두고 다시 씀. 서버가 없어서 1시간이 지나면 한 번은 다시 받아야 함 */
+const GDK = "bj-gd-token";
+function gdKeep() { try { localStorage.setItem(GDK, JSON.stringify({ t: GD.token, e: GD.exp, m: D.set.gdEmail || "" })); } catch (e) {} }
+function gdRestore() { try { const o = JSON.parse(localStorage.getItem(GDK) || "null"); if (o && o.t && o.e > Date.now() + 120000 && (!o.m || !D.set.gdEmail || o.m === D.set.gdEmail)) { GD.token = o.t; GD.exp = o.e; return true; } } catch (e) {} return false; }
+function gdForget() { try { localStorage.removeItem(GDK); } catch (e) {} }
 async function gdToken(interactive) {
   if (GD.token && Date.now() < GD.exp - 60000) return GD.token;
   if (!gdCid()) throw new Error("클라이언트 ID가 없어요 — 설정에서 넣어 주세요");
   await gdLoad();
   return new Promise((res, rej) => {
     GD.tc = google.accounts.oauth2.initTokenClient({ client_id: gdCid(), scope: GD_SCOPE, hint: D.set.gdEmail || undefined, login_hint: D.set.gdEmail || undefined,
-      callback: r => { if (r.error) return rej(new Error(r.error_description || r.error)); GD.token = r.access_token; GD.exp = Date.now() + (r.expires_in || 3600) * 1000; res(GD.token); },
+      callback: r => { if (r.error) return rej(new Error(r.error_description || r.error)); GD.token = r.access_token; GD.exp = Date.now() + (r.expires_in || 3600) * 1000; gdKeep(); res(GD.token); },
       error_callback: e => rej(new Error(e && e.type === "popup_closed" ? "구글 창을 닫았어요" : e && e.type === "popup_failed_to_open" ? "구글 창을 열지 못했어요 — 「지금 동기화」를 눌러 다시 연결해 주세요(팝업이 막혔으면 주소창에서 허용)" : "구글 연결이 취소됐어요")) });
     GD.tc.requestAccessToken({ prompt: interactive && !D.set.gdOn ? "consent" : "" });
   });
@@ -2810,7 +2844,7 @@ async function gdToken(interactive) {
 async function gdApi(url, opt = {}, retry = true) {
   const t = await gdToken(false);
   const r = await fetch(url.startsWith("http") ? url : "https://www.googleapis.com/drive/v3/" + url, { ...opt, headers: { ...(opt.headers || {}), Authorization: "Bearer " + t } });
-  if (r.status === 401 && retry) { GD.token = null; return gdApi(url, opt, false); }
+  if (r.status === 401 && retry) { GD.token = null; gdForget(); return gdApi(url, opt, false); }
   if (!r.ok) { let m = r.status + ""; try { const j = await r.json(); m = (j.error && j.error.message) || m; } catch (e) {} throw new Error("드라이브 응답 오류: " + m); }
   return r;
 }
@@ -2860,12 +2894,12 @@ async function gdSync(opt = {}) {
     const files = await gdList(), keep = new Set(); await gdFromV1(files);
     if (files[GDJ] && !opt.pushOnly) {
       const o = JSON.parse(await (await gdGet(files[GDJ].id)).text());
-      (o.items || []).forEach(r => (r.photos || []).forEach(p => keep.add(p.id + ".jpg")));
+      (o.items || []).forEach(r => (r.photos || []).forEach(p => { keep.add(p.id + ".jpg"); keep.add("t_" + p.id + ".jpg"); }));
       /* 받을 사진 수를 먼저 세어 「사진 받는 중 n/전체」로 보여 줌 */
       const need = (o.items || []).flatMap(r => (r.photos || []).map(p => p.id)).filter(id => !PURL[id] && files[id + ".jpg"]).length; let dn = 0;
-      GD.importing = true; try { got = await importData(o, async id => { if (D.dir && D.dirPerm === "granted") { const lf = await folderPhoto(id); if (lf) return lf; } if (!files[id + ".jpg"]) return null; const b = await gdGet(files[id + ".jpg"].id); if (need) { GD.prog = `받는 중 ${++dn}/${need}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } return b; }); } finally { GD.importing = false; }
+      GD.importing = true; try { got = await importData(o, async id => { if (D.dir && D.dirPerm === "granted") { const lf = await folderPhoto(id); if (lf) return lf; } if (!files[id + ".jpg"]) return null; const tn = files["t_" + id + ".jpg"], b = !(D.dir && D.dirPerm === "granted") && tn ? { thOnly: await gdGet(tn.id) } : await gdGet(files[id + ".jpg"].id); if (need) { GD.prog = `받는 중 ${++dn}/${need}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } return b; }); } finally { GD.importing = false; }
     }
-    const want = new Set(); for (const r of D.items) for (const p of r.photos || []) want.add(p.id + ".jpg");
+    const want = new Set(); for (const r of D.items) for (const p of r.photos || []) { want.add(p.id + ".jpg"); want.add("t_" + p.id + ".jpg"); }
     /* 10-29: 목록(여행노트.json)을 사진보다 먼저 씀 — 사진을 올리다 앱을 닫아도 다른 기기에 여행 · 사진 목록이 가고, 빠진 사진은 다음 동기화 때 채워짐 */
     D.set.savedAt = Date.now();
     await gdUpload(GDJ, new Blob([JSON.stringify(exportObj())], { type: "application/json" }), "application/json", files[GDJ] && files[GDJ].id);
@@ -2875,14 +2909,15 @@ async function gdSync(opt = {}) {
     for (const r of D.items) { if (!(r.photos || []).length) continue; const tf = await gdTripFolder(r);
       for (const p of r.photos) { const n = p.id + ".jpg", f = files[n];
         if (!f) todo.push([p.id, n, tf, r.id]);
+        if (!files["t_" + n]) todo.push([p.id, "t_" + n, tf, r.id, 1]);   /* 11-05: 작은 사진도 함께(휴대폰은 이것만 받음 — 빠르고 가벼움) */
         else if (f.parents && f.parents.length && !f.parents.includes(tf)) { GD.msg = `사진을 여행별 폴더로 정리하는 중 ${++mv}…`; gdPaint();
           await gdApi(`files/${f.id}?addParents=${tf}&removeParents=${f.parents.join(",")}&fields=id,parents`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: "{}" }).then(x => x.json()).then(x => { f.parents = x.parents; }).catch(() => {}); } } }
     for (const r of D.items) for (const p of r.photos || []) if (files[p.id + ".jpg"]) phMark(p.id, "inD");   /* 10-31: 드라이브에 이미 있는 사진 */
     if (todo.length) { let up = 0, i = 0; const tot = todo.length;
       GD.tsync = {}; todo.forEach(x => GD.tsync[x[3]] = (GD.tsync[x[3]] || 0) + 1);
-      const one = async () => { while (i < todo.length) { const [id, n, tf, rid] = todo[i++]; const b = await fullBlob(id, true); if (b) { await gdUpload(n, b, "image/jpeg", null, tf); phMark(id, "inD"); } if (GD.tsync[rid] && !--GD.tsync[rid]) delete GD.tsync[rid]; GD.prog = `올리는 중 ${++up}/${tot}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } };
+      const one = async () => { while (i < todo.length) { const [id, n, tf, rid, th] = todo[i++]; const b = th ? await thumbBlob(id) : await fullBlob(id, true); if (b) { await gdUpload(n, b, "image/jpeg", null, tf); if (!th) phMark(id, "inD"); } if (GD.tsync[rid] && !--GD.tsync[rid]) delete GD.tsync[rid]; GD.prog = `올리는 중 ${++up}/${tot}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } };
       GD.prog = `올리는 중 0/${tot}`; gdPaint(); await Promise.all([one(), one(), one()]); }
-    for (const n of Object.keys(files)) if (/^p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
+    for (const n of Object.keys(files)) if (/^(t_)?p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
     /* 지운 여행의 폴더(사진이 다 빠진 것)는 휴지통으로 */
     { const live = new Set([...D.items.map(r => r.id)]); const inUse = new Set(Object.values(files).flatMap(f => f.parents || []));
       for (const [tid, f] of Object.entries(GD.subs || {})) if (!live.has(tid) && !inUse.has(f.id) && Date.now() - Date.parse(f.modifiedTime || 0) > 30 * 60000) { await gdApi(`files/${f.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {}); delete GD.subs[tid]; } }
@@ -2925,7 +2960,7 @@ document.addEventListener("click", async e => {
   if (d.gdcid != null) { const v = ($("#gdcid").value || "").trim(); if (!/\.apps\.googleusercontent\.com$/.test(v)) return toast("…apps.googleusercontent.com 으로 끝나는 클라이언트 ID를 넣어 주세요."); D.set.gdCid = v; await setMeta("set", D.set); return render(); }
   if (d.gdon != null) { try { await gdToken(true); } catch (er) { GD.err = er.message; gdPaint(); return toast(er.message); } D.set.gdOn = true; await setMeta("set", D.set); setTimeout(gdPrepSilent, 500); return gdSync({ interactive: true }); }
   if (d.gdsync != null) { if (GD.busy) return; try { await gdToken(true); } catch (er) { GD.err = er.message; gdPaint(); return toast(er.message); } return gdSync({}); }
-  if (d.gdoff != null) { const tok = GD.token; D.set.gdOn = false; D.set.gdEmail = ""; GD.stc = null; GD.token = null; GD.fid = null; await setMeta("set", D.set); try { if (tok && window.google && google.accounts.oauth2.revoke) google.accounts.oauth2.revoke(tok); } catch (er) {} toast("연결을 끊었어요. 드라이브의 여행노트 폴더는 그대로 남아요."); return render(); }
+  if (d.gdoff != null) { const tok = GD.token; gdForget(); D.set.gdOn = false; D.set.gdEmail = ""; GD.stc = null; GD.token = null; GD.fid = null; await setMeta("set", D.set); try { if (tok && window.google && google.accounts.oauth2.revoke) google.accounts.oauth2.revoke(tok); } catch (er) {} toast("연결을 끊었어요. 드라이브의 여행노트 폴더는 그대로 남아요."); return render(); }
 });
 /* 화면을 다시 보면(다른 기기에서 고쳤을 수 있으니) 토큰이 살아 있으면 조용히 맞춤 */
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && gdOn() && GD.token && Date.now() < GD.exp - 60000) gdSync({ toast: false }); });
@@ -2966,7 +3001,7 @@ function mobileBox() {
    그래서 화면을 처음 누를 때(아무 곳이나) 조용히(prompt:none) 연결해서 동기화 — 전에 허용한 계정이면 창 없이 끝나요 */
 function gdPrepSilent() { if (!gdOn() || !gdHttp() || !gdCid() || D.set.gdAutoTap === false || GD.stc || !D.set.gdEmail) return;
   gdLoad().then(() => { GD.stc = google.accounts.oauth2.initTokenClient({ client_id: gdCid(), scope: GD_SCOPE, hint: D.set.gdEmail || undefined, login_hint: D.set.gdEmail || undefined,
-    callback: r => { if (r.error) { GD.silentFail = true; gdPaint(); return; } GD.token = r.access_token; GD.exp = Date.now() + (+r.expires_in || 3600) * 1000; gdPaint(); gdSync({ toast: false }); },
+    callback: r => { if (r.error) { GD.silentFail = true; gdPaint(); return; } GD.token = r.access_token; GD.exp = Date.now() + (+r.expires_in || 3600) * 1000; gdKeep(); gdPaint(); gdSync({ toast: false }); },
     error_callback: () => { GD.silentFail = true; gdPaint(); } }); }).catch(() => {}); }
 document.addEventListener("click", e => {
   if (!GD.stc || D.set.gdAutoTap === false || GD.busy || (GD.token && Date.now() < GD.exp - 60000)) return;
@@ -3098,7 +3133,7 @@ function render(top) {
   if (pc && S.scr === "item") S.scr = "trip";
   const b = $(".app .body"), y = b ? b.scrollTop : 0, wy = window.scrollY;
   let main;
-  if (pc) main = `<div class="app pcapp">${pcBar()}<div class="pcl full tw ${S.scr}"><main class="pmain">${SCR[S.scr]()}</main></div><footer class="pfoot">여행 노트 v${VER} · 가입 · 서버 없이 내 기기${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장 · 만든 곳 <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></footer>`;
+  if (pc) main = `<div class="app pcapp">${pcBar()}<div class="pcl full tw ${S.scr}"><main class="pmain">${SCR[S.scr]()}</main></div><footer class="pfoot">여행 노트 v${VER}(${BUILD} 판) · 가입 · 서버 없이 내 기기${gdOn() ? " · 내 구글 드라이브" : ""}에만 저장 · 만든 곳 <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J — luvbong.tistory.com</a></footer>`;
   else { const tabs = ["list", "set", "rec", "map"].includes(S.scr); main = `<div class="app ${tabs ? "wt" : ""} s-${S.scr}">${SCR[S.scr]()}${tabs ? tabsHtml() : ""}`; }
   main += `${S.sheet ? sheetHtml() : ""}${S.pg && S.pv == null ? gallery() : ""}${S.pv != null ? viewer() : ""}${S.instPg ? instPage() : ""}</div>`;
   $("#root").innerHTML = main;
@@ -3351,6 +3386,7 @@ window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window
   const ct = PL().find(t => phase(t).k === "on"); if (ct && !S.sheet) { S.rid = ct.id; S.day = phase(ct).i; S.scr = "trip"; hist.push({ scr: "list", rid: null }); }
   /* 11-02: 새로고침 · 휴대폰이 앱을 내렸다 다시 열 때 — 보던 여행 · 날짜 · 탭으로 */
   else { try { const v = JSON.parse(sessionStorage.getItem("trip2:view") || "null"); if (v && ((v.rid && RR(v.rid)) || ["rec", "map"].includes(v.scr)) && ["trip", "photo", "cost", "prep", "recv", "rec", "map"].includes(v.scr) && SCR[v.scr]) { S.rid = v.rid; S.day = +v.day || 0; S.ttab = v.ttab || "plan"; S.scr = v.scr; hist.push({ scr: "list", rid: null }); } } catch (e) {} }
+  if (gdOn() && gdHttp() && !GD.token && gdRestore()) setTimeout(() => gdSync({ toast: false }), 1200);   /* 11-05: 1시간 안이면 창 없이 다시 연결 */
   S._boot = true; render(true);
   if (D.dir && D.dirPerm === "granted") syncFromFolder();
   bkSetup().then(() => { if (S.scr === "set") render(); });
@@ -3592,6 +3628,7 @@ async function phFlush() {
   for (let i = 0; i < ids.length; i += 200) { const part = ids.slice(i, i + 200);
     await st("photos", "readwrite", s => { part.forEach(id => { const q = s.get(id); q.onsuccess = () => { const o = q.result; if (!o) return; const f = PHF[id] || {}; o.inF = !!f.inF; o.inD = !!f.inD; s.put(o); }; }); return null; }).catch(() => {}); }
 }
+async function thumbBlob(id) { const o = await st("photos", "readonly", s => s.get(id)).catch(() => null); if (o && o.th) return o.th; const b = await fullBlob(id); return b ? await shrink(b, 420, 0.8) : null; }
 async function fullBlob(id) {
   const o = await st("photos", "readonly", s => s.get(id)).catch(() => null); if (o && o.blob) return o.blob;
   if (D.dir && D.dirPerm === "granted" && typeof folderPhoto === "function") { const f = await folderPhoto(id); if (f) return f; }
@@ -3759,6 +3796,11 @@ function scrRecList() {
 }
 /* 11-05 제이: 기록 사진 보기 3가지 — 경로별(일정 · 묶음마다) · 일자별 · 전체 사진. 길안내 단추는 기록에서 뺌 */
 const RVM = [["course", "경로별"], ["day", "일자별"], ["all", "전체 사진"]];
+/* 한 줄에 들어가는 칸 수를 재서 넘치는 사진은 숨기고, 마지막 칸에 「전체보기 +n장」 */
+function rvFit() { document.querySelectorAll(".rvb .rv-ph").forEach(el => { const cols = getComputedStyle(el).gridTemplateColumns.split(" ").filter(Boolean).length || 1, T = [...el.querySelectorAll(".rv-t")], mb = el.querySelector(".rv-more");
+  const fit = T.length <= cols; T.forEach((x, i) => { x.hidden = !fit && i >= cols - 1; }); if (mb) { mb.hidden = fit; if (!fit) mb.querySelector("small").textContent = "+" + (+mb.dataset.n - (cols - 1)) + "장"; } }); }
+let rvfT; addEventListener("resize", () => { clearTimeout(rvfT); rvfT = setTimeout(rvFit, 150); });
+const rvSize = () => Math.max(70, Math.min(300, +D.set.rvsz || (isPC() ? 150 : 96)));
 const rvMode = () => RVM.some(m => m[0] === D.set.rvm) ? D.set.rvm : "course";
 function rvRepBtn(t, pid) { const R = recDays(t), e = [...R.days.flatMap(d => d.e), ...R.out].find(x => x.k === S.pvK); if (!e || e.nt) return ""; const r = eRep(e), on = r && r.id === pid;
   return `<button class="vw2-x vw2-rep${on ? " on" : ""}" ${on ? "" : `data-rvrep="${e.k}|${pid}"`} aria-label="${on ? "이 코스의 대표 사진" : "이 코스 대표 사진으로"}" title="${on ? "이 코스의 대표 사진이에요" : "이 코스 대표 사진으로"}">${IC.star}<span>${on ? "대표" : "대표로"}</span></button>`; }
@@ -3766,12 +3808,13 @@ function scrRec() {
   const t = TR(); if (!t) return hd("여행 기록", backBtn()) + `<div class="body"><div class="empty sm"><p>기록을 찾지 못했어요.</p></div></div>`;
   const R = recDays(t), cv = coverOf(t), n = (t.photos || []).length, mode = rvMode(); S.rvG = {}; S.rvx = S.rvx || {};
   const tile = (p, k, r) => `<span class="rv-t${r && p.id === r.id ? " rep" : ""}"><img src="${PURL[p.id].t}" alt="" loading="lazy" data-pvid="${p.id}" data-pvk="${k}">${r ? (p.id === r.id ? `<em class="rv-rb" title="대표 사진">${IC.star}</em>` : `<button class="rv-star" data-rvrep="${k}|${p.id}" aria-label="대표 사진으로" title="대표 사진으로">${IC.star}</button>`) : ""}</span>`;
-  const LIM = isPC() ? 7 : 4;
-  const card = e => { const r = e.nt ? null : eRep(e), L = repFirst(e.ps, r && r.id); S.rvG[e.k] = L.map(p => p.id); const open = !!S.rvx[e.k], more = L.length > LIM;
-    const row = open || !more ? L : L.slice(0, LIM - 1);
-    return `<div class="rv-e${e.cl ? " cl" : ""}"><div class="rv-eh"><span class="num rv-tm">${e.ts ? hm2(e.ts) : ""}</span>${e.cl && !e.nt ? `<input class="rv-cn" data-rvcn="${e.k}" value="${esc(e.title)}" placeholder="이름 넣기 (예: 바닷가 카페)" aria-label="기록 이름">` : `<b>${esc(e.title)}</b>`}<small class="num">${e.ps.length}장</small>${e.cl && !e.nt ? `<em class="rv-new">사진으로 생긴 기록</em>` : ""}${more && open ? `<button class="lk rv-fold" data-rvx="${e.k}">접기</button>` : ""}</div>
+  /* 11-05 제이: 사진 크기 조절(밀대) — 한 줄에 들어가는 칸 수도 크기에 맞춤 */
+  const sz = rvSize(); setTimeout(rvFit, 0);
+  const card = e => { const r = e.nt ? null : eRep(e), L = repFirst(e.ps, r && r.id); S.rvG[e.k] = L.map(p => p.id); const open = !!S.rvx[e.k], more = !open && L.length > 2;
+    const row = open ? L : L.slice(0, 60);
+    return `<div class="rv-e${e.cl ? " cl" : ""}"><div class="rv-eh"><span class="num rv-tm">${e.ts ? hm2(e.ts) : ""}</span>${e.cl && !e.nt ? `<input class="rv-cn" data-rvcn="${e.k}" value="${esc(e.title)}" placeholder="이름 넣기 (예: 바닷가 카페)" aria-label="기록 이름">` : `<b>${esc(e.title)}</b>`}<small class="num">${e.ps.length}장</small>${e.cl && !e.nt ? `<em class="rv-new">사진으로 생긴 기록</em>` : ""}${open ? `<button class="lk rv-fold" data-rvx="${e.k}">접기</button>` : ""}</div>
     ${e.ll ? `<div class="rv-loc">${IC.pin}<span>${esc(llText(t, e.ll))}</span></div>` : ""}
-    <div class="${open ? "rv-grid" : "rv-ph"}">${row.map(p => tile(p, e.k, r)).join("")}${more && !open ? `<button class="rv-more" data-rvx="${e.k}"><b>전체보기</b><small class="num">+${L.length - row.length}장</small></button>` : ""}</div></div>`; };
+    <div class="${open ? "rv-grid" : "rv-ph"}">${row.map(p => tile(p, e.k, r)).join("")}${more ? `<button class="rv-more" data-rvx="${e.k}" data-n="${L.length}" hidden><b>전체보기</b><small class="num"></small></button>` : ""}</div></div>`; };
   const ptime = p => phT(t, p) || 0, grid = (L, k) => { const S2 = L.slice().sort((a, b) => ptime(a) - ptime(b)); S.rvG[k] = S2.map(p => p.id); return `<div class="rv-grid">${S2.map(p => tile(p, k, null)).join("")}</div>`; };
   let body = "";
   if (mode === "course") {
@@ -3782,14 +3825,15 @@ function scrRec() {
     const O = R.out.flatMap(e => e.ps); if (O.length) body += `<div class="phday">여행 날짜 밖 · 시간 모름<span class="rv-sk num">${O.length}장</span></div>` + grid(O, "d:out");
   } else { const A = (t.photos || []).filter(p => PURL[p.id]); if (A.length) body = `<div class="phday">전체 사진<span class="rv-sk num">${A.length}장</span></div>` + grid(A, "all"); }
   if (!n) body = `<div class="empty sm"><p>아직 사진이 없어요. 사진을 넣으면 찍은 시간 · 장소로 기록이 만들어져요.</p></div>`;
-  const modes = n ? `<div class="vt mini rv-mode" role="group" aria-label="사진 보기">${RVM.map(([k, nm]) => `<button class="${mode === k ? "on" : ""}" data-rvm="${k}">${nm}</button>`).join("")}</div>` : "";
+  const modes = n ? `<div class="rv-mode" role="group" aria-label="사진 보기"><span class="rv-ml">사진 보기</span>${RVM.map(([k, nm]) => `<button class="${mode === k ? "on" : ""}" data-rvm="${k}" aria-pressed="${mode === k}">${nm}</button>`).join("")}</div>
+    <label class="rv-sz"><span>사진 크기</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg><input type="range" id="rvsz" min="70" max="300" step="10" value="${sz}" aria-label="사진 크기"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>` : "";
   const top = `<div class="rv-head">${cv ? `<button class="rv-cover" data-rvcov aria-label="대표 사진 바꾸기"><img src="${cv.f || cv.t}" alt=""><em>${IC.star}여행 대표 사진</em></button>` : ""}
     <div class="rv-ttl"><b>${esc(t.name || "이름 없는 기록")}</b><small class="num">${ymdw(dOf(t, 0))}${t.days.length > 1 ? " ~ " + ymdw(dOf(t, t.days.length - 1)) : ""} · ${esc(catOf(t))} · 사진 ${n}장</small>${tsyncTag(t.id)}
     <div class="rv-tools"><label class="btn sm go">${IC.img} 사진 넣기<input type="file" accept="image/*" multiple hidden data-phpick></label>${t.ronly ? "" : `<button class="btn sm" data-rvplan>${IC.cal} 플랜 보기</button>`}<button class="btn sm" data-rvinfo>${IC.pen} 이름 · 분류</button><button class="btn sm" data-rvdrop>${t.ronly ? IC.trash + " 기록 지우기" : IC.x + " 기록에서 빼기"}</button></div></div></div>
-    <div class="rv-bar">${modes}<p class="hint">${mode === "course" ? (isPC() ? "사진에 마우스를 올리면 ★ — 누르면 그 코스의 대표 사진이 돼요(안 고르면 저절로 한 장)." : "사진을 크게 본 뒤 「★ 대표로」를 누르면 그 코스의 대표 사진이 돼요(안 고르면 저절로 한 장).") : "사진을 누르면 크게 보여요."}</p></div>`;
+    <div class="rv-bar">${modes}</div><p class="hint rv-hint">${mode === "course" ? (isPC() ? "사진에 마우스를 올리면 ★ — 누르면 그 코스의 대표 사진이 돼요(안 고르면 저절로 한 장)." : "사진을 크게 본 뒤 「★ 대표로」를 누르면 그 코스의 대표 사진이 돼요(안 고르면 저절로 한 장).") : "사진을 누르면 크게 보여요."}</p>`;
   const inner = top + body;
-  if (isPC()) return `<div class="pc2 wide"><div>${hd("여행 기록", backBtn())}<div class="body rvb">${inner}</div></div></div>`;
-  return hd(t.name || "여행 기록", backBtn()) + `<div class="body rvb">${inner}</div>`;
+  if (isPC()) return `<div class="pc2 wide"><div>${hd("여행 기록", backBtn())}<div class="body rvb" style="--rvs:${sz}px">${inner}</div></div></div>`;
+  return hd(t.name || "여행 기록", backBtn()) + `<div class="body rvb" style="--rvs:${sz}px">${inner}</div>`;
 }
 
 /* 새 기록 · 기록 정보 창 */
@@ -3858,14 +3902,14 @@ function mapPlaces() {
   for (const t of D.items) {
     if (!(isRec(t) || phase(t).k === "after")) continue; if (M.yr && !(t.start || "").startsWith(M.yr)) continue; nTrip++;
     const cat = catOf(t), skipCat = ex.has(cat); let any = false; const R = recDays(t);
-    R.days.forEach(d => d.e.forEach(e => { if (!e.ll) return; any = true; spots.push({ ll: e.ll, name: e.title || (e.cl ? "" : ""), t, day: d.i, k: e.k, rep: eRep(e), cat, ex: skipCat }); }));
-    t.days.forEach((d, i) => d.items.forEach(it => { if (it.state === "skip") return; const ll = itLL(it); if (!ll || spots.some(s => s.t === t && s.k === "i:" + it.id)) return; any = true; spots.push({ ll, name: nameOf(it), t, day: i, k: "i:" + it.id, rep: null, cat, ex: skipCat }); }));
+    R.days.forEach(d => d.e.forEach(e => { if (!e.ll) return; any = true; spots.push({ ll: e.ll, name: e.title || (e.cl ? "" : ""), t, day: d.i, k: e.k, rep: eRep(e), ids: repFirst(e.ps, (eRep(e) || {}).id).map(p => p.id), cat, ex: skipCat }); }));
+    t.days.forEach((d, i) => d.items.forEach(it => { if (it.state === "skip") return; const ll = itLL(it); if (!ll || spots.some(s => s.t === t && s.k === "i:" + it.id)) return; any = true; spots.push({ ll, name: nameOf(it), t, day: i, k: "i:" + it.id, rep: null, ids: [], cat, ex: skipCat }); }));
     if (!any) noLL.push(t);
   }
   const P = [];
   for (const s of spots) { const f = P.find(p => kmBetween(p.ll, s.ll) < 1); if (f) { f.v.push(s); if (!f.name && s.name) f.name = s.name; if (!f.rep && s.rep) f.rep = s.rep; } else P.push({ ll: s.ll, name: s.name, v: [s], rep: s.rep }); }
   const MR = mapPrep();
-  for (const p of P) { p.v.sort((a, b) => b.t.start.localeCompare(a.t.start)); p.cat = p.v[0].cat; p.ex = p.v.every(s => s.ex); if (!p.name) p.name = p.v[0].t.name || "다녀온 곳";
+  for (const p of P) { p.v.sort((a, b) => b.t.start.localeCompare(a.t.start)); p.ids = [...new Set(p.v.flatMap(s => s.ids || []))]; p.cat = p.v[0].cat; p.ex = p.v.every(s => s.ex); if (!p.name) p.name = p.v[0].t.name || "다녀온 곳";
     if (inKR(p.ll)) { p.g = "kr"; p.xy = kxy(p.ll); const z = zoneOf(MR.Ks, p.xy[0], p.xy[1]); p.z = z ? z.c : ""; p.zn = z ? z.n : ""; }
     else { p.xy = wxy(p.ll); const z = zoneOf(MR.Ws, p.xy[0], p.xy[1]); p.z = z ? z.a : ""; p.zn = z ? z.n : ""; p.g = z ? (z.a === "KOR" ? "kr" : z.g) : "oc"; } }
   return { P, noLL, nTrip, spots: spots.length };
@@ -3902,7 +3946,7 @@ function scrMap() {
   const allC = tCats().filter(c => !ex.has(c) && P.some(p => p.cat === c));
   const sel = M.sel >= 0 && all.P[M.sel] && !all.P[M.sel].ex ? all.P[M.sel] : null;
   const selBox = sel ? `<div class="mp-sel"><div class="mp-selh">${sel.rep && PURL[sel.rep.id] ? `<img src="${PURL[sel.rep.id].t}" alt="">` : `<span class="tg-ic">${IC.pin}</span>`}<div><b>${esc(sel.name)}</b><small>${esc(sel.zn || "")} · ${sel.v.length === 1 ? "1번" : sel.v.length + "번"} 다녀옴</small></div><button class="ib s" data-mpp="-1" aria-label="닫기">${IC.x}</button></div>
-    ${[...new Map(sel.v.map(s => [s.t.id, s])).values()].map(s => `<button class="mp-v" data-rvopen="${s.t.id}"><span><b>${esc(s.t.name || "기록")}</b><small class="num">${ymdw(dOf(s.t, s.day))}</small></span><em>기록 ›</em></button>`).join("")}</div>` : "";
+    ${[...new Map(sel.v.map(s => [s.t.id, s])).values()].map(s => `<div class="mp-v"><span><b>${esc(s.t.name || "기록")}</b><small class="num">${ymdw(dOf(s.t, s.day))}</small></span></div>`).join("")}${sel.ids.length ? `<button class="btn sm nv w" data-mpv="${M.sel}">${IC.img} 사진 ${sel.ids.length}장 크게 보기</button>` : ""}</div>` : "";
   const zl = Object.entries(zones).sort((a, b) => b[1].c - a[1].c);
   const tot = kr ? 17 : null;
   const side = `<div class="mp-side">${selBox}
@@ -3911,7 +3955,12 @@ function scrMap() {
     ${zl.length ? `<div class="mp-blk"><span class="aot">${kr ? "시 · 도" : "나라"}별 <small>— 누르면 크게</small></span><div class="mp-zl">${zl.map(([z, o]) => `<button class="${M.z === z ? "on" : ""}" data-mpz="${z}"><span>${esc(o.n)}</span><b class="num">${o.c}</b></button>`).join("")}</div></div>` : ""}
     <div class="mp-blk mp-sum">${kr ? `가 본 시 · 도 <b class="num">${visited.size - (visited.has("") ? 1 : 0)} / ${tot}</b>` : `가 본 나라 <b class="num">${visited.size}</b>`} · 다녀온 곳 <b class="num">${G.length}</b>${all.noLL.length ? `<br><small>위치를 모르는 기록 ${all.noLL.length}개 — 사진에 위치 정보가 없거나 일정에 지도 위치가 없어요</small>` : ""}</div></div>`;
   const zbar = `<div class="mp-zb">${M.z ? `<button class="btn sm" data-mpz="">${IC.back} ${MGRP.find(g => g[0] === M.g)[1]} 전체</button><b>${esc(zObj ? zObj.n : "")}</b><small class="num">${inZ.length}곳</small>` : `<b>${M.yr ? M.yr + "년" : "전체"} 다녀온 곳</b><small>${kr ? "시 · 도를 누르면 크게 보여요" : "나라를 누르면 크게 보여요"}</small>`}</div>`;
-  const body = `${tabs}<div class="mp-wrap"><div class="mp-map">${zbar}<div class="mp-svgw">${svg}</div></div>${side}</div>`;
+  /* 11-05 제이: 점이 몰려 있으면 구분이 안 됨 → 지도 아래에 지금 보이는 곳 목록, 누르면 그곳 사진을 크게(여행으로 넘어가지 않음) */
+  const LL = (M.z ? inZ : G).slice().sort((a, b) => (a.zn || "").localeCompare(b.zn || "") || b.v[0].t.start.localeCompare(a.v[0].t.start));
+  const lrow = p => { const i = all.P.indexOf(p), tr = [...new Map(p.v.map(s => [s.t.id, s.t])).values()], cvp = p.rep || (p.ids[0] ? { id: p.ids[0] } : null);
+    return `<button class="mp-li${M.sel === i ? " on" : ""}" data-mpv="${i}">${cvp && PURL[cvp.id] ? `<img src="${PURL[cvp.id].t}" alt="" loading="lazy">` : `<span class="mp-noimg">${IC.pin}</span>`}<span class="mp-lt"><b><i class="cdot" style="background:${catCol(p.cat)}"></i>${esc(p.name)}</b><small>${esc(p.zn || "")} · ${esc(tr[0].name || "기록")}${tr.length > 1 ? ` 외 ${tr.length - 1}` : ""} · <span class="num">${ymdw(dOf(p.v[0].t, p.v[0].day))}</span></small></span><em class="num">${p.ids.length ? p.ids.length + "장" : "사진 없음"}</em></button>`; };
+  const list = LL.length ? `<div class="mp-list"><div class="mp-lh"><b>${M.z && zObj ? esc(zObj.n) : MGRP.find(g => g[0] === M.g)[1]} 다녀온 곳</b><small class="num">${LL.length}곳 · 누르면 사진을 크게 봐요</small></div><div class="mp-lis">${LL.map(lrow).join("")}</div></div>` : "";
+  const body = `${tabs}<div class="mp-wrap"><div class="mp-map">${zbar}<div class="mp-svgw">${svg}</div>${list}</div>${side}</div>`;
   if (isPC()) return `<div class="pc2 wide"><div>${hd("여행 지도", "")}<div class="body">${body}</div></div></div>`;
   return hd("여행 지도", "", stBar()) + `<div class="body">${body}</div>`;
 }
@@ -3920,7 +3969,7 @@ Object.assign(SCR, { rec: scrRecList, recv: scrRec, map: scrMap });
 
 /* ── 누르기 ── */
 document.addEventListener("click", async e => {
-  const b = e.target.closest("[data-pgo],[data-rvopen],[data-rvrep],[data-rvplan],[data-rvinfo],[data-rvdrop],[data-rvsave],[data-rvcat],[data-rvcov],[data-rvsetcov],[data-nrcat],[data-nrfrom],[data-rlcat],[data-v1ok],[data-mpg],[data-mpz],[data-mpp],[data-mpcat],[data-tripcopy],[data-v1full],[data-rvtrip],[data-pvk],[data-rvm],[data-rvx]"); if (!b) return;
+  const b = e.target.closest("[data-pgo],[data-rvopen],[data-rvrep],[data-rvplan],[data-rvinfo],[data-rvdrop],[data-rvsave],[data-rvcat],[data-rvcov],[data-rvsetcov],[data-nrcat],[data-nrfrom],[data-rlcat],[data-v1ok],[data-mpg],[data-mpz],[data-mpp],[data-mpcat],[data-tripcopy],[data-v1full],[data-rvtrip],[data-pvk],[data-rvm],[data-rvx],[data-mpv],[data-mpplan]"); if (!b) return;
   const d = b.dataset, t = TR();
   if (d.pvk != null && d.pvid) { e.stopPropagation(); e.preventDefault(); S.pvIds = (S.rvG || {})[d.pvk] || null; S.pvK = d.pvk; S.pvIt = null; const L = pvList(); S.pv = Math.max(0, L.findIndex(p => p.id === d.pvid)); return render(); }
   e.stopPropagation();
@@ -3944,6 +3993,10 @@ document.addEventListener("click", async e => {
     t.rec = false; await saveItem(t); S.scr = "rec"; hist.length = 0; render(true); return toast("여행 기록에서 뺐어요 — 여행 플랜에는 그대로 있어요."); }
   if (d.nrcat != null) { const N = S.nr || (S.nr = {}); N.name = ($("#nrName") || {}).value || N.name || ""; N.cat = N.cat === d.nrcat ? "" : d.nrcat; return render(); }
   if (d.nrfrom) { const x = RR(d.nrfrom); if (!x) return; x.rec = true; await saveItem(x); S.sheet = null; S.nr = null; return go("recv", { rid: x.id }); }
+  if (d.mpv != null) { const P = mapPlaces().P[+d.mpv]; if (!P) return; const M = mpState(); M.sel = +d.mpv;
+    if (!P.ids.length) { render(); return toast("이곳은 사진이 없어요 — 일정의 지도 위치로 표시된 곳이에요."); }
+    S.pvIds = P.ids; S.pvK = ""; S.pvIt = null; S.pv = 0; return render(); }
+  if (d.mpplan) { S.pv = null; S.pvIds = null; return openTrip(d.mpplan); }
   if (d.mpg) { const M = mpState(); M.g = d.mpg; M.z = ""; M.sel = -1; return render(); }
   if (d.mpz != null) { const M = mpState(); if (d.mpz === "KOR" && M.g !== "kr") { M.g = "kr"; M.z = ""; M.sel = -1; return render(); } M.z = d.mpz; M.sel = -1; return render(); }
   if (d.mpp != null) { const M = mpState(), i = +d.mpp; if (i >= 0 && !M.z) { const p = mapPlaces().P[i]; if (p) M.z = p.z || ""; } M.sel = i; return render(); }
@@ -3955,6 +4008,7 @@ document.addEventListener("change", async e => { const el = e.target;
   if (el.dataset.nrpick != null && el.files.length) { const f = [...el.files]; el.value = ""; const N = S.nr || (S.nr = {}); N.name = ($("#nrName") || {}).value || N.name || ""; return newRecFromPhotos(f); }
   if (el.dataset.rvcn) { const t = TR(); if (!t) return; t.cn = t.cn || {}; t.cn[el.dataset.rvcn] = Object.assign({ n: "", rep: "" }, t.cn[el.dataset.rvcn] || {}, { n: el.value.trim().slice(0, 100) }); await saveItem(t); }
 });
+let rvszT; document.addEventListener("input", e => { if (e.target.id !== "rvsz") return; const v = +e.target.value, b = e.target.closest(".rvb"); if (b) b.style.setProperty("--rvs", v + "px"); D.set.rvsz = v; rvFit(); clearTimeout(rvszT); rvszT = setTimeout(() => setMeta("set", D.set).catch(() => {}), 400); });
 document.addEventListener("input", e => { if (e.target.id === "nrName") { (S.nr || (S.nr = {})).name = e.target.value; } });
 /* 사진 크게 보기를 닫으면 기록의 묶음 목록도 풀기 */
 document.addEventListener("click", e => { if (e.target.closest("[data-pvx]")) S.pvIds = null; }, true);

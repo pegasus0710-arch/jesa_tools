@@ -1384,6 +1384,22 @@ body.pc .pc2>div .body.rvb{display:block;max-width:1100px}
 .mp-li em{font-style:normal;font-size:12.5px;color:#195455;font-weight:700;white-space:nowrap}
 .vw2-go{display:inline-flex;gap:6px;margin-left:auto}.vw2-go button{display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 12px;border:0;border-radius:10px;background:rgba(255,255,255,.14);color:#fff;font:700 13.5px var(--ui,inherit);cursor:pointer;white-space:nowrap}.vw2-go button:hover{background:rgba(255,255,255,.26)}.vw2-go svg{width:16px;height:16px}
 @media (max-width:899px){.vw2-go button span{display:none}.vw2-go button{padding:0 10px}}
+/* 11-05 14:41 제이: 구분(일자 · 여행지)마다 안쪽 세로 스크롤 없이 모두 펼침 */
+.rv-grid,.rvb .rv-grid,.rv-ph,.rvb .rv-ph{max-height:none!important;overflow:visible!important}
+/* 11-05 제이: 대표 사진 = 이름 옆 「대표」 · 크게 보기 「★ 대표 사진」 메뉴(사진마다 ★ 없음) */
+.rv-star,.rv-rb{display:none!important}
+.rv-repc{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 9px 0 3px;margin-left:8px;border:1.5px solid #d5c9b4;border-radius:8px;background:var(--card);font:700 12.5px var(--ui,inherit);color:#195455;cursor:pointer;vertical-align:middle;white-space:nowrap}
+.rv-repc img{width:22px;height:22px;border-radius:5px;object-fit:cover}.rv-repc:not(:has(img)){padding-left:9px}
+.rv-repc:hover{border-color:#195455;background:#eef4f3}
+.phday .rv-repc{font-size:12.5px}
+.rvp-grid button{position:relative;border:0;padding:0;border-radius:8px;overflow:hidden;aspect-ratio:1;cursor:pointer;background:var(--tint)}.rvp-grid button.on{box-shadow:0 0 0 3px #195455}.rvp-grid img{width:100%;height:100%;object-fit:cover;display:block}
+.sheet .rvp-grid{max-height:60vh!important;overflow:auto!important}
+.vw2-rmw{position:relative;display:inline-flex}
+.vw2-rm{position:absolute;right:0;top:calc(100% + 6px);z-index:5;min-width:250px;display:flex;flex-direction:column;padding:6px;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.vw2-rm b{font-size:12.5px;color:#6f6857;padding:6px 10px 4px}
+.vw2-rm button{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 10px;border:0;border-radius:8px;background:none;color:#1f2125;font:600 14px var(--ui,inherit);text-align:left;cursor:pointer}
+.vw2-rm button:hover{background:#eef4f3}.vw2-rm button.on{color:#195455;cursor:default}.vw2-rm i{width:16px;font-style:normal;color:#195455;font-weight:800}
+.vw2-rm{min-width:320px}.vw2-rm button{white-space:nowrap}.rv-ttl>b .rv-repc{font-size:12.5px}
 
 /* 설치 화면 */
 .ippg{position:fixed;inset:0;z-index:30;background:var(--paper);overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:max(28px,env(safe-area-inset-top)) 18px 40px}
@@ -1841,7 +1857,7 @@ const IC = {
 };
 
 /* ── 저장소 (IndexedDB) ── */
-const BUILD = "2026-11-05(목) 10:13";   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
+const BUILD = "2026-11-05(목) 14:46";   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
 const PL = () => D.items.filter(t => !t.ronly);   /* 11-05: 플랜만(사진으로 만든 기록은 빼고) */
 const DBN = "bj-trip-note2"; const DBN1 = "bj-trip-planner";   /* 11-04 v2.0: 새 저장소(v1.0과 따로) — 처음 열 때 v1.0 자료를 복사해 옴 */
 let db = null;
@@ -2614,7 +2630,7 @@ function viewer() {
   const when = rec.t || rec.u ? (() => { const lt = phT(t, rec), d = new Date(lt); return `${ymdw(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))} ${hmOf(lt)}${rec.lm ? " (파일 시간)" : ""}`; })() : "";
   return `<div class="pv vw2" role="dialog" aria-label="사진 크게 보기"><div class="vw2-top"><b>${esc(it ? it.title || t.name || "" : t.name || "")}</b><span class="k">${esc([when, it ? "" : (rec.it === "" ? "어느 일정에도 안 맞는 사진" : "")].filter(Boolean).join(" · "))}</span>${rec.ll ? `<span class="k vw2-loc">${IC.pin}${esc(llText(t, rec.ll))} ${S.scr === "recv" || mapv ? "" : llLinks(t, rec.ll, it ? nameOf(it) : "")}</span>` : ""}<span class="k n num">${i + 1} / ${L.length}</span>
     ${mapv ? `<span class="vw2-go">${t.rec || t.ronly ? `<button data-rvopen="${t.id}">${IC.img}<span>기록 보기</span></button>` : ""}${t.ronly ? "" : `<button data-mpplan="${t.id}">${IC.cal}<span>플랜 보기</span></button>`}</span>` : ""}${L.length > 1 && !mapv ? `<button class="vw2-list" data-pvgrid aria-label="목록으로 보기" title="사진을 목록으로 한 번에 보기">${IC.grid || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'}<span>목록으로 보기</span></button>` : ""}
-    ${mapv ? "" : S.scr === "recv" && S.pvK && /^[ic]:/.test(S.pvK) && typeof rvRepBtn === "function" ? rvRepBtn(t, p.id) : `<button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button>`}<button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
+    ${mapv ? "" : S.scr === "recv" && typeof rvRepBtn === "function" ? rvRepBtn(t, p.id) : `<button class="vw2-x${t.cover === p.id ? " on" : ""}" data-pvcover aria-label="여행 표지로" title="${t.cover === p.id ? "이 사진이 여행 표지예요" : "여행 표지로"}">${IC.star}</button>`}<button class="vw2-x" data-pvx aria-label="닫기">${IC.x}</button></div>
     <div class="vw2-main">${L.length > 1 ? `<div class="vw2-strip" id="pvstrip">${L.map((q, k) => `<button class="${k === i ? "on" : ""}" data-pvi="${k}" aria-label="사진 ${k + 1}"><img src="${q.t}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}<div class="vw2-stage"><div class="zs2" id="pvb"><img id="pvimg" src="${p.f || p.t}" alt="" draggable="false"></div>
       ${L.length > 1 ? `<button class="vw2-nav l" data-pvm="-1" ${i === 0 ? "disabled" : ""} aria-label="이전 사진">${IC.back}</button><button class="vw2-nav r" data-pvm="1" ${i >= L.length - 1 ? "disabled" : ""} aria-label="다음 사진">${IC.next}</button>` : ""}
       <div class="zs2-bar"><div class="zs2-nav" id="pvnav" hidden><img src="${p.t}" alt="" draggable="false"><span></span></div>
@@ -3691,7 +3707,7 @@ const hashS = s => { let h = 7; for (const c of String(s)) h = (h * 31 + c.charC
 function pickRep(L, key, chosen) { if (!L || !L.length) return null; if (chosen) { const f = L.find(p => p.id === chosen); if (f) return f; } const S2 = L.slice().sort((a, b) => (a.t || 0) - (b.t || 0) || (a.id < b.id ? -1 : 1)); return S2[hashS(key) % S2.length]; }
 function repFirst(L, rid) { const S2 = L.slice().sort((a, b) => (a.t || 0) - (b.t || 0)); const i = S2.findIndex(p => p.id === rid); if (i > 0) S2.unshift(S2.splice(i, 1)[0]); return S2; }
 function itRepId(t, it, ph) { const L = ph || (t.photos || []).filter(p => p.it === it.id && PURL[p.id]); const r = pickRep(L, "i" + it.id, it.rep); return r ? r.id : ""; }
-function sanCn(o) { const out = {}; if (!o || typeof o !== "object") return out; let n = 0; for (const [k, v] of Object.entries(o)) { if (n > 400 || !/^c:[A-Za-z0-9_-]{1,40}$/.test(k) || !v || typeof v !== "object") continue; out[k] = { n: str(v.n, 100), rep: okId(v.rep) ? v.rep : "" }; n++; } return out; }
+function sanCn(o) { const out = {}; if (!o || typeof o !== "object") return out; let n = 0; for (const [k, v] of Object.entries(o)) { if (n > 400 || !/^(c:[A-Za-z0-9_-]{1,40}|d:\d{1,3})$/.test(k) || !v || typeof v !== "object") continue; out[k] = { n: str(v.n, 100), rep: okId(v.rep) ? v.rep : "" }; n++; } return out; }
 const isRec = t => !!(t.rec || t.ronly);
 function phDup(t, sig, x) { return (t.photos || []).some(p => p.sig ? p.sig === sig : (x && x.t && p.t === x.t && !p.lm && JSON.stringify(p.ll || null) === JSON.stringify(x.ll || null))); }
 
@@ -3802,35 +3818,50 @@ function rvFit() { document.querySelectorAll(".rvb .rv-ph").forEach(el => { cons
 let rvfT; addEventListener("resize", () => { clearTimeout(rvfT); rvfT = setTimeout(rvFit, 150); });
 const rvSize = () => Math.max(70, Math.min(300, +D.set.rvsz || (isPC() ? 150 : 96)));
 const rvMode = () => RVM.some(m => m[0] === D.set.rvm) ? D.set.rvm : "course";
-function rvRepBtn(t, pid) { const R = recDays(t), e = [...R.days.flatMap(d => d.e), ...R.out].find(x => x.k === S.pvK); if (!e || e.nt) return ""; const r = eRep(e), on = r && r.id === pid;
-  return `<button class="vw2-x vw2-rep${on ? " on" : ""}" ${on ? "" : `data-rvrep="${e.k}|${pid}"`} aria-label="${on ? "이 코스의 대표 사진" : "이 코스 대표 사진으로"}" title="${on ? "이 코스의 대표 사진이에요" : "이 코스 대표 사진으로"}">${IC.star}<span>${on ? "대표" : "대표로"}</span></button>`; }
+/* 11-05 제이: 대표 사진은 사진마다 ★ 대신 — ① 여행 · 날짜 · 코스 이름 옆 「대표」(누르면 그 묶음 사진에서 고르기) ② 크게 보기의 「★ 대표 사진」(이 코스 · 이 날 · 이 여행 중 고르기) */
+const dRep = (t, R, i) => { const L = (R.days[i] || { e: [] }).e.flatMap(e => e.ps); return pickRep(L, t.id + "d" + i, ((t.cn || {})["d:" + i] || {}).rep); };
+function repGroup(t, key) { const R = recDays(t); if (key === "t") return { L: (t.photos || []).filter(p => PURL[p.id]), r: coverOf(t) && (t.photos || []).find(p => p.id === (coverOf(t).id || t.cover)) || null, nm: "이 여행" };
+  if (key.startsWith("d:")) { const i = +key.slice(2); return { L: (R.days[i] || { e: [] }).e.flatMap(e => e.ps), r: dRep(t, R, i), nm: t.days.length > 1 ? `${i + 1}일째` : "이 날" }; }
+  const e = [...R.days.flatMap(d => d.e), ...R.out].find(x => x.k === key); return e ? { L: e.ps, r: eRep(e), nm: e.title || "이 코스" } : { L: [], r: null, nm: "" }; }
+async function setRep(t, key, pid) {
+  if (key === "t") t.cover = pid;
+  else if (key.startsWith("i:")) t.days.forEach(dd => dd.items.forEach(it => { if (it.id === key.slice(2)) it.rep = pid; }));
+  else { t.cn = t.cn || {}; t.cn[key] = Object.assign({ n: "", rep: "" }, t.cn[key] || {}, { rep: pid }); }
+  await saveItem(t); }
+function rvRepBtn(t, pid) { const R = recDays(t); let ev = null, di = -1; R.days.forEach(d => d.e.forEach(e => { if (e.ps.some(p => p.id === pid)) { ev = e; di = d.i; } })); if (!ev) ev = R.out.find(e => e.ps.some(p => p.id === pid)) || null;
+  const opts = []; if (ev && !ev.nt) { const r = eRep(ev); opts.push([ev.k, `이 코스 — ${ev.title || "사진 묶음"}`, r && r.id === pid]); }
+  if (di >= 0) { const r = dRep(t, R, di); opts.push(["d:" + di, `이 날 — ${t.days.length > 1 ? di + 1 + "일째 " : ""}${ymdw(dOf(t, di))}`, r && r.id === pid]); }
+  const cv = coverOf(t); opts.push(["t", `이 여행 — ${t.name || "기록"}`, !!(cv && (cv.id === pid || t.cover === pid))]);
+  const any = opts.some(o => o[2]);
+  return `<span class="vw2-rmw"><button class="vw2-x vw2-rep${any ? " on" : ""}" data-rvrm aria-expanded="${!!S.rvrm}">${IC.star}<span>대표 사진</span></button>${S.rvrm ? `<span class="vw2-rm" role="menu"><b>이 사진을 대표 사진으로</b>${opts.map(([k, nm, on]) => `<button role="menuitemcheckbox" aria-checked="${on}" class="${on ? "on" : ""}" ${on ? "" : `data-rvset="${k}|${pid}"`}><i>${on ? "✓" : ""}</i>${esc(nm)}</button>`).join("")}</span>` : ""}</span>`; }
+const repChip = (key, r, nm) => `<button class="rv-repc" data-rvpick="${key}" title="${esc(nm)} 대표 사진 바꾸기">${r && PURL[r.id] ? `<img src="${PURL[r.id].t}" alt="">` : ""}<span>대표</span></button>`;
 function scrRec() {
   const t = TR(); if (!t) return hd("여행 기록", backBtn()) + `<div class="body"><div class="empty sm"><p>기록을 찾지 못했어요.</p></div></div>`;
   const R = recDays(t), cv = coverOf(t), n = (t.photos || []).length, mode = rvMode(); S.rvG = {}; S.rvx = S.rvx || {};
-  const tile = (p, k, r) => `<span class="rv-t${r && p.id === r.id ? " rep" : ""}"><img src="${PURL[p.id].t}" alt="" loading="lazy" data-pvid="${p.id}" data-pvk="${k}">${r ? (p.id === r.id ? `<em class="rv-rb" title="대표 사진">${IC.star}</em>` : `<button class="rv-star" data-rvrep="${k}|${p.id}" aria-label="대표 사진으로" title="대표 사진으로">${IC.star}</button>`) : ""}</span>`;
+  const tile = (p, k) => `<span class="rv-t"><img src="${PURL[p.id].t}" alt="" loading="lazy" data-pvid="${p.id}" data-pvk="${k}"></span>`;
   /* 11-05 제이: 사진 크기 조절(밀대) — 한 줄에 들어가는 칸 수도 크기에 맞춤 */
   const sz = rvSize(); setTimeout(rvFit, 0);
   const card = e => { const r = e.nt ? null : eRep(e), L = repFirst(e.ps, r && r.id); S.rvG[e.k] = L.map(p => p.id); const open = !!S.rvx[e.k], more = !open && L.length > 2;
     const row = open ? L : L.slice(0, 60);
-    return `<div class="rv-e${e.cl ? " cl" : ""}"><div class="rv-eh"><span class="num rv-tm">${e.ts ? hm2(e.ts) : ""}</span>${e.cl && !e.nt ? `<input class="rv-cn" data-rvcn="${e.k}" value="${esc(e.title)}" placeholder="이름 넣기 (예: 바닷가 카페)" aria-label="기록 이름">` : `<b>${esc(e.title)}</b>`}<small class="num">${e.ps.length}장</small>${e.cl && !e.nt ? `<em class="rv-new">사진으로 생긴 기록</em>` : ""}${open ? `<button class="lk rv-fold" data-rvx="${e.k}">접기</button>` : ""}</div>
+    return `<div class="rv-e${e.cl ? " cl" : ""}"><div class="rv-eh"><span class="num rv-tm">${e.ts ? hm2(e.ts) : ""}</span>${e.cl && !e.nt ? `<input class="rv-cn" data-rvcn="${e.k}" value="${esc(e.title)}" placeholder="이름 넣기 (예: 바닷가 카페)" aria-label="기록 이름">` : `<b>${esc(e.title)}</b>`}<small class="num">${e.ps.length}장</small>${e.nt ? "" : repChip(e.k, r, e.title || "이 코스")}${e.cl && !e.nt ? `<em class="rv-new">사진으로 생긴 기록</em>` : ""}${open ? `<button class="lk rv-fold" data-rvx="${e.k}">접기</button>` : ""}</div>
     ${e.ll ? `<div class="rv-loc">${IC.pin}<span>${esc(llText(t, e.ll))}</span></div>` : ""}
-    <div class="${open ? "rv-grid" : "rv-ph"}">${row.map(p => tile(p, e.k, r)).join("")}${more ? `<button class="rv-more" data-rvx="${e.k}" data-n="${L.length}" hidden><b>전체보기</b><small class="num"></small></button>` : ""}</div></div>`; };
-  const ptime = p => phT(t, p) || 0, grid = (L, k) => { const S2 = L.slice().sort((a, b) => ptime(a) - ptime(b)); S.rvG[k] = S2.map(p => p.id); return `<div class="rv-grid">${S2.map(p => tile(p, k, null)).join("")}</div>`; };
+    <div class="${open ? "rv-grid" : "rv-ph"}">${row.map(p => tile(p, e.k)).join("")}${more ? `<button class="rv-more" data-rvx="${e.k}" data-n="${L.length}" hidden><b>전체보기</b><small class="num"></small></button>` : ""}</div></div>`; };
+  const ptime = p => phT(t, p) || 0, grid = (L, k) => { const S2 = L.slice().sort((a, b) => ptime(a) - ptime(b)); S.rvG[k] = S2.map(p => p.id); return `<div class="rv-grid">${S2.map(p => tile(p, k)).join("")}</div>`; };
   let body = "";
   if (mode === "course") {
-    R.days.forEach(d => { if (!d.e.length) return; body += `<div class="phday">${t.days.length > 1 ? `${d.i + 1}일째 ` : ""}<small>${ymdw(dOf(t, d.i))}</small>${d.skip && !t.ronly ? `<span class="rv-sk">사진 없는 일정 ${d.skip}개</span>` : ""}</div>` + d.e.map(card).join(""); });
+    R.days.forEach(d => { if (!d.e.length) return; body += `<div class="phday">${t.days.length > 1 ? `${d.i + 1}일째 ` : ""}<small>${ymdw(dOf(t, d.i))}</small>${repChip("d:" + d.i, dRep(t, R, d.i), "이 날")}${d.skip && !t.ronly ? `<span class="rv-sk">사진 없는 일정 ${d.skip}개</span>` : ""}</div>` + d.e.map(card).join(""); });
     if (R.out.length) body += `<div class="phday">여행 날짜 밖 · 시간 모름</div>` + R.out.map(card).join("");
   } else if (mode === "day") {
-    R.days.forEach(d => { const L = d.e.flatMap(e => e.ps); if (!L.length) return; body += `<div class="phday">${t.days.length > 1 ? `${d.i + 1}일째 ` : ""}<small>${ymdw(dOf(t, d.i))}</small><span class="rv-sk num">${L.length}장</span></div>` + grid(L, "d:" + d.i); });
+    R.days.forEach(d => { const L = d.e.flatMap(e => e.ps); if (!L.length) return; body += `<div class="phday">${t.days.length > 1 ? `${d.i + 1}일째 ` : ""}<small>${ymdw(dOf(t, d.i))}</small>${repChip("d:" + d.i, dRep(t, R, d.i), "이 날")}<span class="rv-sk num">${L.length}장</span></div>` + grid(L, "d:" + d.i); });
     const O = R.out.flatMap(e => e.ps); if (O.length) body += `<div class="phday">여행 날짜 밖 · 시간 모름<span class="rv-sk num">${O.length}장</span></div>` + grid(O, "d:out");
   } else { const A = (t.photos || []).filter(p => PURL[p.id]); if (A.length) body = `<div class="phday">전체 사진<span class="rv-sk num">${A.length}장</span></div>` + grid(A, "all"); }
   if (!n) body = `<div class="empty sm"><p>아직 사진이 없어요. 사진을 넣으면 찍은 시간 · 장소로 기록이 만들어져요.</p></div>`;
   const modes = n ? `<div class="rv-mode" role="group" aria-label="사진 보기"><span class="rv-ml">사진 보기</span>${RVM.map(([k, nm]) => `<button class="${mode === k ? "on" : ""}" data-rvm="${k}" aria-pressed="${mode === k}">${nm}</button>`).join("")}</div>
     <label class="rv-sz"><span>사진 크기</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg><input type="range" id="rvsz" min="70" max="300" step="10" value="${sz}" aria-label="사진 크기"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>` : "";
-  const top = `<div class="rv-head">${cv ? `<button class="rv-cover" data-rvcov aria-label="대표 사진 바꾸기"><img src="${cv.f || cv.t}" alt=""><em>${IC.star}여행 대표 사진</em></button>` : ""}
-    <div class="rv-ttl"><b>${esc(t.name || "이름 없는 기록")}</b><small class="num">${ymdw(dOf(t, 0))}${t.days.length > 1 ? " ~ " + ymdw(dOf(t, t.days.length - 1)) : ""} · ${esc(catOf(t))} · 사진 ${n}장</small>${tsyncTag(t.id)}
+  const top = `<div class="rv-head">${cv ? `<button class="rv-cover" data-rvpick="t" aria-label="여행 대표 사진 바꾸기"><img src="${cv.f || cv.t}" alt=""><em>${IC.star}여행 대표 사진</em></button>` : ""}
+    <div class="rv-ttl"><b>${esc(t.name || "이름 없는 기록")}${cv ? repChip("t", cv, "이 여행") : ""}</b><small class="num">${ymdw(dOf(t, 0))}${t.days.length > 1 ? " ~ " + ymdw(dOf(t, t.days.length - 1)) : ""} · ${esc(catOf(t))} · 사진 ${n}장</small>${tsyncTag(t.id)}
     <div class="rv-tools"><label class="btn sm go">${IC.img} 사진 넣기<input type="file" accept="image/*" multiple hidden data-phpick></label>${t.ronly ? "" : `<button class="btn sm" data-rvplan>${IC.cal} 플랜 보기</button>`}<button class="btn sm" data-rvinfo>${IC.pen} 이름 · 분류</button><button class="btn sm" data-rvdrop>${t.ronly ? IC.trash + " 기록 지우기" : IC.x + " 기록에서 빼기"}</button></div></div></div>
-    <div class="rv-bar">${modes}</div><p class="hint rv-hint">${mode === "course" ? (isPC() ? "사진에 마우스를 올리면 ★ — 누르면 그 코스의 대표 사진이 돼요(안 고르면 저절로 한 장)." : "사진을 크게 본 뒤 「★ 대표로」를 누르면 그 코스의 대표 사진이 돼요(안 고르면 저절로 한 장).") : "사진을 누르면 크게 보여요."}</p>`;
+    <div class="rv-bar">${modes}</div><p class="hint rv-hint">대표 사진: 여행 사진 · 날짜 · 코스 이름 옆 「대표」를 누르거나, 사진을 크게 본 뒤 「★ 대표 사진」에서 골라요(안 고르면 저절로 한 장).</p>`;
   const inner = top + body;
   if (isPC()) return `<div class="pc2 wide"><div>${hd("여행 기록", backBtn())}<div class="body rvb" style="--rvs:${sz}px">${inner}</div></div></div>`;
   return hd(t.name || "여행 기록", backBtn()) + `<div class="body rvb" style="--rvs:${sz}px">${inner}</div>`;
@@ -3849,6 +3880,9 @@ function sheetX(k, t) {
     <label class="f">분류 <span class="lt">— 지도에서 뺄 분류는 「여행 지도」에서 정해요</span></label><div class="chips">${tCats().map(c => `<button class="chip ${catOf(t) === c ? "on" : ""}" data-rvcat="${esc(c)}"><i class="cdot" style="background:${catCol(c)}"></i>${esc(c)}</button>`).join("")}<button class="chip add" data-tcadd="0">${IC.plus} 새 분류</button></div>
     <label class="f">날짜</label><div class="g2"><div>${dateIn('id="rvStart"', t.start)}</div><div class="hint num">${t.days.length}일</div></div>
     <div class="row2"><button class="btn" data-close>닫기</button><button class="btn nv" style="flex:1" data-rvsave>저장</button></div>`; }
+  if (k === "rvpick" && t && S.rvp) { const g = repGroup(t, S.rvp), P = g.L.slice().sort((a, b) => (a.t || 0) - (b.t || 0)), ch = S.rvp === "t" ? t.cover : S.rvp.startsWith("i:") ? ((t.days.flatMap(d => d.items).find(it => it.id === S.rvp.slice(2)) || {}).rep) : ((t.cn || {})[S.rvp] || {}).rep;
+    return `<b class="sht">${IC.star} 대표 사진 고르기 — ${esc(g.nm)}</b><p class="hint">${S.rvp === "t" ? "여행 기록 · 플랜 목록 · 여행 지도에 이 사진이 나와요." : S.rvp.startsWith("d:") ? "이 날의 대표 사진이에요." : "이 코스(일정 · 장소)의 대표 사진 — 플랜 · 지도에도 같은 사진이 나와요."} 지금 대표 사진에 초록 테두리.</p><div class="rv-grid rvp-grid">${P.map(p => `<button class="${g.r && g.r.id === p.id ? "on" : ""}" data-rvpset="${p.id}" aria-pressed="${!!(g.r && g.r.id === p.id)}"><img src="${PURL[p.id].t}" alt="" loading="lazy"></button>`).join("")}</div>
+    <div class="row2"><button class="btn" data-rvpset="" ${ch ? "" : "disabled"}>자동으로 두기${ch ? "" : "(지금 자동)"}</button><button class="btn nv" style="flex:1" data-close>닫기</button></div>`; }
   if (k === "rvcov" && t) { const P = (t.photos || []).filter(p => PURL[p.id]).sort((a, b) => a.t - b.t);
     return `<b class="sht">${IC.star} 여행 대표 사진 고르기</b><p class="hint">여행 기록 · 플랜 목록 · 여행 지도에 이 사진이 나와요.</p><div class="rv-grid">${P.map(p => `<button class="${t.cover === p.id ? "on" : ""}" data-rvsetcov="${p.id}"><img src="${PURL[p.id].t}" alt="" loading="lazy"></button>`).join("")}</div>
     <div class="row2"><button class="btn" data-rvsetcov="">무작위로 두기</button><button class="btn nv" style="flex:1" data-close>닫기</button></div>`; }
@@ -3969,7 +4003,7 @@ Object.assign(SCR, { rec: scrRecList, recv: scrRec, map: scrMap });
 
 /* ── 누르기 ── */
 document.addEventListener("click", async e => {
-  const b = e.target.closest("[data-pgo],[data-rvopen],[data-rvrep],[data-rvplan],[data-rvinfo],[data-rvdrop],[data-rvsave],[data-rvcat],[data-rvcov],[data-rvsetcov],[data-nrcat],[data-nrfrom],[data-rlcat],[data-v1ok],[data-mpg],[data-mpz],[data-mpp],[data-mpcat],[data-tripcopy],[data-v1full],[data-rvtrip],[data-pvk],[data-rvm],[data-rvx],[data-mpv],[data-mpplan]"); if (!b) return;
+  const b = e.target.closest("[data-pgo],[data-rvopen],[data-rvrep],[data-rvplan],[data-rvinfo],[data-rvdrop],[data-rvsave],[data-rvcat],[data-rvcov],[data-rvsetcov],[data-nrcat],[data-nrfrom],[data-rlcat],[data-v1ok],[data-mpg],[data-mpz],[data-mpp],[data-mpcat],[data-tripcopy],[data-v1full],[data-rvtrip],[data-pvk],[data-rvm],[data-rvx],[data-mpv],[data-mpplan],[data-rvpick],[data-rvpset],[data-rvrm],[data-rvset]"); if (!b) return;
   const d = b.dataset, t = TR();
   if (d.pvk != null && d.pvid) { e.stopPropagation(); e.preventDefault(); S.pvIds = (S.rvG || {})[d.pvk] || null; S.pvK = d.pvk; S.pvIt = null; const L = pvList(); S.pv = Math.max(0, L.findIndex(p => p.id === d.pvid)); return render(); }
   e.stopPropagation();
@@ -3985,6 +4019,10 @@ document.addEventListener("click", async e => {
   if (d.rvrep && t) { const [k, pid] = d.rvrep.split("|"); if (k.startsWith("i:")) { t.days.forEach(dd => dd.items.forEach(it => { if (it.id === k.slice(2)) it.rep = pid; })); } else { t.cn = t.cn || {}; t.cn[k] = Object.assign({ n: "", rep: "" }, t.cn[k] || {}, { rep: pid }); } await saveItem(t); render(); return toast("대표 사진으로 정했어요 — 플랜 · 지도에도 이 사진이 나와요."); }
   if (d.rvplan != null && t) { return openTrip(t.id); }
   if (d.rvinfo != null && t) { S.sheet = "rvinfo"; return render(); }
+  if (d.rvpick && t) { S.rvp = d.rvpick; S.sheet = "rvpick"; return render(); }
+  if (d.rvpset != null && t && S.rvp) { const g = repGroup(t, S.rvp); await setRep(t, S.rvp, d.rvpset); S.sheet = null; render(); return toast(d.rvpset ? `${g.nm} 대표 사진으로 정했어요 — 다른 기기에도 함께 바뀌어요.` : `${g.nm} 대표 사진을 자동(저절로 한 장)으로 둬요.`); }
+  if (d.rvrm != null) { S.rvrm = !S.rvrm; return render(); }
+  if (d.rvset && t) { const [k, pid] = d.rvset.split("|"), g = repGroup(t, k); await setRep(t, k, pid); S.rvrm = false; render(); return toast(`${g.nm} 대표 사진으로 정했어요.`); }
   if (d.rvcov != null && t) { S.sheet = "rvcov"; return render(); }
   if (d.rvsetcov != null && t) { t.cover = d.rvsetcov; await saveItem(t); S.sheet = null; render(); return toast(d.rvsetcov ? "여행 대표 사진으로 정했어요." : "대표 사진을 무작위로 둬요."); }
   if (d.rvcat != null && t) { t.cat = d.rvcat; await saveItem(t); document.querySelectorAll("[data-rvcat]").forEach(x => x.classList.toggle("on", x.dataset.rvcat === d.rvcat)); return; }   /* 다시 그리지 않음 → 치던 이름 · 날짜 그대로 */

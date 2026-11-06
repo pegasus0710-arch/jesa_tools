@@ -2376,7 +2376,7 @@ const IC = {
 };
 
 /* ── 저장소 (IndexedDB) ── */
-const BUILD = "2026-11-07(토) 00:54";
+const BUILD = "2026-11-07(토) 01:01";
 /* 11-06: 일정 링크(이름 · 주소) */
 const sLinks = L => (Array.isArray(L) ? L : []).filter(x => x && /^https?:\/\//i.test(String(x.u || "").trim())).slice(0, 8).map(x => ({ n: String(x.n || "").trim().slice(0, 40), u: String(x.u).trim().slice(0, 1000) }));   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
 const PL = () => D.items.filter(t => !t.ronly);   /* 11-05: 플랜만(사진으로 만든 기록은 빼고) */
@@ -5356,7 +5356,7 @@ async function syncFromFolder3() { const o = await readFolder(); let nr = 0; if 
 
 /* ═════ 지도 바꾸기(11-07 제이: 해외 = CARTO Voyager, 국내 = 카카오맵) ═════
    키가 아직 없으면 지금처럼 OpenStreetMap. 키는 앱 주소(pegasus0710-arch.github.io)에 묶여 있어 다른 사이트에선 안 됨 */
-const MAPKEY = { kakao: "", carto: "" };   /* ← 제이가 받은 키를 여기에 */
+const MAPKEY = { kakao: "36ef03788ecfa36d46dc97c338534b20", carto: "" };   /* ← 제이가 받은 키를 여기에 */
 const inKR3 = P => P.length && P.every(p => p.lat > 32.8 && p.lat < 38.9 && p.lng > 124.3 && p.lng < 132.2);
 function tileOf3() { return MAPKEY.carto ? { u: `https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?api_key=${MAPKEY.carto}`, a: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>', z: 20 }
   : { u: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", a: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>', z: 19 }; }

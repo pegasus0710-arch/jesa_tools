@@ -2094,6 +2094,12 @@ body.has-sb3{padding-bottom:40px}
 .sh3l-y b{font-size:14px}.sh3l-y small{font-size:12.5px;font-weight:600;opacity:.85}
 .it2-ls{display:flex;flex-wrap:wrap;align-items:center}.it2-ls .ilk.go{margin-left:auto}
 
+.sh3l-hd{display:flex;align-items:center;justify-content:space-between;padding:0 4px 6px 8px}.sh3l-hd .sh3l-t{padding:0}
+.sh3l .sh3l-all{all:unset;cursor:pointer;font-size:12.5px;font-weight:700;color:#2B5FA0;padding:4px 6px;border-radius:6px}.sh3l .sh3l-all:hover{background:#E3EFFB}
+.sh3l .sh3l-y{cursor:pointer;width:calc(100% + 11px);box-sizing:border-box;gap:6px;justify-content:flex-start;min-height:0}.sh3l .sh3l-y small{margin-left:auto}
+.sh3l-cv{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:0 4px 3px 0;transition:transform .15s;flex-shrink:0}
+.sh3l-g.shut .sh3l-cv{transform:rotate(-45deg);margin:0 4px 0 0}.sh3l-g.shut{margin-bottom:4px}
+
 :root{--ink:#14202B;--navy:#0B3D4A;--navy-h:#082F39;--link:#2B5FA0}a,.lk,.fx3-k a{color:#2B5FA0}
 
 </style></head>
@@ -2376,7 +2382,7 @@ const IC = {
 };
 
 /* ── 저장소 (IndexedDB) ── */
-const BUILD = "2026-11-07(토) 01:01";
+const BUILD = "2026-11-07(토) 01:09";
 /* 11-06: 일정 링크(이름 · 주소) */
 const sLinks = L => (Array.isArray(L) ? L : []).filter(x => x && /^https?:\/\//i.test(String(x.u || "").trim())).slice(0, 8).map(x => ({ n: String(x.n || "").trim().slice(0, 40), u: String(x.u).trim().slice(0, 1000) }));   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
 const PL = () => D.items.filter(t => !t.ronly);   /* 11-05: 플랜만(사진으로 만든 기록은 빼고) */
@@ -4998,7 +5004,7 @@ function scrList() {
     ${on.map(t => heroNow(t)).join("")}
     ${up.length ? `<section class="scx3"><div class="sh3"><b>다가오는 여행</b><small class="num">${up.length}</small></div><div class="ps3-l">${up.map(passCard).join("")}</div></section>` : ""}
     ${Y.length ? `<section class="scx3"><div class="sh3 sh3p"><b>다녀온 여행</b><small class="num">${pastAll.length.toLocaleString("ko-KR")}</small><span class="sp"></span>${isPC() ? `<button class="b3 sm" data-sheet="newrec">${IC.img}<span>사진으로 여행 만들기</span></button><button class="b3 sm" data-sheet="tcopy">${IC.copy}<span>지난 여행 복사</span></button>` : ""}</div>
-      <div class="yr3 yj3">${Y.slice(0, 8).map(y => `<button data-hyj="${y}">${y}년 <small class="num">${(grp.find(g => g[0] === y) || [0, []])[1].length}</small></button>`).join("")}${Y.length > 8 ? `<label class="yr3s"><select data-hyjs aria-label="이전 연도"><option value="">이전 연도</option>${Y.slice(8).map(y => `<option value="${y}">${y}년</option>`).join("")}</select></label>` : ""}</div>
+      <div class="yr3 yj3" data-ks="years">${Y.slice(0, 8).map(y => `<button data-hyj="${y}">${y}년 <small class="num">${(grp.find(g => g[0] === y) || [0, []])[1].length}</small></button>`).join("")}${Y.length > 8 ? `<label class="yr3s"><select data-hyjs aria-label="이전 연도"><option value="">이전 연도</option>${Y.slice(8).map(y => `<option value="${y}">${y}년</option>`).join("")}</select></label>` : ""}</div>
       <div class="pcd3-l">${grp.map(([y, L]) => `<div class="yt3" id="yg3-${y}"><b class="num">${y}</b><small class="num"><span>여행 ${L.length}개</span><span>${L.reduce((a, t) => a + Math.max(1, t.days.length), 0)}일</span></small></div>${L.map(postCard).join("")}`).join("")}</div></section>` : ""}`;
   if (isPC()) return `<div class="h3pc"><div class="h3m">${main}</div>${D.items.length ? homeAside() : ""}</div>`;
   return `<div class="hd hd3"><h3>내 여행</h3><span class="sp"></span>${stBar()}${instBtn()}<button class="ib" data-tips aria-label="이렇게 써요" title="이렇게 써요">${IC_HELP}</button></div><div class="body b3m">${main}${D.items.length ? `<div class="qk3m"><button class="b3" data-sheet="newrec">${IC.img}<span>사진으로 여행 만들기</span></button><button class="b3" data-sheet="tcopy">${IC.copy}<span>지난 여행 복사</span></button></div>` : ""}</div>${D.items.length ? `<button class="fab3" data-newtrip aria-label="새 여행">${IC.plus}</button>` : ""}`;
@@ -5008,7 +5014,7 @@ function scrList() {
 const TT3 = [["plan", "일정", "cal"], ["map3", "지도", "map"], ["ph3", "사진", "img"], ["prep3", "준비 · 경비", "bag"]];
 function tStat3(t) { const p = phase(t); return t.ronly || p.k === "after" ? `<span class="ts3 af">다녀옴</span>` : p.k === "on" ? `<span class="ts3 on">${I3.live}여행 중 · ${p.i + 1}일째</span>` : `<span class="ts3 up num">D-${p.n}</span>`; }
 function dayChips3(t) { const p = phase(t);
-  return `<div class="dc3" role="tablist">${t.days.map((d, i) => `<button class="${S.day === i ? "on" : ""}${p.k === "on" && p.i === i ? " td" : ""}" data-d3="${i}" role="tab" aria-selected="${S.day === i}"><b>${i + 1}일째</b><small class="num">${ymdw(dOf(t, i))}</small></button>`).join("")}${t.ronly ? "" : `<button class="add" data-dayadd aria-label="하루 더하기">${IC.plus}<span>하루</span></button>`}</div>`; }
+  return `<div class="dc3" role="tablist" data-ks="days">${t.days.map((d, i) => `<button class="${S.day === i ? "on" : ""}${p.k === "on" && p.i === i ? " td" : ""}" data-d3="${i}" role="tab" aria-selected="${S.day === i}"><b>${i + 1}일째</b><small class="num">${ymdw(dOf(t, i))}</small></button>`).join("")}${t.ronly ? "" : `<button class="add" data-dayadd aria-label="하루 더하기">${IC.plus}<span>하루</span></button>`}</div>`; }
 function journal(t) {
   const i = S.day, d = t.days[i] || { items: [] }, P = travelPh(t).filter(p => PURL[p.id]).sort((a, b) => (phT(t, a) || 9e15) - (phT(t, b) || 9e15));
   const ids = new Set(); t.days.forEach(x => x.items.forEach(it => ids.add(it.id)));
@@ -5080,9 +5086,12 @@ function render(top) {
   if (S.scr === "recv") { S.scr = "trip"; S.ttab = "ph3"; } else if (S.scr === "rec") S.scr = "list";
   if (S.rvSel && (S.scr !== "trip" || S.ttab !== "ph3")) S.rvSel = null;
   if (!S._rm3 && D.set && !D.set.rm3 && D.items && D.items.length) { S._rm3 = 1; D.items.forEach(t => { if (!(t.photos || []).length) return; const b = t.photos.map(p => p.it).join(); remapPhotos(t, false); if (b !== t.photos.map(p => p.it).join()) saveTrip(t).catch(() => {}); }); D.set.rm3 = true; setMeta("set", D.set).catch(() => {}); }
+  /* 11-07 제이: 다시 그릴 때 목록 스크롤이 맨 위로 가던 일 — data-ks 붙은 칸은 스크롤 자리를 기억해 되돌림(모든 앱 공통 기준) */
+  const KS = {}; document.querySelectorAll("[data-ks]").forEach(el => { KS[el.dataset.ks] = [el.scrollTop, el.scrollLeft]; });
   const r = render0(top);
   try { let pk = document.getElementById("pk3root"); if (!pk) { pk = document.createElement("div"); pk.id = "pk3root"; document.body.appendChild(pk); } pk.innerHTML = phkHtml();
-    let sb = document.getElementById("sb3root"); if (!sb) { sb = document.createElement("div"); sb.id = "sb3root"; document.body.appendChild(sb); } sb.innerHTML = sbar3(); document.body.classList.toggle("has-sb3", !!sb.innerHTML); } catch (e) { console.warn(e); } setTimeout(() => { mountMaps(); if (S.rvHiGo) { S.rvHiGo = false; const h = document.querySelector(".rv-t.hi"); if (h) h.scrollIntoView({ block: "center", behavior: "smooth" }); } }, 0); return r; }
+    let sb = document.getElementById("sb3root"); if (!sb) { sb = document.createElement("div"); sb.id = "sb3root"; document.body.appendChild(sb); } sb.innerHTML = sbar3(); document.body.classList.toggle("has-sb3", !!sb.innerHTML); } catch (e) { console.warn(e); }
+  document.querySelectorAll("[data-ks]").forEach(el => { const v = KS[el.dataset.ks]; if (v && (!top || el.dataset.ks === "shelf")) { el.scrollTop = v[0]; el.scrollLeft = v[1]; } }); setTimeout(() => { mountMaps(); if (S.rvHiGo) { S.rvHiGo = false; const h = document.querySelector(".rv-t.hi"); if (h) h.scrollIntoView({ block: "center", behavior: "smooth" }); } }, 0); return r; }
 
 /* ── 누르기(v3) — 앞에서 먼저 받음 ── */
 window.addEventListener("click", async e => {
@@ -5221,7 +5230,7 @@ function phkHtml() {
   return `<div class="pk3-bg" data-pkbg><div class="pk3" role="dialog" aria-modal="true" aria-label="사진 확인">
     <div class="pk3-h"><div><b>${K.auto ? `사진 ${K.all.toLocaleString("ko-KR")}장을 넣었어요` : `일정에 안 붙은 사진 ${K.all.toLocaleString("ko-KR")}장`}</b><small>찍은 시간 · 장소로 자동 정리 — 맞지 않는 것만 골라 주세요</small></div><button class="ib" data-pkx aria-label="닫기">${IC.x}</button></div>
     <div class="pk3-bar"><i style="width:${pct}%"></i></div><div class="pk3-n num"><span>${K.auto ? `${okN.toLocaleString("ko-KR")}장 정리됨` : `${okN}장 정리함`}</span><span class="w">${left ? `${left}장 확인 필요` : "모두 정리했어요"}</span></div>
-    <div class="pk3-l">${P.slice(0, 40).map(card).join("") || `<p class="hint">모두 정리했어요.</p>`}${P.length > 40 ? `<p class="hint">나머지 ${P.length - 40}장은 위를 정리하면 이어서 보여요.</p>` : ""}</div>
+    <div class="pk3-l" data-ks="pk">${P.slice(0, 40).map(card).join("") || `<p class="hint">모두 정리했어요.</p>`}${P.length > 40 ? `<p class="hint">나머지 ${P.length - 40}장은 위를 정리하면 이어서 보여요.</p>` : ""}</div>
     <div class="pk3-f"><button class="b3" data-pkx>${left ? "나중에 하기" : "닫기"}</button></div></div></div>`;
 }
 async function phkSave3(t) { await saveTrip(t); render(); }
@@ -5278,7 +5287,7 @@ function boardHtml3(t) {
     <textarea id="pta3" class="inp" placeholder="제3일 12/20(일)&#10;08:30 호텔 로비 집합&#10;10:00 유후인 긴린코 호수&#10;12:30 중식">${esc(P.text || "")}</textarea>
     ${R ? `<b class="pb3-s">이렇게 들어가요 · 일정 ${cnt}개</b><div class="pb3-p">${pv || `<p class="hint">읽을 수 있는 일정이 없어요. 「1일차」 · 「09:00 장소」처럼 써 주세요.</p>`}</div>` : `<p class="hint">「1일차」 「제3일」 같은 날짜 줄과 「09:00 장소」 줄을 읽어요.</p>`}
     <div class="pb3-b"><button class="b3" data-go="paste">자세히 고쳐서 넣기</button><button class="b3 sky" data-pb3go ${cnt ? "" : "disabled"}>일정 ${cnt}개 넣기</button></div></aside>`;
-  return `<div class="bd3w"><div class="bd3m"><div class="bd3-top"><b>일정 한눈에</b><small class="num">${t.days.length}일 · 일정 ${n}개${c.total ? ` · 예상 ${won(c.total)}원` : ""}</small></div><div class="bd3">${t.days.map(col).join("")}${t.ronly ? "" : `<button class="bd3-c bd3-plus" data-dayadd>${IC.plus}<span>하루 더하기</span></button>`}</div></div>${paste}</div>`;
+  return `<div class="bd3w"><div class="bd3m"><div class="bd3-top"><b>일정 한눈에</b><small class="num">${t.days.length}일 · 일정 ${n}개${c.total ? ` · 예상 ${won(c.total)}원` : ""}</small></div><div class="bd3" data-ks="board">${t.days.map(col).join("")}${t.ronly ? "" : `<button class="bd3-c bd3-plus" data-dayadd>${IC.plus}<span>하루 더하기</span></button>`}</div></div>${paste}</div>`;
 }
 document.addEventListener("input", e => { if (e.target.id !== "pta3") return; const P = S.pb3 || (S.pb3 = {}); P.text = e.target.value; clearTimeout(S._pb3); S._pb3 = setTimeout(() => { P.res = P.text.trim() ? parseTrip(P.text, { page: true }) : null; const pos = e.target.selectionStart; render(); const a = $("#pta3"); if (a) { a.focus(); try { a.setSelectionRange(pos, pos); } catch (er) {} } }, 450); });
 window.addEventListener("click", async e => { const b = e.target.closest("[data-pb3go]"); if (!b) return; e.stopPropagation(); const t = TR(), P = S.pb3; if (!t || !P || !P.res) return; const r = P.res; let n = 0;
@@ -5305,7 +5314,7 @@ function costBar3(t) { const c = costs(t); if (!c.total) return ""; const K = Ob
 
 /* ═════ ⑦ PC 왼쪽 내 여행 책장 ═════ */
 function shelf3(t) { const L = D.items.slice().sort((a, b) => b.start.localeCompare(a.start)), Y = {}; L.forEach(x => { const y = (x.start || "").slice(0, 4) || "날짜 없음"; (Y[y] = Y[y] || []).push(x); });
-  return `<aside class="sh3l"><b class="sh3l-t">내 여행 책장</b>${Object.keys(Y).sort().reverse().map(y => `<div class="sh3l-g"><div class="sh3l-y num"><b>${y}</b><small>${Y[y].length}개</small></div>${Y[y].map(x => `<button class="${x.id === t.id ? "on" : ""}" data-trip="${x.id}" title="${esc(x.name || "")}">${esc(x.name || "이름 없는 여행")}</button>`).join("")}</div>`).join("")}<button class="sh3l-n" data-newtrip>${IC.plus}<span>새 여행</span></button></aside>`; }
+  return `<aside class="sh3l" data-ks="shelf"><div class="sh3l-hd"><b class="sh3l-t">내 여행 책장</b><button class="sh3l-all" data-shall>${Object.keys(Y).every(y => { const st = (D.set.shx3 || {})[y]; return st ? st === "o" : y === (t.start || "").slice(0, 4); }) ? "모두 접기" : "모두 펼치기"}</button></div>${Object.keys(Y).sort().reverse().map(y => { const ty = (t.start || "").slice(0, 4), st = (D.set.shx3 || {})[y], open = st ? st === "o" : y === ty; return `<div class="sh3l-g${open ? "" : " shut"}"><button class="sh3l-y num" data-shy="${y}" aria-expanded="${open}"><i class="sh3l-cv" aria-hidden="true"></i><b>${y}</b><small>${Y[y].length}개</small></button>${open ? Y[y].map(x => `<button class="${x.id === t.id ? "on" : ""}" data-trip="${x.id}" title="${esc(x.name || "")}">${esc(x.name || "이름 없는 여행")}</button>`).join("") : ""}</div>`; }).join("")}<button class="sh3l-n" data-newtrip>${IC.plus}<span>새 여행</span></button></aside>`; }
 
 /* ═════ ⑧ 환율 계산기 ═════ */
 const FX3 = [["JPY", "일본 엔", "엔", 100], ["USD", "미국 달러", "달러", 1], ["EUR", "유로", "유로", 1], ["CNY", "중국 위안", "위안", 1], ["TWD", "대만 달러", "대만 달러", 1], ["HKD", "홍콩 달러", "홍콩 달러", 1], ["VND", "베트남 동", "동", 100], ["THB", "태국 바트", "바트", 1], ["PHP", "필리핀 페소", "페소", 1], ["SGD", "싱가포르 달러", "싱가포르 달러", 1], ["MYR", "말레이시아 링깃", "링깃", 1], ["IDR", "인도네시아 루피아", "루피아", 100], ["GBP", "영국 파운드", "파운드", 1], ["AUD", "호주 달러", "호주 달러", 1], ["CAD", "캐나다 달러", "캐나다 달러", 1], ["CHF", "스위스 프랑", "프랑", 1]];
@@ -5356,9 +5365,9 @@ async function syncFromFolder3() { const o = await readFolder(); let nr = 0; if 
 
 /* ═════ 지도 바꾸기(11-07 제이: 해외 = CARTO Voyager, 국내 = 카카오맵) ═════
    키가 아직 없으면 지금처럼 OpenStreetMap. 키는 앱 주소(pegasus0710-arch.github.io)에 묶여 있어 다른 사이트에선 안 됨 */
-const MAPKEY = { kakao: "36ef03788ecfa36d46dc97c338534b20", carto: "" };   /* ← 제이가 받은 키를 여기에 */
+const MAPKEY = { kakao: "36ef03788ecfa36d46dc97c338534b20", carto: "cb1_53n2_1_6258325a8bf2a0053ecdfe29" };   /* ← 제이가 받은 키를 여기에 */
 const inKR3 = P => P.length && P.every(p => p.lat > 32.8 && p.lat < 38.9 && p.lng > 124.3 && p.lng < 132.2);
-function tileOf3() { return MAPKEY.carto ? { u: `https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?api_key=${MAPKEY.carto}`, a: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>', z: 20 }
+function tileOf3() { return MAPKEY.carto ? { u: `https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${MAPKEY.carto}`, a: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>', z: 20 }
   : { u: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", a: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>', z: 19 }; }
 drawLeaf = function (el, o, L) {
   const m = L.map(el, { zoomControl: true, attributionControl: true, scrollWheelZoom: false }); m.attributionControl.setPrefix(false);
@@ -5390,6 +5399,12 @@ mountMaps = async function () {
     if (navigator.onLine === false) { el.innerHTML = fbMap(o); continue; }
     if (MAPKEY.kakao && inKR3(o.pts)) { try { const k = await loadKakao3(); if (el.isConnected) { drawKakao3(el, o, k); continue; } } catch (e) { console.warn("카카오맵을 못 불러와서 기본 지도로", e); } }
     try { const L = await loadLeaf(); if (el.isConnected) drawLeaf(el, o, L); } catch (e) { el.innerHTML = fbMap(o); } } };
+
+/* 책장 연도 접기 · 펼치기(11-07 제이) — 처음엔 보고 있는 여행의 연도만 펼침, 누른 대로 기억 */
+window.addEventListener("click", e => { const b = e.target.closest("[data-shy],[data-shall]"); if (!b) return; e.stopPropagation(); const t = TR(); D.set.shx3 = D.set.shx3 || {};
+  if (b.dataset.shy) { const y = b.dataset.shy, ty = t ? (t.start || "").slice(0, 4) : "", st = D.set.shx3[y], open = st ? st === "o" : y === ty; D.set.shx3[y] = open ? "c" : "o"; }
+  else { const Y = [...new Set(D.items.map(x => (x.start || "").slice(0, 4) || "날짜 없음"))], allOpen = b.textContent.includes("접기"); Y.forEach(y => D.set.shx3[y] = allOpen ? "c" : "o"); }
+  setMeta("set", D.set).catch(() => {}); render(); }, true);
 
 /* ══ 공통: 폴더의 정확한 전체 경로 (2026-10-31 제이 — 「글자가 작더라도 정확한 경로가 보여야 해」) ══
    웹 앱은 보안상 폴더의 전체 경로(C:\Users\…)를 알 수 없음 → 사용자가 탐색기 주소창을 한 번 복사해 붙여넣으면 그대로 기억해서 보여 줌.

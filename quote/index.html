@@ -370,6 +370,9 @@ h3.sec{flex-wrap:wrap;row-gap:2px}h3.sec>span{flex:1 1 200px;min-width:0}
 .gdc.off i{background:#9a9384}.gdc.ok i{background:#2f7d4f}.gdc.busy i{background:#f56d03;animation:qpl .8s infinite}
 .gdc.off svg{color:#9a9384}.gdc.ok svg{color:#2f7d4f}.gdc.busy svg{color:#f56d03;animation:qpl .8s infinite}
 @media (prefers-reduced-motion:reduce){.gdc.busy i,.gdc.busy svg{animation:none}}
+
+/* 11-06 제이: 처음 여는 화면 — 전에 쓰던 자료 안내 */
+.qwel{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:#eef4f3;border:1.5px solid #c9dcd8;font-size:13.5px;line-height:1.7;color:#1f2125;text-align:left}.qwel b{color:#195455}
 </style>
 <script>/* ══ 공통: 엑셀 붙여넣기 「엑셀 표 예시」 (2026-10-31) ══
    엑셀 화면처럼 생긴 예시 표(열 문자 A·B·C · 행 번호 · 1행 머리글 · 초록 선택 테두리)
@@ -1228,6 +1231,7 @@ async function start(){
   if(!h&&(local||(await kvGet('mode'))==='local'))return boot();
   if(!h){gate(`<h2 style="margin:0 0 8px">견적서 발행기 — 저장할 곳 고르기</h2><p style="line-height:1.7;margin:0 0 14px">거래처 · 품목 · 만든 문서는 <b>${FS?'이 기기 폴더나 브라우저':'이 휴대폰 브라우저'}</b>에 저장돼요. 인터넷(우리 서버)에는 올라가지 않아요.<br><b>구글 드라이브를 연결</b>하면 PC와 휴대폰에서 같은 자료를 같이 써요(내 드라이브에만 저장).</p>
     <div class="qgate">${FS&&!PAINT.MOB?`<button class="btn p" id="pick">이 PC 폴더에 저장 <small>추천 — 폴더째 복사하면 백업</small></button>`:''}<button class="btn ${FS&&!PAINT.MOB?'':'p'}" id="nodir">${FS&&!PAINT.MOB?'폴더 없이 시작 <small>브라우저에 저장 · 구글 드라이브와 함께</small>':'시작하기 <small>이 휴대폰에 저장 · 구글 드라이브로 PC와 같이</small>'}</button>${FS&&PAINT.MOB?`<button class="btn" id="pick">휴대폰 폴더에도 저장 <small>선택</small></button>`:''}</div>
+    <div class="qwel"><b>전에 쓰던 자료가 있어요</b> — 새로 설치했거나 다른 기기에서 처음 열었다면: ${FS&&!PAINT.MOB?'<b>PC</b>는 「이 PC 폴더에 저장」에서 <b>쓰던 폴더</b>를 고르면 거래처 · 품목 · 내 정보 · 문서가 그대로 열려요. ':''}<b>구글 드라이브</b>를 쓰셨다면 「${FS&&!PAINT.MOB?'폴더 없이 시작':'시작하기'}」 뒤 위쪽 구름 아이콘으로 같은 구글 계정을 연결하면 자료와 설정이 그대로 와요(처음 설정 없이 이어서). 백업 파일은 「설정 › 백업에서 되살리기」.</div>
     <p class="muted" style="margin:12px 0 0">${PAINT.MOB?'휴대폰은 홈 화면에 앱으로 설치해서 쓰면 더 안전해요. 시작한 뒤 「설정 · 백업」에서 구글 드라이브를 연결하세요.':'폴더를 고를 때 「파일을 수정하도록 허용할까요?」라고 물으면 <b>허용</b>을 눌러 주세요. PC에서 쓰던 폴더가 있으면 그 폴더를 고르면 그대로 이어져요.'}</p>`);
     const pk=$('#pick');if(pk)pk.onclick=async()=>{try{await pickFolder();await kvSet('mode','dir');boot();}catch(e){if(e&&e.name!=='AbortError')toast('폴더를 열지 못했어요.');}};$('#nodir').onclick=noDir;return;}
   if(h&&await permOk(h,false)){ST.root=h;ST.name=h.name;return boot();}

@@ -1924,7 +1924,7 @@ header.pcbar.b3 .upc-row{display:none}
 .t-ph3 [data-rvplan],.t-ph3 [data-rvdrop]{display:none}
 .pcapp .pc2>div{background:transparent!important;box-shadow:none!important}
 
-.qrx3{margin-top:10px;min-height:40px;padding:0 14px;border-radius:10px;border:1.5px solid #c9c1b2;background:transparent;color:var(--ink);font:600 13.5px/1 inherit;cursor:pointer}.qrx3:hover{border-color:var(--ink)}.qrx3:active{transform:translateY(1px)}.qrx3-h{display:block;margin-top:6px;font-size:12.5px;color:#6f6857}
+.qrx3{margin-top:10px;min-height:40px;padding:0 14px;border-radius:10px;border:1.5px solid #c9c1b2;background:transparent;color:var(--ink);font-weight:600;font-size:13.5px;font-family:inherit;cursor:pointer}.qrx3:hover{border-color:var(--ink)}.qrx3:active{transform:translateY(1px)}.qrx3-h{display:block;margin-top:6px;font-size:12.5px;color:#6f6857}
 
 /* 11-06 PC 넓게(제이: 화면의 70~80%) */
 @media (min-width:1500px){.pcapp .pcl.full,body.pc .pcl.tw{max-width:min(80vw,2200px)}}
@@ -1944,7 +1944,7 @@ header.pcbar.b3 .upc-row{display:none}
 .pg3-map .mp-svgw{background:#EAF0EE}.pg3-map .mpsvg{display:block;width:100%;height:min(68vh,760px)}
 .pg3 .mp-side{flex:none;width:auto;position:sticky;top:90px}
 .pg3 .mp-blk,.pg3 .mp-sel{background:#fff;border-radius:16px;box-shadow:0 1px 2px rgba(20,36,58,.08);border:0;padding:14px 16px}
-.pg3 .tysel select{min-height:40px;padding:0 12px;border:1.5px solid #d9d2c5;border-radius:10px;background:#fff;font:600 14.5px inherit;color:var(--ink);width:100%}
+.pg3 .tysel select{min-height:40px;padding:0 12px;border:1.5px solid #d9d2c5;border-radius:10px;background:#fff;font-weight:600;font-size:14.5px;font-family:inherit;color:var(--ink);width:100%}
 .pg3-list{background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 1px 2px rgba(20,36,58,.08)}.pg3-list .mp-list{margin:0}
 .pg3-list .mp-lis{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 @media (max-width:1099px){.pg3-g{grid-template-columns:minmax(0,1fr)}.pg3 .mp-side{position:static}}
@@ -1963,11 +1963,37 @@ header.pcbar.b3 .upc-row{display:none}
 
 /* 11-06 넓은 화면 배치 */
 .sh3>b{white-space:nowrap}.yr3{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
-.yr3s{position:relative;display:inline-flex}.yr3s select{appearance:none;min-height:36px;padding:0 30px 0 14px;border-radius:999px;border:1.5px solid #d9d2c5;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2314243A' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 11px center;font:600 13.5px inherit;color:var(--ink);cursor:pointer}
+.yr3s{position:relative;display:inline-flex}.yr3s select{appearance:none;min-height:36px;padding:0 30px 0 14px;border-radius:999px;border:1.5px solid #d9d2c5;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2314243A' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 11px center;font-weight:600;font-size:13.5px;font-family:inherit;color:var(--ink);cursor:pointer}
 .yr3s.on select{background-color:var(--ink);color:#fff;border-color:var(--ink)}
 @media (min-width:1500px){.ps3-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(560px,1fr));gap:14px}.ps3-l>*{margin:0!important}.pcd3-l{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}}
 .pday-s{position:sticky;top:90px;align-self:start}
 @media (min-width:1700px){.pday{grid-template-columns:minmax(0,1fr) 420px}.pday-s .dmap{height:380px}}
+/* 11-06 제이: 휴대폰에서 지도가 아래 메뉴를 덮음 — 지도(Leaflet 400~1000층)를 제 상자 안에 가두고 메뉴를 맨 위로 */
+[data-lmap],.leaflet-container,.mp3,.dmap,.mp-svgw{position:relative;isolation:isolate;z-index:0}
+.bn3m,nav.tabs.bn3m{z-index:60!important}.fab3{z-index:61}
+body:not(.pc) .body{padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+
+/* 11-06 홈 배치 다시(넓은 화면) */
+.sh3p{flex-wrap:wrap;gap:8px}.sh3p .b3.sm{min-height:38px;font-size:13.5px}
+.yj3{justify-content:flex-start;margin:4px 0 14px;position:sticky;top:74px;z-index:5;background:var(--paper,#EFE9DF);padding:8px 0}
+.yj3 button{min-height:36px;padding:0 14px;border-radius:999px;border:1.5px solid #d9d2c5;background:#fff;font-weight:600;font-size:13.5px;font-family:inherit;color:var(--ink);cursor:pointer}.yj3 button small{color:#6b6f7a;margin-left:3px}.yj3 button:hover{border-color:var(--ink)}
+.yg3{scroll-margin-top:140px;margin-bottom:22px}
+.yh3{display:flex;align-items:baseline;gap:10px;margin:0 2px 12px;padding-bottom:8px;border-bottom:2px solid #14243A}.yh3 b{font-size:22px;color:var(--ink)}.yh3 small{font-size:13px;color:#6b6f7a}
+.pcd3-l{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+@media (min-width:1500px){.pcd3-l{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}.ps3-l{grid-template-columns:repeat(auto-fit,minmax(460px,1fr))}}
+body.pc .ha3{position:sticky;top:90px;align-self:start}
+.yr3s select option,select option{color:#14243A;background:#fff}
+
+.yt3{scroll-margin-top:140px;border-radius:10px;background:#14243A;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;min-height:180px;position:relative;overflow:hidden}
+.yt3:after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;border:2px dashed rgba(255,255,255,.18)}
+.yt3 b{font-size:40px;line-height:1;letter-spacing:-.02em}.yt3 small{margin-top:8px;font-size:13.5px;color:#C9D3E3;line-height:1.5}
+@media (min-width:1500px){.pcd3-l{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}}
+@media (max-width:600px){.yt3{min-height:0;padding:14px;grid-column:1/-1;flex-direction:row;align-items:baseline;gap:10px}.yt3 b{font-size:26px}.yt3 small br{display:none}.yt3 small{margin:0}}
+
+.yt3 small span{display:block}
+@media (max-width:600px){.yt3{justify-content:flex-start;min-height:0}.yt3 small span{display:inline}.yt3 small span+span:before{content:" · "}.yj3{top:0}}
+@media (max-width:600px){.pcd3-l{grid-template-columns:1fr 1fr;gap:12px}.yj3{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.yj3 button{flex:0 0 auto}}
+@media (max-width:600px){.pcd3-i .st3{width:54px;height:54px;right:6px;bottom:6px}.pcd3-i .st3 b{font-size:12.5px;letter-spacing:-.04em}}
 
 </style></head>
 <body>
@@ -2249,7 +2275,7 @@ const IC = {
 };
 
 /* ── 저장소 (IndexedDB) ── */
-const BUILD = "2026-11-06(금) 23:41";
+const BUILD = "2026-11-06(금) 23:53";
 /* 11-06: 일정 링크(이름 · 주소) */
 const sLinks = L => (Array.isArray(L) ? L : []).filter(x => x && /^https?:\/\//i.test(String(x.u || "").trim())).slice(0, 8).map(x => ({ n: String(x.n || "").trim().slice(0, 40), u: String(x.u).trim().slice(0, 1000) }));   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
 const PL = () => D.items.filter(t => !t.ronly);   /* 11-05: 플랜만(사진으로 만든 기록은 빼고) */
@@ -4851,20 +4877,22 @@ function homeAside() {
       <div class="pp3">${after.slice(0, 5).map(t => `<button class="pp3-b" data-trip="${t.id}">${stamp3(t)}</button>`).join("")}${up[0] ? `<span class="st3 nx"><b>${esc(stampName(up[0]))}</b><small class="num">D-${phase(up[0]).n}</small></span>` : ""}${!after.length && !up.length ? `<p class="hint">여행을 다녀오면 여기에 도장이 찍혀요.</p>` : ""}</div>
       <div class="sx3"><span><b class="num">${after.length.toLocaleString("ko-KR")}</b><small>다녀온 여행</small></span><span><b class="num">${dayN.toLocaleString("ko-KR")}</b><small>여행한 날</small></span><span><b class="num">${Ay.length}</b><small>올해 여행</small></span></div></div>
     ${ago ? `<button class="c3 ago3" data-trip="${ago.id}"><small>1년 전 오늘</small><span>${coverOf(ago) ? `<img src="${coverOf(ago).t}" alt="">` : ""}<span><b>${esc(ago.name || "여행")}</b><small class="num">${ymdw(dOf(ago, 0))}</small></span></span></button>` : ""}
-    <div class="c3 qk3"><b>빠르게 시작</b><button class="b3" data-newtrip>${IC.plus}<span>새 여행 계획</span></button><button class="b3" data-sheet="newrec">${IC.img}<span>사진으로 여행 만들기</span></button><button class="b3" data-sheet="tcopy">${IC.copy}<span>지난 여행 복사</span></button></div>
     ${typeof qrCard === "function" && !IS_MOBILE() && !D.set.qrOff3 ? qrCard().replace(/<\/div><\/div>$/, `<button class="qrx3" data-qroff>더 이상 안 보기</button><small class="qrx3-h">휴대폰 QR은 설정에서 언제든 볼 수 있어요.</small></div></div>`) : ""}
   </aside>`;
 }
 function scrList() {
   const on = D.items.filter(t => !t.ronly && phase(t).k === "on"), up = PL().filter(t => phase(t).k === "before").sort((a, b) => a.start.localeCompare(b.start));
   const Y = pastYears(); if (S.hy && S.hy !== "all" && !Y.includes(S.hy)) S.hy = null; const hy = S.hy || Y[0] || "all";
-  const past = D.items.filter(t => phase(t).k === "after" && (hy === "all" || (t.start || "").startsWith(hy))).sort((a, b) => b.start.localeCompare(a.start));
+  const pastAll = D.items.filter(t => phase(t).k === "after").sort((a, b) => b.start.localeCompare(a.start));
+  const grp = Y.map(y => [y, pastAll.filter(t => (t.start || "").startsWith(y))]).filter(g => g[1].length);
   setTimeout(autoTips, 400);
   const empty = !D.items.length ? `<div class="em3"><b>첫 여행을 만들어 보세요</b><p>날짜만 고르면 1일째 · 2일째가 저절로 생겨요. 여행사 일정은 통째로 붙여넣으면 날짜별로 정리돼요.<br>다녀온 여행은 사진만 넣어도 여행이 만들어져요.</p><div class="row3"><button class="b3 sky big" data-newtrip>${IC.plus}<span>새 여행 계획</span></button><button class="b3 big" data-sheet="newrec">${IC.img}<span>사진으로 여행 만들기</span></button></div></div>` : "";
   const main = `${banner()}${installCard()}${empty}
     ${on.map(t => heroNow(t)).join("")}
     ${up.length ? `<section class="scx3"><div class="sh3"><b>다가오는 여행</b><small class="num">${up.length}</small></div><div class="ps3-l">${up.map(passCard).join("")}</div></section>` : ""}
-    ${Y.length ? `<section class="scx3"><div class="sh3"><b>다녀온 여행</b><span class="sp"></span><div class="yr3">${Y.slice(0, 5).map(y => `<button class="${hy === y ? "on" : ""}" data-hy="${y}">${y}년</button>`).join("")}${Y.length > 5 ? `<label class="yr3s${Y.slice(5).includes(hy) ? " on" : ""}"><select data-hysel aria-label="이전 연도"><option value="">${Y.slice(5).includes(hy) ? hy + "년" : "이전 연도"}</option>${Y.slice(5).map(y => `<option value="${y}">${y}년</option>`).join("")}</select></label>` : ""}<button class="${hy === "all" ? "on" : ""}" data-hy="all">모두</button></div></div><div class="pcd3-l">${past.map(postCard).join("") || `<p class="hint">이 해에 다녀온 여행이 없어요.</p>`}</div></section>` : ""}`;
+    ${Y.length ? `<section class="scx3"><div class="sh3 sh3p"><b>다녀온 여행</b><small class="num">${pastAll.length.toLocaleString("ko-KR")}</small><span class="sp"></span>${isPC() ? `<button class="b3 sm" data-sheet="newrec">${IC.img}<span>사진으로 여행 만들기</span></button><button class="b3 sm" data-sheet="tcopy">${IC.copy}<span>지난 여행 복사</span></button>` : ""}</div>
+      <div class="yr3 yj3">${Y.slice(0, 8).map(y => `<button data-hyj="${y}">${y}년 <small class="num">${(grp.find(g => g[0] === y) || [0, []])[1].length}</small></button>`).join("")}${Y.length > 8 ? `<label class="yr3s"><select data-hyjs aria-label="이전 연도"><option value="">이전 연도</option>${Y.slice(8).map(y => `<option value="${y}">${y}년</option>`).join("")}</select></label>` : ""}</div>
+      <div class="pcd3-l">${grp.map(([y, L]) => `<div class="yt3" id="yg3-${y}"><b class="num">${y}</b><small class="num"><span>여행 ${L.length}개</span><span>${L.reduce((a, t) => a + Math.max(1, t.days.length), 0)}일</span></small></div>${L.map(postCard).join("")}`).join("")}</div></section>` : ""}`;
   if (isPC()) return `<div class="h3pc"><div class="h3m">${main}</div>${D.items.length ? homeAside() : ""}</div>`;
   return `<div class="hd hd3"><h3>내 여행</h3><span class="sp"></span>${stBar()}${instBtn()}<button class="ib" data-tips aria-label="이렇게 써요" title="이렇게 써요">${IC_HELP}</button></div><div class="body b3m">${main}${D.items.length ? `<div class="qk3m"><button class="b3" data-sheet="newrec">${IC.img}<span>사진으로 여행 만들기</span></button><button class="b3" data-sheet="tcopy">${IC.copy}<span>지난 여행 복사</span></button></div>` : ""}</div>${D.items.length ? `<button class="fab3" data-newtrip aria-label="새 여행">${IC.plus}</button>` : ""}`;
 }
@@ -5006,6 +5034,10 @@ function assignPh(t, p, ts) {
 function thN3() { if (!isPC()) return 4; const w = Math.min(innerWidth * .8, 2200) - 460 - 230; return Math.max(5, Math.min(18, Math.floor(w / 96))); }
 let _rz3; window.addEventListener("resize", () => { clearTimeout(_rz3); _rz3 = setTimeout(() => { if (S.scr === "trip" && !S.edit && !S.sheet && !document.activeElement.matches("input,textarea,select")) render(); }, 250); });
 document.addEventListener("change", e => { if (!e.target.matches("[data-hysel]")) return; if (e.target.value) { S.hy = e.target.value; render(); } });
+
+/* 11-06 홈: 연도 단추 = 그 해로 내려가기(여행을 연도별로 모두 보여 줌) */
+document.addEventListener("click", e => { const b = e.target.closest("[data-hyj]"); if (!b) return; const g = document.getElementById("yg3-" + b.dataset.hyj); if (g) g.scrollIntoView({ behavior: "smooth", block: "start" }); });
+document.addEventListener("change", e => { if (!e.target.matches("[data-hyjs]") || !e.target.value) return; const g = document.getElementById("yg3-" + e.target.value); if (g) g.scrollIntoView({ behavior: "smooth", block: "start" }); e.target.value = ""; });
 
 /* ══ 공통: 폴더의 정확한 전체 경로 (2026-10-31 제이 — 「글자가 작더라도 정확한 경로가 보여야 해」) ══
    웹 앱은 보안상 폴더의 전체 경로(C:\Users\…)를 알 수 없음 → 사용자가 탐색기 주소창을 한 번 복사해 붙여넣으면 그대로 기억해서 보여 줌.

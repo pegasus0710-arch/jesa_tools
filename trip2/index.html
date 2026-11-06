@@ -1650,37 +1650,6 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
   window.BJBACK = { init(o) { if (o) { if (o.ov) C.ov = C.ov.concat(o.ov); if (o.btn) Object.assign(C.btn, o.btn); if (o.hook) C.hook = o.hook; } }, arm, say };
 })();
 
-/* Blog J 공통 — 처음 여는 화면(11-06 제이)
-   새로 설치했거나 다른 기기에서 처음 열 때, 먼저 「처음 써요 / 전에 쓰던 자료가 있어요」를 묻는다.
-   전에 쓰던 자료 → 구글 드라이브 · 전에 쓰던 폴더 · 백업 파일에서 가져오면 처음 설정(분류 고르기 등)을 건너뛰고
-   예전 설정 그대로 이어서 씀(설정도 자료에 들어 있음). 처음 써요 → 지금까지의 저장 위치 묻기 → 처음 설정.
-   쓰는 법: 시트 그리기에서 WELCOME.html({ name, gd, dir, dirName, phone }) · 단추는 앱이 이미 가진 data- 속성을 그대로 씀
-     data-welnew(처음 써요) · data-gdstart(드라이브) · data-pickrec(폴더) · data-welbk(백업 파일) */
-(function () {
-  const sv = p => `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
-  const IC = {
-    neu: sv('<path d="M12 5v14M5 12h14"/>'),
-    cloud: sv('<path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.34 9.5 4.75 4.75 0 0 0 7 19z"/>'),
-    folder: sv('<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'),
-    file: sv('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l3 3 3-3M12 10v7"/>')
-  };
-  function html(o) {
-    const nm = o.name || "이 앱";
-    return `<b class="sht">${nm}, 처음 쓰시나요?</b>
-    <button class="opt on1 welopt" data-welnew><span class="ic">${IC.neu}</span><span><b>처음 써요</b><small>저장할 곳을 정하고 처음부터 시작해요</small></span></button>
-    <div class="welsep"><span>전에 쓰던 자료가 있어요</span></div>
-    <p class="hint welhint">앱을 지우고 다시 설치했거나, 다른 기기(PC · 휴대폰)에서 쓰던 경우 — 가져오면 <b>처음 설정은 건너뛰고 예전 설정 그대로</b> 이어서 써요.</p>
-    ${o.gd ? `<button class="opt welopt" data-gdstart><span class="ic">${IC.cloud}</span><span><b>구글 드라이브에서 이어 쓰기</b><small>전에 쓰던 구글 계정으로 연결 → 자료 · 사진 · 설정을 받아 와요(사진이 많으면 조금 걸려요)</small></span></button>` : ""}
-    ${o.dir ? `<button class="opt welopt" data-pickrec><span class="ic">${IC.folder}</span><span><b>전에 쓰던 ${o.phone ? "폴더" : "PC 폴더"} 다시 연결</b><small>${o.dirName ? `「${o.dirName}」 폴더(또는 그 위 폴더)를 고르면 자료를 찾아 그대로 불러와요` : "쓰던 폴더를 고르면 자료를 찾아 그대로 불러와요"}</small></span></button>` : ""}
-    <button class="opt welopt" data-welbk><span class="ic">${IC.file}</span><span><b>백업 파일로 되살리기</b><small>「○○_백업_날짜」 파일을 고르면 그대로 되살려요 — 그다음 저장할 곳을 정해요</small></span></button>`;
-  }
-  const css = `.welsep{display:flex;align-items:center;gap:10px;margin:16px 0 4px;color:var(--ink2,#5b5547);font-size:13.5px;font-weight:700}
-.welsep:before,.welsep:after{content:"";flex:1;height:1px;background:var(--line,#d8cfbf)}
-.welhint{margin:4px 0 8px!important}`;
-  try { const st = document.createElement("style"); st.textContent = css; (document.head || document.documentElement).appendChild(st); } catch (e) {}
-  window.WELCOME = { html };
-})();
-
 /* ══ 공통: 엑셀 붙여넣기 「엑셀 표 예시」 (2026-10-31) ══
    엑셀 화면처럼 생긴 예시 표(열 문자 A·B·C · 행 번호 · 1행 머리글 · 초록 선택 테두리)
    + 복사 순서 3단계 + 「이 예시를 붙여넣어 보기」(대상 입력칸에 그대로 채움).
@@ -1895,7 +1864,7 @@ const IC = {
 };
 
 /* ── 저장소 (IndexedDB) ── */
-const BUILD = "2026-11-06(금) 13:58";   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
+const BUILD = "2026-11-05(목) 14:59";   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
 const PL = () => D.items.filter(t => !t.ronly);   /* 11-05: 플랜만(사진으로 만든 기록은 빼고) */
 const DBN = "bj-trip-note2"; const DBN1 = "bj-trip-planner";   /* 11-04 v2.0: 새 저장소(v1.0과 따로) — 처음 열 때 v1.0 자료를 복사해 옴 */
 let db = null;
@@ -2599,7 +2568,6 @@ function sheetHtml() {
   else if (k === "samsung") h = `<b class="sht">삼성 인터넷에서 설치하기</b>
     <ol class="gsteps"><li><span>아래 <span class="k">≡</span> 메뉴 → <span class="k">페이지 추가</span> → <span class="k">홈 화면</span></span></li><li><span>「안전하지 않은 앱 차단됨」이 뜨면 <span class="k">세부정보 더보기</span> → <span class="k">무시하고 설치하기</span></span></li><li><span>홈 화면의 <span class="k">여행 노트</span> 아이콘으로 열어요</span></li></ol>
     <p class="hint">크롬으로 같은 주소를 열어 「앱 설치」를 누르면 경고 없이 설치돼요.</p><div class="row2">${window._bip ? `<button class="btn go" style="flex:1" data-install>${IC.home} 지금 설치</button><button class="btn sm" data-close>닫기</button>` : `<button class="btn nv" style="flex:1" data-close>알겠어요</button>`}</div>`;
-  else if (k === "wel") h = WELCOME.html({ name: "여행 노트", gd: gdHttp(), dir: CAN_DIR, dirName: "여행노트_v2", phone: ANDROID });
   else if (k === "store") h = `<b class="sht">어디에 저장할까요?</b><p class="hint">휴대폰과 PC를 같이 쓰려면 <b>구글 드라이브</b>를 추천해요. 고칠 때마다 저절로 맞춰져요.</p>
     ${gdHttp() ? `<button class="opt on1" data-gdstart><span class="ic">${IC.cloud}</span><span><b>구글 드라이브에 저장 <span class="req" style="background:var(--cat)">추천</span></b><small>내 드라이브에 「여행노트_v2」 폴더가 생기고, 이 앱은 그 폴더만 봐요</small></span></button>` : ""}
     ${CAN_DIR && !ANDROID ? `<button class="opt" data-pickrec><span class="ic">${IC.folder}</span><span><b>내 PC 폴더에 저장</b><small>사진 › 여행노트_v2 — 열린 창에서 「폴더 선택」 → 「파일 수정 허용」만 누르면 돼요</small></span></button>` : ""}
@@ -3251,8 +3219,6 @@ document.addEventListener("click", async e => {
   if (d.pickrec != null) { const ok = await pickDir(true); if (ok) { S.sheet = null; render(); } return; }
   if (d.dirlater != null) { D.set.dirLater = Date.now(); await setMeta("set", D.set).catch(() => {}); toast("7일 뒤에 다시 알려 드릴게요. 설정 › 저장 위치에서 언제든 연결할 수 있어요."); return render(); }
   if (d.pickown != null) { const ok = await pickDir(false); if (ok) { S.sheet = null; render(); } return; }   /* 10-31: 안드로이드 머리줄 · 설정 「휴대폰 폴더」 단추가 아무 일도 안 하던 것 */
-  if (d.welnew != null) { S.sheet = "store"; return render(); }
-  if (d.welbk != null) { S.sheet = "store"; render(); return BKUP.restore(); }
   if (d.nostore != null) { D.set.storeAsked = true; await setMeta("set", D.set); S.sheet = null; return render(); }
   if (d.dirfull != null) { const v = await FPATH.ask({ name: D.dir ? D.dir.name : "여행노트_v2", cur: D.dirFull, what: "저장 폴더" }); if (v != null) { D.dirFull = v; if (v) await setMeta("dirfull", v).catch(() => {}); else await delO("meta", "dirfull").catch(() => {}); render(); if (v) toast("정확한 경로를 기억했어요."); } return; }
   if (d.undir != null) { if (confirm("저장 폴더 연결을 끊을까요? (폴더 안 파일은 그대로 남아요)")) { D.dir = null; D.dirPerm = null; D.dirFull = ""; await delO("meta", "dir"); await delO("meta", "dirfull").catch(() => {}); render(); } return; }
@@ -3438,7 +3404,7 @@ window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window
     try { D.dirPath = (await getMeta("dirpath")) || ""; D.dirFull = (await getMeta("dirfull")) || ""; D.dir = (await getMeta("dir")) || null; if (D.dir && D.dir.queryPermission) D.dirPerm = await D.dir.queryPermission({ mode: "readwrite" }); } catch (e) { D.dir = null; }
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   } else toast("이 브라우저는 저장을 막고 있어요 — 시크릿 창이면 일반 창으로 열어 주세요.");
-  if ((CAN_DIR || gdHttp()) && !D.dir && !D.set.gdOn && !D.set.storeAsked && gdHttp()) S.sheet = D.items.length ? "store" : "wel";   /* 11-06: 처음 여는 기기는 먼저 처음 써요 / 전에 쓰던 자료
+  if ((CAN_DIR || gdHttp()) && !D.dir && !D.set.gdOn && !D.set.storeAsked && gdHttp()) S.sheet = "store";
   try { history.replaceState({ n: 0 }, "", location.href); } catch (e) {}
   /* 여행 중이면 바로 그 여행의 오늘 */
   const ct = PL().find(t => phase(t).k === "on"); if (ct && !S.sheet) { S.rid = ct.id; S.day = phase(ct).i; S.scr = "trip"; hist.push({ scr: "list", rid: null }); }

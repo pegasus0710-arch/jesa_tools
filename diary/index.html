@@ -627,7 +627,7 @@ body.bgimg .hd .ttl{text-shadow:0 1px 6px rgba(255,255,255,.8)}
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
 <script>
-const BUILD = "2026-11-06(금) 14:00";
+const BUILD = "2026-11-06(금) 14:09";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -951,7 +951,7 @@ function dayView() {
   return pgsw + book(L, R, deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "").replace('<div class="book" id="book">', `<div class="book dayb" id="book" data-dp="${dp}">`) + mtools + mbar;
 }
 function stkHtml(s, i) {
-  const st = `width:${s.w || 74}px;height:${s.t ? 36 : (s.w || 74)}px;transform:translate(-50%,-50%) rotate(${s.r || 0}deg)`;
+  const st = `width:${wOf(s, 74)}px;height:${s.t ? (isOne() ? 30 : 36) : wOf(s, 74)}px;transform:translate(-50%,-50%) rotate(${s.r || 0}deg)`;
   return `<div class="stk ${S.sel === "s" + i ? "sel" : ""}" data-stk="${i}" style="${st}" role="img" aria-label="${s.t ? "글자 테이프" : (STKMAP[s.k] || [0, "스티커"])[1]}">${s.t ? `<div class="tape" style="background:${TAPEC[s.c || 0] || TAPEC[0]}">${esc(s.t)}</div>` : stkSvg(s.k)}<span class="rsz" aria-hidden="true"></span></div>`;
 }
 
@@ -993,8 +993,10 @@ function toolBtns(d, c) {
   return (ph ? `<label class="${c}" title="사진 넣기 (PC는 사진 파일을 쪽 위로 끌어 놓아도 돼요)">${ic("img")}<span>${c === "ltool" ? "사진" : sh ? "+ 사진" : "+ 사진 (갤러리)"}</span><input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label><button class="${c}" data-tool="phPaste" title="복사한 사진 붙여넣기 (PC는 Ctrl+V도 돼요)">${ic("clip")}<span>${c === "ltool" ? "붙여넣기" : sh ? "사진 붙여넣기" : "복사한 사진 붙여넣기"}</span></button>` : "")
     + (on("sticker") ? `<button class="${c}" data-tool="stkBtn">${ic("stkr")}<span>${c === "ltool" ? "스티커" : "+ 스티커"}</span></button><button class="${c}" data-tool="tapeBtn">${ic("tape")}<span>${c === "ltool" ? "글자 테이프" : sh ? "+ 테이프" : "+ 글자 테이프"}</span></button>` : "");
 }
+/* 11-06 제이: 휴대폰(한 쪽 화면)에서는 사진 · 스티커가 쪽에 비해 너무 큼 → PC 크기의 62%로 보여 주고, 휴대폰에서 크기를 바꾸면 휴대폰 크기(mw)를 따로 기억 */
+const PS = 0.62, wKey = () => isOne() ? "mw" : "w", wOf = (it, def) => isOne() ? (it.mw || Math.round((it.w || def) * PS)) : (it.w || def);
 function polHtml(p, i) {
-  const w = p.w || 168, st = `width:${w}px;transform:translate(-50%,-50%) rotate(${p.r || 0}deg)`;
+  const w = wOf(p, 168), st = `width:${w}px;transform:translate(-50%,-50%) rotate(${p.r || 0}deg)`;
   return `<div class="pol fx ${S.sel === "p" + i ? "sel" : ""}" data-ph="${i}" style="${st}"><span class="tape" aria-hidden="true"></span><img data-pid="${p.id}" alt="" draggable="false"${p.ar ? ` style="aspect-ratio:1/${p.ar};height:auto"` : ""} /><input class="cap" data-arr="photos" data-i="${i}" data-key="cap" value="${esc(p.cap || "")}" placeholder="한 줄" aria-label="사진 설명" /><button class="star ${p.star ? "on" : ""}" data-star="${i}" aria-label="이달의 사진으로" title="이달의 사진(사진 달력)">★</button><button class="del" data-delp="${i}" aria-label="사진 지우기">×</button><span class="rsz" aria-label="크기 바꾸기" title="끌어서 크기 바꾸기"></span></div>`;
 }
 /* 휴대폰 = 위아래 한 줄 · PC = 좌우 펼침 → 위치는 「쪽(L · R) 안」 기준. 휴대폰에서 옮기면 휴대폰 위치(mp)를 따로 기억 */
@@ -1566,7 +1568,7 @@ document.addEventListener("change", e => {
   if (t.id === "scSat") { D.school.sat = t.checked; touchSec("school"); return render(); }
   if (t.dataset.ti !== undefined && t.dataset.key === "date") return render();
   if (t.dataset.rtt) return render();
-  if (t.dataset.f === "wake" || t.dataset.f === "bed") return rerenderKeep();
+  if (t.dataset.f === "wake" || t.dataset.f === "bed") { /* 11-06 제이: 분을 치다 다시 그려져 「3」만 들어가던 것 → 일어남 · 잠듦 칸에 있는 동안은 기다렸다가 두 칸을 다 나갈 때 */ if (document.activeElement === t) { S.slpDirty = true; return; } return rerenderKeep(); }
   if (t.dataset.bdl !== undefined) return render();
   if (t.dataset.wl !== undefined) return rerenderKeep();
   if (t.dataset.tdd !== undefined) return rerenderKeep();
@@ -1637,7 +1639,7 @@ document.addEventListener("pointerdown", e => {
   if (!el || (!rz && e.target.closest("input,button"))) { if (S.sel != null && !e.target.closest(".stkbar") && !e.target.closest(".deco")) decoSel(null); return; }
   if (isPhone() && dayMode() !== "deco") return;
   const key = el.dataset.ph != null ? "p" + el.dataset.ph : "s" + el.dataset.stk, it = decoArr(dayOf(S.date, true), key)[+key.slice(1)];
-  drag = { key, el, lr: el.parentElement.getBoundingClientRect(), sx: e.clientX, sy: e.clientY, moved: false, rz: !!rz, w0: it.w || (key[0] === "p" ? 168 : 74) };
+  drag = { key, el, lr: el.parentElement.getBoundingClientRect(), sx: e.clientX, sy: e.clientY, moved: false, rz: !!rz, w0: wOf(it, key[0] === "p" ? 168 : 74) };
   (rz || el).setPointerCapture(e.pointerId); e.preventDefault();
 });
 document.addEventListener("pointermove", e => { if (!drag) return; const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy; if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true; if (!drag.moved) return;
@@ -1645,7 +1647,7 @@ document.addEventListener("pointermove", e => { if (!drag) return; const dx = e.
   if (drag.rz) { const p = drag.key[0] === "p", w = Math.round(Math.min(p ? 560 : 400, Math.max(p ? 80 : 26, drag.w0 + (dx + dy) * 1.2))); drag.w = w; drag.el.style.width = w + "px"; if (!p && !drag.el.querySelector(".tape")) drag.el.style.height = w + "px"; return; }
   drag.el.style.left = (e.clientX - drag.lr.left) + "px"; drag.el.style.top = (e.clientY - drag.lr.top) + "px"; drag.cx = e.clientX; drag.cy = e.clientY; });
 document.addEventListener("pointerup", () => { if (!drag) return; const g = drag; drag = null; const d = dayOf(S.date, true), it = decoArr(d, g.key)[+g.key.slice(1)]; if (!it) return;
-  if (g.moved) { if (g.rz) { it.w = g.w; touchDay(S.date); decoSel(g.key); return; } const p = pageAt(g.cx, g.cy); const was = posOf(it).pg; setPos(it, p); touchDay(S.date); if (was !== p.pg) { rerenderKeep(); } else placeDeco(); decoSel(g.key); }
+  if (g.moved) { if (g.rz) { it[wKey()] = g.w; touchDay(S.date); decoSel(g.key); return; } const p = pageAt(g.cx, g.cy); const was = posOf(it).pg; setPos(it, p); touchDay(S.date); if (was !== p.pg) { rerenderKeep(); } else placeDeco(); decoSel(g.key); }
   else decoSel(g.key); });
 function stkBar(el) { const b0 = $(".stkbar"); if (b0) b0.remove(); const bk = $("#book"); if (!bk) return; const r = el.getBoundingClientRect(), br = bk.getBoundingClientRect(); const b = document.createElement("div"); b.className = "stkbar";
   b.style.left = Math.max(0, Math.min(br.width - 340, r.left - br.left)) + "px"; b.style.top = Math.max(0, r.bottom - br.top + 10) + "px";
@@ -1657,7 +1659,7 @@ function stkBar(el) { const b0 = $(".stkbar"); if (b0) b0.remove(); const bk = $
 async function stkAct(a) { const d = dayOf(S.date, true), key = S.sel; if (!key) return; const arr = decoArr(d, key), i = +key.slice(1), s = arr[i]; if (!s) return; const ph = key[0] === "p", dw = ph ? 168 : 74;
   if (a === "view") return viewer(s.id);
   if (a.startsWith("ar")) s.ar = a.slice(2);
-  if (a === "big") s.w = Math.min(ph ? 560 : 400, (s.w || dw) + (ph ? 28 : 14)); if (a === "small") s.w = Math.max(ph ? 80 : 26, (s.w || dw) - (ph ? 28 : 14)); if (a === "rl") s.r = (s.r || 0) - 8; if (a === "rr") s.r = (s.r || 0) + 8;
+  if (a === "big") s[wKey()] = Math.min(ph ? 560 : 400, wOf(s, dw) + (ph ? 28 : 14)); if (a === "small") s[wKey()] = Math.max(ph ? 80 : 26, wOf(s, dw) - (ph ? 28 : 14)); if (a === "rl") s.r = (s.r || 0) - 8; if (a === "rr") s.r = (s.r || 0) + 8;
   if (/^c\d$/.test(a)) s.c = +a.slice(1); if (a === "txt") { const v = prompt("테이프 글자", s.t); if (v) { s.t = v.slice(0, 24); s.w = Math.min(260, 40 + s.t.length * 18); } }
   let nk = key; if (a === "front") { arr.splice(i, 1); arr.push(s); nk = key[0] + (arr.length - 1); }
   if (a === "del") { if (ph) { if (!confirm("이 사진을 삭제할까요?")) return; await delPhoto(s.id); } arr.splice(i, 1); nk = null; }
@@ -1741,6 +1743,8 @@ function bkPaint() { const P = window.__bkp, el = $("#pop .bkp-body"); if (!P ||
   el.innerHTML = `<div class="tp-q">${[["y", "올해 안"], ["1", "1년 안"], ["3", "3년 안"], ["5", "5년 안"], ["10", "10년 안"], ["20", "20년 안"]].map(([q, n]) => `<button class="mini ${P.q === q ? "g" : "ln"}" data-bq="${P.i}" data-q="${q}">${n}</button>`).join("")}<label class="mini bkcal ${P.q === "d" ? "g" : "ln"}" title="달력에서 날짜 고르기">${I(IC.cal)}<span>${P.q === "d" && P.due ? ymdw(P.due) : "날짜 고르기"}</span><input type="date" id="bpd" value="${P.q === "d" ? P.due : ""}" aria-label="달력에서 날짜 고르기" /></label></div>
    <p class="bkp-sum">${P.due ? `<b>${ymdw(P.due)}</b>까지 — D-${Math.max(0, Math.round((pd(P.due) - pd(today())) / DAY)).toLocaleString("ko-KR")}` : "기한을 골라 주세요"}</p>
    <div class="btns">${b.due ? `<button class="btn ln" data-bksave="none">기한 없애기</button>` : ""}<button class="btn g" data-bksave="1" ${P.due ? "" : "disabled"}>저장</button></div>`; }
+
+document.addEventListener("focusout", () => { if (!S.slpDirty) return; setTimeout(() => { const a = document.activeElement; if (a && a.closest && a.closest(".slp")) return; S.slpDirty = false; rerenderKeep(); }, 0); });
 
 /* ───────── 이 기기 폴더에도 저장 (지침 7번 PC 저장 폴더 표준 · 공통기능지도 「용량 큰 앱 = 기기 폴더」) ─────────
    PC 크롬 · 엣지 · 안드로이드 크롬: 고른 폴더 안 「일기노트」 폴더에 일기노트.json + 사진/ 을 자동으로 씀(원본 한 벌 더).
@@ -1978,6 +1982,7 @@ function noteView() { noteMigrate(); D.notes = D.notes.filter(n => n.id === S.nt
 /* 11-01 제이: 목록 = 분류별 글 목록(작성일 · 제목 · 수정일) → 제목을 누르면 내용 보기 → 「수정」 · 「지우기」 */
 const ymdOf = t => { const d = new Date(t); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
 function noteList() {
+  if (S.nf === undefined) S.nf = (D.notes || []).some(n => n.fav) ? "★" : "";   /* 11-06 제이: 노트 첫 화면 = 즐겨찾기(없으면 모두) */
   const F = S.nf || "", Q = (S.nq || "").trim(), L = D.notes.filter(n => (!F || (F === "★" ? n.fav : n.cat === F)) && (!Q || (noteTitle(n) + " " + (n.body || "")).includes(Q))).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.u || 0) - (a.u || 0));
   const per = 20, pages = Math.max(1, Math.ceil(L.length / per)), pg = Math.min(Math.max(1, S.np || 1), pages), part = L.slice((pg - 1) * per, pg * per);
   const isCat = F && F !== "★", sel = S.nsel, cnt = c => D.notes.filter(n => n.cat === c).length;
@@ -2106,6 +2111,9 @@ async function copyText(s) { try { await navigator.clipboard.writeText(s); retur
 document.addEventListener("click", async e => { const b = e.target.closest("#nCopy,#nShare"); if (!b) return; e.stopImmediatePropagation(); const n = noteById(S.nt); if (!n) return; const txt = noteShareText(n);
   if (b.id === "nShare") { try { await navigator.share({ title: noteTitle(n), text: txt }); return; } catch (er) { if (er && er.name === "AbortError") return; } }
   toast(await copyText(txt) ? "글 전체를 복사했어요 — 붙여넣기로 공유하세요" : "복사하지 못했어요 — 글을 길게 눌러 직접 복사해 주세요"); }, true);
+
+/* 11-06 제이: 노트 읽기에서 글을 두 번 누르면(더블클릭) 수정 화면으로 */
+document.addEventListener("dblclick", e => { if (!S.nt || S.ne || !e.target.closest(".nrbody,.nrtitle,.nrhead,.nrdate,.nph")) return; const b = document.getElementById("nEdit"); if (!b) return; try { getSelection().removeAllRanges(); } catch (er) {} b.click(); });
 
 /* ── 휴대폰 뒤로 가기: 앱을 바로 나가지 않고 한 단계씩 (창 닫기 → 쓰기 끝내기 → 상세 → 하루 쪽 → 「한 번 더 누르면 닫혀요」) ── */
 const BACK = { armed: false };

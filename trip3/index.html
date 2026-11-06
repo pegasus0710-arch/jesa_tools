@@ -2001,6 +2001,8 @@ body.pc .ha3{position:sticky;top:90px;align-self:start}
 .rv-sn{font-size:15px;margin-right:4px}.rv-bar .btn.dl{color:#C0392B}
 .vw2-del{color:#fff}.vw2-del span{margin-left:4px}
 
+.rf3{margin-top:18px;padding:14px 16px;border-radius:14px;background:#fff;border:1.5px dashed #c9c1b2}.rf3-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.rf3-h b{font-size:15.5px}.rf3-h small{color:#6b6f7a;font-size:13px}.rf3 .hint{margin:6px 0 4px}
+
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div><div id="busy"><div>사진 넣는 중…</div></div>
@@ -2281,7 +2283,7 @@ const IC = {
 };
 
 /* ── 저장소 (IndexedDB) ── */
-const BUILD = "2026-11-06(금) 23:56";
+const BUILD = "2026-11-07(토) 00:05";
 /* 11-06: 일정 링크(이름 · 주소) */
 const sLinks = L => (Array.isArray(L) ? L : []).filter(x => x && /^https?:\/\//i.test(String(x.u || "").trim())).slice(0, 8).map(x => ({ n: String(x.n || "").trim().slice(0, 40), u: String(x.u).trim().slice(0, 1000) }));   /* 11-05: 올린 판 확인용(꼬리말에 보임) */
 const PL = () => D.items.filter(t => !t.ronly);   /* 11-05: 플랜만(사진으로 만든 기록은 빼고) */
@@ -3538,6 +3540,7 @@ async function addTripPhotos(files) {
       const sig = `${x && x.t ? x.t : "f" + (f.lastModified || 0)}|${f.size}`; if (phDup(t, sig, x)) { dup++; continue; }
       const id = await importFile(f), p = { id, t: tt || 0, u: u || 0, z: x ? x.z : null, ll: x ? x.ll : null, lm: isLm, it: "", sig }; p.it = assignPh(t, p); t.photos.push(p); n++; } catch (e) { bad++; } }
   busy.classList.remove("on"); await saveTrip(t); render();
+  if (n && typeof fitAsk3 === "function" && await fitAsk3(t, t.photos.slice(-n))) return;
   const hit = n ? t.photos.slice(-n).filter(p => p.it).length : 0;
   const tail = `${dup ? ` · 같은 사진 ${dup}장 건너뜀` : ""}${bad ? ` · 못 읽음 ${bad}장(HEIC면 JPG로)` : ""}`;
   toast(n && t.ronly ? `사진 ${n}장을 넣었어요 — 찍은 시간 · 장소로 묶었어요${tail}` : n ? `사진 ${n}장 — 일정에 ${hit}장 · 맞는 일정 없음 ${n - hit}장${tail}` : dup ? `이미 넣은 사진이에요 — 같은 사진 ${dup}장 건너뜀${bad ? ` · 못 읽음 ${bad}장` : ""}` : `넣은 사진이 없어요${tail}`);
@@ -4740,7 +4743,10 @@ function scrRec() {
   const sel = S.rvSel; const tile = p => { const ts = phT(t, p), on = sel && sel.has(p.id); return `<span class="rv-t${S.rvHi && p.it === S.rvHi ? " hi" : ""}${inf ? " cap3" : ""}${sel ? " sel3" : ""}${on ? " on" : ""}">${sel ? `<i class="rv-ck" aria-hidden="true">${on ? IC.ok : ""}</i>` : ""}<img src="${PURL[p.id].t}" alt="" loading="lazy" ${sel ? `data-rvsel="${p.id}"` : `data-pvid="${p.id}" data-pvk="all"`}>${inf ? `<span class="rv-inf">${ts ? `<b class="num">${mdw(new Date(new Date(ts).getUTCFullYear(), new Date(ts).getUTCMonth(), new Date(ts).getUTCDate()))} ${hmOf(ts)}</b>` : ""}${place(p) ? `<span>${esc(place(p))}</span>` : ""}</span>` : ""}</span>`; };
   const keys = Object.keys(G).map(Number).sort((a, b) => (a < 0 ? 999 : a) - (b < 0 ? 999 : b));
   let body = keys.map(k => `<div class="rv-dd">${k >= 0 ? `<b>${t.days.length > 1 ? `${k + 1}일째 ` : ""}</b><small class="num">${ymdw(dOf(t, k))}</small>` : `<b>${k === -2 ? "찍은 시간을 모르는 사진" : "여행 날짜 밖"}</b>`}<span class="rv-sk num">${G[k].length}장</span></div><div class="rv-grid">${G[k].map(tile).join("")}</div>`).join("");
-  if (!n) body = `<div class="empty sm"><p>아직 여행 사진이 없어요. 「사진 넣기」로 넣으면 찍은 날짜 · 시간 · 장소로 정리돼요.${(t.photos || []).length ? "<br>(여행 기간 밖에 찍은 사진은 플랜의 참고 사진으로 들어가 있어요)" : ""}</p></div>`;
+  const RF = (t.photos || []).filter(p => PURL[p.id] && phRef(t, p) && p.ref !== true).sort((a, b) => (phT(t, a) || 0) - (phT(t, b) || 0)); S.rvG.rf = RF.map(p => p.id);
+  const rfBox = RF.length ? `<div class="rf3"><div class="rf3-h"><b>여행 날짜 밖에 찍은 사진</b><small class="num">${RF.length}장 · ${esc(rfSpan3(t, RF))}</small><span class="sp"></span>${t.ronly ? "" : `<button class="btn sm nv" data-fitdate>${IC.cal} 여행 날짜를 사진에 맞추기</button>`}</div><p class="hint">여행 날짜(${ymdw(dOf(t, 0))}${t.days.length > 1 ? " ~ " + ymdw(dOf(t, t.days.length - 1)) : ""})와 찍은 날짜가 달라서 여행 사진으로 세지 않았어요. 여행 날짜가 틀렸다면 맞추기를 누르세요.</p><div class="rv-grid">${RF.map(p => `<span class="rv-t"><img src="${PURL[p.id].t}" alt="" loading="lazy" data-pvid="${p.id}" data-pvk="rf"></span>`).join("")}</div></div>` : "";
+  body += rfBox;
+  if (!n) body = (RF.length ? rfBox : `<div class="empty sm"><p>아직 여행 사진이 없어요. 「사진 넣기」로 넣으면 찍은 날짜 · 시간 · 장소로 정리돼요.</p></div>`);
   const bar = n ? `<div class="rv-bar">${sel ? `<b class="rv-sn num">${sel.size}장 고름</b><button class="btn sm" data-rvsall>모두 고르기</button><button class="btn sm dl" data-rvsdel ${sel.size ? "" : "disabled"}>${IC.trash} 고른 사진 빼기</button><button class="btn sm" data-rvsoff>그만 고르기</button></div>` : `<button class="btn sm" data-rvson>${IC.ok} 고르기</button><button class="btn sm rv-infb${inf ? " on" : ""}" data-rvinf aria-pressed="${inf}">${IC_INFO} 정보 표시</button>
     <label class="rv-sz"><span>사진 크기</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg><input type="range" id="rvsz" min="70" max="300" step="10" value="${sz}" aria-label="사진 크기"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></label></div>
     <p class="hint rv-hint">사진을 누르면 크게 보여요${isPC() ? " — 오른쪽에 찍은 때 · 장소 · 지도" : " — 「정보」를 누르면 찍은 때 · 장소 · 지도"}. 엽서 표지(여행 대표 사진)는 왼쪽 표지를 누르거나 크게 보기의 「★ 대표 사진」에서 바꿔요.</p>`}` : "";
@@ -5059,6 +5065,26 @@ window.addEventListener("click", async e => {
   if (d.rvsel) { const S2 = S.rvSel || new Set(); S2.has(d.rvsel) ? S2.delete(d.rvsel) : S2.add(d.rvsel); S.rvSel = S2; return render(); }
   if (d.rvsdel != null) { const ids = [...(S.rvSel || [])]; if (!ids.length) return; if (!confirm(`고른 사진 ${ids.length}장을 여행에서 뺄까요?\n(휴대폰 · PC에 있는 원본 사진은 그대로예요)`)) return; await rmPhotos3(t, ids); S.rvSel = null; render(); return toast(`사진 ${ids.length}장을 뺐어요.`); }
 }, true);
+
+/* 11-07 제이: 사진을 넣어도 안 보임 — 여행 날짜(2002)와 찍은 날짜(2022)가 달라 「참고 사진」으로 숨던 일 → 물어보고 여행 날짜를 사진에 맞춤 */
+const phYmd3 = (t, p) => { const ts = phT(t, p); if (!ts) return ""; const d = new Date(ts); return d.getUTCFullYear() + "-" + String(d.getUTCMonth() + 1).padStart(2, "0") + "-" + String(d.getUTCDate()).padStart(2, "0"); };
+const ymdD3 = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+function rfSpan3(t, P) { const L = P.map(p => phYmd3(t, p)).filter(Boolean).sort(); if (!L.length) return "찍은 날짜 모름"; const a = ymdw(ymdD3(L[0])), b = ymdw(ymdD3(L[L.length - 1])); return a === b ? a : a + " ~ " + b; }
+async function fitDates3(t, P) {
+  const L = P.map(p => phYmd3(t, p)).filter(Boolean).sort(); if (!L.length) return false;
+  const a = ymdD3(L[0]), b = ymdD3(L[L.length - 1]), span = Math.round((b - a) / 864e5) + 1;
+  t.start = L[0]; while (t.days.length < span) t.days.push(newDay());
+  while (t.days.length > span && !t.days[t.days.length - 1].items.length) t.days.pop();
+  remapPhotos(t, false); await saveTrip(t); render(); toast(`여행 날짜를 ${rfSpan3(t, P)}(으)로 맞췄어요.`); return true;
+}
+async function fitAsk3(t, NP) {
+  const out = NP.filter(p => phRef(t, p) && p.ref !== true); if (!out.length || out.length < NP.length) return false;
+  if (!confirm(`넣은 사진은 ${rfSpan3(t, out)}에 찍었는데, 여행 날짜는 ${ymdw(dOf(t, 0))}예요.\n\n여행 날짜를 사진 날짜에 맞출까요?\n(「취소」를 누르면 사진은 「여행 날짜 밖에 찍은 사진」에 따로 보여요)`)) { toast(`사진 ${out.length}장 — 여행 날짜 밖이라 사진 탭 아래 「여행 날짜 밖에 찍은 사진」에 있어요.`); return true; }
+  return fitDates3(t, out);
+}
+window.addEventListener("click", async e => { const b = e.target.closest("[data-fitdate]"); if (!b) return; e.stopPropagation(); const t = TR(); if (!t) return;
+  const RF = (t.photos || []).filter(p => PURL[p.id] && phRef(t, p) && p.ref !== true); if (!RF.length) return;
+  if (!confirm(`여행 날짜를 사진 찍은 날짜(${rfSpan3(t, RF)})로 바꿀까요?\n일정은 1일째 · 2일째 순서 그대로 따라가요.`)) return; fitDates3(t, RF); }, true);
 
 /* ══ 공통: 폴더의 정확한 전체 경로 (2026-10-31 제이 — 「글자가 작더라도 정확한 경로가 보여야 해」) ══
    웹 앱은 보안상 폴더의 전체 경로(C:\Users\…)를 알 수 없음 → 사용자가 탐색기 주소창을 한 번 복사해 붙여넣으면 그대로 기억해서 보여 줌.

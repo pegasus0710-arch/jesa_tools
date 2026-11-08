@@ -3591,7 +3591,7 @@ window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window
     try { D.dirPath = (await getMeta("dirpath")) || ""; D.dirFull = (await getMeta("dirfull")) || ""; D.dir = (await getMeta("dir")) || null; if (D.dir && D.dir.queryPermission) D.dirPerm = await D.dir.queryPermission({ mode: "readwrite" }); } catch (e) { D.dir = null; }
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   } else toast("이 브라우저는 저장을 막고 있어요 — 시크릿 창이면 일반 창으로 열어 주세요.");
-  if ((CAN_DIR || gdHttp()) && !D.dir && !D.set.gdOn && !D.set.storeAsked && gdHttp()) S.sheet = D.items.length ? "store" : "wel";   /* 11-06: 처음 여는 기기는 먼저 처음 써요 / 전에 쓰던 자료
+  if ((CAN_DIR || gdHttp()) && !D.dir && !D.set.gdOn && !D.set.storeAsked && gdHttp()) S.sheet = D.items.length ? "store" : "wel";   /* 11-06: 처음 여는 기기는 먼저 처음 써요 / 전에 쓰던 자료 (11-08: 주석이 안 닫혀 아래 줄까지 꺼져 있던 것 고침) */
   try { history.replaceState({ n: 0 }, "", location.href); } catch (e) {}
   /* 여행 중이면 바로 그 여행의 오늘 */
   const ct = PL().find(t => phase(t).k === "on"); if (ct && !S.sheet) { S.rid = ct.id; S.day = phase(ct).i; S.scr = "trip"; hist.push({ scr: "list", rid: null }); }

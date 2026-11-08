@@ -1244,7 +1244,8 @@ function wishLinkBtn(w, i) { const u = okUrl(w.link) ? w.link : "";
 /* ── 그리기 ── */
 function render() {
   if (D.set.lock && !LOCK.open) return lockView();
-  if (!D.set.setupDone && S.welOld && Object.keys(D.days).length) { D.set.setupDone = true; save(); S.v = "day"; toast("예전 일기와 설정을 가져왔어요 — 이어서 쓰세요"); }   /* 11-06: 가져오면 처음 설정 건너뜀 */
+  /* 11-08 제이: 「전에 쓰던 자료」로 가져온 뒤에도 「어떤 다이어리로 쓸까요?」(처음 설정)가 그대로 떠 새로 쓰는 것처럼 보이던 문제 — 가져온 설정이 처음 설정을 마친 것이거나 일기가 있으면 바로 일기로 */
+  if (S.welOld && !S.welDone && (D.set.setupDone || Object.keys(D.days).length || (D.tasks || []).length)) { S.welDone = true; D.set.setupDone = true; save(); if (D.set.preset === "book") { S.v = "page"; S.page = "book"; } else S.v = "day"; toast("예전 일기와 설정을 가져왔어요 — 이어서 쓰세요"); }   /* 11-06: 가져오면 처음 설정 건너뜀 */
   if (!D.set.setupDone && S.v !== "set") S.v = "set";
   if (!D.set.noteMig && typeof noteMigrate === "function") noteMigrate();
   const V = { day: dayView, week: weekView, month: monthView, year: yearView, pages: pagesView, page: pageView, find: findView, set: setView }[S.v] || dayView;
@@ -2258,7 +2259,8 @@ function mergeIn(o) {
     D.days[k] = b; nd++; } });
   const rs = o.su || {};
   SECS.forEach(s => { if ((rs[s] || 0) > (D.su[s] || 0) && o[s] !== undefined) { D[s] = o[s]; D.su[s] = rs[s]; } });
-  if ((rs.set || 0) > (D.su.set || 0) && o.set) { Object.assign(D.set, { on: o.set.on, preset: o.set.preset, pm: o.set.pm || {}, setupDone: o.set.setupDone || D.set.setupDone, bookGoal: o.set.bookGoal || D.set.bookGoal || {} }); D.su.set = rs.set; D.set._sh = setShare(); }
+  /* 11-08: 처음 여는 기기(처음 설정 전)는 고친 시각이 없어도 예전 설정을 그대로 받음 — 예전 설정(다이어리 모양)이 안 오던 문제 */
+  if (((rs.set || 0) > (D.su.set || 0) || (!D.set.setupDone && o.set && o.set.setupDone)) && o.set) { Object.assign(D.set, { on: o.set.on, preset: o.set.preset, pm: o.set.pm || {}, setupDone: o.set.setupDone || D.set.setupDone, bookGoal: o.set.bookGoal || D.set.bookGoal || {} }); D.su.set = rs.set; D.set._sh = setShare(); }
   return nd;
 }
 async function gdSync(opt = {}) {
@@ -2321,7 +2323,8 @@ async function backupIn(file) {
     if (!o.days) throw new Error("일기 노트 백업 파일이 아니에요");
     if (!confirm("백업 파일의 기록을 합칠까요? (같은 날은 더 최근에 고친 쪽으로)")) return;
     for (const [id, u] of Object.entries(o.photos || {})) { const blob = await (await fetch(u)).blob(); const th = await shrink(blob, 400, 0.8); await st("photos", "readwrite", s => s.put({ id, blob, th })); }
-    const keepSet = D.set; mergeIn(o); D.set = Object.assign(keepSet, { on: D.set.on || (o.set && o.set.on), setupDone: true });
+    const wasNew = !D.set.setupDone; const keepSet = D.set; mergeIn(o); D.set = Object.assign(keepSet, { on: D.set.on || (o.set && o.set.on), preset: D.set.preset || (o.set && o.set.preset) || null, setupDone: true });
+    if (wasNew) { S.welOld = true; S.welDone = false; }   /* 11-08: 처음 화면에서 되살리면 처음 설정 화면 대신 일기로 */
     await save(true); toast("백업을 불러왔어요"); render();
   } catch (e) { toast("불러오지 못했어요: " + e.message); }
 }

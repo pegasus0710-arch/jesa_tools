@@ -325,6 +325,10 @@ mark{background:#fbe3a6;color:inherit}
 .pol.fx{position:absolute;margin:0;padding:7px 7px 30px;touch-action:none;cursor:grab;user-select:none}
 .pol.fx img{width:100%;height:auto;max-height:none;pointer-events:none;-webkit-user-drag:none}
 .pol.fx.sel,.stk.sel{outline:1.5px dashed var(--g);outline-offset:4px}
+.deco .pol.fx{padding:calc(7px * var(--k,1)) calc(7px * var(--k,1)) max(20px,calc(30px * var(--k,1)))}
+.deco .pol.fx .tape{left:31%;width:40%;top:calc(-11px * var(--k,1));height:calc(20px * var(--k,1))}
+.deco .pol.fx .cap{left:calc(10px * var(--k,1));bottom:max(2px,calc(5px * var(--k,1)));font-size:max(13px,calc(20px * var(--k,1)))}
+.deco .stk .tape{font-size:max(11px,calc(24px * var(--k,1)));padding:0 calc(14px * var(--k,1))}
 .rsz{display:none;position:absolute;right:-9px;bottom:-9px;width:18px;height:18px;border-radius:50%;background:var(--paper);border:2px solid var(--g);cursor:nwse-resize;touch-action:none;z-index:2}
 .sel>.rsz{display:block}
 .stkbar{z-index:8}
@@ -393,6 +397,16 @@ mark{background:#fbe3a6;color:inherit}
  .book.m-view .deco>*,.book.m-edit .deco>*{pointer-events:none}
  .book.m-view .toolrow{display:none}
  .book.m-deco .pg>*:not(.deco):not(.toolrow){opacity:.55}
+ .book.m-deco .pgnx{display:none}
+ .mbar.mdeco{flex-direction:column;align-items:stretch;gap:6px}
+ .mbar .mdtools{display:flex;gap:6px}
+ .mbar .mdt{flex:1 1 0;min-width:0;display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 6px;border:1.5px solid var(--g);border-radius:19px;background:var(--paper);color:var(--g);font-size:13.5px;font-weight:700;white-space:nowrap;box-shadow:0 3px 10px rgba(80,60,30,.22);cursor:pointer;position:relative;overflow:hidden}
+ .mbar .mdrow{display:flex;gap:8px;align-items:center}
+ .mbar .mdrow span{min-width:0}
+ .mbar .mdrow button{flex-shrink:0}
+ body:has(.mdeco) .wrap{padding-bottom:210px}
+ body:has(.mbar) #toast{bottom:calc(132px + env(safe-area-inset-bottom))}
+ body:has(.mdeco) #toast{bottom:calc(178px + env(safe-area-inset-bottom))}
  .wrap{padding-bottom:150px}
 }
 
@@ -702,7 +716,7 @@ const face = (v, sz = 24, col) => { const m = moodOf(v) || MOODS[2]; return `<sv
 
 /* ── 칸 (설정에서 켜고 끔) ── */
 const PARTS = [
-  { g: "하루 쪽에 넣을 칸", items: [["weather", "날씨", "직접 고르기"], ["sleep", "기상 · 취침 시간", "잠잔 시간 자동 계산"], ["mood", "기분 도장", "5가지"], ["photo", "사진", "하루 4장"], ["sticker", "스티커 붙이기", "Blog J가 그린 스티커"], ["todo", "할 일 (TO DO)", "기한 넣으면 그날 할 일로"], ["check", "매일 체크리스트", "습관 · 반복"], ["meal", "식사", "아침 · 점심 · 저녁 · 간식"], ["workout", "운동", "종류 · 시간"], ["money", "쓴 돈", "줄마다 · 합계"], ["thanks", "감사 한 줄", ""], ["people", "만난 사람", ""], ["title", "일기 제목", "「쓴 글」 쪽에 날짜 · 제목으로"], ["question", "오늘의 질문", "쓸 말 없을 때"], ["lastyear", "1년 전 오늘", ""]] },
+  { g: "하루 쪽에 넣을 칸", items: [["weather", "날씨", "직접 고르기"], ["sleep", "기상 · 취침 시간", "잠잔 시간 자동 계산"], ["mood", "기분 도장", "5가지"], ["photo", "사진", "하루 12장"], ["sticker", "스티커 붙이기", "Blog J가 그린 스티커"], ["todo", "할 일 (TO DO)", "기한 넣으면 그날 할 일로"], ["check", "매일 체크리스트", "습관 · 반복"], ["meal", "식사", "아침 · 점심 · 저녁 · 간식"], ["workout", "운동", "종류 · 시간"], ["money", "쓴 돈", "줄마다 · 합계"], ["thanks", "감사 한 줄", ""], ["people", "만난 사람", ""], ["title", "일기 제목", "「쓴 글」 쪽에 날짜 · 제목으로"], ["question", "오늘의 질문", "쓸 말 없을 때"], ["lastyear", "1년 전 오늘", ""]] },
   { g: "계획", items: [["pday", "일간 계획", "시간 · 할 일"], ["pweek", "주간 계획", "한 주 한 장"], ["pmonth", "월간 계획", "달마다 목표"], ["routine", "생활 루틴 · 생활계획표", "시간 되면 했는지 묻고 자동 기록"], ["school", "학교 시간표", "교시 · 준비물 · 학원"], ["trip", "여행 일정", "시간 · 장소 → 일기에 자동"]] },
   { g: "부록 (인덱스 탭)", items: [["vow", "나의 다짐", "매일 맨 위 한 줄"], ["saying", "명언", "한 줄씩 넣으면 매일 맨 위에 하나씩"], ["year", "1년 계획표", "올해 목표 · 12달"], ["wish", "위시리스트", "갖고 싶은 것 · 가격"], ["bucket", "버킷리스트", "기한 · D-day · 이룬 날"], ["book", "독서 기록", "읽은 책 · 후기 · 밑줄 문장 · 목표"], ["asset", "자산 기록", "한 달에 한 번 합계"], ["note", "노트", "생각 · 좋은 글 · 메모 — 분류는 내가 정해요"]] }
 ];
@@ -942,16 +956,19 @@ function dayView() {
   if (on("lastyear")) { const ly = [1, 2, 3].map(n => { const kk = (+k.slice(0, 4) - n) + k.slice(4); const dd = D.days[kk]; return dd && (dd.text || "").trim() ? { n, kk, t: dd.text.trim().split("\n")[0] } : null; }).filter(Boolean)[0];
     if (ly) R += `<button class="ly" data-goday="${ly.kk}" style="margin-top:auto"><span class="pen">${ly.n}년 전 오늘</span><span><span class="num">${ymdw(ly.kk)}</span> ${esc(ly.t.slice(0, 70))}</span></button>`; }
   if (deco) { L += decoLayer(d, "L"); R += decoLayer(d, "R"); }
-  const mbar = `<div class="mbar">${dayMode() === "view" ? `${on("photo") ? `<label class="mph" title="휴대폰 갤러리 · 카메라에서 사진 넣기">${I(IC.img)}사진<input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label>` : ""}<button id="mEdit">${I(IC.pen)}수정</button>${deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}` : `<span>${dayMode() === "edit" ? "쓰는 중" : "꾸미는 중 — 끌어서 옮기고, 눌러서 크기 · 돌리기"}</span>${dayMode() === "edit" && deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}<button id="mDone" class="on">${I(IC.check)}완료</button>`}</div>`;
+  /* 11-08 제이: 꾸미기 = 아래 띠 하나에 「넣기 단추 + 꾸미기 끝내기」만(쪽 아래 따로 붙던 단추 줄 없앰), 보기 · 쓰기 때는 꾸미기 단추가 따라다니지 않게 */
+  const dm = dayMode(), mbar = dm === "view" ? `<div class="mbar">${on("photo") ? `<label class="mph" title="휴대폰 갤러리 · 카메라에서 사진 넣기">${I(IC.img)}사진<input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label>` : ""}<button id="mEdit">${I(IC.pen)}수정</button>${deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}</div>`
+    : dm === "edit" ? `<div class="mbar"><span>쓰는 중</span>${on("photo") ? `<label class="mph" title="휴대폰 갤러리 · 카메라에서 사진 넣기">${I(IC.img)}사진<input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label>` : ""}${deco ? `<button id="mDeco">${I(IC.stkr)}꾸미기</button>` : ""}<button id="mDone" class="on">${I(IC.check)}완료</button></div>`
+    : dm === "deco" ? `<div class="mbar mdeco"><div class="mdtools">${toolBtns(d, "mdt mt")}</div><div class="mdrow"><span>꾸미는 중 · 끌어서 옮기고 눌러서 크기</span><button id="mDone" class="on">${I(IC.check)}꾸미기 끝내기</button></div></div>` : "";
   const dp = S.dp === "R" ? "R" : "L";
   const pgsw = `<div class="pgsw" role="tablist" aria-label="하루 쪽 넘기기"><button role="tab" class="${dp === "L" ? "on" : ""}" data-dp="L" aria-selected="${dp === "L"}"><b>1</b>오늘 · 할 일</button><button role="tab" class="${dp === "R" ? "on" : ""}" data-dp="R" aria-selected="${dp === "R"}"><b>2</b>오늘 이야기</button></div>`;
   const pgnx = `<button class="pgnx" data-dp="${dp === "L" ? "R" : "L"}">${dp === "L" ? "2쪽 오늘 이야기 ›" : "‹ 1쪽 오늘 · 할 일"}</button>`;
   L += dp === "L" ? pgnx : ""; R += dp === "R" ? pgnx : "";
-  const mtools = deco && isPhone() && dp === "L" && dayMode() !== "view" ? `<div class="toolrow mtools" aria-label="사진 · 스티커 넣기">${toolBtns(d, "dashb mt")}</div>` : "";
+  const mtools = "";   /* 11-08: 넣기 단추는 꾸미기 띠 안으로 */
   return pgsw + book(L, R, deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "").replace('<div class="book" id="book">', `<div class="book dayb" id="book" data-dp="${dp}">`) + mtools + mbar;
 }
 function stkHtml(s, i) {
-  const st = `width:${wOf(s, 74)}px;height:${s.t ? (isOne() ? 30 : 36) : wOf(s, 74)}px;transform:translate(-50%,-50%) rotate(${s.r || 0}deg)`;
+  const st = `width:${wOf(s, 74)}px;height:${s.t ? Math.round(36 * curK()) : wOf(s, 74)}px;transform:translate(-50%,-50%) rotate(${s.r || 0}deg)`;
   return `<div class="stk ${S.sel === "s" + i ? "sel" : ""}" data-stk="${i}" style="${st}" role="img" aria-label="${s.t ? "글자 테이프" : (STKMAP[s.k] || [0, "스티커"])[1]}">${s.t ? `<div class="tape" style="background:${TAPEC[s.c || 0] || TAPEC[0]}">${esc(s.t)}</div>` : stkSvg(s.k)}<span class="rsz" aria-hidden="true"></span></div>`;
 }
 
@@ -989,12 +1006,17 @@ function tripLog(k, d) {
 
 /* 꾸미기 — 사진 · 스티커 · 글자 테이프를 하루 쪽(양쪽) 아무 데나: x = 책 너비 %, y = 책 위에서 px */
 function toolBtns(d, c) {
-  const ph = on("photo") && (d.photos || []).length < 4, ic = x => c === "ltool" ? I(IC[x]) : "", sh = c === "ltool" || c.indexOf(" mt") > 0;
-  return (ph ? `<label class="${c}" title="사진 넣기 (PC는 사진 파일을 쪽 위로 끌어 놓아도 돼요)">${ic("img")}<span>${c === "ltool" ? "사진" : sh ? "+ 사진" : "+ 사진 (갤러리)"}</span><input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label><button class="${c}" data-tool="phPaste" title="복사한 사진 붙여넣기 (PC는 Ctrl+V도 돼요)">${ic("clip")}<span>${c === "ltool" ? "붙여넣기" : sh ? "사진 붙여넣기" : "복사한 사진 붙여넣기"}</span></button>` : "")
+  const ph = on("photo") && (d.photos || []).length < DPMAX, ic = x => c === "ltool" ? I(IC[x]) : "", sh = c === "ltool" || c.indexOf(" mt") > 0;
+  const np = c.indexOf("mdt") >= 0;
+  return (ph ? `<label class="${c}" title="사진 넣기 (PC는 사진 파일을 쪽 위로 끌어 놓아도 돼요)">${ic("img")}<span>${c === "ltool" ? "사진" : sh ? "+ 사진" : "+ 사진 (갤러리)"}</span><input type="file" accept="image/*" multiple data-tool="phIn" class="sr" /></label>${np ? "" : `<button class="${c}" data-tool="phPaste" title="복사한 사진 붙여넣기 (PC는 Ctrl+V도 돼요)">${ic("clip")}<span>${c === "ltool" ? "붙여넣기" : sh ? "사진 붙여넣기" : "복사한 사진 붙여넣기"}</span></button>`}` : "")
     + (on("sticker") ? `<button class="${c}" data-tool="stkBtn">${ic("stkr")}<span>${c === "ltool" ? "스티커" : "+ 스티커"}</span></button><button class="${c}" data-tool="tapeBtn">${ic("tape")}<span>${c === "ltool" ? "글자 테이프" : sh ? "+ 테이프" : "+ 글자 테이프"}</span></button>` : "");
 }
 /* 11-06 제이: 휴대폰(한 쪽 화면)에서는 사진 · 스티커가 쪽에 비해 너무 큼 → PC 크기의 62%로 보여 주고, 휴대폰에서 크기를 바꾸면 휴대폰 크기(mw)를 따로 기억 */
-const PS = 0.62, wKey = () => isOne() ? "mw" : "w", wOf = (it, def) => isOne() ? (it.mw || Math.round((it.w || def) * PS)) : (it.w || def);
+/* 11-08 제이: PC에서 둔 사진 · 스티커가 휴대폰 · 폴드에서 겹치고 엉뚱한 곳에 보이던 문제 — 기기마다 크기 · 위치를 따로(휴대폰 mw · mp) 쓰고, 폴드는 PC px 그대로 그려서
+   → 크기 · 위치를 모든 기기가 같은 「기준 쪽 너비 DREF(660) 단위」 하나로 저장하고, 그 기기의 쪽 너비에 맞춰 늘이고 줄여 그림. 예전 값(w · y · an = PC px)은 그대로 이 단위로 읽음 */
+const DREF = 660, DPMAX = 12; let DECO_K = 0;
+const curK = () => DECO_K || Math.max(0.3, (innerWidth < 600 ? innerWidth - 20 : innerWidth <= 900 ? innerWidth / 2 - 10 : Math.min(677, innerWidth / 2 - 40)) / DREF);
+const wKey = () => "w", wU = (it, def) => it.w || def, wOf = (it, def) => Math.round(wU(it, def) * curK());
 function polHtml(p, i) {
   const w = wOf(p, 168), st = `width:${w}px;transform:translate(-50%,-50%) rotate(${p.r || 0}deg)`;
   return `<div class="pol fx ${S.sel === "p" + i ? "sel" : ""}" data-ph="${i}" style="${st}"><span class="tape" aria-hidden="true"></span><img data-pid="${p.id}" alt="" draggable="false"${p.ar ? ` style="aspect-ratio:1/${p.ar};height:auto"` : ""} /><input class="cap" data-arr="photos" data-i="${i}" data-key="cap" value="${esc(p.cap || "")}" placeholder="한 줄" aria-label="사진 설명" /><button class="star ${p.star ? "on" : ""}" data-star="${i}" aria-label="이달의 사진으로" title="이달의 사진(사진 달력)">★</button><button class="del" data-delp="${i}" aria-label="사진 지우기">×</button><span class="rsz" aria-label="크기 바꾸기" title="끌어서 크기 바꾸기"></span></div>`;
@@ -1004,7 +1026,8 @@ const isPhone = () => innerWidth <= 900;
 /* 11-03 제이: 좁은 휴대폰(600px 아래) = 하루 쪽을 한 쪽씩(1쪽 ↔ 2쪽 넘기기, 빈 종이에 사진 · 스티커 자리) · 폴드처럼 펼친 화면(600~900) = PC처럼 두 쪽 */
 const isOne = () => innerWidth < 600;
 /* 11-04 제이: 예전(위아래로 쌓던 휴대폰 화면)에서 기억한 휴대폰 위치(v 없음)는 버리고 PC 위치를 칸 기준으로 옮겨 씀 → 휴대폰에서 다시 옮기면 새 휴대폰 위치(v:2) */
-const posOf = it => isOne() && it.mp && it.mp.v === 2 ? Object.assign({ m: 1 }, it.mp) : { pg: it.pg || "L", x: it.x, y: it.y, h: it.h };
+/* 11-08: 모든 기기가 같은 위치 하나 — 예전 휴대폰 위치(mp)는 PC 위치(칸 기준 an)가 없는 것만 씀(휴대폰 쪽 너비 약 370 기준으로 바꿔 읽음) */
+const posOf = it => !it.an && it.mp && it.mp.v === 2 ? { pg: it.mp.pg || "L", x: it.mp.x, yu: Math.round((it.mp.y || 0) * DREF / 370), m: 1 } : { pg: it.pg || "L", x: it.x, y: it.y, h: it.h, an: it.an };
 function decoLayer(d, pg) {
   const ok = it => it.a === 2 && posOf(it).pg === pg;
   return `<div class="deco" data-pg="${pg}">${(d.photos || []).map((p, i) => ok(p) ? polHtml(p, i) : "").join("")}${(d.stk || []).map((s, i) => ok(s) ? stkHtml(s, i) : "").join("")}</div>`;
@@ -1593,14 +1616,20 @@ document.addEventListener("paste", e => {
   const fs = [...(e.clipboardData && e.clipboardData.items || [])].filter(i => i.kind === "file" && i.type.startsWith("image/")).map(i => i.getAsFile()).filter(Boolean);
   if (!fs.length) return; e.preventDefault(); addPhotos(fs); toast("사진을 붙여 넣었어요");
 });
+/* 11-08 제이: 휴대폰에서 5번째 사진부터 안 들어가던 문제 — 하루 4장 제한(알림은 바로 뒤 「끌어서 옮기고…」 알림에 덮여 안 보였음) → 하루 12장, 넘치면 그 안내를 끝까지 보여 줌 */
 async function addPhotos(files, at) {
-  const d = dayOf(S.date, true); d.photos = d.photos || []; const room = 4 - d.photos.length; const fs = [...files].slice(0, room);
-  if (files.length > room) toast(`하루 4장까지 — ${fs.length}장만 넣어요`);
-  for (const f of fs) { try { const id = await addPhoto(f); const q = { id, cap: "", star: false, n: 1, r: Math.round(Math.random() * 8 - 4) }; if (at) Object.assign(q, { n: 0, at: { x: at.x + d.photos.length * 24, y: at.y + d.photos.length * 24 } }); d.photos.push(q); } catch (er) { toast(er.message); } }
-  touchDay(S.date); phDecoAfterAdd("p" + (d.photos.length - 1));
+  const d = dayOf(S.date, true); d.photos = d.photos || []; const all = [...(files || [])].filter(f => f && (!f.type || f.type.startsWith("image/"))), room = Math.max(0, DPMAX - d.photos.length), fs = all.slice(0, room);
+  if (!fs.length) return toast(all.length ? `하루 ${DPMAX}장까지예요 — 다른 사진을 지우면 더 넣을 수 있어요` : "사진 파일이 아니에요");
+  const over = all.length > room ? `하루 ${DPMAX}장까지 — ${fs.length}장만 넣었어요` : ""; let ok = 0;
+  for (const f of fs) { if (fs.length > 1) toast(`사진 넣는 중… ${ok + 1} / ${fs.length}`); try { const id = await addPhoto(f); ok++; const q = { id, cap: "", star: false, n: 1, r: Math.round(Math.random() * 8 - 4) }; if (at) Object.assign(q, { n: 0, at: { x: at.x + d.photos.length * 24, y: at.y + d.photos.length * 24 } }); d.photos.push(q); } catch (er) { toast(er.message); } }
+  if (!ok) return;
+  touchDay(S.date); phDecoAfterAdd("p" + (d.photos.length - 1), over || (!isPhone() && ok > 1 ? `사진 ${ok}장을 넣었어요` : ""));
 }
 /* 11-02 제이: 휴대폰에서 사진 · 스티커를 넣으면 바로 「꾸미기」로 — 끌어서 옮기고 크기 · 돌리기, 다 하면 「완료」 */
-function phDecoAfterAdd(key) { if (isPhone()) { S.mmd = S.date; S.mm = "deco"; } rerenderKeep(); if (isPhone() && key && !key.endsWith("-1")) { setTimeout(() => { decoSel(key); const el = $(".deco .sel"); if (el) el.scrollIntoView({ block: "center", behavior: "smooth" }); }, 60); toast("끌어서 옮기고, 다 하면 「완료」를 눌러요"); } }
+/* 11-08 제이: 꾸미기는 「지금 보는 쪽」에서만 · 「꾸미기 끝내기」를 누르거나 쪽을 넘기면 하던 일(쓰기 · 보기)로 돌아감 */
+function decoEnter() { const m = dayMode(); if (m !== "deco") S.mmPrev = m; S.mmd = S.date; S.mm = "deco"; }
+function decoLeave() { S.mmd = S.date; S.mm = S.mmPrev === "edit" ? "edit" : "view"; S.mmPrev = null; decoSel(null); }
+function phDecoAfterAdd(key, msg) { if (isPhone()) decoEnter(); rerenderKeep(); if (isPhone() && key && !key.endsWith("-1")) { setTimeout(() => { decoSel(key); const el = $(".deco .sel"); if (el) el.scrollIntoView({ block: "center", behavior: "smooth" }); }, 60); toast(msg || "끌어서 옮기고, 다 하면 「꾸미기 끝내기」를 눌러요"); } else if (msg) toast(msg); }
 
 /* ── 꾸미기(사진 · 스티커 · 테이프) — 위치는 쪽(L · R) 기준: x = 쪽 너비 %, y = 쪽 위에서 px(h = 그때 쪽 높이) ── */
 const PAR = [["", "원본"], ["1", "1:1"], ["0.75", "4:3"], ["1.333", "3:4"], ["0.5625", "16:9"]];
@@ -1609,7 +1638,7 @@ const decoArr = (d, sel) => sel && sel[0] === "p" ? (d.photos || []) : (d.stk ||
 const pgEl = pg => $("#pg" + pg) || $("#pgL");
 function pageAt(cx, cy) { const P = ["L", "R"].map(k => [k, $("#pg" + k)]).filter(x => x[1]).map(([k, el]) => [k, el.getBoundingClientRect()]).filter(x => x[1].width > 0);   /* 한 쪽씩 볼 때 숨긴 쪽은 빼고 */
   let best = P[0], bd = 1e9; for (const [k, r] of P) { const dx = cx < r.left ? r.left - cx : cx > r.right ? cx - r.right : 0, dy = cy < r.top ? r.top - cy : cy > r.bottom ? cy - r.bottom : 0, dd = dx + dy; if (dd < bd) { bd = dd; best = [k, r]; } }
-  const [k, r] = best; return { pg: k, x: Math.round(Math.min(100, Math.max(0, (cx - r.left) / r.width * 100)) * 10) / 10, y: Math.round(Math.min(r.height, Math.max(0, cy - r.top))), h: Math.round(r.height) }; }
+  const [k, r] = best; return { pg: k, x: Math.round(Math.min(100, Math.max(0, (cx - r.left) / r.width * 100)) * 10) / 10, y: Math.round(Math.min(r.height, Math.max(0, cy - r.top))), h: Math.round(r.height), w: Math.round(r.width) }; }
 /* 11-01 제이: PC(좌우 쪽)와 휴대폰(한 줄)은 칸 높이가 달라 쪽 높이 비율로 옮기면 사진이 엉뚱한 칸 위에 얹힘
    → PC에서 둔 자리를 「바로 위 칸(묶음 · 칸) 기준」으로 함께 저장(an), 휴대폰은 같은 칸을 찾아 그 아래에 놓음 */
 function ancList(pe) { const seen = {}; return [...pe.querySelectorAll(".sec, .blk, .fl, .strow, .dayph")].filter(e => !e.closest(".deco")).map(e => { const lb = (e.querySelector(".lbl, h4") || e).textContent || "", k0 = e.className.split(" ")[0] + ":" + lb.replace(/[\d\s/·]+/g, "").slice(0, 10); seen[k0] = (seen[k0] || 0) + 1; return { e, k: k0 + "#" + seen[k0] }; }); }
@@ -1617,18 +1646,25 @@ function ancAt(pg, y) { const pe = pgEl(pg); if (!pe) return null; const pr = pe
   for (const a of ancList(pe)) { const r = a.e.getBoundingClientRect(), t = r.top - pr.top; if (t <= y + 2 && t >= bt) { if (t > bt || !best) { best = a; bt = t; best.h = r.height; } } }
   return best ? { k: best.k, dy: Math.round(y - bt), bh: Math.round(best.h) } : null; }
 function ancY(pg, an) { const pe = pgEl(pg); if (!pe || !an) return null; const a = ancList(pe).find(x => x.k === an.k); if (!a) return null; const pr = pe.getBoundingClientRect(), r = a.e.getBoundingClientRect(), t = r.top - pr.top;
-  return an.dy <= an.bh ? t + an.dy / Math.max(1, an.bh) * r.height : t + r.height + (an.dy - an.bh); }
-function setPos(it, p) { if (isOne()) { it.mp = { pg: p.pg, x: p.x, y: p.y, v: 2 }; if (!it.pg) Object.assign(it, { pg: p.pg, x: p.x, y: p.y, h: p.h }); } else { Object.assign(it, { pg: p.pg, x: p.x, y: p.y, h: p.h }); it.an = ancAt(p.pg, p.y); } it.a = 2; delete it.n; delete it.at; }
+  return an.dy <= an.bh ? t + an.dy / Math.max(1, an.bh) * r.height : t + r.height + (an.dy - an.bh) * curK(); }
+function setPos(it, p) { const K = (p.w || curK() * DREF) / DREF, a = ancAt(p.pg, p.y);   /* 어느 기기에서 옮겨도 같은 단위 하나로 */
+  Object.assign(it, { pg: p.pg, x: p.x, y: Math.round(p.y / K), h: Math.round(p.h / K) });
+  if (a) it.an = { k: a.k, dy: Math.round(a.dy / K), bh: Math.max(1, Math.round(a.bh / K)) }; else delete it.an;
+  delete it.mp; delete it.mw; it.a = 2; delete it.n; delete it.at; }
 /* 그린 뒤 자리 잡기 */
 function placeDeco() { const d = dayOf(S.date); if (!d) return; let mig = false; const need = {};
   ["L", "R"].forEach(k => { const pe = $("#pg" + k); if (pe) pe.style.minHeight = ""; });
+  { const pe0 = [$("#pgL"), $("#pgR")].find(e => e && e.offsetWidth); if (pe0) DECO_K = pe0.getBoundingClientRect().width / DREF; }
+  const K = curK(); $$(".deco").forEach(dc => dc.style.setProperty("--k", K.toFixed(3)));
   $$(".deco > .stk, .deco > .pol.fx").forEach(el => { const key = el.dataset.ph != null ? "p" + el.dataset.ph : "s" + el.dataset.stk, it = decoArr(d, key)[+key.slice(1)]; if (!it) return;
-    const p = posOf(it), pe = pgEl(p.pg), pr = pe.getBoundingClientRect(), H = pr.height, W = pr.width; let y = p.y; if (isOne() && !p.m) { const ay = it.an ? ancY(p.pg, it.an) : null; y = ay != null ? ay : p.h ? p.y / p.h * H : p.y; y = Math.max(0, y); } else if (!isOne() && it.a === 2 && !it.an && p.y != null) { it.an = ancAt(p.pg, p.y); if (it.an) mig = true; }
-    let w = it.w || (el.dataset.ph != null ? 168 : 74);
-    if (isOne() && !p.m) { const f = Math.max(0.6, Math.min(1, W / 640)); w = Math.round(w * f); el.style.width = w + "px"; if (el.classList.contains("stk") && !it.t) el.style.height = w + "px"; }
+    const p = posOf(it), pe = pgEl(p.pg), pr = pe.getBoundingClientRect(), W = pr.width; if (!W) return;   /* 한 쪽씩 볼 때 숨긴 쪽 */
+    let y = p.an ? ancY(p.pg, p.an) : null; if (y == null) y = p.yu != null ? p.yu * K : (p.y || 0) * K; y = Math.max(0, y);
+    const isP = el.dataset.ph != null, w = wOf(it, isP ? 168 : 74); el.style.width = w + "px"; if (!isP) el.style.height = (it.t ? Math.round(36 * K) : w) + "px";
+    /* 예전 위치(칸 기준 없음 · 휴대폰 위치만)는 지금 그린 자리를 칸 기준 단위로 한 번 옮겨 적음 */
+    if (it.a === 2 && !p.an) { const a = ancAt(p.pg, y); if (a) { Object.assign(it, { pg: p.pg, x: p.x, y: Math.round(y / K), h: Math.round(pr.height / K), an: { k: a.k, dy: Math.round(a.dy / K), bh: Math.max(1, Math.round(a.bh / K)) } }); delete it.mp; mig = true; } }
     const vw = Math.max(w, (el.firstElementChild && el.firstElementChild.scrollWidth) || 0), half = Math.min(vw / 2, W / 2),   /* 글자 테이프는 글자 길이만큼 — 쪽 밖으로 안 나가게 */ cx = Math.max(half, Math.min(W - half, W * p.x / 100));
     el.style.left = Math.round(cx) + "px"; el.style.top = Math.round(y) + "px";
-    need[p.pg] = Math.max(need[p.pg] || 0, Math.round(y + el.offsetHeight / 2 + 28)); });
+    need[p.pg] = Math.max(need[p.pg] || 0, Math.round(y + el.offsetHeight / 2 + 28 + (isOne() ? 56 : 0))); });   /* 11-08: 한 쪽씩 볼 때는 쪽 아래 「2쪽 ›」 단추가 사진에 가리지 않게 */
   /* 11-04 제이: 사진 · 스티커가 쪽 아래로 벗어나지 않게 — 그 쪽을 사진 끝까지 늘림 */
   for (const k in need) { const pe = $("#pg" + k); if (pe && pe.offsetHeight && need[k] > pe.offsetHeight) pe.style.minHeight = need[k] + "px"; }
   if (mig) { /* 예전 사진에 칸 기준 붙이기 — 방금 동기화한 PC면 다른 기기로도 보내고(날짜 고친 시각 갱신), 아니면 이 기기에만 */ if (!(typeof gdOn === "function" && gdOn()) || Date.now() - (D.set.gdLast || 0) < 10 * 60000) touchDay(S.date); else save(); } }
@@ -1645,10 +1681,10 @@ document.addEventListener("pointerdown", e => {
 });
 document.addEventListener("pointermove", e => { if (!drag) return; const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy; if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true; if (!drag.moved) return;
   const b = $(".stkbar"); if (b) b.remove();
-  if (drag.rz) { const p = drag.key[0] === "p", w = Math.round(Math.min(p ? 560 : 400, Math.max(p ? 80 : 26, drag.w0 + (dx + dy) * 1.2))); drag.w = w; drag.el.style.width = w + "px"; if (!p && !drag.el.querySelector(".tape")) drag.el.style.height = w + "px"; return; }
+  if (drag.rz) { const p = drag.key[0] === "p", K = curK(), w = Math.round(Math.min((p ? 560 : 400) * K, Math.max((p ? 80 : 26) * K, drag.w0 + (dx + dy) * 1.2))); drag.w = w; drag.el.style.width = w + "px"; if (!p && !drag.el.querySelector(".tape")) drag.el.style.height = w + "px"; return; }
   drag.el.style.left = (e.clientX - drag.lr.left) + "px"; drag.el.style.top = (e.clientY - drag.lr.top) + "px"; drag.cx = e.clientX; drag.cy = e.clientY; });
 document.addEventListener("pointerup", () => { if (!drag) return; const g = drag; drag = null; const d = dayOf(S.date, true), it = decoArr(d, g.key)[+g.key.slice(1)]; if (!it) return;
-  if (g.moved) { if (g.rz) { it[wKey()] = g.w; touchDay(S.date); decoSel(g.key); return; } const p = pageAt(g.cx, g.cy); const was = posOf(it).pg; setPos(it, p); touchDay(S.date); if (was !== p.pg) { rerenderKeep(); } else placeDeco(); decoSel(g.key); }
+  if (g.moved) { if (g.rz) { it.w = Math.round(g.w / curK()); delete it.mw; touchDay(S.date); decoSel(g.key); return; } const p = pageAt(g.cx, g.cy); const was = posOf(it).pg; setPos(it, p); touchDay(S.date); if (was !== p.pg) { rerenderKeep(); } else placeDeco(); decoSel(g.key); }
   else decoSel(g.key); });
 function stkBar(el) { const b0 = $(".stkbar"); if (b0) b0.remove(); const bk = $("#book"); if (!bk) return; const r = el.getBoundingClientRect(), br = bk.getBoundingClientRect(); const b = document.createElement("div"); b.className = "stkbar";
   b.style.left = Math.max(0, Math.min(br.width - 340, r.left - br.left)) + "px"; b.style.top = Math.max(0, r.bottom - br.top + 10) + "px";
@@ -1656,11 +1692,12 @@ function stkBar(el) { const b0 = $(".stkbar"); if (b0) b0.remove(); const bk = $
   b.innerHTML = (cur.t ? TAPEC.map((c, j) => `<button data-sk="c${j}" aria-label="테이프 색 ${j + 1}" style="background:${c};${(cur.c || 0) === j ? "box-shadow:inset 0 0 0 2px #195455" : ""}"></button>`).join("") + `<button data-sk="txt" aria-label="글자 고치기">글자</button>` : "")
     + (ph ? `<button data-sk="view">크게 보기</button>` + PAR.map(([v, n]) => `<button data-sk="ar${v}" class="${(cur.ar || "") === v ? "on" : ""}">${n}</button>`).join("") : "")
     + `<button data-sk="big" aria-label="크게">＋</button><button data-sk="small" aria-label="작게">－</button><button data-sk="rl" aria-label="왼쪽으로 돌리기">↺</button><button data-sk="rr" aria-label="오른쪽으로 돌리기">↻</button><button data-sk="front" aria-label="맨 앞으로">앞</button><button data-sk="del" aria-label="삭제">삭제</button>`;
-  bk.appendChild(b); }
+  bk.appendChild(b);
+  /* 11-08: 휴대폰 꾸미기 띠에 가리면 사진 위쪽에 */ const mb = $(".mbar.mdeco"), lim = mb ? mb.getBoundingClientRect().top : innerHeight; if (r.bottom + 10 + b.offsetHeight > lim - 6 && r.top - b.offsetHeight - 10 > 60) b.style.top = Math.max(0, r.top - br.top - b.offsetHeight - 10) + "px"; }
 async function stkAct(a) { const d = dayOf(S.date, true), key = S.sel; if (!key) return; const arr = decoArr(d, key), i = +key.slice(1), s = arr[i]; if (!s) return; const ph = key[0] === "p", dw = ph ? 168 : 74;
   if (a === "view") return viewer(s.id);
   if (a.startsWith("ar")) s.ar = a.slice(2);
-  if (a === "big") s[wKey()] = Math.min(ph ? 560 : 400, wOf(s, dw) + (ph ? 28 : 14)); if (a === "small") s[wKey()] = Math.max(ph ? 80 : 26, wOf(s, dw) - (ph ? 28 : 14)); if (a === "rl") s.r = (s.r || 0) - 8; if (a === "rr") s.r = (s.r || 0) + 8;
+  if (a === "big" || a === "small") { s.w = a === "big" ? Math.min(ph ? 560 : 400, wU(s, dw) + (ph ? 28 : 14)) : Math.max(ph ? 80 : 26, wU(s, dw) - (ph ? 28 : 14)); delete s.mw; } if (a === "rl") s.r = (s.r || 0) - 8; if (a === "rr") s.r = (s.r || 0) + 8;
   if (/^c\d$/.test(a)) s.c = +a.slice(1); if (a === "txt") { const v = prompt("테이프 글자", s.t); if (v) { s.t = v.slice(0, 24); s.w = Math.min(260, 40 + s.t.length * 18); } }
   let nk = key; if (a === "front") { arr.splice(i, 1); arr.push(s); nk = key[0] + (arr.length - 1); }
   if (a === "del") { if (ph) { if (!confirm("이 사진을 삭제할까요?")) return; await delPhoto(s.id); } arr.splice(i, 1); nk = null; }
@@ -1673,11 +1710,14 @@ function anchorDeco() {
     if (it.a === 1) { cx = br.left + br.width * it.x / 100; cy = br.top + it.y; }
     else if (it.at) { cx = it.at.x; cy = it.at.y; }
     else if (it.n && isPhone()) { /* 11-03: 휴대폰은 지금 보고 있는 쪽(한 쪽씩이면 그 쪽, 폴드면 오른쪽 「오늘 이야기」)에, 보이는 자리에 엇갈려 놓기 */
-      const r = (pgEl(isOne() ? (S.dp === "R" ? "R" : "L") : "R") || L).getBoundingClientRect(), j = nNew++; cx = r.left + r.width * (j % 2 ? 0.68 : 0.32); cy = Math.min(r.bottom - 110, Math.max(r.top + 110, innerHeight * 0.42)) + Math.floor(j / 2) * 70 + (j % 2) * 30; }
+      const tp = isOne() ? (S.dp === "R" ? "R" : "L") : "L", r = (pgEl(tp) || L).getBoundingClientRect(), K = curK();
+      if (nNew === 0) nNew = [...(d.photos || []), ...(d.stk || [])].filter(x => x.a === 2 && posOf(x).pg === tp && !x.t).length % 8;   /* 11-08: 한 장씩 넣어도 앞 사진과 같은 자리에 겹치지 않게 */
+      const j = nNew++, pe = pgEl(tp), bl = pe ? ancList(pe).map(a => a.e.getBoundingClientRect().bottom).filter(b => b > 0) : [], top0 = Math.max(r.top + 60, bl.length ? Math.max(...bl) + 16 : r.top + 110);   /* 11-08: 쪽의 칸들 아래 빈 종이부터, 두 줄로 */
+      cx = r.left + r.width * (j % 2 ? 0.7 : 0.3); cy = top0 + Math.round(130 * K) + Math.floor(j / 2) * Math.round(250 * K) + (j % 2) * Math.round(30 * K); }
     else if (it.n) { const vc = Math.min(br.bottom - 80, Math.max(br.top + 80, innerHeight / 2 + (Math.random() * 80 - 40))); const pr = (isPhone() ? pageAt(lr.left + 50, vc) : { pg: "L" }); const r = pgEl(pr.pg).getBoundingClientRect(); cx = r.left + r.width / 2 + (Math.random() * 120 - 60); cy = vc; }
     else if (k === "p") { cx = desk.l + desk.w * (0.18 + n * 0.24); cy = desk.t + desk.h * 0.45; }
     else { cx = desk.l + desk.w * (it.x || 50) / 100; cy = desk.t + desk.h * (it.y || 50) / 100; }
-    const p = pageAt(cx, cy); if (isOne() && it.a !== 1 && !it.n && !it.at) { Object.assign(it, { pg: p.pg, x: p.x, y: p.y, h: p.h, a: 2 }); } else setPos(it, p); ch = true; };
+    const p = pageAt(cx, cy); setPos(it, p); ch = true; };
   (d.photos || []).forEach((p, i) => { if (p.a !== 2) place(p, "p", i); }); (d.stk || []).forEach((s, i) => { if (s.a !== 2) place(s, "s", i); });
   if (ch) { touchDay(S.date); ["L", "R"].forEach(pg => { const dc = $(`.deco[data-pg="${pg}"]`); if (dc) dc.outerHTML = decoLayer(d, pg); }); fillPhotos($("#book")); }
   placeDeco();
@@ -1686,9 +1726,15 @@ function anchorDeco() {
 function applyDayMode() { const B = $("#book"); if (!B) return; const m = dayMode(); B.classList.remove("m-view", "m-edit", "m-deco"); if (m !== "pc") B.classList.add("m-" + m);
   $$("#book .pg input, #book .pg textarea").forEach(x => { if (x.type === "file") return; const lock = m === "view" || (m === "deco" && !x.closest(".deco")); if (lock) x.setAttribute("readonly", ""); else if (!x.dataset.ro) x.removeAttribute("readonly"); }); }
 document.addEventListener("click", e => { const t = e.target.closest("#mEdit,#mDeco,#mDone"); if (!t) return; e.stopImmediatePropagation();
-  S.mmd = S.date; S.mm = t.id === "mEdit" ? "edit" : t.id === "mDeco" ? "deco" : "view"; if (S.mm === "view") { const a = document.activeElement; if (a && a.blur) a.blur(); decoSel(null); toast("저장했어요"); }
+  const cur = dayMode();
+  if (t.id === "mDeco") decoEnter(); else if (t.id === "mEdit") { S.mmd = S.date; S.mm = "edit"; }
+  else if (cur === "deco") { decoLeave(); toast(S.mm === "edit" ? "꾸미기를 끝냈어요 — 이어서 쓰세요" : "꾸미기를 끝냈어요"); }
+  else { S.mmd = S.date; S.mm = "view"; const a = document.activeElement; if (a && a.blur) a.blur(); decoSel(null); toast("저장했어요"); }
   rerenderKeep(); if (S.mm === "edit") { const x = $("#dtx"); if (x && !(x.value || "").trim()) x.focus(); } }, true);
 
+/* 11-08 제이: 휴대폰 보기에서 글 칸을 누르면 「수정」을 따로 안 눌러도 바로 쓰기 */
+document.addEventListener("click", e => { if (S.v !== "day" || !isPhone() || dayMode() !== "view") return; const x = e.target.closest && e.target.closest("#book .pg textarea, #book .pg input"); if (!x || x.closest(".deco") || /^(file|checkbox|radio|date|time|button)$/.test(x.type)) return;
+  const sel = x.id ? "#" + x.id : x.dataset.f ? `[data-f="${x.dataset.f}"]` : null; S.mmd = S.date; S.mm = "edit"; rerenderKeep(); const n = sel && $(sel); if (n) { n.focus(); try { const L = n.value.length; n.setSelectionRange(L, L); } catch (er) {} } }, true);
 /* 휴대폰: 옆으로 밀어 넘기기 */
 let sw0 = null;
 document.addEventListener("touchstart", e => { if (S.v !== "day" || (isPhone() && dayMode() === "deco") || e.target.closest(".pop,.stkbar") || (dayMode() !== "view" && e.target.closest("textarea,input,.stk,.pol"))) return; const t = e.touches[0]; sw0 = { x: t.clientX, y: t.clientY, at: Date.now() }; }, { passive: true });
@@ -1698,7 +1744,7 @@ document.addEventListener("touchend", e => { if (!sw0) return; const t = e.chang
     S.dp = dx < 0 ? "L" : "R"; }
   flipTo(addD(S.date, dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
 /* 한 쪽씩 볼 때 1쪽 ↔ 2쪽 */
-function dpGo(dp, dir) { if (S.dp === dp && $("#book")) return; S.dp = dp; render(); window.scrollTo(0, 0); const b = $("#book"); if (b) { b.classList.add(dir > 0 ? "pgin-r" : "pgin-l"); setTimeout(() => b.classList.remove("pgin-r", "pgin-l"), 320); } }
+function dpGo(dp, dir) { if (S.dp === dp && $("#book")) return; if (isPhone() && dayMode() === "deco") decoLeave(); S.dp = dp; render(); window.scrollTo(0, 0); const b = $("#book"); if (b) { b.classList.add(dir > 0 ? "pgin-r" : "pgin-l"); setTimeout(() => b.classList.remove("pgin-r", "pgin-l"), 320); } }
 document.addEventListener("click", e => { const t = e.target.closest(".pgsw [data-dp], .pgnx"); if (!t) return; e.preventDefault(); const dp = t.dataset.dp; dpGo(dp, dp === "R" ? 1 : -1); });
 
 /* ── 여행 노트에서 불러오기 (같은 주소의 여행 노트 기록을 읽기만) ── */

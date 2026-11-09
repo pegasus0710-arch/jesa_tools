@@ -3407,7 +3407,8 @@ async function gdToken(interactive) {
   if (GD.token && Date.now() < GD.exp - 60000) return GD.token;
   if (!gdCid()) throw new Error("클라이언트 ID가 없어요 — 설정에서 넣어 주세요");
   await gdLoad();
-  return new Promise((res, rej) => {
+  return new Promise((res0, rej0) => { let done = false; const to = setTimeout(() => { if (!done) { done = true; rej0(new Error("구글 응답이 없어요 — 「지금 동기화」를 눌러 다시 연결해 주세요(올리던 사진은 이어서 올라가요)")); } }, 30000);   /* 11-09: 구글 창이 앱 뒤에 숨어 답이 없으면 「동기화 중」에서 멈추던 것 */
+    const res = t => { if (!done) { done = true; clearTimeout(to); res0(t); } }, rej = e => { if (!done) { done = true; clearTimeout(to); rej0(e); } };
     GD.tc = google.accounts.oauth2.initTokenClient({ client_id: gdCid(), scope: GD_SCOPE, hint: D.set.gdEmail || undefined, login_hint: D.set.gdEmail || undefined,
       callback: r => { if (r.error) return rej(new Error(r.error_description || r.error)); GD.token = r.access_token; GD.exp = Date.now() + (r.expires_in || 3600) * 1000; gdKeep(); res(GD.token); },
       error_callback: e => rej(new Error(e && e.type === "popup_closed" ? "구글 창을 닫았어요" : e && e.type === "popup_failed_to_open" ? "구글 창을 열지 못했어요 — 「지금 동기화」를 눌러 다시 연결해 주세요(팝업이 막혔으면 주소창에서 허용)" : "구글 연결이 취소됐어요")) });
@@ -3483,12 +3484,12 @@ async function gdSync(opt = {}) {
       for (const p of r.photos) { const n = p.id + ".jpg", f = files[n];
         if (!f) todo.push([p.id, n, tf, r.id]);
         if (!files["t_" + n]) todo.push([p.id, "t_" + n, tf, r.id, 1]);   /* 11-05: 작은 사진도 함께(휴대폰은 이것만 받음 — 빠르고 가벼움) */
-        else if (f.parents && f.parents.length && !f.parents.includes(tf)) { GD.msg = `사진을 여행별 폴더로 정리하는 중 ${++mv}…`; gdPaint();
+        else if (f && f.parents && f.parents.length && !f.parents.includes(tf)) { GD.msg = `사진을 여행별 폴더로 정리하는 중 ${++mv}…`; gdPaint();
           await gdApi(`files/${f.id}?addParents=${tf}&removeParents=${f.parents.join(",")}&fields=id,parents`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: "{}" }).then(x => x.json()).then(x => { f.parents = x.parents; }).catch(() => {}); } } }
     for (const r of D.items) for (const p of r.photos || []) if (files[p.id + ".jpg"]) phMark(p.id, "inD");   /* 10-31: 드라이브에 이미 있는 사진 */
     if (todo.length) { let up = 0, i = 0; const tot = todo.length;
-      GD.tsync = {}; todo.forEach(x => GD.tsync[x[3]] = (GD.tsync[x[3]] || 0) + 1);
-      const one = async () => { while (i < todo.length) { const [id, n, tf, rid, th] = todo[i++]; const b = th ? await thumbBlob(id) : await fullBlob(id, true); if (b) { await gdUpload(n, b, "image/jpeg", null, tf); if (!th) phMark(id, "inD"); } if (GD.tsync[rid] && !--GD.tsync[rid]) delete GD.tsync[rid]; GD.prog = `올리는 중 ${++up}/${tot}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } };
+      GD.tsync = {}; const tleft = {}; todo.forEach(x => tleft[x[3]] = (tleft[x[3]] || 0) + 1);   /* 11-09: 「동기화 중」은 지금 올리는 여행만(예전: 모든 여행이 한꺼번에 떠서 어느 것도 끝나지 않는 것처럼 보임) — 여행 하나씩 차례로 끝남 */
+      const one = async () => { while (i < todo.length) { const [id, n, tf, rid, th] = todo[i++]; if (GD.tsync[rid] == null && tleft[rid]) { GD.tsync[rid] = tleft[rid]; tsyncPaint && tsyncPaint(); } const b = th ? await thumbBlob(id) : await fullBlob(id, true); if (b) { await gdUpload(n, b, "image/jpeg", null, tf); if (!th) phMark(id, "inD"); } if (GD.tsync[rid] && !--GD.tsync[rid]) delete GD.tsync[rid]; GD.prog = `올리는 중 ${++up}/${tot}`; GD.msg = "사진 " + GD.prog + " — 앱을 켜 둔 채로 기다려 주세요"; gdPaint(); } };
       GD.prog = `올리는 중 0/${tot}`; gdPaint(); await Promise.all([one(), one(), one()]); }
     for (const n of Object.keys(files)) if (/^(t_)?p.*\.jpg$/.test(n) && !want.has(n) && !keep.has(n) && Date.now() - Date.parse(files[n].modifiedTime || 0) > 30 * 60000) await gdApi(`files/${files[n].id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ trashed: true }) }).catch(() => {});
     /* 지운 여행의 폴더(사진이 다 빠진 것)는 휴지통으로 */

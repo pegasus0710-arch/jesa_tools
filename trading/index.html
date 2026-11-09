@@ -954,6 +954,243 @@ ${o.note ? `<p class="xlx-p">${o.note}</p>` : ""}<button type="button" class="xl
 
 
 </script>
+<script>/* bj-sync-core.js (11-09 붙임) */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Blog J 공통 동기화 핵심(bj-sync-core.js) — 2026-11-08 점검안 · 서버 없음
+   ───────────────────────────────────────────────────────────────────────────
+   목적(제이 불편 3가지):
+     ① 쓰다 보면 구글이 끊긴 것처럼 보이고 처음 화면이 다시 나옴
+     ② PC · 휴대폰이 바로 맞춰지지 않음
+     ③ PC 폴더를 연결해도 저절로 저장이 잘 안 됨
+   원칙:
+     · 「연결됨」은 저장된 표시(앱의 gdOn)로 정한다 — 토큰(1시간짜리) 유무로 정하지 않는다.
+       토큰이 없으면 「쉬는 중」일 뿐, 처음 화면 · 설정 화면을 다시 띄우지 않는다.
+     · 토큰은 모든 Blog J 앱이 같은 주소(origin)라서 localStorage 「bj-gd-token」 하나를 같이 쓴다
+       (클라이언트 ID · 권한(drive.file)이 같아서 한 앱에서 받은 토큰을 다른 앱도 쓸 수 있음).
+     · 토큰 다시 받기는 브라우저가 「사용자가 누른 순간」에만 구글 창(잠깐 열렸다 닫힘)을 허락한다.
+       → 화면을 누를 때(pointerdown/keydown) 조용히(prompt:'none' + login_hint) 다시 받는다.
+       → 누름 없이(백그라운드 · 401) 구글 창을 열지 않는다(열면 팝업 차단 → 오류만 남음).
+     · 고친 것은 「올릴 것 있음」 표시를 localStorage에 남겨(앱을 닫아도 남음) 연결이 돌아오면 올린다.
+     · 열려 있고 화면이 보이는 동안: 다시 볼 때 · 창에 들어올 때 · 인터넷이 돌아올 때 + 90초마다
+       드라이브 파일의 수정 시각만 가볍게 확인 → 바뀌었으면 맞추기(받기+합치기+올리기).
+     · PC 폴더: 권한이 'prompt'가 되면(브라우저를 다시 열면 흔함) 조용히 실패하지 않고
+       작은 띠 「PC 폴더 다시 연결」 → 누르면 그 누름으로 허용을 받고 밀린 것을 한꺼번에 씀.
+   서버 없이 안 되는 것(정직하게):
+     · 새로 고침 토큰(refresh token)이 없다 → 1시간마다 토큰이 끝나고, 다시 받으려면 「누름」이 한 번 필요.
+       (구글 로그인 · 앱 허용이 살아 있으면 창이 잠깐 깜빡이고 끝, 로그아웃 · 쿠키 삭제 · 여러 계정이면 계정 고르기 창)
+     · 앱이 닫혀 있을 때(또는 휴대폰이 앱을 얼려 둔 동안) 동기화는 불가 — 다음에 열고 한 번 누를 때 맞춤.
+     · 사파리 · 일부 브라우저는 prompt:'none' 창을 막거나 서드파티 쿠키 때문에 실패할 수 있음 → 띠 단추로.
+     · 드라이브 v3에는 「바뀌지 않았을 때만 덮어쓰기」 조건 저장이 공식적으로 없다 →
+       올리기 바로 전에 수정 시각을 한 번 더 보고 바뀌었으면 한 번 더 합친 뒤 올림(beforePush 훅).
+   쓰는 법: 맨 아래 「앱에 붙이기」 + sync_plan/integration_checklist.md
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function (W) {
+  "use strict";
+  const TK = "bj-gd-token";                     /* 기존 trip2 와 같은 키 · 같은 모양 {t,e,m} */
+  const now = () => Date.now();
+  const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const hasGesture = () => !!(navigator.userActivation && navigator.userActivation.isActive);
+  const visible = () => document.visibilityState === "visible";
+
+  function create(cfg) {
+    /* cfg = {
+         app:        "trip2"                       — 로컬 저장 키 이름에 씀
+         clientId, scope                           — GIS
+         isOn():     bool                          — 저장된 「드라이브 연결함」 표시(D.set.gdOn 등). 토큰과 무관
+         email():    string                        — 연결한 계정(login_hint). 없으면 조용한 갱신이 덜 됨
+         setEmail(e)                               — (선택) 처음 맞출 때 받은 계정 저장
+         sync(why):  Promise                       — 앱의 맞추기(받기 → 합치기 → 올리기). 토큰은 core.token()으로
+         remoteStamp(): Promise<string|null>       — (선택) 드라이브 본 파일의 modifiedTime 만 가볍게. 없으면 주기 확인 때 전체 맞추기
+         paint(state)                              — (선택) 앱 머리줄 · 상태 줄 다시 그리기
+         folder: {                                 — (선택) PC · 안드로이드 폴더
+           handle(): FileSystemDirectoryHandle|null
+           onPerm(p)                               — 'granted' | 'prompt' | 'denied' 를 앱 상태(D.dirPerm 등)에 반영
+           writeAll(): Promise                     — 지금 자료 전부 폴더에 쓰기(앱의 folderWrite / dirWrite(true) / Store.writeFile 들)
+           name(): string
+         }
+         band: true                                — 기본 띠를 core가 그림(false면 앱이 state로 직접)
+       } */
+    const K = { dirty: "bj-sync:" + cfg.app + ":dirty", fdirty: "bj-sync:" + cfg.app + ":fdirty", stamp: "bj-sync:" + cfg.app + ":stamp" };
+    const C = { token: null, exp: 0, tc: null, silentAt: 0, silentFails: 0, busy: false, again: false, err: "", lastPull: 0, timer: null, pushT: null, needGesture: false, folderPerm: null };
+
+    /* ── 토큰 ───────────────────────────────────────────── */
+    const live = () => !!C.token && now() < C.exp - 60000;
+    function restore() {   /* 같은 주소의 다른 Blog J 앱이 받은 토큰도 씀(계정이 같을 때만) */
+      const o = lsGet(TK, null), m = (cfg.email && cfg.email()) || "";
+      if (o && o.t && o.e > now() + 120000 && (!o.m || !m || o.m === m)) { C.token = o.t; C.exp = o.e; return true; }
+      return false;
+    }
+    function keep() { lsSet(TK, { t: C.token, e: C.exp, m: (cfg.email && cfg.email()) || "" }); }
+    function invalidate() { C.token = null; C.exp = 0; const o = lsGet(TK, null); if (o && o.t) lsSet(TK, null); }
+    function loadGis() {
+      return new Promise((res, rej) => { if (W.google && google.accounts && google.accounts.oauth2) return res();
+        const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+        s.onload = () => res(); s.onerror = () => rej(new Error("구글 로그인 도구를 불러오지 못했어요 (인터넷 확인)")); document.head.appendChild(s); });
+    }
+    /* 토큰 받기 — mode: 'silent'(prompt:none, 누름 안에서만) | 'interactive'(prompt:'' 또는 처음이면 consent) */
+    function request(mode) {
+      return loadGis().then(() => new Promise((res, rej) => {
+        const em = (cfg.email && cfg.email()) || undefined;
+        const tc = google.accounts.oauth2.initTokenClient({ client_id: cfg.clientId, scope: cfg.scope, hint: em, login_hint: em,
+          callback: r => { if (r.error) return rej(Object.assign(new Error(r.error_description || r.error), { code: r.error }));
+            C.token = r.access_token; C.exp = now() + (+r.expires_in || 3600) * 1000; keep(); res(C.token); },
+          error_callback: e => rej(Object.assign(new Error(e && e.type === "popup_failed_to_open" ? "구글 창이 막혔어요 — 「다시 연결」을 눌러 주세요" : e && e.type === "popup_closed" ? "구글 창을 닫았어요" : "구글 연결이 취소됐어요"), { code: e && e.type })) });
+        tc.requestAccessToken({ prompt: mode === "silent" ? "none" : (cfg.isOn() ? "" : "consent") });
+      }));
+    }
+    /* 앱의 gdToken 대신: 살아 있으면 바로, 없으면 누름이 있을 때만 다시 받음. 누름이 없으면 창을 열지 않고 NEED_GESTURE */
+    async function token(interactive) {
+      if (live()) return C.token;
+      if (restore()) return C.token;
+      if (!hasGesture()) { C.needGesture = true; paint(); throw Object.assign(new Error("구글 연결이 쉬는 중이에요 — 화면을 한 번 누르면 이어서 맞춰요"), { code: "NEED_GESTURE" }); }
+      const t = await request(interactive ? "interactive" : "silent");
+      C.needGesture = false; C.silentFails = 0; return t;
+    }
+
+    /* ── 올릴 것 표시(앱을 닫아도 남음) ───────────────────── */
+    const dirtyAt = () => +lsGet(K.dirty, 0) || 0;
+    function markDirty() {                  /* 앱의 touch() / save() 마다 */
+      lsSet(K.dirty, now());
+      if (cfg.folder) lsSet(K.fdirty, now());
+      if (!cfg.isOn()) return;
+      clearTimeout(C.pushT);
+      if (live()) C.pushT = setTimeout(() => run("push"), 2500); else { C.needGesture = true; paint(); }
+    }
+    /* ── 맞추기 실행(겹치지 않게 · 실패해도 표시는 남김) ─────── */
+    async function run(why) {
+      if (!cfg.isOn()) return;
+      if (C.busy) { C.again = true; return; }
+      if (!live() && !restore()) { C.needGesture = true; paint(); return; }
+      C.busy = true; C.err = ""; paint();
+      const started = now();
+      try {
+        await cfg.sync(why);
+        if (dirtyAt() <= started) lsSet(K.dirty, null);     /* 맞추는 동안 또 고쳤으면 표시 유지 */
+        C.lastPull = now();
+        if (cfg.remoteStamp) { try { lsSet(K.stamp, await cfg.remoteStamp()); } catch (e) {} }
+        if (cfg.folder) folderFlush();                         /* ③ 받은 것도 폴더에 — 지금은 레시피 · 스크랩 · 가계부가 안 씀 */
+      } catch (e) {
+        if (e && (e.status === 401 || /401|Invalid Credentials/.test(e.message || ""))) { invalidate(); C.needGesture = true; }
+        else if (!(e && e.code === "NEED_GESTURE")) C.err = (e && e.message) || "동기화 오류";
+      }
+      C.busy = false; paint();
+      if (C.again) { C.again = false; setTimeout(() => run("again"), 600); }
+    }
+    /* 가벼운 확인: 드라이브 본 파일 수정 시각만 보고 바뀌었을 때만 맞춤(요청 1번) */
+    async function check(why) {
+      if (!cfg.isOn() || !visible() || C.busy) return;
+      if (!live() && !restore()) { C.needGesture = true; paint(); return; }
+      if (dirtyAt()) return run(why);                          /* 올릴 것이 있으면 바로 맞추기 */
+      if (!cfg.remoteStamp) return run(why);
+      try { const s = await cfg.remoteStamp(); if (s && s !== lsGet(K.stamp, null)) return run(why); C.lastPull = now(); }
+      catch (e) { if (/401/.test(e && e.message || "")) { invalidate(); C.needGesture = true; paint(); } }
+    }
+
+    /* ── 화면을 누를 때: 조용히 토큰 다시 받기(누름 안에서만 창 허용) ── */
+    function onGesture(e) {
+      if (!cfg.isOn() || live() || C.busy) return;
+      if (e && e.target && e.target.closest && e.target.closest("[data-bjs-band],[data-gdoff]")) return;
+      if (restore()) { run("restore"); return; }
+      const gap = C.silentFails ? Math.min(10 * 60000, 30000 * Math.pow(2, C.silentFails)) : 0;   /* 실패하면 30초 · 1분 · 2분 … 최대 10분 */
+      if (now() - C.silentAt < gap) return;
+      C.silentAt = now();
+      request("silent").then(() => { C.needGesture = false; C.silentFails = 0; run("gesture"); })
+        .catch(() => { C.silentFails++; C.needGesture = true; paint(); });
+    }
+
+    /* ── PC 폴더 ───────────────────────────────────────── */
+    async function folderCheck() {
+      const h = cfg.folder && cfg.folder.handle(); if (!h || !h.queryPermission) return;
+      let p = "prompt"; try { p = await h.queryPermission({ mode: "readwrite" }); } catch (e) {}
+      if (p !== C.folderPerm) { C.folderPerm = p; cfg.folder.onPerm && cfg.folder.onPerm(p); paint(); }
+      if (p === "granted" && lsGet(K.fdirty, 0)) folderFlush();
+    }
+    let fBusy = false;
+    async function folderFlush() {
+      const h = cfg.folder && cfg.folder.handle(); if (!h || fBusy) return;
+      if (C.folderPerm !== "granted") { await folderCheck(); if (C.folderPerm !== "granted") return; }
+      fBusy = true; const t0 = now();
+      try { await cfg.folder.writeAll(); if (+lsGet(K.fdirty, 0) <= t0) lsSet(K.fdirty, null); }
+      catch (e) { if (e && e.name === "NotAllowedError") { C.folderPerm = "prompt"; cfg.folder.onPerm && cfg.folder.onPerm("prompt"); } }
+      fBusy = false; paint();
+    }
+    async function folderGrant() {      /* 띠 단추 — 반드시 누름 안에서 */
+      const h = cfg.folder && cfg.folder.handle(); if (!h) return false;
+      let p = "denied"; try { p = await h.requestPermission({ mode: "readwrite" }); } catch (e) {}
+      C.folderPerm = p; cfg.folder.onPerm && cfg.folder.onPerm(p);
+      if (p === "granted") { lsSet(K.fdirty, now()); await folderFlush(); }
+      paint(); return p === "granted";
+      /* 크롬(PC) 122+ 는 다시 물을 때 「방문할 때마다 허용」을 고를 수 있음 → 그 뒤로는 브라우저를 다시 열어도 'granted' */
+    }
+
+    /* ── 띠(작게 · 가리지 않게) ─────────────────────────── */
+    function state() {
+      const on = cfg.isOn(), pend = !!dirtyAt();
+      return { on, live: live(), busy: C.busy, err: C.err, pending: pend, needGesture: on && !live() && C.needGesture,
+        folder: cfg.folder && cfg.folder.handle() ? (C.folderPerm || "?") : null, fpending: !!lsGet(K.fdirty, 0), lastPull: C.lastPull };
+    }
+    function paint() {
+      const s = state(); try { cfg.paint && cfg.paint(s); } catch (e) {}
+      if (cfg.band === false) return;
+      let el = document.getElementById("bjsBand");
+      const items = [];
+      if (s.on && !s.live && (s.needGesture || s.pending)) items.push(`<span>구글 드라이브 연결이 쉬는 중${s.pending ? " · 올릴 것 있음" : ""}</span><button type="button" data-bjs-band="gd">다시 연결</button>`);
+      if (s.folder && s.folder !== "granted" && s.folder !== "?") items.push(`<span>PC 폴더 「${(cfg.folder.name && cfg.folder.name()) || "저장 폴더"}」 쉬는 중</span><button type="button" data-bjs-band="dir">폴더 다시 연결</button>`);
+      if (!items.length) { if (el) el.remove(); return; }
+      if (!el) { el = document.createElement("div"); el.id = "bjsBand"; el.setAttribute("role", "status");
+        el.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:9000;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;max-width:min(560px,calc(100vw - 32px));padding:8px 12px;border-radius:10px;background:#fffdf7;border:1px solid #d9cfbd;box-shadow:0 2px 8px rgba(0,0,0,.12);font:600 13.5px/1.4 SUIT,Pretendard,sans-serif;color:#1f2125";
+        document.body.appendChild(el); }
+      el.innerHTML = items.map(x => `<div style="display:flex;gap:8px;align-items:center">${x}</div>`).join("");
+      el.querySelectorAll("button").forEach(b => { b.style.cssText = "border:1px solid #195455;background:#195455;color:#fff;border-radius:8px;padding:4px 10px;font:inherit;cursor:pointer"; });
+    }
+    document.addEventListener("click", async e => {
+      const b = e.target.closest && e.target.closest("[data-bjs-band]"); if (!b) return;
+      if (b.dataset.bjsBand === "gd") { try { await token(true); run("band"); } catch (er) { C.err = er.message; paint(); } }
+      else folderGrant();
+    });
+
+    /* ── 시작 · 이벤트 ───────────────────────────────────── */
+    function start() {
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});   /* 휴대폰이 저장소를 비우지 않게 */
+      document.addEventListener("pointerdown", onGesture, true);
+      document.addEventListener("keydown", onGesture, true);
+      document.addEventListener("visibilitychange", () => { if (visible()) { check("visible"); folderCheck(); } else if (dirtyAt() && live()) run("hide"); });   /* 내릴 때 남은 것 올리기 */
+      W.addEventListener("focus", () => check("focus"));
+      W.addEventListener("online", () => check("online"));
+      W.addEventListener("pageshow", e => { if (e.persisted) check("bfcache"); });
+      C.timer = setInterval(() => { if (visible() && now() - C.lastPull > 85000) check("tick"); paint(); }, 30000);   /* 약 90초마다 가볍게 확인 */
+      if (cfg.isOn()) { if (restore()) setTimeout(() => run("start"), 800); else { C.needGesture = true; paint(); } }
+      folderCheck();
+    }
+    return { start, token, invalidate, markDirty, run, check, folderGrant, folderFlush, state, live, restore, _C: C };
+  }
+
+  /* 처음 화면(처음 써요 / 전에 쓰던 자료)을 띄울지 — 저장된 흔적이 하나라도 있으면 절대 띄우지 않음 */
+  function shouldWelcome(o) {
+    /* o = { gdOn, dirSaved(폴더 핸들 저장됨), storeAsked, hasData, setupDone } */
+    return !(o.gdOn || o.dirSaved || o.storeAsked || o.hasData || o.setupDone);
+  }
+  W.BJSync = { create, shouldWelcome };
+})(window);
+
+/* ───────── 앱에 붙이기(여행 노트 v2.0 예) ─────────
+const SYNC = BJSync.create({
+  app: "trip2", clientId: GD_CLIENT_ID, scope: GD_SCOPE,
+  isOn: () => !!D.set.gdOn, email: () => D.set.gdEmail || "",
+  sync: why => gdSync({ toast: false }),                         // gdSync 안의 gdToken(...) → SYNC.token(...)
+  remoteStamp: async () => { const fid = await gdFolder(); const r = await (await gdApi(`files?q=${gq(`'${fid}' in parents and name='${GDJ}' and trashed=false`)}&fields=files(modifiedTime)`)).json(); return r.files && r.files[0] ? r.files[0].modifiedTime : null; },
+  paint: () => gdPaint(),
+  folder: { handle: () => D.dir, onPerm: p => { D.dirPerm = p; gdPaint(); }, writeAll: () => folderWrite(), name: () => D.dir && D.dir.name },
+});
+// gdToken(i)  → return SYNC.token(i)
+// gdApi 401   → SYNC.invalidate(); throw Object.assign(new Error("401"), { status: 401 })   (다시 창을 열지 않음)
+// touch()     → … SYNC.markDirty()   (gdAuto() 는 지움)
+// 처음 화면    → if (BJSync.shouldWelcome({ gdOn: D.set.gdOn, dirSaved: !!(await getMeta("dir")), storeAsked: D.set.storeAsked, hasData: D.items.length })) S.sheet = "wel";
+// init 끝     → SYNC.start()    · 기존 visibilitychange · 첫 누름(prompt:none) · gdPrepSilent · 30초 setInterval 동기화 부분은 지움
+*/
+
+</script>
 <script>
 /* ───────── 구글 드라이브 동기화 (v1.1 설치형) ─────────
    · 내 구글 드라이브에 「매매일지」 폴더를 만들고, 앱이 쓰는 파일(settings.json · 연도별 파일 · 시세.json)을 그대로 둠
@@ -971,7 +1208,7 @@ const GS = {
   on(fn) { this.ls.add(fn); return () => this.ls.delete(fn); },
   paint() { this.ls.forEach(f => { try { f(); } catch (e) {} }); },
   http() { return /^https:$/.test(location.protocol) || location.hostname === "localhost"; },
-  live() { return !!this.token && Date.now() < this.exp - 60000; },
+  live() { try { return SYNC.live(); } catch (e) { return false; } },   /* 11-09: 토큰은 공통 코어(bj-gd-token)가 맡음 */
   /* 파일 이름 ↔ 브라우저 저장 키 */
   key(n) { if (n === "settings.json") return GS_CFG.pfx + ":settings"; const m = n.match(GS_CFG.yearRe); if (m) return GS_CFG.pfx + ":tx:" + m[1]; return (GS_CFG.extra || {})[n] || null; },
   isYear(n) { return GS_CFG.yearRe.test(n); },
@@ -983,7 +1220,7 @@ const GS = {
   /* 앱이 파일을 쓸 때마다(Store.writeFile) — 바뀐 것으로 표시하고, 연결돼 있으면 잠시 뒤 올림 */
   touch(n) { if (this.importing || !this.key(n)) return; const m = this.m(); m.dirty[n] = 1; m.savedAt = Date.now(); this.save(); this.auto(); },
   touchAll() { for (const n of this.localNames()) this.m().dirty[n] = 1; this.save(); this.auto(); },
-  auto() { if (!this.m().on || !this.http()) return; if (!this.live()) return this.paint(); clearTimeout(this._t); this._t = setTimeout(() => this.sync({ toast: false }), 2500); },
+  auto() { SYNC.markDirty(); this.paint(); },   /* 11-09: 「올릴 것 있음」을 남기고 2.5초 뒤 올림(토큰이 쉬면 띠) · 폴더도 밀린 것으로 표시 */
   ago(t) { if (!t) return "아직 없음"; const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "방금" : m < 60 ? m + "분 전" : m < 1440 ? Math.round(m / 60) + "시간 전" : ymdw(new Date(t)); },
   pending() { return Object.keys(this.m().dirty).length > 0; },
   state() { const m = this.m(); if (!this.http()) return ["off", "웹 주소에서만"]; if (!m.on) return ["off", "미연결"]; if (this.busy) return ["busy", "동기화 중…"]; if (this.err) return ["bad", "다시 연결"];
@@ -992,20 +1229,11 @@ const GS = {
 const ymdw = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}(${"일월화수목금토"[d.getDay()]})`;
 function gdLoad() { return new Promise((res, rej) => { if (window.google && google.accounts && google.accounts.oauth2) return res(); const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true; s.onload = () => res(); s.onerror = () => rej(new Error("구글 로그인 도구를 불러오지 못했어요 (인터넷 확인)")); document.head.appendChild(s); }); }
 /* 토큰 — 처음엔 구글 창(계정 고르기 · 허용), 그다음부터는 조용히 */
-async function gdToken(interactive) {
-  if (GS.live()) return GS.token;
-  await gdLoad(); const m = GS.m();
-  return new Promise((res, rej) => {
-    GS.tc = google.accounts.oauth2.initTokenClient({ client_id: GD_CLIENT_ID, scope: GD_SCOPE, hint: m.email || undefined, login_hint: m.email || undefined,
-      callback: r => { if (r.error) return rej(new Error(r.error_description || r.error)); GS.token = r.access_token; GS.exp = Date.now() + (+r.expires_in || 3600) * 1000; res(GS.token); },
-      error_callback: e => rej(new Error(e && e.type === "popup_closed" ? "구글 창을 닫았어요" : e && e.type === "popup_failed_to_open" ? "구글 창을 열지 못했어요 — 팝업이 막혔으면 주소창에서 허용한 뒤 다시 눌러 주세요" : "구글 연결이 취소됐어요")) });
-    GS.tc.requestAccessToken({ prompt: interactive && !m.on ? "consent" : "" });
-  });
-}
+async function gdToken(interactive) { return SYNC.token(interactive); }   /* 11-09: 누름이 없으면 창을 열지 않음(NEED_GESTURE) */
 async function gdApi(url, opt = {}, retry = true) {
   const t = await gdToken(false);
   const r = await fetch(url.startsWith("http") ? url : "https://www.googleapis.com/drive/v3/" + url, { ...opt, headers: { ...(opt.headers || {}), Authorization: "Bearer " + t } });
-  if (r.status === 401 && retry) { GS.token = null; return gdApi(url, opt, false); }
+  if (r.status === 401) { SYNC.invalidate(); throw Object.assign(new Error("401"), { status: 401 }); }
   if (!r.ok) { let msg = r.status + ""; try { const j = await r.json(); msg = (j.error && j.error.message) || msg; } catch (e) {} throw new Error("드라이브 응답 오류: " + msg); }
   return r;
 }
@@ -1041,7 +1269,7 @@ GS.sync = async function (opt = {}) {
   if (this.busy) { this.again = true; return; }
   if (this.locked()) { this.msg = "암호 잠금을 푼 뒤 동기화해요"; return this.paint(); }
   this.busy = true; this.err = ""; this.msg = "구글 드라이브와 동기화하는 중…"; this.paint();
-  const m = this.m(); let pulled = 0, pushed = 0, reload = false;
+  const m = this.m(); let pulled = 0, pushed = 0, reload = false, fail = null;
   try {
     await gdToken(!!opt.interactive);
     const files = await gdList(), first = !Object.keys(m.rev).length;
@@ -1113,15 +1341,16 @@ GS.sync = async function (opt = {}) {
         } finally { this.importing = false; }
       }
     }
-    if (!m.email) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user && a.user.emailAddress) { m.email = a.user.emailAddress; this.stc = null; setTimeout(gsPrepSilent, 300); } } catch (e) {} }
+    if (!m.email) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user && a.user.emailAddress) { m.email = a.user.emailAddress; } } catch (e) {} }
     m.last = Date.now(); m.on = true; this.syncedRun = true; this.save();
     this.msg = pulled ? "동기화했어요 — 다른 기기에서 바뀐 내용을 받았어요" : "동기화했어요";
     if (opt.toast !== false && typeof toast === "function") toast(this.msg);
     if (reload) { if (typeof toast === "function") toast("드라이브 것으로 바꿨어요 — 다시 열어요"); setTimeout(() => location.reload(), 900); }
     else if (pulled && window.__bjLoadAll) { this.importing = true; try { await window.__bjLoadAll(); } catch (e) { setTimeout(() => location.reload(), 300); } finally { this.importing = false; } }
-  } catch (e) { this.importing = false; this.err = e.message; this.msg = ""; if (opt.toast !== false && typeof toast === "function") toast("구글 드라이브: " + e.message); }
+  } catch (e) { this.importing = false; fail = e; const quiet = !!e && (e.code === "NEED_GESTURE" || e.status === 401); this.err = quiet ? "" : e.message; this.msg = ""; if (!quiet && opt.toast !== false && typeof toast === "function") toast("구글 드라이브: " + e.message); }
   this.busy = false; this.paint();
-  if (this.again) { this.again = false; setTimeout(() => this.sync({ toast: false }), 500); }
+  if (this.again) { this.again = false; setTimeout(() => SYNC.run("again"), 500); }
+  if (fail && opt.fromCore) throw fail;   /* 11-09: 코어가 401 · 「누름 필요」를 띠로 바꿈 */
 };
 /* 11-01 동기화 점검: 바탕이 비었거나 예전 모양(id 목록)이면 — 이 기기가 안 고친 파일은 지금 내용이 곧 바탕.
    잠금이 바뀌어 드라이브 것을 받으면 그때는 풀 수 없어 바탕이 비어 → 잠금을 푼 뒤 처음 고친 파일에서 지운 내역이 되살아나던 문제. 잠금을 풀자마자 채움 */
@@ -1132,27 +1361,35 @@ setInterval(() => { const l = GS.locked(); if (GS._wasL && !l && GS.m().on) GS.f
 GS.connect = async function () {
   try { await gdToken(true); } catch (e) { this.err = e.message; this.paint(); if (typeof toast === "function") toast(e.message); return; }
   const m = this.m(); if (!Object.keys(m.rev).length) for (const n of this.localNames()) m.dirty[n] = 1;
-  m.on = true; this.save(); setTimeout(gsPrepSilent, 500); return this.sync({ interactive: true });
+  m.on = true; this.save(); return SYNC.run("connect");
 };
-GS.tap = async function () { if (this.busy) return; if (!this.m().on) return this.connect(); try { await gdToken(true); } catch (e) { this.err = e.message; this.paint(); if (typeof toast === "function") toast(e.message); return; } return this.sync({}); };
-GS.off = function () { const tok = this.token, m = this.m(); m.on = false; m.email = ""; m.rev = {}; m.base = {}; this.stc = null; this.token = null; this.fid = null; this.err = ""; this.msg = ""; this.save();
-  try { if (tok && window.google && google.accounts.oauth2.revoke) google.accounts.oauth2.revoke(tok); } catch (e) {}
+GS.tap = async function () { if (this.busy) return; if (!this.m().on) return this.connect(); try { await gdToken(true); } catch (e) { this.err = e.message; this.paint(); if (typeof toast === "function") toast(e.message); return; } return SYNC.run("tap"); };
+GS.off = function () { const m = this.m(); m.on = false; m.email = ""; m.rev = {}; m.base = {}; this.fid = null; this.err = ""; this.msg = ""; this.save();
+  SYNC._C.token = null; SYNC._C.exp = 0;   /* 11-09: 토큰은 다른 Blog J 앱과 같이 쓰므로 취소(revoke)하지 않고 이 앱만 놓음 */
   if (typeof toast === "function") toast(`연결을 끊었어요. 드라이브의 ${GS_CFG.folder} 폴더는 그대로 남아요.`); this.paint(); };
-GS.setAuto = function (v) { this.m().autoTap = v; this.save(); if (v) gsPrepSilent(); this.paint(); };
+GS.setAuto = function (v) { this.m().autoTap = v; this.save(); if (v) { SYNC._C.silentFails = 0; SYNC._C.silentAt = 0; } this.paint(); };
 
-/* 열 때 자동 동기화 — 브라우저는 한 번 누르기 전에는 구글 창을 막음 → 화면을 처음 누를 때 조용히(prompt:none) 연결 */
-function gsPrepSilent() { const m = GS.m(); if (!m.on || !GS.http() || m.autoTap === false || GS.stc || !m.email) return;
-  gdLoad().then(() => { GS.stc = google.accounts.oauth2.initTokenClient({ client_id: GD_CLIENT_ID, scope: GD_SCOPE, hint: m.email || undefined, login_hint: m.email || undefined,
-    callback: r => { if (r.error) return GS.paint(); GS.token = r.access_token; GS.exp = Date.now() + (+r.expires_in || 3600) * 1000; GS.paint(); GS.sync({ toast: false }); },
-    error_callback: () => GS.paint() }); }).catch(() => {}); }
-document.addEventListener("click", e => {
-  if (!GS.stc || GS.m().autoTap === false || GS.busy || GS.live() || GS.locked()) return;
-  if (GS.silentAt && Date.now() - GS.silentAt < 10 * 60000) return;
-  if (e.target.closest("[data-gs]")) return;
-  GS.silentAt = Date.now(); try { GS.stc.requestAccessToken({ prompt: "none" }); } catch (er) {} }, true);
-setTimeout(gsPrepSilent, 800);
-/* 화면을 다시 보면(다른 기기에서 고쳤을 수 있으니) 연결이 살아 있으면 조용히 맞춤 */
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && GS.m().on && GS.live()) GS.sync({ toast: false }); });
+/* 11-09 공통 동기화 코어(bj-sync-core.js) — 연결됨 = 저장된 표시(GS.m().on), 토큰이 없으면 띠만 · 화면을 누를 때 조용히 다시 받음 ·
+   고친 것 2.5초 뒤 올림 · 다시 볼 때 · 창에 들어올 때 · 인터넷이 돌아올 때 + 약 90초마다 드라이브 수정 시각 확인 · 받은 것도 PC 폴더에 씀 */
+const SYNC = BJSync.create({
+  app: GS_CFG.pfx, clientId: GD_CLIENT_ID, scope: GD_SCOPE,
+  isOn: () => !!GS.m().on && GS.http() && !GS.locked(),   /* 잠긴 동안 맞추지 않음 */
+  email: () => GS.m().email || "",
+  sync: why => GS.sync({ toast: /^(tap|band|connect)$/.test(why), fromCore: true }),
+  remoteStamp: async () => { const f = await gdList(); let t = ""; for (const n in f) if (f[n].modifiedTime > t) t = f[n].modifiedTime; return t || null; },
+  paint: () => GS.paint(),
+  folder: {
+    handle: () => Store.dirHandle || Store.pendDir || null,
+    name: () => { const h = Store.dirHandle || Store.pendDir; return h ? h.name : ""; },
+    onPerm: p => { if (p === "granted") { if (!Store.dirHandle && Store.pendDir) Store.dirHandle = Store.pendDir; Store.pendDir = null; } else if (Store.dirHandle) { Store.pendDir = Store.dirHandle; Store.dirHandle = null; }
+      if (window.__bjNeedPerm) window.__bjNeedPerm(p !== "granted"); },
+    /* 지금 이 기기 자료(파일 모양 그대로 · 잠금이면 잠긴 채)를 폴더에 모두 씀 — GS.touch 없이 */
+    writeAll: async () => { const h = Store.dirHandle || Store.pendDir; if (!h) return;
+      for (const n of GS.localNames()) { const t = localStorage.getItem(GS.key(n)); if (t == null) continue; const fh = await h.getFileHandle(n, { create: true }); const w = await fh.createWritable(); await w.write(t); await w.close(); } },
+  },
+});
+/* 「열 때 자동 동기화」를 끈 사람: 화면을 눌러도 구글 창(조용한 다시 받기)을 열지 않음 — 띠 「다시 연결」 · 「지금 동기화」로만 */
+["pointerdown", "keydown"].forEach(ev => window.addEventListener(ev, () => { if (GS.m().autoTap === false) { SYNC._C.silentAt = Date.now(); SYNC._C.silentFails = Math.max(SYNC._C.silentFails, 30); } }, true));
 setInterval(() => { if (GS.m().on) GS.paint(); }, 30000);
 
 /* 금액 칸 — 치는 대로 천 단위 쉼표(커서 위치 유지). data-money 칸만 */
@@ -1329,7 +1566,7 @@ const Store = {
   async writeFile(name, content){
     GS.touch(name); if(!this.dirHandle) return;
     try{ const fh=await this.dirHandle.getFileHandle(name,{create:true}); const w=await fh.createWritable(); await w.write(content); await w.close(); }
-    catch(e){ console.warn("folder write failed",e); }
+    catch(e){ console.warn("folder write failed",e); if(e&&e.name==="NotAllowedError") SYNC.folderFlush(); }
   },
   async readFile(name){ try{ const fh=await this.dirHandle.getFileHandle(name); const f=await fh.getFile(); return await f.text(); }catch(e){ return null; } },
   async listFolder(){ const out=[]; if(!this.dirHandle) return out; for await(const [n,h] of this.dirHandle.entries()) if(h.kind==="file") out.push(n); return out; },
@@ -1390,8 +1627,8 @@ function DataSettings({db}){
   const [files,setFiles]=useState([]); const [dirName,setDirName]=useState(Store.dirHandle?Store.dirHandle.name:""); const [dfull,setDfull]=useState(()=>{try{return localStorage.getItem("bj-trading-dfull")||"";}catch(e){return "";}}); const setFull=v=>{try{v?localStorage.setItem("bj-trading-dfull",v):localStorage.removeItem("bj-trading-dfull");}catch(e){} setDfull(v);}; const askFull=async()=>{ const v=await FPATH.ask({name:dirName,cur:dfull,what:"저장 폴더"}); if(v!=null){ setFull(v); if(v) toast("정확한 경로를 기억했어요"); } }; const fileRef=useRef();
   const refresh=async()=>{ setFiles(await Store.listFolder()); setDirName(Store.dirHandle?Store.dirHandle.name:""); };
   useEffect(()=>{ refresh(); },[]);
-  const connect=async()=>{ try{ const h=await window.showDirectoryPicker({mode:"readwrite"}); Store.dirHandle=h; await HDB.set(h); setFull(""); await db.writeAllToFolder(); await refresh(); toast("폴더에 저장했습니다"); }catch(e){ if(e.name!=="AbortError") toast("폴더 연결 실패: "+e.message); } };
-  const disconnect=async()=>{ Store.dirHandle=null; await HDB.del(); setFull(""); await refresh(); toast("폴더 연결을 해제했습니다"); };
+  const connect=async()=>{ try{ const h=await window.showDirectoryPicker({mode:"readwrite"}); Store.dirHandle=h; Store.pendDir=null; await HDB.set(h); setFull(""); await db.writeAllToFolder(); await refresh(); toast("폴더에 저장했습니다"); SYNC.folderFlush(); }catch(e){ if(e.name!=="AbortError") toast("폴더 연결 실패: "+e.message); } };
+  const disconnect=async()=>{ Store.dirHandle=null; Store.pendDir=null; { const bb=document.getElementById("bjsBand"); if(bb) bb.remove(); } await HDB.del(); setFull(""); await refresh(); toast("폴더 연결을 해제했습니다"); };
   const loadFromFolder=async()=>{ if(!confirm("폴더의 파일로 현재 데이터를 덮어씁니다. 계속할까요?")) return; const n=await db.loadAllFromFolder(); if(n<0) toast("암호가 달라 읽을 수 없는 파일이 있습니다"); else toast(`폴더에서 ${n}개 파일을 불러왔습니다`); };
   const backup=async()=>{ const blob=await db.exportBackup(); dl(blob,`매매일지_백업_${todayStr().replace(/-/g,"")}.json`); };
   const restore=async(e)=>{ const f=e.target.files[0]; if(!f) return; e.target.value=""; if(!confirm("백업 파일로 현재 데이터를 모두 덮어씁니다. 계속할까요?")) return; const r=await db.importBackup(await f.text()); toast(r); };
@@ -1887,11 +2124,12 @@ function App(){
     const pr=(await Store.unpack(localStorage.getItem(LS_PRICES)))||{};
     try{ const sv=JSON.parse(localStorage.getItem("mm1:filter")||"null"); if(sv){ if(sv.quick==="year"||!sv.quick&&!sv.from) setF_(p=>({...p,acct:sv.acct||"",quick:"year",from:ymd(new Date().getFullYear(),0,1),to:todayStr()})); else if(["month","lmonth","lyear"].includes(sv.quick)){ const [fr,to]=quickRange(sv.quick); setF_(p=>({...p,acct:sv.acct||"",quick:sv.quick,from:fr,to})); } /* 11-02: 「이번 달」 등은 열 때마다 오늘 기준으로 다시 */ else setF_(p=>({...p,acct:sv.acct||"",quick:sv.quick||"",from:sv.from||"",to:sv.to||""})); } }catch(e){}
     setSettings(s); setTxByYear(tb); setPrices(pr); setView(s.prefs.defaultView||"hold"); setReady(true); };
-  useEffect(()=>{ (async()=>{ const h=await HDB.get(); if(h){ const p=await h.queryPermission({mode:"readwrite"}); if(p==="granted") Store.dirHandle=h; else setNeedPerm(true); }
-    const raw=Store.rawSettings(); if(raw&&raw.enc){ const k0=window.BJSESS?await BJSESS.restore(JSON.stringify(raw.salt)):null; let ok=false; if(k0){ try{ Store.key=k0; Store.salt=raw.salt; await decryptStr(k0,raw); await loadAll(); ok=true; }catch(e){ Store.key=null; Store.salt=null; } } setLocked(!ok); setReady(true); } else await loadAll(); })(); },[]);
-  const unlock=async(pw)=>{ const raw=Store.rawSettings(); try{ const {key}=await deriveKey(pw,raw.salt); Store.key=key; Store.salt=raw.salt; await decryptStr(key,raw); await loadAll(); setLocked(false); if(window.BJSESS) BJSESS.keep(key,JSON.stringify(raw.salt)); setTimeout(()=>{ if(GS.m().on&&GS.live()) GS.sync({toast:false}); else GS.paint(); },300); return true; }catch(e){ Store.key=null; return false; } };
+  useEffect(()=>{ (async()=>{ const h=await HDB.get(); if(h){ const p=await h.queryPermission({mode:"readwrite"}); if(p==="granted") Store.dirHandle=h; else { Store.pendDir=h; setNeedPerm(true); } } window.__bjNeedPerm=setNeedPerm;
+    const raw=Store.rawSettings(); if(raw&&raw.enc){ const k0=window.BJSESS?await BJSESS.restore(JSON.stringify(raw.salt)):null; let ok=false; if(k0){ try{ Store.key=k0; Store.salt=raw.salt; await decryptStr(k0,raw); await loadAll(); ok=true; }catch(e){ Store.key=null; Store.salt=null; } } setLocked(!ok); setReady(true); } else await loadAll();
+    if(!window.__bjSyncOn){ window.__bjSyncOn=1; SYNC.start(); }   /* 11-09: 코어 시작(폴더 핸들 · 잠금 확인 뒤) */ })(); },[]);
+  const unlock=async(pw)=>{ const raw=Store.rawSettings(); try{ const {key}=await deriveKey(pw,raw.salt); Store.key=key; Store.salt=raw.salt; await decryptStr(key,raw); await loadAll(); setLocked(false); if(window.BJSESS) BJSESS.keep(key,JSON.stringify(raw.salt)); setTimeout(()=>{ SYNC.check("unlock"); GS.paint(); },300); return true; }catch(e){ Store.key=null; return false; } };
   const lockNow=()=>{ if(!settings||!settings.security.enabled) return; if(window.BJSESS) BJSESS.drop(); Store.key=null; Store.salt=null; setSettings(null); setTxByYear({}); setLocked(true); setModal(null); }; if(window.BJSESS) BJSESS.onIdle(()=>{ if(Store.key) lockNow(); });
-  const reconnect=async()=>{ const h=await HDB.get(); if(!h) return setNeedPerm(false); try{ const p=await h.requestPermission({mode:"readwrite"}); if(p==="granted"){ Store.dirHandle=h; setNeedPerm(false); toast("폴더를 다시 연결했습니다"); } }catch(e){} };
+  const reconnect=async()=>{ if(await SYNC.folderGrant()) toast("폴더를 다시 연결했습니다"); };   /* 11-09: 다시 연결하면 밀린 파일을 한꺼번에 씀 */
   const savePrices=async(pr)=>{ setPrices(pr); const p=await Store.pack(pr); localStorage.setItem(LS_PRICES,p); Store.writeFile("시세.json",p); };
   const db=useMemo(()=>({
     get settings(){ return settings; }, get txByYear(){ return txByYear; },
@@ -1933,7 +2171,7 @@ function App(){
       <div class="tabs">${[["hold","pie","보유종목"],["trades","list","거래내역"],["anal","chart","분석"],["set","gear","설정"]].map(([k,ic,l])=>html`<button class=${view===k?"on":""} onClick=${()=>setView(k)}><${Icon} name=${ic} size=${16} /> ${l}</button>`)}</div>
       <div class="actions"><${GdChip} onGo=${()=>window.__bjGoData()} /><button class="btn ghost" onClick=${()=>setModal({kind:"bulk"})}><${Icon} name="upload" size=${16} /> 일괄 입력</button><button class="btn p hide-m" onClick=${()=>setModal({kind:"tx"})}><${Icon} name="plus" size=${16} sw=${2.4} /> 입력</button>${settings.security.enabled?html`<button class="btn ghost ic" aria-label="잠그기" onClick=${lockNow}><${Icon} name="lock" size=${17} /></button>`:null}</div>
     </div>
-    ${needPerm&&html`<div class="note w row"><span class="grow">저장 폴더에 다시 접근하려면 허용이 필요합니다.</span><button class="btn s p" style="flex:0" onClick=${reconnect}>폴더 다시 연결</button><button class="btn s g" style="flex:0" onClick=${()=>setNeedPerm(false)}>나중에</button></div>`}
+    ${false&&needPerm&&html`<div class="note w row"><span class="grow">저장 폴더에 다시 접근하려면 허용이 필요합니다.</span><button class="btn s p" style="flex:0" onClick=${reconnect}>폴더 다시 연결</button><button class="btn s g" style="flex:0" onClick=${()=>setNeedPerm(false)}>나중에</button></div>`}
     <${MoveNote} onGo=${()=>window.__bjGoData()} />
     ${(view==="trades"||view==="hold")&&!allTx.length?html`<${Onboard} onEdit=${t=>setModal({kind:"tx",init:t})} onBulk=${()=>setModal({kind:"bulk"})} />`:null}
     ${view==="trades"&&allTx.length?html`<${TradesView} db=${db} allTx=${allTx} rep=${rep} f=${f} setF=${setF} onBulk=${()=>setModal({kind:"bulk"})} onEdit=${t=>setModal({kind:"tx",init:{...t,price:t.price?String(t.price):"",qty:t.qty?String(t.qty):"",fee:t.fee!=null?String(t.fee):"",tax:t.tax!=null?String(t.tax):"",amount:t.amount?String(t.amount):"",reason:t.reason||"",memo:t.memo||"",code:t.code||"",name:t.name||"",groupId:t.groupId||""}})} />`:null}
@@ -1960,8 +2198,8 @@ function GdChip({ onGo }) {
   useGS(); const [c, t] = GS.state(); const m = GS.m();
   const tip = !GS.http() ? "구글 드라이브 동기화는 웹 주소(설치한 앱)에서만 돼요" : !m.on ? "설정 › 저장 · 동기화에서 구글 드라이브를 연결하면 휴대폰 · PC가 같은 기록을 써요" : GS.err ? "동기화하지 못했어요 — 눌러서 다시: " + GS.err : `구글 드라이브 › ${GS_CFG.folder} · 마지막 동기화: ${GS.ago(m.last)}${GS.live() ? " · 고칠 때마다 자동으로 올려요" : ""}`;
   const pw = window.BJPWA && BJPWA.can();
-  return html`${pw ? html`<button class="btn ghost gsi" data-gs title="휴대폰 · PC에 앱으로 설치" onClick=${() => BJPWA.open()}>${GS_IC.down}<span>설치</span></button>` : null}
-    <button class=${"btn ghost gsc " + c} data-gs title=${tip} aria-label=${"구글 드라이브: " + t} onClick=${() => { if (!GS.http()) return onGo(); if (!m.on) return onGo(); GS.tap(); }}>${GS_IC.cloud}<span class="gsl">구글 드라이브</span><i>${t}</i></button>`;
+  return html`${pw ? html`<button class="btn ghost gsi" data-gs data-gdoff title="휴대폰 · PC에 앱으로 설치" onClick=${() => BJPWA.open()}>${GS_IC.down}<span>설치</span></button>` : null}
+    <button class=${"btn ghost gsc " + c} data-gs data-gdoff title=${tip} aria-label=${"구글 드라이브: " + t} onClick=${() => { if (!GS.http()) return onGo(); if (!m.on) return onGo(); GS.tap(); }}>${GS_IC.cloud}<span class="gsl">구글 드라이브</span><i>${t}</i></button>`;
 }
 /* 설정 › 저장 · 동기화 맨 위 */
 function GdSection() {
@@ -1971,8 +2209,8 @@ function GdSection() {
     <div class="desc">${m.on ? html`${m.email ? html`<b>${m.email}</b> · ` : null}내 구글 드라이브 › <b>${GS_CFG.folder}</b> 폴더와 맞춰요(휴대폰 · PC가 같은 기록을 써요). 마지막 동기화: <b>${GS.ago(m.last)}</b>${GS.live() ? " · 고칠 때마다 자동으로 올려요" : " · 「지금 동기화」를 누르면 최신으로"}`
       : html`휴대폰 · PC에서 <b>같은 구글 계정</b>으로 연결하면 같은 기록을 함께 써요. 내 드라이브에 「${GS_CFG.folder}」 폴더가 생기고, 이 앱은 <b>그 폴더 말고 다른 파일은 볼 수 없어요</b>(구글 권한 drive.file). 서버를 거치지 않고 브라우저와 구글 드라이브가 바로 주고받아요.`}</div>
     ${GS.msg ? html`<div class="muted" style="margin-bottom:6px"><b>${GS.msg}</b></div>` : null}${GS.err ? html`<div class="note w">${GS.err}</div>` : null}
-    ${m.on ? html`<label class="gsauto"><input type="checkbox" data-gs checked=${m.autoTap !== false} onChange=${e => GS.setAuto(e.target.checked)} /> 열 때 자동 동기화 <span class="muted">(앱을 열고 화면을 처음 누를 때)</span></label>` : null}
-    <div class="row" style="margin:8px 0 4px">${m.on ? html`<button class="btn p" data-gs disabled=${GS.busy} onClick=${() => GS.tap()}>지금 동기화</button><button class="btn" data-gs onClick=${() => GS.off()}>연결 끊기</button>` : html`<button class="btn p" data-gs disabled=${GS.busy} onClick=${() => GS.connect()}>구글 드라이브 연결</button>`}</div>
+    ${m.on ? html`<label class="gsauto"><input type="checkbox" data-gs data-gdoff checked=${m.autoTap !== false} onChange=${e => GS.setAuto(e.target.checked)} /> 열 때 자동 동기화 <span class="muted">(연결이 쉬면 화면을 누를 때 조용히 다시 연결)</span></label>` : null}
+    <div class="row" style="margin:8px 0 4px">${m.on ? html`<button class="btn p" data-gs data-gdoff disabled=${GS.busy} onClick=${() => GS.tap()}>지금 동기화</button><button class="btn" data-gs data-gdoff onClick=${() => GS.off()}>연결 끊기</button>` : html`<button class="btn p" data-gs data-gdoff disabled=${GS.busy} onClick=${() => GS.connect()}>구글 드라이브 연결</button>`}</div>
     <div class="muted">암호 잠금을 켜 두면 드라이브에도 <b>암호화된 채로</b> 올라가요(다른 기기에서는 같은 암호로 열어요). 개인정보 처리방침: <a href="https://pegasus0710-arch.github.io/jesa_tools/privacy.html" target="_blank" rel="noopener">보기</a></div>
     ${pc && GS_QR ? html`<div class="gsmob"><div class="qr" dangerouslySetInnerHTML=${{ __html: GS_QR }}></div><div><b>휴대폰에서도 쓰기</b><div class="muted">${m.on ? "휴대폰 카메라로 QR을 찍어 설치하고(「앱 설치」 · 「홈 화면에 추가」), 휴대폰 설정에서 같은 구글 계정으로 「구글 드라이브 연결」을 누르면 이 기록이 그대로 보여요." : "① 위 「구글 드라이브 연결」 ② 휴대폰 카메라로 QR을 찍어 설치 ③ 휴대폰에서도 같은 구글 계정으로 연결 — 그러면 PC와 휴대폰이 같은 기록을 써요."}</div><div class="muted gsurl">${GS_URL.replace(/^https:\/\//, "")}</div></div></div>` : null}
   </div>`;
@@ -1988,7 +2226,7 @@ function HelpLinks() {
 /* 기록이 없을 때 한 번 — v1.0(내려받은 파일)에서 옮겨 오기 */
 function MoveNote({ onGo }) {
   const k = GS_CFG.pfx + "gs:movenote"; const [x, setX] = useState(() => { try { return localStorage.getItem(k) === "off"; } catch (e) { return false; } });
-  if (x || GS.hasTx()) return null;
+  if (x || GS.hasTx() || GS.m().on) return null;   /* 11-09: 드라이브에서 받기 전 잠깐 뜨던 것 */
   const close = () => { try { localStorage.setItem(k, "off"); } catch (e) {} setX(true); };
   return html`<div class="note gsmove"><b>v1.0(내려받은 파일)을 쓰셨나요?</b> 그 기록은 이 앱으로 저절로 오지 않아요. v1.0에서 「설정 › 저장·백업 › 백업 파일 내려받기」를 한 뒤, 여기 <b>「설정 › 저장 · 동기화 › 백업에서 되살리기 → 파일 직접 고르기」</b>로 그 파일을 고르면 그대로 옮겨져요(쓰던 폴더가 있으면 「폴더 선택 → 폴더에서 불러오기」).
     <div class="row" style="margin-top:8px;justify-content:flex-start"><button class="btn s p" style="flex:0" onClick=${onGo}>옮기러 가기</button><button class="btn s g" style="flex:0" onClick=${close}>처음 써요 · 닫기</button></div></div>`;

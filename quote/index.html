@@ -794,13 +794,14 @@ const kv=(m,fn)=>new Promise((ok,no)=>{const t=db.transaction('kv',m);const r=fn
 const kvGet=k=>kv('readonly',s=>s.get(k)),kvSet=(k,v)=>kv('readwrite',s=>s.put(v,k));
 const LS='bjquote:';const lget=(k,d)=>{try{const v=localStorage.getItem(LS+k);return v?JSON.parse(v):d;}catch(e){return d;}};const lset=(k,v)=>{try{localStorage.setItem(LS+k,JSON.stringify(v));}catch(e){}};
 const FILE='견적서발행기.json';
+let QDIR=null,QMERGE=false;   /* 11-09: 저장 폴더 핸들(권한이 'prompt'여도 기억) · 다시 허용되면 폴더 파일과 한 번 합침 */
 const ST={root:null,name:'',
   async write(n,t){if(!this.root)return;const f=await this.root.getFileHandle(n,{create:true});const w=await f.createWritable();await w.write(t);await w.close();},
   async read(n){if(!this.root)return null;try{const f=await this.root.getFileHandle(n);return await (await f.getFile()).text();}catch(e){return null;}}};
 async function pickFolder(){let h=await window.showDirectoryPicker({id:'bjquote',mode:'readwrite',startIn:'documents'});
   let ours=false;try{await h.getFileHandle(FILE);ours=true;}catch(e){}
   const top=h.name;if(!ours)h=await h.getDirectoryHandle('견적서 발행기',{create:true});
-  ST.root=h;ST.name=h.name;ST.path=ours?top:top+' › '+h.name;lset('dpath',ST.path);lset('dfull','');await ST.write('견적서발행기_안내.txt','이 폴더는 Blog J 「견적서 발행기」가 내 정보 · 거래처 · 품목 · 발행한 문서를 저장하는 곳입니다.\r\n견적서발행기.json = 전부, 견적서발행기_어제.json = 하루 전 사본.\r\n폴더째 복사해 두면 그대로 백업이 됩니다.\r\n');await kvSet('dir',h);}
+  ST.root=h;QDIR=h;ST.name=h.name;ST.path=ours?top:top+' › '+h.name;lset('dpath',ST.path);lset('dfull','');await ST.write('견적서발행기_안내.txt','이 폴더는 Blog J 「견적서 발행기」가 내 정보 · 거래처 · 품목 · 발행한 문서를 저장하는 곳입니다.\r\n견적서발행기.json = 전부, 견적서발행기_어제.json = 하루 전 사본.\r\n폴더째 복사해 두면 그대로 백업이 됩니다.\r\n');await kvSet('dir',h);}
 async function permOk(h,ask){if(!h.queryPermission)return true;const o={mode:'readwrite'};if(await h.queryPermission(o)==='granted')return true;if(!ask)return false;return (await h.requestPermission(o))==='granted';}
 
 /* 상태 */
@@ -818,7 +819,7 @@ function stampChanges(){const now=Date.now();if(!SNAP){SNAP=snapNow();return;}D.
   if(JSON.stringify(D.me||{})!==SNAP.me)D.meAt=now;if(JSON.stringify(D.set||{})!==SNAP.set)D.setAt=now;SNAP=snapNow();}
 async function flush(){clearTimeout(saveT);saveT=null;stampChanges();const txt=JSON.stringify(D,null,1);
   try{await kvSet('data',txt);}catch(e){}
-  if(ST.root){try{const day=lget('bakday','');if(day!==today()){const o=await ST.read(FILE);if(o)await ST.write('견적서발행기_어제.json',o);lset('bakday',today());}await ST.write(FILE,txt);}catch(e){toast('폴더에 저장하지 못했어요 — 폴더 권한을 확인해 주세요. (이 기기에는 저장됐어요)');}}
+  if(ST.root){try{const day=lget('bakday','');if(day!==today()){const o=await ST.read(FILE);if(o)await ST.write('견적서발행기_어제.json',o);lset('bakday',today());}await ST.write(FILE,txt);}catch(e){if(e&&e.name==='NotAllowedError'){QDIR=ST.root;ST.root=null;SYNC.folderFlush();}else toast('폴더에 저장하지 못했어요 — 폴더 권한을 확인해 주세요. (이 기기에는 저장됐어요)');}}
   QG.touch();}
 
 /* 계산 */
@@ -831,10 +832,10 @@ const isBlank=d=>!d.clientId&&!(d.client&&d.client.name)&&!(d.lines||[]).some(l=
 
 /* 그리기 */
 function render(){const r=$('#root');
-  r.innerHTML=`<header class="top"><span class="badge">${ICON}</span><div class="ttl"><small>Blog J 무료 도구 · ${PAINT.MOB?'휴대폰 · PC':'내 PC'}</small><b>견적서 발행기</b></div><button class="gdc" id="gdChip" data-gd type="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5z"/></svg><i></i><span></span></button>
+  r.innerHTML=`<header class="top"><span class="badge">${ICON}</span><div class="ttl"><small>Blog J 무료 도구 · ${PAINT.MOB?'휴대폰 · PC':'내 PC'}</small><b>견적서 발행기</b></div><button class="gdc" id="gdChip" data-gd data-gdoff type="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5z"/></svg><i></i><span></span></button>
   <nav class="tabs">${[['edit','문서 작성'],['list','발행 목록'],['clients','거래처'],['items','품목'],['me','내 정보'],['set','설정 · 백업']].map(([k,l])=>`<button data-tab="${k}" class="${S.tab===k?'on':''}">${l}</button>`).join('')}</nav></header>
   <div id="main"></div>
-  <div class="foot"><span>문서 <b class="num">${D.docs.filter(d=>!isBlank(d)).length}</b>개 · 거래처 <b class="num">${D.clients.length}</b> · 품목 <b class="num">${D.items.length}</b></span><span>${ST.root?`저장 폴더: <b>${esc(ST.name)}</b>`:'이 기기 브라우저에 저장'}${QG.m().on?' · 내 구글 드라이브':''} — 우리 서버 없음</span><span style="flex:1"></span><span>견적서 발행기 v1.0 · Blog J <span class="muted" title="만든 때">2026-10-21(수)</span></span></div>`;
+  <div class="foot"><span>문서 <b class="num">${D.docs.filter(d=>!isBlank(d)).length}</b>개 · 거래처 <b class="num">${D.clients.length}</b> · 품목 <b class="num">${D.items.length}</b></span><span>${ST.root?`저장 폴더: <b>${esc(ST.name)}</b>`:QDIR?`저장 폴더 <b>${esc(QDIR.name)}</b> 쉬는 중 · 이 기기에 저장`:'이 기기 브라우저에 저장'}${QG.m().on?' · 내 구글 드라이브':''} — 우리 서버 없음</span><span style="flex:1"></span><span>견적서 발행기 v1.0 · Blog J <span class="muted" title="만든 때">2026-10-21(수)</span></span></div>`;
   r.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanup();S.tab=b.dataset.tab;render();});$('#gdChip').onclick=gdTap;paintGd();
   ({edit:renderEdit,list:renderList,clients:renderClients,items:renderItems,me:renderMe,set:renderSet})[S.tab]();}
 const ICON='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M10 11h5M10 15h5M10 19h3"/></svg>';
@@ -1192,17 +1193,17 @@ function renderSet(){$('#main').innerHTML=`<div style="display:grid;grid-templat
   ${window.showDirectoryPicker?`<div class="row"><button class="btn" id="bDir">${ST.root?'다른 폴더로 바꾸기':'폴더에도 저장하기'}</button></div>`:''}
   <h3 class="sec" style="margin-top:16px">구글 드라이브 — PC · 휴대폰 같이 쓰기</h3>
   ${QG.http()?(QG.m().on?`<p style="margin:0 0 8px;font-size:14.5px">연결됨${QG.m().email?` <b>${esc(QG.m().email)}</b>`:''} · 마지막 동기화 ${QG.m().last?esc(ymdwQ((d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date(QG.m().last))))+' '+String(new Date(QG.m().last).getHours()).padStart(2,'0')+':'+String(new Date(QG.m().last).getMinutes()).padStart(2,'0'):'아직 없음'}${QG.err?`<br><span style="color:var(--red)">${esc(QG.err)}</span>`:''}</p>
-    <div class="row"><button class="btn p" id="gSync" data-gd>지금 동기화</button><button class="btn" id="gOff" data-gd>연결 끊기</button></div>`
-   :`<p style="margin:0 0 8px;font-size:14.5px">내 구글 드라이브에 「견적서발행기」 폴더를 만들어 저장하고, 같은 구글 계정으로 연결한 PC · 휴대폰과 자동으로 맞춰요. 이 앱이 만든 파일만 볼 수 있는 권한(drive.file)이라 다른 드라이브 파일은 보지 않아요.</p><div class="row"><button class="btn p" id="gOn" data-gd>구글 드라이브 연결</button></div>`)
+    <div class="row"><button class="btn p" id="gSync" data-gd data-gdoff>지금 동기화</button><button class="btn" id="gOff" data-gd data-gdoff>연결 끊기</button></div>`
+   :`<p style="margin:0 0 8px;font-size:14.5px">내 구글 드라이브에 「견적서발행기」 폴더를 만들어 저장하고, 같은 구글 계정으로 연결한 PC · 휴대폰과 자동으로 맞춰요. 이 앱이 만든 파일만 볼 수 있는 권한(drive.file)이라 다른 드라이브 파일은 보지 않아요.</p><div class="row"><button class="btn p" id="gOn" data-gd data-gdoff>구글 드라이브 연결</button></div>`)
    :'<p class="muted" style="margin:0">구글 드라이브는 웹 주소(github.io)에서 열었을 때만 연결돼요.</p>'}
   <h3 class="sec" style="margin-top:16px">백업 파일</h3><p class="muted" style="margin:0 0 8px">마지막 백업 ${esc(BKUP.info().lastText)} · ${BKUP.info().canDir?(BKUP.info().dir?`백업 폴더 「${esc(BKUP.info().dir)}」에 바로 저장`:'처음 한 번 백업 폴더를 정하면 다음부터 바로 저장'):'공유 창으로 「파일에 저장」 · 내 드라이브 등에'} · ${BKUP.info().every?BKUP.info().every+'일마다 알림':'알림 꺼짐'}</p>
   <div class="row"><button class="btn" id="bOut">백업 만들기</button><button class="btn" id="bIn">백업에서 되살리기</button><button class="btn" id="bSet">백업 설정</button></div>
   <h3 class="sec" style="margin-top:16px">예시로 써 보기</h3><div class="row"><button class="btn" id="bDemo">예시 넣어 보기</button><button class="btn red" id="bWipe">모두 지우기</button></div><p class="muted" style="margin:6px 0 0">예시는 가상 회사 · 가상 거래처예요(설명용).</p></section></div>`;
   document.querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{D.set.vat=b.dataset.sv;save();renderSet();});
   $('#sValid').oninput=e=>{D.set.valid=+e.target.value||0;save();};
-  if($('#gOn'))$('#gOn').onclick=()=>qgSync({ask:true,toast:true});if($('#gSync'))$('#gSync').onclick=()=>qgSync({ask:true,toast:true});if($('#gOff'))$('#gOff').onclick=()=>{if(confirm('구글 드라이브 연결을 끊을까요? 이 기기 · 드라이브의 자료는 그대로 남아요.'))qgOff();};
+  if($('#gOn'))$('#gOn').onclick=()=>qgSync({ask:true,toast:true});if($('#gSync'))$('#gSync').onclick=gdTap;if($('#gOff'))$('#gOff').onclick=()=>{if(confirm('구글 드라이브 연결을 끊을까요? 이 기기 · 드라이브의 자료는 그대로 남아요.'))qgOff();};
   if($('#bFull'))$('#bFull').onclick=async()=>{const v=await FPATH.ask({name:ST.name,cur:lget('dfull',''),what:'저장 폴더'});if(v!=null){lset('dfull',v);render();if(v)toast('정확한 경로를 기억했어요.');}};
-  if($('#bDir'))$('#bDir').onclick=async()=>{try{await flush();const old=JSON.stringify(D);await pickFolder();await kvSet('mode','dir');const ex=await ST.read(FILE);if(ex&&confirm('고른 폴더에 이미 저장된 내용이 있어요. 그것을 열까요?\n(취소 = 지금 내용을 그 폴더에 저장)'))load(JSON.parse(ex));else await ST.write(FILE,old);render();toast('「'+ST.name+'」 폴더에 저장합니다.');}catch(e){}};
+  if($('#bDir'))$('#bDir').onclick=async()=>{try{await flush();const old=JSON.stringify(D);await pickFolder();await kvSet('mode','dir');const ex=await ST.read(FILE);if(ex&&confirm('고른 폴더에 이미 저장된 내용이 있어요. 그것을 열까요?\n(취소 = 지금 내용을 그 폴더에 저장)'))load(JSON.parse(ex));else await ST.write(FILE,old);render();toast('「'+ST.name+'」 폴더에 저장합니다.');SYNC.folderFlush();}catch(e){}};
   $('#bOut').onclick=()=>BKUP.run().then(()=>renderSet());$('#bIn').onclick=()=>BKUP.restore();$('#bSet').onclick=()=>BKUP.settings();
   $('#bDemo').onclick=()=>{fillDemo();S.cur=D.docs[0];S.tab='edit';save();render();toast('예시를 넣었어요 — 다 보셨으면 「모두 지우기」로 지우고 시작하세요.');};
   $('#bWipe').onclick=()=>{if(!confirm('내 정보 · 거래처 · 품목 · 문서를 모두 지울까요? (하루 전 사본은 남아요)'))return;D.me={};D.clients=[];D.items=[];D.docs=[];S.cur=null;save();render();};}
@@ -1223,37 +1224,274 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 /* 시작 */
 function gate(html){$('#root').innerHTML=`<section class="panel gate">${html}</section>`;}
 async function boot(){let t=await ST.read(FILE);if(!t)t=await kvGet('data').catch(()=>null);if(t){try{load(JSON.parse(t));}catch(e){toast('저장 파일을 읽지 못했어요 — 「견적서발행기_어제.json」을 확인해 주세요.');}}
-  S.tab=D.me&&D.me.name?'edit':'me';render();if(S.tab==='me')toast('먼저 「내 정보」에 상호 · 사업자번호를 넣어 주세요.');}
+  S.tab=D.me&&D.me.name?'edit':'me';render();if(S.tab==='me'&&!QG.m().on)toast('먼저 「내 정보」에 상호 · 사업자번호를 넣어 주세요.');
+  if(!window.__qSyncOn){window.__qSyncOn=1;SYNC.start();}}   /* 11-09: 공통 동기화 코어 시작 */
 async function start(){
   try{db=await idb();}catch(e){gate('<h2>크롬 · 엣지에서 열어 주세요</h2><p>이 브라우저에서는 저장 공간을 쓸 수 없어요.</p>');return;}
   const FS=!!window.showDirectoryPicker,h=FS?await kvGet('dir'):null,local=await kvGet('data').catch(()=>null);
   const noDir=async()=>{await kvSet('mode','local');ST.root=null;ST.name='';boot();};
-  if(!h&&(local||(await kvGet('mode'))==='local'))return boot();
+  if(!h&&(local||(await kvGet('mode'))==='local'||QG.m().on))return boot();   /* 11-09: 드라이브를 연결한 기기는 처음 화면 없이 */
   if(!h){gate(`<h2 style="margin:0 0 8px">견적서 발행기 — 저장할 곳 고르기</h2><p style="line-height:1.7;margin:0 0 14px">거래처 · 품목 · 만든 문서는 <b>${FS?'이 기기 폴더나 브라우저':'이 휴대폰 브라우저'}</b>에 저장돼요. 인터넷(우리 서버)에는 올라가지 않아요.<br><b>구글 드라이브를 연결</b>하면 PC와 휴대폰에서 같은 자료를 같이 써요(내 드라이브에만 저장).</p>
     <div class="qgate">${FS&&!PAINT.MOB?`<button class="btn p" id="pick">이 PC 폴더에 저장 <small>추천 — 폴더째 복사하면 백업</small></button>`:''}<button class="btn ${FS&&!PAINT.MOB?'':'p'}" id="nodir">${FS&&!PAINT.MOB?'폴더 없이 시작 <small>브라우저에 저장 · 구글 드라이브와 함께</small>':'시작하기 <small>이 휴대폰에 저장 · 구글 드라이브로 PC와 같이</small>'}</button>${FS&&PAINT.MOB?`<button class="btn" id="pick">휴대폰 폴더에도 저장 <small>선택</small></button>`:''}</div>
     <div class="qwel"><b>전에 쓰던 자료가 있어요</b> — 새로 설치했거나 다른 기기에서 처음 열었다면: ${FS&&!PAINT.MOB?'<b>PC</b>는 「이 PC 폴더에 저장」에서 <b>쓰던 폴더</b>를 고르면 거래처 · 품목 · 내 정보 · 문서가 그대로 열려요. ':''}<b>구글 드라이브</b>를 쓰셨다면 「${FS&&!PAINT.MOB?'폴더 없이 시작':'시작하기'}」 뒤 위쪽 구름 아이콘으로 같은 구글 계정을 연결하면 자료와 설정이 그대로 와요(처음 설정 없이 이어서). 백업 파일은 「설정 › 백업에서 되살리기」.</div>
     <p class="muted" style="margin:12px 0 0">${PAINT.MOB?'휴대폰은 홈 화면에 앱으로 설치해서 쓰면 더 안전해요. 시작한 뒤 「설정 · 백업」에서 구글 드라이브를 연결하세요.':'폴더를 고를 때 「파일을 수정하도록 허용할까요?」라고 물으면 <b>허용</b>을 눌러 주세요. PC에서 쓰던 폴더가 있으면 그 폴더를 고르면 그대로 이어져요.'}</p>`);
     const pk=$('#pick');if(pk)pk.onclick=async()=>{try{await pickFolder();await kvSet('mode','dir');boot();}catch(e){if(e&&e.name!=='AbortError')toast('폴더를 열지 못했어요.');}};$('#nodir').onclick=noDir;return;}
-  if(h&&await permOk(h,false)){ST.root=h;ST.name=h.name;return boot();}
+  if(h&&await permOk(h,false)){ST.root=h;QDIR=h;ST.name=h.name;return boot();}
+  /* 11-09 제이: PC는 브라우저를 다시 열 때마다 폴더 권한이 'prompt' → 이 기기 저장본이 있으면 전체 화면으로 막지 않고 바로 열고, 아래 작은 띠 「폴더 다시 연결」 */
+  if(h&&local){QDIR=h;ST.root=null;ST.name='';return boot();}
   if(h){gate(`<h2>저장 폴더를 다시 열어 주세요</h2><p>브라우저가 보안을 위해 처음 열 때마다 폴더 사용을 다시 물어요.<br>저장 폴더: <b>${esc(h.name)}</b></p><div class="row" style="margin-top:14px"><button class="btn p" id="reo">「${esc(h.name)}」 폴더 열기</button><button class="btn" id="oth">다른 폴더 고르기</button>${local?'<button class="btn" id="nod">폴더 없이 이 기기 저장본으로 열기</button>':''}</div>`);
     if($('#nod'))$('#nod').onclick=()=>{ST.root=null;ST.name='';boot();};
-    $('#reo').onclick=async()=>{if(await permOk(h,true)){ST.root=h;ST.name=h.name;boot();}else toast('폴더를 허용해야 열 수 있어요.');};$('#oth').onclick=async()=>{try{await pickFolder();boot();}catch(e){}};return;}
+    $('#reo').onclick=async()=>{if(await permOk(h,true)){ST.root=h;QDIR=h;ST.name=h.name;boot();}else toast('폴더를 허용해야 열 수 있어요.');};$('#oth').onclick=async()=>{try{await pickFolder();boot();}catch(e){}};return;}
   gate(`<h2 style="margin:0 0 8px">견적서 발행기 — 저장할 곳 고르기</h2><p style="line-height:1.7;margin:0 0 14px">거래처 · 품목 · 만든 문서를 <b>이 PC 폴더에 파일로</b> 저장해요. 인터넷에 올라가지 않아요.<br>아래 단추를 누르고 <b>「문서」</b>처럼 아무 폴더나 고르면, 그 안에 「견적서 발행기」 폴더가 생겨요.<br>원드라이브 · 구글 드라이브 폴더 안에 두면 다른 PC에서도 같이 쓸 수 있어요.</p><button class="btn p" id="pick" style="height:50px;padding:0 24px;font-size:16px">저장할 곳 고르기</button><p class="muted" style="margin:12px 0 0">브라우저가 「파일을 수정하도록 허용할까요?」라고 물으면 <b>허용</b>을 눌러 주세요.</p>`);
   $('#pick').onclick=async()=>{try{await pickFolder();boot();}catch(e){if(e&&e.name!=='AbortError')toast('폴더를 열지 못했어요.');}};}
+/* ── bj-sync-core.js (11-09 붙임) ── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Blog J 공통 동기화 핵심(bj-sync-core.js) — 2026-11-08 점검안 · 서버 없음
+   ───────────────────────────────────────────────────────────────────────────
+   목적(제이 불편 3가지):
+     ① 쓰다 보면 구글이 끊긴 것처럼 보이고 처음 화면이 다시 나옴
+     ② PC · 휴대폰이 바로 맞춰지지 않음
+     ③ PC 폴더를 연결해도 저절로 저장이 잘 안 됨
+   원칙:
+     · 「연결됨」은 저장된 표시(앱의 gdOn)로 정한다 — 토큰(1시간짜리) 유무로 정하지 않는다.
+       토큰이 없으면 「쉬는 중」일 뿐, 처음 화면 · 설정 화면을 다시 띄우지 않는다.
+     · 토큰은 모든 Blog J 앱이 같은 주소(origin)라서 localStorage 「bj-gd-token」 하나를 같이 쓴다
+       (클라이언트 ID · 권한(drive.file)이 같아서 한 앱에서 받은 토큰을 다른 앱도 쓸 수 있음).
+     · 토큰 다시 받기는 브라우저가 「사용자가 누른 순간」에만 구글 창(잠깐 열렸다 닫힘)을 허락한다.
+       → 화면을 누를 때(pointerdown/keydown) 조용히(prompt:'none' + login_hint) 다시 받는다.
+       → 누름 없이(백그라운드 · 401) 구글 창을 열지 않는다(열면 팝업 차단 → 오류만 남음).
+     · 고친 것은 「올릴 것 있음」 표시를 localStorage에 남겨(앱을 닫아도 남음) 연결이 돌아오면 올린다.
+     · 열려 있고 화면이 보이는 동안: 다시 볼 때 · 창에 들어올 때 · 인터넷이 돌아올 때 + 90초마다
+       드라이브 파일의 수정 시각만 가볍게 확인 → 바뀌었으면 맞추기(받기+합치기+올리기).
+     · PC 폴더: 권한이 'prompt'가 되면(브라우저를 다시 열면 흔함) 조용히 실패하지 않고
+       작은 띠 「PC 폴더 다시 연결」 → 누르면 그 누름으로 허용을 받고 밀린 것을 한꺼번에 씀.
+   서버 없이 안 되는 것(정직하게):
+     · 새로 고침 토큰(refresh token)이 없다 → 1시간마다 토큰이 끝나고, 다시 받으려면 「누름」이 한 번 필요.
+       (구글 로그인 · 앱 허용이 살아 있으면 창이 잠깐 깜빡이고 끝, 로그아웃 · 쿠키 삭제 · 여러 계정이면 계정 고르기 창)
+     · 앱이 닫혀 있을 때(또는 휴대폰이 앱을 얼려 둔 동안) 동기화는 불가 — 다음에 열고 한 번 누를 때 맞춤.
+     · 사파리 · 일부 브라우저는 prompt:'none' 창을 막거나 서드파티 쿠키 때문에 실패할 수 있음 → 띠 단추로.
+     · 드라이브 v3에는 「바뀌지 않았을 때만 덮어쓰기」 조건 저장이 공식적으로 없다 →
+       올리기 바로 전에 수정 시각을 한 번 더 보고 바뀌었으면 한 번 더 합친 뒤 올림(beforePush 훅).
+   쓰는 법: 맨 아래 「앱에 붙이기」 + sync_plan/integration_checklist.md
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function (W) {
+  "use strict";
+  const TK = "bj-gd-token";                     /* 기존 trip2 와 같은 키 · 같은 모양 {t,e,m} */
+  const now = () => Date.now();
+  const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const hasGesture = () => !!(navigator.userActivation && navigator.userActivation.isActive);
+  const visible = () => document.visibilityState === "visible";
+
+  function create(cfg) {
+    /* cfg = {
+         app:        "trip2"                       — 로컬 저장 키 이름에 씀
+         clientId, scope                           — GIS
+         isOn():     bool                          — 저장된 「드라이브 연결함」 표시(D.set.gdOn 등). 토큰과 무관
+         email():    string                        — 연결한 계정(login_hint). 없으면 조용한 갱신이 덜 됨
+         setEmail(e)                               — (선택) 처음 맞출 때 받은 계정 저장
+         sync(why):  Promise                       — 앱의 맞추기(받기 → 합치기 → 올리기). 토큰은 core.token()으로
+         remoteStamp(): Promise<string|null>       — (선택) 드라이브 본 파일의 modifiedTime 만 가볍게. 없으면 주기 확인 때 전체 맞추기
+         paint(state)                              — (선택) 앱 머리줄 · 상태 줄 다시 그리기
+         folder: {                                 — (선택) PC · 안드로이드 폴더
+           handle(): FileSystemDirectoryHandle|null
+           onPerm(p)                               — 'granted' | 'prompt' | 'denied' 를 앱 상태(D.dirPerm 등)에 반영
+           writeAll(): Promise                     — 지금 자료 전부 폴더에 쓰기(앱의 folderWrite / dirWrite(true) / Store.writeFile 들)
+           name(): string
+         }
+         band: true                                — 기본 띠를 core가 그림(false면 앱이 state로 직접)
+       } */
+    const K = { dirty: "bj-sync:" + cfg.app + ":dirty", fdirty: "bj-sync:" + cfg.app + ":fdirty", stamp: "bj-sync:" + cfg.app + ":stamp" };
+    const C = { token: null, exp: 0, tc: null, silentAt: 0, silentFails: 0, busy: false, again: false, err: "", lastPull: 0, timer: null, pushT: null, needGesture: false, folderPerm: null };
+
+    /* ── 토큰 ───────────────────────────────────────────── */
+    const live = () => !!C.token && now() < C.exp - 60000;
+    function restore() {   /* 같은 주소의 다른 Blog J 앱이 받은 토큰도 씀(계정이 같을 때만) */
+      const o = lsGet(TK, null), m = (cfg.email && cfg.email()) || "";
+      if (o && o.t && o.e > now() + 120000 && (!o.m || !m || o.m === m)) { C.token = o.t; C.exp = o.e; return true; }
+      return false;
+    }
+    function keep() { lsSet(TK, { t: C.token, e: C.exp, m: (cfg.email && cfg.email()) || "" }); }
+    function invalidate() { C.token = null; C.exp = 0; const o = lsGet(TK, null); if (o && o.t) lsSet(TK, null); }
+    function loadGis() {
+      return new Promise((res, rej) => { if (W.google && google.accounts && google.accounts.oauth2) return res();
+        const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+        s.onload = () => res(); s.onerror = () => rej(new Error("구글 로그인 도구를 불러오지 못했어요 (인터넷 확인)")); document.head.appendChild(s); });
+    }
+    /* 토큰 받기 — mode: 'silent'(prompt:none, 누름 안에서만) | 'interactive'(prompt:'' 또는 처음이면 consent) */
+    function request(mode) {
+      return loadGis().then(() => new Promise((res, rej) => {
+        const em = (cfg.email && cfg.email()) || undefined;
+        const tc = google.accounts.oauth2.initTokenClient({ client_id: cfg.clientId, scope: cfg.scope, hint: em, login_hint: em,
+          callback: r => { if (r.error) return rej(Object.assign(new Error(r.error_description || r.error), { code: r.error }));
+            C.token = r.access_token; C.exp = now() + (+r.expires_in || 3600) * 1000; keep(); res(C.token); },
+          error_callback: e => rej(Object.assign(new Error(e && e.type === "popup_failed_to_open" ? "구글 창이 막혔어요 — 「다시 연결」을 눌러 주세요" : e && e.type === "popup_closed" ? "구글 창을 닫았어요" : "구글 연결이 취소됐어요"), { code: e && e.type })) });
+        tc.requestAccessToken({ prompt: mode === "silent" ? "none" : (cfg.isOn() ? "" : "consent") });
+      }));
+    }
+    /* 앱의 gdToken 대신: 살아 있으면 바로, 없으면 누름이 있을 때만 다시 받음. 누름이 없으면 창을 열지 않고 NEED_GESTURE */
+    async function token(interactive) {
+      if (live()) return C.token;
+      if (restore()) return C.token;
+      if (!hasGesture()) { C.needGesture = true; paint(); throw Object.assign(new Error("구글 연결이 쉬는 중이에요 — 화면을 한 번 누르면 이어서 맞춰요"), { code: "NEED_GESTURE" }); }
+      const t = await request(interactive ? "interactive" : "silent");
+      C.needGesture = false; C.silentFails = 0; return t;
+    }
+
+    /* ── 올릴 것 표시(앱을 닫아도 남음) ───────────────────── */
+    const dirtyAt = () => +lsGet(K.dirty, 0) || 0;
+    function markDirty() {                  /* 앱의 touch() / save() 마다 */
+      lsSet(K.dirty, now());
+      if (cfg.folder) lsSet(K.fdirty, now());
+      if (!cfg.isOn()) return;
+      clearTimeout(C.pushT);
+      if (live()) C.pushT = setTimeout(() => run("push"), 2500); else { C.needGesture = true; paint(); }
+    }
+    /* ── 맞추기 실행(겹치지 않게 · 실패해도 표시는 남김) ─────── */
+    async function run(why) {
+      if (!cfg.isOn()) return;
+      if (C.busy) { C.again = true; return; }
+      if (!live() && !restore()) { C.needGesture = true; paint(); return; }
+      C.busy = true; C.err = ""; paint();
+      const started = now();
+      try {
+        await cfg.sync(why);
+        if (dirtyAt() <= started) lsSet(K.dirty, null);     /* 맞추는 동안 또 고쳤으면 표시 유지 */
+        C.lastPull = now();
+        if (cfg.remoteStamp) { try { lsSet(K.stamp, await cfg.remoteStamp()); } catch (e) {} }
+        if (cfg.folder) folderFlush();                         /* ③ 받은 것도 폴더에 — 지금은 레시피 · 스크랩 · 가계부가 안 씀 */
+      } catch (e) {
+        if (e && (e.status === 401 || /401|Invalid Credentials/.test(e.message || ""))) { invalidate(); C.needGesture = true; }
+        else if (!(e && e.code === "NEED_GESTURE")) C.err = (e && e.message) || "동기화 오류";
+      }
+      C.busy = false; paint();
+      if (C.again) { C.again = false; setTimeout(() => run("again"), 600); }
+    }
+    /* 가벼운 확인: 드라이브 본 파일 수정 시각만 보고 바뀌었을 때만 맞춤(요청 1번) */
+    async function check(why) {
+      if (!cfg.isOn() || !visible() || C.busy) return;
+      if (!live() && !restore()) { C.needGesture = true; paint(); return; }
+      if (dirtyAt()) return run(why);                          /* 올릴 것이 있으면 바로 맞추기 */
+      if (!cfg.remoteStamp) return run(why);
+      try { const s = await cfg.remoteStamp(); if (s && s !== lsGet(K.stamp, null)) return run(why); C.lastPull = now(); }
+      catch (e) { if (/401/.test(e && e.message || "")) { invalidate(); C.needGesture = true; paint(); } }
+    }
+
+    /* ── 화면을 누를 때: 조용히 토큰 다시 받기(누름 안에서만 창 허용) ── */
+    function onGesture(e) {
+      if (!cfg.isOn() || live() || C.busy) return;
+      if (e && e.target && e.target.closest && e.target.closest("[data-bjs-band],[data-gdoff]")) return;
+      if (restore()) { run("restore"); return; }
+      const gap = C.silentFails ? Math.min(10 * 60000, 30000 * Math.pow(2, C.silentFails)) : 0;   /* 실패하면 30초 · 1분 · 2분 … 최대 10분 */
+      if (now() - C.silentAt < gap) return;
+      C.silentAt = now();
+      request("silent").then(() => { C.needGesture = false; C.silentFails = 0; run("gesture"); })
+        .catch(() => { C.silentFails++; C.needGesture = true; paint(); });
+    }
+
+    /* ── PC 폴더 ───────────────────────────────────────── */
+    async function folderCheck() {
+      const h = cfg.folder && cfg.folder.handle(); if (!h || !h.queryPermission) return;
+      let p = "prompt"; try { p = await h.queryPermission({ mode: "readwrite" }); } catch (e) {}
+      if (p !== C.folderPerm) { C.folderPerm = p; cfg.folder.onPerm && cfg.folder.onPerm(p); paint(); }
+      if (p === "granted" && lsGet(K.fdirty, 0)) folderFlush();
+    }
+    let fBusy = false;
+    async function folderFlush() {
+      const h = cfg.folder && cfg.folder.handle(); if (!h || fBusy) return;
+      if (C.folderPerm !== "granted") { await folderCheck(); if (C.folderPerm !== "granted") return; }
+      fBusy = true; const t0 = now();
+      try { await cfg.folder.writeAll(); if (+lsGet(K.fdirty, 0) <= t0) lsSet(K.fdirty, null); }
+      catch (e) { if (e && e.name === "NotAllowedError") { C.folderPerm = "prompt"; cfg.folder.onPerm && cfg.folder.onPerm("prompt"); } }
+      fBusy = false; paint();
+    }
+    async function folderGrant() {      /* 띠 단추 — 반드시 누름 안에서 */
+      const h = cfg.folder && cfg.folder.handle(); if (!h) return false;
+      let p = "denied"; try { p = await h.requestPermission({ mode: "readwrite" }); } catch (e) {}
+      C.folderPerm = p; cfg.folder.onPerm && cfg.folder.onPerm(p);
+      if (p === "granted") { lsSet(K.fdirty, now()); await folderFlush(); }
+      paint(); return p === "granted";
+      /* 크롬(PC) 122+ 는 다시 물을 때 「방문할 때마다 허용」을 고를 수 있음 → 그 뒤로는 브라우저를 다시 열어도 'granted' */
+    }
+
+    /* ── 띠(작게 · 가리지 않게) ─────────────────────────── */
+    function state() {
+      const on = cfg.isOn(), pend = !!dirtyAt();
+      return { on, live: live(), busy: C.busy, err: C.err, pending: pend, needGesture: on && !live() && C.needGesture,
+        folder: cfg.folder && cfg.folder.handle() ? (C.folderPerm || "?") : null, fpending: !!lsGet(K.fdirty, 0), lastPull: C.lastPull };
+    }
+    function paint() {
+      const s = state(); try { cfg.paint && cfg.paint(s); } catch (e) {}
+      if (cfg.band === false) return;
+      let el = document.getElementById("bjsBand");
+      const items = [];
+      if (s.on && !s.live && (s.needGesture || s.pending)) items.push(`<span>구글 드라이브 연결이 쉬는 중${s.pending ? " · 올릴 것 있음" : ""}</span><button type="button" data-bjs-band="gd">다시 연결</button>`);
+      if (s.folder && s.folder !== "granted" && s.folder !== "?") items.push(`<span>PC 폴더 「${(cfg.folder.name && cfg.folder.name()) || "저장 폴더"}」 쉬는 중</span><button type="button" data-bjs-band="dir">폴더 다시 연결</button>`);
+      if (!items.length) { if (el) el.remove(); return; }
+      if (!el) { el = document.createElement("div"); el.id = "bjsBand"; el.setAttribute("role", "status");
+        el.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:9000;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;max-width:min(560px,calc(100vw - 32px));padding:8px 12px;border-radius:10px;background:#fffdf7;border:1px solid #d9cfbd;box-shadow:0 2px 8px rgba(0,0,0,.12);font:600 13.5px/1.4 SUIT,Pretendard,sans-serif;color:#1f2125";
+        document.body.appendChild(el); }
+      el.innerHTML = items.map(x => `<div style="display:flex;gap:8px;align-items:center">${x}</div>`).join("");
+      el.querySelectorAll("button").forEach(b => { b.style.cssText = "border:1px solid #195455;background:#195455;color:#fff;border-radius:8px;padding:4px 10px;font:inherit;cursor:pointer"; });
+    }
+    document.addEventListener("click", async e => {
+      const b = e.target.closest && e.target.closest("[data-bjs-band]"); if (!b) return;
+      if (b.dataset.bjsBand === "gd") { try { await token(true); run("band"); } catch (er) { C.err = er.message; paint(); } }
+      else folderGrant();
+    });
+
+    /* ── 시작 · 이벤트 ───────────────────────────────────── */
+    function start() {
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});   /* 휴대폰이 저장소를 비우지 않게 */
+      document.addEventListener("pointerdown", onGesture, true);
+      document.addEventListener("keydown", onGesture, true);
+      document.addEventListener("visibilitychange", () => { if (visible()) { check("visible"); folderCheck(); } else if (dirtyAt() && live()) run("hide"); });   /* 내릴 때 남은 것 올리기 */
+      W.addEventListener("focus", () => check("focus"));
+      W.addEventListener("online", () => check("online"));
+      W.addEventListener("pageshow", e => { if (e.persisted) check("bfcache"); });
+      C.timer = setInterval(() => { if (visible() && now() - C.lastPull > 85000) check("tick"); paint(); }, 30000);   /* 약 90초마다 가볍게 확인 */
+      if (cfg.isOn()) { if (restore()) setTimeout(() => run("start"), 800); else { C.needGesture = true; paint(); } }
+      folderCheck();
+    }
+    return { start, token, invalidate, markDirty, run, check, folderGrant, folderFlush, state, live, restore, _C: C };
+  }
+
+  /* 처음 화면(처음 써요 / 전에 쓰던 자료)을 띄울지 — 저장된 흔적이 하나라도 있으면 절대 띄우지 않음 */
+  function shouldWelcome(o) {
+    /* o = { gdOn, dirSaved(폴더 핸들 저장됨), storeAsked, hasData, setupDone } */
+    return !(o.gdOn || o.dirSaved || o.storeAsked || o.hasData || o.setupDone);
+  }
+  W.BJSync = { create, shouldWelcome };
+})(window);
+
+/* ───────── 앱에 붙이기(여행 노트 v2.0 예) ─────────
+const SYNC = BJSync.create({
+  app: "trip2", clientId: GD_CLIENT_ID, scope: GD_SCOPE,
+  isOn: () => !!D.set.gdOn, email: () => D.set.gdEmail || "",
+  sync: why => gdSync({ toast: false }),                         // gdSync 안의 gdToken(...) → SYNC.token(...)
+  remoteStamp: async () => { const fid = await gdFolder(); const r = await (await gdApi(`files?q=${gq(`'${fid}' in parents and name='${GDJ}' and trashed=false`)}&fields=files(modifiedTime)`)).json(); return r.files && r.files[0] ? r.files[0].modifiedTime : null; },
+  paint: () => gdPaint(),
+  folder: { handle: () => D.dir, onPerm: p => { D.dirPerm = p; gdPaint(); }, writeAll: () => folderWrite(), name: () => D.dir && D.dir.name },
+});
+// gdToken(i)  → return SYNC.token(i)
+// gdApi 401   → SYNC.invalidate(); throw Object.assign(new Error("401"), { status: 401 })   (다시 창을 열지 않음)
+// touch()     → … SYNC.markDirty()   (gdAuto() 는 지움)
+// 처음 화면    → if (BJSync.shouldWelcome({ gdOn: D.set.gdOn, dirSaved: !!(await getMeta("dir")), storeAsked: D.set.storeAsked, hasData: D.items.length })) S.sheet = "wel";
+// init 끝     → SYNC.start()    · 기존 visibilitychange · 첫 누름(prompt:none) · gdPrepSilent · 30초 setInterval 동기화 부분은 지움
+*/
+
 /* ══ 10-31 제이: 구글 드라이브 동기화 — 내 드라이브 「견적서발행기」 폴더의 견적서발행기.json 하나(권한 drive.file = 이 앱이 만든 파일만)
    맞추기: 문서 · 거래처 · 품목은 하나씩 「나중에 고친 것」, 지운 것도 반영 · 내 정보 · 설정은 나중에 고친 쪽. 우리 서버 없음 */
 const QG_CLIENT="1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com",QG_SCOPE="https://www.googleapis.com/auth/drive.file",QG_DIR="견적서발행기",QG_FILE="견적서발행기.json";
 const QG={token:null,exp:0,stc:null,busy:false,again:false,err:'',fid:null,fileId:null,
   m(){if(!this._m)this._m=Object.assign({on:false,email:'',last:0},lget('gd',{}));return this._m;},save(){lset('gd',this.m());},
-  http(){return location.protocol==='https:'||location.hostname==='localhost';},live(){return !!this.token&&Date.now()<this.exp-60000;},
-  state(){const m=this.m();if(!this.http())return['off','웹 주소에서만'];if(!m.on)return['off','미연결'];if(this.busy)return['busy','동기화 중…'];if(this.err)return['bad','다시 연결'];return this.live()?['ok','연결됨']:['off','누르면 동기화'];},
-  touch(){if(!this.m().on||!this.live())return paintGd();clearTimeout(this._t);this._t=setTimeout(()=>qgSync({}),2500);}};
+  http(){return location.protocol==='https:'||location.hostname==='localhost';},live(){try{return SYNC.live();}catch(e){return false;}},
+  state(){const m=this.m();if(!this.http())return['off','웹 주소에서만'];if(!m.on)return['off','미연결'];if(this.busy)return['busy','동기화 중…'];if(this.err)return['bad','다시 연결'];if(this.live())return['ok','연결됨'];const c=SYNC.state();return['off',c.pending?'올릴 것 있음':c.needGesture?'쉬는 중':'누르면 동기화'];},
+  touch(){SYNC.markDirty();paintGd();}};   /* 11-09: 「올릴 것 있음」을 남기고 2.5초 뒤 올림(토큰이 쉬면 띠) */
 function qgLoad(){return new Promise((ok,no)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return ok();const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=()=>ok();sc.onerror=()=>no(new Error('구글 로그인 도구를 불러오지 못했어요 — 인터넷을 확인해 주세요'));document.head.appendChild(sc);});}
-async function qgToken(ask){if(QG.live())return QG.token;await qgLoad();const m=QG.m();return new Promise((ok,no)=>{const tc=google.accounts.oauth2.initTokenClient({client_id:QG_CLIENT,scope:QG_SCOPE,hint:m.email||undefined,login_hint:m.email||undefined,
-  callback:r=>{if(r.error)return no(new Error(r.error_description||r.error));QG.token=r.access_token;QG.exp=Date.now()+(+r.expires_in||3600)*1000;ok(QG.token);},
-  error_callback:e=>no(new Error(e&&e.type==='popup_failed_to_open'?'구글 창이 막혔어요 — 주소창에서 팝업을 허용한 뒤 다시 눌러 주세요':'구글 연결이 취소됐어요'))});tc.requestAccessToken({prompt:ask&&!m.on?'consent':''});});}
+async function qgToken(ask){return SYNC.token(ask);}   /* 11-09: 공통 토큰(bj-gd-token) · 누름이 없으면 창을 열지 않음 */
 async function qgApi(url,opt={},retry=true){const t=await qgToken(false);const r=await fetch(url.startsWith('http')?url:'https://www.googleapis.com/drive/v3/'+url,{...opt,headers:{...(opt.headers||{}),Authorization:'Bearer '+t}});
-  if(r.status===401&&retry){QG.token=null;return qgApi(url,opt,false);}if(!r.ok){let msg=r.status+'';try{const j=await r.json();msg=(j.error&&j.error.message)||msg;}catch(e){}throw new Error('드라이브 응답 오류: '+msg);}return r;}
+  if(r.status===401){SYNC.invalidate();throw Object.assign(new Error('401'),{status:401});}if(!r.ok){let msg=r.status+'';try{const j=await r.json();msg=(j.error&&j.error.message)||msg;}catch(e){}throw new Error('드라이브 응답 오류: '+msg);}return r;}
 const qq=x=>encodeURIComponent(x);
 async function qgFolder(){if(QG.fid)return QG.fid;const r=await (await qgApi(`files?q=${qq(`name='${QG_DIR}' and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id)&spaces=drive`)).json();
   if(r.files&&r.files.length)return QG.fid=r.files[0].id;const c=await (await qgApi('files?fields=id',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:QG_DIR,mimeType:'application/vnd.google-apps.folder'})})).json();return QG.fid=c.id;}
@@ -1263,7 +1501,7 @@ function qMerge(L,R){const gone={};for(const g of [R.gone||{},L.gone||{}])for(co
     if(c==='docs')arr.sort((a,b)=>(b.created||0)-(a.created||0));else{const ord=new Map((L[c]||[]).map((x,i)=>[x.id,i]));arr.sort((a,b)=>(ord.has(a.id)?ord.get(a.id):1e9)-(ord.has(b.id)?ord.get(b.id):1e9));}out[c]=arr;}
   const lm=(L.meAt||0)>=(R.meAt||0);out.me=lm?L.me:R.me;out.meAt=Math.max(L.meAt||0,R.meAt||0);if(!out.me||!out.me.name)out.me=(lm?R.me:L.me)&&(lm?R.me:L.me).name?(lm?R.me:L.me):out.me;
   out.set=(L.setAt||0)>=(R.setAt||0)?L.set:R.set;out.setAt=Math.max(L.setAt||0,R.setAt||0);out.gone=gone;return out;}
-async function qgSync(o){if(QG.busy){QG.again=true;return;}QG.busy=true;QG.err='';paintGd();
+async function qgSync(o){if(QG.busy){QG.again=true;return;}QG.busy=true;QG.err='';paintGd();let fail=null;
   try{await qgToken(!!o.ask);if(saveT)await flush();stampChanges();const fid=await qgFolder();
     const L=JSON.parse(JSON.stringify(D));let R=null,rid0=QG.fileId;
     const lst=await (await qgApi(`files?q=${qq(`'${fid}' in parents and name='${QG_FILE}' and trashed=false`)}&fields=files(id,modifiedTime)&orderBy=modifiedTime desc`)).json();
@@ -1274,18 +1512,30 @@ async function qgSync(o){if(QG.busy){QG.again=true;return;}QG.busy=true;QG.err='
     if(!R||JSON.stringify(R)!==mt){const meta=rid0?{}:{name:QG_FILE,parents:[fid]};const fd=new FormData();fd.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));fd.append('file',new Blob([mt],{type:'application/json'}));
       const r=await (await qgApi(`https://www.googleapis.com/upload/drive/v3/files${rid0?'/'+rid0:''}?uploadType=multipart&fields=id`,{method:rid0?'PATCH':'POST',body:fd})).json();QG.fileId=r.id;}
     const m=QG.m();if(!m.email){try{const a=await (await qgApi('about?fields=user(emailAddress)')).json();m.email=(a.user&&a.user.emailAddress)||'';}catch(e){}}
-    m.on=true;m.last=Date.now();QG.save();if(o.toast)toast('구글 드라이브와 맞췄어요.');qgPrep();
-  }catch(e){QG.err=e.message;if(o.toast!==false)toast('구글 드라이브: '+e.message);}
-  QG.busy=false;paintGd();if(S.tab==='set')renderSet();if(QG.again){QG.again=false;setTimeout(()=>qgSync({toast:false}),600);}}
-function qgOff(){const m=QG.m();try{if(QG.token&&google.accounts.oauth2.revoke)google.accounts.oauth2.revoke(QG.token);}catch(e){}QG.token=null;QG.fid=null;QG.fileId=null;QG.stc=null;m.on=false;m.email='';QG.save();toast('연결을 끊었어요. 드라이브의 「견적서발행기」 폴더는 그대로 남아요.');paintGd();if(S.tab==='set')renderSet();}
-/* 열 때: 브라우저는 한 번 누르기 전에는 구글 창을 막음 → 화면을 처음 누를 때 조용히 연결해 맞춤 */
-function qgPrep(){const m=QG.m();if(!m.on||!QG.http()||QG.stc||!m.email)return;qgLoad().then(()=>{QG.stc=google.accounts.oauth2.initTokenClient({client_id:QG_CLIENT,scope:QG_SCOPE,hint:m.email,login_hint:m.email,
-  callback:r=>{if(r.error)return paintGd();QG.token=r.access_token;QG.exp=Date.now()+(+r.expires_in||3600)*1000;qgSync({toast:false});},error_callback:()=>paintGd()});}).catch(()=>{});}
-document.addEventListener('click',e=>{if(!QG.stc||QG.busy||QG.live()||e.target.closest('[data-gd]'))return;if(QG.sil&&Date.now()-QG.sil<10*60000)return;QG.sil=Date.now();try{QG.stc.requestAccessToken({prompt:'none'});}catch(er){}},true);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&QG.m().on&&QG.live())qgSync({toast:false});});
-setTimeout(qgPrep,800);
+    m.on=true;m.last=Date.now();QG.save();if(o.toast)toast('구글 드라이브와 맞췄어요.');
+  }catch(e){fail=e;const quiet=!!e&&(e.code==='NEED_GESTURE'||e.status===401);QG.err=quiet?'':e.message;if(!quiet&&o.toast!==false)toast('구글 드라이브: '+e.message);}
+  QG.busy=false;paintGd();if(S.tab==='set')renderSet();if(QG.again){QG.again=false;setTimeout(()=>SYNC.run('again'),600);}
+  if(fail&&o.fromCore)throw fail;}   /* 11-09: 코어가 401 · 「누름 필요」를 띠로 */
+function qgOff(){const m=QG.m();SYNC._C.token=null;SYNC._C.exp=0;   /* 11-09: 토큰은 다른 Blog J 앱과 같이 쓰므로 취소(revoke)하지 않음 */
+  QG.fid=null;QG.fileId=null;QG.stc=null;m.on=false;m.email='';QG.save();toast('연결을 끊었어요. 드라이브의 「견적서발행기」 폴더는 그대로 남아요.');paintGd();if(S.tab==='set')renderSet();}
+/* 11-09 공통 동기화 코어 — 연결됨 = 저장된 표시(QG.m().on) · 토큰이 없으면 띠만 · 화면을 누를 때 조용히 다시 받음 · 고친 것 2.5초 뒤 올림 ·
+   다시 볼 때 · 창에 들어올 때 · 인터넷이 돌아올 때 + 약 90초마다 드라이브 수정 시각 확인 · 받은 것도 PC 폴더에 씀 */
+function qSoftRender(){const ae=document.activeElement;if(!(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName))&&$('#main'))render();}
+async function qWriteAll(){if(!QDIR)return;ST.root=QDIR;ST.name=QDIR.name;
+  if(QMERGE){QMERGE=false;const t=await ST.read(FILE);   /* 다시 허용된 폴더의 파일이 다른 PC에서 고쳐졌을 수 있음 → 하나씩 「나중에 고친 것」으로 합침 */
+    if(t){try{const F=JSON.parse(t);if(Array.isArray(F.docs)){if(saveT)await flush();stampChanges();const L=JSON.parse(JSON.stringify(D)),M=qMerge(L,F);
+      if(JSON.stringify(M)!==JSON.stringify(L)){const cur=S.cur&&S.cur.id;load(M);if(cur)S.cur=D.docs.find(x=>x.id===cur)||null;await kvSet('data',JSON.stringify(D,null,1));QG.touch();qSoftRender();}}}catch(e){}}}
+  await ST.write(FILE,JSON.stringify(D,null,1));}
+const SYNC=BJSync.create({app:'quote',clientId:QG_CLIENT,scope:QG_SCOPE,
+  isOn:()=>!!QG.m().on&&QG.http(),email:()=>QG.m().email||'',
+  sync:why=>qgSync({toast:why==='tap'||why==='band',fromCore:true}),
+  remoteStamp:async()=>{const fid=await qgFolder();const r=await (await qgApi(`files?q=${qq(`'${fid}' in parents and name='${QG_FILE}' and trashed=false`)}&fields=files(modifiedTime)&orderBy=modifiedTime desc`)).json();return r.files&&r.files[0]?r.files[0].modifiedTime:null;},
+  paint:()=>paintGd(),
+  folder:{handle:()=>QDIR,name:()=>QDIR?QDIR.name:'',writeAll:qWriteAll,
+    onPerm:p=>{if(p==='granted'){if(QDIR&&!ST.root){ST.root=QDIR;ST.name=QDIR.name;QMERGE=true;qSoftRender();}}else if(ST.root){ST.root=null;qSoftRender();}}}});
 function paintGd(){const b=$('#gdChip');if(!b)return;const [k,t]=QG.state();b.className='gdc '+k;b.title='구글 드라이브: '+t;b.querySelector('span').textContent=t;}
-function gdTap(){const m=QG.m();if(!QG.http())return toast('구글 드라이브는 웹 주소(github.io)에서 열었을 때만 돼요.');if(QG.busy)return;qgSync({ask:true,toast:true});}
+async function gdTap(){const m=QG.m();if(!QG.http())return toast('구글 드라이브는 웹 주소(github.io)에서 열었을 때만 돼요.');if(QG.busy)return;if(!m.on)return qgSync({ask:true,toast:true});
+  try{await SYNC.token(true);}catch(e){QG.err=e.message;paintGd();if(S.tab==='set')renderSet();return toast('구글 드라이브: '+e.message);}SYNC.run('tap');}
 
 /* ══ 10-31 제이: 문서를 이미지 · PDF로 — 휴대폰은 공유 창(카톡 · 메일 · 파일), PC는 저장 ══ */
 async function docExport(d,kind){d=d&&d.id?d:S.cur;if(!d||isBlank(d))return toast('먼저 문서를 작성해 주세요.');await flush();

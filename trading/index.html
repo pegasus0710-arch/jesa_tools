@@ -1040,7 +1040,13 @@ ${o.note ? `<p class="xlx-p">${o.note}</p>` : ""}<button type="button" class="xl
       }));
     }
     /* 앱의 gdToken 대신: 살아 있으면 바로, 없으면 누름이 있을 때만 다시 받음. 누름이 없으면 창을 열지 않고 NEED_GESTURE */
-    async function token(interactive) {
+    /* 11-09: 한 번만 받기 — 사진을 여러 장 동시에 올리다 토큰이 끝나도 구글 창은 한 번만 열고 같이 씀 */
+    let tokP = null;
+    function token(interactive) {
+      if (live()) return Promise.resolve(C.token);
+      return tokP || (tokP = token0(interactive).finally(() => { tokP = null; }));
+    }
+    async function token0(interactive) {
       if (live()) return C.token;
       if (restore()) return C.token;
       if (!hasGesture()) { C.needGesture = true; paint(); throw Object.assign(new Error("구글 연결이 쉬는 중이에요 — 화면을 한 번 누르면 이어서 맞춰요"), { code: "NEED_GESTURE" }); }

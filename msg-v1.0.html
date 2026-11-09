@@ -152,7 +152,8 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 const CATS = [
   { id: "event", n: "경조사 알림" }, { id: "congrats", n: "축하" }, { id: "condole", n: "위로 · 조문" },
   { id: "thanks", n: "감사 · 답례" }, { id: "season", n: "명절 · 계절 인사" }, { id: "group", n: "모임 · 단체 공지" },
-  { id: "sorry", n: "사과 · 거절" }, { id: "life", n: "생활 · 이웃" }, { id: "work", n: "일 · 직장" }
+  { id: "sorry", n: "사과 · 거절" }, { id: "life", n: "생활 · 이웃" }, { id: "school", n: "학교 · 학원" },
+  { id: "home", n: "집 · 계약" }, { id: "work", n: "일 · 직장" }
 ];
 const BR = "\n";
 const P = (k, a, b, c) => [a, b, c][k];
@@ -165,6 +166,14 @@ const TOS = v => (v.to ? v.to + " " : "");
 const RELW = r => ({ "부친": "아버지", "모친": "어머니", "조부": "할아버지", "조모": "할머니", "장인": "장인어른", "장모": "장모님", "시부": "시아버지", "시모": "시어머니" }[r] || r);
 const JS = (w, a, b) => { const c = (w || "").charCodeAt((w || "").length - 1); return w + (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? a : b); };
 const SIGN = (v, k) => (v.from ? (k === 2 ? "- " + v.from : "\n" + v.from + " 드림") : "");
+/* 11-10: 날짜 계산 도우미(달 더하기 — 없는 날은 그달 마지막 날로) · 오늘 · 평일 수 */
+const AM = (s, n) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); if (!m) return ""; const y = +m[1], mo = +m[2] - 1 + n, d = +m[3]; const last = new Date(y, mo + 1, 0).getDate(); const r = new Date(y, mo, Math.min(d, last)); return `${r.getFullYear()}-${String(r.getMonth() + 1).padStart(2, "0")}-${String(r.getDate()).padStart(2, "0")}`; };
+const TODAY = () => { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`; };
+const DAYS = (a, b) => { const p = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : NaN; }; return Math.round((p(b) - p(a)) / 864e5); };
+const WEEKDAYS = (a, b) => { const n = DAYS(a, b); if (!(n >= 0)) return 0; const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(a); let c = 0; for (let i = 0; i <= n; i++) { const w = new Date(+m[1], +m[2] - 1, +m[3] + i).getDay(); if (w && w < 6) c++; } return c; };
+const NUM = s => { const n = parseInt(String(s || "").replace(/[^\d]/g, ""), 10); return isNaN(n) ? 0 : n; };
+/* 11-10: 학원 · 과외 교습비 반환 계산(학원법 시행령 반환 기준, 한 달 이내 과정) */
+const ACADREF = v => { const fee = NUM(v.fee), tot = NUM(v.tot), done = NUM(v.done); if (!fee || !tot || done > tot) return null; let r, lab; if (done === 0) { r = 1; lab = "수업 시작 전 — 낸 돈 전부"; } else if (done / tot < 1 / 3) { r = 2 / 3; lab = "1/3이 지나기 전 — 2/3"; } else if (done / tot < 1 / 2) { r = 1 / 2; lab = "1/2이 지나기 전 — 1/2"; } else { r = 0; lab = "1/2이 지남 — 돌려받지 못함"; } const amt = Math.floor(fee * r); return { fee, tot, done, amt, txt: `${tot}회 중 ${done}회 들음 → ${lab} = ${amt ? MONEY(amt) + "원" : "0원"} (교습비 ${MONEY(fee)}원 기준, 원 단위 버림)` }; };
 const SIGN2 = (v, k) => (v.from ? (k === 0 ? "\n" + v.from + " 올림" : k === 1 ? "\n" + v.from + " 드림" : "- " + v.from) : "");
 
 /* 칸 꼴: t 글자 · date 날짜 · time 시각 · sel 고르기 · money 금액 · area 여러 줄 · acc 계좌(켜고 끄기) · map 지도 링크 */
@@ -258,11 +267,11 @@ const TPL = [
 },
 /* ───────── 축하 ───────── */
 { id: "cwed", cat: "congrats", t: "결혼 축하", d: "청첩을 받았을 때", f: [
-  { k: "to", l: "받는 사람", ph: "철수", sug: ["선배님", "후배님", "친구", "부장님"] }, { k: "absent", l: "못 가서 미안", type: "sel", o: ["참석해요", "못 가요"], def: "참석해요" }, { k: "from", l: "보내는 사람", ph: "홍길동", opt: 1 }],
+  { k: "to", l: "받는 사람", ph: "철수", sug: ["선배님", "후배님", "친구", "부장님"] }, { k: "absent", l: "못 가서 미안", type: "sel", o: ["참석해요", "못 가요", "못 가요 · 축의금은 계좌로"], def: "참석해요" }, { k: "from", l: "보내는 사람", ph: "홍길동", opt: 1 }],
   gen: (v, k) => L(
     P(k, `${TOS(v)}결혼을 진심으로 축하드립니다.`.trim(), `${TOS(v)}결혼 정말 축하해!`.trim(), `결혼 축하드립니다!`),
     P(k, "두 분이 서로를 아끼며 늘 웃음 가득한 가정을 꾸리시길 바랍니다.", "둘이 지금처럼 서로 아껴 주면서 행복하게 살아.", ""),
-    v.absent === "못 가요" ? P(k, "직접 찾아뵙고 축하드려야 하는데 사정이 있어 가지 못해 죄송합니다. 마음만이라도 전합니다.", "꼭 가고 싶었는데 못 가게 돼서 너무 아쉬워. 마음은 그 자리에 있을게.", "못 가서 죄송해요, 마음 전합니다.") : P(k, "그날 꼭 찾아뵙고 축하드리겠습니다.", "그날 꼭 갈게!", "그날 뵐게요."),
+    v.absent !== "참석해요" ? L(P(k, "직접 찾아뵙고 축하드려야 하는데 사정이 있어 가지 못해 죄송합니다. 마음만이라도 전합니다.", "꼭 가고 싶었는데 못 가게 돼서 너무 아쉬워. 마음은 그 자리에 있을게.", "못 가서 죄송해요, 마음 전합니다."), v.absent === "못 가요 · 축의금은 계좌로" ? P(k, "작은 정성이지만 축의금은 계좌로 보내 드렸습니다. 기쁘게 받아 주세요.", "축의금은 계좌로 조금 보냈어. 맛있는 거 사 먹어!", "축의금은 계좌로 보냈어요.") : "") : P(k, "그날 꼭 찾아뵙고 축하드리겠습니다.", "그날 꼭 갈게!", "그날 뵐게요."),
     SIGN(v, k))
 },
 { id: "cbirth", cat: "congrats", t: "출산 축하", d: "아기 소식을 들었을 때", f: [
@@ -299,11 +308,11 @@ const TPL = [
 { id: "condo", cat: "condole", t: "조문 문자", d: "부고를 받았을 때(못 가는 경우 포함)", f: [
   { k: "to", l: "받는 사람", ph: "김 과장님" },
   { k: "rel", l: "고인", type: "sel", o: ["부친", "모친", "조부", "조모", "장인", "장모", "시부", "시모", "가족"], def: "부친" },
-  { k: "absent", l: "조문", type: "sel", o: ["찾아뵐게요", "못 가요"], def: "찾아뵐게요" }, { k: "from", l: "보내는 사람", ph: "홍길동", opt: 1 }],
+  { k: "absent", l: "조문", type: "sel", o: ["찾아뵐게요", "못 가요", "못 가요 · 부의금은 계좌로"], def: "찾아뵐게요" }, { k: "from", l: "보내는 사람", ph: "홍길동", opt: 1 }],
   gen: (v, k) => { const r = { "부친": "부친상", "모친": "모친상", "조부": "조부상", "조모": "조모상", "장인": "빙부상", "장모": "빙모상", "시부": "시부상", "시모": "시모상", "가족": "상" }[v.rel] || "상"; return L(
     P(k, `${TOC(v)}${r}을 당하셨다는 소식에 깊은 위로의 말씀을 드립니다.`, `${TOC(v)}갑작스러운 소식에 마음이 아픕니다.`, `${TOC(v)}삼가 고인의 명복을 빕니다.`.trim()),
     k === 0 ? "삼가 고인의 명복을 빕니다." : k === 1 ? "얼마나 마음이 힘드실지요. 삼가 고인의 명복을 빕니다." : "",
-    v.absent === "못 가요" ? P(k, "직접 찾아뵙고 위로드려야 마땅하나 사정이 있어 그러지 못하는 점 너그러이 헤아려 주십시오.", "곁에 가지 못해 너무 죄송해요. 마음으로 함께하겠습니다.", "찾아뵙지 못해 죄송합니다.") : P(k, "곧 찾아뵙겠습니다.", "곧 찾아갈게요.", ""),
+    v.absent !== "찾아뵐게요" ? L(P(k, "직접 찾아뵙고 위로드려야 마땅하나 사정이 있어 그러지 못하는 점 너그러이 헤아려 주십시오.", "곁에 가지 못해 너무 죄송해요. 마음으로 함께하겠습니다.", "찾아뵙지 못해 죄송합니다."), v.absent === "못 가요 · 부의금은 계좌로" ? P(k, "부의금은 계좌로 보내 드렸습니다. 작은 정성이나마 받아 주십시오.", "부의금은 계좌로 조금 보냈어요. 작은 마음이에요.", "부의금은 계좌로 보내 드렸습니다.") : "") : P(k, "곧 찾아뵙겠습니다.", "곧 찾아갈게요.", ""),
     P(k, "힘든 시간 잘 이겨 내시길 바랍니다.", "끼니 거르지 말고 몸 잘 챙기세요.", ""), SIGN(v, k)); }
 },
 { id: "sick", cat: "condole", t: "문병 · 위로", d: "아프거나 힘든 일이 있을 때", f: [
@@ -311,6 +320,16 @@ const TPL = [
   gen: (v, k) => L(
     v.why === "힘든 일이 있을 때" ? P(k, `${TOC(v)}요즘 많이 힘드시다는 이야기를 들었습니다.`, `${TOC(v)}요즘 마음고생 많지?`, `${TOC(v)}힘내세요.`) : P(k, `${TOC(v)}${v.why === "입원 · 수술" ? "입원하셨다는" : "편찮으시다는"} 소식을 들었습니다.`, `${TOC(v)}${v.why === "입원 · 수술" ? "입원했다는" : "아프다는"} 얘기 듣고 걱정돼서 연락해.`, `${TOC(v)}빠른 쾌유를 빕니다.`),
     P(k, v.why === "힘든 일이 있을 때" ? "곁에서 도울 일이 있으면 언제든 말씀해 주십시오." : "아무쪼록 푹 쉬시고 하루빨리 건강을 되찾으시길 바랍니다.", v.why === "힘든 일이 있을 때" ? "혼자 끙끙대지 말고, 필요하면 언제든 불러. 밥 한번 먹자." : "푹 쉬고 얼른 나아. 나으면 맛있는 거 먹으러 가자.", ""), SIGN(v, k))
+},
+{ id: "pet", cat: "condole", t: "반려동물 떠난 사람 위로", d: "강아지 · 고양이를 떠나보낸 친구에게", f: [
+  { k: "to", l: "받는 사람", ph: "지영" }, { k: "pet", l: "반려동물 이름", ph: "콩이", opt: 1 },
+  { k: "kind", l: "어떤 친구", type: "sel", o: ["강아지", "고양이", "반려동물"], def: "강아지" },
+  { k: "years", l: "함께한 시간", ph: "14년", opt: 1 }, { k: "from", l: "보내는 사람", ph: "홍길동", opt: 1 }],
+  gen: (v, k) => { const nm = v.pet ? JS(v.pet, "이", "") : (v.kind === "반려동물" ? "아이" : v.kind); const nmS = v.pet ? JS(v.pet, "이가", "가") : (v.kind === "반려동물" ? "아이가" : JS(v.kind, "이", "가")); return L(
+    P(k, `${TOC(v)}${nmS} 곁을 떠났다는 소식 들었어요. 얼마나 마음이 아프실지요.`, `${TOC(v)}${nmS} 떠났다는 얘기 들었어… 많이 힘들지.`, `${TOC(v)}${nm} 소식 들었어요. 마음이 아프네요.`),
+    v.years ? P(k, `${v.years} 동안 가족으로 함께했으니 그 빈자리가 정말 크실 것 같아요.`, `${v.years}이나 함께했으니 빈자리가 얼마나 클까.`, "") : P(k, "가족처럼 함께한 만큼 빈자리가 크실 것 같아요.", "가족이었으니까 빈자리가 정말 크겠다.", ""),
+    P(k, `${nmS} 사랑받으며 행복하게 지냈다는 건 곁에서 보던 저도 잘 알아요. 너무 자책하지 마시고, 좋았던 날들을 오래 기억해 주세요.`, `${nm}한테 넌 정말 좋은 가족이었어. 너무 자책하지 말고, 좋았던 기억 많이 떠올려 줘.`, "좋은 가족을 만나 행복했을 거예요."),
+    P(k, "필요하시면 언제든 연락 주세요. 이야기 들어 드릴게요.", "보고 싶으면 언제든 얘기해. 같이 추억해 줄게.", ""), SIGN(v, k)); }
 },
 /* ───────── 감사 · 답례 ───────── */
 { id: "tcondo", cat: "thanks", t: "조문 답례(장례 뒤 감사)", d: "장례를 마치고 보내는 인사", card: true, f: [
@@ -441,6 +460,105 @@ const TPL = [
     P(k, `안녕하세요. ${v.car || "○○○○"} 차주님, 차가 출구를 막고 있어 나가지 못하고 있습니다. 바쁘시겠지만 잠시 차를 옮겨 주시면 감사하겠습니다.`, `${v.car || "○○○○"} 차주님, 차 때문에 나갈 수가 없어서요. 잠깐만 옮겨 주실 수 있을까요? 부탁드려요!`, `${v.car || "○○○○"} 차주님, 차 이동 부탁드립니다.`),
     W(v.phone, s => `연락처: ${s}`))
 },
+{ id: "debt", cat: "life", t: "빌려준 돈 돌려받기(단계별)", d: "관계는 지키면서 분명하게 — 1 · 2 · 3단계", f: [
+  { k: "to", l: "받는 사람", ph: "민수" }, { k: "step", l: "몇 번째 연락", type: "sel", o: ["1단계 · 가볍게 물어보기", "2단계 · 날짜를 정해 부탁", "3단계 · 분명하게 마지막 부탁"], def: "1단계 · 가볍게 물어보기" },
+  { k: "fee", l: "금액", type: "money" }, { k: "lent", l: "빌려준 날", type: "date", opt: 1 },
+  { k: "until", l: "돌려받고 싶은 날", type: "date", opt: 1 }, { k: "from", l: "보내는 사람", ph: "홍길동", opt: 1 }, { k: "acc", l: "받을 계좌", type: "acc" }],
+  memo: v => "<b>보내기 전에</b> — 욕설 · 밤늦은 연락 · 하루에도 여러 번 보내기 · 「가족 · 회사에 알리겠다」 같은 말은 협박이나 명예훼손 문제가 될 수 있어요. 이 문장들은 그런 표현을 빼고 썼어요.<br>이체 기록 · 차용증 · 주고받은 문자는 지우지 말고 남겨 두세요. 3단계에도 답이 없으면 「지급명령」(법원 전자소송) 같은 절차를 알아보세요.",
+  gen: (v, k) => { const st = +(v.step || "1")[0] || 1, amt = v.fee ? `${MONEY(v.fee)}원` : "빌려 간 돈", when = v.lent ? `${D(v.lent)}에 ` : ""; return L(
+    st === 1 ? P(k, `${TOC(v)}잘 지내시죠? 다름이 아니라 ${when}빌려 드린 ${amt} 말인데요, 혹시 언제쯤 돌려받을 수 있을지 여쭤봐도 될까요?`, `${TOC(v)}잘 지내지? 말 꺼내기 좀 어려웠는데, ${when}빌려준 ${amt} 언제쯤 줄 수 있을까?`, `${TOC(v)}${when}빌려 드린 ${amt}, 언제쯤 가능할까요?`)
+    : st === 2 ? P(k, `${TOC(v)}지난번에 말씀드린 ${amt} 건으로 다시 연락드립니다. 저도 쓸 곳이 생겨서요, ${v.until ? D(v.until) + "까지" : "날짜를 정해서"} 보내 주실 수 있을까요? 한꺼번에 어려우시면 나눠서 보내 주셔도 괜찮습니다.`, `${TOC(v)}${amt} 얘기 다시 해서 미안해. 나도 써야 할 데가 생겨서 그래. ${v.until ? D(v.until) + "까지" : "날짜 정해서"} 보내 줄 수 있어? 나눠서 줘도 괜찮아.`, `${TOC(v)}${amt}, ${v.until ? D(v.until) + "까지" : "날짜를 정해"} 부탁드립니다. 나눠서도 괜찮아요.`)
+    : P(k, `${TOC(v)}여러 번 말씀드렸던 ${amt} 건입니다. 그동안 기다려 왔지만 더 미루기 어려운 상황이라 분명하게 말씀드립니다. ${v.until ? D(v.until) + "까지" : "이번 달 안에"} 보내 주시거나, 언제 어떻게 갚으실지 계획이라도 꼭 알려 주세요. 연락이 없으시면 법에서 정한 절차를 알아볼 수밖에 없어 미리 말씀드립니다.`, `${TOC(v)}${amt} 얘기 이번이 마지막으로 할게. 나도 더는 기다리기 어려워. ${v.until ? D(v.until) + "까지" : "이번 달 안에"} 보내 주거나, 언제 갚을 수 있는지 계획이라도 알려 줘. 답이 없으면 정식 절차를 알아볼 수밖에 없어.`, `${TOC(v)}${amt}, ${v.until ? D(v.until) + "까지" : "이번 달 안에"} 보내 주시거나 갚을 계획을 알려 주세요. 답이 없으면 정해진 절차를 밟겠습니다.`),
+    ACC(v, "받을 계좌"), SIGN(v, k)); }
+},
+/* ───────── 학교 · 학원 ───────── */
+{ id: "absent", cat: "school", t: "담임 선생님께 결석 · 조퇴 · 지각 연락", d: "아침에 급하게 보낼 때", f: [
+  { k: "to", l: "받는 분", ph: "선생님", def: "선생님", sug: ["선생님", "담임 선생님"] },
+  { k: "child", l: "아이(학년 · 반 · 이름)", ph: "3학년 2반 김민준" },
+  { k: "kind", l: "무엇", type: "sel", o: ["결석", "조퇴", "지각", "병원 들렀다 늦게 등교"], def: "결석" },
+  { k: "date", l: "날", type: "date" }, { k: "why", l: "이유(짧게)", ph: "밤새 열이 38도까지 올라서", opt: 1 },
+  { k: "time", l: "조퇴 · 등교 시각", type: "time", opt: 1 },
+  { k: "doc", l: "낼 서류", type: "sel", o: ["말하지 않기", "진료 확인서 · 처방전 내겠습니다", "결석계 써서 보내겠습니다"], def: "말하지 않기" },
+  { k: "from", l: "보내는 사람", ph: "민준 엄마", opt: 1 }],
+  memo: v => "<b>알아 두세요</b> — 아파서 빠지는 날(질병 결석 · 조퇴)은 학교마다 진료 확인서 · 처방전 · 결석계 같은 서류를 따로 받아요. 며칠 안에 내야 하는지는 학교 안내(가정통신문 · 학교 알림 앱)를 확인하세요.",
+  gen: (v, k) => { const c = v.child || "○학년 ○반 ○○○", kd = v.kind, tm = v.time ? TM(v.time) : "", d = D(v.date), why = v.why ? v.why + " " : "";
+    const A = { "결석": [`${d} 결석하게 되었습니다.`, `${d} 결석해야 할 것 같아요.`, `${d} 결석합니다.`],
+      "조퇴": [`${d} ${tm ? tm + "에 " : ""}조퇴하려고 합니다.`, `${d} ${tm ? tm + "에 " : ""}조퇴해야 할 것 같아요.`, `${d} ${tm ? tm + " " : ""}조퇴합니다.`],
+      "지각": [`${d} ${tm ? tm + "쯤 " : "조금 "}늦게 등교하겠습니다.`, `${d} ${tm ? tm + "쯤 " : "조금 "}늦게 갈 것 같아요.`, `${d} ${tm ? tm + "쯤 " : ""}늦게 등교합니다.`],
+      "병원 들렀다 늦게 등교": [`${d} 병원에 들렀다가 ${tm ? tm + "쯤 " : ""}등교하겠습니다.`, `${d} 병원에 들렀다가 ${tm ? tm + "쯤 " : ""}갈게요.`, `${d} 병원 들렀다 ${tm ? tm + "쯤 " : ""}등교합니다.`] }[kd];
+    const DOC = { "진료 확인서 · 처방전 내겠습니다": ["진료 확인서나 처방전은 등교할 때 내겠습니다.", "진료 확인서는 등교할 때 낼게요.", "진료 확인서 낼게요."], "결석계 써서 보내겠습니다": ["결석계는 써서 보내 드리겠습니다.", "결석계는 써서 보내 드릴게요.", "결석계 보낼게요."] }[v.doc];
+    const me = v.from ? v.from.replace(/^.*\s/, "") : "보호자";
+    return L(
+    P(k, `${TO(v, "선생님")}, 안녕하세요. ${c} 보호자입니다.`, `${TO(v, "선생님")}, 안녕하세요! ${c} ${JS(me, "이에요", "예요")}.`, `${TO(v, "선생님")}, ${c} 보호자입니다.`),
+    k === 2 ? A[2] + (v.why ? ` (${v.why})` : "") : why + A[k],
+    DOC ? DOC[k] : "",
+    P(k, "번거롭게 해 드려 죄송합니다. 감사합니다.", "늘 감사드려요.", "감사합니다."), SIGN(v, k)); }
+},
+{ id: "fieldtrip", cat: "school", t: "교외체험학습 미리 알림", d: "가족 여행 · 행사로 며칠 빠질 때", f: [
+  { k: "to", l: "받는 분", ph: "선생님", def: "선생님" }, { k: "child", l: "아이(학년 · 반 · 이름)", ph: "3학년 2반 김민준" },
+  { k: "start", l: "시작 날", type: "date" }, { k: "end", l: "끝나는 날", type: "date" },
+  { k: "what", l: "무엇을", ph: "가족 여행(제주) / 할아버지 칠순 잔치" },
+  { k: "form", l: "신청서", type: "sel", o: ["신청서는 따로 내겠습니다", "신청서는 이미 냈습니다", "신청서 양식을 받고 싶어요"], def: "신청서는 따로 내겠습니다" },
+  { k: "from", l: "보내는 사람", ph: "민준 아빠", opt: 1 }],
+  memo: v => { const n = v.start && v.end ? WEEKDAYS(v.start, v.end) : 0; return (n ? `<b>빠지는 평일</b> — ${n}일(토 · 일 뺀 날, 공휴일 · 재량휴업일은 빼지 않았어요)<br>` : "") + "<b>알아 두세요</b> — 교외체험학습은 보통 미리 신청서를 내고 학교 승인을 받아야 출석으로 인정돼요. 며칠 전까지 내야 하는지 · 1년에 며칠까지 되는지는 학교 규정마다 달라요. 다녀온 뒤 보고서도 따로 내요."; },
+  gen: (v, k) => { const n = v.start && v.end ? WEEKDAYS(v.start, v.end) : 0; return L(
+    P(k, `${TO(v, "선생님")}, 안녕하세요. ${v.child || "○학년 ○반 ○○○"} 보호자입니다.`, `${TO(v, "선생님")}, 안녕하세요! ${v.child || "○학년 ○반 ○○○"} 보호자예요.`, `${TO(v, "선생님")}, ${v.child || "○학년 ○반 ○○○"} 보호자입니다.`),
+    P(k, `${D(v.start)}부터 ${D(v.end)}까지${n ? `(평일 ${n}일)` : ""} ${v.what || "가족 일정"}으로 교외체험학습을 하려고 미리 말씀드립니다.`, `${D(v.start)}부터 ${D(v.end)}까지${n ? `(평일 ${n}일)` : ""} ${v.what || "가족 일정"}으로 체험학습을 다녀오려고 해요.`, `${D(v.start)} ~ ${D(v.end)} 교외체험학습(${v.what || "가족 일정"}) 예정입니다.`),
+    v.form === "신청서 양식을 받고 싶어요" ? P(k, "신청서 양식을 보내 주시면 작성해서 기한 안에 내겠습니다.", "신청서 양식 보내 주시면 바로 써서 낼게요.", "신청서 양식 부탁드립니다.") : P(k, v.form === "신청서는 이미 냈습니다" ? "신청서는 이미 냈습니다. 다녀와서 보고서도 내겠습니다." : "신청서는 정해진 날까지 따로 내고, 다녀와서 보고서도 내겠습니다.", v.form === "신청서는 이미 냈습니다" ? "신청서는 냈고, 다녀와서 보고서도 낼게요." : "신청서는 날짜 맞춰 낼게요. 다녀와서 보고서도요!", v.form === "신청서는 이미 냈습니다" ? "신청서는 냈습니다." : "신청서는 따로 내겠습니다."),
+    P(k, "늘 아이를 살펴 주셔서 감사합니다.", "늘 감사드려요.", "감사합니다."), SIGN(v, k)); }
+},
+{ id: "quitacad", cat: "school", t: "학원 · 과외 그만둘 때", d: "선생님께 정중하게 + 남은 교습비 계산", f: [
+  { k: "to", l: "받는 분", ph: "원장님 / 수학 선생님", sug: ["원장님", "선생님"] },
+  { k: "child", l: "아이 이름", ph: "민준", opt: 1 },
+  { k: "kind", l: "어디", type: "sel", o: ["학원", "과외", "공부방", "교습소"], def: "학원" },
+  { k: "last", l: "마지막 수업 날", type: "date" },
+  { k: "why", l: "그만두는 이유", type: "sel", o: ["말하지 않기", "다른 공부 방법을 해 보려고", "시간이 맞지 않아서", "형편이 어려워져서", "이사를 가게 되어서", "아이가 쉬고 싶어 해서"], def: "말하지 않기" },
+  { k: "refund", l: "남은 교습비", type: "sel", o: ["말하지 않기", "남은 교습비 돌려받고 싶어요"], def: "말하지 않기" },
+  { k: "fee", l: "이번 달 교습비(계산용)", type: "money", opt: 1 },
+  { k: "tot", l: "이번 달 전체 수업 횟수", ph: "8", opt: 1 }, { k: "done", l: "그중 들은 횟수", ph: "2", opt: 1 },
+  { k: "from", l: "보내는 사람", ph: "민준 엄마", opt: 1 }],
+  memo: v => { const r = ACADREF(v); return (r ? `<b>돌려받을 수 있는 돈(계산)</b> — ${r.txt}<br>` : "") + "<b>반환 기준</b>(학원법 시행령 · 교육청 안내, 한 달 이내 과정) — 수업 시작 전 = 낸 돈 전부 · 전체 수업의 1/3이 지나기 전 = 2/3 · 1/2이 지나기 전 = 1/2 · 1/2이 지난 뒤 = 돌려받지 못함. 한 달 넘게 미리 낸 경우는 그달은 위 기준, 남은 달은 전부.<br>과외 · 교습소도 같은 기준이에요. 학원이 거절하면 관할 교육지원청에 상담할 수 있어요(독서실은 기준이 달라요)."; },
+  gen: (v, k) => { const r = v.refund !== "말하지 않기" ? ACADREF(v) : null, who = v.child ? v.child + " " : "", place = v.kind === "과외" ? "수업" : v.kind; const why = { "다른 공부 방법을 해 보려고": "다른 공부 방법을 해 보고 싶다고 해서", "시간이 맞지 않아서": "시간이 맞지 않게 되어서", "형편이 어려워져서": "집안 사정이 조금 어려워져서", "이사를 가게 되어서": "이사를 가게 되어서", "아이가 쉬고 싶어 해서": "아이가 잠시 쉬고 싶어 해서" }[v.why]; return L(
+    P(k, `${TOC(v)}안녕하세요. ${who}보호자입니다.`, `${TOC(v)}안녕하세요! ${who}보호자예요.`, `${TOC(v)}${who}보호자입니다.`),
+    P(k, `${why ? why + " " : ""}${D(v.last)} 수업을 마지막으로 ${JS(place, "을", "를")} 그만두려고 합니다. 갑자기 말씀드리게 되어 죄송합니다.`, `${why ? why + " " : ""}${D(v.last)} 수업까지만 하고 ${JS(place, "은", "는")} 쉬려고 해요.`, `${D(v.last)} 수업을 끝으로 그만두려 합니다.`),
+    P(k, `그동안 아이를 세심하게 가르쳐 주셔서 정말 감사했습니다. 덕분에 ${v.child ? JS(v.child, "이가", "가") : "아이가"} 많이 자랐습니다.`, `그동안 정말 감사했어요. ${v.child ? JS(v.child, "이도", "도") : "아이도"} 선생님 덕분에 즐겁게 다녔어요.`, "그동안 감사했습니다."),
+    v.refund !== "말하지 않기" ? P(k, `남은 교습비는 반환 기준에 맞춰 정리해 주시면 감사하겠습니다.${r && r.amt != null ? ` (이번 달 ${r.tot}회 중 ${r.done}회 수업 — 기준대로라면 ${r.amt ? MONEY(r.amt) + "원" : "돌려받을 돈 없음"})` : ""}`, `남은 교습비는 기준에 맞게 돌려주시면 고맙겠어요.${r && r.amt ? ` (${r.tot}회 중 ${r.done}회 — 약 ${MONEY(r.amt)}원)` : ""}`, `남은 교습비 정리 부탁드립니다.${r && r.amt ? ` (약 ${MONEY(r.amt)}원)` : ""}`) : "",
+    ACC(v, "돌려받을 계좌"), SIGN(v, k)); }
+},
+/* ───────── 집 · 계약 ───────── */
+{ id: "leaseend", cat: "home", t: "집주인에게 계약 만료 · 이사 알림", d: "갱신 안 함 · 갱신 요구 — 보낼 수 있는 기간 자동", f: [
+  { k: "to", l: "받는 분", ph: "사장님", def: "사장님", sug: ["사장님", "집주인님"] },
+  { k: "unit", l: "집", ph: "○○아파트 101동 1203호" },
+  { k: "end", l: "계약 끝나는 날", type: "date" },
+  { k: "kind", l: "무엇", type: "sel", o: ["계약 끝나면 이사할게요(갱신 안 함)", "계약을 연장하고 싶어요(계약갱신 요구)"], def: "계약 끝나면 이사할게요(갱신 안 함)" },
+  { k: "move", l: "이사 예정일", type: "date", opt: 1 },
+  { k: "dep", l: "보증금 이야기", type: "sel", o: ["이사 날 보증금 돌려받기 부탁", "말하지 않기"], def: "이사 날 보증금 돌려받기 부탁" },
+  { k: "from", l: "보내는 사람", ph: "1203호 세입자 홍길동", opt: 1 }, { k: "acc", l: "보증금 받을 계좌", type: "acc" }],
+  memo: v => { if (!v.end) return "<b>계약 끝나는 날</b>을 넣으면 이 문자를 보내야 하는 기간을 계산해 드려요."; const a = AM(v.end, -6), b = AM(v.end, -2), t = TODAY(); let st = t < a ? `아직 이른 편이에요 — ${D(a)}부터 보내세요.` : t <= b ? `<b>지금 보내면 돼요</b> — 늦어도 ${D(b)}까지 집주인에게 닿아야 해요.` : `<b>2개월 전이 지났어요.</b> 그대로 두면 같은 조건으로 연장된 것(묵시적 갱신)이 될 수 있어요. 이때 세입자는 언제든 계약을 끝내겠다고 알릴 수 있고, 집주인이 받은 날부터 3개월 뒤에 끝나요.`; return `<b>보낼 수 있는 기간</b> — ${D(a)} ~ ${D(b)} (계약 끝나기 6개월 전부터 2개월 전까지)<br>${st}<br>문자 · 카톡도 기록이 남지만, 다툼이 걱정되면 내용증명을 함께 보내 두세요. (주택임대차보호법 · 대한법률구조공단 132)`; },
+  gen: (v, k) => { const ext = v.kind.indexOf("연장") >= 0; return L(
+    P(k, `${TOC(v)}안녕하세요. ${v.unit || "○○○호"}에 살고 있는 세입자${v.from ? " " + v.from.replace(/^.*세입자\s*/, "") : ""}입니다.`, `${TOC(v)}안녕하세요, ${v.unit || "○○○호"} 세입자예요.`, `${TOC(v)}${v.unit || "○○○호"} 세입자입니다.`),
+    ext ? P(k, `${D(v.end)}에 끝나는 임대차 계약을 연장하고 싶어 미리 말씀드립니다. 주택임대차보호법에 따른 계약갱신을 요구합니다. 조건은 편하실 때 이야기 나누면 좋겠습니다.`, `${D(v.end)}에 계약이 끝나는데, 계속 살고 싶어서 연장(계약갱신 요구)을 미리 말씀드려요. 조건은 편하실 때 얘기 나눠요.`, `${D(v.end)} 만료 계약의 갱신을 요구합니다.`)
+        : P(k, `${D(v.end)}에 끝나는 임대차 계약을 연장하지 않고 이사하려고 미리 말씀드립니다.${v.move ? ` 이사는 ${D(v.move)}로 생각하고 있습니다.` : ""}`, `${D(v.end)}에 계약이 끝나면 이사하려고 해요. 미리 알려 드려요.${v.move ? ` 이사는 ${D(v.move)}쯤 생각하고 있어요.` : ""}`, `${D(v.end)} 계약 만료 후 갱신하지 않고 이사하겠습니다.${v.move ? ` (이사 ${D(v.move)})` : ""}`),
+    !ext && v.dep !== "말하지 않기" ? P(k, `이사하는 날 보증금을 돌려받을 수 있도록 미리 준비해 주시면 감사하겠습니다. 집 보러 오시는 분이 있으면 미리 연락 주세요.`, `이사하는 날 보증금 받을 수 있게 미리 준비 부탁드려요. 집 보러 오실 땐 미리 연락 주세요!`, "이사 날 보증금 반환 부탁드립니다.") : "",
+    !ext ? ACC(v, "보증금 받을 계좌") : "",
+    P(k, "그동안 감사했습니다.", "그동안 감사했어요.", ""), SIGN(v, k)); }
+},
+{ id: "repair", cat: "home", t: "집주인에게 수리 요청", d: "보일러 · 누수 · 고장 — 언제 와 보실지 정하기", f: [
+  { k: "to", l: "받는 분", ph: "사장님", def: "사장님" }, { k: "unit", l: "집", ph: "○○빌라 302호" },
+  { k: "what", l: "무엇이 고장", ph: "보일러에서 물이 새고 온수가 안 나와요" }, { k: "since", l: "언제부터", type: "date", opt: 1 },
+  { k: "urgent", l: "급한 정도", type: "sel", o: ["급해요(생활이 어려움)", "시간 될 때 봐 주세요"], def: "급해요(생활이 어려움)" },
+  { k: "free", l: "집에 있는 시간", ph: "평일 저녁 7시 이후 · 주말 종일", opt: 1 },
+  { k: "photo", l: "사진", type: "sel", o: ["사진 함께 보낼게요", "말하지 않기"], def: "사진 함께 보낼게요" }, { k: "from", l: "보내는 사람", ph: "302호 홍길동", opt: 1 }],
+  memo: v => "<b>알아 두세요</b> — 보일러 · 배관 · 누수처럼 집을 쓰는 데 꼭 필요한 큰 수리는 보통 집주인이, 전구 · 소모품처럼 작은 것은 세입자가 맡아요(계약서 특약이 있으면 그것 먼저). 고장 난 곳 사진과 날짜를 남겨 두면 좋아요.",
+  gen: (v, k) => L(
+    P(k, `${TOC(v)}안녕하세요. ${v.unit || "○○○호"} 세입자입니다.`, `${TOC(v)}안녕하세요, ${v.unit || "○○○호"} 세입자예요.`, `${TOC(v)}${v.unit || "○○○호"}입니다.`),
+    (v.since ? D(v.since) + "부터 " : "") + (v.what ? v.what + (/[.!?]$/.test(v.what) ? "" : ".") : "집에 고장 난 곳이 생겼습니다."),
+    P(k, "수리를 부탁드리려고 연락드렸습니다.", "수리 부탁드리려고 연락드렸어요.", "수리 부탁드립니다."),
+    v.urgent.startsWith("급해요") ? P(k, "생활하기가 어려워 되도록 빨리 봐 주시면 감사하겠습니다.", "생활이 좀 불편해서 빨리 봐 주시면 정말 감사하겠어요.", "급합니다.") : P(k, "급하지는 않으니 시간 되실 때 봐 주세요.", "급한 건 아니라 편하실 때 봐 주세요.", ""),
+    W(v.free, s => P(k, `집에 있는 시간은 ${s}입니다. 편하신 때를 알려 주세요.`, `집에는 ${s}에 있어요. 편한 시간 알려 주세요.`, `가능한 시간: ${s}`)),
+    v.photo !== "말하지 않기" ? P(k, "상태를 보실 수 있게 사진도 함께 보내 드립니다.", "사진도 같이 보낼게요.", "사진 함께 보냅니다.") : "",
+    SIGN(v, k))
+},
 /* ───────── 일 · 직장 ───────── */
 { id: "farewell", cat: "work", t: "퇴사 · 이직 인사", d: "마지막 날 보내는 인사", f: [
   { k: "team", l: "부서 · 회사", ph: "영업1팀", opt: 1 }, { k: "last", l: "마지막 출근 날", type: "date" }, { k: "contact", l: "앞으로 연락처", ph: "010-0000-0000 / 메일", opt: 1 }, { k: "from", l: "보내는 사람", ph: "홍길동" }],
@@ -460,6 +578,20 @@ const TPL = [
     P(k, `${v.why ? v.why + " " : ""}${D(v.date)} ${v.kind}를 쓰고자 말씀드립니다.`, `${v.why ? v.why + " " : ""}${D(v.date)} ${v.kind}를 써야 할 것 같아요. 죄송합니다.`, `${D(v.date)} ${v.kind} 보고드립니다.${v.why ? " (" + v.why + ")" : ""}`),
     W(v.backup, s => P(k, `급한 업무는 ${s}.`, `급한 일은 ${s}.`, s)),
     P(k, "불편을 드려 죄송합니다. 연락은 계속 받을 수 있습니다.", "급한 연락은 받을 수 있어요.", ""))
+},
+{ id: "quitboss", cat: "work", t: "그만둔다고 말하기(사장님께)", d: "알바 · 회사 — 마지막 근무일과 함께", f: [
+  { k: "to", l: "받는 분", ph: "사장님", def: "사장님", sug: ["사장님", "점장님", "팀장님"] },
+  { k: "kind", l: "어디", type: "sel", o: ["아르바이트", "회사"], def: "아르바이트" },
+  { k: "last", l: "마지막 근무 날", type: "date" },
+  { k: "why", l: "이유", type: "sel", o: ["개인 사정으로", "학업에 집중하려고", "다른 일을 구하게 되어서", "건강 때문에", "이사를 가게 되어서"], def: "개인 사정으로" },
+  { k: "hand", l: "마무리", type: "sel", o: ["새 사람 구할 때까지 도울게요", "인수인계 잘 하고 나갈게요", "말하지 않기"], def: "인수인계 잘 하고 나갈게요" },
+  { k: "from", l: "보내는 사람", ph: "홍길동", opt: 1 }],
+  memo: v => { const t = TODAY(), m1 = AM(t, 1); let s = `<b>오늘 알리면</b> — 1개월 뒤는 ${D(m1)}이에요.`; if (v.last) { const n = DAYS(t, v.last); s += n >= 0 ? ` 마지막 근무 날까지 ${n}일 남았어요.${n < 30 ? " 한 달이 안 되니 사장님과 날짜를 맞춰 보세요." : ""}` : ""; } return s + "<br><b>알아 두세요</b> — 기간을 정하지 않은 근로계약은 그만두겠다고 알린 날부터 1개월이 지나야 끝나요(민법 제660조, 월급제는 알린 달의 다음 달 말일이 지나야). 서로 합의하면 더 빨리 그만둘 수 있어요. 근로계약서에 미리 알리는 기간이 적혀 있으면 그것도 확인하세요."; },
+  gen: (v, k) => { const work = v.kind === "회사" ? "회사" : "일"; return L(
+    P(k, `${TO(v, "사장님")}, 안녕하세요. ${v.from || "○○○"}입니다.`, `${TO(v, "사장님")}, 안녕하세요! ${JS(v.from || "○○○", "이에요", "예요")}.`, `${TO(v, "사장님")}, ${v.from || "○○○"}입니다.`),
+    P(k, `직접 말씀드려야 하는데 먼저 문자로 여쭙게 되어 죄송합니다. ${v.why} ${D(v.last)}까지만 ${work}하고 그만두려고 합니다.`, `말씀드리기 어려웠는데요, ${v.why} ${D(v.last)}까지만 ${work}하고 그만두려고 해요.`, `${v.why} ${D(v.last)}까지 근무하고 그만두려 합니다.`),
+    v.hand !== "말하지 않기" ? P(k, v.hand === "새 사람 구할 때까지 도울게요" ? "새로 오실 분을 구하실 때까지 최대한 돕겠습니다." : "남은 기간 동안 맡은 일은 끝까지 하고 인수인계도 잘 해 두겠습니다.", v.hand === "새 사람 구할 때까지 도울게요" ? "새로 오실 분 구할 때까지 최대한 도울게요." : "남은 동안 맡은 일은 잘 마무리하고 인수인계도 꼼꼼히 할게요.", v.hand.replace("도울게요", "돕겠습니다").replace("나갈게요", "나가겠습니다") + ".") : "",
+    P(k, "그동안 많이 배웠고 정말 감사했습니다. 편하실 때 따로 찾아뵙고 말씀드리겠습니다.", "그동안 정말 감사했어요. 편하실 때 직접 뵙고 다시 말씀드릴게요.", "그동안 감사했습니다."), SIGN(v, k)); }
 },
 { id: "payreq", cat: "work", t: "입금 요청 · 받을 돈 안내", d: "거래처에 정중하게", f: [
   { k: "to", l: "받는 곳", ph: "○○상사 김 과장님" }, { k: "item", l: "무엇의 대금", ph: "10월 납품 대금" }, { k: "fee", l: "금액", type: "money" },
@@ -497,6 +629,8 @@ const IC = {
   condole: '<path d="M12 21c-4-3-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7-7 10z"/>', thanks: '<path d="M7 11v9H4v-9zM7 11l4-7a2 2 0 0 1 2 2v4h6a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7"/>',
   season: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>', group: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 20c0-2.2 1-4 3.5-4S22 17.8 22 20"/>',
   sorry: '<circle cx="12" cy="12" r="9"/><path d="M8.5 15.5c1.8-1.6 5.2-1.6 7 0M9 9.5h.01M15 9.5h.01"/>', life: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  school: '<path d="M3 6.5C5.5 5 8.5 5 12 6.8 15.5 5 18.5 5 21 6.5V19c-2.5-1.5-5.5-1.5-9 .3-3.5-1.8-6.5-1.8-9-.3z"/><path d="M12 6.8v12.5"/>',
+  home: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l2.5 2.5M18.5 4.5L21 7"/>',
   work: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/>',
   star: '<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>', search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
   copy: '<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>', share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',
@@ -526,8 +660,8 @@ function drawPick() {
   const cats = [{ id: "all", n: "전체" }, { id: "fav", n: "★ 자주 쓰는 것" }, ...CATS];
   let items = TPL.filter(t => S.cat === "all" || (S.cat === "fav" ? S.fav.includes(t.id) : t.cat === S.cat));
   if (q) items = TPL.filter(t => (t.t + t.d + CATS.find(c => c.id === t.cat).n).replace(/\s+/g, "").includes(q));
-  let h = `<div class="find">${svg(IC.search)}<input id="q" type="search" placeholder="찾기 — 부고, 회비, 새해…" value="${esc(S.q)}" autocomplete="off"></div>`;
-  h += `<div class="cats">${cats.map(c => `<button class="cat${S.cat === c.id && !q ? " on" : ""}" data-cat="${c.id}">${c.n}</button>`).join("")}</div><div class="list">`;
+  let h = `<div class="find">${svg(IC.search)}<input id="q" type="search" placeholder="찾기 — 부고, 결석, 집주인, 회비…" value="${esc(S.q)}" autocomplete="off"></div>`;
+  h += `<div class="cats" data-ks="cats">${cats.map(c => `<button class="cat${S.cat === c.id && !q ? " on" : ""}" data-cat="${c.id}">${c.n}</button>`).join("")}</div><div class="list" data-ks="list">`;
   if (!items.length) h += `<div class="empty">${S.cat === "fav" && !q ? "☆를 누른 상황이 여기 모여요." : "찾는 상황이 없어요. 다른 말로 찾아 보세요."}</div>`;
   let last = "";
   for (const t of items) {
@@ -535,7 +669,7 @@ function drawPick() {
     h += `<div class="it${t.id === S.id ? " on" : ""}" data-id="${t.id}" role="button" tabindex="0"><span class="ic">${svg(IC[t.cat])}</span><span class="tx"><b>${t.t}</b><span>${t.d}</span></span><button class="star${S.fav.includes(t.id) ? " on" : ""}" data-fav="${t.id}" aria-label="자주 쓰는 것">${svg(IC.star)}</button></div>`;
   }
   $("#pick").innerHTML = h + "</div>";
-  const qi = $("#q"); qi.oninput = () => { S.q = qi.value; const p = qi.selectionStart; drawPick(); const n = $("#q"); n.focus(); n.setSelectionRange(p, p); };
+  const qi = $("#q"); qi.oninput = () => { S.q = qi.value; const p = qi.selectionStart; keep(drawPick); const n = $("#q"); n.focus(); n.setSelectionRange(p, p); };
 }
 
 /* ── 가운데: 칸 채우기 ── */
@@ -550,12 +684,19 @@ function field(t, f, v) {
   if (f.type === "map") return `<div class="f wide">${lab.replace("</label>", "<em>비워도 돼요</em></label>")}<input class="inp" id="${id}" data-k="${f.k}" inputmode="url" placeholder="네이버 · 카카오 · 구글 지도에서 「공유 → 링크 복사」한 주소" value="${esc(val)}"></div>`;
   return `<div class="f${f.wide ? " wide" : ""}">${lab}<input class="inp" id="${id}" data-k="${f.k}" placeholder="${esc(f.ph || "")}" value="${esc(val)}" autocomplete="off">${f.sug ? `<div class="sug">${f.sug.map(s => `<button data-sug="${f.k}">${s}</button>`).join("")}</div>` : ""}</div>`;
 }
+/* 11-10: 상황마다 알아 두세요 · 계산 — 칸을 칠 때마다 이 부분만 다시 씀(칸은 다시 그리지 않음) */
+function memoHtml(t, v) {
+  let h = "";
+  if (t.memo) { const m = t.memo(v); if (m) h += `<div class="memo num">${m}</div>`; }
+  if (t.id === "obit" && v.died) h += `<div class="memo num"><b>함께 보는 날</b> — 삼우제 ${D(addDays(v.fdate || addDays(v.died, 2), 2))} · 49재 ${D(addDays(v.died, 48))}<br>삼우제는 발인 날을 1일째로 센 3일째, 49재는 별세한 날을 1일째로 센 49일째예요(집안마다 다를 수 있어요).</div>`;
+  return h.replace(/(\d{4}-\d{2}-\d{2}\([^)]\))/g, '<span style="white-space:nowrap">$1</span>');
+}
 function drawEdit() {
   const t = tplOf(S.id), v = valsFor(t), cat = CATS.find(c => c.id === t.cat).n;
   let h = `<div class="lbl">${cat}</div><h2>${t.t}</h2><p class="lead">${t.d}</p>`;
   h += `<div class="lbl">말투</div><div class="seg">${["정중하게", "다정하게", "짧게"].map((n, i) => `<button class="${S.tone === i ? "on" : ""}" data-tone="${i}">${n}</button>`).join("")}</div>`;
   h += `<div class="fs">${t.f.map(f => field(t, f, v)).join("")}</div>`;
-  if (t.id === "obit" && v.died) h += `<div class="memo num"><b>함께 보는 날</b> — 삼우제 ${D(addDays(v.fdate || addDays(v.died, 2), 2))} · 49재 ${D(addDays(v.died, 48))}<br>삼우제는 발인 날을 1일째로 센 3일째, 49재는 별세한 날을 1일째로 센 49일째예요(집안마다 다를 수 있어요).</div>`;
+  h += `<div id="emem">${memoHtml(t, v)}</div>`;
   $("#edit").innerHTML = h;
 }
 
@@ -564,7 +705,7 @@ function curText() { const t = tplOf(S.id); return t.gen(valsFor(t), S.tone).rep
 function drawPrev() {
   const t = tplOf(S.id), auto = curText(), txt = S.custom != null ? S.custom : auto, b = bytes(txt);
   const kind = b <= 90 ? "단문(SMS)" : b <= 2000 ? "장문(LMS)" : "너무 길어요";
-  let h = `<div class="lbl">미리보기 — 눌러서 직접 고칠 수 있어요</div><div class="phone"><div class="phead"><i></i>보낼 문자</div><div class="bub" id="bub" contenteditable="plaintext-only" spellcheck="false">${esc(txt)}</div></div>`;
+  let h = `<div class="lbl">미리보기 — 눌러서 직접 고칠 수 있어요</div><div class="phone"><div class="phead"><i></i>보낼 문자</div><div class="bub" id="bub" data-ks="bub" contenteditable="plaintext-only" spellcheck="false">${esc(txt)}</div></div>`;
   h += `<div class="meta num"><span>${[...txt].length.toLocaleString()}자 · ${b.toLocaleString()}바이트</span><span class="k">${kind}</span></div>`;
   if (S.custom != null) h += `<div class="edited">직접 고친 글이에요 <button data-reset>칸 내용으로 되돌리기</button></div>`;
   const acts = `<button class="btn go" data-act="copy">${svg(IC.copy)}복사하기</button><button class="btn" data-act="share">${svg(IC.share)}보내기</button>${t.card ? `<button class="btn full" data-act="card">${svg(IC.img)}카드 이미지로 만들기</button>` : ""}`;
@@ -575,8 +716,13 @@ function drawPrev() {
   const bub = $("#bub"); if (bub.contentEditable !== "plaintext-only") bub.contentEditable = "true";
   bub.oninput = () => { S.custom = bub.innerText.replace(/ /g, " "); const bb = bytes(S.custom); $("#prev .meta").innerHTML = `<span>${[...S.custom].length.toLocaleString()}자 · ${bb.toLocaleString()}바이트</span><span class="k">${bb <= 90 ? "단문(SMS)" : bb <= 2000 ? "장문(LMS)" : "너무 길어요"}</span>`; if (!$("#prev .edited")) { const e = document.createElement("div"); e.className = "edited"; e.innerHTML = `직접 고친 글이에요 <button data-reset>칸 내용으로 되돌리기</button>`; $("#prev .meta").after(e); } };
 }
+/* 11-09 스크롤 지키기(공통 규칙): 화면 일부를 다시 그려도 창 · 안쪽 스크롤 칸([data-ks])의 자리를 그대로 둠 */
+const MOB = () => matchMedia("(max-width:760px)").matches;
+function keep(fn) { const y = scrollY, m = [...document.querySelectorAll("[data-ks]")].map(e => [e.dataset.ks, e.scrollTop, e.scrollLeft]); fn(); for (const [k, t, l] of m) { const e = document.querySelector(`[data-ks="${k}"]`); if (e) { e.scrollTop = t; e.scrollLeft = l; } } if (Math.abs(scrollY - y) > 1) scrollTo(0, y); }
+/* 휴대폰: 목록 → 고치기로 갈 때 목록 자리를 적어 두고, 돌아오면 그 자리로 */
+function backToPick() { S.mob = "pick"; render(); requestAnimationFrame(() => scrollTo(0, S.pickY || 0)); }
 function render() { document.body.className = S.mob === "edit" ? "m-edit" : "m-pick"; drawPick(); drawEdit(); drawPrev(); }
-const refresh = () => { S.custom = null; S.card = null; drawEdit(); drawPrev(); };
+const refresh = () => { S.custom = null; S.card = null; keep(() => { drawEdit(); drawPrev(); }); };
 
 /* ── 카드 이미지(직접 그림) ── */
 async function makeCard() {
@@ -608,10 +754,12 @@ async function makeCard() {
 document.addEventListener("click", async e => {
   const el = e.target.closest("[data-cat],[data-id],[data-fav],[data-tone],[data-tg],[data-sug],[data-act],[data-reset],#back");
   if (!el) return;
-  if (el.dataset.fav) { e.stopPropagation(); const i = S.fav.indexOf(el.dataset.fav); i >= 0 ? S.fav.splice(i, 1) : S.fav.push(el.dataset.fav); ls.set("fav", S.fav); toast(i >= 0 ? "자주 쓰는 것에서 뺐어요" : "자주 쓰는 것에 넣었어요"); return drawPick(); }
-  if (el.dataset.cat) { S.cat = el.dataset.cat; S.q = ""; ls.set("cat", S.cat); return drawPick(); }
-  if (el.dataset.id) { S.id = el.dataset.id; ls.set("last", S.id); S.mob = "edit"; S.custom = null; S.card = null; try { history.pushState({ m: "edit" }, ""); } catch (er) {} render(); window.scrollTo(0, 0); return; }
-  if (el.id === "back") { history.length > 1 && history.state && history.state.m === "edit" ? history.back() : (S.mob = "pick", render()); return; }
+  if (el.dataset.fav) { e.stopPropagation(); const i = S.fav.indexOf(el.dataset.fav); i >= 0 ? S.fav.splice(i, 1) : S.fav.push(el.dataset.fav); ls.set("fav", S.fav); toast(i >= 0 ? "자주 쓰는 것에서 뺐어요" : "자주 쓰는 것에 넣었어요"); return keep(drawPick); }
+  if (el.dataset.cat) { S.cat = el.dataset.cat; S.q = ""; ls.set("cat", S.cat); keep(drawPick); const l = $(".list"); if (l) l.scrollTop = 0; return; }
+  if (el.dataset.id) { S.id = el.dataset.id; ls.set("last", S.id); S.custom = null; S.card = null;
+    if (!MOB()) { S.mob = "edit"; return keep(render); }   /* PC: 목록 자리 그대로 */
+    S.pickY = scrollY; S.mob = "edit"; try { history.pushState({ m: "edit" }, ""); } catch (er) {} render(); window.scrollTo(0, 0); return; }
+  if (el.id === "back") { history.length > 1 && history.state && history.state.m === "edit" ? history.back() : backToPick(); return; }
   if (el.dataset.tone) { S.tone = +el.dataset.tone; ls.set("tone", S.tone); return refresh(); }
   if (el.dataset.tg) { const t = tplOf(S.id), v = valsFor(t); saveVal(t, el.dataset.tg, !v[el.dataset.tg]); return refresh(); }
   if (el.dataset.sug) { const t = tplOf(S.id); saveVal(t, el.dataset.sug, el.textContent); return refresh(); }
@@ -619,7 +767,7 @@ document.addEventListener("click", async e => {
   const act = el.dataset.act, txt = S.custom != null ? S.custom : curText();
   if (act === "copy") { try { await navigator.clipboard.writeText(txt); } catch (er) { const ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); } catch (e2) {} ta.remove(); } toast("복사했어요 — 카톡 · 문자에 붙여 넣으세요"); }
   if (act === "share") { if (navigator.share) { try { await navigator.share({ text: txt }); } catch (er) {} } else { try { await navigator.clipboard.writeText(txt); } catch (er) {} toast("이 브라우저는 바로 보내기가 안 돼서 복사했어요"); } }
-  if (act === "card") { el.disabled = true; const b = await makeCard(); S.card = { id: S.id, blob: b, url: URL.createObjectURL(b) }; drawPrev(); const img = $("#prev .cardbox"); img && img.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+  if (act === "card") { el.disabled = true; const b = await makeCard(); S.card = { id: S.id, blob: b, url: URL.createObjectURL(b) }; keep(drawPrev); const img = $("#prev .cardbox"); img && img.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
   if (act === "savecard" && S.card) { const name = `${tplOf(S.id).t.replace(/[^\w가-힣]+/g, "_")}_${ymd(new Date())}.png`; const file = new File([S.card.blob], name, { type: "image/png" }); if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file] }); return; } catch (er) { if (er.name === "AbortError") return; } } const a = document.createElement("a"); a.href = S.card.url; a.download = name; a.click(); toast("이미지를 저장했어요"); }
 });
 document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches(".it")) { e.preventDefault(); e.target.click(); } });
@@ -629,11 +777,12 @@ document.addEventListener("input", e => {
   if (el.hasAttribute("data-money")) { const raw = el.value.replace(/[^\d]/g, ""); const pos = el.value.length - el.selectionStart; el.value = MONEY(raw); const np = Math.max(0, el.value.length - pos); el.setSelectionRange(np, np); saveVal(t, k, raw); }
   else saveVal(t, k, el.value);
   if (el.type === "date" || el.type === "time") { const f = t.f.find(x => x.k === k); if (f && f.auto) saveVal(t, k + "_set", true); return refresh(); }
-  S.custom = null; S.card = null; drawPrev();
+  S.custom = null; S.card = null; keep(drawPrev);
+  const mm = $("#emem"); if (mm) mm.innerHTML = memoHtml(t, valsFor(t));
 });
 document.addEventListener("change", e => { const el = e.target; if (el.tagName === "SELECT" && el.dataset.k) { saveVal(tplOf(S.id), el.dataset.k, el.value); refresh(); } });
 document.addEventListener("click", e => { const i = e.target.closest(".dwrap input"); if (i && i.showPicker) { try { i.showPicker(); } catch (er) {} } });
-window.addEventListener("popstate", () => { S.mob = history.state && history.state.m === "edit" ? "edit" : "pick"; render(); });
+window.addEventListener("popstate", () => { if (history.state && history.state.m === "edit") { S.mob = "edit"; render(); scrollTo(0, 0); } else backToPick(); });
 /* 넓은 화면은 처음부터 칸이 보이고, 휴대폰은 고르기부터 */
 S.mob = matchMedia("(max-width:760px)").matches ? "pick" : "edit";
 const q0 = new URLSearchParams(location.search).get("s"); if (q0 && TPL.some(t => t.id === q0)) { S.id = q0; S.mob = "edit"; }

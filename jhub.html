@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#F0E8DB">
+<title>테스트 허브 | Blog J</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+<style>
+:root{--bg:#F0E8DB;--panel:#f7f2ea;--card:#fcf9f4;--in:#ece3d5;--ink:#1f2125;--sub:#5b5547;--sub2:#6f6857;--g:#195455;--gh:#12403f;--gl:#e3ece9;--or:#F56D03;--hair:rgba(90,74,50,.12);--up:3px 4px 9px rgba(160,140,108,.34),-3px -3px 8px rgba(255,255,255,.88)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:SUIT,"Pretendard",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-text-size-adjust:100%}
+a{color:inherit}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+.top{position:sticky;top:0;z-index:10;background:var(--panel);box-shadow:0 1px 0 var(--hair);padding:12px 16px}
+.top-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{width:36px;height:36px;border-radius:10px;background:var(--g);color:#fff;display:grid;place-items:center;font-weight:900;font-style:italic;font-size:19px;position:relative;flex-shrink:0}
+.badge i{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;background:var(--or);border:2px solid var(--panel)}
+.tt{font-weight:900;font-size:18px;letter-spacing:-.3px}
+.tt small{display:block;font-weight:600;font-size:12.5px;color:var(--sub2);letter-spacing:0}
+.sp{flex:1}
+.q{flex:1 1 220px;max-width:360px;padding:10px 12px;border-radius:11px;border:0;background:var(--card);box-shadow:inset 0 0 0 1px var(--hair);font:inherit;font-size:15px;outline:none;min-height:42px}
+.q:focus{box-shadow:inset 0 0 0 2px var(--g);background:#fff}
+.owner{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--card);box-shadow:0 0 0 1px var(--hair);font-size:13.5px;font-weight:800;color:var(--sub)}
+.owner .dot{width:9px;height:9px;border-radius:50%;background:#9a9384}
+.owner.on{color:var(--g);box-shadow:0 0 0 1.5px var(--g)}
+.owner.on .dot{background:#2f7d4f}
+.wrap{max-width:1180px;margin:0 auto;padding:16px 16px 60px}
+.note{font-size:13.5px;color:var(--sub);line-height:1.65;margin:2px 0 16px;padding-left:12px;border-left:3px solid var(--or)}
+.sec{margin:22px 0 10px;display:flex;align-items:baseline;gap:10px}
+.sec h2{margin:0;font-size:16px;font-weight:900;letter-spacing:-.2px}
+.sec span{font-size:12.5px;color:var(--sub2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--up);padding:14px 14px 12px;min-width:0}
+.ch{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ch b{font-size:16px;font-weight:900;letter-spacing:-.3px}
+.ver{font-size:12.5px;font-weight:800;color:var(--g);background:var(--gl);border-radius:999px;padding:2px 8px}
+.st{font-size:12.5px;font-weight:700;color:var(--sub2);margin-left:auto;white-space:nowrap}
+.st.soon{color:#a0520c}
+.st.dev{color:#7a4b2a}
+.ty{font-size:12.5px;color:var(--sub2);margin:4px 0 10px}
+.links{display:flex;flex-wrap:wrap;gap:6px}
+.links a{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border-radius:10px;font-size:13.5px;font-weight:800;text-decoration:none;background:var(--panel);box-shadow:0 0 0 1px var(--hair)}
+.links a:hover{box-shadow:0 0 0 1.5px var(--g);color:var(--g)}
+.links a.main{background:var(--g);color:#fff;box-shadow:none}
+.links a.main:hover{background:var(--gh);color:#fff}
+.links a.post{color:var(--sub)}
+.old{margin-top:10px;padding-top:9px;border-top:1px dashed var(--hair)}
+.old .lb{font-size:12.5px;font-weight:800;color:var(--sub2);margin-bottom:6px}
+.old a{font-weight:700}
+.gate{font-size:12.5px;color:#a0520c;margin-top:8px}
+.foot{font-size:12.5px;color:var(--sub2);text-align:center;margin-top:30px;line-height:1.7}
+.none{color:var(--sub2);padding:30px;text-align:center}
+@media (max-width:560px){.grid{grid-template-columns:1fr}.q{max-width:none;order:3;flex-basis:100%}.tt{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <div class="badge">J<i></i></div>
+  <div class="tt">테스트 허브<small>Blog J 모든 앱 · 지난 버전까지 (나만 보는 페이지)</small></div>
+  <div class="sp"></div>
+  <input class="q" id="q" type="search" placeholder="앱 찾기 — 레시피, 지방, v1.0…" autocomplete="off">
+  <button class="owner" id="owner" title="이 브라우저에서만 켜져요"><span class="dot"></span><span id="ownerT">시험 모드 꺼짐</span></button>
+</div></div>
+<div class="wrap">
+  <p class="note">모든 링크는 <b>새 창</b>으로 열려요. 블로그 경유 잠금이 있는 웹 도구는 <b>오른쪽 위 「시험 모드」를 켠 기기에서만</b> 바로 열려요(기기 · 브라우저마다 한 번). 시험 모드를 끄면 일반 방문자처럼 막힘 화면이 나와서 잠금도 확인할 수 있어요.</p>
+  <div id="list"></div>
+  <div class="foot">이 페이지는 블로그 어디에도 링크하지 않아요 · 새 앱 · 새 버전을 만들면 Claude가 같이 추가하고, 지난 버전은 지우지 않아요.<br><span id="today" class="num"></span></div>
+</div>
+<script>
+/* ═══ 앱 목록 — 새 앱 · 새 버전이 나오면 여기에 한 줄(지난 버전은 old로 옮기고 지우지 않음) ═══
+   kind: app = 설치형(주소 하나) · web = 블로그 실행형(잠금 있음) · dl = 다운로드판 · dev = 개발 중
+   open: 공개 시각(tools.json과 같게) · 없으면 개발 중 */
+const B = "https://pegasus0710-arch.github.io/jesa_tools/", P = n => "https://luvbong.tistory.com/" + n;
+const APPS = [
+ /* ── 설치형 앱 ── */
+ { g: "app", n: "레시피 노트", v: "v1.0", open: "2026-10-29T09:00", post: 788, links: [["열기", "recipe/"], ["설치 화면", "recipe/?install=1"]], old: [["다운로드판 v1.0 (zip)", "downloads/recipe-note-v1.0.zip"]] },
+ { g: "app", n: "스크랩 노트", v: "v1.0", open: "2026-11-14T09:00", post: 792, links: [["열기", "scrap/"], ["설치 화면", "scrap/?install=1"]] },
+ { g: "app", n: "여행 노트", v: "v3.0", open: "2027-01-01T09:00", post: 793, note: "793 공개 연기 — trip / trip2 / trip3 중 정하는 중", links: [["v3.0 열기", "trip3/"], ["설치 화면", "trip3/?install=1"]], old: [["v2.0", "trip2/"], ["v1.0", "trip/"]] },
+ { g: "app", n: "일기 노트", v: "v1.0", open: "2026-11-20T09:00", note: "시험 사용 중", links: [["열기", "diary/"], ["설치 화면", "diary/?install=1"]] },
+ { g: "app", n: "가계부 달력", v: "v1.1", open: "2026-09-19T09:00", post: 725, links: [["열기", "budget/"], ["설치 화면", "budget/?install=1"]], old: [["v1.0 다운로드판 (zip)", "downloads/budget-calendar-v1.0.zip"]] },
+ { g: "app", n: "매매일지", v: "v1.1", open: "2026-09-19T09:00", post: 726, links: [["열기", "trading/"], ["설치 화면", "trading/?install=1"]], old: [["v1.0 다운로드판 (zip)", "downloads/trading-journal-v1.0.zip"]] },
+ { g: "app", n: "견적서 발행기", v: "v1.0", open: "2026-10-22T09:00", post: 784, links: [["열기", "quote/"], ["설치 화면", "quote/?install=1"], ["다운로드판 (zip)", "downloads/quote-issuer-v1.0.zip"]] },
+ { g: "app", n: "자기소개서 쓰기", v: "v1.0", open: "2026-10-24T09:00", post: 786, links: [["열기", "jaso/"], ["다운로드판 (zip)", "downloads/jaso-writer-v1.0.zip"]] },
+ { g: "app", n: "사진 뷰어", v: "v1.0", open: "2026-11-17T09:00", post: 794, links: [["열기(PC)", "photo/"], ["다운로드판 (zip)", "downloads/photo-viewer-v1.0.zip"]] },
+ { g: "app", n: "이미지 편집기", v: "v2.0", open: "2026-11-18T09:00", post: 798, links: [["열기(PC)", "photo-editor/"], ["다운로드판 (zip)", "downloads/photo-editor-v2.0.zip"]] },
+ { g: "app", n: "무료 도구 키트", v: "v1.0", open: "2026-10-31T17:00", post: 803, links: [["열기", "kit/"], ["설치 화면", "kit/?install=1"]] },
+ /* ── 블로그 실행형 웹 도구 ── */
+ { g: "web", n: "제사 지방 출력", v: "v2.0", open: "2026-09-21T09:00", post: 727, links: [["지방", "jibang-v2.0.html?tab=print"], ["제사 날짜 계산", "jibang-v2.0.html?tab=calc"], ["차례상", "jibang-v2.0.html?tab=charye"]], old: [["v1.0 웹", "jibang.html"], ["v2.0 다운로드판 (zip)", "downloads/jesa-jibang-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/jesa-jibang-v1.0.zip"], ["제사 도구 설명서 PDF", "downloads/jesa-tools-manual.pdf"]] },
+ { g: "web", n: "축문 자동 작성", v: "v2.0", open: "2026-10-17T09:00", post: 744, links: [["기제사", "chukmun-v2.0.html?tab=all"], ["시제 · 묘제", "chukmun-v2.0.html?tab=sije"]], old: [["v1.1", "chukmun-v1.1.html"], ["v1.0", "chukmun.html"]] },
+ { g: "web", n: "라벨 출력기", v: "v2.0", open: "2026-10-16T09:00", post: 769, links: [["전체", "label-v2.0.html?tab=all"], ["주소 라벨", "label-v2.0.html?tab=addr"], ["일반 라벨", "label-v2.0.html?tab=gen"]], old: [["v1.0 웹", "label.html"], ["v2.0 다운로드판 (zip)", "downloads/label-printer-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/label-printer-v1.0.zip"], ["주소 검색 시험", "juso-test.html"]] },
+ { g: "web", n: "달력 만들기", v: "v1.1", open: "2026-11-06T20:00", post: 802, links: [["전체", "calendar-v1.1.html?tab=month"], ["탁상 달력", "calendar-v1.1.html?tab=desk"], ["주간 일정표", "calendar-v1.1.html?tab=week"], ["1년 계획", "calendar-v1.1.html?tab=plan"]], old: [["v1.0", "calendar-v1.0.html"]] },
+ { g: "web", n: "다이어리 속지 만들기", v: "v1.0", open: "2026-11-10T20:00", post: 808, links: [["열기", "planner-v1.0.html"]] },
+ { g: "web", n: "파일 변환", v: "v1.0", open: "2026-11-14T20:00", post: 809, links: [["처음", "convert-v1.0.html"], ["HEIC → JPG", "convert-v1.0.html?tab=heic"], ["CSV 한글", "convert-v1.0.html?tab=csv"]] },
+ { g: "web", n: "무료 아이콘", v: "v1.0", open: "2026-11-11T09:00", post: 812, links: [["열기", "icon-v1.0.html"]] },
+ { g: "web", n: "무료 양식", v: "v1.0", open: "2026-11-08T20:00", post: 804, links: [["열기", "form-v1.0.html"]] },
+ { g: "web", n: "김치 양념 계산기", v: "v1.0", open: "2026-11-08T09:00", post: 805, links: [["열기", "kimchi-v1.0.html"]] },
+ { g: "web", n: "PDF 편집 도구", v: "v1.0", open: "2026-10-19T22:00", post: 745, links: [["열기", "pdf.html"]] },
+ { g: "web", n: "이미지 도구", v: "v1.0", open: "2026-10-01T09:00", post: 732, links: [["전체", "image.html?tab=all"], ["용량 줄이기", "image.html?tab=compress"], ["증명사진", "image.html?tab=idphoto"]], old: [["v1.0 다운로드판 (zip)", "downloads/image-tool-v1.0.zip"]] },
+ { g: "web", n: "차트 만들기", v: "v1.0", open: "2026-10-12T22:00", post: 748, links: [["열기", "chart.html?tab=all"]] },
+ { g: "web", n: "쓰기 연습장", v: "v1.0", open: "2026-10-06T09:00", post: 739, links: [["한글", "write.html?tab=ko"], ["받아쓰기", "write.html?tab=test"], ["영어", "write.html?tab=en"]] },
+ /* ── 개발 중 · 샘플 ── */
+ { g: "dev", n: "문자 · 인사말 만들기", v: "샘플", links: [["열기", "msg-v1.0.html"]], note: "검토 중 — 41가지 상황" },
+ { g: "dev", n: "복불복 게임", v: "v1.0", links: [["열기", "game-v1.0.html"]] },
+ /* ── 블로그 · 관리 ── */
+ { g: "etc", n: "블로그 · 관리", v: "", links: [["블로그 첫 화면", P("")], ["무료 도구 페이지", P("pages/tools")], ["블로그 관리", P("manage")], ["tools.json", "tools.json"], ["실행 카드 launch.html", "launch.html"], ["개인정보 처리방침", "privacy.html"]] }
+];
+const SEC = { app: ["설치형 앱", "주소 하나로 PC · 휴대폰 — 잠금 없음"], web: ["블로그 실행형 웹 도구", "잠금 있음 — 시험 모드에서 바로 열림"], dev: ["개발 중 · 샘플", "블로그에 아직 안 나간 것"], etc: ["블로그 · 관리", ""] };
+const WK = "일월화수목금토", ymdw = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}(${WK[d.getDay()]})`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const U = h => /^https?:/.test(h) ? h : B + h;
+const A = (l, cls) => `<a class="${cls || ""}" href="${esc(U(l[1]))}" target="_blank" rel="noopener">${esc(l[0])}</a>`;
+function status(a) {
+  if (a.g === "dev" || !a.open) return ['<span class="st dev">개발 중</span>'];
+  const t = new Date(a.open + ":00+09:00"); return [Date.now() >= t ? `<span class="st num">공개 ${ymdw(t)}</span>` : `<span class="st soon num">공개 예정 ${ymdw(t)}</span>`];
+}
+function draw() {
+  const q = document.getElementById("q").value.trim().toLowerCase(); let h = "";
+  for (const g of Object.keys(SEC)) {
+    const items = APPS.filter(a => a.g === g && (!q || (a.n + " " + a.v + " " + (a.note || "") + " " + a.links.concat(a.old || []).map(l => l.join(" ")).join(" ")).toLowerCase().includes(q)));
+    if (!items.length) continue;
+    h += `<div class="sec"><h2>${SEC[g][0]}</h2><span>${SEC[g][1]}</span></div><div class="grid">`;
+    for (const a of items) {
+      h += `<div class="card"><div class="ch"><b>${esc(a.n)}</b>${a.v ? `<span class="ver">${esc(a.v)}</span>` : ""}${a.g !== "etc" ? status(a)[0] : ""}</div>`;
+      h += a.note ? `<div class="ty">${esc(a.note)}</div>` : `<div class="ty">${a.g === "app" ? "설치형" : a.g === "web" ? "블로그 실행형" : a.g === "dev" ? "개발 중" : "바로가기"}</div>`;
+      h += `<div class="links">${a.links.map((l, i) => A(l, i === 0 && a.g !== "etc" ? "main" : "")).join("")}${a.post ? A(["블로그 글 " + a.post, P(a.post)], "post") : ""}</div>`;
+      if (a.old && a.old.length) h += `<div class="old"><div class="lb">지난 버전 · 다운로드판</div><div class="links">${a.old.map(l => A(l)).join("")}</div></div>`;
+      if (a.g === "web" && !owner()) h += `<div class="gate">시험 모드가 꺼져 있어 막힘 화면이 나와요(블로그 글의 실행 카드로는 열려요)</div>`;
+      h += `</div>`;
+    }
+    h += `</div>`;
+  }
+  document.getElementById("list").innerHTML = h || `<div class="none">찾는 앱이 없어요</div>`;
+}
+/* 시험 모드: 같은 사이트(pegasus0710-arch.github.io)의 모든 도구가 이 값을 보고 잠금을 건너뜀 — 이 브라우저에만 */
+const owner = () => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } };
+function paintOwner() { const on = owner(), b = document.getElementById("owner"); b.classList.toggle("on", on); document.getElementById("ownerT").textContent = on ? "시험 모드 켜짐" : "시험 모드 꺼짐"; }
+document.getElementById("owner").onclick = () => { try { owner() ? localStorage.removeItem("bj-owner") : localStorage.setItem("bj-owner", "1"); } catch (e) {} paintOwner(); draw(); };
+document.getElementById("q").oninput = draw;
+document.getElementById("today").textContent = "오늘 " + ymdw(new Date());
+paintOwner(); draw();
+</script>
+</body>
+</html>

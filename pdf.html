@@ -464,7 +464,7 @@ const BJ_GATE = (() => {
 
   /* 시작할 때 확인: true면 도구를 띄움 */
   async function check(key, tab) {
-    if (dev) { embedOK = inFrame; return true; }
+    if (dev || (() => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } })()) { embedOK = inFrame && (dev || fromBlog()); return true; }   /* 11-10: 주인 시험 모드 — 테스트 허브(jhub.html)에서 이 기기에 켠 경우만 */
     if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }
     try { const v = sessionStorage.getItem(S + key);
       if (v) { if (v !== "1" && v !== (tab || "all")) { const q = new URLSearchParams(location.search); q.set("tab", v); location.replace(location.pathname + "?" + q.toString()); return false; } return true; } } catch (e) {}

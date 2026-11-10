@@ -488,7 +488,7 @@ const BJ_GATE = (() => {
 
   /* 시작할 때 확인: true면 도구를 띄움 */
   async function check(key, tab, opts) {
-    if (dev) { embedOK = inFrame; return true; }
+    if (dev || (() => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } })()) { embedOK = inFrame && (dev || fromBlog()); return true; }   /* 11-10: 주인 시험 모드 — 테스트 허브(jhub.html)에서 이 기기에 켠 경우만 */
     /* 예전 글 호환: 블로그 글의 링크를 눌러 들어온 경우 허용 (프로그램 창 → 실행 카드로 바꾸기 전까지만) */
     if (!inFrame && opts && opts.legacyReferrer && (document.referrer || "").startsWith(BJ_BLOG + "/")) return true;
     if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }

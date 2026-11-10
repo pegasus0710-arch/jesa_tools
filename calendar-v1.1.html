@@ -1125,9 +1125,9 @@ function DayHead({ d, st, annMap, row }) {
 function WeekPage({ d0, st, annMap, land }) {
   const lc = LINE[st.line] || LINE.gray, days = Array.from({ length: 7 }, (_, i) => { const d = new Date(d0); d.setDate(d0.getDate() + i); return d; });
   const d6 = days[6], same = d0.getMonth() === d6.getMonth();
-  const range = `${d0.getMonth() + 1}월 ${d0.getDate()}일 ~ ${same ? "" : d6.getMonth() + 1 + "월 "}${d6.getDate()}일`;
+  const range = `${ymdw(d0)} ~ ${ymdw(d6)}`;   /* 11-10: 날짜 표기 규칙(2026-11-08(일)) — 예전 「11월 8일 ~ 14일」 */
   const legend = [st.hol && "빨간 날 = 공휴일 · 대체공휴일", st.lun !== "off" && "음 = 음력", st.term && "절기 = 24절기"].filter(Boolean);
-  const head = html`<div class="cl-wh2"><div class="cl-wttl"><span class="cl-wno">WEEK ${isoWeek(d0)}</span><b>${range}</b><span class="cl-wyr">${d0.getFullYear()}${same ? "" : ""}</span></div>${st.motto ? html`<div class="cl-motto">${st.motto}</div>` : null}</div>`;
+  const head = html`<div class="cl-wh2"><div class="cl-wttl"><span class="cl-wno">WEEK ${isoWeek(d0)}</span><b>${range}</b></div>${st.motto ? html`<div class="cl-motto">${st.motto}</div>` : null}</div>`;
   const ft = html`<div class="cl-ft"><span>${legend.join("   ·   ")}</span><span>Blog J 달력 만들기</span></div>`;
   const todo = html`<div class="cl-wtd"><div class="cl-wbx"><b>이번 주 할 일</b>${Array.from({ length: land ? 9 : 6 }, () => html`<div class="cl-wck"><i></i><span></span></div>`)}</div>
     <div class="cl-wbx m"><b>메모</b><div class="cl-wln">${Array.from({ length: land ? 6 : 5 }, () => html`<i></i>`)}</div></div></div>`;

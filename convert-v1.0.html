@@ -292,7 +292,7 @@ function vHeic() {
         <p class="note">${S.keep.date && S.keep.gps && S.keep.dev ? "지금은 모든 정보를 그대로 남겨요. 블로그 · 중고 거래에 올릴 사진이면 「찍은 위치」 체크를 풀어 주세요." : `${KEEPS.filter(([k]) => !S.keep[k]).map(([, n]) => n).join(" · ")}을(를) 지워요.`}</p></div>
     </div></div>
   ${it.length ? `<div class="sum"><span class="t"><b>${it.length}장</b> 중 <b>${done}장</b> 바꿈${bad ? ` · <span style="color:var(--red)">${bad}장 실패</span>` : ""}</span>
-    <div class="acts"><button class="btn s" data-a="clear">${SV(G.x)} 목록 비우기</button><button class="btn p" data-a="zip"${done ? "" : " disabled"}>${SV(G.down)} ${done > 1 ? `모두 받기 (zip · ${done}장)` : "받기"}</button></div></div>
+    <div class="acts"><button class="btn s" data-a="clear">${SV(G.x)} 목록 비우기</button><button class="btn p" data-a="zip"${done && !S.busy ? "" : " disabled"}>${SV(G.down)} ${S.busy ? `바꾸는 중… (${done}/${it.length})` : done > 1 ? `모두 받기 (zip · ${done}장)` : "받기"}</button></div></div>
     <div class="bar${S.busy ? "" : " hide"}"><i id="pb"></i></div>
     <div class="list">${it.map((x, i) => `<div class="row"><div class="th">${x.thumb ? `<img src="${x.thumb}" alt="">` : SV(G.photo)}</div>
       <div class="nm"><b>${esc(x.f.name)}</b><span class="${x.err ? "err" : x.out ? "ok" : ""}">${x.err ? esc(x.err) : x.out ? `${kb(x.f.size)} → JPG ${kb(x.out.size)} · ${x.w}×${x.h}` : x.run ? "바꾸는 중…" : `${kb(x.f.size)} · 기다리는 중`}</span></div>
@@ -360,11 +360,12 @@ async function runHeic() {
   let n = 0, total = todo().length;
   for (let x; (x = todo()[0]);) {
     x.run = true; render(); const pb = $("#pb"); if (pb) pb.style.width = (n / Math.max(1, total) * 100) + "%";
-    try { await convOne(lib, x); } catch (e) { x.err = "바꾸지 못했어요 — " + (e && e.message ? e.message : "HEIC 파일이 아니거나 손상됐어요"); }
+    const g = GEN; try { await convOne(lib, x); } catch (e) { x.err = "바꾸지 못했어요 — " + (e && e.message ? e.message : "HEIC 파일이 아니거나 손상됐어요"); }
+    if (g !== GEN) { x.out = null; x.err = null; x.thumb = null; }   /* 바꾸는 도중 설정이 바뀌면 이 사진은 새 설정으로 다시 */
     x.run = false; n++; total = Math.max(total, n + todo().length);
     await new Promise(r => setTimeout(r, 30));
   }
-  S.busy = false; if (S.redo) { S.redo = false; redo(); return; } render();
+  S.busy = false; render();
   const ok = S.items.filter(x => x.out).length; if (ok) toast(`${ok}장을 JPG로 바꿨어요`);
 }
 async function convOne(lib, x) {
@@ -551,7 +552,7 @@ document.addEventListener("click", async e => {
   if (d.out) { saveCsv(d.out); return; }
   if (d.dl != null) { const x = S.items[+d.dl]; if (x && x.out) saveBlob(x.out, uniqNames([x])[0].name); return; }
   if (d.a === "clear") { if (S.busy) return; S.items = []; render(); return; }
-  if (d.a === "zip") { const ok = S.items.filter(x => x.out); if (!ok.length) return; if (ok.length === 1) { saveBlob(ok[0].out, uniqNames(ok)[0].name); return; }
+  if (d.a === "zip") { if (S.busy) return; const ok = S.items.filter(x => x.out); if (!ok.length) return; if (ok.length === 1) { saveBlob(ok[0].out, uniqNames(ok)[0].name); return; }
     b.disabled = true; const z = await makeZip(uniqNames(ok)); saveBlob(z, "HEIC변환_JPG_" + ymd(new Date()) + ".zip"); b.disabled = false; toast(`${ok.length}장을 zip 하나로 받았어요`); }
 });
 document.addEventListener("change", e => { const k = e.target.dataset && e.target.dataset.keep; if (!k) return; S.keep[k] = e.target.checked; save(); redo(); });
@@ -559,7 +560,9 @@ document.addEventListener("change", e => { const k = e.target.dataset && e.targe
 function goTab(t, pop) { S.tab = t; if (!pop) try { const q = new URLSearchParams(location.search); q.set("tab", t === "home" ? "all" : t); history.pushState({ bjt: t }, "", location.pathname + "?" + q.toString()); } catch (er) {} render(); window.scrollTo(0, 0); }
 window.addEventListener("popstate", e => { goTab(e.state && e.state.bjt || "home", true); });
 /* 화질 · 크기 · 정보를 바꾸면 이미 바꾼 사진도 새 설정으로 다시 */
-function redo() { if (S.items.length && S.busy) { S.redo = true; render(); return; } if (S.items.length && !S.busy) { S.items.forEach(x => { x.out = null; x.err = null; x.thumb = null; }); render(); runHeic(); } else render(); }
+/* 11-10: 바꾸는 도중에 설정을 바꾸면 예전 설정으로 바꾼 사진을 바로 지우고(받기 단추도 막음) 새 설정으로 이어서 바꿈 — 예전엔 다 끝날 때까지 예전 사진을 「모두 받기」로 받을 수 있었음 */
+let GEN = 0;
+function redo() { GEN++; if (!S.items.length) { render(); return; } S.items.forEach(x => { x.out = null; x.err = null; x.thumb = null; }); render(); if (!S.busy) runHeic(); }
 
 const GATE_ON = Date.now() >= Date.parse("2026-11-14T20:00:00+09:00");   // 첫 글(HEIC → JPG) 공개 2026-11-14(토) 20:00부터 블로그 경유 잠금
 (async () => { const T = new URLSearchParams(location.search).get("tab") || "all"; if (GATE_ON && !(await BJ_GATE.check("convert", T))) return;

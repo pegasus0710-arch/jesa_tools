@@ -911,6 +911,11 @@ input[type=text]:not(.inp):focus,input[type=number]:not(.inp):focus{box-shadow:i
 .bar-in .ruler::before{display:none!important}
 
 
+
+/* 11-10: 900px 안팎에서 위 탭 · 머리 글자가 두 줄로 꺾이던 것 */
+.pcnav button,.bn small,.bn b,.bn strong{white-space:nowrap}
+@media (max-width:1100px){.pcnav{margin-left:10px}.pcnav button{padding:9px 11px}}
+@media (max-width:980px){.bn small{display:none}}
 </style></head>
 <body>
 <div id="root"></div><div id="print"></div><div id="toast" role="status" aria-live="polite"></div><div id="busy"><div>사진을 줄이는 중…</div></div>
@@ -1330,12 +1335,14 @@ function fmtQ0(v, u) {
   if (u === "mL") { if (v >= 1000) return (Math.round(v / 100) / 10).toLocaleString("ko-KR") + "L"; return (v >= 100 ? Math.round(v / 10) * 10 : Math.max(1, Math.round(v))) + "mL"; }
   if (u === "kg") return (Math.round(v * 100) / 100).toLocaleString("ko-KR") + u; if (u === "L") return (Math.round(v * 10) / 10).toLocaleString("ko-KR") + u;
   if (["인분", "%"].includes(u)) return (Math.round(v * 10) / 10).toLocaleString("ko-KR") + u;
-  const step = ["컵", "큰술", "작은술", "단", "모", "포기"].includes(u) ? 0.25 : 0.5;
-  let r = Math.round(v / step) * step; if (r === 0) r = step;
-  const w = Math.floor(r), fr = Math.round((r - w) * 100) / 100;
-  return ((w ? w : "") + (fr ? FR[fr] : "") || "0") + u;
+  const r = roundQ(v, u), w = Math.floor(r + 1e-9), fr = r - w;
+  return ((w ? w : "") + (fr > 1e-6 ? FRL(fr) : "") || "0") + u;
 }
-function fmtA(v, u) { if (v == null || ["g", "kg", "mL", "L", "약간", "인분"].includes(u)) return fmtQ(v, u); const step = ["컵", "큰술", "작은술", "단", "모", "포기"].includes(u) ? 0.25 : 0.5; return (Math.abs(Math.round(v / step) * step - v) > 0.01 ? "약 " : "") + fmtQ(v, u); }
+/* 11-10: 분수 어림에 ⅓ · ⅔ 추가 — 애호박 ⅓개가 「약 ½개」로 보이던 것. 컵 · 큰술처럼 잘게 나누는 단위는 ¼ · ⅓ · ½ · ⅔ · ¾, 개처럼 세는 단위는 ⅓ · ½ · ⅔ 중 가장 가까운 것 */
+const FRQ = u => ["컵", "큰술", "작은술", "단", "모", "포기"].includes(u) ? [0, 0.25, 1 / 3, 0.5, 2 / 3, 0.75, 1] : [0, 1 / 3, 0.5, 2 / 3, 1];
+const FRL = f => Math.abs(f - 0.25) < 0.01 ? "¼" : Math.abs(f - 1 / 3) < 0.01 ? "⅓" : Math.abs(f - 0.5) < 0.01 ? "½" : Math.abs(f - 2 / 3) < 0.01 ? "⅔" : Math.abs(f - 0.75) < 0.01 ? "¾" : "";
+function roundQ(v, u) { const c = FRQ(u), w = Math.floor(v), f = v - w; let best = c[0]; for (const x of c) if (Math.abs(x - f) < Math.abs(best - f)) best = x; let r = w + best; if (r <= 0) r = c[1]; return r; }
+function fmtA(v, u) { if (v == null || ["g", "kg", "mL", "L", "약간", "인분"].includes(u)) return fmtQ(v, u); return (Math.abs(roundQ(v, u) - v) > 0.01 ? "약 " : "") + fmtQ(v, u); }
 const fmtN = v => (Math.round(v * 100) / 100).toLocaleString("ko-KR");
 function amtState(r) { const a = S.amt[r.id]; return a || { a: r.off ? r.def : (r.base || 1), u: r.bu || "인분" }; }
 function factorOf(r, a, u) { if (!(r.base > 0)) return 1; let v = a; if (!r.off && u === "인분" && r.bu !== "인분" && r.serv > 0) v = a / r.serv * r.base; if (r.off && r.k.id === "baechu" && u === "포기") v = a * KG_PER_HEAD; return v / r.base; }
@@ -1668,7 +1675,7 @@ function looksIng(l) { if (STEP_NO.test(l) && l.length > 18) return false; if (/
 const GRP_KW = "주재료|메인\\s*재료|부재료|속\\s*재료|채소|양념장|양념|소스|드레싱|고명|육수|반죽|토핑|밑간|절임물|국물|튀김옷|시럽|크림|장식";
 const GRP_RE = new RegExp("^[\\[［【<〈(]?\\s*([가-힣A-Za-z ]{0,8}?(?:" + GRP_KW + ")(?:\\s*재료)?)\\s*[\\]］】>〉)]?\\s*([:：])?\\s*(.*)$");
 function grpHead(l) { const m = l.match(GRP_RE); if (!m) return null; const rest = m[3] || "";
-  if (rest && !m[2]) return null;            /* 「다진 양념 1큰술」은 재료 — 머리말은 뒤가 비었거나 「:」가 있을 때만 */
+  if (rest && !m[2] && !/^[\[［【<〈(][^\]］】>〉)]{1,14}[\]］】>〉)]/.test(l)) return null;            /* 「다진 양념 1큰술」은 재료 — 머리말은 뒤가 비었거나 「:」 · 괄호로 닫혔을 때만(11-10: 「[양념장] 고추장 2큰술」도 묶음으로) */
   if (!rest && /[0-9]/.test(l)) return null;
   const nm = m[1].replace(/\s*재료$/, "").trim() || m[1].trim(); return { h: nm === "주" ? "주재료" : nm === "부" ? "부재료" : nm, rest }; }
 /* 한 줄에 여러 재료가 띄어쓰기로만 붙은 것(사진 글자 인식에서 흔함): 「양상추 100g 방울토마토 10개」 → 쉼표로 나눔 */
@@ -1683,7 +1690,9 @@ function parseWhole(txt, wantName) {
     else if ((m = l.match(ING_HD)) && l.length <= 20 + (m[2] || "").length) { mode = "i"; if (m[2]) l = m[2]; else return; }
     l = l.replace(/^[(（]\s*(.*?)\s*[)）]$/, "$1");
     if (/^[0-9]+(?:\.[0-9]+)?\s*(인분|인 분|kg|포기|마리|줄|판|개)\s*(기준|분량)?\s*$/.test(l)) return; /* 「2인분 기준」 줄은 기준으로만 읽음 */
-    if (wantName && i === 0 && !name && !/[0-9]/.test(l) && l.length <= 20 && lines.length > 2 && !/[:：]$|^[\[［【<〈]|(요|다|세요|니다)[.!]?$/.test(l)) { name = l; return; }
+    if (wantName && i === 0 && !name && lines.length > 2) { /* 11-10: 「제육볶음 (2인분)」처럼 이름 뒤 기준(인분 · kg)은 떼고 이름으로 읽음 — 기준 숫자는 붙여넣을 때 따로 읽음 */
+      const nm = l.replace(/\s*[(（]?\s*[0-9]+(?:\.[0-9]+)?\s*(?:인분|인 분|kg|포기|마리|줄|판|개)\s*(?:기준|분량)?\s*[)）]?\s*$/, "").trim();
+      if (nm && !/[0-9]/.test(nm) && nm.length <= 20 && !/[:：]$|^[\[［【<〈]|(요|다|세요|니다)[.!]?$/.test(nm)) { name = nm; return; } }
     const g = mode !== "s" || !hasHd ? grpHead(l) : null;
     if (g) { mode = "i"; hasHd = true; ingL.push("[" + g.h + "]"); if (g.rest) ingL.push(splitIngLine(g.rest)); return; }
     if (mode === "i" && (STEP_NO.test(l) || /(요|다|세요|니다)[.!]?$/.test(l)) && !looksIng(l)) mode = "s"; /* 「만드는 법」 머리말 없이 번호 문장이 나오면 순서로 */

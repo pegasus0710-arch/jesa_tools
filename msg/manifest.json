@@ -1,0 +1,30 @@
+{
+ "id": "/jesa_tools/msg/",
+ "name": "문자 · 인사말 — Blog J",
+ "short_name": "문자 · 인사말",
+ "description": "부고 · 청첩 · 결석 · 집주인 문자를 칸만 채워 만들고, 자주 쓰는 문자는 저장해 두고 바로 복사",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#F0E8DB",
+ "theme_color": "#F0E8DB",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

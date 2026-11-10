@@ -113,6 +113,18 @@ button{cursor:pointer;border:0;background:none}
 .yt-foot{text-align:center;font-size:12.5px;color:var(--sub2);padding:0 16px 30px}
 .yt-foot a{color:var(--n);font-weight:700}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--n);color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+/* 기준 · 한도 표 */
+.lim{margin-top:18px;background:var(--card);border-radius:12px;box-shadow:var(--up);padding:12px 14px 10px}
+.lim h4{font-size:14.5px;font-weight:800;display:flex;gap:7px;align-items:center;margin-bottom:4px}
+.lim h4 svg{width:17px;height:17px;stroke:var(--n);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.lim table{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.45}
+.lim td{padding:7px 0;border-top:1px solid var(--hair);vertical-align:top}
+.lim td:first-child{font-weight:800;width:24%;padding-right:10px;word-break:keep-all}
+.lim td:nth-child(2){color:var(--sub);word-break:keep-all}
+.lim td.me{text-align:right;font-weight:800;color:var(--n);padding-left:10px;width:28%;word-break:keep-all;font-variant-numeric:tabular-nums}
+.lim .nt{font-size:12.5px;color:var(--sub2);margin-top:6px;line-height:1.5}
+.lim .nt b{color:var(--ink)}
+@media (max-width:520px){.lim table,.lim tbody,.lim tr,.lim td{display:block;width:auto!important}.lim tr{border-top:1px solid var(--hair);padding:7px 0}.lim td{border:0;padding:1px 0}.lim td.me{text-align:left;padding:2px 0 0}.lim td.me:empty{display:none}}
 /* 결과 단계 */
 .res-tbl .row span{min-width:0}
 @media (max-width:1100px){.grid2{grid-template-columns:1fr}}
@@ -333,7 +345,13 @@ const BJ_GATE = (() => {
     }
   }
 
+  /* 표준세액공제(13만원)와 특별공제(건강 · 고용보험 · 주택자금 소득공제 + 보험 · 의료 · 교육 · 기부 · 월세) 중 세금이 적은 쪽 */
   function calc(inp, year) {
+    const a = calc0(inp, year, false), b = calc0(inp, year, true);
+    const pick = b.decided < a.decided ? b : a; pick.alt = pick === a ? b : a; pick.stdChosen = pick === b;
+    return pick;
+  }
+  function calc0(inp, year, std) {
     const p = P[year || 2026];
     const t = nz(inp.salary);                       /* 총급여(비과세 뺀 금액) */
     const r = { year: p.year, label: p.label, salary: t, steps: [] };
@@ -342,16 +360,20 @@ const BJ_GATE = (() => {
     /* 인적공제 */
     const fam = inp.family || {};
     const nBasic = 1 + (fam.spouse ? 1 : 0) + nz(fam.kids) + nz(fam.parents) + nz(fam.others);
-    r.personal = nBasic * 1.5e6 + nz(fam.senior) * 1e6 + nz(fam.disabled) * 2e6 + (fam.single ? 1e6 : (fam.woman ? 5e5 : 0));
+    /* 부녀자: 종합소득금액(근로소득금액) 3천만원 이하만 */
+    r.womanOk = !!fam.woman && r.earnedIncome <= 3e7;
+    r.personal = nBasic * 1.5e6 + nz(fam.senior) * 1e6 + nz(fam.disabled) * 2e6 + (fam.single ? 1e6 : (r.womanOk ? 5e5 : 0));
     r.nBasic = nBasic;
     r.pensionIns = nz(inp.pensionIns);              /* 국민연금 등 */
-    r.healthIns = nz(inp.healthIns);                /* 건강 · 장기요양 · 고용 */
+    r.healthIns = std ? 0 : nz(inp.healthIns);      /* 건강 · 장기요양 · 고용 (표준세액공제를 고르면 0) */
+    r.healthInsInput = nz(inp.healthIns);
     /* 주택 */
-    const h = inp.housing || {};
+    const h = std ? { homeless: (inp.housing || {}).homeless, saving: (inp.housing || {}).saving } : (inp.housing || {});
     const saving = t <= 70e6 && h.homeless ? Math.min(nz(h.saving), 3e6) * 0.4 : 0;
     const lease = Math.min(nz(h.lease) * 0.4, Math.max(0, 4e6 - saving));
     r.housingSaving = fl(saving); r.housingLease = fl(lease);
-    r.mortgage = fl(Math.min(nz(h.mortgage), nz(h.mortgageCap) || 0));
+    /* 장기주택저당 이자 한도(600~2,000만원)는 청약저축 · 전세대출 공제와 합친 한도 */
+    r.mortgage = fl(Math.min(nz(h.mortgage), Math.max(0, (nz(h.mortgageCap) || 0) - saving - lease)));
     r.card = cardDeduction(t, inp.card || {}, p, inp.cardKids != null ? inp.cardKids : nz(fam.kids));
     /* 소득공제 종합한도 2,500만원(주택임차 · 이자 · 주택마련 · 신용카드 등) */
     const capped = r.housingLease + r.mortgage + r.housingSaving + r.card.deduct;
@@ -399,7 +421,7 @@ const BJ_GATE = (() => {
     cr.rent = rentOk ? fl(Math.min(nz(inp.rent), 1e7) * (t <= 55e6 ? 0.17 : 0.15)) : 0;
     /* 표준세액공제: 특별소득공제 · 특별세액공제 · 월세를 안 받으면 13만원 (정치 · 고향사랑 기부는 같이 됨) */
     const specTotal = cr.insurance + cr.medical + cr.edu + fl(Math.min(gsum, 1e7) * 0.15 + Math.max(0, gsum - 1e7) * 0.30) + cr.rent;
-    const useStd = !(r.healthIns + r.housingLease + r.mortgage > 0) && specTotal < 130000;
+    const useStd = std;
     cr.standard = useStd ? 130000 : 0;
     if (useStd) { cr.insurance = 0; cr.medical = 0; cr.edu = 0; cr.rent = 0; cr.donation = fl(polC + Math.min(home, 1e5) * 100 / 110 + Math.min(Math.max(0, home - 1e5), 1e5) * p.hometown2 + Math.max(0, home - 2e5) * 0.15); }
     r.credits = cr;
@@ -420,7 +442,7 @@ const BJ_GATE = (() => {
 </script>
 <script>/* ══════════ 연말정산 계산기 v1.0 — 화면 (Blog J, 2026-11-10) ══════════ */
 const TOOL = "yearend", APP_VER = "1.0", YEAR = 2026;
-const BUILD = "2026-11-10(화) 18:30";
+const BUILD = "2026-11-10(화) 23:00";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-yearend1";
 const STEPS = [["pay", "급여"], ["fam", "가족"], ["card", "카드"], ["spend", "보험·의료·교육"], ["save", "연금·주택·월세"], ["res", "결과"]];
@@ -489,7 +511,7 @@ function stepPay() {
   ${money("salary", "총급여", { sub: "연봉 − 비과세(식대 월 20만원 등)", hint: "원천징수영수증의 「총급여(⑯)」 칸 · 연봉에서 식대 · 자가운전보조금 같은 비과세를 뺀 금액" })}
   ${money("paid", "이미 낸 소득세", { sub: "기납부세액 · 지방소득세 빼고", hint: "급여명세서 「소득세」를 1년치 더한 금액(12월분 포함 예상) — 지방소득세는 이 금액의 10%로 계산해요" })}
   <div class="two">${money("pensionIns", "국민연금", { sub: "1년 합계" })}${money("healthIns", "건강 · 고용보험", { sub: "장기요양 포함" })}</div>
-  <div class="box">급여명세서의 「국민연금 · 건강보험 · 장기요양 · 고용보험」 1년치를 더해 넣어요. 회사가 낸 몫은 넣지 않아요.</div>`;
+  <div class="box">급여명세서의 「국민연금 · 건강보험 · 장기요양 · 고용보험」 1년치를 더해 넣어요. 회사가 낸 몫은 넣지 않아요.</div>${limPay(calcS())}`;
 }
 function stepFam() {
   const k = kidInfo();
@@ -505,7 +527,7 @@ function stepFam() {
   <div class="f"><div class="lb">2026년에 태어난(입양한) 아이<span>몇째인지</span></div><div class="chips">${chip("birthOrder", 0, "없어요")}${chip("birthOrder", 1, "첫째")}${chip("birthOrder", 2, "둘째")}${chip("birthOrder", 3, "셋째 이상")}</div></div>
   ${more("famMore", "경로우대 · 장애인 · 한부모 · 부녀자")}
   ${S.famMore ? `<div class="two">${count("senior", "70세 이상", "공제받는 가족 중 · 1956년 이전 출생")}${count("disabled", "장애인", "본인 포함 · 나이 상관없음")}</div>
-  <div class="f"><div class="lb">한부모 · 부녀자</div><div class="chips">${tog("single", "한부모")}${tog("woman", "부녀자")}</div><div class="hint">한부모 = 배우자 없이 20세 이하 자녀를 키움(100만원) · 부녀자 = 여성 근로자 · 종합소득금액 3천만원 이하(50만원) · 둘 다면 한부모만</div></div>` : ""}`;
+  <div class="f"><div class="lb">한부모 · 부녀자</div><div class="chips">${tog("single", "한부모")}${tog("woman", "부녀자")}</div><div class="hint">한부모 = 배우자 없이 20세 이하 자녀를 키움(100만원) · 부녀자 = 여성 근로자 · 종합소득금액 3천만원 이하(50만원) · 둘 다면 한부모만</div></div>` : ""}${limFam(calcS())}`;
 }
 function stepCard() {
   const r = calcS(), c = r.card, min = c.min;
@@ -517,7 +539,7 @@ function stepCard() {
   ${money("culture", "도서 · 공연 · 영화 · 박물관 · 수영장 · 헬스장", { sub: S.salary > 7e7 ? "총급여 7천만원 넘으면 신용카드로 계산" : "30%", hint: "수영장 · 체력단련장은 시설 이용료만(강습비 제외)" })}
   <div class="box">총급여의 25%(<b class="num">${won(min)}원</b>)를 넘게 쓴 부분부터 공제돼요 · 지금 <b class="num">${won(c.total)}원</b>
   <div class="cardbar"><i style="width:${pct}%"></i><s style="left:${mk}%"></s></div>${c.total <= min ? `25%까지 <b class="num">${won(min - c.total)}원</b> 남음 — 그 전까지는 공제 0원이라 혜택 많은 신용카드도 괜찮아요` : `공제 <b class="num">${won(c.deduct)}원</b> · 기본 한도 ${man(c.limitBasic)}${S.salary <= 7e7 ? "" : ""} 중 <b class="num">${won(c.basic)}원</b> 씀`}</div>
-  <div class="hint">홈택스 「연말정산 미리보기」에서 1~9월 카드 사용액을 볼 수 있어요. 형제자매 카드는 넣지 않아요.</div>`;
+  <div class="hint">홈택스 「연말정산 미리보기」에서 1~9월 카드 사용액을 볼 수 있어요. 형제자매 카드는 넣지 않아요.</div>${limCard(r)}`;
 }
 function eduRows() {
   return S.eduKids.map((e, i) => `<div class="edu"><div class="in"><select data-et="${i}" aria-label="교육비 ${i + 1} 구분"><option value="school"${e.t !== "univ" ? " selected" : ""}>취학 전 · 초중고</option><option value="univ"${e.t === "univ" ? " selected" : ""}>대학생</option></select></div><div class="in"><input class="amt" inputmode="numeric" data-ea="${i}" value="${e.a ? won(e.a) : ""}" placeholder="0" aria-label="교육비 ${i + 1} 금액"><em>원</em></div><button class="del" data-edel="${i}" aria-label="지우기" style="width:32px;height:32px;border-radius:8px;color:var(--sub2);font-size:20px">×</button></div>`).join("");
@@ -538,7 +560,7 @@ function stepSpend() {
   ${S.spendMore ? money("eduDis", "장애인 특수교육비", { sub: "한도 없음" }) : ""}
   <div class="yt-sec">기부금</div>
   <div class="two">${money("dnHome", "고향사랑기부", { sub: "10만원까지 전액 · 10만~20만원 40%" })}${money("dnGeneral", "일반 기부", { sub: "사회복지 · 단체 · 15%" })}</div>
-  ${S.spendMore ? `<div class="two">${money("dnPol", "정치자금(후원금)", { sub: "10만원까지 전액" })}${money("dnReligion", "종교단체", { sub: "15%" })}</div>${money("dnSpecial", "특례 기부", { sub: "국가 · 지자체 · 재해 · 국방헌금 등" })}` : ""}`;
+  ${S.spendMore ? `<div class="two">${money("dnPol", "정치자금(후원금)", { sub: "10만원까지 전액" })}${money("dnReligion", "종교단체", { sub: "15%" })}</div>${money("dnSpecial", "특례 기부", { sub: "국가 · 지자체 · 재해 · 국방헌금 등" })}` : ""}${limSpend(calcS())}`;
 }
 function stepSave() {
   const lim = S.salary <= 55e6 ? "15%" : "12%";
@@ -552,9 +574,73 @@ function stepSave() {
   ${more("saveMore", "전세대출 · 주택담보대출 이자 · 그 밖의 소득공제")}
   ${S.saveMore ? `${money("hLease", "전세자금대출 원리금 상환액", { sub: "40% · 청약저축과 합쳐 400만원까지" })}
   <div class="two">${money("hMortgage", "주택담보대출 이자", { sub: "장기주택저당차입금" })}<div class="f"><label for="f_cap">이자 공제 한도<span>상환 기간 · 방식</span></label><div class="in"><select id="f_cap" data-sel="hMortCap">${[[20000000, "15년 이상 · 고정 + 비거치 2,000만원"], [18000000, "15년 이상 · 고정 또는 비거치 1,800만원"], [8000000, "15년 이상 · 그 밖 800만원"], [6000000, "10년 이상 · 고정 또는 비거치 600만원"]].map(([v, t]) => `<option value="${v}"${S.hMortCap === v ? " selected" : ""}>${t}</option>`).join("")}</select></div></div></div>
-  ${money("otherDed", "그 밖의 소득공제", { sub: "소기업소상공인 · 벤처투자 · 우리사주 등", hint: "공제받을 금액을 직접 넣어요(납입액이 아니라 공제 금액)" })}` : ""}`;
+  ${money("otherDed", "그 밖의 소득공제", { sub: "소기업소상공인 · 벤처투자 · 우리사주 등", hint: "공제받을 금액을 직접 넣어요(납입액이 아니라 공제 금액)" })}` : ""}${limSave(calcS())}`;
 }
 
+
+/* ── 단계별 「기준 · 한도」 표 ── */
+const RATES = [[14e6, .06, "1,400만원 이하"], [50e6, .15, "1,400만~5,000만원"], [88e6, .24, "5,000만~8,800만원"], [150e6, .35, "8,800만~1.5억원"], [300e6, .38, "1.5억~3억원"], [500e6, .40, "3억~5억원"], [1e9, .42, "5억~10억원"], [Infinity, .45, "10억원 초과"]];
+const rateOf = tb => RATES.find(x => tb <= x[0]);
+/* 소득공제 금액 → 줄어드는 세금(지방소득세 포함, 내 세율 기준 어림) */
+function saveOf(r, amt) { if (!S.salary) return 0; return Math.round(amt * rateOf(r.taxBase)[1] * 1.1); }
+const pctT = n => (Math.round(n * 1000) / 10) + "%";
+function limBox(title, rows, note, r) {
+  return `<div class="lim"><h4>${IC.info}${title}</h4><table>${rows.filter(Boolean).map(([a, b, c]) => `<tr><td>${a}</td><td>${b}</td><td class="me">${c || ""}</td></tr>`).join("")}</table>${note ? `<p class="nt">${note}</p>` : ""}${r ? `<p class="nt">${dedNote(r)}</p>` : ""}</div>`;
+}
+function myRate(r) { const x = rateOf(r.taxBase); return `${pctT(x[1])}(지방세 포함 ${pctT(x[1] * 1.1)})`; }
+function dedNote(r) { return !S.salary ? "총급여를 넣으면 「내 상태」 칸에 내 기준 금액이 나와요." : r.decided <= 0 ? "지금은 낼 세금(결정세액)이 이미 0원이에요 — 표의 「세금 약」 금액은 세율로 어림한 값이라, 공제를 더 받아도 실제로 돌려받는 돈은 늘지 않아요(이미 낸 세금까지만 돌려받아요)." : `<b>소득공제</b>는 소득에서 빼는 것이라 내 세율 ${myRate(r)}만큼 세금이 줄고, <b>세액공제</b>는 세금에서 바로 빼요.`; }
+function limPay(r) {
+  const x = rateOf(r.taxBase), lim = YT.earnedCreditLimit(S.salary || 0);
+  return limBox("기준 · 한도 — 급여", [
+    ["근로소득공제", "총급여 구간별 자동 · 최대 2,000만원(총급여 약 3.6억원부터)", S.salary ? "내 " + man(r.earnedDed) : ""],
+    ["세율(과세표준)", "6% · 15%(1,400만원~) · 24%(5,000만원~) · 35%(8,800만원~) · 38% · 40% · 42% · 45%", S.salary ? `내 ${pctT(x[1])} 구간` : ""],
+    ["근로소득세액공제", "산출세액 130만원까지 55% · 넘는 부분 30% · 한도 총급여 3,300만원 이하 74만원 · 7,000만원 이하 66만~74만원 · 1.2억원 이하 50만~66만원", S.salary ? "내 한도 " + man(lim) : ""],
+    ["표준세액공제", "건강보험료 공제 · 보험 · 의료 · 교육 · 기부 · 월세를 안 받는 대신 13만원 — 계산기가 유리한 쪽을 골라요", r.stdChosen && S.salary ? "13만원 고름" : ""]
+  ], S.salary ? `내 과세표준 <b class="num">${won(r.taxBase)}원</b> → 세율 ${myRate(r)} 구간(${x[2]}).` : "", r);
+}
+function limFam(r) {
+  const k = kidInfo(), cr = r.credits;
+  return limBox("기준 · 한도 — 가족", [
+    ["기본공제", "1명당 150만원 소득공제(본인 포함)", S.salary ? `${r.nBasic}명 · 세금 약 ${man(saveOf(r, r.nBasic * 1.5e6))} 줄어요` : ""],
+    ["추가공제", "70세 이상 100만원 · 장애인 200만원 · 한부모 100만원 · 부녀자 50만원(근로소득금액 3천만원 이하)", S.woman && !r.womanOk && !S.single && S.salary ? "부녀자는 소득 초과로 빠짐" : ""],
+    ["자녀세액공제", "1명 25만원 · 2명 55만원 · 3명부터 1명당 40만원 더(2016년 이전 출생)", k.credit ? `${k.credit}명 · ${man(cr.child)}` : ""],
+    ["출산 · 입양", "첫째 30만원 · 둘째 50만원 · 셋째 이상 70만원", cr.birth ? man(cr.birth) : ""],
+    ["혼인", "2024~2026년 혼인신고 · 1인 1회 50만원(부부 각자)", cr.marriage ? "50만원" : ""],
+    ["신용카드 한도", "20세 이하 자녀 1명당 한도 +50만원(총급여 7천만원 넘으면 +25만원) · 2명까지", k.card ? `+${man(k.card * (S.salary > 7e7 ? 2.5e5 : 5e5))}` : ""]
+  ], "맞벌이는 같은 가족을 한 사람만 공제받아요. 보통 세율이 높은(소득이 많은) 쪽이 받는 게 유리해요.", r);
+}
+function limCard(r) {
+  const c = r.card, low = S.salary <= 7e7, k = kidInfo().card;
+  const lb = (low ? 3e6 : 2.5e6) + k * (low ? 5e5 : 2.5e5), le = low ? 3e6 : 2e6, min = (S.salary || 0) * 0.25;
+  return limBox("기준 · 한도 — 카드", [
+    ["공제 시작선", "총급여의 25%를 넘게 쓴 부분부터", S.salary ? man(min) : ""],
+    ["공제율", "신용카드 15% · 체크카드 · 현금영수증 30% · 문화체육 30%(총급여 7천만원 이하) · 전통시장 · 대중교통 40%", ""],
+    ["기본 한도", `총급여 7천만원 이하 300만원 · 넘으면 250만원 + 자녀 1명당 ${low ? "50" : "25"}만원(2명까지)`, S.salary ? `내 ${man(lb)} · ${man(c.basic)} 씀` : ""],
+    ["추가 한도", `전통시장 · 대중교통 · 문화체육 사용분만 ${man(le)} 더`, S.salary ? `${man(c.extra)} 씀` : ""],
+    ["최대 혜택", "기본 + 추가 한도까지만 소득공제(그 위로는 더 써도 0원)", S.salary ? `${man(lb + le)} · 세금 약 ${man(saveOf(r, lb + le))}` : ""],
+    S.salary ? ["한도 채우는 사용액", "기본 한도만 채울 때 · 시작선 + 한도 ÷ 공제율", `체크 ${man(Math.ceil((min + lb / .3) / 1e4) * 1e4)} · 신용 ${man(Math.ceil((min + lb / .15) / 1e4) * 1e4)}`] : null
+  ], "기본 한도를 넘었다면 체크카드보다 전통시장 · 대중교통 · 문화체육 사용분이 추가 한도로 더 공제돼요. 소득공제 종합한도는 주택자금과 합쳐 2,500만원.", r);
+}
+function limSpend(r) {
+  const cr = r.credits, th = (S.salary || 0) * 0.03;
+  return limBox("기준 · 한도 — 보험 · 의료 · 교육 · 기부(세액공제)", [
+    ["보장성 보험", "100만원까지 12%(장애인 전용 따로 100만원 · 15%)", `최대 12만원${cr.insurance ? " · 내 " + man(cr.insurance) : ""}`],
+    ["의료비", "총급여 3% 넘는 부분 15% · 그 밖의 가족 700만원까지 · 본인 · 65세 이상 · 6세 이하 · 장애인 한도 없음 · 난임 30% · 미숙아 20%", S.salary ? `시작선 ${man(th)}${cr.medical ? " · 내 " + man(cr.medical) : ""}` : ""],
+    ["교육비", "15% · 취학 전 · 초중고 1명 300만원(최대 45만원) · 대학생 900만원(최대 135만원) · 본인 한도 없음", cr.edu ? "내 " + man(cr.edu) : ""],
+    ["고향사랑기부", "10만원까지 100/110(지방세 포함 거의 전액) · 10만~20만원 40%(2026년부터) · 넘는 부분 15%", "20만원 기부 → 약 14.4만원 돌려받음"],
+    ["일반 · 종교 기부", "15%(1천만원 넘는 부분 30%) · 한도 근로소득금액 30%(종교 10%)", cr.donation ? "내 " + man(cr.donation) : ""]
+  ], r.stdChosen && S.salary ? "지금은 이 공제들보다 <b>표준세액공제 13만원</b>이 더 유리해 표준세액공제로 계산했어요(정치 · 고향사랑 기부는 같이 받아요)." : "이 공제들의 합이 13만원보다 적으면 표준세액공제 13만원으로 계산해요(계산기가 유리한 쪽을 골라요).");
+}
+function limSave(r) {
+  const pr = S.salary <= 55e6 ? .15 : .12, rr = S.salary <= 55e6 ? .17 : .15, cr = r.credits;
+  return limBox("기준 · 한도 — 연금 · 주택 · 월세", [
+    ["연금계좌", `연금저축 600만원 · IRP 합쳐 900만원까지 ${S.salary <= 55e6 ? "15%(총급여 5,500만원 이하)" : "12%(총급여 5,500만원 초과)"}`, `최대 ${man(9e6 * pr * 1.1)}(지방세 포함)${cr.pension ? " · 내 " + man(cr.pension * 1.1) : ""}`],
+    ["주택청약저축", "무주택 세대주 · 총급여 7천만원 이하 · 300만원까지 40% 소득공제", `최대 120만원 공제${S.salary ? " · 세금 약 " + man(saveOf(r, 1.2e6)) : ""}`],
+    ["전세대출 원리금", "상환액 40% 소득공제 · 청약저축과 합쳐 400만원", ""],
+    ["주택담보대출 이자", "상환 기간 · 방식에 따라 600만~2,000만원(청약 · 전세대출 공제와 합친 한도)", r.mortgage ? "내 " + man(r.mortgage) : ""],
+    ["월세", `무주택 세대주 · 총급여 8천만원 이하 · 1,000만원까지 ${pctT(rr)}`, `최대 ${man(1e7 * rr * 1.1)}(지방세 포함)${cr.rent ? " · 내 " + man(cr.rent * 1.1) : ""}`]
+  ], "카드 · 청약 · 전세대출 · 주택담보대출 이자 소득공제는 합쳐서 2,500만원까지예요.", r);
+}
 /* ── 결과 · 「더 돌려받는 방법」 ── */
 function tips(r) {
   const out = [], base = r.diffAll;
@@ -634,6 +720,7 @@ function stepRes(r) {
   ${L("지방소득세(결정세액 10%) − 이미 낸 지방소득세", (r.local - r.paidLocal === 0 ? "" : r.local - r.paidLocal < 0 ? "−" : "+") + won(Math.abs(r.local - r.paidLocal)))}
   ${L(r.diffAll <= 0 ? "모두 돌려받음" : "모두 더 냄", won(Math.abs(r.diffAll)) + "원", "t")}
   </div>
+  ${r.stdChosen ? `<div class="box" style="margin-top:14px">건강보험료 소득공제 · 보험 · 의료 · 교육 · 월세 공제를 받는 것보다 <b>표준세액공제 13만원</b>이 세금이 <b class="num">${won(r.alt.decided - r.decided)}원</b> 적어 표준세액공제로 계산했어요.</div>` : ""}
   <div class="box" style="margin-top:14px">계산에 넣지 않은 것: 중소기업 취업자 감면 · 외국납부세액 · 기부금 이월 · 세액공제 순서에 따른 차이. 이런 것이 있으면 실제 금액과 다를 수 있어요.</div>
   <div class="chips noprint" style="margin-top:4px"><button class="btn sm" data-print>인쇄 · PDF로 저장</button><button class="btn sm" data-reset>처음부터 다시</button></div>`;
 }
@@ -657,6 +744,7 @@ function render(keepFocus) {
 /* 입력할 때는 오른쪽 결과만 다시 그림(입력 칸은 그대로) */
 function refreshResult() {
   const r = calcS();
+  const lm = document.querySelector("#panel .lim"), lf = [limPay, limFam, limCard, limSpend, limSave][S.step]; if (lm && lf) lm.outerHTML = lf(r);
   const res = $("#res"); if (res) res.innerHTML = `${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div>`;
   const mb = $("#mb"); if (mb) { mb.textContent = won(Math.abs(r.diffAll)) + "원"; const sp = mb.previousElementSibling; if (sp) sp.textContent = "예상 · " + (!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"); }
 }

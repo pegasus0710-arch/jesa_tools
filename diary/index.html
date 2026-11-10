@@ -896,7 +896,7 @@ const SYNC = BJSync.create({
 */
 </script>
 <script>
-const BUILD = "2026-11-10(화) 16:00";
+const BUILD = "2026-11-10(화) 17:30";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";
@@ -2004,10 +2004,10 @@ document.addEventListener("click", e => { const t = e.target.closest(".pgsw [dat
 
 /* ── 여행 노트에서 불러오기 (같은 주소의 여행 노트 기록을 읽기만) ── */
 async function tripImport() {
-  let tdb; try { tdb = await new Promise((res, rej) => { const r = indexedDB.open("bj-trip-planner"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); r.onupgradeneeded = () => { r.transaction.abort(); rej(new Error("none")); }; }); } catch (e) { return toast("이 기기에 여행 노트 기록이 없어요 — 여행 노트를 같은 기기 · 같은 브라우저에서 쓰고 있을 때 불러올 수 있어요"); }
+  let tdb; try { tdb = await new Promise((res, rej) => { const r = indexedDB.open("bj-trip-note3"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); r.onupgradeneeded = () => { r.transaction.abort(); rej(new Error("none")); }; }); } catch (e) { return toast("이 기기에 여행 노트 기록이 없어요 — 여행 노트를 같은 기기 · 같은 브라우저에서 쓰고 있을 때 불러올 수 있어요"); }
   if (!tdb.objectStoreNames.contains("items")) { tdb.close(); return toast("이 기기에 여행 노트 기록이 없어요"); }
   const items = await new Promise(res => { const q = tdb.transaction("items", "readonly").objectStore("items").getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); tdb.close();
-  const ts = items.filter(t => t && t.start && Array.isArray(t.days));
+  const ts = items.filter(t => t && !t.ronly && t.start && Array.isArray(t.days));   /* 11-10: 여행 노트 v1.0 저장소 · 사진으로 만든 기록은 빼고 */
   if (!ts.length) return toast("여행 노트에 여행이 없어요");
   pop(`<h2>여행 노트에서 불러오기</h2>${ts.map((t, i) => `<button class="pcard" data-timp="${i}" style="width:100%"><b style="font-size:24px">${esc(t.name || "여행")}</b><span class="num">${ymdw(t.start)} ~ ${ymdw(addD(t.start, t.days.length - 1))} · 일정 ${t.days.reduce((a, d) => a + (d.items || []).length, 0)}개</span></button>`).join("")}<div class="btns"><button class="btn" data-close>닫기</button></div>`, p => {
     p.addEventListener("click", ev => { const b = ev.target.closest("[data-timp]"); if (!b) return; const t = ts[+b.dataset.timp]; const its = []; t.days.forEach((d, di) => (d.items || []).forEach(it => its.push({ id: "x" + uid(), date: addD(t.start, di), tm: it.time || "", what: it.title || it.kind || "", place: it.place || "" })));

@@ -1,0 +1,731 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0A1931">
+<title>연말정산 계산기 | Blog J</title>
+<meta name="description" content="2026년 귀속 연말정산 환급금 미리 계산 — 카드 · 가족 · 의료비 · 교육비 · 연금저축 · 월세, 입력한 금액은 이 기기에만">
+<link rel="icon" href="icons/apps/yearend.png" type="image/png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+<style>:root{--paper:#f0e8db;--panel:#f7f2ea;--card:#fcf9f4;--tint:#ece3d5;--ink:#1f2125;--sub:#5b5547;--sub2:#6f6857;--n:#0A1931;--nh:#061024;--nl:#e2e6ee;--or:#f56d03;--red:#c23a2b;--blue:#1f4f9a;--hair:rgba(90,74,50,.12);--hair2:rgba(90,74,50,.22);--up:0 0 0 1px rgba(90,74,50,.07),0 1px 2px rgba(90,74,50,.05),0 10px 28px -12px rgba(90,74,50,.18);--in:inset 0 1px 2px rgba(90,74,50,.14);color-scheme:only light}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:SUIT,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.num,input.amt{font-variant-numeric:tabular-nums}
+#root{min-height:100vh}
+.yt-head{height:64px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:20}
+.yt-ic{width:38px;height:38px;border-radius:10px;background:var(--n);position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.yt-ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.yt-ic i{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;background:var(--or);border:2px solid var(--paper)}
+.yt-head h1{font-size:19px;font-weight:800;white-space:nowrap}
+.yt-head small{font-size:13px;color:var(--sub2)}
+.yt-yr{font-size:13px;font-weight:700;color:var(--n);background:var(--nl);border-radius:8px;padding:5px 10px;white-space:nowrap}
+.yt-rul{margin-left:auto;display:flex;width:min(560px,46vw)}
+.yt-rul button{flex:1;text-align:center;font-size:12.5px;color:var(--sub2);position:relative;padding-top:16px;white-space:nowrap}
+.yt-rul button:before{content:"";position:absolute;top:5px;left:0;right:0;height:3px;background:var(--hair2)}
+.yt-rul button.done:before,.yt-rul button.on:before{background:var(--or)}
+.yt-rul button.on:before{right:50%}
+.yt-rul button b{position:absolute;top:0;left:50%;margin-left:-6px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:2px solid var(--hair2)}
+.yt-rul button.done b,.yt-rul button.on b{background:var(--or);border-color:var(--or)}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(245,109,3,.18)}
+.yt-rul button.on{color:var(--ink);font-weight:800}
+.yt-main{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr);gap:22px;padding:22px 24px 40px;max-width:1500px;margin:0 auto}
+.yt-panel{background:var(--panel);border-radius:16px;box-shadow:var(--up);padding:22px 24px;display:flex;flex-direction:column;min-height:640px;align-self:start}
+.yt-k{font-size:13px;color:var(--sub2);font-weight:700}
+.yt-panel h2{font-size:24px;font-weight:800;margin:4px 0}
+.yt-lead{font-size:14.5px;color:var(--sub);margin-bottom:16px}
+.yt-sec{font-size:15.5px;font-weight:800;margin:18px 0 10px;padding-top:14px;border-top:1px solid var(--hair);display:flex;align-items:center;gap:8px}
+.yt-sec:first-of-type{border:0;padding-top:0;margin-top:4px}
+.f{margin-bottom:14px;min-width:0}
+.f>label,.f>.lb{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14.5px;font-weight:800;margin-bottom:6px}
+.f>label,.f>.lb{flex-wrap:wrap;white-space:nowrap}
+.f>label span,.f>.lb span{font-weight:500;color:var(--sub2);font-size:13px;text-align:right;white-space:normal;margin-left:auto}
+.in{height:48px;border-radius:12px;background:#fff;box-shadow:var(--in),0 0 0 1px var(--hair2);display:flex;align-items:center;padding:0 14px;gap:6px}
+.in:focus-within{box-shadow:0 0 0 2px var(--n)}
+.in input{border:0;outline:0;background:none;width:100%;min-width:0;font-size:18px;font-weight:700;text-align:right}
+.in input::placeholder{color:#b7ae9e;font-weight:600}
+.in em{font-style:normal;font-size:15px;color:var(--sub2);font-weight:600;flex-shrink:0}
+.in select{border:0;outline:0;background:none;width:100%;font-size:16px;font-weight:700}
+.hint{font-size:13px;color:var(--sub2);margin-top:5px}
+.hint b{color:var(--n)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border-radius:10px;padding:9px 13px;font-size:14px;font-weight:700;background:var(--card);box-shadow:var(--up)}
+.chip.on{background:var(--n);color:#fff}
+.box{background:var(--tint);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--sub);box-shadow:var(--in);margin:4px 0 12px}
+.box b{color:var(--ink)}
+.kid{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;box-shadow:var(--up);padding:8px 10px 8px 12px;margin-bottom:8px}
+.kid .in{height:40px;width:130px;flex-shrink:0}
+.kid .in input{font-size:16px}
+.kid .ag{font-size:14px;color:var(--sub);white-space:nowrap}
+.kid .tg{margin-left:auto;font-size:12.5px;font-weight:800;border-radius:7px;padding:3px 8px;background:var(--nl);color:var(--n);white-space:nowrap}
+.kid .tg.x{background:var(--tint);color:var(--sub2)}
+.kid .del{width:32px;height:32px;border-radius:8px;color:var(--sub2);font-size:20px;line-height:1;flex-shrink:0}
+.kid .del:hover{background:var(--tint)}
+.addb{width:100%;height:44px;border-radius:12px;background:var(--card);box-shadow:var(--up);color:var(--n);font-weight:800;margin-bottom:12px}
+.edu{display:grid;grid-template-columns:150px 1fr 32px;gap:8px;align-items:center;margin-bottom:8px}
+.edu .in{height:44px}
+.more{width:100%;text-align:left;font-weight:800;font-size:14.5px;color:var(--n);padding:10px 0;display:flex;align-items:center;gap:6px}
+.more i{font-style:normal;transition:transform .15s}
+.more.op i{transform:rotate(90deg)}
+.yt-nav{margin-top:auto;padding-top:18px;display:flex;gap:10px}
+.btn{height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;padding:0 20px;background:var(--card);box-shadow:var(--up);white-space:nowrap}
+.btn:hover{box-shadow:0 0 0 2px var(--n)}
+.btn:active{transform:translateY(1px)}
+.btn.pr{background:var(--n);color:#fff;flex:1}
+.btn.pr:hover{background:var(--nh);box-shadow:none}
+.btn.sm{height:40px;font-size:14px;padding:0 14px}
+.yt-res{display:flex;flex-direction:column;gap:16px;min-width:0;position:sticky;top:86px;align-self:start}
+.big{background:var(--card);border-radius:16px;box-shadow:var(--up);padding:22px 26px}
+.big .k2{font-size:14px;font-weight:800;color:var(--sub)}
+.amt-b{font-size:clamp(34px,4.2vw,52px);font-weight:900;letter-spacing:-1.5px;color:var(--blue);margin:2px 0;line-height:1.15;word-break:keep-all}
+.amt-b.pay{color:var(--red)}
+.amt-b.zero{color:var(--ink)}
+.amt-b small{font-size:.46em;font-weight:800;margin-left:4px;letter-spacing:-.3px}
+.amt-s{font-size:14px;color:var(--sub2)}
+.flow{display:flex;gap:8px;align-items:stretch;margin-top:16px}
+.fb{flex:1;background:var(--panel);border-radius:12px;padding:10px 12px;box-shadow:var(--in);min-width:0}
+.fb span{display:block;font-size:12.5px;color:var(--sub2);font-weight:700}
+.fb b{font-size:clamp(15px,1.4vw,19px);font-weight:800}
+.op{display:flex;align-items:center;font-size:18px;color:var(--sub2);font-weight:800}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--up);padding:18px 20px;min-width:0}
+.card h3{font-size:16px;font-weight:800;margin-bottom:8px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;padding:7px 0;border-bottom:1px solid var(--hair)}
+.row:last-child{border:0}
+.row b{font-weight:800;white-space:nowrap}
+.row.z{color:var(--sub2)}
+.row.t{font-weight:800;border-top:2px solid var(--ink);border-bottom:0;margin-top:4px;padding-top:9px}
+.row.s{padding-left:14px;font-size:13.5px;color:var(--sub)}
+.tip{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
+.tip:last-child{border:0}
+.tip .d{width:34px;height:34px;border-radius:9px;background:var(--nl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tip .d svg{width:19px;height:19px;stroke:var(--n);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tip p{font-size:14px;line-height:1.4;flex:1;min-width:0}
+.tip p small{color:var(--sub2);font-size:12.5px}
+.tip b.g{color:var(--blue);font-size:16px;white-space:nowrap}
+.tip.info b.g{color:var(--sub2);font-size:13px;font-weight:700}
+.note{font-size:12.5px;color:var(--sub2);margin-top:10px}
+.cardbar{height:12px;border-radius:6px;background:var(--tint);box-shadow:var(--in);position:relative;overflow:hidden;margin:6px 0 4px}
+.cardbar i{position:absolute;left:0;top:0;bottom:0;background:var(--n);border-radius:6px}
+.cardbar s{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--or)}
+.yt-mbar{display:none}
+.yt-foot{text-align:center;font-size:12.5px;color:var(--sub2);padding:0 16px 30px}
+.yt-foot a{color:var(--n);font-weight:700}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--n);color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+/* 결과 단계 */
+.res-tbl .row span{min-width:0}
+@media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+@media (max-width:899px){
+  .yt-head{height:56px;padding:0 16px}
+  .yt-head small,.yt-head .yt-yr{display:none}
+  .yt-head h1{font-size:17px}
+  .yt-rul{display:none}
+  .yt-mrul{display:flex;gap:4px;padding:10px 16px 0}
+  .yt-mrul i{flex:1;height:4px;border-radius:2px;background:var(--hair2)}
+  .yt-mrul i.d{background:var(--or)}
+  .yt-main{grid-template-columns:1fr;padding:12px 12px 110px;gap:14px}
+  .yt-panel{padding:18px 16px;min-height:0}
+  .yt-panel h2{font-size:21px}
+  .yt-res{position:static}
+  .yt-res.side{display:none}
+  .yt-nav{display:none}
+  .yt-mbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--n);color:#fff;padding:10px 14px calc(12px + env(safe-area-inset-bottom));align-items:center;gap:8px;z-index:30}
+  .yt-mbar span{font-size:12.5px;color:#c8d0e0;display:block}
+  .yt-mbar b{font-size:22px;font-weight:900;white-space:nowrap}
+  .yt-mbar .bk{margin-left:auto;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:11px 12px;font-weight:800;font-size:14px}
+  .yt-mbar .go{background:#fff;color:var(--n);border-radius:12px;padding:11px 16px;font-weight:800;font-size:15px;white-space:nowrap}
+  .flow{flex-wrap:wrap}.flow .op{display:none}.fb{flex:1 1 40%}
+  .edu{grid-template-columns:118px 1fr 32px}
+  .kid .in{width:112px}
+}
+@media (min-width:900px){.yt-mrul{display:none}}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .yt-head,.yt-panel,.yt-mbar,.yt-mrul,.yt-foot,.noprint,.toast{display:none!important}
+  .yt-main{display:block;padding:0}
+  .yt-res{position:static;display:flex!important}
+  .big,.card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  .printhead{display:block!important;font-size:18px;font-weight:800;margin-bottom:8px}
+}
+.printhead{display:none}
+/* 블로그 경유 잠금 — 막힘 화면 */
+.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#f7f6f2;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(25,84,85,.08)}
+.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#0A1931;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
+.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#f56d03}
+.bj-gate h1{font-size:21px;color:#20241f;margin:0 0 12px;letter-spacing:-.3px}
+.bj-gate p{font-size:15px;color:#5c6259;line-height:1.7;margin:0}
+.bj-gate b{color:#20241f}
+.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#f56d03;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
+.bj-gate-s{font-size:12.5px!important;color:#8a8f84!important}
+.bj-gate-s a{color:#0A1931;font-weight:700}
+</style></head><body><div id="root"></div>
+<script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
+   허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
+   그 밖(주소 복사·공유 링크·즐겨찾기·직접 입력·다른 사이트에 퍼가기)은 막고 해당 글로 안내.
+   서버 없는 브라우저 안 확인이라 일반 사용자의 건너뛰기를 막는 수준(의도적 우회는 못 막음). */
+const BJ_BLOG = "https://luvbong.tistory.com";
+const BJ_GATE = (() => {
+  const S = "bjgate:";                       /* 새 창 안에서만 유지되는 확인 표시(sessionStorage) */
+  const tokens = new Map();                  /* 글 속 도구가 발급한 일회용 확인값 */
+  const approved = new Set();                /* 확인을 마친 새 창 — 이 창에만 작업을 넘겨줌 */
+  let provider = null, handoff = null;       /* 넘겨줄 작업을 만드는 함수 / 새 창이 받은 작업 */
+  const inFrame = window.parent !== window;
+  const dev = (location.protocol === "file:" || location.hostname === "localhost") && new URLSearchParams(location.search).get("bjdev") === "1";
+  const fromBlog = () => { try { const a = location.ancestorOrigins; if (a && a.length) return a[a.length - 1] === BJ_BLOG; } catch (e) {}
+    return (document.referrer || "").startsWith(BJ_BLOG + "/"); };
+  let embedOK = false;
+
+  /* 글 속 도구: 새 창이 보내는 확인 요청에 답함 */
+  window.addEventListener("message", e => {
+    const d = e.data; if (!d || d.bjgate !== "verify" || e.origin !== location.origin) return;
+    const t = tokens.get(d.t); tokens.delete(d.t);
+    const ok = embedOK && t && Date.now() - t.at < 30000 && e.source === t.win;
+    if (ok) approved.add(e.source);
+    try { e.source.postMessage({ bjgate: ok ? "ok" : "no", t: d.t }, location.origin); } catch (err) {}
+  });
+  window.addEventListener("message", e => {   /* 새 창이 작업을 달라고 할 때 (확인된 창에만) */
+    const d = e.data; if (!d || d.bjhand !== "req" || e.origin !== location.origin || !approved.has(e.source)) return;
+    approved.delete(e.source);
+    let data = null; try { data = provider ? provider() : null; } catch (err) {}
+    try { e.source.postMessage({ bjhand: "data", data }, location.origin); } catch (err) {}
+  });
+
+  /* 새 창으로 열기 (글 속 도구에서만) */
+  function openWindow(key, params, file) {
+    const t = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const q = new URLSearchParams(params || {}); q.delete("embed"); q.set("bjt", t);
+    const path = file ? location.pathname.replace(/[^/]*$/, file) : location.pathname;
+    const url = path + "?" + q.toString();
+    const w = window.open(url, "bj_" + key + "_" + (q.get("tab") || "all"), "popup,width=1320,height=920");
+    if (!w) return false;
+    tokens.set(t, { at: Date.now(), win: w });
+    return true;
+  }
+
+  /* 막힘 화면 */
+  async function blocked(key, tab, why) {
+    const post = BJ_BLOG + "/";     /* 막힘 화면은 늘 블로그 첫 화면으로 (글마다 주소를 적을 필요 없음) */
+    const root = document.getElementById("root");
+    root.innerHTML = `<div class="bj-gate"><div class="bj-gate-in">
+      <div class="bj-gate-mark">J<i></i></div>
+      <h1>Blog J 블로그 글에서 열어 주세요</h1>
+      <p>이 도구는 <b>Blog J 블로그 글</b>을 통해서만 쓸 수 있어요.<br>글 안의 도구에서 <b>새 창으로 열기</b>를 누르면 광고 없이 도구만 크게 띄워 쓸 수 있습니다.</p>
+      <a class="bj-gate-btn" href="${post}" target="_top" rel="noopener">Blog J 이동하기 ›</a>
+      <p class="bj-gate-s">${why === "frame" ? "다른 사이트에 넣은 도구는 열리지 않아요." : "주소를 직접 입력하거나, 즐겨찾기·공유받은 링크로는 열리지 않아요."} · 설치·가입 없는 무료 도구 모음 <a href="${BJ_BLOG}/" target="_top" rel="noopener">Blog J</a></p>
+    </div></div>`;
+    document.title = "Blog J 블로그 글에서 열어 주세요";
+    return false;
+  }
+
+  /* 시작할 때 확인: true면 도구를 띄움 */
+  async function check(key, tab, opts) {
+    if (dev || (() => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } })()) { embedOK = inFrame && (dev || fromBlog()); return true; }   /* 11-10: 주인 시험 모드 — 테스트 허브(jhub.html)에서 이 기기에 켠 경우만 */
+    /* 예전 글 호환: 블로그 글의 링크를 눌러 들어온 경우 허용 (프로그램 창 → 실행 카드로 바꾸기 전까지만) */
+    if (!inFrame && opts && opts.legacyReferrer && (document.referrer || "").startsWith(BJ_BLOG + "/")) return true;
+    if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }
+    try { const v = sessionStorage.getItem(S + key);
+      if (v) { if (v !== "1" && v !== (tab || "all")) { const q = new URLSearchParams(location.search); q.set("tab", v); location.replace(location.pathname + "?" + q.toString()); return false; } return true; } } catch (e) {}
+    const q = new URLSearchParams(location.search), t = q.get("bjt");
+    if (t && window.opener) {
+      const ok = await new Promise(res => {
+        const on = e => { if (e.origin === location.origin && e.data && e.data.t === t && (e.data.bjgate === "ok" || e.data.bjgate === "no")) { window.removeEventListener("message", on); res(e.data.bjgate === "ok"); } };
+        window.addEventListener("message", on);
+        try { window.opener.postMessage({ bjgate: "verify", t }, location.origin); } catch (e) { res(false); }
+        setTimeout(() => { window.removeEventListener("message", on); res(false); }, 3000);
+      });
+      if (ok) { try { sessionStorage.setItem(S + key, tab || "all"); } catch (e) {}
+        const op = window.opener;
+        handoff = await new Promise(res => {
+          const on = e => { if (e.origin === location.origin && e.source === op && e.data && e.data.bjhand === "data") { window.removeEventListener("message", on); res(e.data.data || null); } };
+          window.addEventListener("message", on);
+          try { op.postMessage({ bjhand: "req" }, location.origin); } catch (e) { res(null); }
+          setTimeout(() => { window.removeEventListener("message", on); res(null); }, 4000);
+        });
+        q.delete("bjt"); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q.toString() : ""));
+        try { window.opener = null; } catch (e) {}
+        return true; }
+    }
+    return blocked(key, tab, "direct");
+  }
+  return { check, openWindow, embedded: () => { embedOK = inFrame && (dev || fromBlog()); return embedOK; }, inFrame: () => inFrame, setProvider: fn => { provider = fn; }, takeHandoff: () => { const h = handoff; handoff = null; return h; } };
+})();</script>
+<script>/* 연말정산 계산 엔진 — Blog J (2026-11-10)
+   근거: 국세청 「2025년 연말정산 신고안내」(2025.12) + 2026년 귀속 개정
+   - 조특법 §126의2⑩ 신용카드 기본한도 자녀 추가(2026 사용분~)
+   - 소득세법 §59의2 자녀세액공제 나이(법률 제21548호, 2026.4.21. — 2026년 9세 이상, 2017년생 제외)
+   - 조특법 고향사랑기부금 10만~20만 40%(2026~)
+   금액 단위 = 원. 결과는 참고용(실제 금액은 회사 연말정산 · 홈택스). */
+(function (G) {
+  "use strict";
+  const P = {
+    2025: { year: 2025, childMinBirth: null, childMaxBirthCredit: 2017, kidCardExtra: false, hometown2: 0.15, label: "2025년 귀속(2026년 1월 정산)" },
+    2026: { year: 2026, childMaxBirthCredit: 2016, kidCardExtra: true, hometown2: 0.40, label: "2026년 귀속(2027년 1월 정산)" }
+  };
+  const fl = n => Math.floor(n);
+  const nz = n => Math.max(0, +n || 0);
+
+  function earnedDeduction(t) {           /* 근로소득공제 (2,000만원 한도) */
+    let d;
+    if (t <= 5e6) d = t * 0.7;
+    else if (t <= 15e6) d = 3.5e6 + (t - 5e6) * 0.4;
+    else if (t <= 45e6) d = 7.5e6 + (t - 15e6) * 0.15;
+    else if (t <= 1e8) d = 12e6 + (t - 45e6) * 0.05;
+    else d = 14.75e6 + (t - 1e8) * 0.02;
+    return fl(Math.min(d, 2e7));
+  }
+  function baseTax(x) {                    /* 기본세율 */
+    const B = [[14e6, 0.06, 0], [50e6, 0.15, 1.26e6], [88e6, 0.24, 5.76e6], [150e6, 0.35, 15.44e6], [300e6, 0.38, 19.94e6], [500e6, 0.40, 25.94e6], [1e9, 0.42, 35.94e6], [Infinity, 0.45, 65.94e6]];
+    for (const [lim, r, k] of B) if (x <= lim) return fl(Math.max(0, x * r - k));
+  }
+  function earnedCreditLimit(t) {          /* 근로소득세액공제 한도 */
+    if (t <= 33e6) return 740000;
+    if (t <= 70e6) return Math.max(660000, fl(740000 - (t - 33e6) * 0.008));
+    if (t <= 120e6) return Math.max(500000, fl(660000 - (t - 70e6) / 2));
+    return Math.max(200000, fl(500000 - (t - 120e6) / 2));
+  }
+  function earnedCredit(tax, t) {
+    const c = tax <= 1.3e6 ? tax * 0.55 : 715000 + (tax - 1.3e6) * 0.3;
+    return fl(Math.min(c, earnedCreditLimit(t)));
+  }
+
+  /* 신용카드 등 소득공제 — 국세청 안내 132~133쪽 계산식 그대로 */
+  function cardDeduction(t, c, p, kids) {
+    const low = t <= 70e6;
+    const credit = nz(c.credit), cash = nz(c.debit), culture = low ? nz(c.culture) : 0, market = nz(c.market), transit = nz(c.transit);
+    /* 7천만원 초과자는 문화체육 사용분을 일반 사용분으로 봄(결제 수단을 몰라 신용카드로 계산 — 화면 안내) */
+    const credit2 = credit + (low ? 0 : nz(c.culture));
+    const total = credit2 + cash + culture + market + transit;
+    const min = t * 0.25;
+    const out = { total, min, over: Math.max(0, total - min), deduct: 0, basic: 0, extra: 0, limitBasic: 0, limitExtra: 0, possible: 0 };
+    if (total <= min) return out;
+    const a = credit2 * 0.15, b = cash * 0.30, cc = culture * 0.30, m = market * 0.40, tr = transit * 0.40;
+    let six;
+    if (min <= credit2) six = min * 0.15;
+    else if (min <= credit2 + cash + culture) six = credit2 * 0.15 + (min - credit2) * 0.30;
+    else six = credit2 * 0.15 + (cash + culture) * 0.30 + (min - credit2 - cash - culture) * 0.40;
+    const possible = Math.max(0, a + b + cc + m + tr - six);
+    let lim = low ? 3e6 : 2.5e6;
+    if (p.kidCardExtra) { const k = Math.min(2, nz(kids)); lim += k * (low ? 5e5 : 2.5e5); }
+    const extraCap = low ? 3e6 : 2e6;
+    const basic = Math.min(possible, lim);
+    const extra = Math.min(Math.max(0, possible - lim), cc + m + tr, extraCap);
+    Object.assign(out, { possible: fl(possible), basic: fl(basic), extra: fl(extra), deduct: fl(basic + extra), limitBasic: lim, limitExtra: extraCap });
+    return out;
+  }
+
+  /* 의료비 — 국세청 안내 173쪽 표 */
+  function medicalCredit(t, md) {
+    const inf = nz(md.infertility), pre = nz(md.premature), self = nz(md.self), oth = nz(md.other);
+    const th = t * 0.03;
+    let a = inf, b = pre, c = self, d = oth, dAmt;
+    if (d >= th) { dAmt = Math.min(d - th, 7e6); return pack(a, b, c, dAmt); }
+    let rest = th - d; dAmt = 0;
+    const take = v => { const x = Math.min(v, rest); rest -= x; return v - x; };
+    c = take(c); b = take(b); a = take(a);
+    return pack(a, b, c, dAmt);
+    function pack(A, B, C, D) {
+      const credit = fl((C + D) * 0.15 + B * 0.20 + A * 0.30);
+      return { base: fl(A + B + C + D), credit, th: fl(th) };
+    }
+  }
+
+  function calc(inp, year) {
+    const p = P[year || 2026];
+    const t = nz(inp.salary);                       /* 총급여(비과세 뺀 금액) */
+    const r = { year: p.year, label: p.label, salary: t, steps: [] };
+    r.earnedDed = earnedDeduction(t);
+    r.earnedIncome = Math.max(0, t - r.earnedDed);
+    /* 인적공제 */
+    const fam = inp.family || {};
+    const nBasic = 1 + (fam.spouse ? 1 : 0) + nz(fam.kids) + nz(fam.parents) + nz(fam.others);
+    r.personal = nBasic * 1.5e6 + nz(fam.senior) * 1e6 + nz(fam.disabled) * 2e6 + (fam.single ? 1e6 : (fam.woman ? 5e5 : 0));
+    r.nBasic = nBasic;
+    r.pensionIns = nz(inp.pensionIns);              /* 국민연금 등 */
+    r.healthIns = nz(inp.healthIns);                /* 건강 · 장기요양 · 고용 */
+    /* 주택 */
+    const h = inp.housing || {};
+    const saving = t <= 70e6 && h.homeless ? Math.min(nz(h.saving), 3e6) * 0.4 : 0;
+    const lease = Math.min(nz(h.lease) * 0.4, Math.max(0, 4e6 - saving));
+    r.housingSaving = fl(saving); r.housingLease = fl(lease);
+    r.mortgage = fl(Math.min(nz(h.mortgage), nz(h.mortgageCap) || 0));
+    r.card = cardDeduction(t, inp.card || {}, p, inp.cardKids != null ? inp.cardKids : nz(fam.kids));
+    /* 소득공제 종합한도 2,500만원(주택임차 · 이자 · 주택마련 · 신용카드 등) */
+    const capped = r.housingLease + r.mortgage + r.housingSaving + r.card.deduct;
+    r.overCap = Math.max(0, capped - 25e6);
+    r.otherDed = nz(inp.otherDed);
+    r.taxBase = Math.max(0, r.earnedIncome - r.personal - r.pensionIns - r.healthIns - r.housingLease - r.mortgage - r.housingSaving - r.card.deduct - r.otherDed + r.overCap);
+    r.tax = baseTax(r.taxBase);
+    /* 세액공제 */
+    const cr = {};
+    cr.earned = earnedCredit(r.tax, t);
+    cr.marriage = inp.marriage ? 500000 : 0;
+    const kc = nz(fam.kidsCredit);
+    cr.child = kc === 0 ? 0 : kc === 1 ? 250000 : kc === 2 ? 550000 : 550000 + (kc - 2) * 400000;
+    cr.birth = [0, 300000, 500000, 700000][Math.min(3, nz(fam.birthOrder))] || 0;
+    const pen = inp.pension || {};
+    const ps = Math.min(nz(pen.savings), 6e6), pa = Math.min(ps + nz(pen.irp), 9e6);
+    const pr = t <= 55e6 ? 0.15 : 0.12;
+    cr.pension = fl(pa * pr); r.pensionRate = pr;
+    /* 특별세액공제 */
+    const sp = inp.special || {};
+    const insGen = Math.min(nz(sp.insurance), 1e6), insDis = Math.min(nz(sp.insuranceDis), 1e6);
+    cr.insurance = fl(insGen * 0.12 + insDis * 0.15);
+    r.medical = medicalCredit(t, sp.medical || {}); cr.medical = r.medical.credit;
+    const ed = sp.edu || {};
+    const eduBase = nz(ed.self) + (ed.kids || []).reduce((s, k) => s + Math.min(nz(k.amt), k.univ ? 9e6 : 3e6), 0) + nz(ed.disabled);
+    cr.edu = fl(eduBase * 0.15); r.eduBase = eduBase;
+    /* 기부금 */
+    const dn = sp.donation || {};
+    const pol = nz(dn.political), home = Math.min(nz(dn.hometown), 2e7);
+    let dc = 0;
+    const polC = Math.min(pol, 1e5) * 100 / 110 + Math.min(Math.max(0, pol - 1e5), 3e7 - 1e5) * 0.15 + Math.max(0, pol - 3e7) * 0.25;
+    dc += polC;
+    dc += Math.min(home, 1e5) * 100 / 110 + Math.min(Math.max(0, home - 1e5), 1e5) * p.hometown2 + Math.max(0, home - 2e5) * 0.15;
+    const inc = r.earnedIncome;
+    const special = Math.min(nz(dn.special), inc);
+    const genLimit = Math.max(0, inc - special) * 0.3;
+    const general = Math.min(nz(dn.general), genLimit);
+    const religion = Math.min(nz(dn.religion), Math.max(0, inc - special) * 0.1, Math.max(0, genLimit - general));
+    const gsum = special + general + religion;
+    dc += Math.min(gsum, 1e7) * 0.15 + Math.max(0, gsum - 1e7) * 0.30;
+    cr.donation = fl(dc);
+    const hasSpecial = r.healthIns + r.housingLease + r.mortgage + cr.insurance + cr.medical + cr.edu + fl(Math.min(gsum, 1e7) * 0.15 + Math.max(0, gsum - 1e7) * 0.30) > 0;
+    /* 월세 */
+    const rentOk = t <= 80e6 && nz(inp.rent) > 0;
+    cr.rent = rentOk ? fl(Math.min(nz(inp.rent), 1e7) * (t <= 55e6 ? 0.17 : 0.15)) : 0;
+    /* 표준세액공제: 특별소득공제 · 특별세액공제 · 월세를 안 받으면 13만원 (정치 · 고향사랑 기부는 같이 됨) */
+    const specTotal = cr.insurance + cr.medical + cr.edu + fl(Math.min(gsum, 1e7) * 0.15 + Math.max(0, gsum - 1e7) * 0.30) + cr.rent;
+    const useStd = !(r.healthIns + r.housingLease + r.mortgage > 0) && specTotal < 130000;
+    cr.standard = useStd ? 130000 : 0;
+    if (useStd) { cr.insurance = 0; cr.medical = 0; cr.edu = 0; cr.rent = 0; cr.donation = fl(polC + Math.min(home, 1e5) * 100 / 110 + Math.min(Math.max(0, home - 1e5), 1e5) * p.hometown2 + Math.max(0, home - 2e5) * 0.15); }
+    r.credits = cr;
+    const sumCr = Object.values(cr).reduce((s, v) => s + v, 0);
+    r.creditTotal = sumCr;
+    r.decided = Math.max(0, r.tax - sumCr);             /* 결정세액(소득세) */
+    r.creditUnused = Math.max(0, sumCr - r.tax);
+    r.paid = nz(inp.paid);                               /* 이미 낸 소득세(기납부) */
+    r.diff = r.decided - r.paid;                         /* + 더 냄 / − 돌려받음 */
+    r.local = fl(r.decided * 0.1);                       /* 지방소득세 10% */
+    r.paidLocal = inp.paidLocal != null ? nz(inp.paidLocal) : fl(r.paid * 0.1);
+    r.diffAll = r.diff + (r.local - r.paidLocal);
+    r.hasSpecial = hasSpecial;
+    return r;
+  }
+  G.YT = { calc, P, earnedDeduction, baseTax, earnedCredit, earnedCreditLimit, cardDeduction, medicalCredit };
+})(typeof window !== "undefined" ? window : globalThis);
+</script>
+<script>/* ══════════ 연말정산 계산기 v1.0 — 화면 (Blog J, 2026-11-10) ══════════ */
+const TOOL = "yearend", APP_VER = "1.0", YEAR = 2026;
+const BUILD = "2026-11-10(화) 18:30";
+const EMBED = new URLSearchParams(location.search).get("embed") === "1";
+const LSK = "bj-yearend1";
+const STEPS = [["pay", "급여"], ["fam", "가족"], ["card", "카드"], ["spend", "보험·의료·교육"], ["save", "연금·주택·월세"], ["res", "결과"]];
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const won = n => (Math.round(+n || 0)).toLocaleString("ko-KR");
+const man = n => { n = Math.round(+n || 0); if (Math.abs(n) >= 1e4) { const m = n / 1e4; return (Number.isInteger(m) ? m.toLocaleString("ko-KR") : m.toLocaleString("ko-KR", { maximumFractionDigits: 1 })) + "만원"; } return won(n) + "원"; };
+const IC = {
+  calc: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3M8 18h3M13 18h3"/></svg>',
+  up: '<svg viewBox="0 0 24 24"><path d="M12 20V5M5 11l7-7 7 7"/></svg>',
+  card: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg>',
+  heart: '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg>',
+  home: '<svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/></svg>',
+  info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+  med: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>'
+};
+
+/* ── 입력 상태 (이 기기 브라우저에만) ── */
+const BLANK = () => ({ step: 0, salary: 0, paid: 0, paidLocal: null, pensionIns: 0, healthIns: 0,
+  spouse: false, kids: [], parents: 0, others: 0, senior: 0, disabled: 0, single: false, woman: false, marriage: false, birthOrder: 0, famMore: false,
+  credit: 0, debit: 0, market: 0, transit: 0, culture: 0,
+  insurance: 0, insuranceDis: 0, medSelf: 0, medOther: 0, medInf: 0, medPre: 0, eduSelf: 0, eduKids: [], eduDis: 0,
+  dnHome: 0, dnPol: 0, dnSpecial: 0, dnGeneral: 0, dnReligion: 0, spendMore: false,
+  pSavings: 0, pIrp: 0, homeless: false, hSaving: 0, hLease: 0, hMortgage: 0, hMortCap: 18000000, rent: 0, otherDed: 0, saveMore: false });
+let S = (() => { try { const v = JSON.parse(localStorage.getItem(LSK) || "null"); return v ? Object.assign(BLANK(), v) : BLANK(); } catch (e) { return BLANK(); } })();
+let saveT = null;
+function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LSK, JSON.stringify(S)); } catch (e) {} }, 300); }
+
+/* ── 엔진 입력 만들기 ── */
+const kidAge = y => YEAR - y;
+function kidInfo() {
+  const ys = S.kids.map(k => +k.y).filter(y => y >= 1950 && y <= YEAR);
+  const basic = ys.filter(y => kidAge(y) <= 20).length;                    /* 기본공제 직계비속 20세 이하 */
+  const credit = ys.filter(y => y <= 2016 && kidAge(y) <= 20).length;      /* 2026년 귀속: 9세 이상 · 2017년생 제외 */
+  return { basic, credit, card: Math.min(2, basic) };
+}
+function toInput(o) {
+  const s = o || S, k = kidInfo();
+  return { salary: s.salary, paid: s.paid, paidLocal: s.paidLocal, pensionIns: s.pensionIns, healthIns: s.healthIns,
+    family: { spouse: s.spouse, kids: k.basic, kidsCredit: k.credit, birthOrder: s.birthOrder, parents: s.parents, others: s.others, senior: s.senior, disabled: s.disabled, single: s.single, woman: s.woman && !s.single },
+    cardKids: k.card, marriage: s.marriage,
+    card: { credit: s.credit, debit: s.debit, market: s.market, transit: s.transit, culture: s.culture },
+    pension: { savings: s.pSavings, irp: s.pIrp },
+    housing: { homeless: s.homeless, saving: s.hSaving, lease: s.hLease, mortgage: s.hMortgage, mortgageCap: s.hMortCap },
+    special: { insurance: s.insurance, insuranceDis: s.insuranceDis, medical: { self: s.medSelf, other: s.medOther, infertility: s.medInf, premature: s.medPre },
+      edu: { self: s.eduSelf, kids: s.eduKids.map(e => ({ amt: e.a, univ: e.t === "univ" })), disabled: s.eduDis },
+      donation: { hometown: s.dnHome, political: s.dnPol, special: s.dnSpecial, general: s.dnGeneral, religion: s.dnReligion } },
+    rent: s.homeless ? s.rent : 0, otherDed: s.otherDed };
+}
+const calcS = o => YT.calc(toInput(o), YEAR);
+
+/* ── 입력 칸 ── */
+function money(key, label, opt) {
+  opt = opt || {}; const v = S[key];
+  return `<div class="f"${opt.full ? "" : ""}><label for="f_${key}">${label}${opt.sub ? `<span>${opt.sub}</span>` : ""}</label><div class="in"><input id="f_${key}" class="amt" inputmode="numeric" autocomplete="off" data-m="${key}" value="${v ? won(v) : ""}" placeholder="0"><em>원</em></div>${opt.hint ? `<div class="hint">${opt.hint}</div>` : ""}</div>`;
+}
+function count(key, label, sub) {
+  return `<div class="f"><label for="f_${key}">${label}${sub ? `<span>${sub}</span>` : ""}</label><div class="in"><input id="f_${key}" inputmode="numeric" autocomplete="off" data-c="${key}" value="${S[key] || ""}" placeholder="0"><em>명</em></div></div>`;
+}
+function chip(key, val, text) { const on = S[key] === val; return `<button class="chip${on ? " on" : ""}" data-ch="${key}" data-v='${JSON.stringify(val)}' aria-pressed="${on}">${text}</button>`; }
+function tog(key, text) { const on = !!S[key]; return `<button class="chip${on ? " on" : ""}" data-ch="${key}" data-v='${JSON.stringify(!on)}' aria-pressed="${on}">${on ? text + " ✓" : text}</button>`; }
+function more(key, text) { return `<button class="more${S[key] ? " op" : ""}" data-more="${key}"><i>›</i>${text}</button>`; }
+
+function stepPay() {
+  return `<div class="yt-k">1 / 6 단계</div><h2>급여 · 이미 낸 세금</h2><p class="yt-lead">1년 동안 받은 급여와, 월급에서 이미 떼어 간 세금을 넣어요. 원천징수영수증이나 급여명세서를 보면 쉬워요.</p>
+  ${money("salary", "총급여", { sub: "연봉 − 비과세(식대 월 20만원 등)", hint: "원천징수영수증의 「총급여(⑯)」 칸 · 연봉에서 식대 · 자가운전보조금 같은 비과세를 뺀 금액" })}
+  ${money("paid", "이미 낸 소득세", { sub: "기납부세액 · 지방소득세 빼고", hint: "급여명세서 「소득세」를 1년치 더한 금액(12월분 포함 예상) — 지방소득세는 이 금액의 10%로 계산해요" })}
+  <div class="two">${money("pensionIns", "국민연금", { sub: "1년 합계" })}${money("healthIns", "건강 · 고용보험", { sub: "장기요양 포함" })}</div>
+  <div class="box">급여명세서의 「국민연금 · 건강보험 · 장기요양 · 고용보험」 1년치를 더해 넣어요. 회사가 낸 몫은 넣지 않아요.</div>`;
+}
+function stepFam() {
+  const k = kidInfo();
+  const kids = S.kids.map((x, i) => { const y = +x.y, ok = y >= 1950 && y <= YEAR, age = ok ? kidAge(y) : null;
+    const tag = !ok ? "" : age > 20 ? `<span class="tg x">20세 넘음 · 공제 없음</span>` : (y <= 2016 ? `<span class="tg">자녀세액공제</span>` : `<span class="tg x">${y === YEAR ? "올해 출생 · 인적공제" : "인적공제 · 카드 한도"}</span>`);
+    return `<div class="kid"><div class="in"><input inputmode="numeric" maxlength="4" data-kid="${i}" value="${x.y || ""}" placeholder="2015" aria-label="자녀 ${i + 1} 태어난 해"><em>년</em></div><span class="ag">${ok ? age + "세" : "태어난 해"}</span>${tag}<button class="del" data-kdel="${i}" aria-label="자녀 지우기">×</button></div>`; }).join("");
+  return `<div class="yt-k">2 / 6 단계</div><h2>가족</h2><p class="yt-lead">나와 함께 공제받는 가족을 넣어요. 자녀는 태어난 해만 넣으면 공제가 저절로 나뉘어요.</p>
+  <div class="f"><div class="lb">배우자<span>연 소득금액 100만원 이하(근로소득만 있으면 총급여 500만원 이하)</span></div><div class="chips">${chip("spouse", true, "공제받아요")}${chip("spouse", false, "안 받아요 · 없어요")}</div></div>
+  <div class="f"><div class="lb">자녀 · 손자녀<span>20세 이하 · 소득 요건은 배우자와 같아요</span></div>${kids}<button class="addb" data-kadd>+ 자녀 넣기</button>
+  ${S.kids.length ? `<div class="hint">자녀세액공제 <b>${k.credit}명</b>(2016년 이전 출생 · 2026년 귀속은 9세 이상, 2017년생 제외) · 인적공제 <b>${k.basic}명</b> · 신용카드 한도 늘어나는 자녀 <b>${k.card}명</b></div>` : ""}</div>
+  <div class="two">${count("parents", "부모님", "60세 이상 · 1966년 이전 출생")}${count("others", "그 밖의 가족", "형제자매 · 수급자 등")}</div>
+  <div class="f"><div class="lb">올해 결혼 · 출산</div><div class="chips">${tog("marriage", "2026년에 혼인신고 했어요")}</div></div>
+  <div class="f"><div class="lb">2026년에 태어난(입양한) 아이<span>몇째인지</span></div><div class="chips">${chip("birthOrder", 0, "없어요")}${chip("birthOrder", 1, "첫째")}${chip("birthOrder", 2, "둘째")}${chip("birthOrder", 3, "셋째 이상")}</div></div>
+  ${more("famMore", "경로우대 · 장애인 · 한부모 · 부녀자")}
+  ${S.famMore ? `<div class="two">${count("senior", "70세 이상", "공제받는 가족 중 · 1956년 이전 출생")}${count("disabled", "장애인", "본인 포함 · 나이 상관없음")}</div>
+  <div class="f"><div class="lb">한부모 · 부녀자</div><div class="chips">${tog("single", "한부모")}${tog("woman", "부녀자")}</div><div class="hint">한부모 = 배우자 없이 20세 이하 자녀를 키움(100만원) · 부녀자 = 여성 근로자 · 종합소득금액 3천만원 이하(50만원) · 둘 다면 한부모만</div></div>` : ""}`;
+}
+function stepCard() {
+  const r = calcS(), c = r.card, min = c.min;
+  const pct = c.total ? Math.min(100, c.total / Math.max(min * 2.2, c.total) * 100) : 0, mk = Math.min(100, min / Math.max(min * 2.2, c.total || 1) * 100);
+  return `<div class="yt-k">3 / 6 단계</div><h2>카드 · 현금영수증</h2><p class="yt-lead">2026년 1년치 사용액을 넣어요. 전통시장 · 대중교통 · 문화체육은 <b>따로 빼서</b> 넣으면 공제율이 더 높아요.</p>
+  ${money("credit", "신용카드", { sub: "아래 세 가지 뺀 금액 · 15%" })}
+  ${money("debit", "체크카드 · 현금영수증", { sub: "아래 세 가지 뺀 금액 · 30%" })}
+  <div class="two">${money("market", "전통시장", { sub: "40%" })}${money("transit", "대중교통", { sub: "40%" })}</div>
+  ${money("culture", "도서 · 공연 · 영화 · 박물관 · 수영장 · 헬스장", { sub: S.salary > 7e7 ? "총급여 7천만원 넘으면 신용카드로 계산" : "30%", hint: "수영장 · 체력단련장은 시설 이용료만(강습비 제외)" })}
+  <div class="box">총급여의 25%(<b class="num">${won(min)}원</b>)를 넘게 쓴 부분부터 공제돼요 · 지금 <b class="num">${won(c.total)}원</b>
+  <div class="cardbar"><i style="width:${pct}%"></i><s style="left:${mk}%"></s></div>${c.total <= min ? `25%까지 <b class="num">${won(min - c.total)}원</b> 남음 — 그 전까지는 공제 0원이라 혜택 많은 신용카드도 괜찮아요` : `공제 <b class="num">${won(c.deduct)}원</b> · 기본 한도 ${man(c.limitBasic)}${S.salary <= 7e7 ? "" : ""} 중 <b class="num">${won(c.basic)}원</b> 씀`}</div>
+  <div class="hint">홈택스 「연말정산 미리보기」에서 1~9월 카드 사용액을 볼 수 있어요. 형제자매 카드는 넣지 않아요.</div>`;
+}
+function eduRows() {
+  return S.eduKids.map((e, i) => `<div class="edu"><div class="in"><select data-et="${i}" aria-label="교육비 ${i + 1} 구분"><option value="school"${e.t !== "univ" ? " selected" : ""}>취학 전 · 초중고</option><option value="univ"${e.t === "univ" ? " selected" : ""}>대학생</option></select></div><div class="in"><input class="amt" inputmode="numeric" data-ea="${i}" value="${e.a ? won(e.a) : ""}" placeholder="0" aria-label="교육비 ${i + 1} 금액"><em>원</em></div><button class="del" data-edel="${i}" aria-label="지우기" style="width:32px;height:32px;border-radius:8px;color:var(--sub2);font-size:20px">×</button></div>`).join("");
+}
+function stepSpend() {
+  return `<div class="yt-k">4 / 6 단계</div><h2>보험 · 의료 · 교육 · 기부</h2><p class="yt-lead">해당하는 것만 넣으면 돼요. 비워 두면 0원으로 계산해요.</p>
+  <div class="yt-sec">보험료 <span class="hint" style="margin:0">12% · 100만원까지</span></div>
+  <div class="two">${money("insurance", "보장성 보험", { sub: "실손 · 종신 · 자동차 등" })}${money("insuranceDis", "장애인 전용 보험", { sub: "15%" })}</div>
+  <div class="yt-sec">의료비 <span class="hint" style="margin:0">총급여 3%(${man(S.salary * 0.03)}) 넘는 부분 · 15%</span></div>
+  <div class="two">${money("medSelf", "본인 · 65세 이상 · 6세 이하 · 장애인", { sub: "한도 없음" })}${money("medOther", "그 밖의 가족", { sub: "700만원까지" })}</div>
+  ${more("spendMore", "난임 시술 · 미숙아 · 장애인 교육 · 정치 · 종교 기부")}
+  ${S.spendMore ? `<div class="two">${money("medInf", "난임 시술비", { sub: "30%" })}${money("medPre", "미숙아 · 선천성 이상아", { sub: "20%" })}</div>` : ""}
+  <div class="hint" style="margin:-4px 0 6px">실손보험으로 돌려받은 금액은 빼고 넣어요 · 안경은 1명 50만원까지 · 산후조리원은 1회 200만원까지</div>
+  <div class="yt-sec">교육비 <span class="hint" style="margin:0">15%</span></div>
+  ${money("eduSelf", "본인", { sub: "대학원 · 대학 · 직업훈련 · 학자금 상환 — 한도 없음" })}
+  <div class="f"><div class="lb">자녀 · 가족<span>취학 전 · 초중고 1명 300만원 · 대학생 900만원까지</span></div>${eduRows()}<button class="addb" data-eadd>+ 교육비 넣기</button>
+  <div class="hint">초중고 학원비는 안 돼요 · 취학 전 아이 학원 · 체육시설, <b>2026년부터 초등 1~2학년 예체능 학원 · 체육시설</b>은 돼요</div></div>
+  ${S.spendMore ? money("eduDis", "장애인 특수교육비", { sub: "한도 없음" }) : ""}
+  <div class="yt-sec">기부금</div>
+  <div class="two">${money("dnHome", "고향사랑기부", { sub: "10만원까지 전액 · 10만~20만원 40%" })}${money("dnGeneral", "일반 기부", { sub: "사회복지 · 단체 · 15%" })}</div>
+  ${S.spendMore ? `<div class="two">${money("dnPol", "정치자금(후원금)", { sub: "10만원까지 전액" })}${money("dnReligion", "종교단체", { sub: "15%" })}</div>${money("dnSpecial", "특례 기부", { sub: "국가 · 지자체 · 재해 · 국방헌금 등" })}` : ""}`;
+}
+function stepSave() {
+  const lim = S.salary <= 55e6 ? "15%" : "12%";
+  return `<div class="yt-k">5 / 6 단계</div><h2>연금 · 주택 · 월세</h2><p class="yt-lead">연금저축 · IRP는 연말 전에 더 넣으면 바로 환급이 늘어요. 오른쪽 「더 돌려받는 방법」을 같이 보세요.</p>
+  <div class="yt-sec">연금계좌 <span class="hint" style="margin:0">${lim} · 연금저축 600만원 · 합쳐서 900만원</span></div>
+  <div class="two">${money("pSavings", "연금저축", { sub: "1년 납입" })}${money("pIrp", "IRP · 퇴직연금", { sub: "본인이 넣은 돈" })}</div>
+  <div class="yt-sec">주택 · 월세</div>
+  <div class="f"><div class="lb">무주택 세대주예요<span>월세 · 청약저축 공제 조건</span></div><div class="chips">${chip("homeless", true, "네")}${chip("homeless", false, "아니요")}</div></div>
+  ${S.homeless ? `<div class="two">${money("rent", "월세", { sub: S.salary > 8e7 ? "총급여 8천만원 넘으면 안 됨" : `1년 합계 · ${S.salary <= 55e6 ? "17%" : "15%"} · 1,000만원까지` })}${money("hSaving", "주택청약저축", { sub: S.salary > 7e7 ? "총급여 7천만원 넘으면 안 됨" : "300만원까지 · 40% 소득공제" })}</div>
+  <div class="hint" style="margin:-6px 0 10px">월세는 전입신고가 된 집 · 국민주택규모(85㎡) 또는 기준시가 4억원 이하 · 월세로 공제받으면 그 금액은 카드 · 현금영수증 공제에서 빠져요</div>` : ""}
+  ${more("saveMore", "전세대출 · 주택담보대출 이자 · 그 밖의 소득공제")}
+  ${S.saveMore ? `${money("hLease", "전세자금대출 원리금 상환액", { sub: "40% · 청약저축과 합쳐 400만원까지" })}
+  <div class="two">${money("hMortgage", "주택담보대출 이자", { sub: "장기주택저당차입금" })}<div class="f"><label for="f_cap">이자 공제 한도<span>상환 기간 · 방식</span></label><div class="in"><select id="f_cap" data-sel="hMortCap">${[[20000000, "15년 이상 · 고정 + 비거치 2,000만원"], [18000000, "15년 이상 · 고정 또는 비거치 1,800만원"], [8000000, "15년 이상 · 그 밖 800만원"], [6000000, "10년 이상 · 고정 또는 비거치 600만원"]].map(([v, t]) => `<option value="${v}"${S.hMortCap === v ? " selected" : ""}>${t}</option>`).join("")}</select></div></div></div>
+  ${money("otherDed", "그 밖의 소득공제", { sub: "소기업소상공인 · 벤처투자 · 우리사주 등", hint: "공제받을 금액을 직접 넣어요(납입액이 아니라 공제 금액)" })}` : ""}`;
+}
+
+/* ── 결과 · 「더 돌려받는 방법」 ── */
+function tips(r) {
+  const out = [], base = r.diffAll;
+  const gain = patch => { const o = Object.assign({}, S, patch); return base - YT.calc(toInput(o), YEAR).diffAll; };
+  /* 연금저축 · IRP */
+  const ps = Math.min(S.pSavings, 6e6), room = 9e6 - Math.min(ps + S.pIrp, 9e6);
+  if (S.salary > 0 && room > 0 && r.decided > 0) {
+    const addS = Math.max(0, Math.min(6e6 - ps, room)), addI = room - addS;
+    const g = gain({ pSavings: S.pSavings + addS, pIrp: S.pIrp + addI });
+    if (g > 0) out.push([IC.up, `${addS ? "연금저축" : "IRP"}${addS && addI ? " · IRP" : ""}에 ${man(room)} 더 넣으면`, `한도 900만원까지 · ${S.salary <= 55e6 ? 15 : 12}% 세액공제${r.decided < room * 0.15 ? " · 낼 세금이 그보다 적어 일부만" : ""}`, "+" + won(g) + "원"]);
+  }
+  /* 카드 */
+  const c = r.card;
+  if (S.salary > 0 && c.total > 0 && c.total < c.min) out.push([IC.card, `카드 사용액이 총급여 25%까지 ${man(c.min - c.total)} 남음`, "그 전까지는 카드 공제 0원 — 혜택 많은 신용카드 쓰기", "공제 0원", true]);
+  else if (S.credit >= 1e6 && c.basic < c.limitBasic) {
+    const mv = Math.min(S.credit, 6e6), g = gain({ credit: S.credit - mv, debit: S.debit + mv });
+    if (g > 0) out.push([IC.card, `신용카드 ${man(mv)}을 체크카드로 썼다면`, "체크카드 · 현금영수증은 공제율 30%(신용 15%)", "+" + won(g) + "원"]);
+  } else if (c.basic >= c.limitBasic && c.extra < Math.min(c.limitExtra, c.possible - c.limitBasic)) {
+    out.push([IC.card, "카드 기본 한도를 다 썼어요", "전통시장 · 대중교통 · 문화체육으로 쓴 만큼은 추가 한도로 더 공제", "추가 한도", true]);
+  }
+  /* 고향사랑기부 */
+  if (r.decided > 0 && S.dnHome < 2e5) {
+    const to = S.dnHome < 1e5 ? 1e5 : 2e5, g = gain({ dnHome: to });
+    if (g > 0) out.push([IC.heart, `고향사랑기부 ${man(to - S.dnHome)} 더 하면`, to === 1e5 ? "10만원까지는 낸 만큼 거의 그대로(지방세 포함) + 답례품" : "10만~20만원 구간 공제율 40%(2026년부터)", "+" + won(g) + "원"]);
+  }
+  /* 월세 */
+  if (S.salary > 0 && S.salary <= 8e7 && !S.rent) out.push([IC.home, "무주택 세대주가 월세를 낸다면", `연 1,000만원까지 ${S.salary <= 55e6 ? 17 : 15}% 세액공제 — 5단계에서 넣기`, "확인", true]);
+  /* 의료비 */
+  if (S.medSelf + S.medOther > 0 && r.credits.medical === 0 && !r.credits.standard) out.push([IC.med, `의료비가 총급여 3%(${man(S.salary * 0.03)})를 안 넘었어요`, "그 아래는 공제 0원 · 맞벌이면 소득이 적은 쪽이 받는 게 유리할 수 있어요", "공제 0원", true]);
+  return out.slice(0, 4);
+}
+function resultCard(r) {
+  const d = r.diffAll, cls = !S.salary ? "zero" : d < 0 ? "" : d > 0 ? "pay" : "zero";
+  const head = !S.salary ? `<div class="amt-b zero num">0<small>원</small></div><div class="amt-s">1단계에서 총급여를 넣으면 바로 계산돼요</div>`
+    : `<div class="amt-b ${cls} num">${won(Math.abs(d))}<small>원 ${d < 0 ? "돌려받아요" : d > 0 ? "더 내요" : ""}</small></div><div class="amt-s">소득세 ${won(Math.abs(r.diff))}원 + 지방소득세 ${won(Math.abs(r.local - r.paidLocal))}원 · 넣은 값으로 계산한 참고 금액</div>`;
+  return `<div class="big"><div class="printhead">연말정산 계산기 · 2026년 귀속 · Blog J</div><div class="k2">예상 결과 · 지방소득세 포함</div>${head}
+  <div class="flow"><div class="fb"><span>산출세액</span><b class="num">${won(r.tax)}</b></div><div class="op">−</div><div class="fb"><span>세액공제</span><b class="num">${won(Math.min(r.creditTotal, r.tax))}</b></div><div class="op">=</div><div class="fb"><span>결정세액</span><b class="num">${won(r.decided)}</b></div><div class="op">vs</div><div class="fb"><span>이미 낸 세금</span><b class="num">${won(r.paid)}</b></div></div>
+  ${r.creditUnused > 0 && S.salary ? `<div class="hint" style="margin-top:10px">세액공제가 낼 세금보다 <b class="num">${won(r.creditUnused)}원</b> 많아 그만큼은 쓰이지 못해요(결정세액 0원).</div>` : ""}</div>`;
+}
+function summary(r) {
+  const cr = r.credits;
+  const sp = cr.insurance + cr.medical + cr.edu + cr.donation;
+  return `<div class="card"><h3>공제 한눈에</h3>
+  <div class="row"><span>근로소득공제</span><b class="num">${won(r.earnedDed)}</b></div>
+  <div class="row"><span>인적공제(${r.nBasic}명${r.personal > r.nBasic * 1.5e6 ? " + 추가" : ""})</span><b class="num">${won(r.personal)}</b></div>
+  <div class="row"><span>국민연금 · 건강 · 고용보험</span><b class="num">${won(r.pensionIns + r.healthIns)}</b></div>
+  <div class="row${r.card.deduct ? "" : " z"}"><span>신용카드 등</span><b class="num">${won(r.card.deduct)}</b></div>
+  ${r.housingSaving + r.housingLease + r.mortgage ? `<div class="row"><span>주택(청약 · 대출)</span><b class="num">${won(r.housingSaving + r.housingLease + r.mortgage)}</b></div>` : ""}
+  <div class="row"><span>근로소득세액공제</span><b class="num">${won(cr.earned)}</b></div>
+  ${cr.child + cr.birth ? `<div class="row"><span>자녀 · 출산</span><b class="num">${won(cr.child + cr.birth)}</b></div>` : ""}
+  ${cr.marriage ? `<div class="row"><span>혼인</span><b class="num">${won(cr.marriage)}</b></div>` : ""}
+  ${cr.pension ? `<div class="row"><span>연금계좌</span><b class="num">${won(cr.pension)}</b></div>` : ""}
+  ${sp ? `<div class="row"><span>보험 · 의료 · 교육 · 기부</span><b class="num">${won(sp)}</b></div>` : ""}
+  ${cr.rent ? `<div class="row"><span>월세</span><b class="num">${won(cr.rent)}</b></div>` : ""}
+  ${cr.standard ? `<div class="row"><span>표준세액공제</span><b class="num">${won(cr.standard)}</b></div>` : ""}
+  </div>`;
+}
+function tipsCard(r) {
+  const t = S.salary ? tips(r) : [];
+  return `<div class="card"><h3>더 돌려받는 방법</h3>${t.length ? t.map(([ic, a, b, g, info]) => `<div class="tip${info ? " info" : ""}"><div class="d">${ic}</div><p>${esc(a)}<br><small>${esc(b)}</small></p><b class="g num">${esc(g)}</b></div>`).join("") : `<p class="hint">값을 넣으면 연금저축 · 카드 · 기부로 환급을 늘리는 방법을 계산해 보여 드려요.</p>`}
+  <p class="note">2026년 귀속(2027년 1월 연말정산) 기준 · 국세청 연말정산 안내의 계산식으로 계산 · 정확한 금액은 회사 연말정산 · 홈택스에서</p></div>`;
+}
+function stepRes(r) {
+  const cr = r.credits, c = r.card;
+  const L = (a, b, cls) => `<div class="row${cls ? " " + cls : ""}"><span>${a}</span><b class="num">${b}</b></div>`;
+  return `<div class="yt-k">6 / 6 단계</div><h2>결과</h2><p class="yt-lead">원천징수영수증과 같은 순서로 계산 과정을 모두 보여 드려요.</p>
+  <div class="res-tbl">
+  ${L("총급여", won(r.salary))}${L("− 근로소득공제", won(r.earnedDed), "s")}${L("근로소득금액", won(r.earnedIncome))}
+  ${L("− 인적공제", won(r.personal), "s")}${L("− 국민연금", won(r.pensionIns), "s")}${L("− 건강 · 고용보험", won(r.healthIns), "s")}
+  ${r.housingLease + r.mortgage ? L("− 주택 대출", won(r.housingLease + r.mortgage), "s") : ""}${r.housingSaving ? L("− 주택청약저축", won(r.housingSaving), "s") : ""}
+  ${L(`− 신용카드 등 <small class="hint">(25% 넘은 ${man(c.over)} · 한도 ${man(c.limitBasic)}${c.extra ? " + 추가 " + man(c.extra) : ""})</small>`, won(c.deduct), "s")}
+  ${r.otherDed ? L("− 그 밖의 소득공제", won(r.otherDed), "s") : ""}${r.overCap ? L("+ 소득공제 종합한도(2,500만원) 넘은 금액", won(r.overCap), "s") : ""}
+  ${L("과세표준", won(r.taxBase), "t")}${L("산출세액", won(r.tax))}
+  ${L("− 근로소득세액공제", won(cr.earned), "s")}${cr.child ? L(`− 자녀세액공제(${kidInfo().credit}명)`, won(cr.child), "s") : ""}${cr.birth ? L("− 출산 · 입양", won(cr.birth), "s") : ""}${cr.marriage ? L("− 혼인세액공제", won(cr.marriage), "s") : ""}
+  ${cr.pension ? L(`− 연금계좌(${Math.round(r.pensionRate * 100)}%)`, won(cr.pension), "s") : ""}${cr.insurance ? L("− 보험료", won(cr.insurance), "s") : ""}${cr.medical ? L("− 의료비", won(cr.medical), "s") : ""}${cr.edu ? L("− 교육비", won(cr.edu), "s") : ""}${cr.donation ? L("− 기부금", won(cr.donation), "s") : ""}${cr.rent ? L("− 월세", won(cr.rent), "s") : ""}${cr.standard ? L("− 표준세액공제", won(cr.standard), "s") : ""}
+  ${L("결정세액(소득세)", won(r.decided), "t")}${L("− 이미 낸 소득세", won(r.paid), "s")}${L(r.diff <= 0 ? "소득세 돌려받음" : "소득세 더 냄", won(Math.abs(r.diff)))}
+  ${L("지방소득세(결정세액 10%) − 이미 낸 지방소득세", (r.local - r.paidLocal === 0 ? "" : r.local - r.paidLocal < 0 ? "−" : "+") + won(Math.abs(r.local - r.paidLocal)))}
+  ${L(r.diffAll <= 0 ? "모두 돌려받음" : "모두 더 냄", won(Math.abs(r.diffAll)) + "원", "t")}
+  </div>
+  <div class="box" style="margin-top:14px">계산에 넣지 않은 것: 중소기업 취업자 감면 · 외국납부세액 · 기부금 이월 · 세액공제 순서에 따른 차이. 이런 것이 있으면 실제 금액과 다를 수 있어요.</div>
+  <div class="chips noprint" style="margin-top:4px"><button class="btn sm" data-print>인쇄 · PDF로 저장</button><button class="btn sm" data-reset>처음부터 다시</button></div>`;
+}
+
+/* ── 그리기 ── */
+function stepHtml(r) { return [stepPay, stepFam, stepCard, stepSpend, stepSave, () => stepRes(r)][S.step](); }
+function render(keepFocus) {
+  const r = calcS();
+  const isRes = S.step === 5;
+  const rul = STEPS.map(([k, n], i) => `<button class="${i < S.step ? "done" : i === S.step ? "on" : ""}" data-go="${i}"><b></b>${n}</button>`).join("");
+  const mrul = STEPS.map((x, i) => `<i class="${i <= S.step ? "d" : ""}"></i>`).join("");
+  const nav = `<div class="yt-nav">${S.step ? `<button class="btn" data-prev>‹ 이전</button>` : ""}${isRes ? `<button class="btn pr" data-go="0">처음 단계로</button>` : `<button class="btn pr" data-next>다음: ${STEPS[S.step + 1][1]} ›</button>`}</div>`;
+  $("#root").innerHTML = `<header class="yt-head"><div class="yt-ic">${IC.calc}<i></i></div><h1>연말정산 계산기</h1><small>Blog J</small><span class="yt-yr">2026년 귀속 · 2027년 1월 정산</span><nav class="yt-rul" aria-label="단계">${rul}</nav></header>
+  <div class="yt-mrul">${mrul}</div>
+  <div class="yt-main"><section class="yt-panel" id="panel">${stepHtml(r)}${nav}</section>
+  <aside class="yt-res${isRes ? "" : " side"}" id="res">${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div></aside></div>
+  <div class="yt-mbar"><div><span>예상 · ${!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"}</span><b class="num" id="mb">${won(Math.abs(r.diffAll))}원</b></div>${S.step ? `<button class="bk" data-prev>‹</button>` : `<span style="margin-left:auto"></span>`}${isRes ? `<button class="go" data-print>인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
+  <p class="yt-foot">입력한 금액은 이 기기 브라우저에만 저장되고 어디로도 보내지 않아요 · 연말정산 계산기 v${APP_VER}(${BUILD} 판) · 만든 곳 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a></p>`;
+  if (keepFocus) { const el = document.getElementById(keepFocus.id) || (keepFocus.sel && document.querySelector(keepFocus.sel)); if (el) { el.focus(); try { el.setSelectionRange(keepFocus.pos, keepFocus.pos); } catch (e) {} } }
+}
+/* 입력할 때는 오른쪽 결과만 다시 그림(입력 칸은 그대로) */
+function refreshResult() {
+  const r = calcS();
+  const res = $("#res"); if (res) res.innerHTML = `${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div>`;
+  const mb = $("#mb"); if (mb) { mb.textContent = won(Math.abs(r.diffAll)) + "원"; const sp = mb.previousElementSibling; if (sp) sp.textContent = "예상 · " + (!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"); }
+}
+function go(i, push) {
+  S.step = Math.max(0, Math.min(5, i)); save(); render(); window.scrollTo(0, 0);
+  if (push !== false) try { history.pushState({ yt: S.step }, "", location.href); } catch (e) {}
+}
+window.addEventListener("popstate", e => { const st = e.state && typeof e.state.yt === "number" ? e.state.yt : 0; S.step = st; save(); render(); window.scrollTo(0, 0); });
+
+/* 금액 칸: 치는 대로 천 단위 쉼표 · 커서 위치 유지 */
+function fmtMoney(el) {
+  const raw = el.value, pos = el.selectionStart || 0;
+  const digitsBefore = raw.slice(0, pos).replace(/\D/g, "").length;
+  let d = raw.replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 13);
+  const v = d ? +d : 0; el.value = d ? (+d).toLocaleString("ko-KR") : "";
+  let p = 0, seen = 0; while (p < el.value.length && seen < digitsBefore) { if (/\d/.test(el.value[p])) seen++; p++; }
+  try { el.setSelectionRange(p, p); } catch (e) {}
+  return v;
+}
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.m) { S[t.dataset.m] = fmtMoney(t); save(); refreshResult(); if (S.step === 2) cardBoxSoon(); return; }
+  if (t.dataset.c) { const v = Math.min(20, +t.value.replace(/\D/g, "") || 0); t.value = v || ""; S[t.dataset.c] = v; save(); refreshResult(); return; }
+  if (t.dataset.kid != null) { t.value = t.value.replace(/\D/g, "").slice(0, 4); S.kids[+t.dataset.kid].y = t.value; save(); refreshResult(); if (t.value.length === 4) { const id = { sel: `[data-kid="${t.dataset.kid}"]`, pos: 4 }; render(id); } return; }
+  if (t.dataset.ea != null) { S.eduKids[+t.dataset.ea].a = fmtMoney(t); save(); refreshResult(); return; }
+});
+let cbT = null;
+function cardBoxSoon() { clearTimeout(cbT); cbT = setTimeout(() => { const a = document.activeElement; const k = { id: a && a.id, pos: a && a.selectionStart }; render(k); }, 700); }
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.dataset.et != null) { S.eduKids[+t.dataset.et].t = t.value; save(); refreshResult(); }
+  if (t.dataset.sel) { S[t.dataset.sel] = +t.value; save(); refreshResult(); }
+});
+document.addEventListener("focusin", e => { const t = e.target; if (t.matches && t.matches("input.amt") && window.innerWidth < 900) setTimeout(() => t.scrollIntoView({ block: "center", behavior: "smooth" }), 250); });
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT") { const ins = [...document.querySelectorAll("#panel input")]; const i = ins.indexOf(e.target); if (i >= 0 && i < ins.length - 1) ins[i + 1].focus(); else e.target.blur(); } });
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.go != null) return go(+b.dataset.go);
+  if (b.hasAttribute("data-next")) return go(S.step + 1);
+  if (b.hasAttribute("data-prev")) return history.state && typeof history.state.yt === "number" && history.state.yt === S.step && S.step > 0 ? history.back() : go(S.step - 1);
+  if (b.dataset.ch) { S[b.dataset.ch] = JSON.parse(b.dataset.v); if (b.dataset.ch === "single" && S.single) S.woman = false; if (b.dataset.ch === "woman" && S.woman) S.single = false; save(); return render(); }
+  if (b.dataset.more) { S[b.dataset.more] = !S[b.dataset.more]; save(); return render(); }
+  if (b.hasAttribute("data-kadd")) { S.kids.push({ y: "" }); save(); render({ sel: `[data-kid="${S.kids.length - 1}"]`, pos: 0 }); return; }
+  if (b.dataset.kdel != null) { S.kids.splice(+b.dataset.kdel, 1); save(); return render(); }
+  if (b.hasAttribute("data-eadd")) { S.eduKids.push({ t: "school", a: 0 }); save(); render({ sel: `[data-ea="${S.eduKids.length - 1}"]`, pos: 0 }); return; }
+  if (b.dataset.edel != null) { S.eduKids.splice(+b.dataset.edel, 1); save(); return render(); }
+  if (b.hasAttribute("data-print")) { if (S.step !== 5) go(5); setTimeout(() => window.print(), 120); return; }
+  if (b.hasAttribute("data-reset")) { if (!confirmReset()) return; S = BLANK(); try { localStorage.removeItem(LSK); } catch (er) {} go(0); toast("입력한 값을 모두 지웠어요"); }
+});
+let rsT = 0;
+function confirmReset() { const n = Date.now(); if (n - rsT < 4000) return true; rsT = n; toast("한 번 더 누르면 입력한 값을 모두 지워요"); return false; }
+function toast(t) { const o = document.querySelector(".toast"); if (o) o.remove(); const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
+
+/* 시작 — 블로그 경유 잠금(대표 글 공개 시각부터) */
+const GATE_ON = false;   /* 대표 글 날짜가 정해지면 Date.now() >= Date.parse("…") 로 */
+(async () => {
+  const T = new URLSearchParams(location.search).get("tab") || "all";
+  if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return;
+  try { history.replaceState({ yt: S.step }, "", location.href); } catch (e) {}
+  render();
+})();
+
+/* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알림 */
+(function () { if (!EMBED || window.parent === window) return;
+  let last = 0, t = null;
+  function send() { const r = document.getElementById("root"); if (!r) return; const h = Math.ceil(r.getBoundingClientRect().height) + 8; if (Math.abs(h - last) < 4) return; last = h; try { window.parent.postMessage({ blogj: "height", h }, "https://luvbong.tistory.com"); } catch (e) {} }
+  function soon() { clearTimeout(t); t = setTimeout(send, 60); }
+  if (window.ResizeObserver) new ResizeObserver(soon).observe(document.getElementById("root"));
+  window.addEventListener("load", send); setTimeout(send, 300);
+})();
+</script>
+</body></html>

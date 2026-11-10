@@ -299,7 +299,7 @@ mark{background:#fbe3a6;color:inherit}
  .navb{width:24px}
  .wxb{width:36px;height:36px}
  .big{font-size:50px}
- .stamp{width:48px;height:48px}
+ .stamp{width:58px;height:58px;white-space:nowrap;letter-spacing:-.4px}   /* 11-10: 휴대폰에서 「아주 좋음」 글자가 도장 밖으로 넘치던 것 */
  .grid2{grid-template-columns:minmax(0,1fr)}
  .meals{grid-template-columns:repeat(2,minmax(0,1fr))}
  .cell{min-height:64px;padding:3px}
@@ -556,7 +556,7 @@ mark{background:#fbe3a6;color:inherit}
  .book>.pg{flex:none}   /* 11-04: 세로로 쌓을 때 min-height가 내용보다 작게 줄여 글 · 칸이 쪽 밖으로 넘치던 것 */
  .dayb .pg.r{border-top:0}
  .dayb .pg{min-height:max(calc(100vh - 200px),640px);min-height:max(calc(100dvh - 200px),640px)}   /* 11-04: 1쪽 · 2쪽 같은 높이, 낮은 화면(폴드 바깥 화면)은 위아래로 넘겨 씀 */
- .dayb .pg,.dayb .pg.r{padding-bottom:64px}   /* 아래 「수정 · 꾸미기」 띠에 1쪽 · 2쪽 단추가 가리지 않게 */
+ .dayb .pg,.dayb .pg.r{padding-bottom:128px}   /* 11-10: 아래에 떠 있는 「사진 · 수정 · 꾸미기」 띠가 「‹ 1쪽 · 2쪽 ›」 단추를 가리던 것 */   /* 아래 「수정 · 꾸미기」 띠에 1쪽 · 2쪽 단추가 가리지 않게 */
  .pgsw{display:flex;gap:6px;margin:2px 0 8px;padding-left:10px}
  .pgsw button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;height:40px;border:0;border-radius:12px 12px 4px 4px;background:var(--paper2);color:var(--sub);font-family:var(--ui);font-size:14px;font-weight:700;box-shadow:inset 0 -2px 0 rgba(90,74,50,.12)}
  .pgsw button b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--paper);color:var(--sub);font-size:12px}
@@ -896,7 +896,7 @@ const SYNC = BJSync.create({
 */
 </script>
 <script>
-const BUILD = "2026-11-09(월) 22:00";
+const BUILD = "2026-11-10(화) 16:00";
 /* 일기 노트 v1.0 — Blog J (설치형 · 내 기기 + 내 구글 드라이브에만 저장) */
 "use strict";
 const VER = "1.0";

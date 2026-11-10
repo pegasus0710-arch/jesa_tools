@@ -239,7 +239,13 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
  .pvt{display:inline-flex;padding:6px 11px;border-radius:999px;font-size:13px;font-weight:800;color:var(--g);background:var(--card);box-shadow:0 0 0 1px var(--hair2)}
  body.m-edit .prev:not(.big) .phone{padding:0;background:none;box-shadow:none}
  body.m-edit .prev:not(.big) .phead,body.m-edit .prev:not(.big) .meta,body.m-edit .prev:not(.big) .edited,body.m-edit .prev:not(.big) .acts,body.m-edit .prev:not(.big) .cardbox{display:none}
- body.m-edit .prev:not(.big) .bub{max-height:118px;font-size:14.5px;line-height:1.6;padding:10px 12px}
+ body.m-edit .prev:not(.big) .bub{max-height:118px;font-size:14.5px;line-height:1.6;padding:11px 13px;font-size:15.5px;max-height:150px;border:2px solid var(--g);border-radius:16px 16px 16px 4px;box-shadow:0 3px 0 rgba(25,84,85,.14)}
+ /* 11-10 제이: 휴대폰에서 「보낼 문자」가 눈에 띄게 — 초록 제목 + 말풍선 테두리 + 연한 초록 판 */
+ body.m-edit .prev{background:var(--gl)}
+ body.m-edit .pvh .ls{display:inline-flex;align-items:center;gap:7px;font-size:16.5px;font-weight:800;color:var(--g)}
+ body.m-edit .pvh .ls small{font-size:12.5px;font-weight:600;color:var(--sub2);margin-left:2px}
+ body.m-edit .pvh .lsi{width:10px;height:10px;border-radius:50%;background:var(--or);box-shadow:0 0 0 3px rgba(245,109,3,.18);flex-shrink:0}
+ body.m-edit .pvt{background:#fff}
  body.m-edit .prev:not(.big) .pvh .lbl::after{content:""}
  body.m-edit .prev.big .bub{max-height:52vh}
  body.m-edit .prev.big{max-height:calc(100vh - var(--th,58px) - 80px);overflow:auto}
@@ -886,6 +892,7 @@ const CAT8 = [
       if (!cfg.isOn() || live() || C.busy) return;
       if (e && e.target && e.target.closest && e.target.closest("[data-bjs-band],[data-gdoff]")) return;
       if (restore()) { run("restore"); return; }
+      if (cfg.noSilent && cfg.noSilent()) { C.needGesture = true; paint(); return; }   /* 11-10: 휴대폰 설치 앱은 창 대신 띠 「다시 연결」(같은 화면 이동) */
       const gap = C.silentFails ? Math.min(10 * 60000, 30000 * Math.pow(2, C.silentFails)) : 0;   /* 실패하면 30초 · 1분 · 2분 … 최대 10분 */
       if (now() - C.silentAt < gap) return;
       C.silentAt = now();
@@ -1058,7 +1065,7 @@ function curText() { const t = tplOf(S.id); return t.gen(valsFor(t), S.tone).rep
 function drawPrev() {
   const t = tplOf(S.id), auto = curText(), txt = S.custom != null ? S.custom : auto, b = bytes(txt);
   const kind = b <= 90 ? "단문(SMS)" : b <= 2000 ? "장문(LMS)" : "너무 길어요";
-  let h = `<div class="pvh"><div class="lbl"><span class="lf">미리보기 — 눌러서 직접 고칠 수 있어요</span><span class="ls">보낼 문자 미리보기</span></div><span class="pvn num">${[...txt].length.toLocaleString()}자</span><button class="pvt" data-pvt aria-expanded="${S.pvBig ? "true" : "false"}">${S.pvBig ? "작게 보기" : "크게 보기"}</button></div><div class="phone"><div class="phead"><i></i>보낼 문자</div><div class="bub" id="bub" data-ks="bub" contenteditable="plaintext-only" spellcheck="false">${esc(txt)}</div></div>`;
+  let h = `<div class="pvh"><div class="lbl"><span class="lf">미리보기 — 눌러서 직접 고칠 수 있어요</span><span class="ls"><i class="lsi"></i>보낼 문자<small>아래 칸을 고르면 바로 바뀌어요</small></span></div><span class="pvn num">${[...txt].length.toLocaleString()}자</span><button class="pvt" data-pvt aria-expanded="${S.pvBig ? "true" : "false"}">${S.pvBig ? "작게 보기" : "크게 보기"}</button></div><div class="phone"><div class="phead"><i></i>보낼 문자</div><div class="bub" id="bub" data-ks="bub" contenteditable="plaintext-only" spellcheck="false">${esc(txt)}</div></div>`;
   h += `<div class="meta num"><span>${[...txt].length.toLocaleString()}자 · ${b.toLocaleString()}바이트</span><span class="k">${kind}</span></div>`;
   if (S.custom != null) h += `<div class="edited">직접 고친 글이에요 <button data-reset>칸 내용으로 되돌리기</button></div>`;
   const acts = `<button class="btn go" data-act="copy">${svg(IC.copy)}복사하기</button><button class="btn" data-act="share">${svg(IC.share)}보내기</button><button class="btn full my" data-act="savemy">${svg(IC.my)}내 문구로 저장</button>${t.card ? `<button class="btn full" data-act="card">${svg(IC.img)}카드 이미지로 만들기</button>` : ""}`;
@@ -1373,7 +1380,7 @@ document.addEventListener("click", async e => {
   if (el.dataset.bk === "make") return backupMake();
   if (el.dataset.bk === "restore") return backupPick();
   if (el.dataset.gd === "connect") return gdConnect();
-  if (el.dataset.gd === "sync") { GD.toastNext = true; try { await SYNC.token(true); } catch (er) { return toast(er.message || "구글 연결에 실패했어요"); } return SYNC.run("manual"); }
+  if (el.dataset.gd === "sync") { GD.toastNext = true; if (GD_RE() && !SYNC.live() && !SYNC.restore()) return gdRedirect(); try { await SYNC.token(true); } catch (er) { return toast(er.message || "구글 연결에 실패했어요"); } return SYNC.run("manual"); }
   if (el.dataset.gdoff) { if (!el.dataset.sure) { el.dataset.sure = "1"; el.textContent = "한 번 더 누르면 끊어요"; return; } S.set.gdOn = false; saveSet(); SYNC.invalidate(); toast("구글 드라이브 연결을 끊었어요 — 이 기기 자료는 그대로예요"); return render(); }
   if (el.dataset.inst) return instGo();
   /* 상황 고르기 — 칸 · 미리보기(샘플판 그대로) */
@@ -1454,22 +1461,48 @@ async function gdSync(opt = {}) {
   } catch (e) { GD.busy = false; paintSync(); if (GD.toastNext) { GD.toastNext = false; if (!(e.status === 401 || e.code === "NEED_GESTURE")) toast("구글 드라이브: " + e.message); } throw e; }
   GD.busy = false; paintSync();
 }
+/* 11-10 제이: 휴대폰 설치 앱에서 구글 창(팝업)을 열면 지메일 쓰기 화면이 열림 → 설치 앱(휴대폰)은 창 대신 같은 화면에서 구글로 갔다가 돌아오기
+   ※ 구글 클라우드 콘솔 → OAuth 클라이언트 → 「승인된 리디렉션 URI」에 https://pegasus0710-arch.github.io/jesa_tools/msg/ 등록 필요 */
+const GD_RE = () => MOB() && INST.standalone;
+function knownEmail() {   /* 같은 주소의 다른 Blog J 앱에서 연결한 계정 — 계정 고르기 화면을 건너뜀 */
+  try { const o = JSON.parse(localStorage.getItem("bj-gd-token") || "null"); if (o && o.m) return o.m; } catch (e) {}
+  try { for (let i = 0; i < localStorage.length; i++) { const v = localStorage.getItem(localStorage.key(i)) || ""; const x = v.match(/"gdEmail":"([^"@]+@[^"]+)"/); if (x) return x[1]; } } catch (e) {}
+  return "";
+}
+function gdRedirect() {
+  if (!navigator.onLine) return toast("인터넷에 연결된 뒤 다시 눌러 주세요");
+  const st = "m" + Math.random().toString(36).slice(2, 12); try { localStorage.setItem("bj-msg2-oauth", st); } catch (e) {}
+  const q = new URLSearchParams({ client_id: GD_CLIENT_ID, redirect_uri: location.origin + location.pathname.replace(/index\.html$/, ""), response_type: "token", scope: GD_SCOPE, include_granted_scopes: "true", state: st });
+  const em = S.set.gdEmail || knownEmail(); if (em) q.set("login_hint", em); if (!S.set.gdOn) q.set("prompt", "consent");
+  toast("구글로 넘어가요 — 허용하면 이 화면으로 돌아와요");
+  setTimeout(() => location.assign("https://accounts.google.com/o/oauth2/v2/auth?" + q), 300);
+}
+function gdBack() {   /* 구글에서 돌아왔을 때(#access_token=…) */
+  const h = location.hash; if (!/access_token=|error=/.test(h)) return false;
+  const p = new URLSearchParams(h.slice(1)); let st0 = ""; try { st0 = localStorage.getItem("bj-msg2-oauth") || ""; localStorage.removeItem("bj-msg2-oauth"); } catch (e) {}
+  history.replaceState(null, "", location.pathname + location.search);
+  if (!st0 || p.get("state") !== st0) return false;
+  if (p.get("error")) { setTimeout(() => toast(p.get("error") === "access_denied" ? "구글 연결을 취소했어요" : "구글 연결을 못 했어요 — " + p.get("error")), 400); return false; }
+  try { localStorage.setItem("bj-gd-token", JSON.stringify({ t: p.get("access_token"), e: Date.now() + (+p.get("expires_in") || 3600) * 1000, m: S.set.gdEmail || "" })); } catch (e) {}
+  S.set.gdOn = true; saveSet(); GD.toastNext = true; S.view = "set"; return true;
+}
 async function gdConnect() {
   if (!gdHttp()) return toast("구글 드라이브는 인터넷 주소(https)에서 열었을 때만 돼요");
+  if (GD_RE()) return gdRedirect();
   try { await SYNC.token(true); } catch (er) { return toast(er && er.message ? "구글 연결 — " + er.message : "구글 연결을 못 했어요"); }
   S.set.gdOn = true; saveSet(); GD.toastNext = true; await SYNC.run("connect"); render();
 }
 function paintSync() {
   const s = SYNC ? SYNC.state() : null; const dot = $("#gdot"); if (dot && s) { dot.className = "gdot " + (!s.on ? "off" : s.busy ? "busy" : s.live ? "ok" : "off"); dot.title = !s.on ? "구글 드라이브 연결 안 됨" : s.busy ? "동기화 중" : s.live ? "구글 드라이브 연결됨" : "구글 드라이브 쉬는 중"; }
   let b = $("#syband"); const need = s && s.on && !s.live && (s.needGesture || s.pending);
-  if (!need) { if (b) b.remove(); } else { if (!b) { b = document.createElement("div"); b.id = "syband"; document.body.appendChild(b); } b.innerHTML = `<span>구글 드라이브 쉬는 중${s.pending ? " · 올릴 것 있음" : ""}</span><button type="button" data-bjs-band="gd">다시 연결</button>`; }
+  if (!need) { if (b) b.remove(); } else { if (!b) { b = document.createElement("div"); b.id = "syband"; document.body.appendChild(b); } b.innerHTML = `<span>구글 드라이브 쉬는 중${s.pending ? " · 올릴 것 있음" : ""}</span><button type="button" ${GD_RE() ? 'data-gd="connect"' : 'data-bjs-band="gd"'}>다시 연결</button>`; }
   if (S.view === "set" && $("#sheet").hidden && (!document.activeElement || document.activeElement === document.body)) drawSet();
 }
 let SYNC = null;
-SYNC = BJSync.create({ app: "msg", clientId: GD_CLIENT_ID, scope: GD_SCOPE, isOn: () => !!S.set.gdOn && gdHttp(), email: () => S.set.gdEmail || "",
+SYNC = BJSync.create({ app: "msg", clientId: GD_CLIENT_ID, scope: GD_SCOPE, isOn: () => !!S.set.gdOn && gdHttp(), email: () => S.set.gdEmail || knownEmail(),
   sync: why => gdSync({ toast: why === "connect" || why === "manual" }),
   remoteStamp: async () => { const f = await gdFile(); return f ? f.modifiedTime : null; },
-  paint: () => paintSync(), band: false });
+  paint: () => paintSync(), band: false, noSilent: () => GD_RE() });
 
 /* ── 설치(PWA) ── */
 const INST = { ev: null, standalone: matchMedia("(display-mode: standalone)").matches || navigator.standalone === true };
@@ -1498,7 +1531,9 @@ if (!MOB() && S.view === "tpl") S.mob = "edit";
 const q0 = new URLSearchParams(location.search);
 if (q0.get("s") && TPL.some(t => t.id === q0.get("s"))) { S.id = q0.get("s"); S.open = tplOf(S.id).cat; S.view = "tpl"; S.mob = "edit"; }
 if (q0.get("v") && ["my", "tpl", "fav", "recent", "set"].includes(q0.get("v"))) S.view = q0.get("v");
+const gdBackOk = gdBack();
 render(); SYNC.start(); paintSync();
+if (gdBackOk) setTimeout(() => drawSet(), 1500);   /* 돌아오면 SYNC.start()가 토큰을 읽어 바로 맞춤 */
 if (q0.get("install") === "1") setTimeout(openInstall, 300);
 addEventListener("resize", (() => { let w = innerWidth; return () => { if ((w <= 760) !== (innerWidth <= 760)) { w = innerWidth; if (!MOB() && S.view === "tpl") S.mob = "edit"; render(); } }; })());
 

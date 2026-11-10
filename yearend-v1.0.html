@@ -115,6 +115,15 @@ button{cursor:pointer;border:0;background:none}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--n);color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .box.notice{background:#fff7e8;box-shadow:0 0 0 1px rgba(245,109,3,.35);color:var(--ink)}
 .box.notice b{color:var(--ink)}
+/* 바뀐 값 표시 */
+.dlt{display:inline-block!important;font-size:12px!important;font-weight:800;letter-spacing:0;line-height:1.3;padding:1px 6px;border-radius:6px;margin-left:6px;vertical-align:middle;white-space:nowrap;animation:dpop .45s ease-out;font-variant-numeric:tabular-nums}
+.dlt.g{color:#17703f;background:#e1f2e6}
+.dlt.b{color:#b8321f;background:#fbe4df}
+.dlt.out{opacity:0;transition:opacity .4s}
+.amt-b .dlt{font-size:14px!important;padding:3px 9px;margin-left:10px;vertical-align:.5em}
+.fb .dlt{margin:3px 0 0;display:table!important}
+.yt-mbar .dlt{font-size:11.5px!important;margin-left:4px}
+@keyframes dpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}
 /* 기준 · 한도 표 */
 .lim{margin-top:18px;background:var(--card);border-radius:12px;box-shadow:var(--up);padding:12px 14px 10px}
 .lim h4{font-size:14.5px;font-weight:800;display:flex;gap:7px;align-items:center;margin-bottom:4px}
@@ -738,30 +747,32 @@ function checks(r) {
 function checkCard(r) {
   return `<div class="card"><h3>놓치기 쉬운 것 · 결과 받은 뒤 할 일</h3>${checks(r).map(([a, b]) => `<div class="row" style="justify-content:flex-start;align-items:baseline"><b style="min-width:7.5em;white-space:normal">${a}</b><span style="color:var(--sub)">${b}</span></div>`).join("")}</div>`;
 }
+/* 바뀐 값 옆에 +/− 표시: data-dk(이름) · data-v(값) · data-gd(up = 늘면 좋음 / down = 줄면 좋음) */
+const DV = (k, v, gd, txt) => `<b class="num" data-dk="${k}" data-v="${Math.round(v)}" data-gd="${gd || "up"}">${txt != null ? txt : won(v)}</b>`;
 function resultCard(r) {
   const d = r.diffAll, cls = !S.salary ? "zero" : d < 0 ? "" : d > 0 ? "pay" : "zero";
   const head = !S.salary ? `<div class="amt-b zero num">0<small>원</small></div><div class="amt-s">1단계에서 총급여를 넣으면 바로 계산돼요</div>`
-    : `<div class="amt-b ${cls} num">${won(Math.abs(d))}<small>원 ${d < 0 ? "돌려받아요" : d > 0 ? "더 내요" : ""}</small></div><div class="amt-s">소득세 ${won(Math.abs(r.diff))}원 + 지방소득세 ${won(Math.abs(r.local - r.paidLocal))}원 · <b>넣은 값으로 어림한 참고 금액 — 실제 환급액과 다를 수 있어요</b></div>`;
+    : `<div class="amt-b ${cls} num" data-dk="refund" data-v="${-d}" data-gd="up">${won(Math.abs(d))}<small>원 ${d < 0 ? "돌려받아요" : d > 0 ? "더 내요" : ""}</small></div><div class="amt-s">소득세 ${won(Math.abs(r.diff))}원 + 지방소득세 ${won(Math.abs(r.local - r.paidLocal))}원 · <b>넣은 값으로 어림한 참고 금액 — 실제 환급액과 다를 수 있어요</b></div>`;
   return `<div class="big"><div class="printhead">연말정산 계산기 · 2026년 귀속 · Blog J</div><div class="k2">예상 결과 · 지방소득세 포함</div>${head}
-  <div class="flow"><div class="fb"><span>산출세액</span><b class="num">${won(r.tax)}</b></div><div class="op">−</div><div class="fb"><span>세액공제</span><b class="num">${won(Math.min(r.creditTotal, r.tax))}</b></div><div class="op">=</div><div class="fb"><span>결정세액</span><b class="num">${won(r.decided)}</b></div><div class="op">vs</div><div class="fb"><span>이미 낸 세금</span><b class="num">${won(r.paid)}</b></div></div>
+  <div class="flow"><div class="fb"><span>산출세액</span>${DV("tax", r.tax, "down")}</div><div class="op">−</div><div class="fb"><span>세액공제</span>${DV("cred", Math.min(r.creditTotal, r.tax))}</div><div class="op">=</div><div class="fb"><span>결정세액</span>${DV("dec", r.decided, "down")}</div><div class="op">vs</div><div class="fb"><span>이미 낸 세금</span>${DV("paid", r.paid)}</div></div>
   ${r.creditUnused > 0 && S.salary ? `<div class="hint" style="margin-top:10px">세액공제가 낼 세금보다 <b class="num">${won(r.creditUnused)}원</b> 많아 그만큼은 쓰이지 못해요(결정세액 0원).</div>` : ""}</div>`;
 }
 function summary(r) {
   const cr = r.credits;
   const sp = cr.insurance + cr.medical + cr.edu + cr.donation;
   return `<div class="card"><h3>공제 한눈에</h3>
-  <div class="row"><span>근로소득공제</span><b class="num">${won(r.earnedDed)}</b></div>
-  <div class="row"><span>인적공제(${r.nBasic}명${r.personal > r.nBasic * 1.5e6 ? " + 추가" : ""})</span><b class="num">${won(r.personal)}</b></div>
-  <div class="row"><span>국민연금 · 건강 · 고용보험</span><b class="num">${won(r.pensionIns + r.healthIns)}</b></div>
-  <div class="row${r.card.deduct ? "" : " z"}"><span>신용카드 등</span><b class="num">${won(r.card.deduct)}</b></div>
-  ${r.housingSaving + r.housingLease + r.mortgage ? `<div class="row"><span>주택(청약 · 대출)</span><b class="num">${won(r.housingSaving + r.housingLease + r.mortgage)}</b></div>` : ""}
-  <div class="row"><span>근로소득세액공제</span><b class="num">${won(cr.earned)}</b></div>
-  ${cr.child + cr.birth ? `<div class="row"><span>자녀 · 출산</span><b class="num">${won(cr.child + cr.birth)}</b></div>` : ""}
-  ${cr.marriage ? `<div class="row"><span>혼인</span><b class="num">${won(cr.marriage)}</b></div>` : ""}
-  ${cr.pension ? `<div class="row"><span>연금계좌</span><b class="num">${won(cr.pension)}</b></div>` : ""}
-  ${sp ? `<div class="row"><span>보험 · 의료 · 교육 · 기부</span><b class="num">${won(sp)}</b></div>` : ""}
-  ${cr.rent ? `<div class="row"><span>월세</span><b class="num">${won(cr.rent)}</b></div>` : ""}
-  ${cr.standard ? `<div class="row"><span>표준세액공제</span><b class="num">${won(cr.standard)}</b></div>` : ""}
+  <div class="row"><span>근로소득공제</span>${DV("sEd", r.earnedDed)}</div>
+  <div class="row"><span>인적공제(${r.nBasic}명${r.personal > r.nBasic * 1.5e6 ? " + 추가" : ""})</span>${DV("sPer", r.personal)}</div>
+  <div class="row"><span>국민연금 · 건강 · 고용보험</span>${DV("sIns", r.pensionIns + r.healthIns)}</div>
+  <div class="row${r.card.deduct ? "" : " z"}"><span>신용카드 등</span>${DV("sCard", r.card.deduct)}</div>
+  ${r.housingSaving + r.housingLease + r.mortgage ? `<div class="row"><span>주택(청약 · 대출)</span>${DV("sHou", r.housingSaving + r.housingLease + r.mortgage)}</div>` : ""}
+  <div class="row"><span>근로소득세액공제</span>${DV("sEc", cr.earned)}</div>
+  ${cr.child + cr.birth ? `<div class="row"><span>자녀 · 출산</span>${DV("sKid", cr.child + cr.birth)}</div>` : ""}
+  ${cr.marriage ? `<div class="row"><span>혼인</span>${DV("sMar", cr.marriage)}</div>` : ""}
+  ${cr.pension ? `<div class="row"><span>연금계좌</span>${DV("sPen", cr.pension)}</div>` : ""}
+  ${sp ? `<div class="row"><span>보험 · 의료 · 교육 · 기부</span>${DV("sSp", sp)}</div>` : ""}
+  ${cr.rent ? `<div class="row"><span>월세</span>${DV("sRent", cr.rent)}</div>` : ""}
+  ${cr.standard ? `<div class="row"><span>표준세액공제</span>${DV("sStd", cr.standard)}</div>` : ""}
   </div>`;
 }
 function tipsCard(r) {
@@ -804,8 +815,9 @@ function render(keepFocus) {
   <div class="yt-mrul">${mrul}</div>
   <div class="yt-main"><section class="yt-panel" id="panel">${stepHtml(r)}${nav}</section>
   <aside class="yt-res${isRes ? "" : " side"}" id="res">${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div>${checkCard(r)}</aside></div>
-  <div class="yt-mbar"><div><span>예상 · ${!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"}</span><b class="num" id="mb">${won(Math.abs(r.diffAll))}원</b></div>${S.step ? `<button class="bk" data-prev>‹</button>` : `<span style="margin-left:auto"></span>`}${isRes ? `<button class="go" data-print>인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
+  <div class="yt-mbar"><div><span>예상 · ${!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"}</span><b class="num" id="mb" data-dk="mb" data-v="${-r.diffAll}" data-gd="up">${won(Math.abs(r.diffAll))}원</b></div>${S.step ? `<button class="bk" data-prev>‹</button>` : `<span style="margin-left:auto"></span>`}${isRes ? `<button class="go" data-print>인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
   <p class="yt-foot">참고용 계산 · 실제 환급액과 다를 수 있어요 · 입력한 금액은 이 기기 브라우저에만 저장되고 어디로도 보내지 않아요 · 연말정산 계산기 v${APP_VER}(${BUILD} 판) · 만든 곳 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a></p>`;
+  showDeltas();
   if (keepFocus) { const el = document.getElementById(keepFocus.id) || (keepFocus.sel && document.querySelector(keepFocus.sel)); if (el) { el.focus(); try { el.setSelectionRange(keepFocus.pos, keepFocus.pos); } catch (e) {} } }
 }
 /* 입력할 때는 오른쪽 결과만 다시 그림(입력 칸은 그대로) */
@@ -813,7 +825,8 @@ function refreshResult() {
   const r = calcS();
   const lm = document.querySelector("#panel .lim"), lf = [limPay, limFam, limCard, limSpend, limSave][S.step]; if (lm && lf) lm.outerHTML = lf(r);
   const res = $("#res"); if (res) res.innerHTML = `${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div>${checkCard(r)}`;
-  const mb = $("#mb"); if (mb) { mb.textContent = won(Math.abs(r.diffAll)) + "원"; const sp = mb.previousElementSibling; if (sp) sp.textContent = "예상 · " + (!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"); }
+  const mb = $("#mb"); if (mb) { mb.textContent = won(Math.abs(r.diffAll)) + "원"; mb.dataset.v = -r.diffAll; const sp = mb.previousElementSibling; if (sp) sp.textContent = "예상 · " + (!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"); }
+  showDeltas();
 }
 function go(i, push) {
   S.step = Math.max(0, Math.min(5, i)); save(); render(); window.scrollTo(0, 0);
@@ -865,6 +878,26 @@ let rsT = 0;
 function confirmReset() { const n = Date.now(); if (n - rsT < 4000) return true; rsT = n; toast("한 번 더 누르면 입력한 값을 모두 지워요"); return false; }
 function toast(t) { const o = document.querySelector(".toast"); if (o) o.remove(); const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
 
+
+/* ── 바뀐 곳 표시 ── 입력을 시작할 때 값을 기억해 두고, 오른쪽 값마다 그때보다 얼마 바뀌었는지 */
+let BASE = null, baseT = 0;
+function snap() { const m = {}; document.querySelectorAll("[data-dk]").forEach(e => { m[e.dataset.dk] = +e.dataset.v; }); return m; }
+function startBase() { clearTimeout(baseT); if (!BASE) BASE = snap(); }
+function endBase(ms) { clearTimeout(baseT); baseT = setTimeout(() => { BASE = null; document.querySelectorAll(".dlt").forEach(x => { x.classList.add("out"); setTimeout(() => x.remove(), 400); }); }, ms); }
+function showDeltas() {
+  if (!BASE) return;
+  document.querySelectorAll("[data-dk]").forEach(el => {
+    const k = el.dataset.dk;
+    const d = +el.dataset.v - (k in BASE ? BASE[k] : 0); const old = el.querySelector(".dlt"); if (old) old.remove();
+    if (Math.abs(d) < 1) return;
+    const good = (d > 0) === (el.dataset.gd !== "down");
+    const t = k === "refund" || k === "mb" ? (d > 0 ? `+${won(d)}원 ${k === "mb" ? "" : "유리"}` : `−${won(-d)}원 ${k === "mb" ? "" : "불리"}`) : (d > 0 ? "+" : "−") + won(Math.abs(d));
+    el.insertAdjacentHTML("beforeend", `<span class="dlt ${good ? "g" : "b"}">${t.trim()}</span>`);
+  });
+}
+document.addEventListener("focusin", e => { if (e.target.closest && e.target.closest("#panel") && e.target.matches("input,select")) { BASE = null; startBase(); } });
+document.addEventListener("focusout", e => { if (e.target.closest && e.target.closest("#panel") && e.target.matches("input,select")) endBase(5000); });
+document.addEventListener("click", e => { const b = e.target.closest("#panel button, .yt-mbar button"); if (!b || b.dataset.go != null || b.hasAttribute("data-next") || b.hasAttribute("data-prev") || b.hasAttribute("data-more") || b.hasAttribute("data-print")) return; BASE = null; startBase(); endBase(5000); }, true);
 /* 시작 — 블로그 경유 잠금(대표 글 공개 시각부터) */
 const GATE_ON = false;   /* 대표 글 날짜가 정해지면 Date.now() >= Date.parse("…") 로 */
 (async () => {

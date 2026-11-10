@@ -113,6 +113,8 @@ button{cursor:pointer;border:0;background:none}
 .yt-foot{text-align:center;font-size:12.5px;color:var(--sub2);padding:0 16px 30px}
 .yt-foot a{color:var(--n);font-weight:700}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--n);color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.box.notice{background:#fff7e8;box-shadow:0 0 0 1px rgba(245,109,3,.35);color:var(--ink)}
+.box.notice b{color:var(--ink)}
 /* 기준 · 한도 표 */
 .lim{margin-top:18px;background:var(--card);border-radius:12px;box-shadow:var(--up);padding:12px 14px 10px}
 .lim h4{font-size:14.5px;font-weight:800;display:flex;gap:7px;align-items:center;margin-bottom:4px}
@@ -466,7 +468,7 @@ const BLANK = () => ({ step: 0, salary: 0, paid: 0, paidLocal: null, pensionIns:
   credit: 0, debit: 0, market: 0, transit: 0, culture: 0,
   insurance: 0, insuranceDis: 0, medSelf: 0, medOther: 0, medInf: 0, medPre: 0, eduSelf: 0, eduKids: [], eduDis: 0,
   dnHome: 0, dnPol: 0, dnSpecial: 0, dnGeneral: 0, dnReligion: 0, spendMore: false,
-  pSavings: 0, pIrp: 0, homeless: false, hSaving: 0, hLease: 0, hMortgage: 0, hMortCap: 18000000, rent: 0, otherDed: 0, saveMore: false });
+  pSavings: 0, pIrp: 0, homeless: false, hSaving: 0, hLease: 0, hMortgage: 0, hMortCap: 18000000, rent: 0, otherDed: 0, saveMore: false, dual: false, spSal: 0 });
 let S = (() => { try { const v = JSON.parse(localStorage.getItem(LSK) || "null"); return v ? Object.assign(BLANK(), v) : BLANK(); } catch (e) { return BLANK(); } })();
 let saveT = null;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LSK, JSON.stringify(S)); } catch (e) {} }, 300); }
@@ -482,7 +484,7 @@ function kidInfo() {
 function toInput(o) {
   const s = o || S, k = kidInfo();
   return { salary: s.salary, paid: s.paid, paidLocal: s.paidLocal, pensionIns: s.pensionIns, healthIns: s.healthIns,
-    family: { spouse: s.spouse, kids: k.basic, kidsCredit: k.credit, birthOrder: s.birthOrder, parents: s.parents, others: s.others, senior: s.senior, disabled: s.disabled, single: s.single, woman: s.woman && !s.single },
+    family: { spouse: s.spouse && !s.dual, kids: k.basic, kidsCredit: k.credit, birthOrder: s.birthOrder, parents: s.parents, others: s.others, senior: s.senior, disabled: s.disabled, single: s.single, woman: s.woman && !s.single },
     cardKids: k.card, marriage: s.marriage,
     card: { credit: s.credit, debit: s.debit, market: s.market, transit: s.transit, culture: s.culture },
     pension: { savings: s.pSavings, irp: s.pIrp },
@@ -508,6 +510,7 @@ function more(key, text) { return `<button class="more${S[key] ? " op" : ""}" da
 
 function stepPay() {
   return `<div class="yt-k">1 / 6 단계</div><h2>급여 · 이미 낸 세금</h2><p class="yt-lead">1년 동안 받은 급여와, 월급에서 이미 떼어 간 세금을 넣어요. 원천징수영수증이나 급여명세서를 보면 쉬워요.</p>
+  <div class="box notice">이 계산기는 실제 환급액을 정해 주는 도구가 아니라, <b>연말 전에 더 받을 수 있는 공제를 찾아 주는 보조 도구</b>예요. 실제 금액은 회사 연말정산 · 홈택스 간소화 자료 · 공제 조건에 따라 달라질 수 있어요.</div>
   ${money("salary", "총급여", { sub: "연봉 − 비과세(식대 월 20만원 등)", hint: "원천징수영수증의 「총급여(⑯)」 칸 · 연봉에서 식대 · 자가운전보조금 같은 비과세를 뺀 금액" })}
   ${money("paid", "이미 낸 소득세", { sub: "기납부세액 · 지방소득세 빼고", hint: "급여명세서 「소득세」를 1년치 더한 금액(12월분 포함 예상) — 지방소득세는 이 금액의 10%로 계산해요" })}
   <div class="two">${money("pensionIns", "국민연금", { sub: "1년 합계" })}${money("healthIns", "건강 · 고용보험", { sub: "장기요양 포함" })}</div>
@@ -520,6 +523,8 @@ function stepFam() {
     return `<div class="kid"><div class="in"><input inputmode="numeric" maxlength="4" data-kid="${i}" value="${x.y || ""}" placeholder="2015" aria-label="자녀 ${i + 1} 태어난 해"><em>년</em></div><span class="ag">${ok ? age + "세" : "태어난 해"}</span>${tag}<button class="del" data-kdel="${i}" aria-label="자녀 지우기">×</button></div>`; }).join("");
   return `<div class="yt-k">2 / 6 단계</div><h2>가족</h2><p class="yt-lead">나와 함께 공제받는 가족을 넣어요. 자녀는 태어난 해만 넣으면 공제가 저절로 나뉘어요.</p>
   <div class="f"><div class="lb">배우자<span>연 소득금액 100만원 이하(근로소득만 있으면 총급여 500만원 이하)</span></div><div class="chips">${chip("spouse", true, "공제받아요")}${chip("spouse", false, "안 받아요 · 없어요")}</div></div>
+  <div class="f"><div class="lb">맞벌이<span>배우자도 회사에서 연말정산해요</span></div><div class="chips">${tog("dual", "맞벌이예요")}</div>
+  ${S.dual ? `${money("spSal", "배우자 총급여", { sub: "자녀 · 부모님을 누가 받으면 유리한지 계산해요", hint: "배우자 4대보험은 총급여로 어림해요(국민연금 4.75% · 건강 · 장기요양 · 고용 약 5%)" })}` : ""}</div>
   <div class="f"><div class="lb">자녀 · 손자녀<span>20세 이하 · 소득 요건은 배우자와 같아요</span></div>${kids}<button class="addb" data-kadd>+ 자녀 넣기</button>
   ${S.kids.length ? `<div class="hint">자녀세액공제 <b>${k.credit}명</b>(2016년 이전 출생 · 2026년 귀속은 9세 이상, 2017년생 제외) · 인적공제 <b>${k.basic}명</b> · 신용카드 한도 늘어나는 자녀 <b>${k.card}명</b></div>` : ""}</div>
   <div class="two">${count("parents", "부모님", "60세 이상 · 1966년 이전 출생")}${count("others", "그 밖의 가족", "형제자매 · 수급자 등")}</div>
@@ -642,40 +647,101 @@ function limSave(r) {
   ], "카드 · 청약 · 전세대출 · 주택담보대출 이자 소득공제는 합쳐서 2,500만원까지예요.", r);
 }
 /* ── 결과 · 「더 돌려받는 방법」 ── */
+/* 배우자 4대보험 어림(2026년: 국민연금 4.75% · 상한 월 637만원 / 건강 3.595% + 장기요양 13.14% + 고용 0.9%) */
+function spouseIns(t) { return { pen: Math.round(Math.min(t, 6.37e6 * 12) * 0.0475), hl: Math.round(t * (0.03595 * 1.1314 + 0.009)) }; }
+/* 맞벌이: 자녀 · 부모님 공제를 누가 받을 때 부부 세금 합계가 가장 적은지 */
+function dualPlan() {
+  if (!S.dual || !(S.spSal > 0) || !S.salary) return null;
+  const k = kidInfo(), base = toInput(), si = spouseIns(S.spSal);
+  const total = (kidsMe, parMe) => {
+    const me = JSON.parse(JSON.stringify(base)), sp = { salary: S.spSal, pensionIns: si.pen, healthIns: si.hl, family: { kids: 0, kidsCredit: 0, birthOrder: 0, parents: 0, others: 0, senior: 0 }, cardKids: 0 };
+    if (!kidsMe) { sp.family.kids = k.basic; sp.family.kidsCredit = k.credit; sp.family.birthOrder = S.birthOrder; sp.cardKids = k.card; me.family.kids = 0; me.family.kidsCredit = 0; me.family.birthOrder = 0; me.cardKids = 0; }
+    if (!parMe) { sp.family.parents = S.parents; sp.family.others = S.others; sp.family.senior = S.senior; me.family.parents = 0; me.family.others = 0; me.family.senior = 0; }
+    const a = YT.calc(me, YEAR), b = YT.calc(sp, YEAR);
+    return Math.round((a.decided + b.decided) * 1.1);
+  };
+  const hasK = k.basic > 0 || S.birthOrder, hasP = S.parents + S.others > 0;
+  if (!hasK && !hasP) return null;
+  const opts = [];
+  for (const km of hasK ? [true, false] : [true]) for (const pm of hasP ? [true, false] : [true]) opts.push({ km, pm, t: total(km, pm) });
+  const cur = opts.find(o => o.km && o.pm), best = opts.reduce((x, y) => y.t < x.t ? y : x, cur);
+  return { cur, best, hasK, hasP };
+}
+const tipWon = n => "+" + won(n) + "원";
 function tips(r) {
-  const out = [], base = r.diffAll;
+  const out = [], base = r.diffAll, rate = S.salary ? rateOf(r.taxBase)[1] * 1.1 : 0;
   const gain = patch => { const o = Object.assign({}, S, patch); return base - YT.calc(toInput(o), YEAR).diffAll; };
+  const zero = r.decided <= 0;
+  /* 세금이 이미 0원 */
+  const top = [];
+  if (zero && S.salary) top.push([IC.info, "낼 세금이 이미 0원이에요", "이미 낸 세금까지만 돌려받아요 — 올해는 연금저축을 더 넣어도 공제 0원이니 내년 1월 이후 납입이 나아요" + (S.dual ? " · 의료비 · 기부는 배우자가 받는 쪽으로" : ""), "확인", true, 0]);
+  /* 맞벌이 몰아주기 */
+  const dp = dualPlan();
+  if (dp) { const g = dp.cur.t - dp.best.t;
+    if (g > 0) { const who = [dp.hasK ? `자녀는 ${dp.best.km ? "내가" : "배우자가"}` : "", dp.hasP ? `부모님 · 가족은 ${dp.best.pm ? "내가" : "배우자가"}` : ""].filter(Boolean).join(", ");
+      out.push([IC.home, `맞벌이: ${who} 공제받으면`, "부부 세금 합계 기준(배우자 4대보험은 어림 · 같은 가족을 둘이 받으면 가산세)", tipWon(g), false, g]); }
+    else out.push([IC.home, "맞벌이: 지금처럼 내가 가족 공제를 받는 게 유리해요", "부부 세금 합계로 비교한 결과 · 같은 가족을 둘이 받으면 가산세", "유리", true, 1]);
+    if (S.medSelf + S.medOther > 0) out.push([IC.med, `의료비는 총급여가 적은 쪽이 시작선이 낮아요`, `나 ${man(S.salary * 0.03)} · 배우자 ${man(S.spSal * 0.03)}부터 공제`, "확인", true, 0]); }
   /* 연금저축 · IRP */
   const ps = Math.min(S.pSavings, 6e6), room = 9e6 - Math.min(ps + S.pIrp, 9e6);
-  if (S.salary > 0 && room > 0 && r.decided > 0) {
+  if (S.salary > 0 && room > 0 && !zero) {
     const addS = Math.max(0, Math.min(6e6 - ps, room)), addI = room - addS;
     const g = gain({ pSavings: S.pSavings + addS, pIrp: S.pIrp + addI });
-    if (g > 0) out.push([IC.up, `${addS ? "연금저축" : "IRP"}${addS && addI ? " · IRP" : ""}에 ${man(room)} 더 넣으면`, `한도 900만원까지 · ${S.salary <= 55e6 ? 15 : 12}% 세액공제${r.decided < room * 0.15 ? " · 낼 세금이 그보다 적어 일부만" : ""}`, "+" + won(g) + "원"]);
+    if (g > 0) out.push([IC.up, `12월 31일까지 ${addS ? "연금저축" : "IRP"}${addS && addI ? " · IRP" : ""}에 ${man(room)} 더 넣으면`, `넣은 돈의 ${S.salary <= 55e6 ? "16.5" : "13.2"}%를 돌려받는 셈(지방세 포함)${r.decided < room * 0.15 ? " · 낼 세금이 그보다 적어 일부만" : ""} · 55세 전에 찾으면 공제받은 세금을 다시 내요`, tipWon(g), false, g]);
   }
-  /* 카드 */
+  /* 남은 12월 카드 */
   const c = r.card;
-  if (S.salary > 0 && c.total > 0 && c.total < c.min) out.push([IC.card, `카드 사용액이 총급여 25%까지 ${man(c.min - c.total)} 남음`, "그 전까지는 카드 공제 0원 — 혜택 많은 신용카드 쓰기", "공제 0원", true]);
-  else if (S.credit >= 1e6 && c.basic < c.limitBasic) {
-    const mv = Math.min(S.credit, 6e6), g = gain({ credit: S.credit - mv, debit: S.debit + mv });
-    if (g > 0) out.push([IC.card, `신용카드 ${man(mv)}을 체크카드로 썼다면`, "체크카드 · 현금영수증은 공제율 30%(신용 15%)", "+" + won(g) + "원"]);
-  } else if (c.basic >= c.limitBasic && c.extra < Math.min(c.limitExtra, c.possible - c.limitBasic)) {
-    out.push([IC.card, "카드 기본 한도를 다 썼어요", "전통시장 · 대중교통 · 문화체육으로 쓴 만큼은 추가 한도로 더 공제", "추가 한도", true]);
+  if (S.salary > 0 && c.total > 0 && !zero) {
+    if (c.total < c.min) out.push([IC.card, `남은 결제는 혜택 많은 신용카드로`, `총급여 25%까지 ${man(c.min - c.total)} 남아 그 전까지는 카드 공제가 0원`, "공제 0원", true, 0]);
+    else if (c.basic < c.limitBasic) { const per = Math.round(1e6 * 0.15 * rate);
+      const mv = Math.min(S.credit, 6e6), g = mv >= 1e6 ? gain({ credit: S.credit - mv, debit: S.debit + mv }) : 0;
+      out.push([IC.card, `남은 결제는 체크카드 · 현금영수증으로`, `100만원 쓸 때 체크 약 ${man(per * 2)} · 신용 약 ${man(per)} 세금이 줄어요 · 기본 한도까지 ${man(c.limitBasic - c.basic)} 공제 남음`, g > 0 ? tipWon(g) : "2배", g <= 0, g]); }
+    else if (c.extra < c.limitExtra) out.push([IC.card, "카드 기본 한도는 다 찼어요 — 이제 전통시장 · 대중교통 · 문화체육", `이 셋은 추가 한도 ${man(c.limitExtra - c.extra)}까지 40% · 30%로 더 공제 · 그 밖의 결제는 혜택 많은 카드로`, "추가 한도", true, 0]);
+    else out.push([IC.card, "카드 공제는 한도까지 다 찼어요", "더 써도 공제는 늘지 않아요 — 포인트 · 할인 많은 카드로", "다 참", true, 0]);
   }
+  /* 부모님 공제 */
+  if (S.salary > 0 && !zero && S.parents === 0) { const g = gain({ parents: 1 });
+    if (g > 0) out.push([IC.heart, "60세 이상 부모님 1명을 공제받으면", "1966년 이전 출생 · 연 소득금액 100만원 이하(국민연금만이면 연 516만원 정도까지) · 따로 살아도 됨 · 형제 중 한 명만", tipWon(g), false, g]); }
+  /* 주택청약 */
+  if (S.homeless && S.salary > 0 && S.salary <= 7e7 && S.hSaving < 3e6 && !zero) { const g = gain({ hSaving: 3e6 });
+    if (g > 0) out.push([IC.home, `주택청약저축을 연 300만원까지 채우면`, `12월 31일까지 ${man(3e6 - S.hSaving)} 더 · 무주택 세대주 · 은행에 「무주택 확인서」 제출`, tipWon(g), false, g]); }
   /* 고향사랑기부 */
-  if (r.decided > 0 && S.dnHome < 2e5) {
+  if (!zero && S.dnHome < 2e5) {
     const to = S.dnHome < 1e5 ? 1e5 : 2e5, g = gain({ dnHome: to });
-    if (g > 0) out.push([IC.heart, `고향사랑기부 ${man(to - S.dnHome)} 더 하면`, to === 1e5 ? "10만원까지는 낸 만큼 거의 그대로(지방세 포함) + 답례품" : "10만~20만원 구간 공제율 40%(2026년부터)", "+" + won(g) + "원"]);
+    if (g > 0) out.push([IC.heart, `고향사랑기부 ${man(to - S.dnHome)} 더 하면`, to === 1e5 ? "10만원까지는 낸 만큼 거의 그대로 돌려받고 답례품(기부액 30%)까지" : "10만~20만원 구간 공제율 40%(2026년부터) + 답례품", tipWon(g), false, g]);
   }
   /* 월세 */
-  if (S.salary > 0 && S.salary <= 8e7 && !S.rent) out.push([IC.home, "무주택 세대주가 월세를 낸다면", `연 1,000만원까지 ${S.salary <= 55e6 ? 17 : 15}% 세액공제 — 5단계에서 넣기`, "확인", true]);
-  /* 의료비 */
-  if (S.medSelf + S.medOther > 0 && r.credits.medical === 0 && !r.credits.standard) out.push([IC.med, `의료비가 총급여 3%(${man(S.salary * 0.03)})를 안 넘었어요`, "그 아래는 공제 0원 · 맞벌이면 소득이 적은 쪽이 받는 게 유리할 수 있어요", "공제 0원", true]);
-  return out.slice(0, 4);
+  if (S.salary > 0 && S.salary <= 8e7 && !S.rent) out.push([IC.home, "무주택 세대주가 월세를 낸다면", `연 1,000만원까지 ${S.salary <= 55e6 ? 17 : 15}% 세액공제 — 집주인 동의 없이 계약서 · 이체 내역으로`, "확인", true, 0]);
+  /* 의료비 시작선 */
+  if (!S.dual && S.medSelf + S.medOther > 0 && r.credits.medical === 0 && !r.credits.standard) out.push([IC.med, `의료비가 총급여 3%(${man(S.salary * 0.03)})를 안 넘었어요`, "그 아래는 공제 0원 · 안경 · 산후조리원 · 실손 받은 금액 빼기도 확인", "공제 0원", true, 0]);
+  /* 돈이 되는 것 먼저 */
+  return top.concat(out.sort((a, b) => (b[4] ? 0 : 1) - (a[4] ? 0 : 1) || b[5] - a[5])).slice(0, 7);
+}
+/* 간소화 자료에 안 나올 수 있는 것 · 결과 받은 뒤 할 일 */
+function checks(r) {
+  const k = kidInfo(), out = [];
+  out.push(["안경 · 콘택트렌즈", "1명 50만원까지 의료비 — 안경점에서 「구입 영수증」 받기(간소화에 안 나오는 곳 많음)"]);
+  if (k.basic) out.push(["교복 · 체험학습", "중 · 고생 교복 · 체육복 1명 50만원 · 초중고 현장체험학습 1명 30만원까지 교육비 — 학교 · 판매점 영수증"]);
+  if (S.birthOrder) out.push(["산후조리원", "출산 1회 200만원까지 의료비(소득 제한 없음)"]);
+  if (S.homeless) out.push(["월세", "간소화에 안 나와요 — 임대차계약서 사본 · 계좌이체 내역 · 주민등록등본"]);
+  out.push(["기부금 영수증", "종교단체 · 일부 단체는 간소화에 안 나와요 — 기부처에서 영수증 받기"]);
+  out.push(["중소기업 다니는 청년", "만 15~34세에 중소기업에 취업했다면 5년 동안 소득세 90% 감면(연 200만원까지) — 회사에 감면 신청서 내기(이 계산기엔 안 들어가요)"]);
+  if (S.dual || S.parents || S.others) out.push(["이중 공제 주의", "같은 가족을 부부 · 형제가 같이 받으면 나중에 세금 + 가산세 — 누가 받을지 미리 정하기"]);
+  if (S.salary) {
+    if (r.diff > 1e5) out.push(["나눠 내기", `더 낼 소득세가 10만원을 넘으면 2~4월 급여에서 나눠 낼 수 있어요 — 회사에 분납 신청`]);
+    if (r.diffAll < -5e5) out.push(["매달 떼는 세금 줄이기", "해마다 많이 돌려받으면 원천징수 비율을 80%로 바꿔 월급에서 덜 떼게 할 수 있어요(회사에 신청)"]);
+    if (r.diffAll > 3e5) out.push(["매달 떼는 세금 늘리기", "해마다 더 낸다면 원천징수 비율 120%로 바꾸면 1월에 몰아 내지 않아요(회사에 신청)"]);
+  }
+  out.push(["빠뜨렸다면", "5년 안에 홈택스 「경정청구」로 돌려받을 수 있어요"]);
+  return out;
+}
+function checkCard(r) {
+  return `<div class="card"><h3>놓치기 쉬운 것 · 결과 받은 뒤 할 일</h3>${checks(r).map(([a, b]) => `<div class="row" style="justify-content:flex-start;align-items:baseline"><b style="min-width:7.5em;white-space:normal">${a}</b><span style="color:var(--sub)">${b}</span></div>`).join("")}</div>`;
 }
 function resultCard(r) {
   const d = r.diffAll, cls = !S.salary ? "zero" : d < 0 ? "" : d > 0 ? "pay" : "zero";
   const head = !S.salary ? `<div class="amt-b zero num">0<small>원</small></div><div class="amt-s">1단계에서 총급여를 넣으면 바로 계산돼요</div>`
-    : `<div class="amt-b ${cls} num">${won(Math.abs(d))}<small>원 ${d < 0 ? "돌려받아요" : d > 0 ? "더 내요" : ""}</small></div><div class="amt-s">소득세 ${won(Math.abs(r.diff))}원 + 지방소득세 ${won(Math.abs(r.local - r.paidLocal))}원 · 넣은 값으로 계산한 참고 금액</div>`;
+    : `<div class="amt-b ${cls} num">${won(Math.abs(d))}<small>원 ${d < 0 ? "돌려받아요" : d > 0 ? "더 내요" : ""}</small></div><div class="amt-s">소득세 ${won(Math.abs(r.diff))}원 + 지방소득세 ${won(Math.abs(r.local - r.paidLocal))}원 · <b>넣은 값으로 어림한 참고 금액 — 실제 환급액과 다를 수 있어요</b></div>`;
   return `<div class="big"><div class="printhead">연말정산 계산기 · 2026년 귀속 · Blog J</div><div class="k2">예상 결과 · 지방소득세 포함</div>${head}
   <div class="flow"><div class="fb"><span>산출세액</span><b class="num">${won(r.tax)}</b></div><div class="op">−</div><div class="fb"><span>세액공제</span><b class="num">${won(Math.min(r.creditTotal, r.tax))}</b></div><div class="op">=</div><div class="fb"><span>결정세액</span><b class="num">${won(r.decided)}</b></div><div class="op">vs</div><div class="fb"><span>이미 낸 세금</span><b class="num">${won(r.paid)}</b></div></div>
   ${r.creditUnused > 0 && S.salary ? `<div class="hint" style="margin-top:10px">세액공제가 낼 세금보다 <b class="num">${won(r.creditUnused)}원</b> 많아 그만큼은 쓰이지 못해요(결정세액 0원).</div>` : ""}</div>`;
@@ -701,7 +767,7 @@ function summary(r) {
 function tipsCard(r) {
   const t = S.salary ? tips(r) : [];
   return `<div class="card"><h3>더 돌려받는 방법</h3>${t.length ? t.map(([ic, a, b, g, info]) => `<div class="tip${info ? " info" : ""}"><div class="d">${ic}</div><p>${esc(a)}<br><small>${esc(b)}</small></p><b class="g num">${esc(g)}</b></div>`).join("") : `<p class="hint">값을 넣으면 연금저축 · 카드 · 기부로 환급을 늘리는 방법을 계산해 보여 드려요.</p>`}
-  <p class="note">2026년 귀속(2027년 1월 연말정산) 기준 · 국세청 연말정산 안내의 계산식으로 계산 · 정확한 금액은 회사 연말정산 · 홈택스에서</p></div>`;
+  <p class="note">2026년 귀속(2027년 1월 연말정산) 기준 · 국세청 연말정산 안내의 계산식으로 계산한 참고용이에요. 더 받을 수 있는 공제를 찾는 보조 도구이고, 실제 환급액은 회사 연말정산 · 홈택스에서 확인하세요.</p></div>`;
 }
 function stepRes(r) {
   const cr = r.credits, c = r.card;
@@ -721,7 +787,8 @@ function stepRes(r) {
   ${L(r.diffAll <= 0 ? "모두 돌려받음" : "모두 더 냄", won(Math.abs(r.diffAll)) + "원", "t")}
   </div>
   ${r.stdChosen ? `<div class="box" style="margin-top:14px">건강보험료 소득공제 · 보험 · 의료 · 교육 · 월세 공제를 받는 것보다 <b>표준세액공제 13만원</b>이 세금이 <b class="num">${won(r.alt.decided - r.decided)}원</b> 적어 표준세액공제로 계산했어요.</div>` : ""}
-  <div class="box" style="margin-top:14px">계산에 넣지 않은 것: 중소기업 취업자 감면 · 외국납부세액 · 기부금 이월 · 세액공제 순서에 따른 차이. 이런 것이 있으면 실제 금액과 다를 수 있어요.</div>
+  <div class="box notice" style="margin-top:14px">이 계산기는 실제 환급액을 정해 주는 도구가 아니라, <b>연말 전에 더 받을 수 있는 공제를 찾아 주는 보조 도구</b>예요. 실제 금액은 회사 연말정산 · 홈택스 간소화 자료 · 공제 조건에 따라 달라질 수 있어요.</div>
+  <div class="box" style="margin-top:10px">계산에 넣지 않은 것: 중소기업 취업자 감면 · 외국납부세액 · 기부금 이월 · 세액공제 순서에 따른 차이. 이런 것이 있으면 실제 금액과 다를 수 있어요.</div>
   <div class="chips noprint" style="margin-top:4px"><button class="btn sm" data-print>인쇄 · PDF로 저장</button><button class="btn sm" data-reset>처음부터 다시</button></div>`;
 }
 
@@ -736,16 +803,16 @@ function render(keepFocus) {
   $("#root").innerHTML = `<header class="yt-head"><div class="yt-ic">${IC.calc}<i></i></div><h1>연말정산 계산기</h1><small>Blog J</small><span class="yt-yr">2026년 귀속 · 2027년 1월 정산</span><nav class="yt-rul" aria-label="단계">${rul}</nav></header>
   <div class="yt-mrul">${mrul}</div>
   <div class="yt-main"><section class="yt-panel" id="panel">${stepHtml(r)}${nav}</section>
-  <aside class="yt-res${isRes ? "" : " side"}" id="res">${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div></aside></div>
+  <aside class="yt-res${isRes ? "" : " side"}" id="res">${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div>${checkCard(r)}</aside></div>
   <div class="yt-mbar"><div><span>예상 · ${!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"}</span><b class="num" id="mb">${won(Math.abs(r.diffAll))}원</b></div>${S.step ? `<button class="bk" data-prev>‹</button>` : `<span style="margin-left:auto"></span>`}${isRes ? `<button class="go" data-print>인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
-  <p class="yt-foot">입력한 금액은 이 기기 브라우저에만 저장되고 어디로도 보내지 않아요 · 연말정산 계산기 v${APP_VER}(${BUILD} 판) · 만든 곳 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a></p>`;
+  <p class="yt-foot">참고용 계산 · 실제 환급액과 다를 수 있어요 · 입력한 금액은 이 기기 브라우저에만 저장되고 어디로도 보내지 않아요 · 연말정산 계산기 v${APP_VER}(${BUILD} 판) · 만든 곳 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a></p>`;
   if (keepFocus) { const el = document.getElementById(keepFocus.id) || (keepFocus.sel && document.querySelector(keepFocus.sel)); if (el) { el.focus(); try { el.setSelectionRange(keepFocus.pos, keepFocus.pos); } catch (e) {} } }
 }
 /* 입력할 때는 오른쪽 결과만 다시 그림(입력 칸은 그대로) */
 function refreshResult() {
   const r = calcS();
   const lm = document.querySelector("#panel .lim"), lf = [limPay, limFam, limCard, limSpend, limSave][S.step]; if (lm && lf) lm.outerHTML = lf(r);
-  const res = $("#res"); if (res) res.innerHTML = `${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div>`;
+  const res = $("#res"); if (res) res.innerHTML = `${resultCard(r)}<div class="grid2">${summary(r)}${tipsCard(r)}</div>${checkCard(r)}`;
   const mb = $("#mb"); if (mb) { mb.textContent = won(Math.abs(r.diffAll)) + "원"; const sp = mb.previousElementSibling; if (sp) sp.textContent = "예상 · " + (!S.salary ? "총급여를 넣어요" : r.diffAll <= 0 ? "돌려받아요" : "더 내요"); }
 }
 function go(i, push) {
@@ -785,7 +852,7 @@ document.addEventListener("click", e => {
   if (b.dataset.go != null) return go(+b.dataset.go);
   if (b.hasAttribute("data-next")) return go(S.step + 1);
   if (b.hasAttribute("data-prev")) return history.state && typeof history.state.yt === "number" && history.state.yt === S.step && S.step > 0 ? history.back() : go(S.step - 1);
-  if (b.dataset.ch) { S[b.dataset.ch] = JSON.parse(b.dataset.v); if (b.dataset.ch === "single" && S.single) S.woman = false; if (b.dataset.ch === "woman" && S.woman) S.single = false; save(); return render(); }
+  if (b.dataset.ch) { S[b.dataset.ch] = JSON.parse(b.dataset.v); if (b.dataset.ch === "dual" && S.dual) S.spouse = false; if (b.dataset.ch === "spouse" && S.spouse) S.dual = false; if (b.dataset.ch === "single" && S.single) S.woman = false; if (b.dataset.ch === "woman" && S.woman) S.single = false; save(); return render(); }
   if (b.dataset.more) { S[b.dataset.more] = !S[b.dataset.more]; save(); return render(); }
   if (b.hasAttribute("data-kadd")) { S.kids.push({ y: "" }); save(); render({ sel: `[data-kid="${S.kids.length - 1}"]`, pos: 0 }); return; }
   if (b.dataset.kdel != null) { S.kids.splice(+b.dataset.kdel, 1); save(); return render(); }

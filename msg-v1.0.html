@@ -66,7 +66,11 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 .dwrap{position:relative}
 .dwrap .shown{pointer-events:none}
 .dwrap input[type=date],.dwrap input[type=time]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
-.dwrap .shown.empty{color:#a39a88}
+.dwrap .shown{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dwrap .shown::after{content:"";width:18px;height:18px;flex-shrink:0;opacity:.55;background:no-repeat center/18px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b5547' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")}
+.dwrap .shown.tm::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b5547' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")}
+.dwrap .shown.noval{color:#a39a88}
+.dwrap:focus-within .shown{box-shadow:inset 0 0 0 2px var(--g);background:#fff}
 .hint{font-size:12.5px;color:var(--sub2);margin-top:4px;line-height:1.5}
 .sug{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
 .sug button{font-size:12.5px;padding:4px 9px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--hair2);color:var(--sub);font-weight:600}
@@ -88,6 +92,9 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 .bub{background:#fff;border-radius:4px 16px 16px 16px;padding:13px 14px;font-size:15.5px;line-height:1.65;white-space:pre-wrap;word-break:keep-all;overflow-wrap:break-word;box-shadow:0 1px 2px rgba(90,74,50,.12);max-height:52vh;overflow:auto;outline:none}
 .bub:focus{box-shadow:0 0 0 2px var(--g)}
 .bub .ph{color:#b9ae9a}
+.pvn,.pvt,.pvh .ls{display:none}
+::highlight(pvhl){background-color:#ffe9b3;color:inherit}
+.pvh .lbl{margin:0 0 6px}
 .meta{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--sub2);margin:8px 2px 0}
 .meta .k{font-weight:800;color:var(--g)}
 .edited{font-size:12.5px;color:var(--or);font-weight:700;margin-top:6px;display:flex;gap:8px;align-items:center}
@@ -121,10 +128,23 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
  .edit{padding:16px}
  .fs{grid-template-columns:1fr}
  .prev{grid-column:auto;order:1}
+ /* 11-10 휴대폰: 미리보기를 위에 붙여 두고(작게 4줄) 아래 칸을 고치면서 바로 확인 · 「크게 보기」로 펼치면 직접 고치기 · 카드 이미지 */
+ body.m-edit .prev{position:sticky;top:var(--th,58px);z-index:15;padding:10px 12px 12px;border-radius:0 0 16px 16px;margin:-12px -12px 0;box-shadow:0 1px 0 var(--hair),0 10px 18px -14px rgba(90,74,50,.45)}
+ .pvh{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+ .pvh .lbl{margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .pvn{display:inline;font-size:12.5px;color:var(--sub2)}
+ body.m-edit .pvh .lf{display:none}
+ body.m-edit .pvh .ls{display:inline}
+ .pvt{display:inline-flex;padding:6px 11px;border-radius:999px;font-size:13px;font-weight:800;color:var(--g);background:var(--card);box-shadow:0 0 0 1px var(--hair2)}
+ body.m-edit .prev:not(.big) .phone{padding:0;background:none;box-shadow:none}
+ body.m-edit .prev:not(.big) .phead,body.m-edit .prev:not(.big) .meta,body.m-edit .prev:not(.big) .edited,body.m-edit .prev:not(.big) .acts,body.m-edit .prev:not(.big) .cardbox{display:none}
+ body.m-edit .prev:not(.big) .bub{max-height:118px;font-size:14.5px;line-height:1.6;padding:10px 12px}
+ body.m-edit .prev:not(.big) .pvh .lbl::after{content:""}
+ body.m-edit .prev.big .bub{max-height:52vh}
+ body.m-edit .prev.big{max-height:calc(100vh - var(--th,58px) - 80px);overflow:auto}
  .edit{order:2}
  .sub3{grid-template-columns:1fr 1fr}
  .sub3 [data-k=acc_no]{grid-column:1/-1;order:3}
- .bub{max-height:none}
  .prev .acts [data-act=copy],.prev .acts [data-act=share]{display:none}
  .prev .acts{grid-template-columns:1fr}
  body.m-edit .mbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--panel);box-shadow:0 -1px 0 var(--hair),0 -8px 20px -12px rgba(90,74,50,.3);z-index:30}
@@ -677,8 +697,8 @@ function field(t, f, v) {
   const id = "f_" + f.k, val = v[f.k] == null ? "" : v[f.k];
   const lab = `<label for="${id}">${f.l}${f.opt ? "<em>비워도 돼요</em>" : ""}</label>`;
   if (f.type === "sel") return `<div class="f">${lab}<select class="inp" id="${id}" data-k="${f.k}">${f.o.map(o => `<option${o === val ? " selected" : ""}>${o}</option>`).join("")}</select></div>`;
-  if (f.type === "date") return `<div class="f">${lab}<div class="dwrap"><div class="inp shown num${val ? "" : " empty"}">${val ? D(val) : "날짜 고르기"}</div><input type="date" id="${id}" data-k="${f.k}" value="${esc(val)}"></div>${f.hint ? `<div class="hint">${f.hint}</div>` : ""}</div>`;
-  if (f.type === "time") return `<div class="f">${lab}<div class="dwrap"><div class="inp shown num${val ? "" : " empty"}">${val ? TM(val) : "시각 고르기"}</div><input type="time" id="${id}" data-k="${f.k}" value="${esc(val)}" step="600"></div></div>`;
+  if (f.type === "date") return `<div class="f">${lab}<div class="dwrap"><div class="inp shown num${val ? "" : " noval"}">${val ? D(val) : "날짜 고르기"}</div><input type="date" id="${id}" data-k="${f.k}" value="${esc(val)}"></div>${f.hint ? `<div class="hint">${f.hint}</div>` : ""}</div>`;
+  if (f.type === "time") return `<div class="f">${lab}<div class="dwrap"><div class="inp shown tm num${val ? "" : " noval"}">${val ? TM(val) : "시각 고르기"}</div><input type="time" id="${id}" data-k="${f.k}" value="${esc(val)}" step="600"></div></div>`;
   if (f.type === "money") return `<div class="f">${lab}<input class="inp num" id="${id}" data-k="${f.k}" data-money inputmode="numeric" placeholder="30,000" value="${esc(MONEY(val))}"></div>`;
   if (f.type === "acc") return `<div class="f wide"><div class="tg${v.acc_on ? " on" : ""}" data-tg="acc_on"><span class="sw"></span><span><b>${f.l}</b><br><span>${v.acc_on ? "문자에 넣어요 · 이 기기에 기억" : "켜면 계좌 줄이 들어가요"}</span></span></div>${v.acc_on ? `<div class="sub3"><input class="inp" data-k="acc_bank" placeholder="은행" value="${esc(v.acc_bank || "")}"><input class="inp num" data-k="acc_no" inputmode="numeric" placeholder="계좌 번호" value="${esc(v.acc_no || "")}"><input class="inp" data-k="acc_name" placeholder="예금주" value="${esc(v.acc_name || "")}"></div>` : ""}</div>`;
   if (f.type === "map") return `<div class="f wide">${lab.replace("</label>", "<em>비워도 돼요</em></label>")}<input class="inp" id="${id}" data-k="${f.k}" inputmode="url" placeholder="네이버 · 카카오 · 구글 지도에서 「공유 → 링크 복사」한 주소" value="${esc(val)}"></div>`;
@@ -705,17 +725,33 @@ function curText() { const t = tplOf(S.id); return t.gen(valsFor(t), S.tone).rep
 function drawPrev() {
   const t = tplOf(S.id), auto = curText(), txt = S.custom != null ? S.custom : auto, b = bytes(txt);
   const kind = b <= 90 ? "단문(SMS)" : b <= 2000 ? "장문(LMS)" : "너무 길어요";
-  let h = `<div class="lbl">미리보기 — 눌러서 직접 고칠 수 있어요</div><div class="phone"><div class="phead"><i></i>보낼 문자</div><div class="bub" id="bub" data-ks="bub" contenteditable="plaintext-only" spellcheck="false">${esc(txt)}</div></div>`;
+  let h = `<div class="pvh"><div class="lbl"><span class="lf">미리보기 — 눌러서 직접 고칠 수 있어요</span><span class="ls">보낼 문자 미리보기</span></div><span class="pvn num">${[...txt].length.toLocaleString()}자</span><button class="pvt" data-pvt aria-expanded="${S.pvBig ? "true" : "false"}">${S.pvBig ? "작게 보기" : "크게 보기"}</button></div><div class="phone"><div class="phead"><i></i>보낼 문자</div><div class="bub" id="bub" data-ks="bub" contenteditable="plaintext-only" spellcheck="false">${esc(txt)}</div></div>`;
   h += `<div class="meta num"><span>${[...txt].length.toLocaleString()}자 · ${b.toLocaleString()}바이트</span><span class="k">${kind}</span></div>`;
   if (S.custom != null) h += `<div class="edited">직접 고친 글이에요 <button data-reset>칸 내용으로 되돌리기</button></div>`;
   const acts = `<button class="btn go" data-act="copy">${svg(IC.copy)}복사하기</button><button class="btn" data-act="share">${svg(IC.share)}보내기</button>${t.card ? `<button class="btn full" data-act="card">${svg(IC.img)}카드 이미지로 만들기</button>` : ""}`;
   h += `<div class="acts">${acts}</div>`;
   if (S.card && S.card.id === S.id) h += `<div class="cardbox"><img src="${S.card.url}" alt="카드 이미지 미리보기"><div class="acts"><button class="btn go full" data-act="savecard">${svg(IC.img)}이미지 저장 · 보내기</button></div></div>`;
-  $("#prev").innerHTML = h;
+  $("#prev").innerHTML = h; $("#prev").classList.toggle("big", !!S.pvBig);
   $("#mbar").innerHTML = `<button class="btn go" data-act="copy">${svg(IC.copy)}복사하기</button><button class="btn" data-act="share">${svg(IC.share)}보내기</button>`;
   const bub = $("#bub"); if (bub.contentEditable !== "plaintext-only") bub.contentEditable = "true";
   bub.oninput = () => { S.custom = bub.innerText.replace(/ /g, " "); const bb = bytes(S.custom); $("#prev .meta").innerHTML = `<span>${[...S.custom].length.toLocaleString()}자 · ${bb.toLocaleString()}바이트</span><span class="k">${bb <= 90 ? "단문(SMS)" : bb <= 2000 ? "장문(LMS)" : "너무 길어요"}</span>`; if (!$("#prev .edited")) { const e = document.createElement("div"); e.className = "edited"; e.innerHTML = `직접 고친 글이에요 <button data-reset>칸 내용으로 되돌리기</button>`; $("#prev .meta").after(e); } };
 }
+/* 11-10 휴대폰 미리보기: 칸을 고치면 작은 미리보기 안에서 바뀐 글자가 보이는 곳으로 저절로 옮김 · 「크게 보기 / 작게 보기」 · 칸을 누르면 작게 */
+function pvSeek(str) {
+  if (!MOB() || S.pvBig || !str) return; const bub = $("#bub"); if (!bub) return;
+  const tries = [str, str.slice(-8), str.slice(0, 8)].filter(x => x && x.length >= 2);
+  const w = document.createTreeWalker(bub, NodeFilter.SHOW_TEXT); const nodes = []; let n; while ((n = w.nextNode())) nodes.push(n);
+  for (const q of tries) for (const nd of nodes) { const i = nd.data.indexOf(q); if (i < 0) continue;
+    const r = document.createRange(); r.setStart(nd, i); r.setEnd(nd, i + q.length); const rr = r.getBoundingClientRect(), br = bub.getBoundingClientRect();
+    bub.scrollTop += rr.top - br.top - 28;
+    try { if (window.CSS && CSS.highlights && window.Highlight) { CSS.highlights.set("pvhl", new Highlight(r)); clearTimeout(pvSeek.t); pvSeek.t = setTimeout(() => CSS.highlights.delete("pvhl"), 1400); } } catch (er) {}
+    return; }
+}
+function pvSize(big) { S.pvBig = big; const pv = $("#prev"); if (!pv) return; pv.classList.toggle("big", big); const b = pv.querySelector("[data-pvt]"); if (b) { b.textContent = big ? "작게 보기" : "크게 보기"; b.setAttribute("aria-expanded", big ? "true" : "false"); } if (big) pv.scrollTop = 0; }
+document.addEventListener("click", e => { if (e.target.closest("[data-pvt]")) pvSize(!S.pvBig); });
+document.addEventListener("focusin", e => { if (MOB() && S.pvBig && e.target.closest("#edit")) pvSize(false); });
+const setTH = () => { const tp = $(".top"); if (tp) document.documentElement.style.setProperty("--th", tp.offsetHeight + "px"); };
+addEventListener("resize", setTH); addEventListener("load", setTH); setTimeout(setTH, 0);
 /* 11-09 스크롤 지키기(공통 규칙): 화면 일부를 다시 그려도 창 · 안쪽 스크롤 칸([data-ks])의 자리를 그대로 둠 */
 const MOB = () => matchMedia("(max-width:760px)").matches;
 function keep(fn) { const y = scrollY, m = [...document.querySelectorAll("[data-ks]")].map(e => [e.dataset.ks, e.scrollTop, e.scrollLeft]); fn(); for (const [k, t, l] of m) { const e = document.querySelector(`[data-ks="${k}"]`); if (e) { e.scrollTop = t; e.scrollLeft = l; } } if (Math.abs(scrollY - y) > 1) scrollTo(0, y); }
@@ -776,8 +812,8 @@ document.addEventListener("input", e => {
   const t = tplOf(S.id), k = el.dataset.k;
   if (el.hasAttribute("data-money")) { const raw = el.value.replace(/[^\d]/g, ""); const pos = el.value.length - el.selectionStart; el.value = MONEY(raw); const np = Math.max(0, el.value.length - pos); el.setSelectionRange(np, np); saveVal(t, k, raw); }
   else saveVal(t, k, el.value);
-  if (el.type === "date" || el.type === "time") { const f = t.f.find(x => x.k === k); if (f && f.auto) saveVal(t, k + "_set", true); return refresh(); }
-  S.custom = null; S.card = null; keep(drawPrev);
+  if (el.type === "date" || el.type === "time") { const f = t.f.find(x => x.k === k); if (f && f.auto) saveVal(t, k + "_set", true); refresh(); return pvSeek(el.type === "date" ? D(el.value) : TM(el.value)); }
+  S.custom = null; S.card = null; keep(drawPrev); pvSeek(el.hasAttribute("data-money") ? el.value : el.value.trim());
   const mm = $("#emem"); if (mm) mm.innerHTML = memoHtml(t, valsFor(t));
 });
 document.addEventListener("change", e => { const el = e.target; if (el.tagName === "SELECT" && el.dataset.k) { saveVal(tplOf(S.id), el.dataset.k, el.value); refresh(); } });

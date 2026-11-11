@@ -54,6 +54,23 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .foot{font-size:12.5px;color:var(--sub2);text-align:center;margin-top:30px;line-height:1.7}
 .none{color:var(--sub2);padding:30px;text-align:center}
 @media (max-width:560px){.grid{grid-template-columns:1fr}.q{max-width:none;order:3;flex-basis:100%}.tt{font-size:17px}}
+
+/* 가로 배치(11-11): 한 앱 = 한 줄 — 왼쪽 이름 · 상태, 오른쪽 단추 */
+.grid{display:flex;flex-direction:column;gap:0;background:var(--card);border-radius:14px;box-shadow:var(--up);overflow:hidden}
+.card{display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px;align-items:start;border-radius:0;box-shadow:none;padding:12px 16px;border-top:1px solid var(--hair)}
+.card:first-child{border-top:0}
+.card:hover{background:#fbfaf6}
+.cl{min-width:0}.cr{min-width:0}
+.cl .ch{flex-wrap:wrap}
+.cl .st{margin-left:0;white-space:normal}
+.cl .ty{margin:3px 0 0}
+.cr{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
+.cr .old{margin:0;padding:0 0 0 14px;border-top:0;border-left:1px dashed var(--hair);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cr .old .lb{margin:0}
+.cr .gate{margin:0;flex-basis:100%}
+.card{padding:10px 16px}
+.cl .ty{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:760px){.card{grid-template-columns:1fr;gap:8px}.cr .old{padding-left:0;border-left:0}}
 </style>
 <style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
 :root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
@@ -134,8 +151,9 @@ function draw() {
     if (!items.length) continue;
     h += `<div class="sec"><h2>${SEC[g][0]}</h2><span>${SEC[g][1]}</span></div><div class="grid">`;
     for (const a of items) {
-      h += `<div class="card"><div class="ch"><b>${esc(a.n)}</b>${a.v ? `<span class="ver">${esc(a.v)}</span>` : ""}${a.g !== "etc" ? status(a)[0] : ""}</div>`;
+      h += `<div class="card"><div class="cl"><div class="ch"><b>${esc(a.n)}</b>${a.v ? `<span class="ver">${esc(a.v)}</span>` : ""}${a.g !== "etc" ? status(a)[0] : ""}</div>`;
       h += a.note ? `<div class="ty">${esc(a.note)}</div>` : `<div class="ty">${a.g === "app" ? "설치형" : a.g === "web" ? "블로그 실행형" : a.g === "dev" ? "개발 중" : "바로가기"}</div>`;
+      h += `</div><div class="cr">`;
       const xp = (a.posts || []).map(([t, n]) => A([t, P(n)], "post")).join("");
       if (a.g === "web" && a.post) {
         h += `<div class="links">${A(["블로그 글에서 열기 · " + a.post, P(a.post)], "main")}${xp}</div>`;
@@ -143,7 +161,7 @@ function draw() {
       } else h += `<div class="links">${a.links.map((l, i) => A(l, i === 0 && a.g !== "etc" ? "main" : "")).join("")}${a.post ? A(["블로그 글 " + a.post, P(a.post)], "post") : ""}${xp}</div>`;
       if (a.old && a.old.length) h += `<div class="old"><div class="lb">지난 버전 · 다운로드판</div><div class="links">${a.old.map(l => A(l)).join("")}</div></div>`;
       if (a.g === "web" && !owner()) h += `<div class="gate">「바로 열기」는 시험 모드가 꺼져 있으면 막힘 화면이 나와요 — 「블로그 글에서 열기」의 실행 카드로 여세요</div>`;
-      h += `</div>`;
+      h += `</div></div>`;
     }
     h += `</div>`;
   }

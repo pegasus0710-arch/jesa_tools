@@ -1,0 +1,898 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0b3d4a">
+<title>간트 차트 만들기 | Blog J</title>
+<meta name="description" content="엑셀 일정표를 붙여 넣으면 간트 차트 완성 — 오늘 선 · 진행률 · 주말 · 공휴일 · 주요 날짜, 그림 복사 · PNG · A4 가로 인쇄 · 엑셀로 받기 (가입 · 업로드 없음)">
+<link rel="icon" href="icons/apps/gantt.png" type="image/png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+<style>:root{--paper:#faf6ee;--panel:#ffffff;--card:#ffffff;--tint:#f3eee3;--ink:#14202b;--sub:#5f6b7a;--sub2:#5f6b7a;--n:#0c737d;--nh:#0f3a3b;--nl:#dcebe9;--or:#e07a4f;--red:#c23a2b;--blue:#1f4f9a;--hair:rgba(20,32,43,0.18);--hair2:rgba(20,32,43,0.33);--up:0 0 0 1px rgba(20,32,43,0.105),0 1px 2px rgba(20,32,43,0.075),0 10px 28px -12px rgba(20,32,43,0.27);--in:inset 0 1px 2px rgba(20,32,43,0.21);color-scheme:only light}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:SUIT,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.num,input.amt{font-variant-numeric:tabular-nums}
+#root{min-height:100vh}
+.yt-head{height:64px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:20}
+.yt-ic{width:38px;height:38px;border-radius:10px;background:var(--n);position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.yt-ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.yt-ic i{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;background:var(--or);border:2px solid var(--paper)}
+.yt-head h1{font-size:19px;font-weight:800;white-space:nowrap}
+.yt-head small{font-size:13px;color:var(--sub2)}
+.yt-yr{font-size:13px;font-weight:700;color:var(--n);background:var(--nl);border-radius:8px;padding:5px 10px;white-space:nowrap}
+.yt-rul{margin-left:auto;display:flex;width:min(560px,46vw)}
+.yt-rul button{flex:1;text-align:center;font-size:12.5px;color:var(--sub2);position:relative;padding-top:16px;white-space:nowrap}
+.yt-rul button:before{content:"";position:absolute;top:5px;left:0;right:0;height:3px;background:var(--hair2)}
+.yt-rul button.done:before,.yt-rul button.on:before{background:var(--or)}
+.yt-rul button.on:before{right:50%}
+.yt-rul button b{position:absolute;top:0;left:50%;margin-left:-6px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:2px solid var(--hair2)}
+.yt-rul button.done b,.yt-rul button.on b{background:var(--or);border-color:var(--or)}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,0.18)}
+.yt-rul button.on{color:var(--ink);font-weight:800}
+.yt-main{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr);gap:22px;padding:22px 24px 40px;max-width:1500px;margin:0 auto}
+.yt-panel{background:var(--panel);border-radius:16px;box-shadow:var(--up);padding:22px 24px;display:flex;flex-direction:column;min-height:640px;align-self:start}
+.yt-k{font-size:13px;color:var(--sub2);font-weight:700}
+.yt-panel h2{font-size:24px;font-weight:800;margin:4px 0}
+.yt-lead{font-size:14.5px;color:var(--sub);margin-bottom:16px}
+.yt-sec{font-size:15.5px;font-weight:800;margin:18px 0 10px;padding-top:14px;border-top:1px solid var(--hair);display:flex;align-items:center;gap:8px}
+.yt-sec:first-of-type{border:0;padding-top:0;margin-top:4px}
+.f{margin-bottom:14px;min-width:0}
+.f>label,.f>.lb{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14.5px;font-weight:800;margin-bottom:6px}
+.f>label,.f>.lb{flex-wrap:wrap;white-space:nowrap}
+.f>label span,.f>.lb span{font-weight:500;color:var(--sub2);font-size:13px;text-align:right;white-space:normal;margin-left:auto}
+.in{height:48px;border-radius:12px;background:#fff;box-shadow:var(--in),0 0 0 1px var(--hair2);display:flex;align-items:center;padding:0 14px;gap:6px}
+.in:focus-within{box-shadow:0 0 0 2px var(--n)}
+.in input{border:0;outline:0;background:none;width:100%;min-width:0;font-size:18px;font-weight:700;text-align:right}
+.in input::placeholder{color:#b7ae9e;font-weight:600}
+.in em{font-style:normal;font-size:15px;color:var(--sub2);font-weight:600;flex-shrink:0}
+.in select{border:0;outline:0;background:none;width:100%;font-size:16px;font-weight:700}
+.hint{font-size:13px;color:var(--sub2);margin-top:5px}
+.hint b{color:var(--n)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border-radius:10px;padding:9px 13px;font-size:14px;font-weight:700;background:var(--card);box-shadow:var(--up)}
+.chip.on{background:var(--n);color:#fff}
+.box{background:var(--tint);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--sub);box-shadow:var(--in);margin:4px 0 12px}
+.box b{color:var(--ink)}
+.kid{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;box-shadow:var(--up);padding:8px 10px 8px 12px;margin-bottom:8px}
+.kid .in{height:40px;width:130px;flex-shrink:0}
+.kid .in input{font-size:16px}
+.kid .ag{font-size:14px;color:var(--sub);white-space:nowrap}
+.kid .tg{margin-left:auto;font-size:12.5px;font-weight:800;border-radius:7px;padding:3px 8px;background:var(--nl);color:var(--n);white-space:nowrap}
+.kid .tg.x{background:var(--tint);color:var(--sub2)}
+.kid .del{width:32px;height:32px;border-radius:8px;color:var(--sub2);font-size:20px;line-height:1;flex-shrink:0}
+.kid .del:hover{background:var(--tint)}
+.addb{width:100%;height:44px;border-radius:12px;background:var(--card);box-shadow:var(--up);color:var(--n);font-weight:800;margin-bottom:12px}
+.edu{display:grid;grid-template-columns:150px 1fr 32px;gap:8px;align-items:center;margin-bottom:8px}
+.edu .in{height:44px}
+.more{width:100%;text-align:left;font-weight:800;font-size:14.5px;color:var(--n);padding:10px 0;display:flex;align-items:center;gap:6px}
+.more i{font-style:normal;transition:transform .15s}
+.more.op i{transform:rotate(90deg)}
+.yt-nav{margin-top:auto;padding-top:18px;display:flex;gap:10px}
+.btn{height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;padding:0 20px;background:var(--card);box-shadow:var(--up);white-space:nowrap}
+.btn:hover{box-shadow:0 0 0 2px var(--n)}
+.btn:active{transform:translateY(1px)}
+.btn.pr{background:var(--n);color:#fff;flex:1}
+.btn.pr:hover{background:var(--nh);box-shadow:none}
+.btn.sm{height:40px;font-size:14px;padding:0 14px}
+.yt-res{display:flex;flex-direction:column;gap:16px;min-width:0;position:sticky;top:86px;align-self:start}
+.big{background:var(--card);border-radius:16px;box-shadow:var(--up);padding:22px 26px}
+.big .k2{font-size:14px;font-weight:800;color:var(--sub)}
+.amt-b{font-size:clamp(34px,4.2vw,52px);font-weight:900;letter-spacing:-1.5px;color:var(--blue);margin:2px 0;line-height:1.15;word-break:keep-all}
+.amt-b.pay{color:var(--red)}
+.amt-b.zero{color:var(--ink)}
+.amt-b small{font-size:.46em;font-weight:800;margin-left:4px;letter-spacing:-.3px}
+.amt-s{font-size:14px;color:var(--sub2)}
+.flow{display:flex;gap:8px;align-items:stretch;margin-top:16px}
+.fb{flex:1;background:var(--panel);border-radius:12px;padding:10px 12px;box-shadow:var(--in);min-width:0}
+.fb span{display:block;font-size:12.5px;color:var(--sub2);font-weight:700}
+.fb b{font-size:clamp(15px,1.4vw,19px);font-weight:800}
+.op{display:flex;align-items:center;font-size:18px;color:var(--sub2);font-weight:800}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--up);padding:18px 20px;min-width:0}
+.card h3{font-size:16px;font-weight:800;margin-bottom:8px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;padding:7px 0;border-bottom:1px solid var(--hair)}
+.row:last-child{border:0}
+.row b{font-weight:800;white-space:nowrap}
+.row.z{color:var(--sub2)}
+.row.t{font-weight:800;border-top:2px solid var(--ink);border-bottom:0;margin-top:4px;padding-top:9px}
+.row.s{padding-left:14px;font-size:13.5px;color:var(--sub)}
+.tip{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
+.tip:last-child{border:0}
+.tip .d{width:34px;height:34px;border-radius:9px;background:var(--nl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tip .d svg{width:19px;height:19px;stroke:var(--n);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tip p{font-size:14px;line-height:1.4;flex:1;min-width:0}
+.tip p small{color:var(--sub2);font-size:12.5px}
+.tip b.g{color:var(--blue);font-size:16px;white-space:nowrap}
+.tip.info b.g{color:var(--sub2);font-size:13px;font-weight:700}
+.note{font-size:12.5px;color:var(--sub2);margin-top:10px}
+.cardbar{height:12px;border-radius:6px;background:var(--tint);box-shadow:var(--in);position:relative;overflow:hidden;margin:6px 0 4px}
+.cardbar i{position:absolute;left:0;top:0;bottom:0;background:var(--n);border-radius:6px}
+.cardbar s{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--or)}
+.yt-mbar{display:none}
+.yt-foot{text-align:center;font-size:12.5px;color:var(--sub2);padding:0 16px 30px}
+.yt-foot a{color:var(--n);font-weight:700}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--n);color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+/* 결과 단계 */
+.res-tbl .row span{min-width:0}
+@media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+@media (max-width:899px){
+  .yt-head{height:56px;padding:0 16px}
+  .yt-head small,.yt-head .yt-yr{display:none}
+  .yt-head h1{font-size:17px}
+  .yt-rul{display:none}
+  .yt-mrul{display:flex;gap:4px;padding:10px 16px 0}
+  .yt-mrul i{flex:1;height:4px;border-radius:2px;background:var(--hair2)}
+  .yt-mrul i.d{background:var(--or)}
+  .yt-main{grid-template-columns:1fr;padding:12px 12px 110px;gap:14px}
+  .yt-panel{padding:18px 16px;min-height:0}
+  .yt-panel h2{font-size:21px}
+  .yt-res{position:static}
+  .yt-res.side{display:none}
+  .yt-nav{display:none}
+  .yt-mbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--n);color:#fff;padding:10px 14px calc(12px + env(safe-area-inset-bottom));align-items:center;gap:8px;z-index:30}
+  .yt-mbar span{font-size:12.5px;color:#eaf4f5;display:block}
+  .yt-mbar b{font-size:22px;font-weight:900;white-space:nowrap}
+  .yt-mbar .bk{margin-left:auto;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:11px 12px;font-weight:800;font-size:14px}
+  .yt-mbar .go{background:#fff;color:var(--n);border-radius:12px;padding:11px 16px;font-weight:800;font-size:15px;white-space:nowrap}
+  .flow{flex-wrap:wrap}.flow .op{display:none}.fb{flex:1 1 40%}
+  .edu{grid-template-columns:118px 1fr 32px}
+  .kid .in{width:112px}
+}
+@media (min-width:900px){.yt-mrul{display:none}}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .yt-head,.yt-panel,.yt-mbar,.yt-mrul,.yt-foot,.noprint,.toast{display:none!important}
+  .yt-main{display:block;padding:0}
+  .yt-res{position:static;display:flex!important}
+  .big,.card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  .printhead{display:block!important;font-size:18px;font-weight:800;margin-bottom:8px}
+}
+.printhead{display:none}
+/* 블로그 경유 잠금 — 막힘 화면 */
+.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#faf6ee;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(12,115,125,0.08)}
+.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#0c737d;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
+.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#e07a4f}
+.bj-gate h1{font-size:21px;color:#20241f;margin:0 0 12px;letter-spacing:-.3px}
+.bj-gate p{font-size:15px;color:#5c6259;line-height:1.7;margin:0}
+.bj-gate b{color:#20241f}
+.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#e07a4f;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
+.bj-gate-s{font-size:12.5px!important;color:#5f6b7a!important}
+.bj-gate-s a{color:#0c737d;font-weight:700}
+.ti{height:46px;border-radius:12px;background:#fff;box-shadow:var(--in),0 0 0 1px var(--hair2);display:flex;align-items:center;padding:0 14px}
+.ti:focus-within{box-shadow:0 0 0 2px var(--n)}
+.ti input{border:0;outline:0;background:none;width:100%;min-width:0;font-size:16px;font-weight:600}
+.ta{width:100%;min-height:150px;border-radius:12px;background:#fff;box-shadow:var(--in),0 0 0 1px var(--hair2);border:0;outline:0;padding:12px 14px;font:inherit;font-size:15.5px;line-height:1.7;resize:vertical}
+.ta:focus{box-shadow:0 0 0 2px var(--n)}
+.dt{position:relative;height:46px;border-radius:12px;background:#fff;box-shadow:var(--in),0 0 0 1px var(--hair2);display:flex;align-items:center;padding:0 14px;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.dt input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.dt:focus-within{box-shadow:0 0 0 2px var(--n)}
+.nud{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nud button{width:40px;height:38px;border-radius:10px;background:var(--card);box-shadow:var(--up);font-weight:800;font-size:15px}
+.nud button:hover{box-shadow:0 0 0 2px var(--n)}
+.nud span{font-size:14px;font-weight:700;min-width:118px;font-variant-numeric:tabular-nums}
+.pv{background:var(--card);border-radius:16px;box-shadow:var(--up);padding:16px 18px}
+.pv-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.pv-top h3{font-size:15px;font-weight:800}
+.pv-top small{font-size:13px;color:var(--sub2)}
+.pv-desk{background:#d9cfbe;border-radius:12px;padding:22px;box-shadow:var(--in)}
+.pv-box{position:relative;margin:0 auto}
+.pv-note{font-size:12.5px;color:var(--sub2);margin-top:10px;text-align:center}
+.pop{position:fixed;inset:0;background:rgba(20,18,14,.45);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.pop-in{background:var(--panel);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);padding:22px;width:min(560px,100%);max-height:90vh;overflow:auto}
+.pop-in h3{font-size:19px;font-weight:800;margin-bottom:6px}
+.pop-in p{font-size:13.5px;color:var(--sub);margin-bottom:10px}
+.yt-main{grid-template-columns:minmax(0,470px) minmax(0,1fr)}
+.pv-desk{padding:14px;overflow:auto}
+.pv-box{background:#fff;border-radius:6px;box-shadow:0 14px 30px -16px rgba(60,40,10,.5);margin:0;min-width:100%}
+.pv-box svg{display:block}
+.pv-empty{padding:60px 20px;text-align:center;color:var(--sub);font-size:14.5px;line-height:1.7}
+.pv-empty b{display:block;font-size:17px;color:var(--ink);margin-bottom:4px}
+/* 작업 목록 */
+.tk-list{display:flex;flex-direction:column;gap:8px}
+.tk{background:var(--card);border-radius:12px;box-shadow:var(--up);padding:10px 10px 10px 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.tk.ms{box-shadow:var(--up),inset 3px 0 0 var(--n)}
+.tk-a{display:grid;grid-template-columns:86px minmax(0,1fr);gap:6px}
+.tk-b{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 74px 66px;gap:6px;grid-column:1/-1}
+.tk-b.ms{grid-template-columns:minmax(0,1fr) 74px}
+.tk .ti,.tk .dt{height:38px;border-radius:9px;padding:0 9px}
+.tk .ti input{font-size:14.5px}
+.tk .dt{font-size:13.5px;white-space:nowrap;overflow:hidden}
+.tk .dt.no{color:var(--sub2);font-weight:500}
+.tk .ti.pc input{text-align:right}
+.tk .ti.pc em{font-style:normal;font-size:13px;color:var(--sub2);margin-left:2px}
+.tk-x{display:flex;gap:4px;align-items:flex-start}
+.tk-x button{width:32px;height:32px;border-radius:8px;background:var(--panel);box-shadow:var(--up);font-weight:800;font-size:14px;color:var(--sub)}
+.tk-x button:hover{box-shadow:0 0 0 2px var(--n);color:var(--ink)}
+.tk-x button.ms.on{background:var(--n);color:#fff}
+.tk-x button.del:hover{box-shadow:0 0 0 2px var(--red);color:var(--red)}
+.tk-hd{display:flex;align-items:center;gap:8px;margin:2px 0 8px;font-size:13px;color:var(--sub2)}
+.tk-hd b{color:var(--ink);font-size:14px}
+.addb2{margin-top:8px;width:100%;height:44px;border-radius:12px;background:var(--card);box-shadow:var(--up);font-weight:800;color:var(--n)}
+.addb2:hover{box-shadow:0 0 0 2px var(--n)}
+.pst{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.pst .btn{flex:1;min-width:120px}
+.warn{font-size:13px;color:var(--red);margin-top:6px}
+.outs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.oc{background:var(--card);border-radius:14px;box-shadow:var(--up);padding:14px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.oc b{font-size:15.5px;font-weight:800}
+.oc span{font-size:13px;color:var(--sub);line-height:1.45}
+.oc:hover{box-shadow:0 0 0 2px var(--n)}
+.oc.wide{grid-column:1/-1}
+.dtrow{display:grid;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr);gap:6px;align-items:center}
+.dtrow i{text-align:center;color:var(--sub2);font-style:normal}
+#prt{display:none}
+@media (max-width:899px){
+  .yt-main{grid-template-columns:1fr}
+  .tk-b{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .tk-b.ms{grid-template-columns:minmax(0,1fr) 74px}
+  .outs{grid-template-columns:1fr}
+}
+@media print{
+  @page{size:297mm 210mm;margin:0}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  #root,.toast,.pop{display:none!important}
+  #prt{display:block!important}
+  #prt .pg{width:297mm;height:209mm;padding:10mm;box-sizing:border-box;break-after:page;page-break-after:always;overflow:hidden}
+  #prt .pg:last-child{break-after:auto;page-break-after:auto}
+  #prt svg{width:277mm;height:auto;display:block}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+.tk-hd b{white-space:nowrap}.tk-hd .tk-sp{flex:1}.tk-hd .chip{white-space:nowrap}
+</style><style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
+:root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
+/* 연말정산 · 상장 — 머리띠 */
+.yt-head{background:var(--sea-band)!important;border-bottom:0!important}
+.yt-head h1{color:#fff!important}
+.yt-head small{color:var(--sea-band-s)!important}
+.yt-head .yt-yr{background:rgba(255,255,255,.13)!important;color:#fff!important}
+.yt-head .yt-ic{box-shadow:0 0 0 1.5px rgba(255,255,255,.22)}
+.yt-head .yt-ic i{border-color:var(--sea-band)!important}
+.yt-rul button{color:var(--sea-band-s)!important}
+.yt-rul button.on{color:#fff!important}
+.yt-rul button:before{background:rgba(255,255,255,.22)!important}
+.yt-rul button b{background:var(--sea-band)!important;border-color:rgba(255,255,255,.4)!important}
+.yt-rul button.done:before,.yt-rul button.on:before{background:var(--sunset)!important}
+.yt-rul button.done b,.yt-rul button.on b{background:var(--sunset)!important;border-color:var(--sunset)!important}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,.25)!important}
+.yt-mbar{background:var(--sea-band)!important}
+.yt-mbar span{color:var(--sea-band-s)!important}
+.yt-mbar .bk{color:#fff!important}
+.yt-mbar .bk.rs{color:var(--sea-band-s)!important}
+</style></head><body><div id="root"></div>
+<script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
+   허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
+   그 밖(주소 복사·공유 링크·즐겨찾기·직접 입력·다른 사이트에 퍼가기)은 막고 해당 글로 안내.
+   서버 없는 브라우저 안 확인이라 일반 사용자의 건너뛰기를 막는 수준(의도적 우회는 못 막음). */
+const BJ_BLOG = "https://luvbong.tistory.com";
+const BJ_GATE = (() => {
+  const S = "bjgate:";                       /* 새 창 안에서만 유지되는 확인 표시(sessionStorage) */
+  const tokens = new Map();                  /* 글 속 도구가 발급한 일회용 확인값 */
+  const approved = new Set();                /* 확인을 마친 새 창 — 이 창에만 작업을 넘겨줌 */
+  let provider = null, handoff = null;       /* 넘겨줄 작업을 만드는 함수 / 새 창이 받은 작업 */
+  const inFrame = window.parent !== window;
+  const dev = (location.protocol === "file:" || location.hostname === "localhost") && new URLSearchParams(location.search).get("bjdev") === "1";
+  const fromBlog = () => { try { const a = location.ancestorOrigins; if (a && a.length) return a[a.length - 1] === BJ_BLOG; } catch (e) {}
+    return (document.referrer || "").startsWith(BJ_BLOG + "/"); };
+  let embedOK = false;
+
+  /* 글 속 도구: 새 창이 보내는 확인 요청에 답함 */
+  window.addEventListener("message", e => {
+    const d = e.data; if (!d || d.bjgate !== "verify" || e.origin !== location.origin) return;
+    const t = tokens.get(d.t); tokens.delete(d.t);
+    const ok = embedOK && t && Date.now() - t.at < 30000 && e.source === t.win;
+    if (ok) approved.add(e.source);
+    try { e.source.postMessage({ bjgate: ok ? "ok" : "no", t: d.t }, location.origin); } catch (err) {}
+  });
+  window.addEventListener("message", e => {   /* 새 창이 작업을 달라고 할 때 (확인된 창에만) */
+    const d = e.data; if (!d || d.bjhand !== "req" || e.origin !== location.origin || !approved.has(e.source)) return;
+    approved.delete(e.source);
+    let data = null; try { data = provider ? provider() : null; } catch (err) {}
+    try { e.source.postMessage({ bjhand: "data", data }, location.origin); } catch (err) {}
+  });
+
+  /* 새 창으로 열기 (글 속 도구에서만) */
+  function openWindow(key, params, file) {
+    const t = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const q = new URLSearchParams(params || {}); q.delete("embed"); q.set("bjt", t);
+    const path = file ? location.pathname.replace(/[^/]*$/, file) : location.pathname;
+    const url = path + "?" + q.toString();
+    const w = window.open(url, "bj_" + key + "_" + (q.get("tab") || "all"), "popup,width=1320,height=920");
+    if (!w) return false;
+    tokens.set(t, { at: Date.now(), win: w });
+    return true;
+  }
+
+  /* 막힘 화면 */
+  async function blocked(key, tab, why) {
+    const post = BJ_BLOG + "/";     /* 막힘 화면은 늘 블로그 첫 화면으로 (글마다 주소를 적을 필요 없음) */
+    const root = document.getElementById("root");
+    root.innerHTML = `<div class="bj-gate"><div class="bj-gate-in">
+      <div class="bj-gate-mark">J<i></i></div>
+      <h1>Blog J 블로그 글에서 열어 주세요</h1>
+      <p>이 도구는 <b>Blog J 블로그 글</b>을 통해서만 쓸 수 있어요.<br>글 안의 도구에서 <b>새 창으로 열기</b>를 누르면 광고 없이 도구만 크게 띄워 쓸 수 있습니다.</p>
+      <a class="bj-gate-btn" href="${post}" target="_top" rel="noopener">Blog J 이동하기 ›</a>
+      <p class="bj-gate-s">${why === "frame" ? "다른 사이트에 넣은 도구는 열리지 않아요." : "주소를 직접 입력하거나, 즐겨찾기·공유받은 링크로는 열리지 않아요."} · 설치·가입 없는 무료 도구 모음 <a href="${BJ_BLOG}/" target="_top" rel="noopener">Blog J</a></p>
+    </div></div>`;
+    document.title = "Blog J 블로그 글에서 열어 주세요";
+    return false;
+  }
+
+  /* 시작할 때 확인: true면 도구를 띄움 */
+  async function check(key, tab, opts) {
+    if (dev || (() => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } })()) { embedOK = inFrame && (dev || fromBlog()); return true; }   /* 11-10: 주인 시험 모드 — 테스트 허브(jhub.html)에서 이 기기에 켠 경우만 */
+    /* 예전 글 호환: 블로그 글의 링크를 눌러 들어온 경우 허용 (프로그램 창 → 실행 카드로 바꾸기 전까지만) */
+    if (!inFrame && opts && opts.legacyReferrer && (document.referrer || "").startsWith(BJ_BLOG + "/")) return true;
+    if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }
+    try { const v = sessionStorage.getItem(S + key);
+      if (v) { if (v !== "1" && v !== (tab || "all")) { const q = new URLSearchParams(location.search); q.set("tab", v); location.replace(location.pathname + "?" + q.toString()); return false; } return true; } } catch (e) {}
+    const q = new URLSearchParams(location.search), t = q.get("bjt");
+    if (t && window.opener) {
+      const ok = await new Promise(res => {
+        const on = e => { if (e.origin === location.origin && e.data && e.data.t === t && (e.data.bjgate === "ok" || e.data.bjgate === "no")) { window.removeEventListener("message", on); res(e.data.bjgate === "ok"); } };
+        window.addEventListener("message", on);
+        try { window.opener.postMessage({ bjgate: "verify", t }, location.origin); } catch (e) { res(false); }
+        setTimeout(() => { window.removeEventListener("message", on); res(false); }, 3000);
+      });
+      if (ok) { try { sessionStorage.setItem(S + key, tab || "all"); } catch (e) {}
+        const op = window.opener;
+        handoff = await new Promise(res => {
+          const on = e => { if (e.origin === location.origin && e.source === op && e.data && e.data.bjhand === "data") { window.removeEventListener("message", on); res(e.data.data || null); } };
+          window.addEventListener("message", on);
+          try { op.postMessage({ bjhand: "req" }, location.origin); } catch (e) { res(null); }
+          setTimeout(() => { window.removeEventListener("message", on); res(null); }, 4000);
+        });
+        q.delete("bjt"); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q.toString() : ""));
+        try { window.opener = null; } catch (e) {}
+        return true; }
+    }
+    return blocked(key, tab, "direct");
+  }
+  return { check, openWindow, embedded: () => { embedOK = inFrame && (dev || fromBlog()); return embedOK; }, inFrame: () => inFrame, setProvider: fn => { provider = fn; }, takeHandoff: () => { const h = handoff; handoff = null; return h; } };
+})();</script>
+<script>const HOL={"2026-01-01": "신정", "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴", "2026-03-01": "삼일절", "2026-03-02": "대체공휴일", "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-05-25": "대체공휴일", "2026-06-03": "지방선거", "2026-06-06": "현충일", "2026-07-17": "제헌절", "2026-08-15": "광복절", "2026-08-17": "대체공휴일", "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴", "2026-10-03": "개천절", "2026-10-05": "대체공휴일", "2026-10-09": "한글날", "2026-12-25": "성탄절", "2027-01-01": "신정", "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴", "2027-02-09": "대체공휴일", "2027-03-01": "삼일절", "2027-05-01": "노동절", "2027-05-03": "대체공휴일", "2027-05-05": "어린이날", "2027-05-13": "부처님오신날", "2027-06-06": "현충일", "2027-07-17": "제헌절", "2027-07-19": "대체공휴일", "2027-08-15": "광복절", "2027-08-16": "대체공휴일", "2027-09-14": "추석 연휴", "2027-09-15": "추석", "2027-09-16": "추석 연휴", "2027-10-03": "개천절", "2027-10-04": "대체공휴일", "2027-10-09": "한글날", "2027-10-11": "대체공휴일", "2027-12-25": "성탄절", "2027-12-27": "대체공휴일", "2028-01-01": "신정", "2028-01-26": "설날 연휴", "2028-01-27": "설날", "2028-01-28": "설날 연휴", "2028-03-01": "삼일절", "2028-04-12": "국회의원선거", "2028-05-01": "노동절", "2028-05-02": "부처님오신날", "2028-05-05": "어린이날", "2028-06-06": "현충일", "2028-07-17": "제헌절", "2028-08-15": "광복절", "2028-10-02": "추석 연휴", "2028-10-03": "추석 · 개천절", "2028-10-04": "추석 연휴", "2028-10-05": "대체공휴일", "2028-10-09": "한글날", "2028-12-25": "성탄절"};
+</script>
+<script>/* 간트 차트 만들기 v1.0 — Blog J (블로그 실행형 · 입력한 일정은 이 기기 브라우저에만) */
+const TOOL = "gantt", APP_VER = "1.0";
+const BUILD = "2026-11-12(목) 03:00";
+const EMBED = new URLSearchParams(location.search).get("embed") === "1";
+const LSK = "bj-gantt1";
+const STEPS = [["data", "일정 넣기"], ["view", "보기"], ["look", "꾸미기"], ["out", "저장 · 인쇄"]];
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const WD = "일월화수목금토";
+const IC_G = '<svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M8 8h6M10 12h7M7 16h5"/></svg>';
+
+/* ── 날짜: 1970-01-01부터 며칠째(dn)로 셈 — 시간대 영향 없음 ── */
+const dn = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); return m ? Math.round(Date.UTC(+m[1], +m[2] - 1, +m[3]) / 864e5) : NaN; };
+const ds = n => new Date(n * 864e5).toISOString().slice(0, 10);
+const wdi = n => ((n % 7) + 11) % 7;                 /* 0 = 일요일 */
+const ymdw = s => isNaN(dn(s)) ? "" : s + "(" + WD[wdi(dn(s))] + ")";
+const mdw = n => ds(n).slice(5) + "(" + WD[wdi(n)] + ")";
+const todayS = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+const isOff = n => { const w = wdi(n); return w === 0 || w === 6 || !!HOL[ds(n)]; };
+
+/* ── 예시(설명용 가상 일정) ── */
+function SAMPLE() {
+  const t = dn(todayS()), mon = t - ((wdi(t) + 6) % 7) - 7;   /* 지난주 월요일부터 */
+  const D = k => ds(mon + k);
+  return [
+    { g: "기획", n: "요구사항 정리", s: D(0), e: D(4), who: "김지영", pct: 100 },
+    { g: "기획", n: "화면 설계", s: D(7), e: D(18), who: "박민수", pct: 60 },
+    { g: "기획", n: "기획 검토 회의", s: D(18), e: D(18), who: "", pct: 0, ms: true },
+    { g: "디자인 · 개발", n: "디자인 작업", s: D(14), e: D(32), who: "최수진", pct: 30 },
+    { g: "디자인 · 개발", n: "기능 개발", s: D(21), e: D(53), who: "이준호", pct: 10 },
+    { g: "점검 · 오픈", n: "시험 · 고치기", s: D(56), e: D(67), who: "김지영", pct: 0 },
+    { g: "점검 · 오픈", n: "서비스 오픈", s: D(70), e: D(70), who: "", pct: 0, ms: true },
+  ];
+}
+function BLANK() {
+  return { step: 0, title: "프로젝트 일정표", sub: "", tasks: SAMPLE(), sample: true,
+    scale: "auto", rng: "auto", from: "", to: "", biz: false,
+    wk: true, hol: true, today: true, pct: true, grp: true, cWho: true, cDate: true, cDur: false,
+    colorBy: "grp", pal: "sea", fs: "m", shape: "round", pngW: 1600 };
+}
+let S = (() => { try { const v = JSON.parse(localStorage.getItem(LSK) || "null"); return v ? Object.assign(BLANK(), v) : BLANK(); } catch (e) { return BLANK(); } })();
+let saveT = null;
+function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LSK, JSON.stringify(S)); } catch (e) {} }, 300); }
+
+/* ── 붙여넣기 읽기 ── */
+const KEYS = { n: /작업|업무|항목|내용|할\s*일|일정|task|이름|활동/i, s: /시작|착수|start|부터/i, e: /종료|끝|마감|완료\s*일|end|까지|납기/i, dur: /기간|일수|소요|days?|duration/i, who: /담당|책임|owner|담당자|사람/i, pct: /진행|진척|완료율|%|percent|progress/i, g: /구분|단계|분류|그룹|phase|group|파트|카테고리/i };
+function pDate(v, ref) {
+  v = String(v || "").trim().replace(/\([^)]*\)$/, "").replace(/\s+/g, " ").trim();
+  if (!v) return "";
+  if (/^\d{5}(\.\d+)?$/.test(v)) { const n = Math.floor(+v); if (n > 20000 && n < 80000) return ds(n - 25569); }   /* 엑셀 날짜 숫자 */
+  let m = /^(\d{4})\s*[-./년]\s*(\d{1,2})\s*[-./월]\s*(\d{1,2})\s*[.일]?$/.exec(v);
+  if (m) return mk(+m[1], +m[2], +m[3]);
+  m = /^(\d{2})[-./](\d{1,2})[-./](\d{1,2})\.?$/.exec(v);
+  if (m) return mk(2000 + +m[1], +m[2], +m[3]);
+  m = /^(\d{1,2})\s*[-./월]\s*(\d{1,2})\s*[.일]?$/.exec(v);
+  if (m) { const y = ref ? +ref.slice(0, 4) : new Date().getFullYear(); let r = mk(y, +m[1], +m[2]); if (ref && r && dn(r) < dn(ref) - 180) r = mk(y + 1, +m[1], +m[2]); return r; }
+  return "";
+  function mk(y, mo, d) { if (mo < 1 || mo > 12 || d < 1 || d > 31) return ""; const s = `${y}-${String(mo).padStart(2, "0")}-${String(d).padStart(2, "0")}`; return ds(dn(s)) === s ? s : ""; }
+}
+const pNum = v => { const m = /^\s*(\d+(?:\.\d+)?)\s*(%|일|d|days?)?\s*$/i.exec(String(v || "")); return m ? +m[1] : NaN; };
+function addDur(s, d) {               /* 시작일 포함 d일 */
+  let n = dn(s); if (d <= 1) return s;
+  if (!S.biz) return ds(n + Math.round(d) - 1);
+  let k = isOff(n) ? 0 : 1; while (k < d) { n++; if (!isOff(n)) k++; } return ds(n);
+}
+function parsePaste(text) {
+  const rows = String(text || "").replace(/\r/g, "").split("\n").map(r => r.split("\t")).filter(r => r.some(c => c.trim()));
+  if (!rows.length) return { tasks: [], bad: 0, noTab: false };
+  const noTab = rows.every(r => r.length < 2);
+  let map = null, start = 0;
+  const h = rows[0].map(c => c.trim());
+  if (h.some(c => c && !pDate(c) && isNaN(pNum(c))) && h.some(c => Object.values(KEYS).some(k => k.test(c)))) {
+    map = {}; h.forEach((c, i) => { for (const k of ["s", "e", "dur", "who", "pct", "g", "n"]) if (!(k in map) && KEYS[k].test(c)) { map[k] = i; break; } });
+    if (!("n" in map)) { const i = h.findIndex((c, j) => c && !Object.values(map).includes(j)); if (i >= 0) map.n = i; }
+    start = 1;
+  }
+  const out = []; let bad = 0, ref = "";
+  for (const r of rows.slice(start)) {
+    const c = i => i == null || i < 0 ? "" : String(r[i] == null ? "" : r[i]).trim();
+    let t = { g: "", n: "", s: "", e: "", who: "", pct: 0 };
+    if (map) {
+      t.n = c(map.n); t.g = c(map.g); t.who = c(map.who);
+      t.s = pDate(c(map.s), ref); t.e = pDate(c(map.e), t.s || ref);
+      const p = pNum(c(map.pct)); if (!isNaN(p)) t.pct = p <= 1 && /\./.test(c(map.pct)) ? Math.round(p * 100) : Math.round(p);
+      if (!t.e && t.s) { const d = pNum(c(map.dur)); if (!isNaN(d)) { if (d === 0) t.ms = true; else t.e = addDur(t.s, d); } }
+    } else {   /* 머리줄이 없으면 내용으로 맞힘: 첫 글자 칸 = 작업, 날짜 두 개 = 시작 · 끝 */
+      const txt = [], dts = [], nums = [];
+      r.forEach((v, i) => { v = String(v).trim(); if (!v) return; const d = pDate(v, ref); if (d) dts.push(d); else if (/%$/.test(v) && !isNaN(pNum(v))) t.pct = Math.round(pNum(v)); else if (!isNaN(pNum(v))) nums.push(pNum(v)); else txt.push(v); });
+      if (txt.length >= 3) { t.g = txt[0]; t.n = txt[1]; t.who = txt[2]; } else if (txt.length === 2) { t.n = txt[0]; t.who = txt[1]; } else t.n = txt[0] || "";
+      t.s = dts[0] || ""; t.e = dts[1] || "";
+      if (!t.e && t.s && nums.length) { const d = nums[0]; if (d === 0) t.ms = true; else if (d <= 1000) t.e = addDur(t.s, d); }
+    }
+    if (!t.s && !t.n) continue;
+    if (!t.s) { bad++; continue; }
+    if (!t.e) t.ms = true;
+    if (t.e && dn(t.e) < dn(t.s)) [t.s, t.e] = [t.e, t.s];
+    if (t.ms) t.e = t.s;
+    t.pct = Math.max(0, Math.min(100, t.pct || 0));
+    ref = t.s; out.push(t);
+  }
+  return { tasks: out, bad, noTab };
+}
+
+/* ── 색 ── */
+const PALS = {
+  sea: ["#0E7C86", "#2B5FA0", "#C2873B", "#6B8E4E", "#8A6BB0", "#B5566B", "#4F7C9E", "#7A6A58"],
+  calm: ["#4E7A8C", "#7F8F6A", "#B08968", "#6F7FA8", "#9C7A9E", "#6E9E98", "#A88C5A", "#8C6F6F"],
+  vivid: ["#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#9467BD", "#8C564B", "#E377C2", "#17BECF"],
+  mono: ["#3A3F45", "#6B7178", "#9097A0", "#50565D", "#7D838B", "#A3A9B1", "#5E646B", "#8A9097"] };
+const PALN = { sea: "바다(기본)", calm: "차분하게", vivid: "선명하게", mono: "흑백(흑백 인쇄용)" };
+const mix = (hex, k) => { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; const f = c => Math.round(c + (255 - c) * k); return "#" + [f(r), f(g), f(b)].map(x => x.toString(16).padStart(2, "0")).join(""); };
+function keyOf(t) { return S.colorBy === "who" ? (t.who || "담당 없음") : S.colorBy === "grp" ? (t.g || "구분 없음") : "일정"; }
+function colorMap(tasks) { const m = new Map(), P = PALS[S.pal] || PALS.sea; tasks.forEach(t => { const k = keyOf(t); if (!m.has(k)) m.set(k, P[m.size % P.length]); }); return m; }
+
+/* ── 차트 그리기 (SVG 글자) ── */
+const FS = { s: 11.5, m: 13, l: 14.5 };
+const TODAY_C = "#E07A4F";
+function tw(str, fs) { let w = 0; for (const ch of String(str)) w += /[ᄀ-ᇿ㄰-㆏가-힣一-鿿]/.test(ch) ? fs * .98 : /[A-Z0-9%~]/.test(ch) ? fs * .62 : fs * .5; return w; }
+function clip(str, fs, max) { str = String(str || ""); if (tw(str, fs) <= max) return str; while (str.length > 1 && tw(str + "…", fs) > max) str = str.slice(0, -1); return str + "…"; }
+function validTasks() { return S.tasks.filter(t => !isNaN(dn(t.s)) && (t.ms || !isNaN(dn(t.e)))).map(t => Object.assign({}, t, { e: t.ms ? t.s : (dn(t.e) < dn(t.s) ? t.s : t.e) })); }
+function rangeOf(tasks) {
+  let a = Infinity, b = -Infinity; tasks.forEach(t => { a = Math.min(a, dn(t.s)); b = Math.max(b, dn(t.e)); });
+  if (S.rng === "set" && !isNaN(dn(S.from)) && !isNaN(dn(S.to)) && dn(S.to) >= dn(S.from)) { a = dn(S.from); b = dn(S.to); }
+  if (!isFinite(a)) { const t = dn(todayS()); a = t; b = t + 27; }
+  const span = b - a + 1;
+  const sc = S.scale !== "auto" ? S.scale : span <= 45 ? "day" : span <= 200 ? "week" : "month";
+  if (S.rng !== "set") {
+    if (sc === "day") { a -= 1; b += 1; }
+    else if (sc === "week") { a -= (wdi(a) + 6) % 7; b += 6 - (wdi(b) + 6) % 7; }
+    else { const da = ds(a), db = ds(b); a = dn(da.slice(0, 8) + "01"); const y = +db.slice(0, 4), m = +db.slice(5, 7); b = dn(m === 12 ? `${y + 1}-01-01` : `${y}-${String(m + 1).padStart(2, "0")}-01`) - 1; }
+  }
+  return { a, b, sc };
+}
+function durTxt(t) { if (t.ms) return "—"; const a = dn(t.s), b = dn(t.e); if (!S.biz) return (b - a + 1) + "일"; let k = 0; for (let n = a; n <= b; n++) if (!isOff(n)) k++; return k + "일"; }
+/* 줄 목록(구분 묶음이면 구분 머리줄 + 작업) */
+function rowsOf(tasks) {
+  if (!S.grp || !tasks.some(t => t.g)) return tasks.map(t => ({ t }));
+  const order = []; const by = new Map();
+  tasks.forEach(t => { const k = t.g || ""; if (!by.has(k)) { by.set(k, []); order.push(k); } by.get(k).push(t); });
+  const out = []; order.forEach(k => { const L = by.get(k); if (k) out.push({ grp: k, list: L }); L.forEach(t => out.push({ t, ind: !!k })); });
+  return out;
+}
+/* opts: { W, rows(줄 목록 일부), page, pages, all(전체 작업 — 범위 · 색 기준) } */
+function chartSvg(o) {
+  const all = o.all, fs = FS[S.fs] || 13, rowH = Math.round(fs * 2.25), cm = colorMap(all);
+  const { a, b, sc } = rangeOf(all), nd = b - a + 1;
+  const hasWho = S.cWho && all.some(t => t.who), rows = o.rows;
+  let nameW = Math.max(110, Math.min(300, Math.max(...rows.map(r => tw(r.grp || r.t.n, fs) + (r.ind ? 14 : 0) + (r.grp ? 6 : 0)), 60) + 22));
+  const whoW = hasWho ? Math.max(56, Math.min(110, Math.max(...all.map(t => tw(t.who, fs * .92))) + 18)) : 0;
+  const xy = all.some(t => t.s.slice(0, 4) !== all[0].s.slice(0, 4) || t.e.slice(0, 4) !== all[0].s.slice(0, 4)), dd = n => xy ? ds(n) : ds(n).slice(5);
+  const dateW = S.cDate ? Math.round(fs * (xy ? 13.2 : 8.4)) : 0, durW = S.cDur ? Math.round(fs * 3.6) : 0;
+  let W = o.W; const minTl = Math.max(240, nd * (sc === "day" ? Math.max(14, fs * 1.25) : sc === "week" ? 3.2 : 1.1));
+  if (o.grow && nameW + whoW + dateW + durW + minTl > W) W = Math.ceil(nameW + whoW + dateW + durW + minTl);
+  const L = nameW + whoW + dateW + durW, TL = W - L - 12, px = TL / nd, X = n => L + (n - a) * px;
+  const titleH = S.title || S.sub ? (S.sub ? fs * 3.9 : fs * 2.7) : 0;
+  const hdH = sc === "day" ? fs * 3.6 : fs * 3.2, top = Math.round(titleH + hdH);
+  const legend = S.colorBy !== "one" && cm.size > 1;
+  const legH = Math.round(fs * 2.6), H = top + rows.length * rowH + (o.last !== false ? legH + 6 : 8);
+  const F = `font-family="SUIT, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif"`;
+  let g = `<rect width="${W}" height="${H}" fill="#fff"/>`;
+  /* 제목 */
+  if (titleH) { g += `<text x="2" y="${fs * 1.7}" font-size="${fs * 1.45}" font-weight="800" fill="#14202b">${esc(S.title)}</text>`;
+    const sub = S.sub || ""; if (sub) g += `<text x="2" y="${fs * 3.2}" font-size="${fs * .95}" fill="#5f6b7a">${esc(sub)}</text>`;
+    if (o.pages > 1) g += `<text x="${W - 4}" y="${fs * 1.7}" text-anchor="end" font-size="${fs * .9}" fill="#5f6b7a">${o.page} / ${o.pages}</text>`; }
+  const y0 = titleH, yH2 = titleH + hdH / 2;
+  /* 칸 머리 */
+  g += `<rect x="0" y="${y0}" width="${W}" height="${hdH}" fill="#f4f1ea"/>`;
+  const colHd = (x, w, t) => `<text x="${x + 8}" y="${y0 + hdH / 2 + fs * .36}" font-size="${fs * .92}" font-weight="700" fill="#5f6b7a">${t}</text>`;
+  g += colHd(0, nameW, "작업"); if (whoW) g += colHd(nameW, whoW, "담당"); if (dateW) g += colHd(nameW + whoW, dateW, "기간"); if (durW) g += colHd(nameW + whoW + dateW, durW, "일수");
+  /* 주말 · 공휴일 칸, 위 머리(달 / 해) · 아래 머리(날 / 주 / 달) */
+  let shade = "", hd1 = "", hd2 = "", grid = "";
+  const rowsBot = top + rows.length * rowH;
+  if (sc === "day" || (sc === "week" && px >= 2.2)) for (let n = a; n <= b; n++) {
+    const hol = HOL[ds(n)], w = wdi(n);
+    if ((S.wk && (w === 0 || w === 6)) || (S.hol && hol)) shade += `<rect x="${X(n)}" y="${top}" width="${px}" height="${rowsBot - top}" fill="${S.hol && hol ? "#fbeeee" : "#f3f1ec"}"/>`;
+  }
+  const mStarts = []; for (let n = a; n <= b; n++) if (n === a || ds(n).slice(8) === "01") mStarts.push(n);
+  if (sc === "month") {
+    const yStarts = []; for (let n = a; n <= b; n++) if (n === a || ds(n).slice(5) === "01-01") yStarts.push(n);
+    yStarts.forEach((n, i) => { const e = i + 1 < yStarts.length ? yStarts[i + 1] : b + 1; let lx = X(n) + 5; const tn0 = dn(todayS()); if (S.today && tn0 >= a && tn0 <= b) { const cx = X(tn0) + px / 2; if (lx < cx + fs * 1.4 && lx + fs * 3 > cx - fs * 1.4) lx = cx + fs * 1.4 + 4; } hd1 += `<text x="${lx}" y="${y0 + fs * 1.25}" font-size="${fs * .9}" font-weight="700" fill="#14202b">${ds(n).slice(0, 4)}년</text>`; if (i) hd1 += `<line x1="${X(n)}" x2="${X(n)}" y1="${y0}" y2="${yH2}" stroke="#d6d0c4"/>`; });
+    mStarts.forEach((n, i) => { const e = i + 1 < mStarts.length ? mStarts[i + 1] : b + 1, cx = (X(n) + X(e)) / 2;
+      if (X(e) - X(n) > fs * 1.4) hd2 += `<text x="${cx}" y="${yH2 + fs * 1.2}" text-anchor="middle" font-size="${fs * .86}" fill="#3d4a55">${+ds(n).slice(5, 7)}월</text>`;
+      if (i) grid += `<line x1="${X(n)}" x2="${X(n)}" y1="${yH2}" y2="${rowsBot}" stroke="#e7e2d8"/>`; });
+  } else {
+    mStarts.forEach((n, i) => { const e = i + 1 < mStarts.length ? mStarts[i + 1] : b + 1;
+      let lx = X(n) + 5; const lw = tw(ds(n).slice(0, 7), fs * .9), tn0 = dn(todayS());
+      if (S.today && tn0 >= a && tn0 <= b) { const cx = X(tn0) + px / 2, c1 = cx - fs * 1.4, c2 = cx + fs * 1.4; if (lx < c2 && lx + lw > c1) lx = c2 + 4; }
+      if (X(e) - lx > lw + 4) hd1 += `<text x="${lx}" y="${y0 + fs * 1.25}" font-size="${fs * .9}" font-weight="700" fill="#14202b">${ds(n).slice(0, 7)}</text>`;
+      if (i) hd1 += `<line x1="${X(n)}" x2="${X(n)}" y1="${y0}" y2="${rowsBot}" stroke="#cfc8ba"/>`; });
+    if (sc === "day") for (let n = a; n <= b; n++) { const w = wdi(n), hol = HOL[ds(n)], c = hol || w === 0 ? "#c23a2b" : w === 6 ? "#2B5FA0" : "#3d4a55", cx = X(n) + px / 2;
+      if (px >= fs * 1.1) { hd2 += `<text x="${cx}" y="${yH2 + fs * .95}" text-anchor="middle" font-size="${fs * .8}" fill="${c}">${+ds(n).slice(8)}</text><text x="${cx}" y="${yH2 + fs * 1.95}" text-anchor="middle" font-size="${fs * .72}" fill="${c}">${WD[w]}</text>`; }
+      grid += `<line x1="${X(n)}" x2="${X(n)}" y1="${yH2}" y2="${rowsBot}" stroke="#efebe3"/>`; }
+    else for (let n = a; n <= b; n++) if (wdi(n) === 1) { const cx = X(n) + Math.min(px * 7, X(b + 1) - X(n)) / 2;
+      if (px * 7 >= fs * 1.6) hd2 += `<text x="${cx}" y="${yH2 + fs * 1.2}" text-anchor="middle" font-size="${fs * .78}" fill="#3d4a55">${+ds(n).slice(8)}</text>`;
+      grid += `<line x1="${X(n)}" x2="${X(n)}" y1="${yH2}" y2="${rowsBot}" stroke="#ece8df"/>`; }
+  }
+  g += shade + grid + hd1 + hd2;
+  g += `<line x1="${L}" x2="${W - 12}" y1="${yH2}" y2="${yH2}" stroke="#d6d0c4"/>`;
+  g += `<line x1="0" x2="${W}" y1="${top}" y2="${top}" stroke="#8f8676" stroke-width="1.2"/>`;
+  /* 줄 */
+  const r1 = S.shape === "round" ? 4 : 0, bh = Math.round(rowH * .56);
+  rows.forEach((r, i) => {
+    const y = top + i * rowH, cy = y + rowH / 2, ty = cy + fs * .36;
+    g += `<line x1="0" x2="${W}" y1="${y + rowH}" y2="${y + rowH}" stroke="#ece8df"/>`;
+    if (r.grp) {
+      const L2 = r.list, ga = Math.min(...L2.map(t => dn(t.s))), gb = Math.max(...L2.map(t => dn(t.e)));
+      const tot = L2.reduce((s, t) => s + (t.ms ? 0 : dn(t.e) - dn(t.s) + 1), 0), done = L2.reduce((s, t) => s + (t.ms ? 0 : (dn(t.e) - dn(t.s) + 1) * (t.pct || 0) / 100), 0);
+      g += `<rect x="0" y="${y}" width="${W}" height="${rowH}" fill="#faf8f3" opacity=".85"/>`;
+      g += `<text x="8" y="${ty}" font-size="${fs}" font-weight="800" fill="#14202b">${esc(clip(r.grp, fs, nameW - 14))}</text>`;
+      if (dateW) g += `<text x="${nameW + whoW + 8}" y="${ty}" font-size="${fs * .85}" fill="#5f6b7a">${dd(ga)} ~ ${dd(gb)}</text>`;
+      const x1 = Math.max(L, X(ga)), x2 = Math.min(W - 12, X(gb + 1));
+      if (x2 > x1) { const c = S.colorBy === "grp" ? cm.get(keyOf(L2[0])) : "#3d4a55";
+        g += `<rect x="${x1}" y="${cy - 3}" width="${x2 - x1}" height="6" rx="2" fill="${c}" opacity=".9"/><path d="M${x1} ${cy - 3}v9l4-4z M${x2} ${cy - 3}v9l-4-4z" fill="${c}"/>`;
+        if (S.pct && tot) { const lab = Math.round(done / tot * 100) + "%", lw = tw(lab, fs * .82) + 8, right = x2 + lw < W - 12;
+          if (right || x1 - lw > L) g += `<text x="${right ? x2 + 6 : x1 - 6}" y="${ty}" font-size="${fs * .82}" font-weight="700" fill="#5f6b7a"${right ? "" : ' text-anchor="end"'}>${lab}</text>`; } }
+      return;
+    }
+    const t = r.t, c = cm.get(keyOf(t)) || "#0E7C86", ix = r.ind ? 18 : 8;
+    g += `<text x="${ix}" y="${ty}" font-size="${fs}" fill="#14202b"${t.ms ? ' font-weight="700"' : ""}>${esc(clip(t.n || "(이름 없음)", fs, nameW - ix - 6))}</text>`;
+    if (whoW) g += `<text x="${nameW + 8}" y="${ty}" font-size="${fs * .92}" fill="#3d4a55">${esc(clip(t.who, fs * .92, whoW - 12))}</text>`;
+    if (dateW) g += `<text x="${nameW + whoW + 8}" y="${ty}" font-size="${fs * .85}" fill="#3d4a55">${t.ms ? (xy ? ymdw(t.s) : mdw(dn(t.s))) : dd(dn(t.s)) + " ~ " + dd(dn(t.e))}</text>`;
+    if (durW) g += `<text x="${nameW + whoW + dateW + durW - 8}" y="${ty}" text-anchor="end" font-size="${fs * .85}" fill="#3d4a55">${durTxt(t)}</text>`;
+    const sa = dn(t.s), sb = dn(t.e);
+    if (t.ms) { if (sa < a || sa > b) return; const cx = X(sa) + px / 2, h = bh * .62;
+      g += `<path d="M${cx} ${cy - h}L${cx + h} ${cy}L${cx} ${cy + h}L${cx - h} ${cy}Z" fill="${c}" stroke="#fff" stroke-width="1.5"/>`;
+      const lx = cx + h + 5, lab = mdw(sa), right = lx + tw(lab, fs * .82) < W - 12;
+      g += `<text x="${right ? lx : cx - h - 5}" y="${ty}" font-size="${fs * .82}" font-weight="700" fill="#3d4a55"${right ? "" : ' text-anchor="end"'}>${lab}</text>`; return; }
+    const x1 = Math.max(L, X(sa)), x2 = Math.min(W - 12, X(sb + 1)); if (x2 <= x1) return;
+    const w = x2 - x1, p = Math.max(0, Math.min(100, t.pct || 0));
+    g += `<rect x="${x1}" y="${cy - bh / 2}" width="${w}" height="${bh}" rx="${Math.min(r1, w / 2)}" fill="${S.pct ? mix(c, .62) : c}"/>`;
+    if (S.pct && p > 0) { const pw = w * p / 100; g += `<clipPath id="cp${o.page || 0}_${i}"><rect x="${x1}" y="${cy - bh / 2}" width="${pw}" height="${bh}"/></clipPath><rect x="${x1}" y="${cy - bh / 2}" width="${w}" height="${bh}" rx="${Math.min(r1, w / 2)}" fill="${c}" clip-path="url(#cp${o.page || 0}_${i})"/>`; }
+    if (S.pct) { const lab = p + "%", lw = tw(lab, fs * .8) + 8;
+      if (w > lw + 4) g += `<text x="${x2 - 5}" y="${cy + fs * .3}" text-anchor="end" font-size="${fs * .8}" font-weight="700" fill="${p >= 85 ? "#fff" : "#14202b"}">${lab}</text>`;
+      else { const right = x2 + lw < W - 12; g += `<text x="${right ? x2 + 4 : x1 - 4}" y="${cy + fs * .3}" font-size="${fs * .8}" font-weight="700" fill="#3d4a55"${right ? "" : ' text-anchor="end"'}>${lab}</text>`; } }
+  });
+  /* 왼쪽 칸 나눔선 */
+  [nameW, nameW + whoW, nameW + whoW + dateW, L].forEach((x, i, arr) => { if (i && x === arr[i - 1]) return; g += `<line x1="${x}" x2="${x}" y1="${y0}" y2="${rowsBot}" stroke="#d6d0c4"/>`; });
+  /* 오늘 */
+  const tn = dn(todayS());
+  if (S.today && tn >= a && tn <= b) { const x = X(tn) + px / 2;
+    g += `<line x1="${x}" x2="${x}" y1="${yH2 - fs * .1}" y2="${rowsBot}" stroke="${TODAY_C}" stroke-width="2"/><rect x="${x - fs * 1.3}" y="${yH2 - fs * 1.45}" width="${fs * 2.6}" height="${fs * 1.35}" rx="${fs * .3}" fill="${TODAY_C}"/><text x="${x}" y="${yH2 - fs * .42}" text-anchor="middle" font-size="${fs * .78}" font-weight="800" fill="#fff">오늘</text>`; }
+  g += `<rect x="0.5" y="${y0 + .5}" width="${W - 1}" height="${rowsBot - y0 - 1}" fill="none" stroke="#bdb5a6"/>`;
+  /* 범례 */
+  if (o.last !== false) { let lx = 2; const ly = rowsBot + legH / 2 + 3;
+    const item = (sw, text) => { const s = `<g transform="translate(${lx} ${ly})">${sw}<text x="${fs * 1.3}" y="${fs * .36}" font-size="${fs * .85}" fill="#3d4a55">${esc(text)}</text></g>`; lx += fs * 1.3 + tw(text, fs * .85) + fs * 1.4; return s; };
+    if (legend) cm.forEach((c, k) => { if (lx < W - 120) g += item(`<rect x="0" y="${-fs * .45}" width="${fs * .9}" height="${fs * .9}" rx="2" fill="${c}"/>`, k); });
+    if (S.pct) g += item(`<rect x="0" y="${-fs * .45}" width="${fs * .9}" height="${fs * .9}" rx="2" fill="#9aa0a6"/><rect x="${fs * .45}" y="${-fs * .45}" width="${fs * .45}" height="${fs * .9}" fill="${mix("#9aa0a6", .62)}"/>`, "진한 부분 = 진행");
+    if (all.some(t => t.ms)) g += item(`<path d="M${fs * .45} ${-fs * .5}l${fs * .5} ${fs * .5}l${-fs * .5} ${fs * .5}l${-fs * .5} ${-fs * .5}z" fill="#3d4a55"/>`, "주요 날짜");
+    if (S.today && tn >= a && tn <= b) g += item(`<rect x="${fs * .35}" y="${-fs * .55}" width="2.5" height="${fs * 1.1}" fill="${TODAY_C}"/>`, "오늘 " + mdw(tn));
+    if (S.hol && sc !== "month") g += item(`<rect x="0" y="${-fs * .45}" width="${fs * .9}" height="${fs * .9}" fill="#fbeeee" stroke="#e7c9c9"/>`, "공휴일");
+  }
+  const P = o.pad == null ? 16 : o.pad, OW = W + P * 2, OH = Math.ceil(H) + P * 2;
+  return { svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${OW} ${OH}" width="${OW}" height="${OH}" ${F}><rect width="${OW}" height="${OH}" fill="#fff"/><g transform="translate(${P} ${P})">${g}</g></svg>`, W: OW, H: OH, top: top + P, rowH, pad: P };
+}
+
+/* ── 단계 화면 ── */
+const chip = (attr, val, text, on) => `<button class="chip${on ? " on" : ""}" data-${attr}="${esc(val)}" aria-pressed="${!!on}">${text}</button>`;
+const tog = (key, text) => chip("tog", key, text, !!S[key]);
+const ti = (key, ph, extra) => `<div class="ti"><input data-k="${key}" value="${esc(S[key])}" placeholder="${esc(ph || "")}" ${extra || ""}></div>`;
+const dtBox = (attr, val, ph) => `<label class="dt${val ? "" : " no"}"><span>${val ? ymdw(val) : ph}</span><input type="date" ${attr} value="${esc(val || "")}"></label>`;
+function taskRow(t, i) {
+  return `<div class="tk${t.ms ? " ms" : ""}" data-row="${i}"><div class="tk-a"><div class="ti"><input data-t="g" data-i="${i}" value="${esc(t.g)}" placeholder="구분"></div><div class="ti"><input data-t="n" data-i="${i}" value="${esc(t.n)}" placeholder="작업 이름"></div></div>
+  <div class="tk-x"><button class="ms${t.ms ? " on" : ""}" data-ms="${i}" title="하루짜리 주요 날짜(마름모)로" aria-label="주요 날짜로">◆</button><button data-up="${i}" aria-label="위로">▲</button><button class="del" data-del="${i}" aria-label="지우기">×</button></div>
+  <div class="tk-b${t.ms ? " ms" : ""}">${dtBox(`data-t="s" data-i="${i}"`, t.s, "시작일")}${t.ms ? "" : dtBox(`data-t="e" data-i="${i}"`, t.e, "종료일")}${t.ms ? "" : `<div class="ti"><input data-t="who" data-i="${i}" value="${esc(t.who)}" placeholder="담당"></div><div class="ti pc"><input data-t="pct" data-i="${i}" value="${t.pct || ""}" placeholder="0" inputmode="numeric"><em>%</em></div>`}${t.ms ? `<div class="ti"><input data-t="who" data-i="${i}" value="${esc(t.who)}" placeholder="담당"></div>` : ""}</div></div>`;
+}
+function stepData() {
+  const n = S.tasks.length;
+  return `<p class="yt-k">1단계</p><h2>일정을 넣어요</h2><p class="yt-lead">엑셀 일정표를 복사해 붙여 넣거나, 아래에서 한 줄씩 넣어요. 넣는 대로 오른쪽 차트가 바뀌어요.</p>
+  <div class="yt-sec">엑셀에서 붙여넣기</div>
+  <textarea class="ta" id="pst" placeholder="엑셀에서 표를 골라 복사(Ctrl+C) → 여기에 붙여넣기(Ctrl+V)&#10;&#10;예) 구분 · 작업 · 담당 · 시작일 · 종료일 · 진행률&#10;머리줄(작업 · 시작 · 종료 …)이 있으면 칸을 알아서 맞춰요" style="min-height:120px"></textarea>
+  <div class="pst"><button class="btn pr" data-paste="new">이 표로 바꾸기</button><button class="btn" data-paste="add">아래에 더하기</button></div>
+  <p class="hint">날짜는 2026-12-07 · 2026.12.7 · 12/7 · 12월 7일 모두 읽어요. 종료일 대신 <b>기간(일수)</b>만 있어도 돼요. 종료일이 없으면 하루짜리 <b>주요 날짜(◆)</b>로 넣어요.</p>
+  <div class="yt-sec">작업 목록</div>
+  <div class="tk-hd"><b>${n}개</b><span class="tk-sp"></span><button class="chip" data-clear>모두 지우기</button><button class="chip" data-sample>예시 다시</button></div>${S.sample ? `<p class="hint" style="margin:-2px 0 10px">지금은 설명용 예시예요 — 위에 붙여 넣거나 「모두 지우기」 뒤 새로 넣으세요.</p>` : ""}
+  <div class="tk-list">${S.tasks.map(taskRow).join("") || `<div class="box">아직 작업이 없어요. 위에 붙여 넣거나 「+ 작업 넣기」를 눌러 주세요.</div>`}</div>
+  <button class="addb2" data-add>+ 작업 넣기</button>`;
+}
+function stepView() {
+  const { sc } = rangeOf(validTasks());
+  return `<p class="yt-k">2단계</p><h2>어떻게 보여 줄까요?</h2><p class="yt-lead">눈금 · 기간 · 표시할 것을 골라요. 처음 값 그대로 두어도 돼요.</p>
+  <div class="yt-sec">눈금</div>
+  <div class="f"><div class="chips">${chip("scale", "auto", "자동", S.scale === "auto")}${chip("scale", "day", "날마다", S.scale === "day")}${chip("scale", "week", "주마다", S.scale === "week")}${chip("scale", "month", "달마다", S.scale === "month")}</div>
+  <p class="hint">${S.scale === "auto" ? `지금은 <b>${{ day: "날마다", week: "주마다", month: "달마다" }[sc]}</b> — 기간이 45일까지는 날마다, 200일까지는 주마다, 그보다 길면 달마다로 맞춰요.` : "고른 눈금으로 그려요."}</p></div>
+  <div class="yt-sec">보여 줄 기간</div>
+  <div class="f"><div class="chips">${chip("rng", "auto", "작업에 맞춰 자동", S.rng !== "set")}${chip("rng", "set", "직접 정하기", S.rng === "set")}</div>
+  ${S.rng === "set" ? `<div class="dtrow" style="margin-top:10px">${dtBox("data-from", S.from, "시작일")}<i>~</i>${dtBox("data-to", S.to, "종료일")}</div><p class="hint">이 기간 밖의 막대는 잘려서 보여요.</p>` : ""}</div>
+  <div class="yt-sec">표시할 것</div>
+  <div class="f"><div class="chips">${tog("today", "오늘 선")}${tog("pct", "진행률")}${tog("wk", "주말 칸 색")}${tog("hol", "공휴일 칸 색")}${tog("grp", "구분으로 묶기")}</div></div>
+  <div class="f"><div class="lb">왼쪽 칸</div><div class="chips">${tog("cWho", "담당")}${tog("cDate", "기간(날짜)")}${tog("cDur", "일수")}</div></div>
+  <div class="f"><div class="lb">일수 셈</div><div class="chips">${chip("biz", "0", "달력 날짜 모두", !S.biz)}${chip("biz", "1", "평일만(주말 · 공휴일 빼고)", S.biz)}</div>
+  <p class="hint">「일수」 칸과, 붙여 넣을 때 종료일 대신 기간(일수)만 있는 줄의 종료일 계산에 써요. 공휴일은 2026 ~ 2028년(대체공휴일 포함)이 들어 있어요.</p></div>`;
+}
+function stepLook() {
+  const sw = k => PALS[k].slice(0, 5).map(c => `<i style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${c};margin-right:2px;vertical-align:-1px"></i>`).join("");
+  return `<p class="yt-k">3단계</p><h2>꾸미기</h2><p class="yt-lead">제목을 넣고 색을 골라요.</p>
+  <div class="yt-sec">제목</div>
+  <div class="f"><label>차트 제목</label>${ti("title", "예: 2027년 상반기 프로젝트 일정")}</div>
+  <div class="f"><label>작은 글 <span>없어도 돼요</span></label>${ti("sub", "예: 기획팀 · 2026-12-01(화) 기준")}</div>
+  <div class="yt-sec">색</div>
+  <div class="f"><div class="lb">무엇으로 색을 나눌까요?</div><div class="chips">${chip("cby", "grp", "구분마다", S.colorBy === "grp")}${chip("cby", "who", "담당마다", S.colorBy === "who")}${chip("cby", "one", "한 가지 색", S.colorBy === "one")}</div></div>
+  <div class="f"><div class="lb">색 묶음</div><div class="chips">${Object.keys(PALS).map(k => chip("pal", k, sw(k) + " " + PALN[k], S.pal === k)).join("")}</div></div>
+  <div class="yt-sec">글자 · 막대</div>
+  <div class="f"><div class="lb">글자 크기</div><div class="chips">${chip("fs", "s", "작게", S.fs === "s")}${chip("fs", "m", "보통", S.fs === "m")}${chip("fs", "l", "크게", S.fs === "l")}</div></div>
+  <div class="f"><div class="lb">막대 모양</div><div class="chips">${chip("shape", "round", "둥글게", S.shape === "round")}${chip("shape", "sq", "각지게", S.shape === "sq")}</div></div>`;
+}
+function stepOut() {
+  return `<p class="yt-k">4단계</p><h2>저장 · 인쇄</h2><p class="yt-lead">PPT · 보고서에 넣거나, 종이로 뽑거나, 엑셀로 이어 써요.</p>
+  <div class="outs">
+  <button class="oc" data-out="copy"><b>그림 복사</b><span>PPT · 엑셀 · 한글 · 카톡에 바로 붙여넣기(Ctrl+V)</span></button>
+  <button class="oc" data-out="png"><b>그림 파일 받기(PNG)</b><span>가로 ${S.pngW}px · 보고서 · 메일에 넣기</span></button>
+  <button class="oc" data-out="print"><b>A4 가로 인쇄 · PDF</b><span>줄이 많으면 여러 장으로 — 머리줄은 장마다 다시</span></button>
+  <button class="oc" data-out="xlsx"><b>엑셀로 받기(.xlsx)</b><span>칸을 색칠한 간트표 · 회사 양식에 붙이기 쉬워요</span></button>
+  <button class="oc wide" data-out="tsv"><b>표만 복사</b><span>구분 · 작업 · 담당 · 시작 · 종료 · 일수 · 진행률 — 엑셀에 붙이면 표, 다음에 이 도구에 다시 붙여 넣어 이어 써요</span></button>
+  </div>
+  <div class="f" style="margin-top:14px"><div class="lb">그림 파일 크기</div><div class="chips">${chip("pngw", "1600", "보통(1600px)", S.pngW === 1600)}${chip("pngw", "2400", "크게(2400px)", S.pngW === 2400)}${chip("pngw", "1200", "작게(1200px)", S.pngW === 1200)}</div></div>
+  <div class="box" style="margin-top:12px">인쇄 창에서 <b>배율 「실제 크기(100%)」</b> · 용지 <b>A4 가로</b>로 뽑아 주세요. PDF는 대상에서 「PDF로 저장」을 고르면 돼요.<br>입력한 일정은 이 기기 브라우저에만 남고 어디로도 보내지 않아요.</div>`;
+}
+function stepHtml() { return [stepData, stepView, stepLook, stepOut][S.step](); }
+
+/* ── 미리 보기 ── */
+function previewHtml() {
+  return `<div class="pv"><div class="pv-top"><h3>미리 보기</h3><small id="pvsub"></small></div><div class="pv-desk"><div class="pv-box" id="pvbox"></div></div><p class="pv-note" id="pvnote"></p></div>`;
+}
+function renderPreview() {
+  const box = $("#pvbox"); if (!box) return;
+  const all = validTasks();
+  const bad = S.tasks.length - all.length;
+  if (!all.length) { box.innerHTML = `<div class="pv-empty"><b>아직 그릴 일정이 없어요</b>작업 이름과 시작일을 넣으면 여기에 막대가 생겨요.</div>`; $("#pvnote").textContent = ""; $("#pvsub").textContent = ""; return; }
+  const W = Math.max(320, box.parentElement.clientWidth - 28);
+  const r = chartSvg({ W: W - 32, rows: rowsOf(all), all, grow: true });
+  box.innerHTML = r.svg; const fit = r.W > W && r.W / W <= 2.4; box.style.width = (fit ? W : r.W) + "px";
+  if (fit) { const sv = box.firstElementChild; sv.style.width = "100%"; sv.style.height = "auto"; }
+  const { a, b, sc } = rangeOf(all);
+  $("#pvsub").textContent = `${ymdw(ds(a))} ~ ${ymdw(ds(b))} · ${{ day: "날마다", week: "주마다", month: "달마다" }[sc]}`;
+  $("#pvnote").textContent = (bad ? `날짜가 비어 그리지 못한 작업 ${bad}개 · ` : "") + (r.W > W ? (r.W / W <= 2.4 ? "화면에 맞춰 줄여 보여요(손가락으로 확대) · " : "옆으로 밀어 끝까지 볼 수 있어요 · ") : "") + (S.sample ? "설명용 가상 일정" : `작업 ${all.length}개`);
+}
+function render() {
+  const rul = STEPS.map(([k, n], i) => `<button class="${i < S.step ? "done" : i === S.step ? "on" : ""}" data-go="${i}"><b></b>${n}</button>`).join("");
+  const mrul = STEPS.map((x, i) => `<i class="${i <= S.step ? "d" : ""}"></i>`).join("");
+  const last = S.step === STEPS.length - 1;
+  const nav = `<div class="yt-nav"><button class="btn rs" data-reset title="입력한 내용을 모두 지워요">초기화</button>${S.step ? `<button class="btn" data-prev>‹ 이전</button>` : ""}${last ? `<button class="btn pr" data-out="print">A4 가로 인쇄</button>` : `<button class="btn pr" data-next>다음: ${STEPS[S.step + 1][1]} ›</button>`}</div>`;
+  $("#root").innerHTML = `<header class="yt-head"><div class="yt-ic">${IC_G}<i></i></div><h1>간트 차트 만들기</h1><small>Blog J</small><nav class="yt-rul" aria-label="단계">${rul}</nav></header>
+  <div class="yt-mrul">${mrul}</div>
+  <div class="yt-main"><section class="yt-panel" id="panel">${stepHtml()}${nav}</section>
+  <aside class="yt-res" id="res">${previewHtml()}</aside></div>
+  <div class="yt-mbar"><div><span>${S.step + 1} / ${STEPS.length} 단계</span><b style="font-size:18px">${STEPS[S.step][1]}</b></div><button class="bk" data-pvjump>미리 보기</button>${S.step ? `<button class="bk" data-prev style="margin-left:0">‹</button>` : ""}${last ? `<button class="go" data-out="print">인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
+  <p class="yt-foot">입력한 일정은 이 기기 브라우저에만 저장되고 어디로도 보내지 않아요 · 간트 차트 만들기 v${APP_VER}(${BUILD} 판) · 만든 곳 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a></p>`;
+  renderPreview();
+}
+function go(i, push) {
+  S.step = Math.max(0, Math.min(STEPS.length - 1, i)); save(); render(); window.scrollTo(0, 0);
+  if (push !== false) try { history.pushState({ gt: S.step }, "", location.href); } catch (e) {}
+}
+window.addEventListener("popstate", e => { const st = e.state && typeof e.state.gt === "number" ? e.state.gt : 0; S.step = st; save(); render(); window.scrollTo(0, 0); });
+let rzT = 0; window.addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(renderPreview, 150); });
+
+/* ── 내보내기 ── */
+function fullSvg(W) { const all = validTasks(); return chartSvg({ W: W - 48, rows: rowsOf(all), all, pad: 24 }); }
+const fname = ext => (String(S.title || "간트차트").replace(/[\\/:*?"<>|]/g, "").trim() || "간트차트") + "_" + todayS() + "." + ext;
+function dl(blob, name) { const u = URL.createObjectURL(blob), a = document.createElement("a"); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 3000); }
+async function pngBlob() {
+  const r = fullSvg(S.pngW); const k = 2;
+  const img = new Image(); const url = URL.createObjectURL(new Blob([r.svg], { type: "image/svg+xml;charset=utf-8" }));
+  await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = url; });
+  const c = document.createElement("canvas"); c.width = r.W * k; c.height = r.H * k; const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+  URL.revokeObjectURL(url);
+  return await new Promise(ok => c.toBlob(ok, "image/png"));
+}
+async function outCopy() {
+  try { const b = await pngBlob(); await navigator.clipboard.write([new ClipboardItem({ "image/png": b })]); toast("그림을 복사했어요 — PPT · 엑셀 · 카톡에서 Ctrl+V"); }
+  catch (e) { toast("이 브라우저는 그림 복사를 막아요 — 「그림 파일 받기」로 받아 주세요"); }
+}
+async function outPng() { try { dl(await pngBlob(), fname("png")); toast("그림 파일을 받았어요"); } catch (e) { toast("그림을 만들지 못했어요: " + e.message); } }
+function outPrint() {
+  const all = validTasks(); if (!all.length) return toast("그릴 일정이 없어요");
+  const W = 1100, pageH = W * 190 / 277, rows = rowsOf(all);
+  const probe = chartSvg({ W, rows: rows.slice(0, 1), all, page: 1, pages: 1, pad: 0 });
+  const head = probe.top, legH = probe.H - head - probe.rowH;
+  const per = Math.max(4, Math.floor((pageH - head - legH - 4) / probe.rowH));
+  const pages = []; let cur = [], lastG = null;
+  rows.forEach(r => { if (r.grp) lastG = r;
+    if (cur.length >= per) { pages.push(cur); cur = []; if (!r.grp && r.ind && lastG) cur.push({ grp: lastG.grp + " (이어서)", list: lastG.list }); }
+    cur.push(r); });
+  if (cur.length) pages.push(cur);
+  let prt = $("#prt"); if (!prt) { prt = document.createElement("div"); prt.id = "prt"; document.body.appendChild(prt); }
+  prt.innerHTML = pages.map((rw, i) => `<div class="pg">${chartSvg({ W, rows: rw, all, page: i + 1, pages: pages.length, last: true, pad: 0 }).svg}</div>`).join("");
+  toast(pages.length > 1 ? `${pages.length}장으로 나눠 인쇄해요 — 실제 크기(100%) · A4 가로` : "실제 크기(100%) · A4 가로로 뽑아 주세요");
+  setTimeout(() => window.print(), 250);
+}
+function tsvText() {
+  const all = validTasks();
+  return [["구분", "작업", "담당", "시작일", "종료일", "일수", "진행률"].join("\t")].concat(all.map(t => [t.g || "", t.n || "", t.who || "", ymdw(t.s), t.ms ? "" : ymdw(t.e), t.ms ? 0 : durTxt(t).replace("일", ""), (t.pct || 0) + "%"].join("\t"))).join("\n");
+}
+async function outTsv() { try { await navigator.clipboard.writeText(tsvText()); toast("표를 복사했어요 — 엑셀에서 Ctrl+V"); } catch (e) { toast("복사하지 못했어요 — 엑셀로 받기를 써 주세요"); } }
+
+/* 엑셀(.xlsx) — 압축 없는 zip으로 직접 만듦(외부 파일 없이) */
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = u => { let c = 0xffffffff; for (let i = 0; i < u.length; i++) c = CRC[(c ^ u[i]) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
+function zipStore(files) {
+  const enc = new TextEncoder(), parts = [], cen = []; let off = 0;
+  for (const [name, text] of files) {
+    const nm = enc.encode(name), d = enc.encode(text), c = crc32(d);
+    const h = new DataView(new ArrayBuffer(30)); h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true); h.setUint32(14, c, true); h.setUint32(18, d.length, true); h.setUint32(22, d.length, true); h.setUint16(26, nm.length, true);
+    parts.push(new Uint8Array(h.buffer), nm, d);
+    const ce = new DataView(new ArrayBuffer(46)); ce.setUint32(0, 0x02014b50, true); ce.setUint16(4, 20, true); ce.setUint16(6, 20, true); ce.setUint16(8, 0x0800, true); ce.setUint32(16, c, true); ce.setUint32(20, d.length, true); ce.setUint32(24, d.length, true); ce.setUint16(28, nm.length, true); ce.setUint32(42, off, true);
+    cen.push(new Uint8Array(ce.buffer), nm); off += 30 + nm.length + d.length;
+  }
+  const cs = cen.reduce((s, p) => s + p.length, 0), e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, cs, true); e.setUint32(16, off, true);
+  return new Blob([...parts, ...cen, new Uint8Array(e.buffer)], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}
+function outXlsx() {
+  const all = validTasks(); if (!all.length) return toast("그릴 일정이 없어요");
+  const { a, b } = rangeOf(all), span = b - a + 1, wk = span > 130;
+  const cols = []; if (wk) { let n = a - ((wdi(a) + 6) % 7); for (; n <= b; n += 7) cols.push([n, n + 6]); } else for (let n = a; n <= b; n++) cols.push([n, n]);
+  const cm = colorMap(all), keys = [...cm.keys()];
+  /* 채우기: 0 없음 · 1 gray125 · 2 머리 · 3 주말 · 4 공휴일 · 5 오늘 · 그 뒤 색마다 (진한 · 연한) */
+  const fill = c => `<fill><patternFill patternType="solid"><fgColor rgb="FF${c.slice(1).toUpperCase()}"/><bgColor indexed="64"/></patternFill></fill>`;
+  const fills = ['<fill><patternFill patternType="none"/></fill>', '<fill><patternFill patternType="gray125"/></fill>', fill("#EFEBE3"), fill("#F3F1EC"), fill("#FBEEEE"), fill("#F6C7B3")];
+  keys.forEach(k => { const c = cm.get(k); fills.push(fill(c), fill(mix(c, .62))); });
+  /* 칸 모양: 0 기본 · 1 머리(굵게 · 머리 색) · 2 주말 · 3 공휴일 · 4 오늘 머리 · 5 구분 굵게 · 6+ 색 */
+  const xf = (f, font, al) => `<xf numFmtId="0" fontId="${font}" fillId="${f}" borderId="1" xfId="0" applyFill="1" applyBorder="1"${al ? ` applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>` : "/>"}`;
+  const xfs = [xf(0, 0), xf(2, 1, 1), xf(3, 0), xf(4, 0), xf(5, 1, 1), xf(0, 1)];
+  keys.forEach((k, i) => { xfs.push(xf(6 + i * 2, 0), xf(7 + i * 2, 0)); });
+  const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="10"/><name val="맑은 고딕"/><family val="3"/><charset val="129"/></font><font><b/><sz val="10"/><name val="맑은 고딕"/><family val="3"/><charset val="129"/></font></fonts><fills count="${fills.length}">${fills.join("")}</fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFE0DAD0"/></left><right style="thin"><color rgb="FFE0DAD0"/></right><top style="thin"><color rgb="FFE0DAD0"/></top><bottom style="thin"><color rgb="FFE0DAD0"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="${xfs.length}">${xfs.join("")}</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const colL = i => { let s = ""; i++; while (i) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+  const cell = (r, c, v, st, num) => v === "" || v == null ? `<c r="${colL(c)}${r}" s="${st || 0}"/>` : num ? `<c r="${colL(c)}${r}" s="${st || 0}"><v>${v}</v></c>` : `<c r="${colL(c)}${r}" s="${st || 0}" t="inlineStr"><is><t xml:space="preserve">${esc(v)}</t></is></c>`;
+  const H = ["구분", "작업", "담당", "시작일", "종료일", "일수", "진행률"], NC = H.length, tn = dn(todayS());
+  let rowsX = [];
+  /* 1행: 제목 · 2행: 머리 · 3행~: 작업 */
+  let r1x = `<row r="1">${cell(1, 0, S.title || "간트 차트", 5)}`; cols.forEach(([x], j) => { const prev = j ? cols[j - 1][0] : null; if (!j || ds(x).slice(0, 7) !== ds(prev).slice(0, 7)) r1x += cell(1, NC + j, ds(x).slice(0, 7), 5); }); rowsX.push(r1x + "</row>");
+  let r2 = `<row r="2">` + H.map((h, i) => cell(2, i, h, 1)).join("");
+  cols.forEach(([x, y], j) => { const today = tn >= x && tn <= y; r2 += cell(2, NC + j, wk ? ds(x).slice(5) : +ds(x).slice(8) + "(" + WD[wdi(x)] + ")", today ? 4 : 1); });
+  rowsX.push(r2 + "</row>");
+  all.forEach((t, i) => {
+    const r = i + 3, ki = keys.indexOf(keyOf(t)), sa = dn(t.s), sb = dn(t.e), p = t.pct || 0, done = sa + Math.round((sb - sa + 1) * p / 100);
+    let row = `<row r="${r}">` + cell(r, 0, t.g || "") + cell(r, 1, t.n || "", t.ms ? 5 : 0) + cell(r, 2, t.who || "") + cell(r, 3, ymdw(t.s)) + cell(r, 4, t.ms ? "" : ymdw(t.e)) + cell(r, 5, t.ms ? 0 : +durTxt(t).replace("일", ""), 0, true) + cell(r, 6, p / 100 ? p + "%" : "0%");
+    cols.forEach(([x, y], j) => { const on = sa <= y && sb >= x; let st = 0;
+      if (on) st = 6 + ki * 2 + (S.pct && (wk ? x >= done : x >= done) ? 1 : 0);
+      else if (!wk && S.hol && HOL[ds(x)]) st = 3; else if (!wk && S.wk && (wdi(x) === 0 || wdi(x) === 6)) st = 2;
+      row += cell(r, NC + j, on && t.ms ? "◆" : "", st); });
+    rowsX.push(row + "</row>");
+  });
+  const colW = `<cols><col min="1" max="1" width="12" customWidth="1"/><col min="2" max="2" width="24" customWidth="1"/><col min="3" max="3" width="9" customWidth="1"/><col min="4" max="5" width="15" customWidth="1"/><col min="6" max="7" width="7" customWidth="1"/><col min="${NC + 1}" max="${NC + cols.length}" width="${wk ? 6.5 : 6.2}" customWidth="1"/></cols>`;
+  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"><pane xSplit="${NC}" ySplit="2" topLeftCell="${colL(NC)}3" activePane="bottomRight" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="18"/>${colW}<sheetData>${rowsX.join("")}</sheetData><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>`;
+  const files = [
+    ["[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`],
+    ["_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`],
+    ["xl/workbook.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="간트 차트" sheetId="1" r:id="rId1"/></sheets></workbook>`],
+    ["xl/_rels/workbook.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
+    ["xl/styles.xml", styles], ["xl/worksheets/sheet1.xml", sheet]];
+  dl(zipStore(files), fname("xlsx")); toast(wk ? "엑셀로 받았어요 — 기간이 길어 칸 하나 = 한 주" : "엑셀로 받았어요 — 칸 하나 = 하루");
+}
+
+/* ── 입력 ── */
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.k) { S[t.dataset.k] = t.value; save(); renderPreview(); return; }
+  if (t.dataset.t && t.type !== "date") { const i = +t.dataset.i, k = t.dataset.t; let v = t.value;
+    if (k === "pct") { v = v.replace(/\D/g, "").slice(0, 3); if (+v > 100) v = "100"; t.value = v; v = +v || 0; }
+    S.tasks[i][k] = v; S.sample = false; save(); renderPreview(); return; }
+});
+document.addEventListener("change", e => {
+  const t = e.target; if (t.type !== "date") return;
+  const lab = t.parentElement, sp = lab.querySelector("span");
+  if (t.dataset.t) { const i = +t.dataset.i, k = t.dataset.t, T = S.tasks[i]; T[k] = t.value; S.sample = false;
+    if (k === "s" && T.e && dn(T.e) < dn(T.s)) T.e = T.s;
+    if (k === "e" && T.s && dn(T.e) < dn(T.s)) T.s = T.e;
+    if (T.ms) T.e = T.s;
+    save(); const row = document.querySelector(`[data-row="${i}"]`); if (row) row.outerHTML = taskRow(T, i); renderPreview(); return; }
+  if (t.hasAttribute("data-from")) S.from = t.value; if (t.hasAttribute("data-to")) S.to = t.value;
+  if (sp) sp.textContent = t.value ? ymdw(t.value) : "날짜"; lab.classList.toggle("no", !t.value);
+  save(); renderPreview();
+});
+document.addEventListener("click", e => {
+  const dt = e.target.closest(".dt"); if (dt) { const inp = dt.querySelector("input"); try { inp.showPicker(); e.preventDefault(); } catch (er) {} }
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return; const d = b.dataset;
+  if ("go" in d) return go(+d.go);
+  if (b.hasAttribute("data-next")) { if (S.step === 0 && !validTasks().length) return toast("작업 이름과 시작일을 하나 이상 넣어 주세요"); return go(S.step + 1); }
+  if (b.hasAttribute("data-prev")) return go(S.step - 1);
+  if (b.hasAttribute("data-pvjump")) { const r = $("#res"); if (r) r.scrollIntoView({ behavior: "smooth" }); return; }
+  if (d.paste) { const v = ($("#pst") || {}).value || ""; const r = parsePaste(v);
+    if (r.noTab && r.tasks.length < 1) return toast("칸이 나뉘지 않았어요 — 엑셀에서 표를 골라 복사해 주세요");
+    if (!r.tasks.length) return toast(r.bad ? "시작일을 읽지 못했어요 — 날짜 칸을 확인해 주세요" : "붙여 넣은 내용이 없어요");
+    S.tasks = d.paste === "add" && !S.sample ? S.tasks.concat(r.tasks) : r.tasks; S.sample = false; save(); render();
+    return toast(`작업 ${r.tasks.length}개를 넣었어요${r.bad ? ` · 시작일을 못 읽은 줄 ${r.bad}개는 뺐어요` : ""}`); }
+  if (b.hasAttribute("data-add")) { const last = S.tasks[S.tasks.length - 1]; const s = last && last.e ? ds(dn(last.e) + 1) : todayS();
+    if (S.sample) { S.tasks = []; S.sample = false; }
+    S.tasks.push({ g: last ? last.g : "", n: "", s, e: ds(dn(s) + 4), who: "", pct: 0 }); save(); render();
+    const el = document.querySelector(`[data-t="n"][data-i="${S.tasks.length - 1}"]`); if (el) { el.focus(); el.scrollIntoView({ block: "center" }); } return; }
+  if (b.hasAttribute("data-clear")) { if (!confirmTwice("clear")) return; S.tasks = []; S.sample = false; save(); render(); return toast("작업을 모두 지웠어요"); }
+  if (b.hasAttribute("data-sample")) { S.tasks = SAMPLE(); S.sample = true; S.title = S.title || "프로젝트 일정표"; save(); render(); return; }
+  if (d.del != null) { S.tasks.splice(+d.del, 1); S.sample = false; save(); render(); return; }
+  if (d.up != null) { const i = +d.up; if (i > 0) { [S.tasks[i - 1], S.tasks[i]] = [S.tasks[i], S.tasks[i - 1]]; S.sample = false; save(); render(); } return; }
+  if (d.ms != null) { const T = S.tasks[+d.ms]; T.ms = !T.ms; if (T.ms) T.e = T.s; else if (T.s) T.e = ds(dn(T.s) + 4); S.sample = false; save(); render(); return; }
+  if (d.scale) { S.scale = d.scale; save(); render(); return; }
+  if (d.rng) { S.rng = d.rng; if (d.rng === "set" && !S.from) { const { a, b } = rangeOf(validTasks()); S.from = ds(a); S.to = ds(b); } save(); render(); return; }
+  if (d.tog) { S[d.tog] = !S[d.tog]; save(); render(); return; }
+  if (d.biz) { S.biz = d.biz === "1"; save(); render(); return; }
+  if (d.cby) { S.colorBy = d.cby; save(); render(); return; }
+  if (d.pal) { S.pal = d.pal; save(); render(); return; }
+  if (d.fs) { S.fs = d.fs; save(); render(); return; }
+  if (d.shape) { S.shape = d.shape; save(); render(); return; }
+  if (d.pngw) { S.pngW = +d.pngw; save(); render(); return; }
+  if (d.out) { if (!validTasks().length) return toast("그릴 일정이 없어요");
+    return ({ copy: outCopy, png: outPng, print: outPrint, xlsx: outXlsx, tsv: outTsv })[d.out](); }
+  if (b.hasAttribute("data-reset")) { if (!confirmTwice("reset")) return; S = BLANK(); try { localStorage.removeItem(LSK); } catch (er) {} go(0); toast("처음 상태로 돌렸어요"); }
+});
+/* 1단계에서 입력칸 밖에 표를 붙여 넣어도 바로 읽음 */
+document.addEventListener("paste", e => {
+  if (S.step !== 0) return; const t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+  const v = (e.clipboardData || window.clipboardData).getData("text"); if (!v || v.indexOf("\t") < 0) return;
+  e.preventDefault(); const p = $("#pst"); if (p) { p.value = v; p.focus(); toast("붙여 넣었어요 — 「이 표로 바꾸기」를 눌러 주세요"); }
+});
+let ctT = 0, ctK = "";
+function confirmTwice(k) { const n = Date.now(); if (ctK === k && n - ctT < 4000) return true; ctK = k; ctT = n; toast("한 번 더 누르면 지워요"); return false; }
+function toast(t) { const o = document.querySelector(".toast"); if (o) o.remove(); const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
+
+/* 시작 — 블로그 경유 잠금(대표 글 공개 시각부터) */
+const GATE_ON = false;   /* 대표 글 날짜가 정해지면 Date.now() >= Date.parse("…") 로 */
+(async () => {
+  const T = new URLSearchParams(location.search).get("tab") || "all";
+  if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return;
+  if (S.sample) S.tasks = SAMPLE();   /* 예시는 늘 오늘 기준으로 */
+  try { history.replaceState({ gt: S.step }, "", location.href); } catch (e) {}
+  render();
+  if (document.fonts) document.fonts.ready.then(renderPreview);
+})();
+
+/* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알림 */
+(function () { if (!EMBED || window.parent === window) return;
+  let last = 0, t = null;
+  function send() { const r = document.getElementById("root"); if (!r) return; const h = Math.ceil(r.getBoundingClientRect().height) + 8; if (Math.abs(h - last) < 4) return; last = h; try { window.parent.postMessage({ blogj: "height", h }, "https://luvbong.tistory.com"); } catch (e) {} }
+  function soon() { clearTimeout(t); t = setTimeout(send, 60); }
+  if (window.ResizeObserver) new ResizeObserver(soon).observe(document.getElementById("root"));
+  window.addEventListener("load", send); setTimeout(send, 300);
+})();
+</script>
+</body></html>

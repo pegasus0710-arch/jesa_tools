@@ -1,11 +1,11 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
-<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0A1931">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0b3d4a">
 <title>연말정산 계산기 | Blog J</title>
 <meta name="description" content="2026년 귀속 연말정산 환급금 미리 계산 — 카드 · 가족 · 의료비 · 교육비 · 연금저축 · 월세, 입력한 금액은 이 기기에만">
 <link rel="icon" href="icons/apps/yearend.png" type="image/png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-<style>:root{--paper:#f0e8db;--panel:#f7f2ea;--card:#fcf9f4;--tint:#ece3d5;--ink:#1f2125;--sub:#5b5547;--sub2:#6f6857;--n:#0A1931;--nh:#061024;--nl:#e2e6ee;--or:#f56d03;--red:#c23a2b;--blue:#1f4f9a;--hair:rgba(90,74,50,.12);--hair2:rgba(90,74,50,.22);--up:0 0 0 1px rgba(90,74,50,.07),0 1px 2px rgba(90,74,50,.05),0 10px 28px -12px rgba(90,74,50,.18);--in:inset 0 1px 2px rgba(90,74,50,.14);color-scheme:only light}
+<style>:root{--paper:#faf6ee;--panel:#ffffff;--card:#ffffff;--tint:#f3eee3;--ink:#14202b;--sub:#5f6b7a;--sub2:#5f6b7a;--n:#0c737d;--nh:#061024;--nl:#e2e6ee;--or:#e07a4f;--red:#c23a2b;--blue:#1f4f9a;--hair:rgba(20,32,43,0.18);--hair2:rgba(20,32,43,0.33);--up:0 0 0 1px rgba(20,32,43,0.105),0 1px 2px rgba(20,32,43,0.075),0 10px 28px -12px rgba(20,32,43,0.27);--in:inset 0 1px 2px rgba(20,32,43,0.21);color-scheme:only light}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{font-family:SUIT,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5}
@@ -27,7 +27,7 @@ button{cursor:pointer;border:0;background:none}
 .yt-rul button.on:before{right:50%}
 .yt-rul button b{position:absolute;top:0;left:50%;margin-left:-6px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:2px solid var(--hair2)}
 .yt-rul button.done b,.yt-rul button.on b{background:var(--or);border-color:var(--or)}
-.yt-rul button.on b{box-shadow:0 0 0 4px rgba(245,109,3,.18)}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,0.18)}
 .yt-rul button.on{color:var(--ink);font-weight:800}
 .yt-main{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr);gap:22px;padding:22px 24px 40px;max-width:1500px;margin:0 auto}
 .yt-panel{background:var(--panel);border-radius:16px;box-shadow:var(--up);padding:22px 24px;display:flex;flex-direction:column;min-height:640px;align-self:start}
@@ -113,11 +113,11 @@ button{cursor:pointer;border:0;background:none}
 .yt-foot{text-align:center;font-size:12.5px;color:var(--sub2);padding:0 16px 30px}
 .yt-foot a{color:var(--n);font-weight:700}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--n);color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.box.notice{background:#fff7e8;box-shadow:0 0 0 1px rgba(245,109,3,.35);color:var(--ink)}
+.box.notice{background:#fff7e8;box-shadow:0 0 0 1px rgba(224,122,79,0.35);color:var(--ink)}
 .box.notice b{color:var(--ink)}
 .btn.rs{color:var(--sub);font-size:14.5px;padding:0 14px}
 .btn.rs:hover{color:var(--red);box-shadow:0 0 0 2px var(--red)}
-.yt-mbar .bk.rs{font-size:12.5px;padding:11px 9px;color:#c8d0e0}
+.yt-mbar .bk.rs{font-size:12.5px;padding:11px 9px;color:#eaf4f5}
 /* 바뀐 값 표시 */
 .dlt{display:inline-block!important;font-size:12px!important;font-weight:800;letter-spacing:0;line-height:1.3;padding:1px 6px;border-radius:6px;margin-left:6px;vertical-align:middle;white-space:nowrap;animation:dpop .45s ease-out;font-variant-numeric:tabular-nums}
 .dlt.g{color:#17703f;background:#e1f2e6}
@@ -157,7 +157,7 @@ button{cursor:pointer;border:0;background:none}
   .yt-res.side{display:none}
   .yt-nav{display:none}
   .yt-mbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--n);color:#fff;padding:10px 14px calc(12px + env(safe-area-inset-bottom));align-items:center;gap:8px;z-index:30}
-  .yt-mbar span{font-size:12.5px;color:#c8d0e0;display:block}
+  .yt-mbar span{font-size:12.5px;color:#eaf4f5;display:block}
   .yt-mbar b{font-size:22px;font-weight:900;white-space:nowrap}
   .yt-mbar .bk{margin-left:auto;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:11px 12px;font-weight:800;font-size:14px}
   .yt-mbar .go{background:#fff;color:var(--n);border-radius:12px;padding:11px 16px;font-weight:800;font-size:15px;white-space:nowrap}
@@ -178,16 +178,36 @@ button{cursor:pointer;border:0;background:none}
 }
 .printhead{display:none}
 /* 블로그 경유 잠금 — 막힘 화면 */
-.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#f7f6f2;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
-.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(25,84,85,.08)}
-.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#0A1931;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
-.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#f56d03}
+.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#faf6ee;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(12,115,125,0.08)}
+.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#0c737d;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
+.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#e07a4f}
 .bj-gate h1{font-size:21px;color:#20241f;margin:0 0 12px;letter-spacing:-.3px}
 .bj-gate p{font-size:15px;color:#5c6259;line-height:1.7;margin:0}
 .bj-gate b{color:#20241f}
-.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#f56d03;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
-.bj-gate-s{font-size:12.5px!important;color:#8a8f84!important}
-.bj-gate-s a{color:#0A1931;font-weight:700}
+.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#e07a4f;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
+.bj-gate-s{font-size:12.5px!important;color:#5f6b7a!important}
+.bj-gate-s a{color:#0c737d;font-weight:700}
+</style><style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
+:root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
+/* 연말정산 · 상장 — 머리띠 */
+.yt-head{background:var(--sea-band)!important;border-bottom:0!important}
+.yt-head h1{color:#fff!important}
+.yt-head small{color:var(--sea-band-s)!important}
+.yt-head .yt-yr{background:rgba(255,255,255,.13)!important;color:#fff!important}
+.yt-head .yt-ic{box-shadow:0 0 0 1.5px rgba(255,255,255,.22)}
+.yt-head .yt-ic i{border-color:var(--sea-band)!important}
+.yt-rul button{color:var(--sea-band-s)!important}
+.yt-rul button.on{color:#fff!important}
+.yt-rul button:before{background:rgba(255,255,255,.22)!important}
+.yt-rul button b{background:var(--sea-band)!important;border-color:rgba(255,255,255,.4)!important}
+.yt-rul button.done:before,.yt-rul button.on:before{background:var(--sunset)!important}
+.yt-rul button.done b,.yt-rul button.on b{background:var(--sunset)!important;border-color:var(--sunset)!important}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,.25)!important}
+.yt-mbar{background:var(--sea-band)!important}
+.yt-mbar span{color:var(--sea-band-s)!important}
+.yt-mbar .bk{color:#fff!important}
+.yt-mbar .bk.rs{color:var(--sea-band-s)!important}
 </style></head><body><div id="root"></div>
 <script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
    허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창

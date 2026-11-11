@@ -1,13 +1,13 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
-<meta name="color-scheme" content="only light"><meta name="theme-color" content="#195455">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0b3d4a">
 <title>상장 만들기 | Blog J</title>
 <meta name="description" content="상장 · 표창장 · 감사장 · 수료증 · 임명장 · 위촉장 · 공로패 — 종류와 디자인을 골라 섞고, 여러 명을 한 번에 인쇄 · PDF. 직인 이미지도 함께">
 <link rel="icon" href="icons/apps/award.png" type="image/png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@500;700;900&family=Gowun+Batang:wght@400;700&family=Song+Myung&family=Nanum+Brush+Script&family=Gowun+Dodum&family=Jua&display=swap">
-<style>:root{--paper:#f0e8db;--panel:#f7f2ea;--card:#fcf9f4;--tint:#ece3d5;--ink:#1f2125;--sub:#5b5547;--sub2:#6f6857;--n:#195455;--nh:#0f3a3b;--nl:#dcebe9;--or:#f56d03;--red:#c23a2b;--blue:#1f4f9a;--hair:rgba(90,74,50,.12);--hair2:rgba(90,74,50,.22);--up:0 0 0 1px rgba(90,74,50,.07),0 1px 2px rgba(90,74,50,.05),0 10px 28px -12px rgba(90,74,50,.18);--in:inset 0 1px 2px rgba(90,74,50,.14);color-scheme:only light}
+<style>:root{--paper:#faf6ee;--panel:#ffffff;--card:#ffffff;--tint:#f3eee3;--ink:#14202b;--sub:#5f6b7a;--sub2:#5f6b7a;--n:#0c737d;--nh:#0f3a3b;--nl:#dcebe9;--or:#e07a4f;--red:#c23a2b;--blue:#1f4f9a;--hair:rgba(20,32,43,0.18);--hair2:rgba(20,32,43,0.33);--up:0 0 0 1px rgba(20,32,43,0.105),0 1px 2px rgba(20,32,43,0.075),0 10px 28px -12px rgba(20,32,43,0.27);--in:inset 0 1px 2px rgba(20,32,43,0.21);color-scheme:only light}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{font-family:SUIT,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5}
@@ -29,7 +29,7 @@ button{cursor:pointer;border:0;background:none}
 .yt-rul button.on:before{right:50%}
 .yt-rul button b{position:absolute;top:0;left:50%;margin-left:-6px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:2px solid var(--hair2)}
 .yt-rul button.done b,.yt-rul button.on b{background:var(--or);border-color:var(--or)}
-.yt-rul button.on b{box-shadow:0 0 0 4px rgba(245,109,3,.18)}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,0.18)}
 .yt-rul button.on{color:var(--ink);font-weight:800}
 .yt-main{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr);gap:22px;padding:22px 24px 40px;max-width:1500px;margin:0 auto}
 .yt-panel{background:var(--panel);border-radius:16px;box-shadow:var(--up);padding:22px 24px;display:flex;flex-direction:column;min-height:640px;align-self:start}
@@ -133,7 +133,7 @@ button{cursor:pointer;border:0;background:none}
   .yt-res.side{display:none}
   .yt-nav{display:none}
   .yt-mbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--n);color:#fff;padding:10px 14px calc(12px + env(safe-area-inset-bottom));align-items:center;gap:8px;z-index:30}
-  .yt-mbar span{font-size:12.5px;color:#c8d0e0;display:block}
+  .yt-mbar span{font-size:12.5px;color:#eaf4f5;display:block}
   .yt-mbar b{font-size:22px;font-weight:900;white-space:nowrap}
   .yt-mbar .bk{margin-left:auto;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:11px 12px;font-weight:800;font-size:14px}
   .yt-mbar .go{background:#fff;color:var(--n);border-radius:12px;padding:11px 16px;font-weight:800;font-size:15px;white-space:nowrap}
@@ -154,16 +154,16 @@ button{cursor:pointer;border:0;background:none}
 }
 .printhead{display:none}
 /* 블로그 경유 잠금 — 막힘 화면 */
-.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#f7f6f2;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
-.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(25,84,85,.08)}
-.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#195455;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
-.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#f56d03}
+.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#faf6ee;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(12,115,125,0.08)}
+.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#0c737d;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
+.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#e07a4f}
 .bj-gate h1{font-size:21px;color:#20241f;margin:0 0 12px;letter-spacing:-.3px}
 .bj-gate p{font-size:15px;color:#5c6259;line-height:1.7;margin:0}
 .bj-gate b{color:#20241f}
-.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#f56d03;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
-.bj-gate-s{font-size:12.5px!important;color:#8a8f84!important}
-.bj-gate-s a{color:#195455;font-weight:700}
+.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#e07a4f;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
+.bj-gate-s{font-size:12.5px!important;color:#5f6b7a!important}
+.bj-gate-s a{color:#0c737d;font-weight:700}
 /* ── 상장 만들기 전용 ── */
 .yt-main{grid-template-columns:minmax(0,560px) minmax(0,1fr)}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -274,7 +274,27 @@ button{cursor:pointer;border:0;background:none}
 }
 .btn.rs{color:var(--sub);font-size:14.5px;padding:0 14px}
 .btn.rs:hover{color:var(--red);box-shadow:0 0 0 2px var(--red)}
-.yt-mbar .bk.rs{font-size:12.5px;padding:11px 9px;color:#c8e0dc}
+.yt-mbar .bk.rs{font-size:12.5px;padding:11px 9px;color:#eaf4f5}
+</style><style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
+:root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
+/* 연말정산 · 상장 — 머리띠 */
+.yt-head{background:var(--sea-band)!important;border-bottom:0!important}
+.yt-head h1{color:#fff!important}
+.yt-head small{color:var(--sea-band-s)!important}
+.yt-head .yt-yr{background:rgba(255,255,255,.13)!important;color:#fff!important}
+.yt-head .yt-ic{box-shadow:0 0 0 1.5px rgba(255,255,255,.22)}
+.yt-head .yt-ic i{border-color:var(--sea-band)!important}
+.yt-rul button{color:var(--sea-band-s)!important}
+.yt-rul button.on{color:#fff!important}
+.yt-rul button:before{background:rgba(255,255,255,.22)!important}
+.yt-rul button b{background:var(--sea-band)!important;border-color:rgba(255,255,255,.4)!important}
+.yt-rul button.done:before,.yt-rul button.on:before{background:var(--sunset)!important}
+.yt-rul button.done b,.yt-rul button.on b{background:var(--sunset)!important;border-color:var(--sunset)!important}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,.25)!important}
+.yt-mbar{background:var(--sea-band)!important}
+.yt-mbar span{color:var(--sea-band-s)!important}
+.yt-mbar .bk{color:#fff!important}
+.yt-mbar .bk.rs{color:var(--sea-band-s)!important}
 </style></head><body><div id="root"></div>
 <script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
    허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
@@ -429,8 +449,8 @@ const DES = [
       [[18 * s, 18 * s, 0], [w - 18 * s, 18 * s, 90], [w - 18 * s, h - 18 * s, 180], [18 * s, h - 18 * s, 270]].forEach(([x, y, r]) => {
         o += `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><path d="M0 0 C 10 2, 22 2, 34 0" fill="none" stroke="#3e7a55" stroke-width="1"/><path d="M0 0 C 2 10, 2 22, 0 34" fill="none" stroke="#3e7a55" stroke-width="1"/>${[8, 16, 24].map(d => `<ellipse cx="${d}" cy="-2.6" rx="3.6" ry="1.6" fill="#7fae8c" transform="rotate(-20 ${d} -2.6)"/><ellipse cx="-2.6" cy="${d}" rx="1.6" ry="3.6" fill="#7fae8c" transform="rotate(20 -2.6 ${d})"/>`).join("")}<circle cx="0" cy="0" r="2.6" fill="#d58a8a"/><circle cx="0" cy="0" r="1" fill="#f3d27a"/></g>`; });
       return o; } },
-  { k: "modern", n: "모던 띠", ink: "#1f2125", tc: "#195455", ac: "#195455", band: true,
-    f: (w, h, s) => `<rect x="0" y="0" width="${w}" height="${h * .115}" fill="#195455"/><rect x="0" y="${h * .115}" width="${w}" height="${3 * s}" fill="#f56d03"/><rect x="0" y="${h - h * .05}" width="${w}" height="${h * .05}" fill="#195455"/><rect x="${14 * s}" y="${h * .135}" width="${w - 28 * s}" height="${h * .785}" fill="none" stroke="#cfc6b3" stroke-width="${.6 * s}"/>` },
+  { k: "modern", n: "모던 띠", ink: "#14202b", tc: "#0c737d", ac: "#0c737d", band: true,
+    f: (w, h, s) => `<rect x="0" y="0" width="${w}" height="${h * .115}" fill="#0c737d"/><rect x="0" y="${h * .115}" width="${w}" height="${3 * s}" fill="#e07a4f"/><rect x="0" y="${h - h * .05}" width="${w}" height="${h * .05}" fill="#0c737d"/><rect x="${14 * s}" y="${h * .135}" width="${w - 28 * s}" height="${h * .785}" fill="none" stroke="#cdd3dc" stroke-width="${.6 * s}"/>` },
   { k: "trad", n: "전통 문양", ink: "#2a1a14", tc: "#7a2e22", ac: "#7a2e22",
     f: (w, h, s) => { const c = "#7a2e22"; let o = `<rect x="${9 * s}" y="${9 * s}" width="${w - 18 * s}" height="${h - 18 * s}" fill="none" stroke="${c}" stroke-width="${1.6 * s}"/><rect x="${15 * s}" y="${15 * s}" width="${w - 30 * s}" height="${h - 30 * s}" fill="none" stroke="${c}" stroke-width="${.6 * s}"/>`;
       const n = Math.floor((w - 34 * s) / (8.4 * s)), st = (w - n * 8.4 * s) / 2 + 2 * s;
@@ -440,10 +460,10 @@ const DES = [
       return o; } },
   { k: "kids", n: "별 · 밝은 색", ink: "#2b2418", tc: "#e0761b", ac: "#2f7cc4", bg: "#fff6dc",
     f: (w, h, s) => { let o = `<rect x="${8 * s}" y="${8 * s}" width="${w - 16 * s}" height="${h - 16 * s}" rx="${14 * s}" fill="#fff6dc" stroke="#f0a43c" stroke-width="${3 * s}" stroke-dasharray="${7 * s} ${4 * s}"/>`;
-      [[.14, .12, 7, "#f56d03"], [.84, .135, 6, "#3e8bd1"], [.16, .87, 6, "#4fae6b"], [.85, .88, 8, "#e0569a"], [.76, .25, 4, "#f0c02c"], [.21, .3, 4, "#3e8bd1"], [.5, .955, 3.4, "#f0c02c"]].forEach(([x, y, r, c]) => { o += `<path d="${STAR(x * w, y * h, r * s)}" fill="${c}"/>`; });
+      [[.14, .12, 7, "#e07a4f"], [.84, .135, 6, "#3e8bd1"], [.16, .87, 6, "#4fae6b"], [.85, .88, 8, "#e0569a"], [.76, .25, 4, "#f0c02c"], [.21, .3, 4, "#3e8bd1"], [.5, .955, 3.4, "#f0c02c"]].forEach(([x, y, r, c]) => { o += `<path d="${STAR(x * w, y * h, r * s)}" fill="${c}"/>`; });
       return o; } },
-  { k: "minimal", n: "미니멀", ink: "#1f2125", tc: "#1f2125", ac: "#1f2125",
-    f: (w, h, s) => `<line x1="${w * .115}" y1="${h * .1}" x2="${w * .885}" y2="${h * .1}" stroke="#1f2125" stroke-width="${.6 * s}"/><line x1="${w * .115}" y1="${h * .9}" x2="${w * .885}" y2="${h * .9}" stroke="#1f2125" stroke-width="${.6 * s}"/><rect x="${w / 2 - 6 * s}" y="${h * .1 - 4 * s}" width="${12 * s}" height="${8 * s}" fill="#fff"/><circle cx="${w / 2}" cy="${h * .1}" r="${2.2 * s}" fill="#b8913f"/>` },
+  { k: "minimal", n: "미니멀", ink: "#14202b", tc: "#14202b", ac: "#14202b",
+    f: (w, h, s) => `<line x1="${w * .115}" y1="${h * .1}" x2="${w * .885}" y2="${h * .1}" stroke="#14202b" stroke-width="${.6 * s}"/><line x1="${w * .115}" y1="${h * .9}" x2="${w * .885}" y2="${h * .9}" stroke="#14202b" stroke-width="${.6 * s}"/><rect x="${w / 2 - 6 * s}" y="${h * .1 - 4 * s}" width="${12 * s}" height="${8 * s}" fill="#fff"/><circle cx="${w / 2}" cy="${h * .1}" r="${2.2 * s}" fill="#b8913f"/>` },
   { k: "ribbon", n: "파랑 테 · 머리띠", ink: "#17213a", tc: "#2b4a8b", ac: "#2b4a8b",
     f: (w, h, s) => `<rect x="${10 * s}" y="${10 * s}" width="${w - 20 * s}" height="${h - 20 * s}" fill="none" stroke="#2b4a8b" stroke-width="${1.2 * s}"/><rect x="${10 * s}" y="${10 * s}" width="${w - 20 * s}" height="${6 * s}" fill="#2b4a8b"/><rect x="${10 * s}" y="${h - 16 * s}" width="${w - 20 * s}" height="${6 * s}" fill="#2b4a8b"/><rect x="${10 * s}" y="${16 * s}" width="${w - 20 * s}" height="${1.4 * s}" fill="#d9b453"/><rect x="${10 * s}" y="${h - 17.4 * s}" width="${w - 20 * s}" height="${1.4 * s}" fill="#d9b453"/>` },
   { k: "deco", n: "금빛 계단 모서리", ink: "#1d1a16", tc: "#1d1a16", ac: "#8a6a22",

@@ -1,33 +1,35 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>프로그램 실행 | Blog J</title><meta name="robots" content="noindex"><style>*{box-sizing:border-box}html,body{margin:0;background:transparent;}body{padding:0;}html,body{font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#20241f}
-.lc{--paper:#ece6da;--card:#f1ebe1;--tint:#e7e0d2;--ink2:#5b5547;--ink3:#6f6857;background:var(--paper);border-radius:20px;padding:22px;margin:0;color:#1f2125;letter-spacing:-.01em;box-shadow:0 12px 20px -8px rgba(0,0,0,.4)}
+.lc{--paper:#faf6ee;--card:#ffffff;--tint:#f3eee3;--ink2:#5f6b7a;--ink3:#5f6b7a;background:var(--paper);border-radius:20px;padding:22px;margin:0;color:#14202b;letter-spacing:-.01em;box-shadow:0 12px 20px -8px rgba(0,0,0,.4)}
 .lc-main{display:flex;gap:22px;align-items:stretch}.lc-info{flex:1;min-width:0}
 .lc-head{display:flex;gap:16px;align-items:center}.lc-ic{position:relative;width:54px;height:54px;border-radius:16px;background:var(--c);display:grid;place-items:center;flex-shrink:0;box-shadow:4px 6px 12px rgba(0,0,0,.22),-3px -3px 8px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.18)}.lc-ic svg{width:28px;height:28px}
-.lc-ic i{position:absolute;right:-4px;bottom:-4px;width:14px;height:14px;border-radius:50%;background:#e08a3e;border:3px solid var(--paper)}
+.lc-ic i{position:absolute;right:-4px;bottom:-4px;width:14px;height:14px;border-radius:50%;background:#e07a4f;border:3px solid var(--paper)}
 .lc-tag{display:block;font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--ink3)}
 .lc-head h2{margin:2px 0 0;font-size:26px;letter-spacing:-.035em;font-weight:800;line-height:1.2}
 .lc-desc{margin:14px 0 14px;font-size:15px;line-height:1.6;color:var(--ink2)}
-.lc-chips{display:flex;flex-wrap:wrap;gap:4px 0;padding:11px 14px;border-radius:14px;background:var(--tint);box-shadow:inset 3px 3px 8px rgba(160,140,108,.4),inset -3px -3px 8px rgba(255,255,255,.85)}
+.lc-chips{display:flex;flex-wrap:wrap;gap:4px 0;padding:11px 14px;border-radius:14px;background:var(--tint);box-shadow:inset 3px 3px 8px rgba(20,32,43,0.152),inset -3px -3px 8px rgba(255,255,255,.85)}
 .lc-chips{gap:6px 20px}.lc-chips span{font-size:14px;color:#3f3b33;white-space:nowrap;display:inline-flex;align-items:center}.lc-chips span::before{content:"";width:5px;height:5px;border-radius:50%;background:#a89d86;margin-right:8px;flex-shrink:0}
-.lc-prev{width:250px;flex-shrink:0;background:var(--tint);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:inset 3px 3px 8px rgba(160,140,108,.4),inset -3px -3px 8px rgba(255,255,255,.85)}
+.lc-prev{width:250px;flex-shrink:0;background:var(--tint);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:inset 3px 3px 8px rgba(20,32,43,0.152),inset -3px -3px 8px rgba(255,255,255,.85)}
 .pv-bar{display:flex;align-items:center;gap:4px;padding:8px 12px;font-size:11.5px;color:var(--ink3)}.pv-bar b{font-size:10px}.pv-bar span{margin-left:6px;font-weight:700}
 .pv-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 12px 10px;flex:1}
-.pv-pg{position:relative;background:#fffdf7;border-radius:4px;padding:16px 8px 6px;min-height:58px;box-shadow:2px 3px 6px rgba(120,100,70,.3)}.pv-pg em{position:absolute;left:4px;top:3px;font-style:normal;font-size:8px;color:#fff;background:#20263a;border-radius:3px;padding:0 3px}
-.pv-pg b{display:block;font-size:9px;color:#20263a;margin-bottom:3px}.pv-pg p{height:3px;background:#e2dccf;border-radius:2px;margin:3px 0}.pv-pg p.s{width:60%}.pv-pg p.mk{position:absolute;left:8px;right:8px;top:28px;height:8px;background:#111}
-.pv-save{margin:0 12px 12px;background:#e08a3e;color:#fff;font-size:11px;font-weight:700;text-align:center;border-radius:8px;padding:6px}
-.lc-go{margin-top:18px;width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:12px;background:#e08a3e;color:#fff;font:inherit;font-size:17px;font-weight:700;letter-spacing:-.02em;padding:14px 18px;cursor:pointer;box-shadow:4px 6px 14px rgba(170,110,55,.45),-3px -3px 8px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.3);transition:box-shadow .12s,background .15s,transform .12s}
-.lc-go:hover{background:#d97f32;transform:translateY(1px);box-shadow:2px 3px 7px rgba(170,110,55,.4),-2px -2px 6px rgba(255,255,255,.8);outline:2.5px solid #20263a;outline-offset:3px}.lc-go:active{transform:translateY(2px);background:#c9742c;box-shadow:inset 3px 3px 7px rgba(110,60,20,.5);outline:2.5px solid #20263a;outline-offset:3px}.lc-go svg{width:21px;height:21px;transition:transform .15s}.lc-go:hover svg,.lc-dl:hover svg{transform:translateX(2px)}
+.pv-pg{position:relative;background:#fffdf7;border-radius:4px;padding:16px 8px 6px;min-height:58px;box-shadow:2px 3px 6px rgba(20,32,43,0.15)}.pv-pg em{position:absolute;left:4px;top:3px;font-style:normal;font-size:8px;color:#fff;background:#0b3d4a;border-radius:3px;padding:0 3px}
+.pv-pg b{display:block;font-size:9px;color:#0b3d4a;margin-bottom:3px}.pv-pg p{height:3px;background:#e2dccf;border-radius:2px;margin:3px 0}.pv-pg p.s{width:60%}.pv-pg p.mk{position:absolute;left:8px;right:8px;top:28px;height:8px;background:#111}
+.pv-save{margin:0 12px 12px;background:#e07a4f;color:#fff;font-size:11px;font-weight:700;text-align:center;border-radius:8px;padding:6px}
+.lc-go{margin-top:18px;width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:12px;background:#e07a4f;color:#fff;font:inherit;font-size:17px;font-weight:700;letter-spacing:-.02em;padding:14px 18px;cursor:pointer;box-shadow:4px 6px 14px rgba(170,110,55,.45),-3px -3px 8px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.3);transition:box-shadow .12s,background .15s,transform .12s}
+.lc-go:hover{background:#d97f32;transform:translateY(1px);box-shadow:2px 3px 7px rgba(170,110,55,.4),-2px -2px 6px rgba(255,255,255,.8);outline:2.5px solid #0b3d4a;outline-offset:3px}.lc-go:active{transform:translateY(2px);background:#c9742c;box-shadow:inset 3px 3px 7px rgba(110,60,20,.5);outline:2.5px solid #0b3d4a;outline-offset:3px}.lc-go svg{width:21px;height:21px;transition:transform .15s}.lc-go:hover svg,.lc-dl:hover svg{transform:translateX(2px)}
 .lc-sub{margin:9px 0 0;text-align:center;font-size:13px;color:var(--ink2)}
-.lc-msg{margin-top:18px;border-radius:12px;padding:13px 15px;font-size:14.5px;line-height:1.6;background:var(--tint);box-shadow:inset 3px 3px 8px rgba(160,140,108,.4),inset -3px -3px 8px rgba(255,255,255,.85);color:#3f3b33}.lc-msg.ok{box-shadow:inset 3px 3px 8px rgba(160,140,108,.4),inset -3px -3px 8px rgba(255,255,255,.85),0 0 0 1.5px #2e8a58}.lc-msg.warn{box-shadow:inset 3px 3px 8px rgba(160,140,108,.4),inset -3px -3px 8px rgba(255,255,255,.85),0 0 0 1.5px #d98a1a}
-.lc-msg a{color:#20263a;font-weight:700}.lc-again{margin-left:6px;border:0;background:#f4efe6;color:#1f2125;font:inherit;font-weight:700;border-radius:10px;padding:5px 12px;cursor:pointer;box-shadow:2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9)}
+.lc-msg{margin-top:18px;border-radius:12px;padding:13px 15px;font-size:14.5px;line-height:1.6;background:var(--tint);box-shadow:inset 3px 3px 8px rgba(20,32,43,0.152),inset -3px -3px 8px rgba(255,255,255,.85);color:#3f3b33}.lc-msg.ok{box-shadow:inset 3px 3px 8px rgba(20,32,43,0.152),inset -3px -3px 8px rgba(255,255,255,.85),0 0 0 1.5px #25794b}.lc-msg.warn{box-shadow:inset 3px 3px 8px rgba(20,32,43,0.152),inset -3px -3px 8px rgba(255,255,255,.85),0 0 0 1.5px #d98a1a}
+.lc-msg a{color:#0b3d4a;font-weight:700}.lc-again{margin-left:6px;border:0;background:#ffffff;color:#14202b;font:inherit;font-weight:700;border-radius:10px;padding:5px 12px;cursor:pointer;box-shadow:2px 3px 6px rgba(20,32,43,0.144),-2px -2px 5px rgba(255,255,255,.9)}
 @media(max-width:560px){.lc{padding:18px 16px 16px;border-radius:18px}.lc-main{flex-direction:column}.lc-prev{display:none}.lc-head h2{font-size:22px}.lc-ic{width:48px;height:48px;border-radius:14px}.lc-go{font-size:16px}.lc-chips span{font-size:13.5px}}
 
-.lc-two{display:flex;gap:16px;margin-top:18px}.lc-col{flex:1;min-width:0;border-radius:16px;padding:16px;background:var(--card);box-shadow:5px 6px 14px rgba(160,140,108,.42),-4px -4px 10px rgba(255,255,255,.9)}
-.lc-h{margin:0 0 10px;font-size:14px;font-weight:700;color:#1f2125}.lc-col .lc-go{margin-top:0;font-size:16px;padding:13px}
-.lc-dl{display:flex;align-items:center;justify-content:center;gap:9px;min-height:54px;border-radius:12px;background:#20263a;color:#fff;font-size:16px;font-weight:700;padding:13px;text-decoration:none;box-shadow:4px 5px 12px rgba(40,44,60,.35),-3px -3px 8px rgba(255,255,255,.85)}.lc-dl{transition:box-shadow .12s,background .15s,transform .12s}.lc-dl:hover{background:#2c3450;transform:translateY(1px);box-shadow:2px 3px 7px rgba(40,44,60,.32),-2px -2px 6px rgba(255,255,255,.8);outline:2.5px solid #20263a;outline-offset:3px}.lc-dl:active{transform:translateY(2px);background:#171c2c;box-shadow:inset 3px 3px 7px rgba(0,0,0,.45)}.lc-dl svg{width:20px;height:20px;transition:transform .15s}.lc-dl:hover svg{transform:translateY(2px)}
+.lc-two{display:flex;gap:16px;margin-top:18px}.lc-col{flex:1;min-width:0;border-radius:16px;padding:16px;background:var(--card);box-shadow:5px 6px 14px rgba(20,32,43,0.16),-4px -4px 10px rgba(255,255,255,.9)}
+.lc-h{margin:0 0 10px;font-size:14px;font-weight:700;color:#14202b}.lc-col .lc-go{margin-top:0;font-size:16px;padding:13px}
+.lc-dl{display:flex;align-items:center;justify-content:center;gap:9px;min-height:54px;border-radius:12px;background:#0b3d4a;color:#fff;font-size:16px;font-weight:700;padding:13px;text-decoration:none;box-shadow:4px 5px 12px rgba(40,44,60,.35),-3px -3px 8px rgba(255,255,255,.85)}.lc-dl{transition:box-shadow .12s,background .15s,transform .12s}.lc-dl:hover{background:#2c3450;transform:translateY(1px);box-shadow:2px 3px 7px rgba(40,44,60,.32),-2px -2px 6px rgba(255,255,255,.8);outline:2.5px solid #0b3d4a;outline-offset:3px}.lc-dl:active{transform:translateY(2px);background:#171c2c;box-shadow:inset 3px 3px 7px rgba(0,0,0,.45)}.lc-dl svg{width:20px;height:20px;transition:transform .15s}.lc-dl:hover svg{transform:translateY(2px)}
 .lc-col .lc-sub{margin-top:8px}
 @media(max-width:560px){.lc-two{flex-direction:column;gap:14px}}
 /* 글 속 카드: 아래로 떨어지는 그림자가 잘리지 않게 아래만 여백 */
 #root{padding:1px 1px 18px}
+</style><style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
+:root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
 </style></head>
 <body><div id="root"></div><script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
    허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
@@ -123,7 +125,7 @@ const BJ_GATE = (() => {
 /* ══════════ Blog J 프로그램 실행 카드 (글 속에 넣는 작은 창) ══════════ */
 const LQ = new URLSearchParams(location.search);
 const TOOLS = {
-  image: { file: "image.html", color: "#1f7f8f", tag: "#e3f3f5", name: "이미지 도구", icon: "image",
+  image: { file: "image.html", color: "#0c737d", tag: "#e3f3f5", name: "이미지 도구", icon: "image",
     dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/image-tool-v1.0.zip", file: "image-tool-v1.0.zip", size: "약 62KB" },
     tabs: {
     home: { title: "이미지 도구", desc: "블로그 사진 한 번에 · 증명사진 규격 · 크기·용량 줄이기 — 사진은 기기 밖으로 나가지 않아요", chips: ["블로그 사진 한 번에", "증명사진 규격", "크기 · 용량 줄이기", "자르기 · 회전", "워터마크"], file: "photo-editor/",
@@ -152,14 +154,14 @@ const TOOLS = {
     en: { title: "알파벳 쓰기 연습장", desc: "영어 4줄 공책에 대문자·소문자 따라쓰기", chips: ["영어 4줄 공책", "대문자 · 소문자", "손으로 쓰는 모양 글꼴"], q: { lang: "en", cat: "upper" } },
     enword: { title: "영어 단어 쓰기 연습장", desc: "한글 뜻을 보며 영어 단어를 따라 쓰고, 시험지로 확인", chips: ["한글 뜻과 함께", "주제별 낱말", "시험지 모드"], q: { lang: "en", cat: "word" } },
     proverb: { title: "속담 따라쓰기", desc: "속담으로 바른 글씨와 띄어쓰기를 함께 연습", chips: ["속담 48개", "띄어쓰기 · 문장 부호", "인쇄 · PDF 저장"], q: { lang: "ko", cat: "proverb" } } } },
-  calendar: { file: "calendar-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "달력 만들기", icon: "calendar",
+  calendar: { file: "calendar-v1.0.html", color: "#0c737d", tag: "#e3f3f5", name: "달력 만들기", icon: "calendar",
     tabs: {
     all: { title: "달력 만들기", desc: "2026 · 2027 · 2028년 달력 · 주간 일정표를 공휴일 · 음력 · 절기 · 날짜 메모와 함께 A4로 인쇄", chips: ["한 달 한 장 · 1년 한 장 · 탁상 · 주간", "공휴일 · 대체공휴일", "음력 · 24절기 · 손 없는 날", "원하는 날짜에 메모"] },
     month: { title: "월간 달력 인쇄", desc: "칸이 큰 한 달 한 장 달력 — 음력 · 절기 · 메모 줄까지", chips: ["A4 가로 · 세로", "음력 매일 · 10일마다", "날짜 메모", "메모 줄"] },
     year: { title: "1년 달력 한 장 인쇄", desc: "12달을 A4 한 장에 — 아래에 그해 공휴일 목록", chips: ["A4 가로 · 세로", "공휴일 · 대체공휴일", "월요일 시작도 OK"] },
     desk: { title: "탁상 달력 만들기", desc: "A4 위쪽은 A5 달력, 아래쪽은 다음 달 · 날짜별 기록 줄 · 빈 줄 노트", chips: ["A5 크기 달력", "날짜별 기록 줄", "접는 선 · 자르는 선"] },
     week: { title: "주간 일정표 인쇄", desc: "한 주 한 장 — 7일 칸 · 1시간 칸 · 이번 주 할 일, 공휴일 · 음력 · 날짜 메모까지", chips: ["A4 가로 · 세로", "1시간 · 오전 · 오후 · 저녁 칸", "여러 주 한 번에"] } } },
-  calendar11: { file: "calendar-v1.1.html", color: "#1f7f8f", tag: "#e3f3f5", name: "달력 만들기", icon: "calendar",   /* v1.1(11-01): 한 달 계획 달력 · 탁상 위 사진 — 새 글에만 씀, 예전 글의 tool=calendar 는 v1.0 그대로 */
+  calendar11: { file: "calendar-v1.1.html", color: "#0c737d", tag: "#e3f3f5", name: "달력 만들기", icon: "calendar",   /* v1.1(11-01): 한 달 계획 달력 · 탁상 위 사진 — 새 글에만 씀, 예전 글의 tool=calendar 는 v1.0 그대로 */
     tabs: {
     all: { title: "달력 만들기", desc: "2026 · 2027 · 2028년 달력 · 계획 달력 · 주간 일정표를 공휴일 · 음력 · 절기 · 날짜 메모와 함께 A4로 인쇄", chips: ["한 달 · 계획 · 1년 · 탁상 · 주간", "공휴일 · 대체공휴일", "음력 · 24절기", "탁상 달력에 내 사진"] },
     month: { title: "월간 달력 인쇄", desc: "칸이 큰 한 달 한 장 달력 — 음력 · 절기 · 메모 줄까지", chips: ["A4 가로 · 세로", "음력 매일 · 10일마다", "날짜 메모", "메모 줄"] },
@@ -168,7 +170,7 @@ const TOOLS = {
     desk: { title: "탁상 달력 만들기", desc: "A4 위쪽은 A5 달력, 아래쪽은 다음 달 · 날짜별 기록 줄 · 빈 줄 노트 — 달마다 내 사진도", chips: ["A5 크기 달력", "날짜별 기록 줄", "달마다 내 사진", "접는 선 · 자르는 선"] },
     deskphoto: { title: "사진 탁상 달력 만들기", desc: "위쪽 반에 내 사진, 아래쪽 반에 그달 달력 — 사진은 내 기기에만", chips: ["달마다 사진 한 장", "꽉 채우기 · 전체 보이기", "접는 선 · 자르는 선"] },
     week: { title: "주간 일정표 인쇄", desc: "한 주 한 장 — 7일 칸 · 1시간 칸 · 이번 주 할 일, 공휴일 · 음력 · 날짜 메모까지", chips: ["A4 가로 · 세로", "1시간 · 오전 · 오후 · 저녁 칸", "여러 주 한 번에"] } } },
-  form: { file: "form-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "무료 양식", icon: "doc",
+  form: { file: "form-v1.0.html", color: "#0c737d", tag: "#e3f3f5", name: "무료 양식", icon: "doc",
     tabs: {
     all: { title: "무료 양식 67가지 — 이력서 · 사직서 · 동의서 · 시간표 · 공책", desc: "빈 양식을 가입 없이 바로 인쇄하거나 PDF · Word · Excel · 한글 파일로 받기", chips: ["이력서 · 자기소개서 · 경력기술서", "사직서 · 재직증명서 · 휴가 신청서", "회의록 · 품의서 · 지출결의서", "PDF · Word · Excel · 한글"] },
     job: { title: "이력서 · 자기소개서 양식", desc: "이력서 · 아르바이트 이력서 · 경력기술서 · 자기소개서 · 입사지원서 빈 양식", chips: ["A4 한 장", "바로 인쇄", "Word · Excel · 한글 파일"] },
@@ -178,7 +180,7 @@ const TOOLS = {
     life: { title: "생활 · 모임 양식", desc: "개인정보 · 초상권 · 보호자 동의서 · 간이영수증 · 출석부 · 회비 장부 · 용돈 기입장 · 이사 체크리스트 · 비상 연락처", chips: ["A4 한 장", "바로 인쇄", "Word · Excel · 한글 파일"] },
     plan: { title: "시간표 · 계획표 양식", desc: "학교 시간표 · 하루 계획표 · 주간 계획표(A4 가로)", chips: ["A4 한 장", "바로 인쇄", "Word · Excel · 한글 파일"] },
     rite: { title: "경조사 · 의례 양식", desc: "부고 알림문 · 제사 참석 안내문 · 조의금 · 축의금 기록부", chips: ["A4 한 장", "바로 인쇄", "Word · Excel · 한글 파일"] } } },
-  planner: { file: "planner-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "다이어리 속지 만들기", icon: "calendar",   /* v1.0(11-03): 다이어리 · 플래너 속지 — A5 · A4, 날짜 자동 */
+  planner: { file: "planner-v1.0.html", color: "#0c737d", tag: "#e3f3f5", name: "다이어리 속지 만들기", icon: "calendar",   /* v1.0(11-03): 다이어리 · 플래너 속지 — A5 · A4, 날짜 자동 */
     tabs: {
     all: { title: "다이어리 속지 만들기", desc: "신년 계획 · 연간 계획표 · 먼슬리 · 해빗 트래커 · 위클리 · 데일리 · 스터디 플래너 · 노트 — 날짜 · 공휴일 자동, A5 · A4로 인쇄", chips: ["여러 속지 한 번에", "A5(A4에 두 쪽) · A4", "날짜 · 공휴일 자동", "제본 여백"] },
     newyear: { title: "신년 계획 속지", desc: "올해의 한 마디 · 분야별 목표 · 12달 목표를 한 장에", chips: ["A5 · A4", "분야 이름 바꾸기", "날짜 없이도"] },
@@ -188,18 +190,18 @@ const TOOLS = {
     weekly: { title: "위클리 속지", desc: "한 주 한 장 — 요일 칸 7개 + 이번 주 할 일", chips: ["주 번호", "공휴일 이름", "몇 주치 한 번에"] },
     daily: { title: "데일리 속지", desc: "하루 한 장 — 06~24시 시간표 · 오늘 할 일 · 메모 · 감사 한 줄", chips: ["날짜 · 음력 자동", "날씨 · 기분 칸", "한 달치 한 번에"] },
     study: { title: "스터디 플래너 속지", desc: "과목별 할 일 + 10분 칸 공부 시간표 · D-day · 공부 시간", chips: ["10분 칸 타임테이블", "과목 · 할 일 · 체크", "날짜 자동"] } } },
-  kimchi: { file: "kimchi-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "김치 양념 계산기", icon: "jar",
+  kimchi: { file: "kimchi-v1.0.html", color: "#0c737d", tag: "#e3f3f5", name: "김치 양념 계산기", icon: "jar",
     tabs: {
     all: { title: "김치 양념 계산기", desc: "절임배추 kg이나 포기 수만 넣으면 고춧가루 · 젓갈 · 마늘 양이 자동으로 — 김치 18가지", chips: ["배추김치 · 깍두기 · 총각김치 등 18가지", "농촌진흥청 · 연구소 레시피", "맵기 · 젓갈 조절", "장보기 목록 · 이미지 저장"] } } },
-  convert: { file: "convert-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "파일 변환", icon: "swap",   /* v1.0(11-03): HEIC → JPG · CSV 한글 깨짐 */
+  convert: { file: "convert-v1.0.html", color: "#0c737d", tag: "#e3f3f5", name: "파일 변환", icon: "swap",   /* v1.0(11-03): HEIC → JPG · CSV 한글 깨짐 */
     tabs: {
     all: { title: "파일 변환 — HEIC → JPG · CSV 한글 깨짐", desc: "아이폰 HEIC 사진을 JPG로 한 번에, 엑셀에서 한글이 깨지는 CSV는 바로 고쳐서 — 파일은 내 컴퓨터 밖으로 나가지 않아요", chips: ["HEIC 여러 장 → JPG · zip", "찍은 날짜 남기고 위치만 빼기", "CSV 엑셀용 · UTF-8 · EUC-KR", "업로드 없음"] },
     heic: { title: "HEIC → JPG 변환", desc: "아이폰 사진(HEIC)을 여러 장 한 번에 JPG로 — 화질 · 크기 · 위치 정보 고르기", chips: ["여러 장 · zip으로 받기", "사진 방향 바로잡기", "위치(GPS)만 빼기", "업로드 없음"] },
     csv: { title: "CSV 한글 깨짐 고치기", desc: "엑셀에서 한글이 깨지는 CSV를 엑셀용(UTF-8 BOM) · UTF-8 · EUC-KR로 다시 저장", chips: ["글자 방식 자동 알아내기", "미리보기", "엑셀 · 구글 시트 · 옛 프로그램", "업로드 없음"] } } },
-  yearend: { file: "yearend-v1.0.html", color: "#0A1931", tag: "#e2e6ee", name: "연말정산 계산기", icon: "calc",   /* v1.0(11-10): 2026년 귀속 연말정산 미리 계산 */
+  yearend: { file: "yearend-v1.0.html", color: "#0c737d", tag: "#e2e6ee", name: "연말정산 계산기", icon: "calc",   /* v1.0(11-10): 2026년 귀속 연말정산 미리 계산 */
     tabs: {
     all: { title: "연말정산 계산기 — 2026년 귀속", desc: "급여 · 가족 · 카드 · 의료비 · 교육비 · 연금저축 · 월세를 넣으면 돌려받을 금액이 바로 — 국세청 계산식 그대로, 입력한 금액은 이 기기에만", chips: ["환급 · 추가 납부 바로 계산", "자녀 태어난 해로 공제 자동", "연금저축 · 카드로 더 돌려받는 방법", "가입 · 업로드 없음"] } } },
-  award: { file: "award-v1.0.html", color: "#195455", tag: "#dcebe9", name: "상장 만들기", icon: "award",   /* v1.0(11-10): 상장 · 표창장 · 감사장 · 수료증 등 10종 × 디자인 10 */
+  award: { file: "award-v1.0.html", color: "#0c737d", tag: "#dcebe9", name: "상장 만들기", icon: "award",   /* v1.0(11-10): 상장 · 표창장 · 감사장 · 수료증 등 10종 × 디자인 10 */
     tabs: {
     all: { title: "상장 만들기 — 상장 · 감사장 · 수료증", desc: "종류 10가지와 디자인 10가지를 골라 섞고, 이름 목록을 붙여 넣어 여러 장을 한 번에 인쇄 · PDF — 직인 이미지도 함께 찍혀요", chips: ["종류 × 디자인 섞어 쓰기", "여러 명 한 번에", "직인 이미지 · 글자 직인", "가입 · 업로드 없음"] } } },
   icon: { file: "icon-v1.0.html", color: "#1F5F8B", tag: "#e2ecf3", name: "무료 아이콘", icon: "shapes",   /* v1.0(11-04): 직접 그린 선 아이콘 140 · 색 스티커 178 */
@@ -207,7 +209,7 @@ const TOOLS = {
     all: { title: "무료 아이콘 — 직접 그린 선 아이콘 · 색 스티커", desc: "선 아이콘 140개 · 색 스티커 178개를 색 · 굵기 · 배경을 바꿔 그림 복사 · SVG · PNG로 — 출처 표시 없이 무료", chips: ["한글로 찾기", "그림 복사 → 한글 · PPT · 카톡", "SVG · PNG · 여러 개 zip", "제사 · 한국 생활 아이콘"] },
     line: { title: "무료 선 아이콘 140개", desc: "집 · 달력 · 전화 · 화살표부터 지방 · 향로 · 한옥 · 윷까지 — 색 · 굵기 · 배경 바꿔 받기", chips: ["24칸 · 선 2", "색 · 굵기 · 배경", "SVG · PNG"] },
     sticker: { title: "무료 색 스티커 178개", desc: "기분 · 기념일 · 날씨 · 음식 · 동물 — 블로그 글 · 안내문 · 학습지 꾸미기", chips: ["직접 그린 그림", "투명 PNG", "여러 개 zip"] } } },
-  game: { file: "game-v1.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "복불복 게임", icon: "dice",   /* v1.0(11-03): 모임 · 내기용 복불복 6가지 — 휴대폰 한 대로 */
+  game: { file: "game-v1.0.html", color: "#0c737d", tag: "#e3f3f5", name: "복불복 게임", icon: "dice",   /* v1.0(11-03): 모임 · 내기용 복불복 6가지 — 휴대폰 한 대로 */
     tabs: {
     all: { title: "복불복 게임 — 오늘의 독박은 누구?", desc: "모임 · 회식 · 내기에서 30초면 끝나는 복불복 6가지 — 휴대폰 한 대를 돌려 가며, 가입 없이", chips: ["폭탄 돌리기 · 풍선 터뜨리기", "손가락 고르기 · 숫자 폭탄", "시간 맞히기 · 꽝 카드", "2~10명 · 벌칙 고르기"] },
     bomb: { title: "폭탄 돌리기", desc: "언제 터질지 모르는 폭탄을 게이지가 차면 다음 사람에게 넘겨요 — 들고 있을 때 터지면 독박", chips: ["12~40초 무작위", "소리 · 진동", "2~10명"] },
@@ -221,7 +223,7 @@ const TOOLS = {
     all: { title: "축문 자동 작성", desc: "누구의 제사인지와 기일만 넣으면 간지까지 자동으로, 읽는 법·풀이와 함께 인쇄", chips: ["관계 17가지", "세차 · 삭 · 일진 자동", "한글 독음 · 풀이", "한글 축문"] },
     gije: { title: "기제사 축문 자동 작성", desc: "누구의 제사인지와 기일만 넣으면 간지까지 자동으로, 읽는 법·풀이와 함께 인쇄", chips: ["관계 17가지", "세차 · 삭 · 일진 자동", "한글 독음 · 풀이", "한글 축문"], file: "chukmun-v2.0.html" },
     sije: { title: "시제 · 묘제 축문 자동 작성", desc: "몇 대조인지와 시제 날짜만 넣으면 간지까지 자동으로 — 산신축도 함께", chips: ["5대조 이상 시향", "부모~고조 묘제", "산신(토지신) 축문", "읽는 법 · 풀이"], file: "chukmun-v2.0.html" } } },
-  chart: { file: "chart.html", color: "#1f7f8f", tag: "#e3f3f5", name: "차트 만들기", icon: "chart",
+  chart: { file: "chart.html", color: "#0c737d", tag: "#e3f3f5", name: "차트 만들기", icon: "chart",
     tabs: {
     all: { title: "차트 만들기", desc: "엑셀 표를 붙여넣으면 보고서·PPT용 차트 완성 — 데이터는 기기 밖으로 나가지 않아요", chips: ["엑셀 붙여넣기", "막대 · 꺾은선 · 원 · 콤보", "PPT에 바로 복사", "내 차트 저장 · 다시 쓰기"] },
     bar: { title: "막대그래프 만들기", desc: "월별 실적·목표 비교를 깔끔한 세로 막대로", chips: ["나란히 · 쌓기 · 100%", "큰 값 순 정렬", "데이터 표 넣기"] },
@@ -229,11 +231,11 @@ const TOOLS = {
     line: { title: "꺾은선 그래프 만들기", desc: "월별 추이·전년 비교를 여러 선으로", chips: ["여러 계열", "부드러운 곡선", "표식 모양 · 크기 · 색"] },
     pie: { title: "원그래프 · 도넛 차트 만들기", desc: "비중·점유율을 비율(%) 자동 계산으로", chips: ["비율 자동 계산", "도넛 가운데 합계", "값 · 비율 범례"] },
     combo: { title: "콤보 차트 만들기", desc: "매출은 막대, 성장률은 선 — 보조 축까지", chips: ["막대 + 꺾은선", "보조 축", "축마다 단위"] } } },
-  photo: { file: "photo/", color: "#1f7f8f", tag: "#e3f3f5", name: "사진 뷰어", icon: "image", win: "max",
+  photo: { file: "photo/", color: "#0c737d", tag: "#e3f3f5", name: "사진 뷰어", icon: "image", win: "max",
     dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/photo-viewer-v1.0.zip", file: "photo-viewer-v1.0.zip", size: "약 236KB" },
     tabs: {
     all: { title: "사진 정리기", desc: "내 PC 사진 폴더를 열어 찍은 날 · 기기 · 위치로 찾고 지도에서 확인 — 업로드 없음", chips: ["폴더별 보기", "찍은 날 · 종류 · 기기 찾기", "복사 · 이동 · 지우기", "찍은 위치 지도"] } } },
-  label: { file: "label-v2.0.html", color: "#1f7f8f", tag: "#e3f3f5", name: "라벨 출력기", icon: "tag",
+  label: { file: "label-v2.0.html", color: "#0c737d", tag: "#e3f3f5", name: "라벨 출력기", icon: "tag",
     dl: { href: "https://pegasus0710-arch.github.io/jesa_tools/downloads/label-printer-v2.0.zip", file: "label-printer-v2.0.zip", size: "약 52KB", note: "우편번호는 직접 입력" },
     tabs: {
     all: { title: "라벨 출력기", desc: "주소 라벨 · 이름 스티커 · 정리 라벨을 A4 라벨지에 — 설치 · 가입 없이 브라우저에서", chips: ["엑셀 붙여넣기 · 파일", "우편번호 자동 찾기", "폼텍 · 애니라벨 규격", "시험 인쇄 · 위치 보정"] },
@@ -245,7 +247,7 @@ const TOOLS = {
     print: { title: "제사 지방 출력", desc: "관계만 고르면 한자 지방 완성, A4 한 장에 2매 인쇄 — 설치·가입 없이", chips: ["관계 26가지", "한자 · 한글 독음 · 우리말", "본관·성씨 한자 변환", "지방틀 크기 조절"] },
     calc: { title: "제사 날짜 계산기", desc: "음력 기일을 양력으로, 삼우제·49재·소상·대상까지", chips: ["음력 · 양력 · 윤달", "앞으로 10년 기일", "삼우제 · 49재 · 백일"] },
     charye: { title: "차례상 배치도", desc: "전통 · 간소 · 영남식 차례상을 설날·추석별로", chips: ["배치도 3종", "설날 · 추석", "전해 오는 용어 풀이"] } } },
-  pdf: { file: "pdf.html", color: "#1f7f8f", tag: "#e3f3f5", name: "PDF 편집 도구", tabs: {
+  pdf: { file: "pdf.html", color: "#0c737d", tag: "#e3f3f5", name: "PDF 편집 도구", tabs: {
     all: { title: "PDF 편집 도구", desc: "합치기·나누기·용량 줄이기·개인정보 가리기·서명까지 — 서류를 올리지 않고 내 기기 안에서", chips: ["합치기", "나누기", "페이지 추출", "삭제·회전", "JPG 변환", "용량 줄이기", "가리기", "서명·도장", "쪽 번호", "워터마크"] },
     merge: { title: "PDF 합치기", desc: "여러 PDF와 사진을 원하는 순서대로 한 파일로 — 서류를 올리지 않고 내 기기 안에서", chips: ["PDF + 사진 섞기", "끌어서 순서 바꾸기", "파일 이름순 정렬", "A4에 맞추기"] },
     img2pdf: { title: "JPG PDF 변환", desc: "휴대폰으로 찍은 서류 사진 여러 장을 PDF 한 파일로", chips: ["JPG·PNG·WEBP", "A4에 맞추기", "여백 선택", "순서 바꾸기"] },
@@ -287,7 +289,7 @@ const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width
 const ICON_GO = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function render(state) {
   if (!KNOWN) {   /* 모르는 도구: 다른 도구로 바꿔 보여 주지 않고 안내 */
-    document.getElementById("root").innerHTML = `<div class="lc" style="--c:#8a8f84"><div class="lc-msg warn"><b>이 프로그램 정보를 아직 불러오지 못했어요.</b> 잠시 뒤 새로고침(Ctrl+F5)해 주세요. 계속 이렇게 보이면 <a href="https://luvbong.tistory.com/" target="_top" rel="noopener">Blog J</a>에 댓글로 알려 주세요. <span style="color:#8a8f84">(${esc(TOOL_KEY)})</span></div></div>`;
+    document.getElementById("root").innerHTML = `<div class="lc" style="--c:#5f6b7a"><div class="lc-msg warn"><b>이 프로그램 정보를 아직 불러오지 못했어요.</b> 잠시 뒤 새로고침(Ctrl+F5)해 주세요. 계속 이렇게 보이면 <a href="https://luvbong.tistory.com/" target="_top" rel="noopener">Blog J</a>에 댓글로 알려 주세요. <span style="color:#5f6b7a">(${esc(TOOL_KEY)})</span></div></div>`;
     try { sendH(); } catch (e) {}
     return;
   }

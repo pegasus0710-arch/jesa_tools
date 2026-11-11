@@ -922,7 +922,7 @@ document.addEventListener("focusin", e => { if (e.target.closest && e.target.clo
 document.addEventListener("focusout", e => { if (e.target.closest && e.target.closest("#panel") && e.target.matches("input,select")) endBase(5000); });
 document.addEventListener("click", e => { const b = e.target.closest("#panel button, .yt-mbar button"); if (!b || b.dataset.go != null || b.hasAttribute("data-next") || b.hasAttribute("data-prev") || b.hasAttribute("data-more") || b.hasAttribute("data-print") || b.hasAttribute("data-reset")) return; BASE = null; startBase(); endBase(5000); }, true);
 /* 시작 — 블로그 경유 잠금(대표 글 공개 시각부터) */
-const GATE_ON = false;   /* 대표 글 날짜가 정해지면 Date.now() >= Date.parse("…") 로 */
+const GATE_ON = Date.now() >= Date.parse("2026-11-11T23:00:00+09:00");   /* 대표 글 공개(2026-11-11(수) 밤)부터 블로그 경유 잠금 */
 (async () => {
   const T = new URLSearchParams(location.search).get("tab") || "all";
   if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return;

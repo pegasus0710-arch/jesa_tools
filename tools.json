@@ -200,6 +200,27 @@
    "app": "https://pegasus0710-arch.github.io/jesa_tools/trading/"
   },
   {
+   "name": "연말정산 계산기",
+   "category": "재무",
+   "area": "money",
+   "icon": "calc",
+   "type": [
+    "온라인"
+   ],
+   "desc": "2026년 귀속 연말정산을 원천징수영수증 순서로 미리 계산 — 12월 31일 전에 연금저축 · 카드 · 부모님 공제로 얼마 더 돌려받는지까지",
+   "short": "2026 연말정산 미리 계산",
+   "link": "https://luvbong.tistory.com/823",
+   "open": "2026-11-11T22:50:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "연말정산 계산기",
+     "q": "yearend&tab=all"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/yearend.png"
+  },
+  {
    "name": "레시피 노트",
    "category": "디지털",
    "area": "life",
@@ -727,6 +748,11 @@
    "no": 793,
    "t": "여행 노트 — 여행 일정 · 경비 · 지도 무료 앱",
    "at": "2027-01-01T09:00:00+09:00"
+  },
+  {
+   "no": 823,
+   "t": "연말정산 계산기 2026 — 미리 계산하고 더 돌려받을 것 찾기",
+   "at": "2026-11-11T22:50:00+09:00"
   }
  ],
  "kit": {

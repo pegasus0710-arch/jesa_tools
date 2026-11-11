@@ -71,6 +71,22 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .card{padding:10px 16px}
 .cl .ty{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 @media (max-width:760px){.card{grid-template-columns:1fr;gap:8px}.cr .old{padding-left:0;border-left:0}}
+
+/* 표 배치(11-11): 엑셀처럼 한 앱 = 한 행 */
+.xt{overflow-x:auto;background:var(--card);border-radius:12px;box-shadow:0 0 0 1px var(--hair)}
+.xt table{width:100%;min-width:980px;border-collapse:collapse;font-size:13.5px}
+.xt th{position:sticky;top:0;background:#f3eee3;text-align:left;font-size:12.5px;font-weight:800;color:var(--sub);padding:8px 10px;border-bottom:1px solid var(--hair);white-space:nowrap}
+.xt td{padding:8px 10px;border-top:1px solid rgba(20,32,43,.1);vertical-align:top}
+.xt tr:nth-child(even) td{background:#fcfaf6}
+.xt tr:hover td{background:#eef6f7}
+.xt td.nm{width:190px}.xt td.nm b{font-size:14.5px;font-weight:900}
+.xt td + td{border-left:1px solid rgba(20,32,43,.07)}
+.xt .ty{font-size:12.5px;color:var(--sub2);margin:2px 0 0}
+.xt .st{margin:0;white-space:nowrap}
+.xt .links{gap:4px}.xt .links a{padding:5px 9px;font-size:12.5px;border-radius:8px}
+.xt .links.sm{margin-top:4px}.xt .links.sm a{padding:3px 7px;font-weight:700;color:var(--sub)}
+.xt .dash{color:var(--sub2)}
+.gate{margin:6px 2px 0}
 </style>
 <style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
 :root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
@@ -149,21 +165,24 @@ function draw() {
   for (const g of Object.keys(SEC)) {
     const items = APPS.filter(a => a.g === g && (!q || (a.n + " " + a.v + " " + (a.note || "") + " " + a.links.concat(a.old || []).map(l => l.join(" ")).join(" ")).toLowerCase().includes(q)));
     if (!items.length) continue;
-    h += `<div class="sec"><h2>${SEC[g][0]}</h2><span>${SEC[g][1]}</span></div><div class="grid">`;
+    h += `<div class="sec"><h2>${SEC[g][0]}</h2><span>${SEC[g][1]}</span></div>`;
+    if (g === "etc") { h += `<div class="xt"><table><tbody>${items.map(a => `<tr><td class="nm">${esc(a.n)}</td><td colspan="5"><div class="links">${a.links.map(l => A(l)).join("")}</div></td></tr>`).join("")}</tbody></table></div>`; continue; }
+    h += `<div class="xt"><table><thead><tr><th class="nm">앱</th><th>버전</th><th>공개</th><th>열기</th><th>블로그 글</th><th>지난 버전 · 다운로드 · 메모</th></tr></thead><tbody>`;
     for (const a of items) {
-      h += `<div class="card"><div class="cl"><div class="ch"><b>${esc(a.n)}</b>${a.v ? `<span class="ver">${esc(a.v)}</span>` : ""}${a.g !== "etc" ? status(a)[0] : ""}</div>`;
-      h += a.note ? `<div class="ty">${esc(a.note)}</div>` : `<div class="ty">${a.g === "app" ? "설치형" : a.g === "web" ? "블로그 실행형" : a.g === "dev" ? "개발 중" : "바로가기"}</div>`;
-      h += `</div><div class="cr">`;
-      const xp = (a.posts || []).map(([t, n]) => A([t, P(n)], "post")).join("");
-      if (a.g === "web" && a.post) {
-        h += `<div class="links">${A(["블로그 글에서 열기 · " + a.post, P(a.post)], "main")}${xp}</div>`;
-        h += `<div class="old"><div class="lb">바로 열기 — 시험 모드에서만</div><div class="links">${a.links.map(l => A(l)).join("")}</div></div>`;
-      } else h += `<div class="links">${a.links.map((l, i) => A(l, i === 0 && a.g !== "etc" ? "main" : "")).join("")}${a.post ? A(["블로그 글 " + a.post, P(a.post)], "post") : ""}${xp}</div>`;
-      if (a.old && a.old.length) h += `<div class="old"><div class="lb">지난 버전 · 다운로드판</div><div class="links">${a.old.map(l => A(l)).join("")}</div></div>`;
-      if (a.g === "web" && !owner()) h += `<div class="gate">「바로 열기」는 시험 모드가 꺼져 있으면 막힘 화면이 나와요 — 「블로그 글에서 열기」의 실행 카드로 여세요</div>`;
-      h += `</div></div>`;
+      const web = a.g === "web" && a.post;
+      const open = web ? `<div class="links">${A(["블로그 글에서 열기", P(a.post)], "main")}</div><div class="links sm">${a.links.map(l => A(l)).join("")}</div>`
+                       : `<div class="links">${a.links.map((l, i) => A(l, i === 0 ? "main" : "")).join("")}</div>`;
+      const posts = (a.post ? [A(["" + a.post, P(a.post)], "post")] : []).concat((a.posts || []).map(([t, n]) => A([t, P(n)], "post")));
+      const extra = (a.old || []).map(l => A(l)).join("");
+      h += `<tr><td class="nm"><b>${esc(a.n)}</b><div class="ty">${a.g === "app" ? "설치형" : a.g === "web" ? "블로그 실행형" : "개발 중"}</div></td>
+        <td class="num"><span class="ver">${esc(a.v)}</span></td>
+        <td class="num">${status(a)[0]}</td>
+        <td>${open}</td>
+        <td><div class="links">${posts.join("") || '<span class="dash">—</span>'}</div></td>
+        <td>${extra ? `<div class="links">${extra}</div>` : ""}${a.note ? `<div class="ty">${esc(a.note)}</div>` : ""}${!extra && !a.note ? '<span class="dash">—</span>' : ""}</td></tr>`;
     }
-    h += `</div>`;
+    h += `</tbody></table></div>`;
+    if (g === "web" && !owner()) h += `<div class="gate">작은 단추(바로 열기)는 시험 모드가 꺼져 있으면 막힘 화면이 나와요 — 「블로그 글에서 열기」의 실행 카드로 여세요</div>`;
   }
   document.getElementById("list").innerHTML = h || `<div class="none">찾는 앱이 없어요</div>`;
 }

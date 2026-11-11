@@ -498,7 +498,7 @@ const PAPERS = [["a4", "A4", 210, 297], ["b5", "B5", 182, 257], ["p8", "8절", 2
 </script>
 <script>/* 상장 만들기 v1.0 — Blog J (블로그 실행형 · 입력한 내용은 이 기기 브라우저에만) */
 const TOOL = "award", APP_VER = "1.0";
-const BUILD = "2026-11-11(수) 16:50";
+const BUILD = "2026-11-11(수) 23:00";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-award2";   /* 11-11 단계 순서 바꿈(디자인 먼저) → 새 이름 */
 const STEPS = [["des", "디자인"], ["kind", "내용 고르기"], ["text", "내용 · 꾸미기"], ["who", "받는 사람"], ["seal", "직인 · 로고"], ["print", "인쇄"]];
@@ -552,6 +552,7 @@ function autoSeal() {
 }
 function sealHtml() {
   if (S.sealMode === "none") return "";
+  if (DRAW === "ph" && !S.sealSet && S.step < 4) return "";   /* 직인은 5단계 「직인 · 로고」에 가기 전엔 미리 보기에 안 보임 */
   const inner = S.sealMode === "img" ? (S.sealImg ? `<img src="${S.sealImg}" alt="">` : "") : autoSeal();
   if (!inner) return "";
   const z = +S.sealSize || 24;
@@ -622,7 +623,7 @@ function stepDes() {
 }
 function stepKind() {
   const card = K => `<button class="tc${S.kindPicked && S.kind === K.k ? " on" : ""}" data-kind="${K.k}"><b>${K.n}</b><span>${K.d}</span></button>`;
-  return `<p class="yt-k">2단계</p><h2>어떤 내용을 넣을까요?</h2><p class="yt-lead">고른 디자인(<b>${esc((DESK[S.des] || {}).n)}</b>)에 예시 내용이 들어가요. 다음 단계에서 고쳐 쓸 수 있어요.</p>
+  return `<p class="yt-k">2단계</p><h2>어떤 내용을 넣을까요?</h2><p class="yt-lead">고른 디자인(<b>${esc((DESK[S.des] || {}).n)}</b>)에 예시 내용이 들어가요. 다음 단계에서 고쳐 쓰고 <b>받는 사람 이름</b>도 넣어요(여러 명이면 4단계에서 목록으로).</p>
   <div class="tgrid">${KINDS.map(card).join("")}${card(KIND.custom).replace('class="tc', 'class="tc own')}</div>
   ${S.kindPicked ? "" : `<div class="box" style="margin-top:14px">하나를 고르면 미리 보기에 바로 들어가요. 처음부터 쓰려면 「직접 입력」을 고르세요.</div>`}`;
 }
@@ -630,6 +631,10 @@ function stepText() {
   const K = KIND[S.kind];
   return `<p class="yt-k">3단계</p><h2>내용 고치고 꾸미기</h2><p class="yt-lead">${K.k === "custom" ? "제목 · 본문을 직접 써 주세요." : "예시를 고르고 고쳐 쓰면 돼요."} 모든 장에 같은 문구가 들어가요.</p>
   <div class="yt-sec">내용</div>
+  <div class="f"><div class="lb">받는 사람 <span>${S.people.length > 1 ? `첫 번째 사람 · 모두 ${S.people.length}명` : "한 사람이면 여기서 끝"}</span></div>
+  <div class="two"><div class="ti"><input data-pf="dept" data-i="0" value="${esc((S.people[0] || {}).dept)}" placeholder="소속 · 학년(없어도 돼요)"></div><div class="ti"><input data-pf="name" data-i="0" value="${esc((S.people[0] || {}).name)}" placeholder="이름"></div></div>
+  <div class="chips" style="margin-top:8px">${WHO.map(([k, n]) => chip("who", k, n, S.who === k)).join("")}</div>
+  <p class="hint">여러 명이면 다음 「받는 사람」 단계에서 더하거나 엑셀 · 카톡 목록을 붙여 넣어요.</p></div>
   <div class="two"><div class="f"><div class="lb">제목</div>${ti("title", "상 장")}</div>
   <div class="f"><div class="lb">상 이름 <span>없으면 비워 두세요</span></div>${ti("aw", "예: 우 수 상")}</div></div>
   ${K.awc.length ? `<div class="chips" style="margin:-4px 0 14px">${K.awc.map(a => chip("awc", a, a.replace(/ /g, ""), S.aw === a)).join("")}${chip("awc", "", "없음", !S.aw)}</div>` : ""}
@@ -661,9 +666,9 @@ function stepSeal() {
   const prev = S.sealMode === "img" ? (S.sealImg ? `<img src="${S.sealImg}" alt="">` : "") : S.sealMode === "auto" ? autoSeal() : "";
   return `<p class="yt-k">5단계</p><h2>직인 · 로고</h2><p class="yt-lead">직인은 주는 곳 이름 끝에 살짝 겹쳐 찍혀요. 이미지는 이 기기에만 저장돼요.</p>
   <div class="yt-sec">직인</div>
-  <div class="f"><div class="chips">${chip("sm", "img", "직인 이미지 넣기", S.sealMode === "img")}${chip("sm", "auto", "글자 직인 자동", S.sealMode === "auto")}${chip("sm", "none", "직인 없음", S.sealMode === "none")}</div></div>
-  ${S.sealMode !== "none" ? `<div class="imgbox"><div class="iv">${prev || ""}</div><p>${S.sealMode === "img" ? (S.sealImg ? "흰 바탕은 지우고 빨간 도장만 남겼어요. 「직인 다시 고르기」로 바꿀 수 있어요." : "흰 종이에 도장을 찍어 사진 · 스캔한 이미지(PNG · JPG)를 골라 주세요. 하얀 바탕은 자동으로 지워요.") : "주는 곳 이름으로 만든 네모 직인이에요. 아래에서 글자를 바꿀 수 있어요."}</p></div>` : ""}
-  ${S.sealMode === "img" ? `<div class="bt2"><button class="btn sm" data-pick="seal">${S.sealImg ? "직인 다시 고르기" : "직인 이미지 고르기"}</button>${S.sealSrc ? tog("sealBg", "흰 바탕 지우기") + tog("sealRed", "빨간색으로 맞추기") : ""}</div>` : ""}
+  <div class="f"><div class="chips">${chip("sm", "auto", "자동 — 글자 직인", S.sealMode === "auto")}${chip("sm", "img", "수동 — 도장 사진 · 이미지", S.sealMode === "img")}${chip("sm", "none", "직인 없음", S.sealMode === "none")}</div></div>
+  ${S.sealMode !== "none" ? `<div class="imgbox"><div class="iv">${prev || ""}</div><p>${S.sealMode === "img" ? (S.sealImg ? "흰 바탕은 지우고 빨간 도장만 남겼어요. 「다시 사진 찍기」 · 「다른 파일 고르기」로 바꿀 수 있어요." : "흰 종이에 도장을 찍고 「사진 찍기」로 바로 찍거나, 찍어 둔 사진 · 스캔 파일(PNG · JPG)을 골라 주세요. 하얀 바탕은 자동으로 지워요. 밝은 곳에서 위에서 똑바로 찍으면 깨끗해요.") : "주는 곳 이름으로 만든 네모 직인이에요. 아래에서 글자를 바꿀 수 있어요."}</p></div>` : ""}
+  ${S.sealMode === "img" ? `<div class="bt2"><button class="btn sm" data-pick="seal" data-cam="1">${S.sealImg ? "다시 사진 찍기" : "사진 찍기"}</button><button class="btn sm" data-pick="seal">${S.sealImg ? "다른 파일 고르기" : "이미지 파일 고르기"}</button>${S.sealSrc ? tog("sealBg", "흰 바탕 지우기") + tog("sealRed", "빨간색으로 맞추기") : ""}</div>` : ""}
   ${S.sealMode === "auto" ? `<div class="f"><div class="lb">직인 글자 <span>비우면 「${esc(sealChars().join(""))}」</span></div>${ti("sealText", "예: 한빛피아노학원장인")}</div>` : ""}
   ${S.sealMode !== "none" ? `<div class="f"><div class="lb">크기 <span id="szv">${S.sealSize}mm</span></div><input class="rng" type="range" min="12" max="40" step="1" data-rng="sealSize" value="${S.sealSize}"></div>
   <div class="f"><div class="lb">위치 <span>1mm씩</span></div><div class="nud"><button data-nud="sealDx:-1">←</button><button data-nud="sealDx:1">→</button><button data-nud="sealDy:-1">↑</button><button data-nud="sealDy:1">↓</button><span id="sdv">가로 ${S.sealDx} · 세로 ${S.sealDy}</span><button data-nud="seal0" style="width:auto;padding:0 12px">처음 자리</button></div></div>` : ""}
@@ -728,7 +733,7 @@ function render() {
   renderPreview(); if (S.step === 0) fitThumbs();
 }
 function go(i, push) {
-  S.step = Math.max(0, Math.min(STEPS.length - 1, i)); save(); render(); window.scrollTo(0, 0);
+  S.step = Math.max(0, Math.min(STEPS.length - 1, i)); if (S.step >= 4) S.sealSet = true; save(); render(); window.scrollTo(0, 0);
   if (push !== false) try { history.pushState({ aw: S.step }, "", location.href); } catch (e) {}
 }
 window.addEventListener("popstate", e => { const st = e.state && typeof e.state.aw === "number" ? e.state.aw : 0; S.step = st; save(); render(); window.scrollTo(0, 0); });
@@ -765,8 +770,9 @@ async function processSeal() {
   o.getContext("2d").drawImage(c, x0, y0, x1 - x0 + 1, y1 - y0 + 1, m, m, x1 - x0 + 1, y1 - y0 + 1);
   S.sealImg = o.toDataURL("image/png");
 }
-function pick(kind) {
-  const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/png,image/jpeg,image/webp,image/gif";
+function pick(kind, cam) {
+  const inp = document.createElement("input"); inp.type = "file"; inp.accept = cam ? "image/*" : "image/png,image/jpeg,image/webp,image/gif";
+  if (cam) inp.setAttribute("capture", "environment");   /* 휴대폰: 카메라가 바로 열림 · PC: 파일 고르기 창 */
   inp.onchange = async () => { const f = inp.files && inp.files[0]; if (!f) return;
     try { const im = await loadImg(f);
       if (kind === "seal") { S.sealSrc = toCanvas(im, 700).toDataURL("image/png"); S.sealMode = "img"; await processSeal(); toast("직인을 넣었어요"); }
@@ -841,7 +847,7 @@ document.addEventListener("click", e => {
   if (b.hasAttribute("data-prev")) return history.state && typeof history.state.aw === "number" && history.state.aw === S.step && S.step > 0 ? history.back() : go(S.step - 1);
   if (b.hasAttribute("data-pvjump")) { const r = $("#res"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
   if (d.kind) { applyKind(d.kind); save(); render(); if (window.innerWidth < 900) toast(d.kind === "custom" ? "빈 상장을 준비했어요 — 「다음」에서 직접 써요" : `${KIND[d.kind].n} 내용을 넣었어요 — 「다음」에서 고쳐 써요`); return; }
-  if (d.des) { const was = S.des; S.des = d.des; S.desPicked = true; if (!S.orientPicked) { if (d.des === "plaque") S.orient = "l"; else if (was === "plaque") S.orient = "p"; } save(); return render(); }
+  if (d.des) { S.des = d.des; S.desPicked = true; save(); return render(); }   /* 방향은 「방향」에서 고른 그대로(패 모양도 자동으로 가로로 바꾸지 않음) */
   if (d.deco) { S.deco = d.deco; S.decoPicked = true; save(); return render(); }
   if (d.dpos) { S.decoPos = d.dpos; save(); return render(); }
   if (d.font) { S.font = d.font; S.decoPicked = true; save(); return render(); }
@@ -856,8 +862,8 @@ document.addEventListener("click", e => {
   if (d.pdel != null) { S.people.splice(+d.pdel, 1); if (!S.people.length) S.people.push({ dept: "", name: "", aw: "" }); S.sampleP = false; save(); return render(); }
   if (b.hasAttribute("data-pclear")) { if (!confirmTwice("pclear")) return; S.people = [{ dept: "", name: "", aw: "" }]; S.cur = 0; S.sampleP = false; save(); return render(); }
   if (d.pg) { S.cur = (S.cur + +d.pg + S.people.length) % S.people.length; if (S.step === 3) { save(); return render(); } return renderPreview(); }
-  if (d.sm) { S.sealMode = d.sm; save(); render(); if (d.sm === "img" && !S.sealImg) pick("seal"); return; }
-  if (d.pick) return pick(d.pick);
+  if (d.sm) { S.sealMode = d.sm; save(); render(); return; }
+  if (d.pick) return pick(d.pick, !!d.cam);
   if (b.hasAttribute("data-logodel")) { S.logo = ""; save(); return render(); }
   if (d.nud) { const v = d.nud;
     if (v === "seal0") { S.sealDx = 0; S.sealDy = 0; } else if (v === "off0") { S.offX = 0; S.offY = 0; }

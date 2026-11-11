@@ -135,6 +135,24 @@ button{border:0;background:none;cursor:pointer}
 .top .brand .cat,.top .cat{background:rgba(255,255,255,.14)!important;color:#fff!important;box-shadow:none!important}
 .top .lg,.top .badge{box-shadow:0 0 0 1.5px rgba(255,255,255,.25)!important}
 .top .lg i,.top .badge i{border-color:var(--sea-band)!important}
+
+/* 왼쪽 메뉴 두 묶음 (11-11) */
+.kinds{display:none}
+.kgrp{display:flex;flex-direction:column;gap:2px}
+.kgrp+.kgrp{margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)}
+.khd{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;font-size:16px;font-weight:800;color:var(--ink);text-align:left;width:100%}
+.khd svg{width:16px;height:16px;flex-shrink:0;transition:transform .15s;color:var(--sub)}
+.kgrp.open .khd svg{transform:rotate(90deg)}
+.khd span{flex:1;min-width:0}
+.khd em{font-style:normal;font-size:13px;font-weight:700;color:var(--sub)}
+.khd small{font-size:12.5px;font-weight:700;color:#0c737d;padding:2px 7px;border-radius:6px;background:#eef6f7}
+.khd:hover{background:var(--card)}
+.kgrp.cur .khd{color:#0c737d}
+.kgrp.cur .khd svg{color:#0c737d}
+.kbody{display:none;flex-direction:column;gap:2px;padding-left:10px;margin-left:12px;border-left:2px solid var(--hair)}
+.kgrp.open .kbody{display:flex}
+.cats{max-height:calc(100vh - 80px);overflow-y:auto}
+@media (max-width:720px){.kinds{display:flex}}
 </style></head><body>
 <div id="root"></div>
 <div id="toast"></div>
@@ -211,6 +229,15 @@ function list() {
   else if (S.cat !== "all") a = a.filter(x => x.c === S.cat);
   return a;
 }
+/* 왼쪽 메뉴: 선 아이콘 · 색 스티커 두 묶음 — 이름을 누르면 펼치기 / 접기 (11-11) */
+const OPEN = { line: true, stk: true };
+function kgroup(kd, qActive) {
+  const P = kd === "line" ? LINE : STICK, C = kd === "line" ? Object.keys(ICONS) : Object.keys(STK);
+  const fav = P.filter(x => S.favs.includes(x.id)).length, cur = S.kind === kd, op = OPEN[kd];
+  const rows = [["all", "전체", P.length], ["fav", "★ 자주 쓰는 것", fav], ...C.map(c => [c, c, P.filter(x => x.c === c).length])];
+  return `<div class="kgrp${op ? " open" : ""}${cur ? " cur" : ""}"><button class="khd" data-kt="${kd}" aria-expanded="${op}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span>${kd === "line" ? "선 아이콘" : "색 스티커"}</span><em>${P.length}</em><small>${op ? "접기" : "보기"}</small></button>
+  <div class="kbody">${rows.map(([k, n, c], i) => `${i === 2 ? '<div class="sep"></div>' : ""}<button data-kc="${kd}" data-cat="${esc(k)}" class="${cur && !qActive && S.cat === k ? "on" : ""}">${esc(n)}<em>${c}</em></button>`).join("")}</div></div>`;
+}
 function render() {
   const a = list(), sel = S.sel && byId(S.sel);
   const cnt = c => pool().filter(x => x.c === c).length, favN = pool().filter(x => S.favs.includes(x.id)).length;
@@ -225,7 +252,7 @@ function render() {
   </div>
   <div class="mcats">${catBtns.map(([k, n]) => `<button data-cat="${esc(k)}" class="${!qActive && S.cat === k ? "on" : ""}">${esc(n)}</button>`).join("")}</div>
   <div class="body">
-    <nav class="cats">${catBtns.map(([k, n, c], i) => `${i === 2 ? '<div class="sep"></div>' : ""}<button data-cat="${esc(k)}" class="${!qActive && S.cat === k ? "on" : ""}">${esc(n)}<em>${c}</em></button>`).join("")}</nav>
+    <nav class="cats" aria-label="분류">${["line", "stk"].map(kd => kgroup(kd, qActive)).join("")}</nav>
     <main class="list ${S.pick ? "picking" : ""}">
       <div class="info">${qActive ? `「<b>${esc(S.q.trim())}</b>」 찾은 결과 <b>${a.length}</b>개` : `<b>${S.cat === "all" ? "전체" : S.cat === "fav" ? "자주 쓰는 것" : esc(S.cat)}</b> ${a.length}개`}
         <span class="multi">${S.pick ? `<span><b>${S.picked.size}</b>개 고름</span><button class="btn s" data-a="all">보이는 것 모두</button><button class="btn s p" data-a="zip" ${S.picked.size ? "" : "disabled"}>${ico("dl")}zip으로 받기</button><button class="btn s" data-a="pick">끝</button>` : `<button class="btn s" data-a="pick">여러 개 골라 받기</button>`}</span></div>
@@ -294,7 +321,9 @@ async function zipPicked() {
 }
 document.addEventListener("click", async e => {
   const b = e.target.closest("button"); if (!b) return; const d = b.dataset;
-  if (d.kind) { go({ kind: d.kind, cat: "all", sel: null, q: "" }); return; }
+  if (d.kt) { const kd = d.kt; if (!OPEN[kd]) { OPEN[kd] = true; if (S.kind !== kd) { go({ kind: kd, cat: "all", sel: null, q: "" }); return; } } else OPEN[kd] = false; render(); return; }
+  if (d.kind) { OPEN[d.kind] = true; go({ kind: d.kind, cat: "all", sel: null, q: "" }); return; }
+  if (d.kc) { S.q = ""; go(d.kc !== S.kind ? { kind: d.kc, cat: d.cat, sel: null } : { cat: d.cat }); return; }
   if (d.cat) { S.q = ""; go({ cat: d.cat }); return; }
   if (d.id) { if (S.pick) { S.picked.has(d.id) ? S.picked.delete(d.id) : S.picked.add(d.id); render(); return; } S.sel = d.id; render(); if (innerWidth <= 720) { const p = $(".pane"); p && p.scrollTo(0, 0); } return; }
   if (d.color) { S.color = d.color; save(); render(); return; }

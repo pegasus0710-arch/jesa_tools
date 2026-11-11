@@ -278,6 +278,7 @@ button{cursor:pointer;border:0;background:none}
 .tc.own{box-shadow:none;border:1.5px dashed var(--n);background:transparent}
 .tc.own b{color:var(--n)}
 .tc.own.on{border-style:solid;background:#fff}
+.dgh{font-weight:800;font-size:14px;color:#3d4a55;margin:14px 0 8px}.dgh:first-of-type{margin-top:4px}
 </style><style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
 :root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
 /* 연말정산 · 상장 — 머리띠 */
@@ -395,7 +396,7 @@ const KINDS = [
     tx: ["위 사람은 2026학년도 피아노 연주 발표회에서 성실한 자세로 꾸준히 노력하여 뛰어난 성과를 거두었으므로 이 상장을 수여합니다.",
       "위 사람은 품행이 바르고 맡은 일에 늘 최선을 다하여 다른 이의 본보기가 되었으므로 이 상장을 주어 칭찬합니다.",
       "위 사람은 제12회 한빛 사생대회에서 뛰어난 실력을 보였으므로 이 상장을 수여합니다."] },
-  { k: "pyo", n: "표창장", d: "직원 · 회원 공로 표창", title: "표 창 장", aw: "", awc: ["공 로 상", "우 수 사 원 상", "모 범 상", "봉 사 상"], who: "sung", des: "navy", font: "Noto Serif KR", deco: "none", org: "주식회사 한빛상사 대표이사", rep: "", sample: [["영업1팀 과장", "이준호"], ["관리팀 대리", "정수아"]],
+  { k: "pyo", n: "표창장", d: "직원 · 회원 공로 표창", title: "표 창 장", aw: "", awc: ["공 로 상", "우 수 사 원 상", "모 범 상", "봉 사 상"], who: "sung", des: "silver", font: "Noto Serif KR", deco: "none", org: "주식회사 한빛상사 대표이사", rep: "", sample: [["영업1팀 과장", "이준호"], ["관리팀 대리", "정수아"]],
     tx: ["위 사람은 평소 맡은 업무에 성실히 임하며 회사 발전에 크게 이바지하였으므로 그 공로를 높이 사 이에 표창합니다.",
       "위 사람은 투철한 봉사 정신으로 지역 사회의 어려운 이웃을 꾸준히 도와 모든 이의 귀감이 되었으므로 이에 표창합니다.",
       "위 사람은 2026년 한 해 동안 뛰어난 영업 실적을 올려 회사의 목표 달성에 크게 기여하였으므로 이에 표창합니다."] },
@@ -411,7 +412,7 @@ const KINDS = [
     tx: ["위 사람을 한빛교회 청년부 회장으로 임명합니다.\n임기 2027년 1월 1일 ~ 2027년 12월 31일",
       "위 사람을 주식회사 한빛상사 영업본부 팀장으로 임명합니다.",
       "위 사람을 2027학년도 한빛초등학교 6학년 1반 반장으로 임명합니다."] },
-  { k: "wichok", n: "위촉장", d: "위원 · 강사 · 홍보대사 위촉", title: "위 촉 장", aw: "", awc: [], who: "nim", des: "minimal", font: "Nanum Myeongjo", deco: "none", org: "한빛 아파트 입주자대표회의 회장", rep: "", sample: [["", "김정우"]],
+  { k: "wichok", n: "위촉장", d: "위원 · 강사 · 홍보대사 위촉", title: "위 촉 장", aw: "", awc: [], who: "nim", des: "filigree", font: "Nanum Myeongjo", deco: "none", org: "한빛 아파트 입주자대표회의 회장", rep: "", sample: [["", "김정우"]],
     tx: ["귀하를 한빛 아파트 입주자대표회의 자문위원으로 위촉합니다.\n위촉 기간 2027년 1월 1일 ~ 2028년 12월 31일",
       "귀하를 2027년 한빛구 마을 축제 운영위원으로 위촉합니다.",
       "귀하를 본 협회의 명예 홍보대사로 위촉합니다."] },
@@ -427,7 +428,7 @@ const KINDS = [
     tx: ["위 어린이는 한 달 동안 책을 30권이나 읽고 독서 기록장을 꼼꼼히 써서 친구들에게 좋은 본보기가 되었으므로 이 상을 줍니다.",
       "위 어린이는 늘 밝은 얼굴로 먼저 인사하고 친구를 도와주어 모두를 기쁘게 하였으므로 이 상을 줍니다.",
       "위 어린이는 장난감과 물건을 스스로 정리하고 약속을 잘 지켜 칭찬받아 마땅하므로 이 상을 줍니다."] },
-  { k: "gae", n: "개근상", d: "한 해 동안 빠짐없이", title: "상 장", aw: "개 근 상", awc: ["개 근 상", "정 근 상", "성 실 상"], who: "sung", des: "ribbon", font: "Noto Serif KR", deco: "medal", org: "다솜 영어 학원장", rep: "", sample: [["중등부 1학년", "한지우"], ["중등부 2학년", "오서준"]],
+  { k: "gae", n: "개근상", d: "한 해 동안 빠짐없이", title: "상 장", aw: "개 근 상", awc: ["개 근 상", "정 근 상", "성 실 상"], who: "sung", des: "royal", font: "Noto Serif KR", deco: "medal", org: "다솜 영어 학원장", rep: "", sample: [["중등부 1학년", "한지우"], ["중등부 2학년", "오서준"]],
     tx: ["위 사람은 2026학년도 한 해 동안 하루도 빠짐없이 성실하게 등원하여 다른 이의 모범이 되었으므로 이 상장을 수여합니다.",
       "위 사람은 1년 동안 한 번도 빠지지 않고 수업에 참여하여 성실함을 보였으므로 이 상장을 수여합니다.",
       "위 사람은 정해진 기간 동안 결석 없이 꾸준히 운동에 참여하여 다른 회원의 본보기가 되었으므로 이 상장을 수여합니다."] },
@@ -442,7 +443,140 @@ const WHO = [["sung", "성명 홍길동"], ["nim", "홍길동 님"], ["gwiha", "
 /* 테두리 — (w, h)는 mm, s = 짧은 변 / 210 */
 const r2 = n => Math.round(n * 100) / 100;
 const STAR = (x, y, r) => { let p = ""; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .45 : r; p += (i ? "L" : "M") + r2(x + rr * Math.cos(a)) + " " + r2(y + rr * Math.sin(a)); } return p + "Z"; };
-const DES = [
+/* 고급 테두리 시안 — f(w, h, s, id) : w·h = mm, s = 짧은 변/210, id = 그라데이션 이름 겹침 방지 */
+const R2 = r2;
+/* 금박 · 은박 그라데이션 */
+const FOIL = (id, kind) => {
+  const st = kind === "silver"
+    ? [["0", "#8a919c"], [".25", "#e9edf2"], [".5", "#9aa2ad"], [".75", "#f4f6f9"], ["1", "#7d8590"]]
+    : kind === "rose"
+    ? [["0", "#8c4a3a"], [".3", "#e6b29a"], [".55", "#a35c46"], [".8", "#f0c6b0"], ["1", "#80402f"]]
+    : [["0", "#8a6420"], [".22", "#f3dc8e"], [".45", "#b08a35"], [".7", "#f8e7a6"], ["1", "#7d5a1c"]];
+  return `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${st.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join("")}</linearGradient>`;
+};
+/* 직선을 따라 물결 여러 줄(기요셰 띠) */
+const WAVE = (x1, y1, x2, y2, amp, lam, n, col, sw) => {
+  const L = Math.hypot(x2 - x1, y2 - y1), ux = (x2 - x1) / L, uy = (y2 - y1) / L, nx = -uy, ny = ux;
+  const k = Math.max(1, Math.round(L / lam)), lm = L / k; let o = "";
+  for (let j = 0; j < n; j++) {
+    const ph = j / n * Math.PI * 2; let d = "";
+    for (let t = 0; t <= L + .01; t += lm / 16) { const a = amp * Math.sin(t / lm * Math.PI * 2 + ph); d += (t ? "L" : "M") + R2(x1 + ux * t + nx * a) + " " + R2(y1 + uy * t + ny * a); }
+    o += `<path d="${d}" fill="none" stroke="${col}" stroke-width="${sw}"/>`;
+  }
+  return o;
+};
+/* 기요셰 장미 문양(원형) */
+const ROSE = (cx, cy, R, a, petals, n, col, sw) => {
+  let o = "";
+  for (let j = 0; j < n; j++) {
+    const ph = j / n * Math.PI * 2 / petals; let d = "";
+    for (let i = 0; i <= 360; i++) { const t = i / 360 * Math.PI * 2, r = R + a * Math.sin(petals * t + ph * petals); d += (i ? "L" : "M") + R2(cx + r * Math.cos(t)) + " " + R2(cy + r * Math.sin(t)); }
+    o += `<path d="${d}Z" fill="none" stroke="${col}" stroke-width="${sw}"/>`;
+  }
+  return o;
+};
+/* 덩굴 소용돌이 하나 (모서리 장식용, 0,0 기준 · 오른쪽 아래로 뻗음) */
+const SCROLL = (col, sw) => `
+<path d="M0 0 C 18 0, 30 4, 40 14 C 48 22, 46 34, 36 34 C 28 34, 26 24, 33 21 C 37 19, 40 23, 38 26" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"/>
+<path d="M0 0 C 0 18, 4 30, 14 40 C 22 48, 34 46, 34 36 C 34 28, 24 26, 21 33 C 19 37, 23 40, 26 38" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"/>
+<path d="M6 6 C 16 10, 22 16, 24 24 C 26 32, 20 36, 16 32" fill="none" stroke="${col}" stroke-width="${sw * .7}" stroke-linecap="round"/>
+<path d="M14 2 C 30 -2, 50 2, 62 0" fill="none" stroke="${col}" stroke-width="${sw * .6}" stroke-linecap="round"/>
+<path d="M2 14 C -2 30, 2 50, 0 62" fill="none" stroke="${col}" stroke-width="${sw * .6}" stroke-linecap="round"/>
+<path d="M44 4 C 50 -2, 56 0, 58 4 C 54 6, 48 6, 44 4Z M4 44 C -2 50, 0 56, 4 58 C 6 54, 6 48, 4 44Z" fill="${col}"/>
+<circle cx="8" cy="8" r="3.2" fill="${col}"/>`;
+/* 무궁화 한 송이 (Blog J가 그린 단순화 모양) */
+const MUG = (cx, cy, r, col, core) => {
+  let o = "";
+  for (let i = 0; i < 5; i++) { const a = i / 5 * 360 - 90; o += `<path d="M0 0 C ${R2(r * .35)} ${R2(-r * .25)}, ${R2(r * .55)} ${R2(-r * .95)}, 0 ${R2(-r)} C ${R2(-r * .55)} ${R2(-r * .95)}, ${R2(-r * .35)} ${R2(-r * .25)}, 0 0Z" fill="${col}" transform="translate(${cx} ${cy}) rotate(${a + 36})"/>`; }
+  return o + `<circle cx="${cx}" cy="${cy}" r="${R2(r * .26)}" fill="${core}"/>`;
+};
+
+const LUX = [
+  { grp: "lux", wm: "#eadfbf", ins: 1.2, k: "royal", n: "기요셰 금박", ink: "#1d1a16", tc: "#5a4110", ac: "#7a5a1c",
+    f: (w, h, s, id) => {
+      const g = `url(#${id})`; let o = `<defs>${FOIL(id, "gold")}</defs>`;
+      o += `<rect x="${7 * s}" y="${7 * s}" width="${w - 14 * s}" height="${h - 14 * s}" fill="none" stroke="${g}" stroke-width="${2.6 * s}"/>`;
+      o += `<rect x="${19 * s}" y="${19 * s}" width="${w - 38 * s}" height="${h - 38 * s}" fill="none" stroke="${g}" stroke-width="${1.2 * s}"/>`;
+      const m = 13 * s, A = 3.1 * s, lam = 9 * s;
+      o += WAVE(m + 7 * s, m, w - m - 7 * s, m, A, lam, 5, g, .32 * s) + WAVE(m + 7 * s, h - m, w - m - 7 * s, h - m, A, lam, 5, g, .32 * s);
+      o += WAVE(m, m + 7 * s, m, h - m - 7 * s, A, lam, 5, g, .32 * s) + WAVE(w - m, m + 7 * s, w - m, h - m - 7 * s, A, lam, 5, g, .32 * s);
+      [[m, m], [w - m, m], [m, h - m], [w - m, h - m]].forEach(([x, y]) => { o += `<circle cx="${x}" cy="${y}" r="${7.4 * s}" fill="#fffdf6" stroke="${g}" stroke-width="${.9 * s}"/>` + ROSE(x, y, 4.6 * s, 1.5 * s, 8, 6, g, .28 * s) + `<circle cx="${x}" cy="${y}" r="${1.2 * s}" fill="${g}"/>`; });
+      /* 위 가운데 메달 */
+      o += ROSE(w / 2, 19 * s, 6 * s, 1.6 * s, 12, 4, g, .3 * s) + `<circle cx="${w / 2}" cy="${19 * s}" r="${3.6 * s}" fill="${g}"/>`;
+      return o; } },
+  { grp: "lux", wm: "#eadfbf", ins: 1.2, k: "filigree", n: "금박 덩굴", ink: "#1d1a16", tc: "#1d1a16", ac: "#8a6420",
+    f: (w, h, s, id) => {
+      const g = `url(#${id})`; let o = `<defs>${FOIL(id, "gold")}</defs>`;
+      o += `<rect x="${9 * s}" y="${9 * s}" width="${w - 18 * s}" height="${h - 18 * s}" fill="none" stroke="${g}" stroke-width="${1.8 * s}"/>`;
+      o += `<rect x="${12.5 * s}" y="${12.5 * s}" width="${w - 25 * s}" height="${h - 25 * s}" fill="none" stroke="${g}" stroke-width="${.5 * s}"/>`;
+      const sc = .36 * s;
+      [[15 * s, 15 * s, 1, 1], [w - 15 * s, 15 * s, -1, 1], [15 * s, h - 15 * s, 1, -1], [w - 15 * s, h - 15 * s, -1, -1]].forEach(([x, y, a, b]) => { o += `<g transform="translate(${x} ${y}) scale(${a * sc} ${b * sc})">${SCROLL(g, 2.2)}</g>`; });
+      /* 위 · 아래 가운데 장식 */
+      [[15 * s, 1], [h - 15 * s, -1]].forEach(([y, b]) => { o += `<g transform="translate(${w / 2} ${y}) scale(${sc} ${b * sc})"><path d="M-46 0 C -30 0, -20 10, -8 10 C -2 10, 0 4, 0 0 C 0 4, 2 10, 8 10 C 20 10, 30 0, 46 0" fill="none" stroke="${g}" stroke-width="2"/><path d="M0 0 L5 9 L0 18 L-5 9Z" fill="${g}"/><circle cx="-24" cy="6" r="2.4" fill="${g}"/><circle cx="24" cy="6" r="2.4" fill="${g}"/></g>`; });
+      return o; } },
+  { grp: "lux", wm: "#eadfbf", ins: 1.8, k: "mugung", n: "무궁화 금테", ink: "#1d1a16", tc: "#1d1a16", ac: "#8a6420",
+    f: (w, h, s, id) => {
+      const g = `url(#${id})`; let o = `<defs>${FOIL(id, "gold")}</defs>`;
+      o += `<rect x="${8 * s}" y="${8 * s}" width="${w - 16 * s}" height="${h - 16 * s}" fill="none" stroke="${g}" stroke-width="${3 * s}"/>`;
+      o += `<rect x="${13 * s}" y="${13 * s}" width="${w - 26 * s}" height="${h - 26 * s}" fill="none" stroke="${g}" stroke-width="${.6 * s}"/>`;
+      o += `<rect x="${15 * s}" y="${15 * s}" width="${w - 30 * s}" height="${h - 30 * s}" fill="none" stroke="${g}" stroke-width="${.3 * s}"/>`;
+      [[22 * s, 22 * s, 0], [w - 22 * s, 22 * s, 90], [w - 22 * s, h - 22 * s, 180], [22 * s, h - 22 * s, 270]].forEach(([x, y, r]) => {
+        o += `<g transform="translate(${x} ${y}) rotate(${r})">`;
+        o += `<path d="M0 0 C ${10 * s} ${-1 * s}, ${20 * s} ${-1 * s}, ${30 * s} ${-5 * s} M0 0 C ${-1 * s} ${10 * s}, ${-1 * s} ${20 * s}, ${-5 * s} ${30 * s}" fill="none" stroke="${g}" stroke-width="${.6 * s}"/>`;
+        [[12, -2.4, -14], [22, -3.8, -22], [-2.4, 12, 104], [-3.8, 22, 112]].forEach(([lx, ly, rot]) => { o += `<ellipse cx="${lx * s}" cy="${ly * s}" rx="${3.6 * s}" ry="${1.5 * s}" fill="${g}" transform="rotate(${rot} ${lx * s} ${ly * s})"/>`; });
+        o += MUG(0, 0, 6 * s, g, "#c23a2b") + `</g>`;
+      });
+      o += MUG(w / 2, 13 * s, 4.2 * s, g, "#c23a2b");
+      return o; } },
+  { grp: "lux", wm: "#efd9cf", ins: 2.5, k: "dangcho", n: "전통 당초문", ink: "#2a1a14", tc: "#6e2318", ac: "#6e2318",
+    f: (w, h, s, id) => {
+      const c = "#7a2e22", g = `url(#${id})`; let o = `<defs>${FOIL(id, "gold")}</defs>`;
+      o += `<rect x="${7 * s}" y="${7 * s}" width="${w - 14 * s}" height="${h - 14 * s}" fill="${c}"/><rect x="${18 * s}" y="${18 * s}" width="${w - 36 * s}" height="${h - 36 * s}" fill="#fffdf6"/>`;
+      o += `<rect x="${9 * s}" y="${9 * s}" width="${w - 18 * s}" height="${h - 18 * s}" fill="none" stroke="${g}" stroke-width="${.5 * s}"/><rect x="${16 * s}" y="${16 * s}" width="${w - 32 * s}" height="${h - 32 * s}" fill="none" stroke="${g}" stroke-width="${.5 * s}"/>`;
+      /* 덩굴 물결 + 말린 잎 */
+      const vine = (x1, y1, x2, y2) => { const L = Math.hypot(x2 - x1, y2 - y1), ux = (x2 - x1) / L, uy = (y2 - y1) / L, nx = -uy, ny = ux, lam = 14 * s, k = Math.round(L / lam), lm = L / k, A = 2 * s; let d = "", e = "";
+        for (let t = 0; t <= L + .01; t += lm / 20) { const a = A * Math.sin(t / lm * Math.PI * 2); d += (t ? "L" : "M") + R2(x1 + ux * t + nx * a) + " " + R2(y1 + uy * t + ny * a); }
+        for (let i = 0; i < k; i++) { const t = (i + .25) * lm, sg = 1, px = x1 + ux * t + nx * A, py = y1 + uy * t + ny * A, t2 = (i + .75) * lm, qx = x1 + ux * t2 - nx * A, qy = y1 + uy * t2 - ny * A;
+          e += `<circle cx="${R2(px - nx * 1.6 * s)}" cy="${R2(py - ny * 1.6 * s)}" r="${1.1 * s}" fill="none" stroke="${g}" stroke-width="${.45 * s}"/><circle cx="${R2(qx + nx * 1.6 * s)}" cy="${R2(qy + ny * 1.6 * s)}" r="${1.1 * s}" fill="none" stroke="${g}" stroke-width="${.45 * s}"/>`; }
+        return `<path d="${d}" fill="none" stroke="${g}" stroke-width="${.6 * s}"/>` + e; };
+      const m = 12.5 * s; o += vine(m + 6 * s, m, w - m - 6 * s, m) + vine(m + 6 * s, h - m, w - m - 6 * s, h - m) + vine(m, m + 6 * s, m, h - m - 6 * s) + vine(w - m, m + 6 * s, w - m, h - m - 6 * s);
+      [[m, m], [w - m, m], [m, h - m], [w - m, h - m]].forEach(([x, y]) => { o += MUG(x, y, 4 * s, g, c); });
+      return o; } },
+  { grp: "lux", wm: "#dfe3ea", ins: 2.5, k: "silver", n: "은박 기요셰 · 남색", ink: "#141a2c", tc: "#1d2f55", ac: "#1d2f55",
+    f: (w, h, s, id) => {
+      const g = `url(#${id})`, nv = "#1d2f55"; let o = `<defs>${FOIL(id, "silver")}</defs>`;
+      o += `<rect x="${6 * s}" y="${6 * s}" width="${w - 12 * s}" height="${h - 12 * s}" fill="${nv}"/><rect x="${17 * s}" y="${17 * s}" width="${w - 34 * s}" height="${h - 34 * s}" fill="#fffefb"/>`;
+      const m = 11.5 * s, A = 3 * s, lam = 8 * s;
+      o += WAVE(m, m, w - m, m, A, lam, 6, g, .3 * s) + WAVE(m, h - m, w - m, h - m, A, lam, 6, g, .3 * s) + WAVE(m, m, m, h - m, A, lam, 6, g, .3 * s) + WAVE(w - m, m, w - m, h - m, A, lam, 6, g, .3 * s);
+      o += `<rect x="${17 * s}" y="${17 * s}" width="${w - 34 * s}" height="${h - 34 * s}" fill="none" stroke="${g}" stroke-width="${1.2 * s}"/><rect x="${20 * s}" y="${20 * s}" width="${w - 40 * s}" height="${h - 40 * s}" fill="none" stroke="${nv}" stroke-width="${.35 * s}"/>`;
+      return o; } },
+  { grp: "lux", wm: "#f1dccf", k: "rosegold", n: "로즈골드 꽃테", ink: "#2b1d18", tc: "#7a3a2a", ac: "#7a3a2a",
+    f: (w, h, s, id) => {
+      const g = `url(#${id})`; let o = `<defs>${FOIL(id, "rose")}</defs>`;
+      o += `<rect x="${10 * s}" y="${10 * s}" width="${w - 20 * s}" height="${h - 20 * s}" rx="${4 * s}" fill="none" stroke="${g}" stroke-width="${1.4 * s}"/>`;
+      o += `<rect x="${13 * s}" y="${13 * s}" width="${w - 26 * s}" height="${h - 26 * s}" rx="${2.6 * s}" fill="none" stroke="${g}" stroke-width="${.4 * s}" stroke-dasharray="${.4 * s} ${1.4 * s}"/>`;
+      /* 위 · 아래 꽃 줄기 */
+      [[13 * s, 1], [h - 13 * s, -1]].forEach(([y, b]) => {
+        let d = `M${w * .22} ${y}`; o += `<path d="M${w * .2} ${y} C ${w * .35} ${y + b * 8 * s}, ${w * .65} ${y + b * 8 * s}, ${w * .8} ${y}" fill="none" stroke="${g}" stroke-width="${.6 * s}"/>`;
+        [.28, .36, .44, .56, .64, .72].forEach((t, i) => { const x = w * t, yy = y + b * (8 * s) * 4 * (t - .2) * (.8 - t) / (.6 * .6) * .75; o += `<ellipse cx="${R2(x)}" cy="${R2(yy)}" rx="${2.6 * s}" ry="${1.1 * s}" fill="${g}" transform="rotate(${(i % 2 ? 30 : -30) * b} ${R2(x)} ${R2(yy)})"/>`; });
+        o += MUG(w / 2, y + b * 6 * s, 3.6 * s, g, "#fff3e8");
+      });
+      return o; } },
+];
+/* 가운데 은은한 문양(워터마크) */
+const WMARK = (w, h, s, col) => ROSE(w / 2, h * .52, 46 * s, 9 * s, 14, 9, col, .25 * s) + ROSE(w / 2, h * .52, 26 * s, 5 * s, 10, 7, col, .22 * s);
+
+/* 고급 장식 */
+const LUXDECO = [
+  { k: "goldseal", n: "금박 실 · 리본", svg: id => `<defs>${FOIL(id, "gold")}</defs><path d="M36 60 L26 98 L36 92 L42 100 L50 64Z M64 60 L74 98 L64 92 L58 100 L50 64Z" fill="#8f1f1f"/><path d="M40 60 L33 92 M60 60 L67 92" stroke="#c9a24a" stroke-width="1"/>${(() => { let d = ""; for (let i = 0; i < 48; i++) { const a = i / 48 * Math.PI * 2, r = i % 2 ? 30 : 34; d += (i ? "L" : "M") + R2(50 + r * Math.cos(a)) + " " + R2(40 + r * Math.sin(a)); } return `<path d="${d}Z" fill="url(#${id})"/>`; })()}${ROSE(50, 40, 22, 2.4, 16, 4, "#7d5a1c", .4)}<circle cx="50" cy="40" r="16" fill="url(#${id})" stroke="#7d5a1c" stroke-width=".6"/><path d="${STAR(50, 40, 8)}" fill="#7d5a1c"/>` },
+  { k: "goldlaurel", n: "금박 월계관", svg: id => `<defs>${FOIL(id, "gold")}</defs>${(() => { const F = `url(#${id})`; let o = "";
+    [1, -1].forEach(sd => { let d = ""; for (let i = 0; i <= 20; i++) { const th = (100 + i * 7.5) * Math.PI / 180; const x = 50 - sd * 36 * Math.cos(th) * -1, y = 52 + 36 * Math.sin(th); d += (i ? "L" : "M") + R2(50 + sd * (36 * Math.cos(th))) + " " + R2(y); } o += `<path d="${d}" fill="none" stroke="${F}" stroke-width="1.6"/>`;
+      for (let i = 0; i < 9; i++) { const deg = 104 + i * 16, th = deg * Math.PI / 180, x = 50 + sd * 36 * Math.cos(th), y = 52 + 36 * Math.sin(th), tang = sd > 0 ? deg + 90 : 90 - deg;
+        [[-1, 6.8], [1, 6.8]].forEach(([io]) => { const ox = x + sd * io * 4.2 * Math.cos(th), oy = y + io * 4.2 * Math.sin(th); o += `<ellipse cx="${R2(ox)}" cy="${R2(oy)}" rx="${R2(6.6 - i * .25)}" ry="2.4" fill="${F}" transform="rotate(${R2(tang + io * sd * 28)} ${R2(ox)} ${R2(oy)})"/>`; }); }
+    }); return o; })()}<path d="M44 86 L38 98 L44 95 L47 99 L50 89 L53 99 L56 95 L62 98 L56 86Z" fill="#8f1f1f"/><circle cx="50" cy="87" r="3.4" fill="#8f1f1f"/>` },
+];
+
+const DES_BASIC = [
   { k: "gold", n: "클래식 금테", ink: "#1d1a16", tc: "#1d1a16", ac: "#1d1a16",
     f: (w, h, s) => { const c = "#9a7a2e"; let o = `<rect x="${8 * s}" y="${8 * s}" width="${w - 16 * s}" height="${h - 16 * s}" fill="none" stroke="${c}" stroke-width="${2.4 * s}"/><rect x="${12 * s}" y="${12 * s}" width="${w - 24 * s}" height="${h - 24 * s}" fill="none" stroke="${c}" stroke-width="${.7 * s}"/>`;
       [[8, 8, 1, 1], [w / s - 8, 8, -1, 1], [8, h / s - 8, 1, -1], [w / s - 8, h / s - 8, -1, -1]].forEach(([x, y, a, b]) => { o += `<path d="M${(x + a * 4) * s} ${(y + b * 18) * s} L${(x + a * 4) * s} ${(y + b * 4) * s} L${(x + a * 18) * s} ${(y + b * 4) * s}" fill="none" stroke="${c}" stroke-width="${1.6 * s}"/><circle cx="${(x + a * 9) * s}" cy="${(y + b * 9) * s}" r="${2 * s}" fill="${c}"/>`; });
@@ -479,6 +613,9 @@ const DES = [
   { k: "plaque", n: "패 모양", ink: "#3b2a1a", tc: "#3b2a1a", ac: "#3b2a1a", inset: 1.25,
     f: (w, h, s) => `<rect x="${3 * s}" y="${3 * s}" width="${w - 6 * s}" height="${h - 6 * s}" rx="${9 * s}" fill="#3b2a1a"/><rect x="${15 * s}" y="${15 * s}" width="${w - 30 * s}" height="${h - 30 * s}" rx="${4 * s}" fill="#d8c08a"/><rect x="${21 * s}" y="${21 * s}" width="${w - 42 * s}" height="${h - 42 * s}" fill="none" stroke="#7a5a2a" stroke-width="${.8 * s}"/>${[[27, 27], [w / s - 27, 27], [27, h / s - 27], [w / s - 27, h / s - 27]].map(([x, y]) => `<circle cx="${x * s}" cy="${y * s}" r="${2.4 * s}" fill="#7a5a2a"/>`).join("")}` },
 ];
+/* 밋밋한 기본 3가지(남색 이중선 · 미니멀 · 파랑 테)는 11-12 뺌 — 예전 저장값은 아래 DES_OLD로 바꿈 */
+const DES = [...LUX, ...DES_BASIC.filter(x => !["navy", "minimal", "ribbon"].includes(x.k))];
+const DES_OLD = { navy: "silver", minimal: "filigree", ribbon: "royal" };
 const DESK = Object.fromEntries(DES.map(x => [x.k, x]));
 
 /* 장식 그림 (viewBox 0 0 100 100) */
@@ -493,6 +630,7 @@ const DECO = [
   { k: "heart", n: "하트", pos: "bl", svg: `<path d="M50 86 C 18 64, 8 44, 20 28 C 30 16, 46 20, 50 32 C 54 20, 70 16, 80 28 C 92 44, 82 64, 50 86Z" fill="#e0697a"/><path d="M30 34 C 33 28, 40 27, 43 31" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M78 14 C 74 10, 68 13, 70 18 C 72 22, 78 25, 78 25 C 78 25, 84 22, 86 18 C 88 13, 82 10, 78 14Z" fill="#f0a0ac"/>` },
   { k: "flower", n: "꽃", pos: "bl", svg: `<path d="M50 52 C 48 70, 44 84, 40 96 M50 52 C 56 70, 62 82, 70 92" fill="none" stroke="#3e7a55" stroke-width="2.4"/><ellipse cx="38" cy="78" rx="8" ry="3.4" fill="#6aa27b" transform="rotate(-30 38 78)"/><ellipse cx="64" cy="76" rx="8" ry="3.4" fill="#6aa27b" transform="rotate(30 64 76)"/>${[[50, 34, 15, "#e0697a"], [26, 52, 10, "#f0b43c"], [74, 50, 11, "#9a7ad1"]].map(([x, y, r, c]) => Array.from({ length: 5 }, (_, i) => { const a = i / 5 * Math.PI * 2 - Math.PI / 2; return `<circle cx="${r2(x + r * .62 * Math.cos(a))}" cy="${r2(y + r * .62 * Math.sin(a))}" r="${r2(r * .5)}" fill="${c}"/>`; }).join("") + `<circle cx="${x}" cy="${y}" r="${r2(r * .32)}" fill="#fff3a3"/>`).join("")}` },
 ];
+DECO.splice(1, 0, ...LUXDECO.map(x => Object.assign({ pos: "bl" }, x)));
 const DECOK = Object.fromEntries(DECO.map(x => [x.k, x]));
 const PAPERS = [["a4", "A4", 210, 297], ["b5", "B5", 182, 257], ["p8", "8절", 272, 394], ["custom", "직접(mm)", 0, 0]];
 </script>
@@ -504,6 +642,8 @@ const LSK = "bj-award2";   /* 11-11 단계 순서 바꿈(디자인 먼저) → �
 const STEPS = [["des", "디자인"], ["kind", "내용 고르기"], ["text", "내용 · 꾸미기"], ["who", "받는 사람"], ["seal", "직인 · 로고"], ["print", "인쇄"]];
 /* 그리는 방식: "full" 인쇄용 · "ph" 미리보기(빈 칸은 흐린 안내 글자) · "blank" 테두리만(디자인 단계) */
 let DRAW = "full";
+let GID = 0; const gid = () => "bjg" + (++GID);
+const decoSvg = E => typeof E.svg === "function" ? E.svg(gid()) : (E.svg || "");
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const WD = "일월화수목금토";
@@ -514,15 +654,16 @@ const IC_AW = '<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M
 function BLANK(k) {
   const K = KIND[k || "award"];
   return { step: 0, kind: K.k, title: K.title, aw: K.aw, body: K.tx[0], tpl: 0, who: K.who,
-    des: K.des, font: K.font, deco: K.deco, decoPos: "bl", orient: K.orient || "p", desPicked: false, kindPicked: false, decoPicked: false,
+    des: k ? K.des : DES[0].k, font: K.font, deco: K.deco, decoPos: "bl", orient: K.orient || "p", desPicked: false, kindPicked: false, decoPicked: false,
     people: K.sample.map(([dept, name]) => ({ dept, name, aw: "" })), sampleP: true, cur: 0,
     date: "2026-12-20", dateFmt: "k", org: K.org, rep: "", sampleOrg: true,
     noOn: false, noYear: "2026", noStart: 1,
     sealMode: "auto", sealText: "", sealSrc: "", sealImg: "", sealBg: true, sealRed: true, sealSize: 24, sealDx: 0, sealDy: 0,
-    logo: "",
+    logo: "", wm: false,
     paper: "a4", pw: 210, ph: 297, mode: "white", preTitle: false, offX: 0, offY: 0, fs: 100 };
 }
 let S = (() => { try { const v = JSON.parse(localStorage.getItem(LSK) || "null"); return v ? Object.assign(BLANK(v.kind), v) : BLANK(); } catch (e) { return BLANK(); } })();
+if (!DESK[S.des]) S.des = DES_OLD[S.des] || DES[0].k;
 let saveT = null;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LSK, JSON.stringify(S)); } catch (e) { toast("이 기기에 저장할 자리가 모자라요 — 직인 · 로고 이미지를 작은 것으로 바꿔 보세요"); } }, 300); }
 
@@ -571,7 +712,7 @@ function sheetHtml(p, i, test) {
   const plq = !pre && D.k === "plaque", band = !pre && D.band;
   const ink = pre ? "#141414" : D.ink, tc = pre ? "#141414" : D.tc, ac = pre ? "#141414" : D.ac;
   const aw = (p.aw || S.aw || "").trim();
-  const ins = plq ? 4.5 : 0, dn = band ? 2.5 : 0;
+  const ins = plq ? 4.5 : pre ? 0 : (D.ins || 0), dn = band ? 2.5 : 0;
   const L = land ? { no: 9.5, nl: 11, lt: 4.6, lh: 9, ti: 11.5, aw: 25, wh: aw ? 26.5 : 24, wr: 11, bo: aw ? 38 : 35.5, bx: 12, da: 70.5, og: 79 }
                  : { no: 7.4, nl: 14, lt: 4.4, lh: 6.6, ti: 13, aw: 24.5, wh: aw ? 31 : 27.5, wr: 13, bo: aw ? 41.5 : 38.5, bx: 13, da: 72.5, og: 79 };
   if (plq) { L.ti += land ? 3 : 2; L.aw += 2; L.wh += 2; L.bo += 2; L.da -= 2; L.og -= 3; L.no += 4; }
@@ -579,14 +720,14 @@ function sheetHtml(p, i, test) {
   const title = String(S.title || ""), spaced = /\s/.test(title.trim());
   const ls = kids ? .06 : spaced ? .42 : .12;
   let o = `<div class="sh${test ? " test" : ""}" style="width:${w}mm;height:${h}mm;font-size:${base.toFixed(2)}mm;font-family:'${S.font}',serif;color:${ink}">`;
-  if (!pre) o += `<svg class="fr" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${D.f(w, h, s)}</svg>`;
+  if (!pre) o += `<svg class="fr" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${D.f(w, h, s, gid())}${S.wm && DRAW !== "blank" ? WMARK(w, h, s, D.wm || "#f3eee3") : ""}</svg>`;
   else if (!test) o += `<div class="ghost" style="left:9mm;top:9mm;right:9mm;bottom:9mm"><span>사 온 상장 용지의 테두리 자리 — 글자만 인쇄돼요</span></div>`;
   if (DRAW === "blank") return o + `</div>`;
   const PH = (v, t) => v ? esc(v) : DRAW === "ph" ? `<span style="opacity:.32">${t}</span>` : "";
   if (!pre && S.deco !== "none" && DECOK[S.deco]) {
     const z = Math.min(w, h) * (S.decoPos === "tc" ? .085 : .16);
     const st = S.decoPos === "tc" ? `left:calc(50% - ${z / 2}mm);top:${(land ? 3 : 3.2) + ins / 2}%` : S.decoPos === "br" ? `right:${9 + ins}%;bottom:${(land ? 8 : 6.5) + ins}%` : `left:${9 + ins}%;bottom:${(land ? 8 : 6.5) + ins}%`;
-    o += `<div class="dec" style="width:${z.toFixed(1)}mm;height:${z.toFixed(1)}mm;${st}"><svg viewBox="0 0 100 100">${DECOK[S.deco].svg}</svg></div>`;
+    o += `<div class="dec" style="width:${z.toFixed(1)}mm;height:${z.toFixed(1)}mm;${st}"><svg viewBox="0 0 100 100">${decoSvg(DECOK[S.deco])}</svg></div>`;
   }
   o += `<div class="lay" style="position:absolute;inset:0;${pre ? `transform:translate(${+S.offX || 0}mm,${+S.offY || 0}mm)` : ""}">`;
   if (band) o += `<div class="t" style="top:4.2%;color:#fff;font-size:.95em;letter-spacing:.3em;padding-left:.3em;font-family:SUIT,sans-serif;font-weight:700">${PH(S.org, "주는 곳")}</div>`;
@@ -621,7 +762,7 @@ function stepDes() {
   <div class="f"><div class="chips">${chip("mode", "white", "흰 종이(테두리까지)", !pre)}${chip("mode", "pre", "사 온 상장 용지(글자만)", pre)}</div>
   ${pre ? `<p class="hint">테두리가 인쇄된 상장 용지에는 <b>글자만</b> 찍어요 — 테두리는 고르지 않아도 돼요. 글자 위치 맞추기 · 시험 인쇄는 마지막 「인쇄」 단계에 있어요.</p>` : ""}</div>
   ${pre ? "" : `<div class="yt-sec">테두리</div>
-  <div class="dgrid">${DES.map(D => `<button class="dc${S.desPicked && S.des === D.k ? " on" : ""}" data-des="${D.k}"><div class="thw">${sheetHtml({ dept: "", name: "" }, 0, false, D.k, "blank")}</div><em>${D.n}</em></button>`).join("")}</div>`}
+  ${[["lux", "고급 — 금박 · 은박 · 물결무늬"], ["", "기본"]].map(([g, t]) => `<div class="dgh">${t}</div><div class="dgrid">${DES.filter(D => (D.grp || "") === g).map(D => `<button class="dc${S.desPicked && S.des === D.k ? " on" : ""}" data-des="${D.k}"><div class="thw">${sheetHtml({ dept: "", name: "" }, 0, false, D.k, "blank")}</div><em>${D.n}</em></button>`).join("")}</div>`).join("")}`}
   <div class="yt-sec">방향</div>
   <div class="f"><div class="chips">${chip("orient", "p", "세로", S.orient === "p")}${chip("orient", "l", "가로", S.orient === "l")}</div><p class="hint">글꼴 · 장식 그림은 3단계 「내용 · 꾸미기」에서 골라요.</p></div>`;
 }
@@ -634,7 +775,8 @@ function stepKind() {
 function decoBlock() {
   if (S.mode === "pre") return `<div class="yt-sec">꾸미기 · 장식 그림</div><div class="box">사 온 상장 용지에는 <b>글자만</b> 찍어서 장식 그림은 넣지 않아요. 흰 종이로 바꾸려면 1단계 「어디에 인쇄해요?」에서 고르세요.</div>`;
   return `  <div class="yt-sec">꾸미기 · 장식 그림</div>
-  <div class="egrid">${DECO.map(E => `<button class="ec${S.deco === E.k ? " on" : ""}" data-deco="${E.k}"><div class="ei${E.k === "none" ? " no" : ""}">${E.svg ? `<svg viewBox="0 0 100 100">${E.svg}</svg>` : "없음"}</div><em>${E.n}</em></button>`).join("")}</div>
+  <div class="egrid">${DECO.map(E => `<button class="ec${S.deco === E.k ? " on" : ""}" data-deco="${E.k}"><div class="ei${E.k === "none" ? " no" : ""}">${E.svg ? `<svg viewBox="0 0 100 100">${decoSvg(E)}</svg>` : "없음"}</div><em>${E.n}</em></button>`).join("")}</div>
+  <div class="f" style="margin-top:10px"><div class="lb">가운데 은은한 문양</div><div class="chips">${chip("wm", "1", "넣기", !!S.wm)}${chip("wm", "0", "안 넣기", !S.wm)}</div><p class="hint">글자 뒤에 아주 옅은 물결 문양 — 상장 용지 느낌이 나요.</p></div>
   ${S.deco !== "none" ? `<div class="f" style="margin-top:10px"><div class="lb">그림 자리</div><div class="chips">${chip("dpos", "bl", "아래 왼쪽", S.decoPos === "bl")}${chip("dpos", "br", "아래 오른쪽", S.decoPos === "br")}${chip("dpos", "tc", "맨 위 가운데(작게)", S.decoPos === "tc")}</div></div>` : ""}`;
 }
 function stepText() {
@@ -857,6 +999,7 @@ document.addEventListener("click", e => {
   if (d.des) { S.des = d.des; S.desPicked = true; save(); return render(); }   /* 방향은 「방향」에서 고른 그대로(패 모양도 자동으로 가로로 바꾸지 않음) */
   if (d.deco) { S.deco = d.deco; S.decoPicked = true; save(); return render(); }
   if (d.dpos) { S.decoPos = d.dpos; save(); return render(); }
+  if (d.wm) { S.wm = d.wm === "1"; save(); return render(); }
   if (d.font) { S.font = d.font; S.decoPicked = true; save(); return render(); }
   if (d.orient) { S.orient = d.orient; S.orientPicked = true; save(); return render(); }
   if (d.awc != null) { S.aw = d.awc; save(); return render(); }

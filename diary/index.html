@@ -655,6 +655,7 @@ body.bgimg .hd .ttl{text-shadow:0 1px 6px rgba(255,255,255,.8)}
 </style></head>
 <body>
 <div id="root"></div><div id="toast" role="status" aria-live="polite"></div>
+<script>/* 11-11 제이: 휴대폰에서는 폴더 저장이 의미 없음 → 안드로이드는 폴더 저장 기능을 끄고 구글 드라이브 · 백업 파일로(다른 설치형 앱과 같게) */if(/Android/i.test(navigator.userAgent))try{window.showDirectoryPicker=undefined}catch(e){}</script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
    Blog J 공통 동기화 핵심(bj-sync-core.js) — 2026-11-08 점검안 · 서버 없음
@@ -1220,7 +1221,7 @@ function dayView() {
   const dp = S.dp === "R" ? "R" : "L";
   const pgsw = `<div class="pgsw" role="tablist" aria-label="하루 쪽 넘기기"><button role="tab" class="${dp === "L" ? "on" : ""}" data-dp="L" aria-selected="${dp === "L"}"><b>1</b>오늘 · 할 일</button><button role="tab" class="${dp === "R" ? "on" : ""}" data-dp="R" aria-selected="${dp === "R"}"><b>2</b>오늘 이야기</button></div>`;
   const pgnx = `<button class="pgnx" data-dp="${dp === "L" ? "R" : "L"}">${dp === "L" ? "2쪽 오늘 이야기 ›" : "‹ 1쪽 오늘 · 할 일"}</button>`;
-  L += dp === "L" ? pgnx : ""; R += dp === "R" ? pgnx : "";
+  /* 11-11 제이: 쪽 아래 「2쪽 오늘 이야기 ›」 단추가 사진 · 스티커와 겹침 → 뺌(위 「1 · 2」 탭 · 옆으로 밀기로 넘김) */ void pgnx;
   const mtools = "";   /* 11-08: 넣기 단추는 꾸미기 띠 안으로 */
   return pgsw + book(L, R, deco ? `<nav class="ltools" aria-label="꾸미기">${toolBtns(d, "ltool")}</nav>` : "").replace('<div class="book" id="book">', `<div class="book dayb" id="book" data-dp="${dp}">`) + mtools + mbar;
 }

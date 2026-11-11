@@ -476,7 +476,7 @@ const BJ_GATE = (() => {
 </script>
 <script>/* ══════════ 연말정산 계산기 v1.0 — 화면 (Blog J, 2026-11-10) ══════════ */
 const TOOL = "yearend", APP_VER = "1.0", YEAR = 2026;
-const BUILD = "2026-11-10(화) 23:00";
+const BUILD = "2026-11-11(수) 23:10";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-yearend1";
 const STEPS = [["pay", "급여"], ["fam", "가족"], ["card", "카드"], ["spend", "보험·의료·교육"], ["save", "연금·주택·월세"], ["res", "결과"]];
@@ -743,7 +743,7 @@ function tips(r) {
     if (g > 0) out.push([IC.heart, `고향사랑기부 ${man(to - S.dnHome)} 더 하면`, to === 1e5 ? "10만원까지는 낸 만큼 거의 그대로 돌려받고 답례품(기부액 30%)까지" : "10만~20만원 구간 공제율 40%(2026년부터) + 답례품", tipWon(g), false, g]);
   }
   /* 월세 */
-  if (S.salary > 0 && S.salary <= 8e7 && !S.rent) out.push([IC.home, "무주택 세대주가 월세를 낸다면", `연 1,000만원까지 ${S.salary <= 55e6 ? 17 : 15}% 세액공제 — 집주인 동의 없이 계약서 · 이체 내역으로`, "확인", true, 0]);
+  if (S.salary > 0 && S.salary <= 8e7 && !S.rent && !zero) out.push([IC.home, "무주택 세대주가 월세를 낸다면", `연 1,000만원까지 ${S.salary <= 55e6 ? 17 : 15}% 세액공제 — 집주인 동의 없이 계약서 · 이체 내역으로`, "확인", true, 0]);
   /* 의료비 시작선 */
   if (!S.dual && S.medSelf + S.medOther > 0 && r.credits.medical === 0 && !r.credits.standard) out.push([IC.med, `의료비가 총급여 3%(${man(S.salary * 0.03)})를 안 넘었어요`, "그 아래는 공제 0원 · 안경 · 산후조리원 · 실손 받은 금액 빼기도 확인", "공제 0원", true, 0]);
   /* 돈이 되는 것 먼저 */
@@ -817,7 +817,7 @@ function stepRes(r) {
   ${L("− 근로소득세액공제", won(cr.earned), "s")}${cr.child ? L(`− 자녀세액공제(${kidInfo().credit}명)`, won(cr.child), "s") : ""}${cr.birth ? L("− 출산 · 입양", won(cr.birth), "s") : ""}${cr.marriage ? L("− 혼인세액공제", won(cr.marriage), "s") : ""}
   ${cr.pension ? L(`− 연금계좌(${Math.round(r.pensionRate * 100)}%)`, won(cr.pension), "s") : ""}${cr.insurance ? L("− 보험료", won(cr.insurance), "s") : ""}${cr.medical ? L("− 의료비", won(cr.medical), "s") : ""}${cr.edu ? L("− 교육비", won(cr.edu), "s") : ""}${cr.donation ? L("− 기부금", won(cr.donation), "s") : ""}${cr.rent ? L("− 월세", won(cr.rent), "s") : ""}${cr.standard ? L("− 표준세액공제", won(cr.standard), "s") : ""}
   ${L("결정세액(소득세)", won(r.decided), "t")}${L("− 이미 낸 소득세", won(r.paid), "s")}${L(r.diff <= 0 ? "소득세 돌려받음" : "소득세 더 냄", won(Math.abs(r.diff)))}
-  ${L("지방소득세(결정세액 10%) − 이미 낸 지방소득세", (r.local - r.paidLocal === 0 ? "" : r.local - r.paidLocal < 0 ? "−" : "+") + won(Math.abs(r.local - r.paidLocal)))}
+  ${L("지방소득세(결정세액 10%)", won(r.local), "s")}${L("− 이미 낸 지방소득세", won(r.paidLocal), "s")}${L(r.local - r.paidLocal <= 0 ? "지방소득세 돌려받음" : "지방소득세 더 냄", won(Math.abs(r.local - r.paidLocal)))}
   ${L(r.diffAll <= 0 ? "모두 돌려받음" : "모두 더 냄", won(Math.abs(r.diffAll)) + "원", "t")}
   </div>
   ${r.stdChosen ? `<div class="box" style="margin-top:14px">건강보험료 소득공제 · 보험 · 의료 · 교육 · 월세 공제를 받는 것보다 <b>표준세액공제 13만원</b>이 세금이 <b class="num">${won(r.alt.decided - r.decided)}원</b> 적어 표준세액공제로 계산했어요.</div>` : ""}

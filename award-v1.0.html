@@ -498,7 +498,7 @@ const PAPERS = [["a4", "A4", 210, 297], ["b5", "B5", 182, 257], ["p8", "8절", 2
 </script>
 <script>/* 상장 만들기 v1.0 — Blog J (블로그 실행형 · 입력한 내용은 이 기기 브라우저에만) */
 const TOOL = "award", APP_VER = "1.0";
-const BUILD = "2026-11-11(수) 23:20";
+const BUILD = "2026-11-11(수) 23:40";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-award2";   /* 11-11 단계 순서 바꿈(디자인 먼저) → 새 이름 */
 const STEPS = [["des", "디자인"], ["kind", "내용 고르기"], ["text", "내용 · 꾸미기"], ["who", "받는 사람"], ["seal", "직인 · 로고"], ["print", "인쇄"]];
@@ -631,6 +631,12 @@ function stepKind() {
   <div class="tgrid">${KINDS.map(card).join("")}${card(KIND.custom).replace('class="tc', 'class="tc own')}</div>
   ${S.kindPicked ? "" : `<div class="box" style="margin-top:14px">하나를 고르면 미리 보기에 바로 들어가요. 처음부터 쓰려면 「직접 입력」을 고르세요.</div>`}`;
 }
+function decoBlock() {
+  if (S.mode === "pre") return `<div class="yt-sec">꾸미기 · 장식 그림</div><div class="box">사 온 상장 용지에는 <b>글자만</b> 찍어서 장식 그림은 넣지 않아요. 흰 종이로 바꾸려면 1단계 「어디에 인쇄해요?」에서 고르세요.</div>`;
+  return `  <div class="yt-sec">꾸미기 · 장식 그림</div>
+  <div class="egrid">${DECO.map(E => `<button class="ec${S.deco === E.k ? " on" : ""}" data-deco="${E.k}"><div class="ei${E.k === "none" ? " no" : ""}">${E.svg ? `<svg viewBox="0 0 100 100">${E.svg}</svg>` : "없음"}</div><em>${E.n}</em></button>`).join("")}</div>
+  ${S.deco !== "none" ? `<div class="f" style="margin-top:10px"><div class="lb">그림 자리</div><div class="chips">${chip("dpos", "bl", "아래 왼쪽", S.decoPos === "bl")}${chip("dpos", "br", "아래 오른쪽", S.decoPos === "br")}${chip("dpos", "tc", "맨 위 가운데(작게)", S.decoPos === "tc")}</div></div>` : ""}`;
+}
 function stepText() {
   const K = KIND[S.kind];
   return `<p class="yt-k">3단계</p><h2>내용 고치고 꾸미기</h2><p class="yt-lead">${K.k === "custom" ? "제목 · 본문을 직접 써 주세요." : "예시를 고르고 고쳐 쓰면 돼요."} 모든 장에 같은 문구가 들어가요.</p>
@@ -639,7 +645,7 @@ function stepText() {
   <div class="two"><div class="ti"><input data-pf="dept" data-i="0" value="${esc((S.people[0] || {}).dept)}" placeholder="소속 · 학년(없어도 돼요)"></div><div class="ti"><input data-pf="name" data-i="0" value="${esc((S.people[0] || {}).name)}" placeholder="이름"></div></div>
   <div class="chips" style="margin-top:8px">${WHO.map(([k, n]) => chip("who", k, n, S.who === k)).join("")}</div>
   <p class="hint">여러 명이면 다음 「받는 사람」 단계에서 더하거나 엑셀 · 카톡 목록을 붙여 넣어요.</p></div>
-  <div class="two"><div class="f"><div class="lb">제목</div>${ti("title", "상 장")}</div>
+  <div class="two"><div class="f"><div class="lb">제목</div>${ti("title", "상 장", S.mode === "pre" && !S.preTitle ? "disabled" : "")}${S.mode === "pre" ? `<div class="chips" style="margin-top:8px">${tog("preTitle", "제목도 인쇄")}</div><p class="hint">용지에 「상장」 글자가 이미 있으면 끄세요</p>` : ""}</div>
   <div class="f"><div class="lb">상 이름 <span>없으면 비워 두세요</span></div>${ti("aw", "예: 우 수 상")}</div></div>
   ${K.awc.length ? `<div class="chips" style="margin:-4px 0 14px">${K.awc.map(a => chip("awc", a, a.replace(/ /g, ""), S.aw === a)).join("")}${chip("awc", "", "없음", !S.aw)}</div>` : ""}
   ${K.tx.length ? `<div class="f"><div class="lb">문구 예시</div>${K.tx.map((t, i) => `<button class="ex${S.body === t ? " on" : ""}" data-tx="${i}"><i>${i + 1}</i>${esc(t.replace(/\n/g, " / "))}</button>`).join("")}</div>` : ""}
@@ -652,9 +658,7 @@ function stepText() {
   ${S.noOn ? `<div class="two" style="margin-top:10px"><div><div class="hint" style="margin:0 0 4px">연도</div>${ti("noYear", "2026", 'inputmode="numeric"')}</div><div><div class="hint" style="margin:0 0 4px">첫 번호</div>${ti("noStart", "1", 'inputmode="numeric"')}</div></div>` : ""}</div>
   <div class="yt-sec">꾸미기 · 글꼴</div>
   <div class="f"><div class="chips">${FONTS.map(([f, n]) => chip("font", f, n, S.font === f, `font-family:'${f}',serif;font-size:16px`)).join("")}</div><p class="hint">모두 무료 글꼴(OFL)이에요.</p></div>
-  <div class="yt-sec">꾸미기 · 장식 그림</div>
-  <div class="egrid">${DECO.map(E => `<button class="ec${S.deco === E.k ? " on" : ""}" data-deco="${E.k}"><div class="ei${E.k === "none" ? " no" : ""}">${E.svg ? `<svg viewBox="0 0 100 100">${E.svg}</svg>` : "없음"}</div><em>${E.n}</em></button>`).join("")}</div>
-  ${S.deco !== "none" ? `<div class="f" style="margin-top:10px"><div class="lb">그림 자리</div><div class="chips">${chip("dpos", "bl", "아래 왼쪽", S.decoPos === "bl")}${chip("dpos", "br", "아래 오른쪽", S.decoPos === "br")}${chip("dpos", "tc", "맨 위 가운데(작게)", S.decoPos === "tc")}</div></div>` : ""}`;
+  ${decoBlock()}`;
 }
 function stepWho() {
   const rows = S.people.map((p, i) => `<div class="prow${i === S.cur ? " cur" : ""}"><span class="nn">${i + 1}</span><div class="ti"><input data-pf="dept" data-i="${i}" value="${esc(p.dept)}" placeholder="소속 · 학년"></div><div class="ti"><input data-pf="name" data-i="${i}" value="${esc(p.name)}" placeholder="이름"></div><div class="ti aw3"><input data-pf="aw" data-i="${i}" value="${esc(p.aw)}" placeholder="상 이름(따로)"></div><button class="del" data-pdel="${i}" aria-label="지우기">×</button></div>`).join("");

@@ -1,0 +1,30 @@
+{
+ "id": "/jesa_tools/shortcut/",
+ "name": "단축키 사전 — Blog J",
+ "short_name": "단축키 사전",
+ "description": "엑셀 · 한글 · 윈도우 11 · 크롬 · 파워포인트 · 워드 단축키를 하고 싶은 일로 찾기",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#FAF6EE",
+ "theme_color": "#0B3D4A",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

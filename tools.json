@@ -526,6 +526,43 @@
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/kit/",
    "img": "https://pegasus0710-arch.github.io/jesa_tools/kit/icon-192.png"
+  },
+  {
+   "name": "단축키 사전",
+   "category": "문서",
+   "area": "doc",
+   "icon": "doc",
+   "type": [
+    "설치"
+   ],
+   "desc": "엑셀 · 한글 · 윈도우 11 · 크롬 · 파워포인트 · 워드 단축키 1,348개를 하고 싶은 일이나 키로 찾기 — PC에 설치해 두고 인터넷 없이도",
+   "short": "단축키 1,348개 찾기",
+   "link": "https://luvbong.tistory.com/834",
+   "open": "2026-11-15T20:00:00+09:00",
+   "ver": "1.0",
+   "app": "https://pegasus0710-arch.github.io/jesa_tools/shortcut/",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/shortcut.png"
+  },
+  {
+   "name": "상장 만들기",
+   "category": "문서",
+   "area": "doc",
+   "icon": "printer",
+   "type": [
+    "온라인"
+   ],
+   "desc": "상장 · 표창장 · 감사장 · 수료증을 이름만 넣어 바로 인쇄 — 여러 명 한 번에 · 직인 · 금박 테두리 13가지 · PDF",
+   "short": "상장 · 표창장 여러 명 인쇄",
+   "link": "https://luvbong.tistory.com/835",
+   "open": "2026-11-26T09:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "상장 만들기",
+     "q": "award"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/award.png"
   }
  ],
  "soon": [
@@ -783,6 +820,21 @@
    "no": 832,
    "t": "워드 단축키 배경화면 — 서식 지우기 · 스타일 단축키 32개",
    "at": "2026-12-24T20:00:00+09:00"
+  },
+  {
+   "no": 833,
+   "t": "연금저축 · IRP 세액공제 — 12월에 얼마 넣으면 얼마 돌려받나",
+   "at": "2026-11-13T09:00:00+09:00"
+  },
+  {
+   "no": 834,
+   "t": "단축키 사전 — 6개 프로그램 단축키 1,348개 찾기",
+   "at": "2026-11-15T20:00:00+09:00"
+  },
+  {
+   "no": 835,
+   "t": "상장 만들기 — 여러 명 한 번에 인쇄 · 직인 · 금박 테두리",
+   "at": "2026-11-26T09:00:00+09:00"
   }
  ],
  "kit": {

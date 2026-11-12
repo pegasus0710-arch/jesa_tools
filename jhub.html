@@ -179,7 +179,7 @@ const APPS = [
  /* ── 블로그 · 관리 ── */
  { g: "etc", n: "블로그 · 관리", v: "", links: [["블로그 첫 화면", P("")], ["무료 도구 페이지", P("pages/tools")], ["블로그 관리", P("manage")], ["tools.json", "tools.json"], ["실행 카드 launch.html", "launch.html"], ["개인정보 처리방침", "privacy.html"]] }
 ];
-const SEC = { app: ["설치형 앱", "주소 하나로 PC · 휴대폰 — 잠금 없음"], web: ["블로그 실행형 웹 도구", "블로그 글의 실행 카드로 열기 — 바로 열기는 시험 모드에서만"], dev: ["개발 중 · 샘플", "블로그에 아직 안 나간 것"], idea: ["아이디어 · 미개발", "아이디어 보드에 있고 아직 만들지 않은 것 — 시기는 계획(안)"], etc: ["블로그 · 관리", ""] };
+const SEC = { dev: ["개발 중 · 샘플", "블로그에 아직 안 나간 것"], app: ["설치형 앱", "주소 하나로 PC · 휴대폰 — 잠금 없음"], web: ["블로그 실행형 웹 도구", "블로그 글의 실행 카드로 열기 — 바로 열기는 시험 모드에서만"], idea: ["아이디어 · 미개발", "아이디어 보드에 있고 아직 만들지 않은 것 — 시기는 계획(안)"], etc: ["블로그 · 관리", ""] };
 const WK = "일월화수목금토", ymdw = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}(${WK[d.getDay()]})`;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const U = h => /^https?:/.test(h) ? h : B + h;

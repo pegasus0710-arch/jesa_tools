@@ -1,0 +1,30 @@
+{
+ "id": "/jesa_tools/gantt/",
+ "name": "일정표 노트 — Blog J",
+ "short_name": "일정표 노트",
+ "description": "프로젝트 일정을 간트 차트로 저장하고 진행하며 고치는 무료 앱 — 늦은 작업 · 이번 주 할 일 · 처음 계획 대비",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#FAF6EE",
+ "theme_color": "#0B3D4A",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

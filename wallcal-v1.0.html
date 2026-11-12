@@ -1,0 +1,818 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0B3D4A">
+<title>달력 배경화면 만들기 | Blog J</title>
+<meta name="description" content="다음 달 달력이 들어간 배경화면을 PC · 노트북 · 휴대폰 해상도에 맞춰 바로 만들기 — 공휴일 · 음력 · 24절기 · 날짜 메모, 그림 29가지 또는 내 사진 (업로드 없음)">
+<link rel="icon" href="icons/apps/wallcal.png" type="image/png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Nanum+Pen+Script&family=Jua&display=swap">
+<style>:root{--bg:#FAF6EE;--in:#F3EEE3;--desk:#F0EADF;--card:#fff;--line:#CDD3DC;--hair:rgba(20,32,43,.12);--ink:#14202B;--sub:#5F6B7A;--sea:#0C737D;--sea2:#0A5C66;--seal:#EEF6F7;--deep:#0B3D4A;--deeps:#CFE3E6;--sky:#2B5FA0;--sun:#E07A4F;--red:#C23A2B;--up:0 1px 2px rgba(20,32,43,.06),0 0 0 1px rgba(20,32,43,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:SUIT,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:var(--sky)}
+.num{font-variant-numeric:tabular-nums}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.hd{background:var(--deep);color:#fff}
+.hd-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 20px;min-height:62px}
+.logo{display:flex;align-items:center;gap:11px;min-width:0}
+.logo .lg{width:40px;height:40px;border-radius:10px;background:#0C737D;display:grid;place-items:center;flex-shrink:0;position:relative}
+.logo .lg svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo .lg i{position:absolute;right:-3px;bottom:-3px;width:11px;height:11px;border-radius:50%;background:var(--sun);border:2px solid var(--deep)}
+.logo small{display:block;font-size:11.5px;font-weight:700;color:var(--deeps)}
+.logo b{display:block;font-size:19px;font-weight:900;letter-spacing:-.02em;white-space:nowrap}
+.hd .sp{flex:1}
+.hbtn{text-decoration:none;height:38px;padding:0 12px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:13.5px;white-space:nowrap}
+.hbtn:hover{background:rgba(255,255,255,.2)}
+.wrap{max-width:1400px;margin:0 auto;padding:18px 20px 60px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:18px;align-items:start}
+.side{display:flex;flex-direction:column;gap:12px}
+.step{background:#fff;border-radius:16px;box-shadow:var(--up);overflow:hidden}
+.sth{display:flex;align-items:center;gap:10px;padding:14px 16px;width:100%;text-align:left}
+.sth .n{width:28px;height:28px;border-radius:50%;background:var(--sea);color:#fff;font-weight:900;display:grid;place-items:center;font-size:14px;flex-shrink:0}
+.sth b{font-size:16px;font-weight:900;flex:1}
+.sth small{font-size:13px;color:var(--sub);font-weight:700;max-width:52%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step:not(.open) .stb{display:none}
+.step.open .sth{border-bottom:1px solid var(--hair)}
+.stb{padding:14px 16px 16px}
+.lab{font-size:13px;font-weight:800;color:var(--sub);margin:12px 0 6px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.lab:first-child{margin-top:0}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{height:34px;padding:0 12px;border-radius:9px;background:var(--in);font-size:13.5px;font-weight:700;white-space:nowrap}
+.chip:hover{box-shadow:0 0 0 2px var(--sea)}
+.chip.on{background:var(--sea);color:#fff}
+.seg{display:flex;background:var(--in);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{flex:1 0 auto;height:32px;padding:0 10px;border-radius:8px;font-size:13.5px;font-weight:700;color:var(--sub)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:var(--up)}
+.thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.thumbs.port{grid-template-columns:repeat(4,minmax(0,1fr))}
+.th{border-radius:10px;overflow:hidden;position:relative;background:var(--in);aspect-ratio:16/9;box-shadow:var(--up)}
+.thumbs.port .th{aspect-ratio:9/19}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th span{position:absolute;left:0;right:0;bottom:0;padding:14px 6px 4px;font-size:12.5px;font-weight:800;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.55));text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th.on{box-shadow:0 0 0 3px var(--sea)}
+.th:hover{box-shadow:0 0 0 2px var(--sea)}
+.sw{width:34px;height:34px;border-radius:9px;box-shadow:var(--up)}
+.sw.on{box-shadow:0 0 0 3px var(--sea)}
+.pos{display:grid;grid-template-columns:repeat(3,44px);gap:4px}
+.pos button{height:30px;border-radius:7px;background:var(--in);position:relative}
+.pos button i{position:absolute;width:12px;height:8px;border-radius:2px;background:var(--sub);opacity:.5}
+.pos button.on{background:var(--sea)}
+.pos button.on i{background:#fff;opacity:1}
+.mon{display:flex;align-items:center;gap:6px}
+.mon button{width:36px;height:36px;border-radius:9px;background:var(--in);display:grid;place-items:center}
+.mon b{min-width:120px;text-align:center;font-size:17px;font-weight:900}
+.rng{width:100%;accent-color:var(--sea)}
+.inp{height:40px;border-radius:10px;border:0;background:#fff;box-shadow:0 0 0 1px var(--line);padding:0 11px;font-size:15px;outline:0;min-width:0;width:100%}
+.inp:focus{box-shadow:0 0 0 2px var(--sea)}
+.memo{display:grid;grid-template-columns:150px minmax(0,1fr) 32px;gap:6px;margin-bottom:6px}
+.dt{position:relative;height:40px;border-radius:10px;background:#fff;box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;padding:0 10px;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.dt input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.x{width:32px;height:40px;border-radius:9px;background:var(--in);display:grid;place-items:center;color:var(--sub)}
+.res{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.res button{text-align:left;padding:8px 10px;border-radius:10px;background:var(--in);font-size:13.5px;font-weight:800;line-height:1.3}
+.res button small{display:block;font-size:12.5px;color:var(--sub);font-weight:600}
+.res button.on{background:var(--sea);color:#fff}
+.res button.on small{color:var(--deeps)}
+.hint{font-size:13px;color:var(--sub);margin-top:8px;line-height:1.6}
+.main{position:sticky;top:12px;display:flex;flex-direction:column;gap:10px}
+.pvc{background:var(--desk);border-radius:16px;padding:14px;box-shadow:inset 0 0 0 1px var(--hair)}
+.pvh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.pvh b{font-size:15px;font-weight:900}
+.pvh small{font-size:13px;color:var(--sub);font-weight:700}
+.stage{display:flex;justify-content:center;align-items:center;min-height:200px}
+#pv{display:block;border-radius:6px;box-shadow:0 18px 40px -20px rgba(20,32,43,.55);max-width:100%;background:#ddd}
+.stage.port #pv{max-height:72vh;width:auto}
+.dlbar{display:flex;gap:8px;flex-wrap:wrap}
+.btn{height:46px;padding:0 18px;border-radius:12px;background:#fff;box-shadow:var(--up);display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:15px;white-space:nowrap}
+.btn:hover{box-shadow:0 0 0 2px var(--sea)}
+.btn.go{background:var(--sea);color:#fff;box-shadow:none;flex:1}
+.btn.go:hover{background:var(--sea2)}
+.how{background:#fff;border-radius:14px;box-shadow:var(--up);padding:12px 14px;font-size:13.5px;color:var(--sub);line-height:1.7}
+.how b{color:var(--ink)}
+#busy{position:fixed;inset:0;background:rgba(11,25,32,.45);z-index:70;display:grid;place-items:center}
+#busy[hidden]{display:none}
+#busy div{background:#fff;border-radius:16px;padding:22px 26px;font-weight:800;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:80;max-width:calc(100vw - 32px)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.ft{max-width:1400px;margin:0 auto;padding:0 20px 30px;font-size:12.5px;color:var(--sub)}
+@media (max-width:900px){
+  .wrap{grid-template-columns:minmax(0,1fr);padding:12px 14px 50px}
+  .main{position:static;order:-1}
+  .stage.port #pv{max-height:60vh}
+}
+@media (max-width:600px){
+  .hd-in{padding:10px 14px;min-height:56px}
+  .logo .lg{width:34px;height:34px}
+  .logo b{font-size:17px}
+  .logo small{display:none}
+  .hbtn .tx{display:none}
+  .thumbs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .thumbs.port{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .memo{grid-template-columns:132px minmax(0,1fr) 32px}
+  .btn{height:50px}
+}
+/* 막힘 화면(블로그 경유 잠금) */
+.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#faf6ee;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(12,115,125,0.08)}
+.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#0c737d;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
+.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#e07a4f}
+.bj-gate h1{font-size:21px;color:#20241f;margin:0 0 12px;letter-spacing:-.3px}
+.bj-gate p{font-size:15px;color:#5c6259;line-height:1.7;margin:0}
+.bj-gate b{color:#20241f}
+.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#e07a4f;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
+.bj-gate-s{font-size:12.5px!important;color:#5f6b7a!important}
+.bj-gate-s a{color:#0c737d;font-weight:700}
+</style></head><body>
+<main class="wrap"><div class="side" id="side"></div><div class="main" id="main"></div></main><footer class="ft" id="ft"></footer>
+<div id="busy" hidden><div>배경화면을 만드는 중…</div></div><div id="toast" role="status" aria-live="polite"></div>
+<script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
+   허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
+   그 밖(주소 복사·공유 링크·즐겨찾기·직접 입력·다른 사이트에 퍼가기)은 막고 해당 글로 안내.
+   서버 없는 브라우저 안 확인이라 일반 사용자의 건너뛰기를 막는 수준(의도적 우회는 못 막음). */
+const BJ_BLOG = "https://luvbong.tistory.com";
+const BJ_GATE = (() => {
+  const S = "bjgate:";                       /* 새 창 안에서만 유지되는 확인 표시(sessionStorage) */
+  const tokens = new Map();                  /* 글 속 도구가 발급한 일회용 확인값 */
+  const approved = new Set();                /* 확인을 마친 새 창 — 이 창에만 작업을 넘겨줌 */
+  let provider = null, handoff = null;       /* 넘겨줄 작업을 만드는 함수 / 새 창이 받은 작업 */
+  const inFrame = window.parent !== window;
+  const dev = (location.protocol === "file:" || location.hostname === "localhost") && new URLSearchParams(location.search).get("bjdev") === "1";
+  const fromBlog = () => { try { const a = location.ancestorOrigins; if (a && a.length) return a[a.length - 1] === BJ_BLOG; } catch (e) {}
+    return (document.referrer || "").startsWith(BJ_BLOG + "/"); };
+  let embedOK = false;
+
+  /* 글 속 도구: 새 창이 보내는 확인 요청에 답함 */
+  window.addEventListener("message", e => {
+    const d = e.data; if (!d || d.bjgate !== "verify" || e.origin !== location.origin) return;
+    const t = tokens.get(d.t); tokens.delete(d.t);
+    const ok = embedOK && t && Date.now() - t.at < 30000 && e.source === t.win;
+    if (ok) approved.add(e.source);
+    try { e.source.postMessage({ bjgate: ok ? "ok" : "no", t: d.t }, location.origin); } catch (err) {}
+  });
+  window.addEventListener("message", e => {   /* 새 창이 작업을 달라고 할 때 (확인된 창에만) */
+    const d = e.data; if (!d || d.bjhand !== "req" || e.origin !== location.origin || !approved.has(e.source)) return;
+    approved.delete(e.source);
+    let data = null; try { data = provider ? provider() : null; } catch (err) {}
+    try { e.source.postMessage({ bjhand: "data", data }, location.origin); } catch (err) {}
+  });
+
+  /* 새 창으로 열기 (글 속 도구에서만) */
+  function openWindow(key, params, file) {
+    const t = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const q = new URLSearchParams(params || {}); q.delete("embed"); q.set("bjt", t);
+    const path = file ? location.pathname.replace(/[^/]*$/, file) : location.pathname;
+    const url = path + "?" + q.toString();
+    const w = window.open(url, "bj_" + key + "_" + (q.get("tab") || "all"), "popup,width=1320,height=920");
+    if (!w) return false;
+    tokens.set(t, { at: Date.now(), win: w });
+    return true;
+  }
+
+  /* 막힘 화면 */
+  async function blocked(key, tab, why) {
+    const post = BJ_BLOG + "/";     /* 막힘 화면은 늘 블로그 첫 화면으로 (글마다 주소를 적을 필요 없음) */
+    const root = document.getElementById("root");
+    root.innerHTML = `<div class="bj-gate"><div class="bj-gate-in">
+      <div class="bj-gate-mark">J<i></i></div>
+      <h1>Blog J 블로그 글에서 열어 주세요</h1>
+      <p>이 도구는 <b>Blog J 블로그 글</b>을 통해서만 쓸 수 있어요.<br>글 안의 도구에서 <b>새 창으로 열기</b>를 누르면 광고 없이 도구만 크게 띄워 쓸 수 있습니다.</p>
+      <a class="bj-gate-btn" href="${post}" target="_top" rel="noopener">Blog J 이동하기 ›</a>
+      <p class="bj-gate-s">${why === "frame" ? "다른 사이트에 넣은 도구는 열리지 않아요." : "주소를 직접 입력하거나, 즐겨찾기·공유받은 링크로는 열리지 않아요."} · 설치·가입 없는 무료 도구 모음 <a href="${BJ_BLOG}/" target="_top" rel="noopener">Blog J</a></p>
+    </div></div>`;
+    document.title = "Blog J 블로그 글에서 열어 주세요";
+    return false;
+  }
+
+  /* 시작할 때 확인: true면 도구를 띄움 */
+  async function check(key, tab, opts) {
+    if (dev || (() => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } })()) { embedOK = inFrame && (dev || fromBlog()); return true; }   /* 11-10: 주인 시험 모드 — 테스트 허브(jhub.html)에서 이 기기에 켠 경우만 */
+    /* 예전 글 호환: 블로그 글의 링크를 눌러 들어온 경우 허용 (프로그램 창 → 실행 카드로 바꾸기 전까지만) */
+    if (!inFrame && opts && opts.legacyReferrer && (document.referrer || "").startsWith(BJ_BLOG + "/")) return true;
+    if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }
+    try { const v = sessionStorage.getItem(S + key);
+      if (v) { if (v !== "1" && v !== (tab || "all")) { const q = new URLSearchParams(location.search); q.set("tab", v); location.replace(location.pathname + "?" + q.toString()); return false; } return true; } } catch (e) {}
+    const q = new URLSearchParams(location.search), t = q.get("bjt");
+    if (t && window.opener) {
+      const ok = await new Promise(res => {
+        const on = e => { if (e.origin === location.origin && e.data && e.data.t === t && (e.data.bjgate === "ok" || e.data.bjgate === "no")) { window.removeEventListener("message", on); res(e.data.bjgate === "ok"); } };
+        window.addEventListener("message", on);
+        try { window.opener.postMessage({ bjgate: "verify", t }, location.origin); } catch (e) { res(false); }
+        setTimeout(() => { window.removeEventListener("message", on); res(false); }, 3000);
+      });
+      if (ok) { try { sessionStorage.setItem(S + key, tab || "all"); } catch (e) {}
+        const op = window.opener;
+        handoff = await new Promise(res => {
+          const on = e => { if (e.origin === location.origin && e.source === op && e.data && e.data.bjhand === "data") { window.removeEventListener("message", on); res(e.data.data || null); } };
+          window.addEventListener("message", on);
+          try { op.postMessage({ bjhand: "req" }, location.origin); } catch (e) { res(null); }
+          setTimeout(() => { window.removeEventListener("message", on); res(null); }, 4000);
+        });
+        q.delete("bjt"); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q.toString() : ""));
+        try { window.opener = null; } catch (e) {}
+        return true; }
+    }
+    return blocked(key, tab, "direct");
+  }
+  return { check, openWindow, embedded: () => { embedOK = inFrame && (dev || fromBlog()); return embedOK; }, inFrame: () => inFrame, setProvider: fn => { provider = fn; }, takeHandoff: () => { const h = handoff; handoff = null; return h; } };
+})();</script>
+<script>const LUNAR={"1901":[0,[29,30,29,29,30,29,30,29,30,30,30,29],"1901-02-19"],"1902":[0,[30,29,30,29,29,30,29,30,29,30,30,30],"1902-02-08"],"1903":[5,[29,30,29,30,29,29,30,29,29,30,30,29,30],"1903-01-29"],"1904":[0,[30,30,29,30,29,29,30,29,29,30,30,29],"1904-02-16"],"1905":[0,[30,30,29,30,30,29,29,30,29,30,29,30],"1905-02-04"],"1906":[4,[29,30,30,29,30,29,30,29,30,29,30,29,30],"1906-01-25"],"1907":[0,[29,30,29,30,29,30,30,29,30,29,30,29],"1907-02-13"],"1908":[0,[30,29,29,30,30,29,30,29,30,30,29,30],"1908-02-02"],"1909":[2,[29,30,29,29,30,29,30,29,30,30,30,29,30],"1909-01-22"],"1910":[0,[29,30,29,29,30,29,30,29,30,30,30,29],"1910-02-10"],"1911":[6,[30,29,30,29,29,30,29,29,30,30,29,30,30],"1911-01-30"],"1912":[0,[30,29,30,29,29,30,29,29,30,30,29,30],"1912-02-18"],"1913":[0,[30,30,29,30,29,29,30,29,29,30,29,30],"1913-02-06"],"1914":[5,[30,30,29,30,30,29,29,30,29,30,29,29,30],"1914-01-26"],"1915":[0,[30,29,30,30,29,30,29,30,29,30,29,30],"1915-02-14"],"1916":[0,[29,30,29,30,29,30,30,29,30,29,30,29],"1916-02-04"],"1917":[2,[30,29,29,30,29,30,30,29,30,30,29,30,29],"1917-01-23"],"1918":[0,[30,29,29,30,29,30,29,30,30,30,29,30],"1918-02-11"],"1919":[7,[29,30,29,29,30,29,30,29,30,30,29,30,30],"1919-02-01"],"1920":[0,[29,30,29,29,30,29,29,30,30,29,30,30],"1920-02-20"],"1921":[0,[30,29,30,29,29,30,29,29,30,29,30,30],"1921-02-08"],"1922":[5,[30,29,30,30,29,29,30,29,29,30,29,30,30],"1922-01-28"],"1923":[0,[29,30,30,29,30,29,30,29,30,29,29,30],"1923-02-16"],"1924":[0,[30,29,30,29,30,30,29,30,29,30,29,29],"1924-02-05"],"1925":[4,[30,29,30,30,29,30,29,30,30,29,30,29,30],"1925-01-24"],"1926":[0,[29,29,30,29,30,29,30,30,29,30,30,29],"1926-02-13"],"1927":[0,[30,29,29,30,29,30,29,30,30,29,30,30],"1927-02-02"],"1928":[2,[29,30,29,29,30,29,29,30,30,29,30,30,30],"1928-01-23"],"1929":[0,[29,30,29,29,30,29,29,30,29,30,30,30],"1929-02-10"],"1930":[6,[29,30,30,29,29,30,29,29,30,29,30,30,29],"1930-01-30"],"1931":[0,[30,30,30,29,29,30,29,29,30,29,30,29],"1931-02-17"],"1932":[0,[30,30,30,29,30,29,30,29,29,30,29,30],"1932-02-06"],"1933":[5,[29,30,30,29,30,30,29,30,29,30,29,29,30],"1933-01-26"],"1934":[0,[29,30,29,30,30,29,30,30,29,30,29,30],"1934-02-14"],"1935":[0,[29,29,30,29,30,29,30,30,29,30,30,29],"1935-02-04"],"1936":[3,[30,29,29,30,29,30,29,30,29,30,30,30,29],"1936-01-24"],"1937":[0,[30,29,29,30,29,29,30,29,30,30,30,29],"1937-02-11"],"1938":[7,[30,30,29,29,30,29,29,30,29,30,30,29,30],"1938-01-31"],"1939":[0,[30,30,29,29,30,29,29,30,29,30,29,30],"1939-02-19"],"1940":[0,[30,30,29,30,29,30,29,29,30,29,30,29],"1940-02-08"],"1941":[6,[30,30,29,30,30,29,30,29,29,30,29,30,29],"1941-01-27"],"1942":[0,[30,29,30,30,29,30,30,29,30,29,29,30],"1942-02-15"],"1943":[0,[29,30,29,30,29,30,30,29,30,30,29,30],"1943-02-05"],"1944":[4,[29,29,30,29,30,29,30,29,30,30,29,30,30],"1944-01-26"],"1945":[0,[29,29,30,29,29,30,29,30,30,30,29,30],"1945-02-13"],"1946":[0,[30,29,29,30,29,29,30,29,30,30,29,30],"1946-02-02"],"1947":[2,[30,30,29,29,30,29,29,30,29,30,29,30,30],"1947-01-22"],"1948":[0,[30,29,30,29,30,29,29,30,29,30,29,30],"1948-02-10"],"1949":[7,[30,30,29,30,29,30,29,29,30,29,30,29,30],"1949-01-29"],"1950":[0,[30,29,30,30,29,30,29,29,30,29,30,29],"1950-02-17"],"1951":[0,[30,29,30,30,29,30,29,30,29,30,29,30],"1951-02-06"],"1952":[5,[29,30,29,30,29,30,30,29,30,29,30,29,30],"1952-01-27"],"1953":[0,[29,30,29,29,30,30,29,30,30,29,30,30],"1953-02-14"],"1954":[0,[29,29,30,29,29,30,29,30,30,29,30,30],"1954-02-04"],"1955":[3,[30,29,29,30,29,29,30,29,30,29,30,30,30],"1955-01-24"],"1956":[0,[29,30,29,30,29,29,30,29,30,29,30,30],"1956-02-12"],"1957":[8,[30,29,30,29,30,29,29,30,29,30,29,30,30],"1957-01-31"],"1958":[0,[29,30,30,29,30,29,29,30,29,30,29,30],"1958-02-19"],"1959":[0,[29,30,30,29,30,29,30,29,30,29,30,29],"1959-02-08"],"1960":[6,[30,29,30,29,30,30,29,30,29,30,29,30,29],"1960-01-28"],"1961":[0,[30,29,30,29,30,29,30,30,29,30,29,30],"1961-02-15"],"1962":[0,[29,30,29,29,30,29,30,30,29,30,30,29],"1962-02-05"],"1963":[4,[30,29,30,29,29,30,29,30,29,30,30,30,29],"1963-01-25"],"1964":[0,[30,29,30,29,29,30,29,30,29,30,30,30],"1964-02-13"],"1965":[0,[29,30,29,30,29,29,30,29,29,30,30,30],"1965-02-02"],"1966":[3,[29,30,30,29,30,29,29,30,29,29,30,30,29],"1966-01-22"],"1967":[0,[30,30,29,30,30,29,29,30,29,30,29,30],"1967-02-09"],"1968":[7,[29,30,30,29,30,29,30,29,30,29,30,29,30],"1968-01-30"],"1969":[0,[29,30,29,30,29,30,30,29,30,29,30,29],"1969-02-17"],"1970":[0,[30,29,29,30,30,29,30,29,30,30,29,30],"1970-02-06"],"1971":[5,[29,30,29,29,30,29,30,29,30,30,30,29,30],"1971-01-27"],"1972":[0,[29,30,29,29,30,29,30,29,30,30,30,29],"1972-02-15"],"1973":[0,[30,29,30,29,29,30,29,29,30,30,30,29],"1973-02-03"],"1974":[4,[30,30,29,30,29,29,30,29,29,30,30,29,30],"1974-01-23"],"1975":[0,[30,30,29,30,29,29,30,29,29,30,29,30],"1975-02-11"],"1976":[8,[30,30,29,30,29,30,29,30,29,30,29,29,30],"1976-01-31"],"1977":[0,[30,29,30,30,29,30,29,30,29,30,29,29],"1977-02-18"],"1978":[0,[30,30,29,30,29,30,30,29,30,29,30,29],"1978-02-07"],"1979":[6,[30,29,29,30,29,30,30,29,30,30,29,30,29],"1979-01-28"],"1980":[0,[30,29,29,30,29,30,29,30,30,29,30,30],"1980-02-16"],"1981":[0,[29,30,29,29,30,29,29,30,30,29,30,30],"1981-02-05"],"1982":[4,[30,29,30,29,29,30,29,29,30,30,29,30,30],"1982-01-25"],"1983":[0,[30,29,30,29,29,30,29,29,30,29,30,30],"1983-02-13"],"1984":[10,[30,29,30,30,29,29,30,29,29,30,29,30,30],"1984-02-02"],"1985":[0,[29,30,30,29,30,29,30,29,29,30,29,30],"1985-02-20"],"1986":[0,[29,30,30,29,30,30,29,30,29,30,29,29],"1986-02-09"],"1987":[6,[30,29,30,30,29,30,29,30,30,29,30,29,30],"1987-01-29"],"1988":[0,[29,29,30,29,30,29,30,30,29,30,30,29],"1988-02-18"],"1989":[0,[30,29,29,30,29,30,29,30,30,29,30,30],"1989-02-06"],"1990":[5,[29,30,29,29,30,29,29,30,30,29,30,30,30],"1990-01-27"],"1991":[0,[29,30,29,29,30,29,29,30,29,30,30,30],"1991-02-15"],"1992":[0,[29,30,30,29,29,30,29,29,30,29,30,30],"1992-02-04"],"1993":[3,[29,30,30,29,30,29,30,29,29,30,29,30,29],"1993-01-23"],"1994":[0,[30,30,30,29,30,29,30,29,29,30,29,30],"1994-02-10"],"1995":[8,[29,30,30,29,30,30,29,30,29,30,29,29,30],"1995-01-31"],"1996":[0,[29,30,29,30,30,29,30,29,30,30,29,30],"1996-02-19"],"1997":[0,[29,29,30,29,30,29,30,30,29,30,30,29],"1997-02-08"],"1998":[5,[30,29,29,30,29,29,30,30,29,30,30,30,29],"1998-01-28"],"1999":[0,[30,29,29,30,29,29,30,29,30,30,30,29],"1999-02-16"],"2000":[0,[30,30,29,29,30,29,29,30,29,30,30,29],"2000-02-05"],"2001":[4,[30,30,30,29,29,30,29,29,30,29,30,29,30],"2001-01-24"],"2002":[0,[30,30,29,30,29,30,29,29,30,29,30,29],"2002-02-12"],"2003":[0,[30,30,29,30,30,29,30,29,29,30,29,30],"2003-02-01"],"2004":[2,[29,30,29,30,30,29,30,29,30,29,30,29,30],"2004-01-22"],"2005":[0,[29,30,29,30,29,30,30,29,30,30,29,29],"2005-02-09"],"2006":[7,[30,29,30,29,30,29,30,29,30,30,29,30,30],"2006-01-29"],"2007":[0,[29,29,30,29,29,30,29,30,30,30,29,30],"2007-02-18"],"2008":[0,[30,29,29,30,29,29,30,29,30,30,29,30],"2008-02-07"],"2009":[5,[30,30,29,29,30,29,29,30,29,30,29,30,30],"2009-01-26"],"2010":[0,[30,29,30,29,30,29,29,30,29,30,29,30],"2010-02-14"],"2011":[0,[30,29,30,30,29,30,29,29,30,29,30,29],"2011-02-03"],"2012":[3,[30,29,30,30,30,29,30,29,29,30,29,30,29],"2012-01-23"],"2013":[0,[30,29,30,30,29,30,29,30,29,30,29,30],"2013-02-10"],"2014":[9,[29,30,29,30,29,30,29,30,30,29,30,29,30],"2014-01-31"],"2015":[0,[29,30,29,29,30,29,30,30,30,29,30,29],"2015-02-19"],"2016":[0,[30,29,30,29,29,30,29,30,30,29,30,30],"2016-02-08"],"2017":[5,[29,30,29,30,29,29,30,29,30,29,30,30,30],"2017-01-28"],"2018":[0,[29,30,29,30,29,29,30,29,30,29,30,30],"2018-02-16"],"2019":[0,[30,29,30,29,30,29,29,30,29,30,29,30],"2019-02-05"],"2020":[4,[30,29,30,30,29,30,29,29,30,29,30,29,30],"2020-01-25"],"2021":[0,[29,30,30,29,30,29,30,29,30,29,30,29],"2021-02-12"],"2022":[0,[30,29,30,29,30,30,29,30,29,30,29,30],"2022-02-01"],"2023":[2,[29,30,29,30,29,30,29,30,30,29,30,29,30],"2023-01-22"],"2024":[0,[29,30,29,29,30,29,30,30,29,30,30,29],"2024-02-10"],"2025":[6,[30,29,30,29,29,30,29,30,29,30,30,30,29],"2025-01-29"],"2026":[0,[30,29,30,29,29,30,29,30,29,30,30,30],"2026-02-17"],"2027":[0,[29,30,29,30,29,29,30,29,29,30,30,30],"2027-02-07"],"2028":[5,[29,30,30,29,30,29,29,30,29,29,30,30,29],"2028-01-27"],"2029":[0,[30,30,29,30,30,29,29,30,29,29,30,30],"2029-02-13"],"2030":[0,[29,30,29,30,30,29,30,29,30,29,30,29],"2030-02-03"],"2031":[3,[30,29,30,29,30,29,30,30,29,30,29,30,29],"2031-01-23"],"2032":[0,[30,29,29,30,29,30,30,29,30,30,29,30],"2032-02-11"],"2033":[11,[29,30,29,29,30,29,30,29,30,30,30,29,30],"2033-01-31"],"2034":[0,[29,30,29,29,30,29,30,29,30,30,30,29],"2034-02-19"],"2035":[0,[30,29,30,29,29,30,29,29,30,30,29,30],"2035-02-08"],"2036":[6,[30,30,29,30,29,29,30,29,29,30,30,29,30],"2036-01-28"],"2037":[0,[30,30,29,30,29,29,30,29,29,30,29,30],"2037-02-15"],"2038":[0,[30,30,29,30,29,30,29,30,29,29,30,29],"2038-02-04"],"2039":[5,[30,30,29,30,30,29,30,29,30,29,30,29,29],"2039-01-24"],"2040":[0,[30,29,30,30,29,30,30,29,30,29,30,29],"2040-02-12"],"2041":[0,[30,29,29,30,29,30,30,29,30,30,29,30],"2041-02-01"],"2042":[2,[29,30,29,29,30,29,30,29,30,30,29,30,30],"2042-01-22"],"2043":[0,[29,30,29,29,30,29,29,30,30,29,30,30],"2043-02-10"],"2044":[7,[30,29,30,29,29,30,29,29,30,29,30,30,30],"2044-01-30"],"2045":[0,[30,29,30,29,29,30,29,29,30,29,30,30],"2045-02-17"],"2046":[0,[30,29,30,30,29,29,30,29,29,30,29,30],"2046-02-06"],"2047":[5,[30,29,30,30,29,30,29,30,29,29,30,29,30],"2047-01-26"],"2048":[0,[29,30,30,29,30,30,29,30,29,30,29,29],"2048-02-14"],"2049":[0,[30,29,30,29,30,30,29,30,30,29,30,29],"2049-02-02"]};
+const HOL={"2026-01-01": "신정", "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴", "2026-03-01": "삼일절", "2026-03-02": "대체공휴일", "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-05-25": "대체공휴일", "2026-06-03": "지방선거", "2026-06-06": "현충일", "2026-07-17": "제헌절", "2026-08-15": "광복절", "2026-08-17": "대체공휴일", "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴", "2026-10-03": "개천절", "2026-10-05": "대체공휴일", "2026-10-09": "한글날", "2026-12-25": "성탄절", "2027-01-01": "신정", "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴", "2027-02-09": "대체공휴일", "2027-03-01": "삼일절", "2027-05-01": "노동절", "2027-05-03": "대체공휴일", "2027-05-05": "어린이날", "2027-05-13": "부처님오신날", "2027-06-06": "현충일", "2027-07-17": "제헌절", "2027-07-19": "대체공휴일", "2027-08-15": "광복절", "2027-08-16": "대체공휴일", "2027-09-14": "추석 연휴", "2027-09-15": "추석", "2027-09-16": "추석 연휴", "2027-10-03": "개천절", "2027-10-04": "대체공휴일", "2027-10-09": "한글날", "2027-10-11": "대체공휴일", "2027-12-25": "성탄절", "2027-12-27": "대체공휴일", "2028-01-01": "신정", "2028-01-26": "설날 연휴", "2028-01-27": "설날", "2028-01-28": "설날 연휴", "2028-03-01": "삼일절", "2028-04-12": "국회의원선거", "2028-05-01": "노동절", "2028-05-02": "부처님오신날", "2028-05-05": "어린이날", "2028-06-06": "현충일", "2028-07-17": "제헌절", "2028-08-15": "광복절", "2028-10-02": "추석 연휴", "2028-10-03": "추석 · 개천절", "2028-10-04": "추석 연휴", "2028-10-05": "대체공휴일", "2028-10-09": "한글날", "2028-12-25": "성탄절"};
+const TERMS={"2026-01-05": "소한", "2026-01-20": "대한", "2026-02-04": "입춘", "2026-02-19": "우수", "2026-03-05": "경칩", "2026-03-20": "춘분", "2026-04-05": "청명", "2026-04-20": "곡우", "2026-05-05": "입하", "2026-05-21": "소만", "2026-06-06": "망종", "2026-06-21": "하지", "2026-07-07": "소서", "2026-07-23": "대서", "2026-08-07": "입추", "2026-08-23": "처서", "2026-09-07": "백로", "2026-09-23": "추분", "2026-10-08": "한로", "2026-10-23": "상강", "2026-11-07": "입동", "2026-11-22": "소설", "2026-12-07": "대설", "2026-12-22": "동지", "2027-01-05": "소한", "2027-01-20": "대한", "2027-02-04": "입춘", "2027-02-19": "우수", "2027-03-06": "경칩", "2027-03-21": "춘분", "2027-04-05": "청명", "2027-04-20": "곡우", "2027-05-06": "입하", "2027-05-21": "소만", "2027-06-06": "망종", "2027-06-21": "하지", "2027-07-07": "소서", "2027-07-23": "대서", "2027-08-08": "입추", "2027-08-23": "처서", "2027-09-08": "백로", "2027-09-23": "추분", "2027-10-08": "한로", "2027-10-24": "상강", "2027-11-08": "입동", "2027-11-22": "소설", "2027-12-07": "대설", "2027-12-22": "동지", "2028-01-06": "소한", "2028-01-20": "대한", "2028-02-04": "입춘", "2028-02-19": "우수", "2028-03-05": "경칩", "2028-03-20": "춘분", "2028-04-04": "청명", "2028-04-19": "곡우", "2028-05-05": "입하", "2028-05-20": "소만", "2028-06-05": "망종", "2028-06-21": "하지", "2028-07-06": "소서", "2028-07-22": "대서", "2028-08-07": "입추", "2028-08-22": "처서", "2028-09-07": "백로", "2028-09-22": "추분", "2028-10-08": "한로", "2028-10-23": "상강", "2028-11-07": "입동", "2028-11-22": "소설", "2028-12-06": "대설", "2028-12-21": "동지"};
+</script>
+<script>/* 배경 그림 — 단축키 배경화면(827~832)과 같은 그림 엔진. Blog J가 코드로 그린 선 · 면 그림(AI · 남의 그림 없음) */
+function SCENE(T, W, H) {
+  let MODE = "glass"; const VARS = {};
+  const document = { body: { set className(v) { MODE = v; } }, documentElement: { style: { setProperty(k, v) { VARS[k.replace(/^--/, "")] = v; } } } };
+/* ── 그림 도구 ── */
+let seed=7;const R=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
+const r2=n=>Math.round(n*10)/10;
+function ridge(base,amp,freq,ph,jag){let d=`M0 ${H}L0 ${base}`;const st=W/160;for(let x=0;x<=W+st;x+=st){const y=base-amp*(Math.sin(x/W*freq*6.28+ph)*.6+Math.sin(x/W*freq*2.3*6.28+ph*1.7)*.28+Math.sin(x/W*freq*5.1*6.28+ph*.3)*.12*jag);d+=`L${r2(x)} ${r2(y)}`;}return d+`L${W} ${H}Z`;}
+const grain=(o)=>`<filter id="gr"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 ${o} 0"/></filter><rect width="${W}" height="${H}" filter="url(#gr)"/>`;
+const lin=(id,a,b,v)=>`<linearGradient id="${id}" x1="0" y1="0" x2="${v?0:1}" y2="${v?1:0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const glow=(id,c,o)=>`<radialGradient id="${id}"><stop offset="0" stop-color="${c}" stop-opacity="${o}"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
+function set(v){for(const k in v)document.documentElement.style.setProperty('--'+k,v[k]);}
+const D={
+ /* 1 겨울 — 새벽 설산 (겹겹 산 · 유리 판) */
+ snowpeak(){document.body.className='glass';set({ink:'#0f2235',acc:'#1f4f7a',kbg:'#ffffff',kfg:'#16324d',ksh:'#9fb3c6',kln:'rgba(22,50,77,.12)',ga:'.55'});
+  let s=`<defs>${lin('sk','#f6d7c3','#7f9fbf',1)}${glow('sun','#fff4e0',.9)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.22}" cy="${H*.42}" r="${H*.38}" fill="url(#sun)"/><circle cx="${W*.22}" cy="${H*.42}" r="${H*.055}" fill="#fff8ee"/>`;
+  const C=['#c9d6e3','#a9bdd2','#86a1bd','#5f7f9f','#3f5f80','#26425f'];
+  C.forEach((c,i)=>{s+=`<path d="${ridge(H*(.5+i*.075),H*(.16-i*.012),1.1+i*.35,i*1.9,1+i*.4)}" fill="${c}"/>`;});
+  // 눈 덮인 봉우리 줄
+  s+=`<path d="${ridge(H*.5,H*.16,1.1,0,1)}" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>`;
+  for(let i=0;i<120;i++)s+=`<circle cx="${r2(R()*W)}" cy="${r2(R()*H)}" r="${r2(.8+R()*2.2)}" fill="#fff" opacity="${r2(.25+R()*.5)}"/>`;
+  return s+grain(.07);},
+ /* 2 겨울 밤 — 눈 내리는 숲 (어두운 판) */
+ nightforest(){document.body.className='dark';set({ink:'#eef3f8',acc:'#9cc3e6',kbg:'#1b2738',kfg:'#e9f1fa',ksh:'#05080d',kln:'rgba(255,255,255,.14)',pline:'rgba(156,195,230,.25)'});
+  let s=`<defs>${lin('sk','#0b1626','#1d3550',1)}${glow('mn','#cfe3ff',.35)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.3}" cy="${H*.2}" r="${H*.28}" fill="url(#mn)"/><circle cx="${W*.3}" cy="${H*.2}" r="${H*.045}" fill="#eef5ff"/>`;
+  for(let i=0;i<160;i++)s+=`<circle cx="${r2(R()*W)}" cy="${r2(R()*H*.6)}" r="${r2(.5+R()*1.3)}" fill="#fff" opacity="${r2(.2+R()*.6)}"/>`;
+  const layer=(y,sc,c,n,snow)=>{let o="";for(let i=0;i<n;i++){const x=(i+R()*.6)*W/n,k=sc*(.75+R()*.5),ty=y+R()*H*.02;o+=`<g transform="translate(${r2(x)} ${r2(ty)}) scale(${r2(k)})"><path d="M0 -220 L-34 -150 H-18 L-56 -80 H-30 L-78 0 H78 L30 -80 H56 L18 -150 H34Z" fill="${c}"/>${snow?`<path d="M-34 -150 L0 -160 L34 -150 M-56 -80 L0 -92 L56 -80 M-78 0 L0 -14 L78 0" stroke="#dce9f5" stroke-width="5" fill="none" opacity=".75" stroke-linecap="round"/>`:""}</g>`;}return o;};
+  s+=layer(H*.78,.7,'#1f3a55',26,false)+`<rect x="0" y="${H*.78}" width="${W}" height="${H}" fill="#1f3a55"/>`;
+  s+=layer(H*.88,1,'#14283d',18,true)+`<path d="M0 ${H*.88} C ${W*.3} ${H*.86}, ${W*.6} ${H*.9}, ${W} ${H*.87} V${H} H0Z" fill="#dbe7f2"/>`;
+  for(let i=0;i<90;i++)s+=`<circle cx="${r2(R()*W)}" cy="${r2(R()*H)}" r="${r2(1+R()*2.5)}" fill="#fff" opacity="${r2(.3+R()*.5)}"/>`;
+  return s+grain(.06);},
+ /* 3 봄 — 벚꽃 가지 (종이 판) */
+ sakura(){document.body.className='paper';set({ink:'#3a2228',acc:'#b8546a',kbg:'#fff',kfg:'#8f3a4f',ksh:'#e7b9c3',kln:'rgba(143,58,79,.25)',pbg:'rgba(255,250,251,.86)',pline:'rgba(184,84,106,.18)'});
+  let s=`<defs>${lin('sk','#fde9ec','#f6d3db',1)}${glow('gl','#fff',.8)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.18}" cy="${H*.7}" r="${H*.5}" fill="url(#gl)"/>`;
+  const br=(d,w)=>`<path d="${d}" fill="none" stroke="#5a3a33" stroke-width="${w}" stroke-linecap="round"/>`;
+  s+=br(`M-20 ${H*.12} C ${W*.12} ${H*.16}, ${W*.2} ${H*.1}, ${W*.32} ${H*.2} S ${W*.5} ${H*.34}, ${W*.6} ${H*.3}`,16)+br(`M${W*.2} ${H*.13} C ${W*.24} ${H*.04}, ${W*.3} ${H*.02}, ${W*.36} ${H*.0}`,8)+br(`M${W*.32} ${H*.2} C ${W*.35} ${H*.3}, ${W*.33} ${H*.38}, ${W*.36} ${H*.46}`,7)+br(`M${W*.46} ${H*.3} C ${W*.5} ${H*.22}, ${W*.55} ${H*.2}, ${W*.6} ${H*.14}`,6);
+  const fl=(x,y,r,rot,c)=>{let p="";for(let i=0;i<5;i++)p+=`<path d="M0 0 C ${-r*.55} ${-r*.35}, ${-r*.45} ${-r*1.05}, 0 ${-r} C ${r*.45} ${-r*1.05}, ${r*.55} ${-r*.35}, 0 0Z" transform="rotate(${i*72})" fill="${c}"/>`;return `<g transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(rot)})">${p}<circle r="${r*.18}" fill="#c7506a"/>${[0,1,2,3,4].map(i=>`<circle cx="${r2(Math.cos(i*1.256)*r*.36)}" cy="${r2(Math.sin(i*1.256)*r*.36)}" r="${r*.05}" fill="#a83c56"/>`).join("")}</g>`;};
+  const pts=[[.06,.13],[.12,.17],[.18,.12],[.24,.1],[.27,.16],[.3,.05],[.34,.02],[.33,.24],[.35,.32],[.36,.42],[.4,.27],[.44,.3],[.48,.24],[.52,.21],[.57,.17],[.58,.29],[.22,.04],[.15,.2]];
+  pts.forEach(([x,y],i)=>s+=fl(W*x+(R()-.5)*30,H*y+(R()-.5)*30,22+R()*16,R()*72,i%3?'#f7c6d0':'#fbdde3'));
+  for(let i=0;i<40;i++){const x=R()*W*.75,y=H*.3+R()*H*.7,r=6+R()*7;s+=`<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(r)}" ry="${r2(r*.55)}" transform="rotate(${r2(R()*180)} ${r2(x)} ${r2(y)})" fill="#f4b6c3" opacity="${r2(.5+R()*.4)}"/>`;}
+  return s+grain(.05);},
+ /* 4 여름 — 모래 · 바다 · 하늘 (유리 판) */
+ sea(){document.body.className='glass';set({ink:'#0c2a33',acc:'#0e7c86',kbg:'#fff',kfg:'#0a5c66',ksh:'#9cc9cd',kln:'rgba(14,124,134,.2)',ga:'.6'});
+  let s=`<defs>${lin('sk','#cfe8f3','#f9f1e2',1)}${lin('se','#2b8fa0','#0b4f62',1)}${glow('sn','#fff7e8',.9)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.26}" cy="${H*.5}" r="${H*.34}" fill="url(#sn)"/><circle cx="${W*.26}" cy="${H*.5}" r="${H*.06}" fill="#fff6e6"/>`;
+  // 구름
+  [[.08,.18,1],[.4,.12,.8],[.6,.24,.6]].forEach(([x,y,k])=>s+=`<g transform="translate(${W*x} ${H*y}) scale(${k})" fill="#fff" opacity=".9"><ellipse cx="0" cy="0" rx="110" ry="26"/><ellipse cx="-30" cy="-22" rx="52" ry="34"/><ellipse cx="34" cy="-16" rx="44" ry="28"/></g>`);
+  s+=`<rect x="0" y="${H*.56}" width="${W}" height="${H*.44}" fill="url(#se)"/>`;
+  for(let i=0;i<9;i++){const y=H*(.58+i*.035);let d=`M0 ${y}`;for(let x=0;x<=W;x+=W/80)d+=`L${r2(x)} ${r2(y+Math.sin(x/(60+i*14)+i)*(2+i*.6))}`;s+=`<path d="${d}" fill="none" stroke="#e6f6f8" stroke-width="${1.2+i*.15}" opacity="${r2(.15+i*.04)}"/>`;}
+  s+=`<path d="M0 ${H*.86} C ${W*.25} ${H*.8}, ${W*.5} ${H*.9}, ${W} ${H*.84} V${H} H0Z" fill="#efe2c8"/><path d="M0 ${H*.86} C ${W*.25} ${H*.8}, ${W*.5} ${H*.9}, ${W} ${H*.84}" fill="none" stroke="#fff" stroke-width="5" opacity=".8"/>`;
+  return s+grain(.05);},
+ /* 5 가을 — 단풍 산 (종이 판) */
+ maple(){document.body.className='paper';set({ink:'#2b1a10',acc:'#a2481a',kbg:'#fffaf2',kfg:'#8a3b12',ksh:'#d9a77d',kln:'rgba(138,59,18,.25)',pbg:'rgba(255,250,242,.88)',pline:'rgba(162,72,26,.2)'});
+  let s=`<defs>${lin('sk','#fbe3c3','#f1c39a',1)}${glow('sn','#fff1d6',.9)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.24}" cy="${H*.36}" r="${H*.3}" fill="url(#sn)"/><circle cx="${W*.24}" cy="${H*.36}" r="${H*.05}" fill="#fff4e0"/>`;
+  const C=['#efb98a','#e59a64','#d97a45','#c45a2c','#9e3f1e','#6e2a14'];
+  C.forEach((c,i)=>{s+=`<path d="${ridge(H*(.5+i*.08),H*(.13-i*.01),.9+i*.4,i*2.3+1,1+i*.3)}" fill="${c}"/>`;});
+  // 앞 나무 단풍 점
+  for(let i=0;i<60;i++){const x=R()*W,y=H*(.84+R()*.16),r=10+R()*18;s+=`<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r)}" fill="${['#b8401c','#d8682c','#e89a3c','#8f2f14'][i%4]}" opacity=".9"/>`;}
+  // 떨어지는 잎
+  const leaf=(x,y,r,rot,c)=>`<g transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(rot)}) scale(${r2(r)})"><path d="M0 -30 L7 -14 L22 -20 L16 -6 L30 0 L14 6 L18 22 L4 12 L0 30 L-4 12 L-18 22 L-14 6 L-30 0 L-16 -6 L-22 -20 L-7 -14Z" fill="${c}"/><path d="M0 30 V40" stroke="${c}" stroke-width="3"/></g>`;
+  for(let i=0;i<16;i++)s+=leaf(R()*W*.7,R()*H*.75,.5+R()*.6,R()*360,['#c4471f','#e07b33','#a8361a'][i%3]);
+  return s+grain(.06);},
+ /* 6 한지 · 달항아리 (종이 판 — Blog J 한국 감성) */
+ moonjar(){document.body.className='paper';set({ink:'#2a2622',acc:'#6b5a46',kbg:'#fffdf8',kfg:'#3b3228',ksh:'#cfc3b0',kln:'rgba(59,50,40,.2)',pbg:'rgba(253,250,244,.9)',pline:'rgba(107,90,70,.2)'});
+  let s=`<rect width="${W}" height="${H}" fill="#efe8dc"/>`;
+  // 한지 섬유
+  s+=`<filter id="fb"><feTurbulence type="fractalNoise" baseFrequency=".012 .06" numOctaves="3" seed="3"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 .22 0"/></filter><rect width="${W}" height="${H}" filter="url(#fb)"/>`;
+  const cx=W*.25,cy=H*.52,rw=H*.25,rh=H*.27;
+  s+=`<ellipse cx="${cx+20}" cy="${cy+rh+10}" rx="${rw*.9}" ry="${H*.025}" fill="#000" opacity=".08"/>`;
+  s+=`<defs><radialGradient id="jar" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#fffdf7"/><stop offset=".7" stop-color="#f1ebdf"/><stop offset="1" stop-color="#ddd3c2"/></radialGradient></defs>`;
+  const mw=rw*.36,fw=rw*.42,sh=cy-rh*.35;
+  s+=`<path d="M${cx-mw} ${cy-rh} L${cx-mw*.92} ${cy-rh*.9} C ${cx-rw*1.02} ${cy-rh*.82}, ${cx-rw*1.1} ${cy-rh*.05}, ${cx-rw*.98} ${cy+rh*.25} C ${cx-rw*.86} ${cy+rh*.62}, ${cx-fw*1.25} ${cy+rh*.86}, ${cx-fw} ${cy+rh*.92} L${cx-fw} ${cy+rh} L${cx+fw} ${cy+rh} L${cx+fw} ${cy+rh*.92} C ${cx+fw*1.25} ${cy+rh*.86}, ${cx+rw*.86} ${cy+rh*.62}, ${cx+rw*.98} ${cy+rh*.25} C ${cx+rw*1.1} ${cy-rh*.05}, ${cx+rw*1.02} ${cy-rh*.82}, ${cx+mw*.92} ${cy-rh*.9} L${cx+mw} ${cy-rh} Z" fill="url(#jar)" stroke="#c8bba6" stroke-width="1.5"/>`;
+  s+=`<ellipse cx="${cx}" cy="${cy-rh}" rx="${mw}" ry="${rh*.04}" fill="#e6ddcd" stroke="#bfb19b" stroke-width="1.5"/><path d="M${cx-rw*1.04} ${cy+rh*.02} C ${cx-rw*.4} ${cy+rh*.12}, ${cx+rw*.4} ${cy+rh*.12}, ${cx+rw*1.04} ${cy+rh*.02}" fill="none" stroke="#d6cbb7" stroke-width="1.2"/><ellipse cx="${cx-rw*.38}" cy="${cy-rh*.42}" rx="${rw*.16}" ry="${rh*.28}" fill="#fff" opacity=".55" transform="rotate(-18 ${cx-rw*.38} ${cy-rh*.42})"/>`;
+  // 붉은 낙관
+  s+=`<rect x="${cx+rw*1.15}" y="${cy+rh*.6}" width="34" height="34" fill="#b0342a" rx="3"/><text x="${cx+rw*1.15+17}" y="${cy+rh*.6+23}" text-anchor="middle" font-size="15" font-weight="800" fill="#f7e9e2" font-family="SUIT">J</text>`;
+  // 먹 선 하나
+  s+=`<path d="M${W*.05} ${H*.12} C ${W*.2} ${H*.1}, ${W*.32} ${H*.14}, ${W*.48} ${H*.11}" stroke="#3b3228" stroke-width="2.2" fill="none" opacity=".55" stroke-linecap="round"/>`;
+  return s+grain(.05);},
+ /* 7 어두운 화면 — 등고선 금선 (어두운 판) */
+ contour(){document.body.className='dark';set({ink:'#f2ece0',acc:'#d8b56a',kbg:'#1e1b16',kfg:'#f0d9a4',ksh:'#000',kln:'rgba(216,181,106,.35)',pline:'rgba(216,181,106,.3)'});
+  let s=`<defs>${lin('cbg','#121212','#1e1a14',0)}</defs><rect width="${W}" height="${H}" fill="url(#cbg)"/>`;
+  const peaks=[[W*.22,H*.5,1],[W*.45,H*.18,.6],[W*.08,H*.9,.7]];
+  peaks.forEach(([px,py,k],j)=>{for(let i=1;i<=22;i++){const rr=i*26*k;let d="";for(let a=0;a<=360;a+=5){const t=a*Math.PI/180,w=rr*(1+.12*Math.sin(3*t+j+i*.3)+.06*Math.sin(5*t+i));d+=(a?"L":"M")+r2(px+Math.cos(t)*w*1.3)+" "+r2(py+Math.sin(t)*w*.85);}s+=`<path d="${d}Z" fill="none" stroke="#d8b56a" stroke-width="${i%5?0.7:1.4}" opacity="${i%5?.28:.5}"/>`;}});
+  return s+grain(.08);},
+ /* 8 대리석 · 금 (종이 판 — 고급) */
+ marble(){document.body.className='paper';set({ink:'#22201c',acc:'#8a6a2a',kbg:'#fffefb',kfg:'#5a4518',ksh:'#d6c9a8',kln:'rgba(138,106,42,.3)',pbg:'rgba(255,255,253,.82)',pline:'rgba(138,106,42,.28)'});
+  let s=`<rect width="${W}" height="${H}" fill="#f6f4f0"/>`;
+  s+=`<filter id="mc"><feTurbulence type="fractalNoise" baseFrequency=".0018 .004" numOctaves="4" seed="5"/><feColorMatrix values="0 0 0 0 .62  0 0 0 0 .6  0 0 0 0 .57  0 0 0 .9 -.35"/></filter><rect width="${W}" height="${H}" filter="url(#mc)" opacity=".5"/>`;
+  const vein=(x0,y0,len,ang,w,c,o)=>{let d=`M${r2(x0)} ${r2(y0)}`,x=x0,y=y0,a=ang;for(let i=0;i<len;i++){a+=(R()-.5)*.5;x+=Math.cos(a)*14;y+=Math.sin(a)*14;d+=`L${r2(x)} ${r2(y)}`;}return `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" opacity="${o}" stroke-linecap="round" stroke-linejoin="round"/>`;};
+  for(let i=0;i<14;i++)s+=vein(-40+R()*W*.3,R()*H,60+R()*80,-.35+R()*.3,.6+R()*1.4,'#8c8780',.25+R()*.3);
+  for(let i=0;i<26;i++)s+=vein(R()*W,R()*H,10+R()*30,R()*6.28,.4+R()*.6,'#9a948c',.2+R()*.25);
+  s+=`<defs>${lin('au','#a9802f','#f1d98d',0)}</defs>`;
+  for(let i=0;i<3;i++)s+=vein(-30,H*(.2+i*.3)+R()*60,110,-.2+R()*.25,2.4-i*.5,'url(#au)',.95);
+  return s+grain(.04);},
+ /* 9 사계절 무난 — 판 색 모눈 (종이 판, Blog J 4.0 모래 · 바다) */
+ grid(){document.body.className='paper';set({ink:'#14202b',acc:'#0e7c86',kbg:'#fff',kfg:'#0a5c66',ksh:'#b9d3d5',kln:'rgba(14,124,134,.22)',pbg:'rgba(255,255,255,.9)',pline:'rgba(14,124,134,.2)'});
+  let s=`<rect width="${W}" height="${H}" fill="#faf6ee"/><defs><pattern id="gp" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#e6ddcc" stroke-width="1"/></pattern><pattern id="gp2" width="160" height="160" patternUnits="userSpaceOnUse"><path d="M160 0H0V160" fill="none" stroke="#d9cdb6" stroke-width="1.4"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#gp)"/><rect width="${W}" height="${H}" fill="url(#gp2)"/>`;
+  // 엑셀 칸 느낌의 선 그림: 막대그래프 + 연필
+  const bx=W*.1,by=H*.72;[.28,.42,.36,.55,.48,.66].forEach((v,i)=>s+=`<rect x="${bx+i*64}" y="${by-v*H*.5}" width="40" height="${v*H*.5}" rx="6" fill="${i===5?'#0e7c86':'#0e7c86'}" opacity="${i===5?1:.22+i*.08}"/>`);
+  s+=`<path d="M${bx-20} ${by} H${bx+400}" stroke="#14202b" stroke-width="3" stroke-linecap="round"/><circle cx="${bx+5*64+20}" cy="${by-.66*H*.5-26}" r="9" fill="#F56D03"/>`;
+  return s+grain(.035);}
+};
+
+/* 프로그램마다 다른 그림 — Blog J가 직접 그린 선 · 면 그림 (AI · 남의 그림 없음) */
+function addThemes(D, X) {
+  const { W, H, R, r2, ridge, grain, lin, glow, set } = X;
+  const paper = (v) => { document.body.className = 'paper'; set(v); };
+  const glass = (v) => { document.body.className = 'glass'; set(v); };
+  const dark = (v) => { document.body.className = 'dark'; set(v); };
+  const hanji = (base, fib) => `<rect width="${W}" height="${H}" fill="${base}"/><filter id="hj"><feTurbulence type="fractalNoise" baseFrequency=".012 .06" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .46  0 0 0 0 .4  0 0 0 ${fib} 0"/></filter><rect width="${W}" height="${H}" filter="url(#hj)"/>`;
+  const seal = (x, y, t) => `<rect x="${x}" y="${y}" width="34" height="34" rx="3" fill="#b0342a"/><text x="${x + 17}" y="${y + 23}" text-anchor="middle" font-size="15" font-weight="800" fill="#f7e9e2">${t}</text>`;
+  /* 먹 붓 줄기: 굵기가 점점 가늘어지는 면 */
+  const brush = (pts, w0, w1, c) => { let L = [], Rr = []; for (let i = 0; i < pts.length; i++) { const [x, y] = pts[i], [nx, ny] = pts[Math.min(i + 1, pts.length - 1)], [px, py] = pts[Math.max(i - 1, 0)]; let dx = nx - px, dy = ny - py; const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l; const w = (w0 + (w1 - w0) * i / (pts.length - 1)) / 2; L.push([x - dy * w, y + dx * w]); Rr.push([x + dy * w, y - dx * w]); } const P = L.concat(Rr.reverse()); return `<path d="M${P.map(p => r2(p[0]) + ' ' + r2(p[1])).join('L')}Z" fill="${c}"/>`; };
+  const curve = (x0, y0, x1, y1, bend, n) => { const a = []; for (let i = 0; i <= n; i++) { const t = i / n; a.push([x0 + (x1 - x0) * t + Math.sin(t * Math.PI) * bend * (y1 - y0) / Math.hypot(x1 - x0, y1 - y0 || 1), y0 + (y1 - y0) * t - Math.sin(t * Math.PI) * bend * (x1 - x0) / Math.hypot(x1 - x0, y1 - y0 || 1)]); } return a; };
+  const HANP = (acc, kfg) => ({ ink: '#2a2622', acc, kbg: '#fffdf8', kfg, ksh: '#cfc3b0', kln: 'rgba(59,50,40,.2)', pbg: 'rgba(253,250,244,.9)', pline: 'rgba(107,90,70,.2)' });
+
+  /* ═══ 한글 — 사군자 · 한지 · 먹 ═══ */
+  D.plum = () => { paper(HANP('#9a3b45', '#7a2e37'));
+    let s = hanji('#f1ebe0', .2);
+    s += brush(curve(-40, H * .82, W * .28, H * .3, 60, 30), 30, 9, '#2f2a26') + brush(curve(W * .14, H * .6, W * .34, H * .62, -40, 20), 14, 4, '#2f2a26') + brush(curve(W * .22, H * .42, W * .44, H * .2, 50, 20), 12, 3, '#2f2a26') + brush(curve(W * .25, H * .36, W * .3, H * .08, -30, 16), 9, 2, '#2f2a26');
+    const fl = (x, y, r, c) => { let o = ''; for (let i = 0; i < 5; i++) { const a = i * 72 * Math.PI / 180 + .3; o += `<circle cx="${r2(x + Math.cos(a) * r * .55)}" cy="${r2(y + Math.sin(a) * r * .55)}" r="${r2(r * .5)}" fill="${c}"/>`; } return o + `<circle cx="${x}" cy="${y}" r="${r2(r * .22)}" fill="#f4d36b"/>`; };
+    [[.1, .7], [.17, .55], [.2, .47], [.24, .4], [.27, .33], [.3, .14], [.33, .6], [.38, .28], [.42, .22], [.28, .5], [.13, .63], [.36, .63], [.26, .24], [.4, .32]].forEach(([x, y], i) => s += fl(W * x + (R() - .5) * 30, H * y + (R() - .5) * 20, 12 + R() * 9, i % 3 ? '#d9485b' : '#f08a99'));
+    for (let i = 0; i < 26; i++) s += `<circle cx="${r2(W * .05 + R() * W * .42)}" cy="${r2(H * .12 + R() * H * .7)}" r="${r2(2 + R() * 3)}" fill="#c43d50" opacity=".7"/>`;
+    s += seal(W * .06, H * .86, '梅');
+    return s + grain(.05); };
+  D.bamboo = () => { paper(HANP('#3d6b45', '#2d5636'));
+    let s = hanji('#eef0e6', .18);
+    [[.08, 1.25, 26, '#33533b'], [.17, 1.1, 20, '#4e7357'], [.27, 1.3, 30, '#2b4732'], [.38, 1.05, 16, '#6e8f74']].forEach(([x, k, w, c], j) => { const cx = W * x; for (let y = H + 20; y > -60; y -= 150 * k) { s += `<path d="M${cx - w / 2} ${y} L${cx - w / 2 + 2} ${y - 140 * k} L${cx + w / 2 - 2} ${y - 140 * k} L${cx + w / 2} ${y}Z" fill="${c}"/><path d="M${cx - w / 2 - 4} ${y - 140 * k} Q ${cx} ${y - 140 * k - 8} ${cx + w / 2 + 4} ${y - 140 * k}" stroke="#1f3325" stroke-width="3" fill="none"/>`; } });
+    const leaf = (x, y, a, L, c) => { const p = curve(x, y, x + Math.cos(a) * L, y + Math.sin(a) * L, L * .08, 10); return brush(p, 16, 1, c); };
+    [[.08, .3], [.08, .55], [.17, .2], [.27, .4], [.27, .15], [.38, .5], [.17, .65]].forEach(([x, y], i) => { for (let k = 0; k < 5; k++) s += leaf(W * x, H * y, (i % 2 ? .3 : 2.6) + (R() - .5) * 1.2, 90 + R() * 60, ['#2b4732', '#3d6b45', '#5c8565'][k % 3]); });
+    s += seal(W * .45, H * .86, '竹');
+    return s + grain(.05); };
+  D.chrysan = () => { paper(HANP('#9a6a12', '#7a520c'));
+    let s = hanji('#f3ead8', .2);
+    s += brush(curve(W * .2, H * 1.02, W * .22, H * .45, 30, 20), 10, 5, '#4a5a36') + brush(curve(W * .3, H * 1.02, W * .34, H * .6, -30, 20), 9, 4, '#4a5a36') + brush(curve(W * .12, H * 1.02, W * .1, H * .62, -20, 20), 8, 4, '#4a5a36');
+    const fl = (x, y, r, c, c2) => { let o = ''; for (let i = 0; i < 34; i++) { const a = i / 34 * Math.PI * 2, L = r * (.75 + R() * .25); o += `<path d="M${x} ${y} Q ${r2(x + Math.cos(a + .08) * L * .6)} ${r2(y + Math.sin(a + .08) * L * .6)} ${r2(x + Math.cos(a) * L)} ${r2(y + Math.sin(a) * L)}" stroke="${i % 2 ? c : c2}" stroke-width="${r * .09}" stroke-linecap="round" fill="none"/>`; } return o + `<circle cx="${x}" cy="${y}" r="${r * .2}" fill="#b5741a"/>`; };
+    s += fl(W * .22, H * .42, 92, '#e8a92e', '#f3c95a') + fl(W * .34, H * .57, 70, '#d9902a', '#efbd52') + fl(W * .1, H * .6, 60, '#efb43f', '#f7d474');
+    const lf = (x, y, a) => `<path d="M0 0 C 20 -26, 52 -24, 70 0 C 52 18, 24 22, 0 0Z" transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(a)})" fill="#5a6e3e" opacity=".9"/>`;
+    for (let i = 0; i < 9; i++) s += lf(W * (.1 + R() * .26), H * (.68 + R() * .26), R() * 360);
+    s += seal(W * .44, H * .86, '菊');
+    return s + grain(.05); };
+  D.pine = () => { paper(HANP('#3f5560', '#2f444e'));
+    let s = hanji('#eceef0', .16);
+    for (let i = 0; i < 90; i++) s += `<circle cx="${r2(R() * W * .55)}" cy="${r2(R() * H)}" r="${r2(1.5 + R() * 3)}" fill="#fff" opacity=".9"/>`;
+    s += brush(curve(W * .16, H * 1.02, W * .2, H * .2, 90, 30), 46, 14, '#3b3029') + brush(curve(W * .19, H * .55, W * .42, H * .44, -40, 20), 18, 5, '#3b3029') + brush(curve(W * .19, H * .36, W * .04, H * .26, 30, 16), 14, 4, '#3b3029') + brush(curve(W * .2, H * .25, W * .36, H * .14, -20, 14), 12, 4, '#3b3029');
+    const tuft = (x, y, r) => { let o = ''; for (let i = 0; i < 26; i++) { const a = Math.PI + i / 25 * Math.PI; o += `<line x1="${x}" y1="${y}" x2="${r2(x + Math.cos(a) * r)}" y2="${r2(y + Math.sin(a) * r * .6)}" stroke="#2f4a3a" stroke-width="2.4" stroke-linecap="round"/>`; } return o + `<ellipse cx="${x}" cy="${y - r * .55}" rx="${r * .9}" ry="${r * .22}" fill="#fff"/>`; };
+    [[.42, .44, 60], [.36, .47, 50], [.3, .5, 46], [.05, .26, 50], [.1, .3, 44], [.36, .14, 52], [.3, .17, 44], [.22, .22, 40]].forEach(([x, y, r]) => s += tuft(W * x, H * y, r));
+    s += `<path d="M0 ${H * .9} C ${W * .3} ${H * .86}, ${W * .6} ${H * .92}, ${W} ${H * .88} V${H} H0Z" fill="#fff"/>`;
+    s += seal(W * .45, H * .82, '松');
+    return s + grain(.04); };
+
+  /* ═══ 윈도우 11 — 하늘과 빛 ═══ */
+  const sky = (a, b, c) => `<defs><linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset=".6" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#sky3)"/>`;
+  const cloud = (x, y, k, c, o) => `<g transform="translate(${r2(x)} ${r2(y)}) scale(${k})" fill="${c}" opacity="${o}"><ellipse cx="0" cy="0" rx="160" ry="38"/><ellipse cx="-60" cy="-30" rx="70" ry="48"/><ellipse cx="20" cy="-52" rx="80" ry="62"/><ellipse cx="90" cy="-24" rx="60" ry="40"/></g>`;
+  const WINK = { kbg: '#fff', kfg: '#1d3a63', ksh: '#a9bad3', kln: 'rgba(29,58,99,.18)', ink: '#11223a', acc: '#2b5fa0', ga: '.55' };
+  D.dawn = () => { glass(WINK);
+    let s = sky('#c9d7f2', '#f3d9e3', '#fbe6cf') + `<defs>${glow('dg', '#fff3e2', .95)}</defs><circle cx="${W * .26}" cy="${H * .78}" r="${H * .5}" fill="url(#dg)"/>`;
+    s += cloud(W * .12, H * .3, 1.1, '#fff', .75) + cloud(W * .38, H * .2, .8, '#fff', .6) + cloud(W * .55, H * .55, 1.3, '#fff', .5);
+    s += `<path d="${ridge(H * .86, H * .05, 1.2, 1, 1)}" fill="#b8a6c9" opacity=".7"/><path d="${ridge(H * .92, H * .04, 1.6, 3, 1)}" fill="#8f7fad" opacity=".8"/>`;
+    return s + grain(.05); };
+  D.cloud = () => { glass(WINK);
+    let s = sky('#2f7bd9', '#7fb7f0', '#d9ecfb');
+    s += cloud(W * .2, H * .55, 2.2, '#fff', .96) + cloud(W * .08, H * .78, 1.6, '#f3f8ff', .95) + cloud(W * .45, H * .3, 1.1, '#fff', .9) + cloud(W * .7, H * .85, 1.8, '#eef5ff', .9) + cloud(W * .32, H * .12, .7, '#fff', .8);
+    s += `<path d="M${W * .05} ${H * .2} q 14 -10 28 0 q 14 -10 28 0" stroke="#1d3a63" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M${W * .1} ${H * .26} q 10 -7 20 0 q 10 -7 20 0" stroke="#1d3a63" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+    return s + grain(.04); };
+  D.sunset = () => { glass(Object.assign({}, WINK, { kfg: '#5a2a1e', ksh: '#e2b39b', acc: '#b4532a', ink: '#2b1610' }));
+    let s = sky('#3b2a63', '#d9637a', '#f8b26a') + `<defs>${glow('sg', '#ffd9a0', .9)}</defs><circle cx="${W * .3}" cy="${H * .72}" r="${H * .45}" fill="url(#sg)"/><circle cx="${W * .3}" cy="${H * .72}" r="${H * .07}" fill="#ffe2b0"/>`;
+    for (let i = 0; i < 6; i++) s += `<rect x="0" y="${H * (.28 + i * .05)}" width="${W * .6}" height="${2 + i}" fill="#ffd2a6" opacity="${.15 + i * .04}"/>`;
+    s += `<path d="${ridge(H * .8, H * .06, 1.1, 2, 1)}" fill="#5a2f4f"/><path d="${ridge(H * .88, H * .05, 1.7, 4, 1)}" fill="#3a1f36"/>`;
+    [[.12, .4], [.16, .37], [.2, .42], [.45, .3]].forEach(([x, y]) => s += `<path d="M${W * x} ${H * y} q 9 -7 18 0 q 9 -7 18 0" stroke="#2b1630" stroke-width="2.6" fill="none" stroke-linecap="round"/>`);
+    return s + grain(.05); };
+  D.aurora = () => { dark({ ink: '#eaf3f2', acc: '#7fe0c4', kbg: '#14262b', kfg: '#d8f7ee', ksh: '#03080a', kln: 'rgba(127,224,196,.25)', pline: 'rgba(127,224,196,.25)' });
+    let s = sky('#040b16', '#0b1f33', '#123349');
+    for (let i = 0; i < 220; i++) s += `<circle cx="${r2(R() * W)}" cy="${r2(R() * H * .7)}" r="${r2(.4 + R() * 1.4)}" fill="#fff" opacity="${r2(.2 + R() * .7)}"/>`;
+    s += `<defs><linearGradient id="au1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#57e3b5" stop-opacity="0"/><stop offset=".55" stop-color="#57e3b5" stop-opacity=".55"/><stop offset="1" stop-color="#57e3b5" stop-opacity="0"/></linearGradient><linearGradient id="au2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f7cf0" stop-opacity="0"/><stop offset=".5" stop-color="#8f7cf0" stop-opacity=".4"/><stop offset="1" stop-color="#8f7cf0" stop-opacity="0"/></linearGradient><filter id="bl"><feGaussianBlur stdDeviation="18"/></filter></defs>`;
+    for (let k = 0; k < 2; k++) { let d = `M-50 ${H * (.35 + k * .1)}`; for (let x = 0; x <= W * .75; x += 40) d += `L${x} ${r2(H * (.35 + k * .1) + Math.sin(x / 210 + k) * 70 + Math.sin(x / 70) * 14)}`; s += `<path d="${d}" stroke="url(#au${k + 1})" stroke-width="${180 - k * 50}" fill="none" filter="url(#bl)"/>`; }
+    s += `<path d="${ridge(H * .86, H * .06, 1.3, 2, 1.4)}" fill="#07131d"/><path d="M0 ${H * .93} H${W}" stroke="#0b1d2a" stroke-width="${H * .14}"/>`;
+    return s + grain(.06); };
+
+  /* ═══ 크롬 — 길과 도시 ═══ */
+  const CHK = (acc, kfg, ksh) => ({ ink: '#1c2229', acc, kbg: '#fff', kfg, ksh, kln: 'rgba(0,0,0,.12)', pbg: 'rgba(255,255,255,.9)', pline: 'rgba(0,0,0,.08)', ga: '.6' });
+  const house = (x, y, w, h, wall, roof, win) => `<rect x="${x}" y="${y - h}" width="${w}" height="${h}" fill="${wall}"/><path d="M${x - 8} ${y - h} L${x + w / 2} ${y - h - w * .42} L${x + w + 8} ${y - h}Z" fill="${roof}"/><rect x="${x + w * .2}" y="${y - h * .7}" width="${w * .22}" height="${h * .25}" rx="3" fill="${win}"/><rect x="${x + w * .58}" y="${y - h * .7}" width="${w * .22}" height="${h * .25}" rx="3" fill="${win}"/><rect x="${x + w * .4}" y="${y - h * .36}" width="${w * .2}" height="${h * .36}" rx="3" fill="${roof}"/>`;
+  D.alley = () => { paper(CHK('#b8546a', '#8f3a4f', '#e7b9c3'));
+    let s = `<rect width="${W}" height="${H}" fill="#fbeff0"/>`;
+    const C = [['#f6e3cf', '#c9705a'], ['#e9eef3', '#6b87a6'], ['#f3ead8', '#9a7c4e'], ['#f1e1e8', '#b05d75'], ['#e6efe6', '#5f8a6a']];
+    for (let i = 0; i < 7; i++) { const [w, r] = C[i % 5]; s += house(-20 + i * 150, H * .78, 120, 150 + (i % 3) * 40, w, r, '#fff7ea'); }
+    s += `<path d="M0 ${H * .78} H${W} V${H} H0Z" fill="#e7d8c6"/><path d="M${W * .2} ${H} L${W * .3} ${H * .78} H${W * .36} L${W * .5} ${H}Z" fill="#d6c3ad"/>`;
+    for (let i = 0; i < 70; i++) { const x = R() * W * .55, y = R() * H * .85; s += `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="6" ry="3.4" transform="rotate(${r2(R() * 180)} ${r2(x)} ${r2(y)})" fill="#f2a9b8" opacity="${r2(.5 + R() * .4)}"/>`; }
+    s += `<path d="M-10 ${H * .1} C ${W * .15} ${H * .16}, ${W * .3} ${H * .08}, ${W * .45} ${H * .14}" stroke="#5a3a33" stroke-width="10" fill="none" stroke-linecap="round"/>`;
+    for (let i = 0; i < 14; i++) s += `<circle cx="${r2(W * .02 + i * W * .03)}" cy="${r2(H * (.12 + Math.sin(i) * .02))}" r="${r2(12 + R() * 8)}" fill="#f7c6d0"/>`;
+    return s + grain(.04); };
+  D.coast = () => { glass(Object.assign(CHK('#0e7c86', '#0a5c66', '#9cc9cd'), { ga: '.6' }));
+    let s = `<defs>${lin('cs', '#bfe3f1', '#f4f1e6', 1)}</defs><rect width="${W}" height="${H}" fill="url(#cs)"/>`;
+    s += `<rect x="0" y="${H * .52}" width="${W}" height="${H * .2}" fill="#2a8fa3"/>`;
+    for (let i = 0; i < 6; i++) s += `<path d="M0 ${H * (.55 + i * .028)} H${W}" stroke="#d8f1f5" stroke-width="2" opacity="${.2 + i * .05}"/>`;
+    s += `<path d="M0 ${H * .72} C ${W * .3} ${H * .66}, ${W * .55} ${H * .76}, ${W} ${H * .7} V${H} H0Z" fill="#e9dcc0"/>`;
+    s += `<path d="M${W * .05} ${H} C ${W * .2} ${H * .85}, ${W * .3} ${H * .78}, ${W * .55} ${H * .74} L${W * .6} ${H * .75} C ${W * .38} ${H * .8}, ${W * .3} ${H * .9}, ${W * .22} ${H}Z" fill="#5d6670"/>`;
+    s += `<path d="M${W * .14} ${H} C ${W * .25} ${H * .87}, ${W * .34} ${H * .8}, ${W * .57} ${H * .745}" stroke="#fff" stroke-width="4" stroke-dasharray="26 22" fill="none"/>`;
+    s += cloud(W * .15, H * .25, .9, '#fff', .9) + cloud(W * .45, H * .16, .6, '#fff', .8);
+    s += `<circle cx="${W * .35}" cy="${H * .2}" r="${H * .05}" fill="#fff4dd"/>`;
+    return s + grain(.04); };
+  D.avenue = () => { paper(CHK('#a2481a', '#8a3b12', '#d9a77d'));
+    let s = `<defs>${lin('av', '#fbe7cc', '#f3d0a6', 1)}</defs><rect width="${W}" height="${H}" fill="url(#av)"/>`;
+    const vx = W * .3, vy = H * .5;
+    s += `<path d="M${vx - 6} ${vy} L${vx + 6} ${vy} L${W * .62} ${H} L${W * -.02} ${H}Z" fill="#8c7f72"/><path d="M${vx} ${vy} L${vx} ${H}" stroke="#f3d27a" stroke-width="6" stroke-dasharray="30 26"/>`;
+    for (let i = 0; i < 9; i++) { const t = (i + 1) / 9, k = t * t; [-1, 1].forEach(sd => { const x = vx + sd * (20 + k * W * .3), y = vy + k * H * .42, r = 14 + k * 70; s += `<rect x="${r2(x - 3 - k * 6)}" y="${r2(y - r * .4)}" width="${r2(6 + k * 12)}" height="${r2(r * .6)}" fill="#6b4126"/><circle cx="${r2(x)}" cy="${r2(y - r * .7)}" r="${r2(r)}" fill="${['#d8642a', '#e88f35', '#c9461f', '#eab04a'][(i + (sd > 0 ? 1 : 0)) % 4]}"/>`; }); }
+    for (let i = 0; i < 40; i++) s += `<circle cx="${r2(R() * W * .6)}" cy="${r2(H * .6 + R() * H * .4)}" r="${r2(3 + R() * 5)}" fill="${['#d8642a', '#eab04a', '#c9461f'][i % 3]}" opacity=".85"/>`;
+    return s + grain(.05); };
+  D.city = () => { dark({ ink: '#f2f2ee', acc: '#ffcf6b', kbg: '#1c1f28', kfg: '#ffe7b0', ksh: '#000', kln: 'rgba(255,207,107,.28)', pline: 'rgba(255,207,107,.25)' });
+    let s = `<defs>${lin('ct', '#0c1424', '#1c2a44', 1)}</defs><rect width="${W}" height="${H}" fill="url(#ct)"/>`;
+    for (let i = 0; i < 100; i++) s += `<circle cx="${r2(R() * W)}" cy="${r2(R() * H * .5)}" r="${r2(.5 + R())}" fill="#fff" opacity="${r2(.2 + R() * .5)}"/>`;
+    const bld = (x, w, h, c) => { let o = `<rect x="${x}" y="${H * .86 - h}" width="${w}" height="${h}" fill="${c}"/>`; for (let yy = H * .86 - h + 18; yy < H * .84; yy += 22) for (let xx = x + 10; xx < x + w - 12; xx += 20) if (R() > .45) o += `<rect x="${r2(xx)}" y="${r2(yy)}" width="9" height="12" fill="${R() > .3 ? '#ffd27a' : '#ffefc4'}" opacity="${r2(.6 + R() * .4)}"/>`; return o; };
+    let x = -20; while (x < W * .62) { const w = 70 + R() * 90, h = H * (.18 + R() * .42); s += bld(x, w, h, R() > .5 ? '#1a2235' : '#222b40'); x += w + 6; }
+    s += `<rect x="0" y="${H * .86}" width="${W}" height="${H * .14}" fill="#e9eef5"/>`;
+    for (let i = 0; i < 120; i++) s += `<circle cx="${r2(R() * W)}" cy="${r2(R() * H)}" r="${r2(1 + R() * 2.4)}" fill="#fff" opacity="${r2(.3 + R() * .5)}"/>`;
+    return s + grain(.06); };
+
+  /* ═══ 파워포인트 — 도형 · 무대 ═══ */
+  const PPK = (acc, kfg, ksh) => ({ ink: '#1f1d22', acc, kbg: '#fff', kfg, ksh, kln: 'rgba(0,0,0,.12)', pbg: 'rgba(255,255,255,.9)', pline: 'rgba(0,0,0,.08)' });
+  D.arches = () => { paper(PPK('#c45a6a', '#9c3f4f', '#efc3cb'));
+    let s = `<rect width="${W}" height="${H}" fill="#fbf1ea"/>`;
+    const arch = (x, y, w, h, c) => `<path d="M${x} ${y} V${y - h + w / 2} A ${w / 2} ${w / 2} 0 0 1 ${x + w} ${y - h + w / 2} V${y}Z" fill="${c}"/>`;
+    s += arch(W * .04, H, 260, 640, '#f2c4c9') + arch(W * .16, H, 220, 520, '#f6dcb5') + arch(W * .27, H, 300, 760, '#c8dcd2') + arch(W * .42, H, 180, 420, '#d9d0ef');
+    s += `<circle cx="${W * .2}" cy="${H * .22}" r="70" fill="#f08a6a"/><circle cx="${W * .44}" cy="${H * .3}" r="26" fill="#2b4a6b"/><path d="M${W * .06} ${H * .3} q 30 -40 60 0 t 60 0 t 60 0" stroke="#2b4a6b" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+    s += `<rect x="${W * .34}" y="${H * .12}" width="90" height="90" rx="10" fill="none" stroke="#c45a6a" stroke-width="6" transform="rotate(12 ${W * .34 + 45} ${H * .12 + 45})"/>`;
+    return s + grain(.04); };
+  D.bauhaus = () => { paper(PPK('#1d4e9e', '#173f80', '#b7c6e3'));
+    let s = `<rect width="${W}" height="${H}" fill="#f4efe4"/>`;
+    s += `<circle cx="${W * .18}" cy="${H * .34}" r="${H * .2}" fill="#e2483b"/><rect x="${W * .26}" y="${H * .3}" width="${W * .16}" height="${H * .5}" fill="#1d4e9e"/><path d="M${W * .02} ${H * .95} L${W * .2} ${H * .5} L${W * .38} ${H * .95}Z" fill="#f2b632"/>`;
+    s += `<path d="M${W * .44} ${H * .1} A ${H * .14} ${H * .14} 0 0 1 ${W * .44} ${H * .38}Z" fill="#1f1d22"/><rect x="${W * .05}" y="${H * .08}" width="${W * .1}" height="14" fill="#1f1d22"/><circle cx="${W * .36}" cy="${H * .18}" r="18" fill="#1f1d22"/>`;
+    for (let i = 0; i < 6; i++) s += `<line x1="${W * .02}" x2="${W * .14}" y1="${H * (.62 + i * .03)}" y2="${H * (.62 + i * .03)}" stroke="#1f1d22" stroke-width="4"/>`;
+    return s + grain(.05); };
+  D.papercut = () => { paper(PPK('#a5512a', '#83401f', '#e0b494'));
+    let s = `<rect width="${W}" height="${H}" fill="#f7e6d2"/>`;
+    const C = ['#f2c58e', '#e9a061', '#d77a43', '#b85c33', '#8a4025'];
+    C.forEach((c, i) => { const r = H * (.95 - i * .14); s += `<circle cx="${W * .22}" cy="${H * 1.05}" r="${r}" fill="${c}" filter="drop-shadow(0 -6px 10px rgba(80,30,10,.25))"/>`; });
+    s += `<defs><filter id="ds"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#5a2a10" flood-opacity=".3"/></filter></defs>`;
+    s += `<circle cx="${W * .4}" cy="${H * .22}" r="${H * .08}" fill="#fff6e6" filter="url(#ds)"/>`;
+    return s + grain(.05); };
+  D.stage = () => { dark({ ink: '#f4efe7', acc: '#ffb35c', kbg: '#211c19', kfg: '#ffdcae', ksh: '#000', kln: 'rgba(255,179,92,.3)', pline: 'rgba(255,179,92,.25)' });
+    let s = `<rect width="${W}" height="${H}" fill="#120f12"/><defs><linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe8c2" stop-opacity=".55"/><stop offset="1" stop-color="#ffe8c2" stop-opacity="0"/></linearGradient><radialGradient id="pool"><stop offset="0" stop-color="#ffdca8" stop-opacity=".55"/><stop offset="1" stop-color="#ffdca8" stop-opacity="0"/></radialGradient></defs>`;
+    s += `<path d="M${W * .12} 0 L${W * .18} 0 L${W * .34} ${H * .82} L${W * .02} ${H * .82}Z" fill="url(#beam)"/><path d="M${W * .36} 0 L${W * .4} 0 L${W * .5} ${H * .82} L${W * .24} ${H * .82}Z" fill="url(#beam)" opacity=".7"/>`;
+    s += `<ellipse cx="${W * .2}" cy="${H * .84}" rx="${W * .17}" ry="${H * .05}" fill="url(#pool)"/><rect x="0" y="${H * .84}" width="${W}" height="${H * .16}" fill="#2a1b14"/>`;
+    for (let i = 0; i < 14; i++) s += `<path d="M${i * W / 14} 0 V${H * .2}" stroke="#5e1a1f" stroke-width="${W / 14 * .9}" opacity=".85"/><path d="M${i * W / 14 + W / 28} 0 V${H * .22}" stroke="#7a2228" stroke-width="10" opacity=".9"/>`;
+    s += `<rect x="${W * .16}" y="${H * .5}" width="${W * .08}" height="${H * .32}" rx="6" fill="#3a2a22"/><rect x="${W * .155}" y="${H * .48}" width="${W * .09}" height="16" rx="4" fill="#5a4234"/>`;
+    return s + grain(.07); };
+
+  /* ═══ 워드 — 책상 · 문구 ═══ */
+  const WDK = (acc, kfg, ksh) => ({ ink: '#1e2430', acc, kbg: '#fff', kfg, ksh, kln: 'rgba(0,0,0,.12)', pbg: 'rgba(255,255,255,.9)', pline: 'rgba(0,0,0,.08)' });
+  const shadow = `<defs><filter id="sh"><feDropShadow dx="6" dy="10" stdDeviation="10" flood-color="#3a2a14" flood-opacity=".25"/></filter></defs>`;
+  const note = (x, y, w, h, rot, line) => { let o = `<g transform="rotate(${rot} ${x + w / 2} ${y + h / 2})" filter="url(#sh)"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#fffdf6"/>`; for (let yy = y + 60; yy < y + h - 20; yy += 34) o += `<line x1="${x + 30}" x2="${x + w - 24}" y1="${yy}" y2="${yy}" stroke="${line}" stroke-width="1.5"/>`; return o + `<line x1="${x + 58}" x2="${x + 58}" y1="${y}" y2="${y + h}" stroke="#e8a0a0" stroke-width="1.5"/></g>`; };
+  const pencil = (x, y, L, rot, c) => `<g transform="translate(${x} ${y}) rotate(${rot})" filter="url(#sh)"><rect x="0" y="-11" width="${L}" height="22" fill="${c}"/><rect x="${L * .86}" y="-11" width="${L * .06}" height="22" fill="#c9c2b4"/><rect x="${L * .92}" y="-11" width="${L * .08}" height="22" rx="4" fill="#e98a8a"/><path d="M0 -11 L-34 0 L0 11Z" fill="#f2d5ab"/><path d="M-22 -4 L-34 0 L-22 4Z" fill="#333"/></g>`;
+  const mug = (x, y, r, c, top) => `<g filter="url(#sh)"><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r * .78}" fill="${top}"/><path d="M${x + r * .9} ${y - r * .3} a ${r * .4} ${r * .4} 0 1 1 0 ${r * .6}" stroke="${c}" stroke-width="${r * .18}" fill="none"/></g>`;
+  D.desk_spring = () => { paper(WDK('#3f6fb0', '#2c5591', '#b9cbe6'));
+    let s = `<rect width="${W}" height="${H}" fill="#eef1ea"/>` + shadow + note(W * .06, H * .2, 520, 680, -6, '#c8d6e8');
+    s += pencil(W * .3, H * .78, 380, -28, '#f2c14e') + mug(W * .44, H * .2, 70, '#e7eef6', '#c48b5a');
+    s += `<g filter="url(#sh)"><rect x="${W * .36}" y="${H * .5}" width="90" height="150" rx="40" fill="#cfe0ea"/></g>`;
+    for (let i = 0; i < 5; i++) { const x = W * .38 + Math.cos(i) * 60, y = H * .42 + Math.sin(i * 2) * 40; s += `<line x1="${W * .38}" y1="${H * .52}" x2="${r2(x)}" y2="${r2(y)}" stroke="#5f8a5a" stroke-width="4"/><circle cx="${r2(x)}" cy="${r2(y)}" r="20" fill="${['#f4a6b8', '#f7d06b', '#f4a6b8', '#fff', '#f08a9a'][i]}"/>`; }
+    return s + grain(.04); };
+  D.desk_summer = () => { paper(WDK('#0e7c86', '#0a5c66', '#9cc9cd'));
+    let s = `<rect width="${W}" height="${H}" fill="#f3efe5"/>` + shadow;
+    s += `<g transform="rotate(4 ${W * .22} ${H * .5})" filter="url(#sh)"><rect x="${W * .05}" y="${H * .14}" width="560" height="760" fill="#fffdf6"/>`;
+    for (let r = 0; r < 20; r++) for (let c = 0; c < 14; c++) s += `<rect x="${W * .05 + 30 + c * 36}" y="${H * .14 + 40 + r * 34}" width="36" height="28" fill="none" stroke="#e6a4a4" stroke-width="1"/>`;
+    s += `</g>`;
+    s += `<g filter="url(#sh)"><path d="M${W * .42} ${H * .18} L${W * .47} ${H * .18} L${W * .46} ${H * .46} L${W * .43} ${H * .46}Z" fill="#c9e6ea" opacity=".9"/><rect x="${W * .43}" y="${H * .24}" width="${W * .03}" height="${H * .2}" fill="#9a6a44" opacity=".85"/><rect x="${W * .445}" y="${H * .1}" width="8" height="${H * .2}" fill="#e2483b"/></g>`;
+    s += pencil(W * .1, H * .9, 420, -4, '#2b6cb0');
+    return s + grain(.04); };
+  D.desk_autumn = () => { paper(WDK('#9a4d22', '#7a3b18', '#ddb08c'));
+    let s = `<rect width="${W}" height="${H}" fill="#f1e5d4"/>` + shadow;
+    const book = (x, y, w, h, c, rot) => `<g transform="rotate(${rot} ${x + w / 2} ${y + h / 2})" filter="url(#sh)"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${c}"/><rect x="${x}" y="${y + h - 16}" width="${w}" height="16" fill="#fffaf0"/></g>`;
+    s += book(W * .06, H * .52, 420, 120, '#7a3b18', -3) + book(W * .08, H * .42, 400, 110, '#3f5f58', 2) + book(W * .05, H * .33, 430, 105, '#b8732e', -1);
+    s += mug(W * .36, H * .32, 80, '#f7f1e6', '#a2683c');
+    const leaf = (x, y, r, rot, c) => `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${r})"><path d="M0 -30 L7 -14 L22 -20 L16 -6 L30 0 L14 6 L18 22 L4 12 L0 30 L-4 12 L-18 22 L-14 6 L-30 0 L-16 -6 L-22 -20 L-7 -14Z" fill="${c}"/></g>`;
+    [[.3, .72, 1.6, 20], [.4, .6, 1.2, -30], [.2, .18, 1.4, 60], [.44, .82, 1.1, 10]].forEach(([x, y, r, a], i) => s += leaf(W * x, H * y, r, a, ['#c9461f', '#e0832e', '#b43a1c', '#eab04a'][i]));
+    return s + grain(.05); };
+  D.desk_winter = () => { paper(WDK('#3f5873', '#2e445c', '#b4c2d3'));
+    let s = `<rect width="${W}" height="${H}" fill="#e9ecef"/>` + shadow;
+    s += `<g transform="rotate(-5 ${W * .2} ${H * .5})" filter="url(#sh)"><rect x="${W * .06}" y="${H * .18}" width="520" height="700" fill="#fffef9"/>`;
+    for (let i = 0; i < 9; i++) s += `<path d="M${W * .06 + 50} ${H * .18 + 120 + i * 56} q 120 ${-8 + (i % 2) * 6} 240 0 t ${160 + (i % 3) * 30} 0" stroke="#3f5873" stroke-width="2.2" fill="none" opacity=".55"/>`;
+    s += `</g>`;
+    s += `<g transform="translate(${W * .32} ${H * .72}) rotate(-35)" filter="url(#sh)"><rect x="0" y="-14" width="330" height="28" rx="14" fill="#1f2b3a"/><rect x="230" y="-15" width="16" height="30" fill="#c9a24a"/><path d="M0 -14 L-60 0 L0 14Z" fill="#c9a24a"/></g>`;
+    s += mug(W * .43, H * .24, 82, '#b8463c', '#5a3826');
+    for (let i = 0; i < 3; i++) s += `<path d="M${W * .43 - 20 + i * 20} ${H * .14} q -14 -24 0 -46 q 14 -22 0 -44" stroke="#fff" stroke-width="4" fill="none" opacity=".7" stroke-linecap="round"/>`;
+    s += `<g filter="url(#sh)"><circle cx="${W * .44}" cy="${H * .62}" r="70" fill="#d9c7a8"/>`; for (let i = -60; i <= 60; i += 14) s += `<path d="M${W * .44 - 66} ${H * .62 + i} Q ${W * .44} ${H * .62 + i - 26} ${W * .44 + 66} ${H * .62 + i}" stroke="#bfa985" stroke-width="3" fill="none"/>`; s += `</g>`;
+    return s + grain(.04); };
+}
+
+  addThemes(D,{W,H,R,r2,ridge,grain,lin,glow,set});
+  seed = 7; if (!D[T]) T = "sea";
+  const body = D[T]();
+  return { svg: `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" font-family="SUIT, sans-serif">${body}</svg>`, mode: MODE, vars: VARS };
+}
+</script>
+<script>/* 달력 배경화면 만들기 v1.0 — Blog J (블로그 실행형 · 그림은 이 기기에서만 만들어요) */
+const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 00:16 판";
+const EMBED = new URLSearchParams(location.search).get("embed") === "1";
+const LSK = "bj-wallcal1";
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const WKK = "일월화수목금토", WKE = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const MONE = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+const p2 = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+const ymdw = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); if (!m) return ""; const d = new Date(+m[1], +m[2] - 1, +m[3]); return `${s}(${WKK[d.getDay()]})`; };
+const svg = p => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+let tt; function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2600); }
+
+/* ── 음력 ── */
+const DAY = 86400000;
+const pdate = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+function lunarMonths(y) { const t = LUNAR[y]; if (!t) return null; const [leap, len, ny] = t; const out = []; let i = 0; for (let m = 1; m <= 12; m++) { out.push({ m, leap: false, days: len[i++] }); if (leap === m) out.push({ m, leap: true, days: len[i++] }); } return { ny: pdate(ny), months: out, leap }; }
+function solarToLunar(date) { let y = date.getFullYear(); let L = lunarMonths(y); if (!L || date < L.ny) { y--; L = lunarMonths(y); if (!L) return null; } let off = Math.round((date - L.ny) / DAY); for (const mo of L.months) { if (off < mo.days) return { y, m: mo.m, d: off + 1, leap: mo.leap }; off -= mo.days; } return null; }
+
+/* ── 그림 목록 ── */
+const SC = {
+  snowpeak: ["새벽 설산", "겨울"], nightforest: ["눈 내리는 숲", "겨울"], pine: ["겨울 소나무", "한국"], city: ["겨울 밤 도시", "도시"], desk_winter: ["겨울 편지", "책상"], aurora: ["오로라 별밤", "하늘"],
+  sakura: ["벚꽃 가지", "봄"], plum: ["봄 매화", "한국"], alley: ["봄 골목", "도시"], arches: ["봄 파스텔 도형", "도형"], desk_spring: ["봄 책상", "책상"], dawn: ["새벽 하늘", "하늘"],
+  sea: ["모래 · 바다 · 하늘", "여름"], coast: ["여름 해안 도로", "도시"], bamboo: ["여름 대나무", "한국"], cloud: ["한낮 구름", "하늘"], bauhaus: ["여름 원색 도형", "도형"], desk_summer: ["여름 원고지", "책상"],
+  maple: ["단풍 산", "가을"], avenue: ["가을 가로수길", "도시"], chrysan: ["가을 국화", "한국"], papercut: ["가을 종이 공예", "도형"], desk_autumn: ["가을 책과 차", "책상"], sunset: ["노을", "하늘"],
+  moonjar: ["한지 · 달항아리", "한국"], contour: ["등고선 금선", "도형"], marble: ["대리석 · 금", "도형"], grid: ["모래 · 바다 모눈", "도형"], stage: ["겨울 무대 조명", "도형"]
+};
+const SEASON = { 12: ["nightforest", "city", "pine", "desk_winter", "snowpeak", "stage"], 1: ["snowpeak", "pine", "moonjar", "nightforest", "desk_winter", "aurora"], 2: ["plum", "snowpeak", "moonjar", "desk_winter", "aurora", "marble"],
+  3: ["plum", "sakura", "dawn", "arches", "desk_spring", "alley"], 4: ["sakura", "alley", "arches", "desk_spring", "dawn", "plum"], 5: ["alley", "arches", "dawn", "cloud", "desk_spring", "sakura"],
+  6: ["sea", "cloud", "bamboo", "coast", "bauhaus", "desk_summer"], 7: ["sea", "coast", "bamboo", "bauhaus", "cloud", "desk_summer"], 8: ["coast", "sea", "sunset", "bamboo", "desk_summer", "cloud"],
+  9: ["sunset", "chrysan", "avenue", "maple", "papercut", "desk_autumn"], 10: ["maple", "avenue", "chrysan", "papercut", "desk_autumn", "sunset"], 11: ["avenue", "maple", "chrysan", "desk_autumn", "papercut", "contour"] };
+const CATS = [["추천", "이달 어울림"], ["겨울"], ["봄"], ["여름"], ["가을"], ["한국"], ["하늘"], ["도시"], ["도형"], ["책상"], ["단색"], ["내 사진"]];
+const SOLID = [["#0B3D4A", "깊은 바다"], ["#14202B", "먹"], ["#2B3A55", "남색 밤"], ["#5A4A6E", "보랏빛"], ["#F3EEE3", "모래"], ["#E9EEF2", "구름"], ["#DCE8E0", "연두"], ["#F4DCD3", "살구"]];
+const RES = [
+  ["PC · 모니터", [[1920, 1080, "FHD", "가장 흔한 모니터"], [2560, 1440, "QHD", "27인치 · 게임 모니터"], [3840, 2160, "4K", "4K 모니터"], [3440, 1440, "울트라와이드", "21:9 모니터"]]],
+  ["노트북 (16:10)", [[1920, 1200, "16:10", "노트북 · 사무용"], [2560, 1600, "16:10 고해상도", "갤럭시북 · 맥북 에어"], [2880, 1800, "레티나", "맥북 프로 15"], [3840, 2400, "16:10 4K", "고해상도 노트북"]]],
+  ["휴대폰 · 태블릿", [[1080, 2340, "갤럭시 기본", "갤럭시 S · A 시리즈"], [1440, 3120, "갤럭시 고해상도", "갤럭시 S 울트라"], [1179, 2556, "아이폰", "아이폰 14 · 15 · 16"], [1290, 2796, "아이폰 맥스", "아이폰 플러스 · 프로 맥스"], [2048, 2732, "아이패드", "아이패드 프로 12.9"]]]
+];
+const MOBW = () => /Android|iPhone|iPad|iPod/.test(navigator.userAgent) && Math.min(screen.width, screen.height) < 700;
+function BLANK() {
+  const n = new Date(); const nx = new Date(n.getFullYear(), n.getMonth() + 1, 1);
+  return { step: 0, cat: "추천", scene: (SEASON[nx.getMonth() + 1] || ["sea"])[0], solid: "#0B3D4A", photo: false, dim: 0, py: 50,
+    y: nx.getFullYear(), m: nx.getMonth() + 1, kind: "month", pos: "tr", posP: "bc", size: 100, panel: "auto", wk: 0,
+    hol: true, lun: true, term: true, son: false, trad: true, font: "suit", motto: "", memos: [], mark: true,
+    w: MOBW() ? Math.round(screen.width * (devicePixelRatio || 1)) : 1920, h: MOBW() ? Math.round(screen.height * (devicePixelRatio || 1)) : 1080, fmt: "png" };
+}
+let S = (() => { try { const v = JSON.parse(localStorage.getItem(LSK) || "null"); if (v) { const b = BLANK(); const o = Object.assign(b, v, { photo: false }); const n = new Date(); if (o.y * 12 + o.m < n.getFullYear() * 12 + n.getMonth() + 1) { o.y = b.y; o.m = b.m; } if (o.cat === "내 사진") o.cat = "추천"; return o; } } catch (e) {} return BLANK(); })();
+let saveT; function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { const c = Object.assign({}, S); delete c.photo; localStorage.setItem(LSK, JSON.stringify(c)); } catch (e) {} }, 300); }
+let PHOTO = null;   /* 내 사진(이 기기 메모리에만) */
+const port = () => S.h > S.w;
+
+/* ── 날짜 정보 ── */
+function dayInfo(d) {
+  const k = ymd(d), lu = solarToLunar(d), o = { hol: S.hol ? HOL[k] : null, term: S.term ? TERMS[k] : null, lun: null, son: false, trad: null, memo: null };
+  if (lu) {
+    if (S.lun && (lu.d === 1 || lu.d === 15)) o.lun = `음 ${lu.leap ? "윤" : ""}${lu.m}.${lu.d}`;
+    if (S.son && (lu.d % 10 === 9 || lu.d % 10 === 0)) o.son = true;
+    if (S.trad && !lu.leap) o.trad = { "1-15": "정월대보름", "5-5": "단오", "7-7": "칠석" }[lu.m + "-" + lu.d] || null;
+  }
+  const mm = S.memos.find(x => x.d === k && x.t); if (mm) o.memo = mm.t;
+  return o;
+}
+
+/* ── 그리기 ── */
+const FONTS = { suit: ['SUIT, "Malgun Gothic", sans-serif', "깔끔한 고딕"], batang: ['"Gowun Batang", serif', "바탕(명조)"], hand: ['"Nanum Pen Script", cursive', "손글씨"], round: ['"Jua", sans-serif', "둥근 글씨"] };
+const SCALE = (w, h) => Math.max(w, h) / 1920;
+function sceneImage(name, w, h) {   /* 그림 SVG → 이미지(목표 크기로) */
+  const k = SCALE(w, h), r = SCENE(name, Math.round(w / k), Math.round(h / k));
+  const s = r.svg.replace(/width="\d+" height="\d+"/, `width="${w}" height="${h}"`);
+  return new Promise((ok, no) => { const im = new Image(); const u = URL.createObjectURL(new Blob([s], { type: "image/svg+xml" })); im.onload = () => { URL.revokeObjectURL(u); ok({ im, mode: r.mode, vars: r.vars }); }; im.onerror = e => { URL.revokeObjectURL(u); no(e); }; im.src = u; });
+}
+function themeOf(bg) {   /* 판 · 글자 색 */
+  let mode = S.panel === "auto" ? bg.mode : S.panel, v = bg.vars || {};
+  if (mode === "glass" && v.ga == null) v = Object.assign({ ga: ".55" }, v);
+  const dark = mode === "dark" || (mode === "none" && bg.darkBg);
+  return { mode, ink: dark ? (v.ink && bg.mode === "dark" ? v.ink : "#F4F2EC") : (bg.mode === "dark" ? "#14202B" : (v.ink || "#14202B")), acc: dark ? (bg.mode === "dark" ? (v.acc || "#9CC3E6") : "#9CC3E6") : (bg.mode === "dark" ? "#0C737D" : (v.acc || "#0C737D")),
+    sun: dark ? "#FF8A7A" : "#C23A2B", sat: dark ? "#8AB4FF" : "#2B5FA0", sub: dark ? "rgba(244,242,236,.72)" : "rgba(20,32,43,.62)", pbg: v.pbg || "rgba(253,250,244,.9)", pline: v.pline || "rgba(20,32,43,.14)", ga: +(v.ga || .2), dark };
+}
+async function bgSource(w, h) {
+  if (S.cat === "내 사진" && PHOTO) return { im: PHOTO, photo: true, mode: "glass", vars: {}, darkBg: true };
+  if (S.cat === "단색") { const c = S.solid, l = luma(c); return { solid: c, mode: l > .6 ? "paper" : "glass", vars: l > .6 ? { pbg: "rgba(255,255,255,.75)" } : { ga: ".12" }, darkBg: l <= .6 }; }
+  return await sceneImage(S.scene, w, h);
+}
+function luma(hex) { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * .299 + ((n >> 8) & 255) * .587 + (n & 255) * .114) / 255; }
+function paintBg(ctx, bg, w, h) {
+  if (bg.solid) { ctx.fillStyle = bg.solid; ctx.fillRect(0, 0, w, h); return; }
+  if (bg.photo) { const im = bg.im, r = Math.max(w / im.width, h / im.height), dw = im.width * r, dh = im.height * r; ctx.drawImage(im, (w - dw) / 2, (h - dh) * (S.py / 100), dw, dh); if (S.dim) { ctx.fillStyle = `rgba(0,0,0,${S.dim / 100})`; ctx.fillRect(0, 0, w, h); } return; }
+  ctx.drawImage(bg.im, 0, 0, w, h);
+}
+function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function panelBox(ctx, src, T, x, y, w, h, u) {
+  if (T.mode === "none") return;
+  const r = 26 * u;
+  if (T.mode === "glass" || T.mode === "dark") {   /* 뒤 그림을 흐리게(작게 줄였다 키우기 — 모든 브라우저) */
+    const k = 1 / 18, c = document.createElement("canvas"); c.width = Math.max(2, Math.round(w * k)); c.height = Math.max(2, Math.round(h * k));
+    const cx = c.getContext("2d"); cx.imageSmoothingQuality = "high"; cx.drawImage(src, x, y, w, h, 0, 0, c.width, c.height);
+    ctx.save(); rr(ctx, x, y, w, h, r); ctx.clip(); ctx.imageSmoothingQuality = "high"; ctx.drawImage(c, x, y, w, h);
+    ctx.fillStyle = T.mode === "dark" ? "rgba(10,14,22,.66)" : `rgba(255,255,255,${Math.min(.82, Math.max(.32, T.ga + .12))})`; ctx.fillRect(x, y, w, h); ctx.restore();
+    ctx.save(); rr(ctx, x + .5, y + .5, w - 1, h - 1, r); ctx.strokeStyle = T.mode === "dark" ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.55)"; ctx.lineWidth = 1.5 * u; ctx.stroke(); ctx.restore();
+  } else {
+    ctx.save(); ctx.shadowColor = "rgba(60,40,10,.28)"; ctx.shadowBlur = 40 * u; ctx.shadowOffsetY = 18 * u; rr(ctx, x, y, w, h, r); ctx.fillStyle = T.pbg; ctx.fill(); ctx.restore();
+    ctx.save(); rr(ctx, x + .5, y + .5, w - 1, h - 1, r); ctx.strokeStyle = T.pline; ctx.lineWidth = 1.2 * u; ctx.stroke(); ctx.restore();
+  }
+}
+function txt(ctx, s, x, y, size, weight, color, align, font) { ctx.font = `${weight} ${size}px ${font || FONTS[S.font][0]}`; ctx.fillStyle = color; ctx.textAlign = align || "left"; ctx.textBaseline = "alphabetic"; ctx.fillText(s, x, y); }
+function fitTxt(ctx, s, max, size, weight, font) { ctx.font = `${weight} ${size}px ${font || FONTS[S.font][0]}`; while (s.length > 1 && ctx.measureText(s).width > max) s = s.slice(0, -1); return s; }
+/* 한 달 칸 — big: 큰 판 / 작게 */
+function monthGrid(ctx, T, y0, x, y, w, Y, M, opt) {
+  const u = opt.u, fs = opt.fs, first = new Date(Y, M - 1, 1), nd = new Date(Y, M, 0).getDate(), off = (first.getDay() - S.wk + 7) % 7, rows = Math.ceil((off + nd) / 7);
+  const cw = w / 7, dh = fs * 1.45, lh = opt.labels ? fs * .62 : 0, rh = dh + lh + fs * .5;
+  let yy = y;
+  if (opt.head) { /* 머리 */
+    if (opt.big) {
+      txt(ctx, String(M), x, yy + fs * 3.1, fs * 3.4, 900, T.acc, "left", 'SUIT, sans-serif');
+      ctx.font = `900 ${fs * 3.4}px SUIT, sans-serif`; const nw = ctx.measureText(String(M)).width;
+      txt(ctx, MONE[M - 1], x + nw + fs * .7, yy + fs * 1.75, fs * .92, 800, T.ink, "left", 'SUIT, sans-serif');
+      txt(ctx, `${Y}년 ${M}월`, x + nw + fs * .7, yy + fs * 3.0, fs * 1.05, 700, T.sub, "left", 'SUIT, sans-serif');
+      yy += fs * 4.2;
+    } else { txt(ctx, `${M}월`, x, yy + fs * 1.2, fs * 1.25, 900, T.acc, "left", 'SUIT, sans-serif'); txt(ctx, MONE[M - 1].slice(0, 3) + " " + Y, x + w, yy + fs * 1.2, fs * .78, 700, T.sub, "right", 'SUIT, sans-serif'); yy += fs * 1.9; }
+  }
+  /* 요일 */
+  for (let i = 0; i < 7; i++) { const wd = (i + S.wk) % 7, c = wd === 0 ? T.sun : wd === 6 ? T.sat : T.sub; txt(ctx, opt.big ? WKE[wd] : WKK[wd], x + cw * i + cw / 2, yy + fs * .85, fs * (opt.big ? .62 : .72), 800, c, "center", 'SUIT, sans-serif'); }
+  yy += fs * 1.25;
+  ctx.fillStyle = T.dark ? "rgba(255,255,255,.18)" : "rgba(20,32,43,.14)"; ctx.fillRect(x, yy - fs * .1, w, Math.max(1, u));
+  yy += fs * .25;
+  for (let d = 1; d <= nd; d++) {
+    const i = off + d - 1, r = Math.floor(i / 7), c = i % 7, dt = new Date(Y, M - 1, d), wd = dt.getDay(), inf = dayInfo(dt);
+    const cx = x + cw * c + cw / 2, cy = yy + r * rh + dh * .9, red = wd === 0 || inf.hol, col = red ? T.sun : wd === 6 ? T.sat : T.ink;
+    if (inf.memo && opt.labels) { ctx.save(); ctx.globalAlpha = T.dark ? .22 : .14; ctx.fillStyle = T.acc; rr(ctx, cx - cw * .44, yy + r * rh - fs * .05, cw * .88, rh - fs * .3, fs * .35); ctx.fill(); ctx.restore(); }
+    txt(ctx, String(d), cx, cy, fs * (opt.big ? 1.05 : 1), opt.big ? 750 : 700, col, "center");
+    if (inf.son) { ctx.fillStyle = T.acc; ctx.beginPath(); ctx.arc(cx + fs * .78, cy - fs * .78, fs * .13, 0, 7); ctx.fill(); }
+    if (opt.labels) { const lab = inf.memo || inf.hol || inf.trad || inf.term || inf.lun; if (lab) { const lc = inf.memo ? T.acc : inf.hol ? T.sun : T.sub; const s = fitTxt(ctx, lab, cw * .96, fs * .5, inf.memo || inf.hol ? 800 : 600); txt(ctx, s, cx, cy + lh + fs * .12, fs * .5, inf.memo || inf.hol ? 800 : 600, lc, "center"); } }
+  }
+  return yy + rows * rh - y;
+}
+function layoutKind() { return S.kind; }
+async function render(w, h, cv, quick) {
+  const ctx = cv.getContext("2d"); cv.width = w; cv.height = h;
+  const bg = await bgSource(w, h);
+  paintBg(ctx, bg, w, h);
+  const src = document.createElement("canvas"); src.width = w; src.height = h; src.getContext("2d").drawImage(cv, 0, 0);
+  const T = themeOf(bg), u = Math.min(w, h) / 1080 * (port() ? 1.25 : 1), sz = S.size / 100, P = port() ? S.posP : S.pos;
+  /* 판 크기 */
+  const fs = (S.kind === "month" ? 30 : S.kind === "small" ? 19 : S.kind === "two" ? 19 : 13.5) * u * sz;
+  const pad = fs * (S.kind === "year" ? 1.3 : 1.15);
+  let gw, cols = 1, rowsN = 1, months = [[S.y, S.m]];
+  if (S.kind === "two") { const n = new Date(S.y, S.m, 1); months.push([n.getFullYear(), n.getMonth() + 1]); cols = port() ? 1 : 2; rowsN = port() ? 2 : 1; }
+  if (S.kind === "year") { months = []; for (let i = 0; i < 12; i++) months.push([S.y, i + 1]); cols = port() ? 3 : 4; rowsN = port() ? 4 : 3; }
+  gw = fs * (S.kind === "month" ? 15.5 : S.kind === "year" ? 11.5 : 12.5);
+  const gap = fs * (S.kind === "year" ? 1.6 : 1.8);
+  /* 높이 재기 */
+  const meas = document.createElement("canvas").getContext("2d");
+  const mh = (Y, M) => monthGrid(meas, T, 0, 0, 0, gw, Y, M, { u, fs, head: true, big: S.kind === "month", labels: S.kind !== "year" });
+  let gh = 0; for (let r = 0; r < rowsN; r++) { let mx = 0; for (let c = 0; c < cols; c++) { const it = months[r * cols + c]; if (it) mx = Math.max(mx, mh(it[0], it[1])); } gh += mx + (r ? gap : 0); }
+  const yearHead = S.kind === "year" ? fs * 3.2 : 0;
+  const mottoH = S.motto ? fs * (S.kind === "month" ? 1.9 : 2.2) : 0, markH = S.mark ? fs * 1.5 : 0;
+  const pw = cols * gw + (cols - 1) * gap + pad * 2, ph = yearHead + gh + mottoH + markH + pad * 2;
+  const mX = (port() ? .07 : .045) * w, mYt = (port() ? .30 : .07) * h, mYb = (port() ? .06 : .09) * h;
+  const px = P[1] === "l" ? mX : P[1] === "r" ? w - mX - pw : (w - pw) / 2;
+  const py = P[0] === "t" ? mYt : P[0] === "b" ? h - mYb - ph : (h - ph) / 2 + (port() ? h * .05 : 0);
+  panelBox(ctx, src, T, px, py, pw, ph, u);
+  let cy = py + pad;
+  if (yearHead) { txt(ctx, String(S.y), px + pad, cy + fs * 2.2, fs * 2.6, 900, T.acc, "left", 'SUIT, sans-serif'); ctx.font = `900 ${fs * 2.6}px SUIT, sans-serif`; txt(ctx, "CALENDAR", px + pad + ctx.measureText(String(S.y)).width + fs * .6, cy + fs * 2.1, fs * .95, 800, T.sub, "left", 'SUIT, sans-serif'); cy += yearHead; }
+  for (let r = 0; r < rowsN; r++) { let mx = 0;
+    for (let c = 0; c < cols; c++) { const it = months[r * cols + c]; if (!it) continue; const hgt = monthGrid(ctx, T, 0, px + pad + c * (gw + gap), cy, gw, it[0], it[1], { u, fs, head: true, big: S.kind === "month", labels: S.kind !== "year" }); mx = Math.max(mx, hgt); }
+    cy += mx + gap; }
+  cy -= gap;
+  if (S.motto) { cy += fs * (S.kind === "month" ? .9 : 1.1); ctx.fillStyle = T.dark ? "rgba(255,255,255,.18)" : "rgba(20,32,43,.12)"; ctx.fillRect(px + pad, cy - fs * .55, pw - pad * 2, Math.max(1, u)); const f = S.font === "suit" ? FONTS.batang[0] : FONTS[S.font][0]; const s = fitTxt(ctx, S.motto, pw - pad * 2, fs * (S.font === "hand" ? 1.15 : .82), 700, f); txt(ctx, s, px + pw / 2, cy + fs * .55, fs * (S.font === "hand" ? 1.15 : .82), 700, T.ink, "center", f); cy += fs * .9; }
+  if (S.mark) { const my = py + ph - pad * .55; ctx.fillStyle = T.acc; rr(ctx, px + pw - pad - fs * 3.1, my - fs * .62, fs * .62, fs * .62, fs * .14); ctx.fill(); txt(ctx, "J", px + pw - pad - fs * 2.79, my - fs * .14, fs * .46, 900, "#fff", "center", 'Georgia, serif'); txt(ctx, "Blog J", px + pw - pad, my - fs * .1, fs * .52, 800, T.sub, "right", 'SUIT, sans-serif'); }
+  return { pw, ph };
+}
+
+/* ── 화면 ── */
+const IC = { cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', img: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/>',
+  dl: '<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/>', l: '<path d="M15 5l-7 7 7 7"/>', r: '<path d="M9 5l7 7-7 7"/>', x: '<path d="M6 6l12 12M18 6L6 18"/>', share: '<path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 14v6h14v-6"/>', screen: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>' };
+const SUM = () => [CATS.find(c => c[0] === S.cat) && (S.cat === "단색" ? "단색" : S.cat === "내 사진" ? "내 사진" : (SC[S.scene] || [""])[0]), `${S.y}년 ${S.m}월 · ${{ month: "한 달", small: "작은 한 달", two: "두 달", year: "1년" }[S.kind]}`, `${S.w}×${S.h}`];
+function drawSide() {
+  const sm = SUM(), st = (i, t, body) => `<section class="step${S.step === i ? " open" : ""}"><button class="sth" data-a="step" data-v="${i}"><span class="n">${i + 1}</span><b>${t}</b><small>${esc(sm[i])}</small></button><div class="stb">${S.step === i ? body() : ""}</div></section>`;
+  $("#side").innerHTML = st(0, "배경 고르기", bodyBg) + st(1, "달력 꾸미기", bodyCal) + st(2, "크기 · 받기", bodyRes);
+  if (S.step === 0) fillThumbs();
+}
+function bodyBg() {
+  let h = `<div class="row" style="margin-bottom:10px">${CATS.map(([c, t]) => `<button class="chip${S.cat === c ? " on" : ""}" data-a="cat" data-v="${c}">${t || c}</button>`).join("")}</div>`;
+  if (S.cat === "단색") return h + `<div class="row">${SOLID.map(([c, n]) => `<button class="sw${S.solid === c ? " on" : ""}" style="background:${c}" data-a="solid" data-v="${c}" title="${n}" aria-label="${n}"></button>`).join("")}<label class="sw" style="display:grid;place-items:center;position:relative;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)" title="직접 고르기"><input type="color" value="${S.solid}" data-k="solid" style="opacity:0;position:absolute;inset:0;width:100%;height:100%"></label></div>`;
+  if (S.cat === "내 사진") return h + `<button class="btn" data-a="photo" style="width:100%">${svg(IC.img)}${PHOTO ? "다른 사진 고르기" : "내 사진 고르기"}</button>
+    ${PHOTO ? `<div class="lab">사진 위치 (위 ↔ 아래)</div><input class="rng" type="range" min="0" max="100" value="${S.py}" data-k="py"><div class="lab">어둡게 (달력이 잘 보이게)</div><input class="rng" type="range" min="0" max="60" value="${S.dim}" data-k="dim">` : ""}
+    <p class="hint">사진은 이 기기 안에서만 쓰여요 — 어디에도 올라가지 않아요. 가로 사진은 PC, 세로 사진은 휴대폰 배경화면에 잘 맞아요.</p>`;
+  const list = S.cat === "추천" ? (SEASON[S.m] || SEASON[12]) : Object.keys(SC).filter(k => SC[k][1] === S.cat);
+  return h + `<div class="thumbs${port() ? " port" : ""}" id="thumbs">${list.map(k => `<button class="th${S.scene === k ? " on" : ""}" data-a="scene" data-v="${k}"><img alt="" data-sc="${k}"><span>${SC[k][0]}</span></button>`).join("")}</div>
+  <p class="hint">그림은 Blog J가 코드로 직접 그린 것이라 크게 받아도 깨지지 않아요. ${S.cat === "추천" ? `${S.m}월에 어울리는 그림부터 보여 드려요.` : ""}</p>`;
+}
+const TH = {};   /* 작은 그림(방향별로 한 번만) */
+async function fillThumbs() {
+  const pt = port(), tw = pt ? 180 : 320, th = pt ? 380 : 180, key = pt ? "p" : "l";
+  for (const img of document.querySelectorAll("img[data-sc]")) {
+    const k = img.dataset.sc, id = k + key;
+    if (!TH[id]) { try { const r = SCENE(k, pt ? 900 : 1920, pt ? 1900 : 1080); TH[id] = URL.createObjectURL(new Blob([r.svg.replace(/width="\d+" height="\d+"/, `width="${tw}" height="${th}"`)], { type: "image/svg+xml" })); } catch (e) { continue; } }
+    img.src = TH[id];
+    await new Promise(r => setTimeout(r, 0));
+  }
+}
+function bodyCal() {
+  const segv = (k, list) => `<div class="seg">${list.map(([v, t]) => `<button class="${String(S[k]) === String(v) ? "on" : ""}" data-a="set" data-k="${k}" data-v="${v}">${t}</button>`).join("")}</div>`;
+  const chipT = (k, t) => `<button class="chip${S[k] ? " on" : ""}" data-a="tog" data-k="${k}">${t}</button>`;
+  const posK = port() ? "posP" : "pos";
+  const posB = ["tl", "tc", "tr", "cl", "cc", "cr", "bl", "bc", "br"].map(p => { const lx = { l: 6, c: 16, r: 26 }[p[1]], ly = { t: 5, c: 11, b: 17 }[p[0]]; return `<button class="${S[posK] === p ? "on" : ""}" data-a="set" data-k="${posK}" data-v="${p}" aria-label="자리"><i style="left:${lx}px;top:${ly}px"></i></button>`; }).join("");
+  let h = `<div class="lab">달</div><div class="mon"><button data-a="mon" data-v="-1" aria-label="이전 달">${svg(IC.l)}</button><b class="num">${S.y}년 ${S.m}월</b><button data-a="mon" data-v="1" aria-label="다음 달">${svg(IC.r)}</button></div>
+  <div class="lab">모양</div>${segv("kind", [["month", "한 달"], ["small", "작은 한 달"], ["two", "두 달"], ["year", "1년"]])}
+  <div class="lab">자리 <small style="font-weight:600">${port() ? "휴대폰은 시계를 피해 아래쪽이 좋아요" : ""}</small></div><div class="row" style="gap:14px;align-items:flex-start"><div class="pos">${posB}</div><div style="flex:1;min-width:140px"><div class="lab" style="margin-top:0">크기 <span class="num">${S.size}%</span></div><input class="rng" type="range" min="60" max="150" step="5" value="${S.size}" data-k="size"></div></div>
+  <div class="lab">판</div>${segv("panel", [["auto", "그림에 맞춤"], ["glass", "유리"], ["paper", "종이"], ["dark", "어둡게"], ["none", "판 없이"]])}
+  <div class="lab">글씨</div>${segv("font", Object.entries(FONTS).map(([k, v]) => [k, v[1]]))}
+  <div class="lab">달력에 넣을 것</div><div class="row">${chipT("hol", "공휴일")}${chipT("lun", "음력(1일 · 15일)")}${chipT("term", "24절기")}${chipT("trad", "명절 · 대보름")}${chipT("son", "손 없는 날")}${chipT("mark", "Blog J 표시")}</div>
+  <div class="lab">한 주의 시작</div>${segv("wk", [[0, "일요일"], [1, "월요일"]])}
+  <div class="lab">한 줄 글 (선택)</div><input class="inp" data-k="motto" value="${esc(S.motto)}" maxlength="40" placeholder="예: 올해도 수고했어요 · 12월은 천천히">
+  <div class="lab">날짜 메모 <button class="chip" data-a="addMemo" ${S.memos.length >= 8 ? "disabled" : ""}>+ 메모</button></div>
+  ${S.memos.map((x, i) => `<div class="memo"><label class="dt"><span>${x.d ? ymdw(x.d) : "날짜 고르기"}</span><input type="date" data-mi="${i}" value="${x.d}"></label><input class="inp" data-mt="${i}" value="${esc(x.t)}" maxlength="12" placeholder="예: 결혼기념일"><button class="x" data-a="delMemo" data-v="${i}" aria-label="지우기">${svg(IC.x)}</button></div>`).join("") || `<p class="hint" style="margin-top:0">생일 · 기념일 · 마감일을 넣으면 그 날짜 칸에 작게 들어가요(한 달 · 두 달 모양).</p>`}`;
+  return h;
+}
+function bodyRes() {
+  const dpr = window.devicePixelRatio || 1, sw = Math.round(screen.width * dpr), sh = Math.round(screen.height * dpr);
+  let h = `<button class="btn" data-a="mine" style="width:100%;margin-bottom:6px">${svg(IC.screen)}지금 이 화면에 맞추기 <span class="num" style="color:var(--sub);font-weight:700">${sw}×${sh}</span></button>`;
+  RES.forEach(([g, L]) => { h += `<div class="lab">${g}</div><div class="res">${L.map(([w, hh, n, d]) => `<button class="${S.w === w && S.h === hh ? "on" : ""}" data-a="res" data-w="${w}" data-h="${hh}"><span class="num">${w}×${hh}</span> · ${n}<small>${d}</small></button>`).join("")}</div>`; });
+  h += `<div class="lab">직접 넣기</div><div class="row" style="flex-wrap:nowrap"><input class="inp num" data-k="w" value="${S.w}" inputmode="numeric" style="width:46%"><span>×</span><input class="inp num" data-k="h" value="${S.h}" inputmode="numeric" style="width:46%"></div>
+  <div class="lab">파일 형식</div><div class="seg"><button class="${S.fmt === "png" ? "on" : ""}" data-a="set" data-k="fmt" data-v="png">PNG (선명)</button><button class="${S.fmt === "jpg" ? "on" : ""}" data-a="set" data-k="fmt" data-v="jpg">JPG (작은 용량)</button></div>
+  <p class="hint">모니터 크기를 모르면 「지금 이 화면에 맞추기」를 누르세요. 큰 크기로 받아도 그림이 흐려지지 않아요.</p>`;
+  return h;
+}
+function drawMain() {
+  $("#main").innerHTML = `<div class="pvc"><div class="pvh"><b>미리보기</b><small class="num" id="pvs">${S.w}×${S.h} · ${S.y}년 ${S.m}월</small></div><div class="stage${port() ? " port" : ""}"><canvas id="pv" aria-label="배경화면 미리보기"></canvas></div></div>
+  <div class="dlbar"><button class="btn go" data-a="dl">${svg(IC.dl)}배경화면 받기 (${S.fmt.toUpperCase()})</button>${navigator.canShare ? `<button class="btn" data-a="share">${svg(IC.share)}휴대폰에 저장 · 보내기</button>` : ""}</div>
+  <div class="how"><b>배경화면으로 쓰는 법</b><br>윈도우: 받은 그림을 오른쪽 클릭 → 「바탕 화면 배경으로 설정」 · 맥: 그림 오른쪽 클릭 → 「데스크탑 사진 설정」 · 갤럭시: 갤러리에서 그림 → ⋮ → 「배경화면으로 설정」 · 아이폰: 사진 앱 → 공유 → 「배경화면으로 사용」</div>`;
+  paintPreview();
+}
+let pvT = 0, pvN = 0;
+function paintPreview() { clearTimeout(pvT); pvT = setTimeout(async () => {
+  const n = ++pvN, cv = $("#pv"); if (!cv) return;
+  const box = $(".stage"), maxW = Math.max(240, box.clientWidth), k = port() ? Math.min(1, (innerHeight * .7) / S.h, maxW / S.w) : Math.min(1, maxW / S.w), w = Math.round(S.w * k), h = Math.round(S.h * k);
+  const off = document.createElement("canvas");
+  try { await render(w, h, off, true); } catch (e) { console.warn(e); return; }
+  if (n !== pvN) return; cv.width = w; cv.height = h; cv.getContext("2d").drawImage(off, 0, 0); cv.style.width = w + "px";
+  const s = $("#pvs"); if (s) s.textContent = `${S.w}×${S.h} · ${S.y}년 ${S.m}월`;
+}, 60); }
+function fname() { return `${S.y}년${S.m}월_달력배경화면_${S.w}x${S.h}.${S.fmt}`; }
+async function makeBlob() {
+  $("#busy").hidden = false; await new Promise(r => setTimeout(r, 30));
+  try { const cv = document.createElement("canvas"); await render(S.w, S.h, cv); return await new Promise(ok => cv.toBlob(ok, S.fmt === "jpg" ? "image/jpeg" : "image/png", .92)); }
+  finally { $("#busy").hidden = true; }
+}
+function render2() { drawSide(); drawMain(); save(); }
+
+/* ── 누르기 · 입력 ── */
+document.addEventListener("click", async e => {
+  const el = e.target.closest("[data-a]"); if (!el) return; const a = el.dataset.a, v = el.dataset.v;
+  if (a === "step") { S.step = S.step === +v ? -1 : +v; drawSide(); return save(); }
+  if (a === "cat") { S.cat = v; if (v === "내 사진" && !PHOTO) { drawSide(); return pickPhoto(); } drawSide(); paintPreview(); return save(); }
+  if (a === "scene") { S.scene = v; document.querySelectorAll(".th").forEach(b => b.classList.toggle("on", b.dataset.v === v)); $(".step .sth small").textContent = SC[v][0]; paintPreview(); return save(); }
+  if (a === "solid") { S.solid = v; drawSide(); paintPreview(); return save(); }
+  if (a === "photo") return pickPhoto();
+  if (a === "mon") { let m = S.m + +v, y = S.y; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; } if (y < 2026 || y > 2028) return toast("공휴일 · 음력은 2026~2028년까지 들어 있어요"); S.y = y; S.m = m; render2(); return; }
+  if (a === "set") { const k = el.dataset.k; S[k] = /^(wk)$/.test(k) ? +v : v; render2(); return; }
+  if (a === "tog") { S[el.dataset.k] = !S[el.dataset.k]; render2(); return; }
+  if (a === "addMemo") { const d = `${S.y}-${p2(S.m)}-01`; S.memos.push({ d, t: "" }); render2(); setTimeout(() => { const i = document.querySelectorAll("[data-mt]"); if (i.length) i[i.length - 1].focus(); }, 30); return; }
+  if (a === "delMemo") { S.memos.splice(+v, 1); render2(); return; }
+  if (a === "res") { S.w = +el.dataset.w; S.h = +el.dataset.h; render2(); return; }
+  if (a === "mine") { const dpr = window.devicePixelRatio || 1; S.w = Math.round(screen.width * dpr); S.h = Math.round(screen.height * dpr); render2(); return toast(`${S.w}×${S.h}에 맞췄어요`); }
+  if (a === "dl") { const b = await makeBlob(); if (!b) return toast("그림을 만들지 못했어요"); const u = URL.createObjectURL(b), x = document.createElement("a"); x.href = u; x.download = fname(); document.body.appendChild(x); x.click(); x.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return toast("배경화면을 받았어요"); }
+  if (a === "share") { const b = await makeBlob(); if (!b) return; const f = new File([b], fname(), { type: b.type }); if (navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f], title: "달력 배경화면" }); } catch (er) {} } else toast("이 브라우저는 보내기가 안 돼요 — 「배경화면 받기」를 써 주세요"); return; }
+});
+document.addEventListener("click", e => { const i = e.target.closest(".dt input"); if (i && i.showPicker) { try { i.showPicker(); } catch (er) {} } });
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.k) { const k = t.dataset.k; if (k === "w" || k === "h") return; S[k] = t.type === "range" ? +t.value : t.value;
+    if (k === "size") { const l = t.closest(".stb").querySelector(".num"); if (l && l.textContent.includes("%")) l.textContent = S.size + "%"; }
+    paintPreview(); return save(); }
+  if (t.dataset.mt != null) { S.memos[+t.dataset.mt].t = t.value; paintPreview(); return save(); }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.dataset.k === "w" || t.dataset.k === "h") { const n = Math.round(+String(t.value).replace(/\D/g, "")); if (!(n >= 320 && n <= 8000)) { toast("320 ~ 8000 사이 숫자를 넣어 주세요"); t.value = S[t.dataset.k]; return; } S[t.dataset.k] = n; render2(); return; }
+  if (t.dataset.mi != null && t.value) { S.memos[+t.dataset.mi].d = t.value; t.previousElementSibling.textContent = ymdw(t.value); paintPreview(); return save(); }
+  if (t.dataset.k === "solid") { S.solid = t.value; drawSide(); paintPreview(); save(); }
+});
+function pickPhoto() {
+  const ip = document.createElement("input"); ip.type = "file"; ip.accept = "image/*";
+  ip.onchange = () => { const f = ip.files[0]; if (!f) return; const u = URL.createObjectURL(f), im = new Image();
+    im.onload = () => { PHOTO = im; S.cat = "내 사진"; if (S.w > S.h !== im.width > im.height) toast(im.width > im.height ? "가로 사진이에요 — PC 크기가 잘 맞아요" : "세로 사진이에요 — 휴대폰 크기가 잘 맞아요"); render2(); };
+    im.onerror = () => toast("이 사진은 열 수 없어요 — JPG · PNG로 골라 주세요"); im.src = u; };
+  ip.click();
+}
+let rzT = 0; addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(paintPreview, 200); });
+
+/* ── 시작 ── */
+const GATE_ON = false;   /* 대표 글 공개 시각이 정해지면 Date.now() >= Date.parse("…+09:00") 로 */
+(async () => {
+  if (GATE_ON && !(await BJ_GATE.check(TOOL, "all"))) return;
+  document.body.insertAdjacentHTML("afterbegin", `<header class="hd"><div class="hd-in"><div class="logo"><span class="lg">${'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M7 15l3-3 3 3 2-2 2 2"/></svg>'}<i></i></span><div><small>BLOG J 무료 도구 · 생활</small><b>달력 배경화면 만들기</b></div></div><div class="sp"></div><a class="hbtn" href="https://luvbong.tistory.com/" target="_blank" rel="noopener">${svg(IC.cal)}<span class="tx">Blog J 다른 도구</span></a></div></header>`);
+  $("#ft").textContent = `달력 배경화면 만들기 v${APP_VER} · Blog J · 그림은 이 기기에서 만들어져요(업로드 없음) · 공휴일 · 음력 2026~2028년 · ${BUILD}`;
+  render2();
+  if (document.fonts) { document.fonts.load('700 20px "Gowun Batang"'); document.fonts.load('400 20px "Nanum Pen Script"'); document.fonts.load('400 20px "Jua"'); document.fonts.ready.then(paintPreview); }
+})();
+</script>
+</body></html>

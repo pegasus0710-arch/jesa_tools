@@ -1030,7 +1030,7 @@ function confirmTwice(k) { const n = Date.now(); if (ctK === k && n - ctT < 4000
 function toast(t) { const o = document.querySelector(".toast"); if (o) o.remove(); const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
 
 /* 시작 — 블로그 경유 잠금(대표 글 공개 시각부터) */
-const GATE_ON = false;   /* 대표 글 날짜가 정해지면 Date.now() >= Date.parse("…") 로 */
+const GATE_ON = Date.now() >= Date.parse("2026-11-26T09:00:00+09:00");   /* 대표 글 공개 시각부터 블로그 경유 잠금 */
 (async () => {
   const T = new URLSearchParams(location.search).get("tab") || "all";
   if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return;

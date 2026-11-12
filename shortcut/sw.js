@@ -1,5 +1,5 @@
 /* 단축키 사전 — 설치형(오프라인) · 열 때마다 새 판 확인 */
-const C = "shortcut-app-v1.0-11122128";
+const C = "shortcut-app-v1.0-11122140";
 const FILES = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./favicon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(C).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith("shortcut-app-") && k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

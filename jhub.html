@@ -6,227 +6,417 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0b3d4a">
 <title>테스트 허브 | Blog J</title>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/hub/jhub-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="icons/hub/jhub-64.png">
+<link rel="apple-touch-icon" href="icons/hub/jhub-180.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
 <style>
-:root{--bg:#faf6ee;--panel:#ffffff;--card:#ffffff;--in:#f3eee3;--ink:#14202b;--sub:#5f6b7a;--sub2:#5f6b7a;--g:#0c737d;--gh:#0a5c66;--gl:#e3ece9;--or:#e07a4f;--hair:rgba(20,32,43,0.18);--up:3px 4px 9px rgba(20,32,43,0.129),-3px -3px 8px rgba(255,255,255,.88)}
+:root{--bg:#faf6ee;--in:#f3eee3;--card:#fff;--ink:#14202b;--sub:#5f6b7a;--sea:#0c737d;--seah:#0a5c66;--seal:#eef6f7;--deep:#0b3d4a;--sky:#2b5fa0;--sun:#e07a4f;--sunt:#b4532a;--hair:rgba(20,32,43,.12);--hair2:rgba(20,32,43,.2)}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:SUIT,"Pretendard",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-text-size-adjust:100%}
 a{color:inherit}
 button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .num{font-variant-numeric:tabular-nums}
-.top{position:sticky;top:0;z-index:10;background:var(--panel);box-shadow:0 1px 0 var(--hair);padding:12px 16px}
-.top-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.badge{width:36px;height:36px;border-radius:10px;background:var(--g);color:#fff;display:grid;place-items:center;font-weight:900;font-style:italic;font-size:19px;position:relative;flex-shrink:0}
-.badge i{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;background:var(--or);border:2px solid var(--panel)}
-.tt{font-weight:900;font-size:18px;letter-spacing:-.3px}
-.tt small{display:block;font-weight:600;font-size:12.5px;color:var(--sub2);letter-spacing:0}
+/* 머리띠 */
+.top{background:var(--deep);color:#fff;padding:12px 16px 14px}
+.top-in{max-width:1320px;margin:0 auto}
+.tr{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{width:40px;height:40px;border-radius:10px;flex-shrink:0;display:block}
+.tt{font-weight:900;font-size:19px;letter-spacing:-.3px}
+.tt small{font-weight:600;font-size:12.5px;color:#cfe3e6;margin-left:8px;letter-spacing:0}
 .sp{flex:1}
-.q{flex:1 1 220px;max-width:360px;padding:10px 12px;border-radius:11px;border:0;background:var(--card);box-shadow:inset 0 0 0 1px var(--hair);font:inherit;font-size:15px;outline:none;min-height:42px}
-.q:focus{box-shadow:inset 0 0 0 2px var(--g);background:#fff}
-.owner{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--card);box-shadow:0 0 0 1px var(--hair);font-size:13.5px;font-weight:800;color:var(--sub)}
-.owner .dot{width:9px;height:9px;border-radius:50%;background:#9a9384}
-.owner.on{color:var(--g);box-shadow:0 0 0 1.5px var(--g)}
-.owner.on .dot{background:#2f7d4f}
-.wrap{max-width:1180px;margin:0 auto;padding:16px 16px 60px}
-.note{font-size:13.5px;color:var(--sub);line-height:1.65;margin:2px 0 16px;padding-left:12px;border-left:3px solid var(--or)}
-.sec{margin:22px 0 10px;display:flex;align-items:baseline;gap:10px}
-.sec h2{margin:0;font-size:16px;font-weight:900;letter-spacing:-.2px}
-.sec span{font-size:12.5px;color:var(--sub2)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
-.card{background:var(--card);border-radius:14px;box-shadow:var(--up);padding:14px 14px 12px;min-width:0}
-.ch{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.ch b{font-size:16px;font-weight:900;letter-spacing:-.3px}
-.ver{font-size:12.5px;font-weight:800;color:var(--g);background:var(--gl);border-radius:999px;padding:2px 8px}
-.st{font-size:12.5px;font-weight:700;color:var(--sub2);margin-left:auto;white-space:nowrap}
-.st.soon{color:#a0520c}
-.st.dev{color:#7a4b2a}
-.ty{font-size:12.5px;color:var(--sub2);margin:4px 0 10px}
-.links{display:flex;flex-wrap:wrap;gap:6px}
-.links a{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border-radius:10px;font-size:13.5px;font-weight:800;text-decoration:none;background:var(--panel);box-shadow:0 0 0 1px var(--hair)}
-.links a:hover{box-shadow:0 0 0 1.5px var(--g);color:var(--g)}
-.links a.main{background:var(--g);color:#fff;box-shadow:none}
-.links a.main:hover{background:var(--gh);color:#fff}
-.links a.post{color:var(--sub)}
-.todos{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}.todos .tl{width:100%;font-size:12px;font-weight:800;color:#a0520c}
-.todo{display:inline-block;padding:4px 9px;border-radius:8px;font-size:12.5px;font-weight:700;color:#8a4a0e;background:#fff3dc;box-shadow:0 0 0 1px #f0cf95 inset}
-.old{margin-top:10px;padding-top:9px;border-top:1px dashed var(--hair)}
-.old .lb{font-size:12.5px;font-weight:800;color:var(--sub2);margin-bottom:6px}
-.old a{font-weight:700}
-.gate{font-size:12.5px;color:#a0520c;margin-top:8px}
-.foot{font-size:12.5px;color:var(--sub2);text-align:center;margin-top:30px;line-height:1.7}
-.none{color:var(--sub2);padding:30px;text-align:center}
-@media (max-width:560px){.grid{grid-template-columns:1fr}.q{max-width:none;order:3;flex-basis:100%}.tt{font-size:17px}}
-
-/* 가로 배치(11-11): 한 앱 = 한 줄 — 왼쪽 이름 · 상태, 오른쪽 단추 */
-.grid{display:flex;flex-direction:column;gap:0;background:var(--card);border-radius:14px;box-shadow:var(--up);overflow:hidden}
-.card{display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px;align-items:start;border-radius:0;box-shadow:none;padding:12px 16px;border-top:1px solid var(--hair)}
-.card:first-child{border-top:0}
-.card:hover{background:#fbfaf6}
-.cl{min-width:0}.cr{min-width:0}
-.cl .ch{flex-wrap:wrap}
-.cl .st{margin-left:0;white-space:normal}
-.cl .ty{margin:3px 0 0}
-.cr{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
-.cr .old{margin:0;padding:0 0 0 14px;border-top:0;border-left:1px dashed var(--hair);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.cr .old .lb{margin:0}
-.cr .gate{margin:0;flex-basis:100%}
-.card{padding:10px 16px}
-.cl .ty{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-@media (max-width:760px){.card{grid-template-columns:1fr;gap:8px}.cr .old{padding-left:0;border-left:0}}
-
-/* 표 배치(11-11): 엑셀처럼 한 앱 = 한 행 */
-.xt{overflow-x:auto;background:var(--card);border-radius:12px;box-shadow:0 0 0 1px var(--hair)}
-.xt table{width:100%;min-width:980px;border-collapse:collapse;font-size:13.5px}
-.xt th{position:sticky;top:0;background:#f3eee3;text-align:left;font-size:12.5px;font-weight:800;color:var(--sub);padding:8px 10px;border-bottom:1px solid var(--hair);white-space:nowrap}
-.xt td{padding:8px 10px;border-top:1px solid rgba(20,32,43,.1);vertical-align:top}
-.xt tr:nth-child(even) td{background:#fcfaf6}
-.xt tr:hover td{background:#eef6f7}
-.xt td.nm{width:190px}.xt td.nm b{font-size:14.5px;font-weight:900}
-.xt td + td{border-left:1px solid rgba(20,32,43,.07)}
-.xt .ty{font-size:12.5px;color:var(--sub2);margin:2px 0 0}
-.xt .st{margin:0;white-space:nowrap}
-.xt .links{gap:4px}.xt .links a{padding:5px 9px;font-size:12.5px;border-radius:8px}
-.xt .links.sm{margin-top:4px}.xt .links.sm a{padding:3px 7px;font-weight:700;color:var(--sub)}
-.xt .dash{color:var(--sub2)}
-.gate{margin:6px 2px 0}
-.st.idea{display:inline-block;padding:3px 8px;border-radius:6px;background:#f3eee3;color:#8a4a16;font-weight:800;box-shadow:inset 0 0 0 1px #e2c9a8}
-.xt td.num{white-space:nowrap}
+.owner{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:10px;background:rgba(255,255,255,.1);font-size:13.5px;font-weight:800;color:#fff}
+.owner .dot{width:9px;height:9px;border-radius:50%;background:#9aa6ad}
+.owner.on{background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1.5px #7fd0d6}
+.owner.on .dot{background:#6fe0a0}
+.qw{position:relative;margin-top:12px}
+.qw svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:var(--sub);fill:none;stroke-width:2;stroke-linecap:round}
+.q{width:100%;padding:14px 16px 14px 46px;border-radius:12px;border:0;background:#fff;font:inherit;font-size:16px;outline:none;color:var(--ink)}
+.q:focus{box-shadow:0 0 0 3px rgba(127,208,214,.6)}
+/* 몸통 */
+.body{max-width:1320px;margin:0 auto;padding:16px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:16px;align-items:start}
+.side{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;background:var(--card);border-radius:16px;box-shadow:0 0 0 1px var(--hair);padding:8px}
+.grp{border-top:1px solid var(--hair)}
+.grp:first-child{border-top:0}
+.gh{width:100%;display:flex;align-items:center;gap:8px;padding:11px 10px;font-size:13px;font-weight:900;color:var(--sub);text-align:left;border-radius:10px}
+.gh:hover{background:var(--in)}
+.gh .ar{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;transition:transform .15s;flex-shrink:0}
+.grp.shut .gh .ar{transform:rotate(-90deg)}
+.gh .cn{margin-left:auto;font-size:12.5px;font-weight:700}
+.gh.dev{color:var(--sunt)}
+.grp.shut .gl{display:none}
+.it{width:100%;display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;text-align:left;min-width:0}
+.it:hover{background:var(--in)}
+.it.on{background:var(--sea);color:#fff}
+.it.on .iv,.it.on .ip{color:#d6eef0}
+.ii{width:30px;height:30px;border-radius:8px;flex-shrink:0;object-fit:cover;background:var(--deep)}
+.il{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:grid;place-items:center;font-weight:900;font-size:13px;color:#fff;background:#8b97a3}
+.it.on .il{background:rgba(255,255,255,.25)}
+.in{flex:1;min-width:0;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iv{font-size:12.5px;color:var(--sub);font-weight:700}
+.ip{font-size:12.5px;color:var(--sub);font-weight:700;min-width:26px;text-align:right}
+.it .tdo{width:7px;height:7px;border-radius:50%;background:var(--sun);flex-shrink:0}
+.gh.fav{color:#b4532a}
+.fs{width:26px;height:26px;display:grid;place-items:center;border-radius:7px;flex-shrink:0;color:#a7b0b9}
+.fs svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linejoin:round}
+.fs:hover{background:rgba(20,32,43,.08);color:#e07a4f}
+.fs.on{color:#e07a4f}.fs.on svg{fill:currentColor}
+.it.on .fs{color:#d6eef0}.it.on .fs.on{color:#ffd2bd}
+.hfs{margin-left:auto;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;font-size:13.5px;font-weight:800;box-shadow:0 0 0 1px var(--hair2);color:var(--sub);white-space:nowrap}
+.hfs svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linejoin:round}
+.hfs.on{color:#b4532a;box-shadow:0 0 0 1.5px #e07a4f;background:#fdf1ea}.hfs.on svg{fill:#e07a4f;stroke:#e07a4f}
+.side .none{padding:20px;color:var(--sub);font-size:14px;text-align:center}
+/* 메인 카드 */
+.main{min-width:0;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border-radius:16px;box-shadow:0 0 0 1px var(--hair);padding:20px 22px;min-width:0}
+.hd{display:flex;gap:16px;align-items:flex-start}
+.hd .big{width:64px;height:64px;border-radius:16px;flex-shrink:0;object-fit:cover;background:var(--deep)}
+.hd .bigl{width:64px;height:64px;border-radius:16px;flex-shrink:0;display:grid;place-items:center;font-weight:900;font-size:26px;color:#fff;background:#8b97a3}
+.hd h1{margin:0;font-size:24px;font-weight:900;letter-spacing:-.5px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ver{font-size:13px;font-weight:800;color:var(--sea);background:var(--seal);border-radius:7px;padding:3px 9px}
+.tag{font-size:12.5px;font-weight:800;border-radius:7px;padding:3px 9px;background:var(--in);color:var(--sub)}
+.tag.soon{background:#fff3dc;color:#8a4a0e}
+.tag.dev{background:#fbe9e1;color:var(--sunt)}
+.tag.pub{background:#e4f2e8;color:#1e6b3a}
+.desc{margin:8px 0 0;font-size:15.5px;line-height:1.65;color:#2a3540}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.btns a{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:10px 15px;border-radius:10px;font-size:14px;font-weight:800;text-decoration:none;background:#fff;box-shadow:0 0 0 1px var(--hair2)}
+.btns a:hover{box-shadow:0 0 0 1.5px var(--sea);color:var(--sea)}
+.btns a.pri{background:var(--sea);color:#fff;box-shadow:none}
+.btns a.pri:hover{background:var(--seah);color:#fff}
+.btns a svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.gate{font-size:12.5px;color:var(--sunt);margin-top:8px}
+.cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px}
+.ct{margin:0 0 12px;font-size:15px;font-weight:900;display:flex;align-items:center;gap:8px}
+.ct span{font-size:12.5px;font-weight:700;color:var(--sub)}
+.ct .tl{color:var(--sunt)}
+.info{width:100%;border-collapse:collapse;font-size:14px}
+.info th{width:108px;text-align:left;font-weight:800;color:var(--sub);padding:8px 10px 8px 0;vertical-align:top;font-size:13.5px}
+.info td{padding:8px 0;border-top:0;line-height:1.55;word-break:break-word}
+.info tr+tr th,.info tr+tr td{border-top:1px solid var(--hair)}
+.feat{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+.feat li{position:relative;padding-left:16px;font-size:14px;line-height:1.55}
+.feat li:before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:2px;background:var(--sea)}
+.todos{display:flex;flex-wrap:wrap;gap:6px}
+.todo{padding:6px 10px;border-radius:8px;font-size:13.5px;font-weight:700;color:#8a4a0e;background:#fff3dc;box-shadow:inset 0 0 0 1px #f0cf95}
+.memo{font-size:14px;line-height:1.65;color:#2a3540;padding-left:12px;border-left:3px solid var(--sun)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips a{padding:7px 11px;border-radius:9px;font-size:13.5px;font-weight:700;text-decoration:none;background:var(--in)}
+.chips a:hover{background:var(--seal);color:var(--sea)}
+/* 글 목록 */
+.pl{border-top:1px solid var(--hair)}
+.pr{display:grid;grid-template-columns:52px minmax(0,1fr) 62px 128px;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid var(--hair);text-decoration:none;font-size:14px}
+.pr:hover{background:var(--seal)}
+.pr .pn{font-weight:900;color:var(--sea)}
+.pr .pt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.pr .pt b{font-size:11.5px;font-weight:800;color:#fff;background:var(--sea);border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.ps{font-size:12.5px;font-weight:800;text-align:center;border-radius:6px;padding:2px 0}
+.ps.P{color:#1e6b3a;background:#e4f2e8}
+.ps.R{color:#8a4a0e;background:#fff3dc}
+.pd{font-size:13px;color:var(--sub);text-align:right}
+.empty{color:var(--sub);font-size:14px;padding:6px 0}
+.foot{max-width:1320px;margin:0 auto;padding:0 16px 40px;font-size:12.5px;color:var(--sub);text-align:center;line-height:1.7}
+.mtog{display:none}
+@media (max-width:900px){
+  .body{grid-template-columns:1fr}
+  .side{position:static;max-height:none}
+  .gl{display:grid;grid-template-columns:1fr 1fr;gap:2px 4px;padding-bottom:6px}
+  .it{padding:6px 8px;gap:8px}.ii,.il{width:26px;height:26px}.in{font-size:13.5px}.iv,.ip{display:none}
+  .cols{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .tt small{display:block;margin:2px 0 0}
+  .owner{padding:7px 10px;font-size:12.5px}
+  .card{padding:16px}
+  .hd .big,.hd .bigl{width:52px;height:52px}
+  .hd h1{font-size:20px}
+  .pr{grid-template-columns:44px minmax(0,1fr) 54px;row-gap:2px}
+  .pr .pd{grid-column:2/4;text-align:left;font-size:12.5px}
+}
 </style>
-<style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
-:root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
-/* 머리띠(깊은 바다) — 앱 이름은 흰색 · 보조 글자는 옅은 하늘. 머리 안 단추 · 칸은 원래 색 그대로 */
-.top{background:var(--sea-band)!important;border-bottom:0!important}
-.top .brand,.top .brand b,.top .brand strong,.top .bt b,.top .bn b,.top h1,.top .tname,.top .tt,.top .tt b,.top .ttl b{color:#fff!important}
-.top .brand small,.top .bt small,.top .bn small,.top .tname small,.top .tt small,.top .ttl small,.top .brand .ver,.top .ver{color:var(--sea-band-s)!important}
-.top .brand .cat,.top .cat{background:rgba(255,255,255,.14)!important;color:#fff!important;box-shadow:none!important}
-.top .lg,.top .badge{box-shadow:0 0 0 1.5px rgba(255,255,255,.25)!important}
-.top .lg i,.top .badge i{border-color:var(--sea-band)!important}
-</style></head>
+</head>
 <body>
 <div class="top"><div class="top-in">
-  <div class="badge">J<i></i></div>
-  <div class="tt">테스트 허브<small>Blog J 모든 앱 · 지난 버전까지 (나만 보는 페이지)</small></div>
-  <div class="sp"></div>
-  <input class="q" id="q" type="search" placeholder="앱 찾기 — 레시피, 지방, v1.0…" autocomplete="off">
-  <button class="owner" id="owner" title="이 브라우저에서만 켜져요"><span class="dot"></span><span id="ownerT">시험 모드 꺼짐</span></button>
+  <div class="tr">
+    <img class="logo" src="icons/hub/jhub-192.png" alt="">
+    <div class="tt">테스트 허브<small>Blog J 모든 앱 · 지난 버전 · 블로그 글 (나만 보는 페이지)</small></div>
+    <div class="sp"></div>
+    <button class="owner" id="owner" title="이 브라우저에서만 켜져요"><span class="dot"></span><span id="ownerT">시험 모드 꺼짐</span></button>
+  </div>
+  <div class="qw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input class="q" id="q" type="search" placeholder="앱 · 글 찾기 — 레시피, 축문, 773, v2.0…" autocomplete="off"></div>
 </div></div>
-<div class="wrap">
-  <p class="note">모든 링크는 <b>새 창</b>으로 열려요. 블로그 경유 잠금이 있는 웹 도구는 <b>오른쪽 위 「시험 모드」를 켠 기기에서만</b> 바로 열려요(기기 · 브라우저마다 한 번). 시험 모드를 끄면 일반 방문자처럼 막힘 화면이 나와서 잠금도 확인할 수 있어요.</p>
-  <div id="list"></div>
-  <div class="foot">이 페이지는 블로그 어디에도 링크하지 않아요 · 새 앱 · 새 버전을 만들면 Claude가 같이 추가하고, 지난 버전은 지우지 않아요.<br><span id="today" class="num"></span></div>
+<div class="body">
+  <nav class="side" id="side"></nav>
+  <main class="main" id="main"></main>
 </div>
+<div class="foot">모든 링크는 새 창 · 블로그 경유 잠금이 있는 웹 도구는 오른쪽 위 「시험 모드」를 켠 브라우저에서만 바로 열려요.<br>이 페이지는 블로그 어디에도 링크하지 않아요 · 새 앱 · 새 글이 나오면 Claude가 같이 추가해요 · <span id="today" class="num"></span></div>
 <script>
-/* ═══ 앱 목록 — 새 앱 · 새 버전이 나오면 여기에 한 줄(지난 버전은 old로 옮기고 지우지 않음) ═══
-   kind: app = 설치형(주소 하나) · web = 블로그 실행형(잠금 있음) · dl = 다운로드판 · dev = 개발 중
-   open: 공개 시각(tools.json과 같게) · 없으면 개발 중 */
 const B = "https://pegasus0710-arch.github.io/jesa_tools/", P = n => "https://luvbong.tistory.com/" + n;
+const POSTS = {"725":["설치 없는 무료 가계부 \"가계부 달력\" v1.0 — 파일 하나로 끝","P","09-20"],"726":["설치 없는 무료 주식 매매일지 v1.0｜보유종목·실현손익·승률 자동","P","09-20"],"727":["제사 지방 출력 프로그램 v2.0｜설치 없이 A4 한 장에 2매 인쇄","P","09-21"],"728":["제사 지방 쓰는 법 — 관계 선택만으로 지방 완성","P","09-22"],"729":["제사 날짜 계산기 — 음력 기일을 양력으로, 49재·삼우제·소상·대상","P","09-23"],"730":["장인 장모 지방 쓰는 법 — 사위가 쓰는 顯外舅·顯外姑","P","09-27"],"731":["차례상 차리는 법 — 전통·간소 차례상 배치도 한눈에","P","09-28"],"732":["사진 용량 줄이기 프로그램 무료 다운로드 — 여러 장 한 번에","P","09-29"],"733":["이미지 용량 줄이기 — 사진 300KB·500KB 이하로 한 번에","P","09-30"],"734":["증명사진 규격 맞추기 — 공무원 원서 사진 137×177, 350KB","P","10-01"],"735":["WEBP JPG 변환 — PNG·JPG·WEBP 이미지 형식 바꾸기","P","10-02"],"736":["이미지 크기 줄이기 — 사진 가로 세로 크기 변경, 비율 그대로","P","10-03"],"737":["사진 자르기 — 원하는 부분만 1:1·16:9로, 회전·좌우 반전까지","P","10-04"],"738":["사진 워터마크 넣기 — 글자·로고를 여러 장에 한 번에","P","10-05"],"739":["한글 따라쓰기 연습장 무료 인쇄 — 자음·모음부터 낱말·문장까지","P","10-06"],"740":["받아쓰기 시험지 만들기 — 학교 범위 넣고 한 번에 인쇄","P","10-07"],"741":["알파벳 쓰기 연습장 무료 인쇄 — 영어 4줄 공책에 대문자·소문자","P","10-08"],"742":["영어 단어 쓰기 연습장 — 한글 뜻과 함께, 뜻 보고 쓰기까지","P","10-09"],"743":["속담 따라쓰기 — 바른 글씨·띄어쓰기 연습장 무료 인쇄","P","10-10"],"744":["축문 쓰는 법 — 기제사 축문 자동 작성, 날짜만 넣으면 간지까지","P","10-11"],"745":["PDF 편집 무료 도구 — 합치기·나누기·용량 줄이기·서명까지","P","10-19"],"748":["무료 차트 만들기 — 엑셀 표 붙여넣기로 PPT·보고서 차트 완성","P","10-12"],"749":["막대그래프 만들기 — 월별 실적·목표 비교 차트","P","10-13"],"750":["꺾은선 그래프 만들기 — 월별 추이·전년 비교 차트","P","10-14"],"752":["원그래프 만들기 — 매출 비중·점유율 도넛 차트까지","P","10-16"],"753":["콤보 차트 만들기 — 막대+꺾은선 이중축 그래프","P","10-17"],"754":["가로 막대그래프 만들기 — 지사·제품 순위표 차트","P","10-18"],"756":["PDF 합치기 무료 — 여러 PDF·사진을 한 파일로, 순서 정리까지","P","10-20"],"757":["JPG PDF 변환 무료 — 서류 사진 여러 장을 A4 PDF 한 파일로","P","10-21"],"758":["PDF 용량 줄이기 무료 — 10MB·3MB 목표 용량에 맞춰 자동으로","P","10-24"],"759":["PDF 나누기 무료 — 페이지마다 따로·N쪽마다·원하는 쪽만","P","10-22"],"760":["PDF 페이지 추출 무료 — 필요한 쪽만 골라 새 PDF로","P","10-23"],"761":["PDF 페이지 삭제·회전 무료 — 거꾸로 스캔된 쪽 바로 세우기","P","10-25"],"762":["PDF JPG 변환 무료 — PDF 쪽마다 그림으로 저장","P","10-30"],"763":["PDF 개인정보 가리기 무료 — 주민등록번호 뒷자리 가리기","P","10-26"],"764":["PDF 서명 넣기 무료 — 서명 직접 그리고 도장 사진은 배경 투명하게","P","10-27"],"765":["레니프 유니백체어 프로 협찬 후기","P","10-13"],"766":["PDF 쪽 번호 넣기 무료 — 1 / 10 모양·위치 6곳·표지 빼고","P","10-28"],"767":["PDF 워터마크 넣기 무료 — 사본·제출용 표시를 모든 쪽에","P","10-29"],"768":["윈도우11 작업표시줄 위치 변경 — 설정에서 위·왼쪽·오른쪽으로","P","10-15"],"769":["라벨 출력 프로그램 무료 — 엑셀 주소 라벨·이름 스티커, 우편번호 자동","P","10-15"],"770":["주소라벨 사이트 무료 — 엑셀 주소록 붙여넣으면 우편번호 자동","P","10-16"],"771":["이름 스티커 만들기 무료 인쇄 — 라벨지 한 장 가득","P","10-17"],"772":["라벨지 인쇄 밀림 해결 — 시험 인쇄로 mm까지 맞추기","P","10-18"],"773":["시제 축문 쓰는 법 — 5대조 시향·묘제 축문 자동 작성, 산신축까지","P","10-19"],"775":["시제 지내는 법 — 2026년 시제 날짜와 순서 · 준비물 · 축문","P","10-20"],"776":["축문 뜻 풀이 — 유세차·세서천역·기서유역·공수세사·세천일제","P","10-21"],"778":["시작 프로그램 끄기 — 윈도우 11 켤 때 느린 PC","P","10-31"],"779":["작업 관리자로 무거운 프로그램 찾기 — CPU · 메모리 확인","P","11-01"],"780":["C드라이브 정리 — 윈도우 11 저장 공간 센스 · 임시 파일","P","11-02"],"781":["전원 모드 최고의 성능 설정 — 윈도우 11 노트북 · PC 느릴 때","P","11-03"],"782":["윈도우 업데이트 · 바이러스 빠른 검사 — 이유 없이 느린 PC 점검","P","11-04"],"783":["큰 파일 · 중복 파일 찾기 — 윈도우 11 파일 탐색기로 용량 확보","P","11-05"],"784":["견적서 프로그램 무료 다운로드 — 거래명세서 · 청구서까지 한 번에","P","10-22"],"785":["견적서 발행기 사용법 — 사용설명서, 기능 16가지 실제 화면으로","P","10-23"],"786":["자기소개서 작성 프로그램 무료 — 글자수 세기 · 질문에 답하면 초안","P","10-24"],"787":["자기소개서 문항별 작성법 — 지원동기 · 직무역량 · 입사 후 포부","P","10-26"],"788":["레시피 노트 무료 — 내 레시피 저장, 양만 바꾸면 재료 자동 계산","P","10-29"],"789":["레시피 인분 계산 — 2인분을 3인분으로, 재료 양 자동 계산","P","11-02"],"790":["앱 설치 · 삭제 방법 — 휴대폰(안드로이드 · 아이폰) · PC","P","10-28"],"791":["앱 자료 저장 위치 정하기 — 구글 드라이브 연결 · 내 PC 폴더","P","10-30"],"792":["스크랩 노트 무료 — 유튜브 · 링크 · 글 · 캡처를 한곳에","R","11-14"],"793":["여행 일정표 만들기 — 「여행 노트」 무료 앱, 여행사 일정 붙여넣기","P","11-09"],"794":["사진 뷰어 무료 — PC 사진 폴더 한곳에 모아 태그 · 찍은 날","R","11-17"],"795":["묘사 지내는 법 — 묘제 순서 · 지내는 시기 · 묘사 축문","P","10-31"],"796":["축문 읽는 법 — 누가 · 언제 · 어떻게 읽나요? 독축 순서","P","11-01"],"797":["한글 축문 예문 — 부모님 기제사 · 시제(묘사) 축문","P","11-03"],"798":["사진 편집 프로그램 무료 — 이미지 편집기 v2.0, 여러 장 한 번에","R","11-18"],"799":["시제 준비물 체크리스트 — 시제 음식 · 상차림 · 묘소에서 챙길 것","P","11-04"],"800":["산신제 축문 쓰는 법 — 묘제 산신축 · 토지축 예문","P","11-05"],"801":["시제 날짜 정하는 법 — 2026 음력 10월 주말 날짜표","P","11-06"],"802":["2027년 달력 무료 — 공휴일 · 음력 · 손 없는 날 넣어 A4로","P","11-06"],"803":["무료 도구 키트 — Blog J 무료 도구를 PC 바탕화면 아이콘 하나로","P","10-31"],"804":["이력서 양식 · 사직서 양식 무료 다운로드 — 67가지 빈 양식","P","11-08"],"805":["김장 양념 비율 계산기 — 절임배추 20kg 양념 · 김치 18가지","P","11-08"],"806":["판촉물 스티커 만들기 — 상호 · 연락처 스티커 A4 라벨지로","P","11-09"],"807":["2027 탁상달력 무료로 만들기 — A4 아래쪽 날짜별 기록 줄","P","11-12"],"808":["2027 다이어리 속지 무료 인쇄 — 먼슬리 · 위클리 · 데일리","P","11-10"],"809":["HEIC JPG 변환 무료 — 아이폰 사진 여러 장 한 번에","R","11-14"],"810":["CSV 한글 깨짐 해결 — 엑셀에서 깨지는 이유와 1분 변환","R","11-17"],"811":["얼굴 모자이크 무료 — 사진 속 얼굴 자동으로 찾아 흐리게","R","11-26"],"812":["무료 아이콘 다운로드 — 선 아이콘 140개 · 색 스티커 178개","P","11-11"],"813":["2027년 공휴일 · 연휴 총정리 — 대체공휴일까지 날짜 · 요일","P","11-07"],"814":["49재 날짜 계산 — 삼우제 · 백일 · 탈상까지","P","11-12"],"815":["거래명세서 양식 무료 — 견적서에서 바로 만들기, A4 한 장에 2부","P","11-11"],"816":["청구서 양식 무료 · 견적서 부가세 계산 — 별도 · 포함 금액 나누기","R","11-18"],"817":["자기소개서 문장 다듬기 — 긴 문장 나누기 · 흔한 표현 바꾸기","R","11-19"],"818":["웨이브 · 디즈니+ PC 화질 · 버퍼링 해결","P","11-09"],"819":["리얼텍 랜카드 드라이버 설치 · 업데이트 — 윈도우 11","P","11-13"],"820":["2026년 12월 달력 — 음력 · 손 없는 날 · 동지 표시","R","11-24"],"821":["일기 앱 무료 — 종이 다이어리 같은 「일기 노트」, 휴대폰 · PC","R","11-20"],"822":["문자 인사말 앱 무료 — 부고 · 조문 · 명절 문자 41가지 상황별","R","11-23"],"823":["연말정산 계산기 2026 — 미리 계산하고 12월 31일 전에 더 돌려받기","P","11-11"],"827":["엑셀 단축키 배경화면 무료 — 알면 빨라지는 단축키 32개, 4K","R","11-19"],"828":["한글 단축키 배경화면 무료 — 한컴 한글 단축키 32개","R","11-27"],"829":["윈도우 11 단축키 배경화면 무료 — 창 정리 · 캡처 단축키 32개","R","12-03"],"830":["크롬 단축키 배경화면 무료 — 닫은 탭 되살리기까지 32개","R","12-10"],"831":["파워포인트 단축키 배경화면 무료 — 발표 · 만들기 단축키 32개","R","12-17"],"832":["워드 단축키 배경화면 무료 — 서식 지우기 · 스타일 단축키 32개","R","12-24"],"833":["연금저축 · IRP 세액공제 2026 — 12월 31일까지 얼마 넣으면","P","11-13"],"834":["단축키 모음 앱 무료 — 엑셀 · 한글 · 윈도우 11 · 크롬 · PPT · 워드","R","11-15"],"835":["상장 만들기 무료 — 상장 · 표창장 · 감사장 · 수료증, 여러 명 한 번에","R","11-26"],"836":["영어 회화 · 단어 앱 무료 — 「영어 노트」, 내 수준 문장을 직접","R","11-22"],"837":["Azure 음성 키 무료로 받는 법 — 가입부터 Speech 키 복사까지","R","11-25"],"838":["12월 달력 배경화면 무료로 만들기 — PC · 노트북 · 휴대폰","R","11-21"],"839":["신용카드 소득공제 계산법 2026 — 총급여 25% 넘으면 체크카드","R","11-15"],"840":["부모님 부양가족 공제 조건 2026 — 소득 100만원 · 따로 살아도","R","11-16"],"841":["수능 응원 문구 모음 · 응원 카드 이미지 무료로 만들기","R","11-16"]};
+/* ═══ 앱 목록 — 새 앱 · 새 버전 · 새 글이 나오면 여기에 (지난 버전은 old로, 지우지 않음) ═══
+   g: dev 개발 중 · app 설치형 · web 블로그 실행형 · idea 아이디어 · etc 블로그 · 관리
+   ic: 아이콘 경로(없으면 글자) · post: 대표 글 · posts: 이 앱의 모든 글 번호(POSTS에서 제목 · 상태 · 날짜)
+   desc: 한두 줄 소개 · feat: 핵심 기능 · info: [이름, 값] 표 · docs: 설명서 페이지 등 */
 const APPS = [
+ /* ── 개발 중 ── */
+ { g: "dev", id: "game", n: "복불복 게임", v: "v1.0", ic: "icons/apps/game.png",
+   desc: "모임에서 쓰는 복불복 게임 모음 — 사다리 · 룰렛 · 제비뽑기처럼 화면 하나로 바로 진행해요.",
+   info: [["유형", "블로그 실행형(예정)"], ["상태", "블로그 글 아직 없음"]],
+   links: [["열기", "game-v1.0.html"]], todo: ["대표 글(12월 초 · 송년회)"] },
+ { g: "dev", id: "gantt", n: "일정표 노트(간트)", v: "v1.0", ic: "gantt/icon-192.png",
+   desc: "프로젝트 일정을 막대(간트)로 그리고, 처음 계획보다 얼마나 늦어졌는지 한눈에 보는 설치형 앱.",
+   feat: ["일정표 여러 개", "처음 계획 대비 늦어짐 표시", "이번 주 할 일", "바뀐 기록", "구글 드라이브 「일정표노트」 폴더에 저장"],
+   info: [["유형", "설치형(PC · 휴대폰)"], ["저장", "기기 + 구글 드라이브"]],
+   links: [["열기", "gantt/"], ["예시로 열기", "gantt/?demo=1"], ["설치 화면", "gantt/?install=1"]],
+   old: [["블로그 실행형 간트 v1.0(미공개)", "gantt-v1.0.html"]], todo: ["대표 글(12월 중순 전)"], note: "11-12 만듦" },
+
  /* ── 설치형 앱 ── */
- { g: "app", n: "레시피 노트", v: "v1.0", open: "2026-10-29T09:00", post: 788, links: [["열기", "recipe/"], ["설치 화면", "recipe/?install=1"]], old: [["다운로드판 v1.0 (zip)", "downloads/recipe-note-v1.0.zip"]] },
- { g: "app", n: "스크랩 노트", v: "v1.0", open: "2026-11-14T09:00", post: 792, links: [["열기", "scrap/"], ["설치 화면", "scrap/?install=1"]] },
- { g: "app", n: "여행 노트", todo: ["793 대표 글(날짜 정하면 예약)"], v: "v1.0", open: "2027-01-01T09:00", post: 793, note: "11-10: 예전 3.0을 v1.0으로 출시(예전 1 · 2 폐쇄, trip2 · trip3 폴더 지움) — 793 날짜 정하는 중(추천 11/22 09:00)", links: [["열기", "trip/"], ["설치 화면", "trip/?install=1"]] },
- { g: "app", n: "일기 노트", todo: ["11/24 기능 글 ①", "11/27 기능 글 ②"], v: "v1.0", open: "2026-11-20T09:00", post: 821, note: "시험 사용 중", links: [["열기", "diary/"], ["설치 화면", "diary/?install=1"]] },
- { g: "app", n: "단축키 사전", v: "v1.0", open: "2026-11-15T20:00", post: 834, posts: [["엑셀 배경화면 827", 827], ["한글 828", 828], ["윈도우 11 829", 829], ["크롬 830", 830], ["파워포인트 831", 831], ["워드 832", 832]], note: "PC 설치형 · 6개 프로그램 1,348개 · 하고 싶은 일 · 키로 찾기 · ☆ · 인쇄 · 11-13 뒤로 가기 · 닫기 확인", links: [["열기", "shortcut/"], ["설치 화면", "shortcut/?install=1"]] },
- { g: "app", n: "가계부 달력", v: "v1.1", open: "2026-09-19T09:00", post: 725, links: [["열기", "budget/"], ["설치 화면", "budget/?install=1"]], old: [["v1.0 다운로드판 (zip)", "downloads/budget-calendar-v1.0.zip"]] },
- { g: "app", n: "매매일지", v: "v1.1", open: "2026-09-19T09:00", post: 726, links: [["열기", "trading/"], ["설치 화면", "trading/?install=1"]], old: [["v1.0 다운로드판 (zip)", "downloads/trading-journal-v1.0.zip"]] },
- { g: "app", n: "견적서 발행기", v: "v1.0", open: "2026-10-22T09:00", post: 784, posts: [["사용설명서 785", 785], ["견적서 설명서", "pages/quote"]], links: [["열기", "quote/"], ["설치 화면", "quote/?install=1"], ["다운로드판 (zip)", "downloads/quote-issuer-v1.0.zip"]] },
- { g: "app", n: "자기소개서 쓰기", todo: ["11/28~ 맞춤법 검사기 쓰는 법"], v: "v1.0", open: "2026-10-24T09:00", post: 786, links: [["열기", "jaso/"], ["다운로드판 (zip)", "downloads/jaso-writer-v1.0.zip"]] },
- { g: "app", n: "사진 뷰어", v: "v1.0", open: "2026-11-17T09:00", post: 794, links: [["열기(PC)", "photo/"], ["다운로드판 (zip)", "downloads/photo-viewer-v1.0.zip"]] },
- { g: "app", n: "이미지 편집기", v: "v2.0", open: "2026-11-18T09:00", post: 798, links: [["열기(PC)", "photo-editor/"], ["다운로드판 (zip)", "downloads/photo-editor-v2.0.zip"]] },
- { g: "app", n: "문자 · 인사말", todo: ["822에 인사 카드 단락 넣기", "12/7 크리스마스 카드", "12월 중순 새해 · 연하장 카드", "1월 중순 설 인사 카드"], v: "v1.0", open: "2026-11-23T09:00", post: 822, posts: [["수능 응원 카드 841", 841]], note: "11-13 수능 응원(상황 + 디자인 3) · 「인사 카드」 탭 — 상황 15 · 디자인 15 · 붓글씨 글꼴 10 · 세로쓰기 · 낙관 · 정사각/4:5/스토리", links: [["열기", "msg/"], ["설치 화면", "msg/?install=1"]], old: [["샘플판(11-09)", "msg-v1.0.html"]] },
-  { g: "app", n: "영어 노트", todo: ["11/29 AI로 내 수준 회화 만들기", "12/2 카페 영어 주문 20", "12/6 여행 2주 전 영어", "12/9 스몰토크 영어 20", "12/13 맞장구 영어 20", "12/16 동사구 · 예문 2개", "12/21 미드 대사로 내 챕터", "12/23 단어장 인쇄"], v: "v1.0", open: "2026-11-22T20:00", post: 836, posts: [["Azure 음성 키 837", 837]], note: "설치형 · 회화 10 · 단어 8 기본 챕터 · 붙여넣기(예문 2개) · 예문 반복 · ☆ 모음 · 음성 표시(기기 / 고품질) · Azure 1분 20문장 쉬어 가기 · 11-13 · 11-14 공개판은 「내 서버」 숨김 → 제이 전용 jay.html(따로 설치 「영어 노트 J」 · 자료 같이 씀)", links: [["열기", "eng/"], ["설치 화면", "eng/?install=1"], ["제이 전용(내 음성 서버)", "eng/jay.html"]] },
- { g: "app", n: "무료 도구 키트", v: "v1.0", open: "2026-10-31T17:00", post: 803, links: [["열기", "kit/"], ["설치 화면", "kit/?install=1"]] },
+ { g: "app", id: "shortcut", n: "단축키 사전", v: "v1.0", ic: "shortcut/icon-192.png", open: "2026-11-15T20:00", post: 834,
+   posts: [834, 827, 828, 829, 830, 831, 832],
+   desc: "엑셀 · 한글 · 윈도우 11 · 크롬 · 파워포인트 · 워드 단축키 1,348개를 「하고 싶은 일」이나 「키」로 찾는 PC 설치형 사전.",
+   feat: ["6개 프로그램 1,348개", "하고 싶은 일 · 키로 찾기", "☆ 자주 찾는 단축키", "분류별 보기 · 인쇄", "단축키 배경화면 6종(4K)과 짝 글"],
+   info: [["유형", "설치형(PC 중심)"], ["배경화면 글", "827~832 매주 한 편(11/19~12/24)"]],
+   links: [["열기", "shortcut/"], ["설치 화면", "shortcut/?install=1"]],
+   todo: ["엣지 단축키 — 크롬과 따로 표시(11-14 제이 아이디어)"], note: "11-13 뒤로 가기 · 닫기 확인" },
+ { g: "app", id: "eng", n: "영어 노트", v: "v1.0", ic: "eng/icon-192.png", open: "2026-11-22T20:00", post: 836, posts: [836, 837],
+   desc: "회화 문장 · 단어를 챕터로 만들어 반복해서 듣는 설치형 앱. 내 수준 문장을 직접 넣고, 기기 음성 또는 고품질(Azure) 음성으로 들어요.",
+   feat: ["회화 10 · 단어 8 기본 챕터", "여러 줄 붙여넣기(예문 2개)", "한 → 영 말하기 · 예문 반복", "☆ 어려운 문장 · 단어 모음(줄 오른쪽 끝 ☆)", "Azure 1분 20문장 쉬어 가기"],
+   info: [["유형", "설치형(PC · 휴대폰)"], ["제이 전용", "eng/jay.html — 「내 음성 서버」(EC2) · 따로 설치 「영어 노트 J」"]],
+   links: [["열기", "eng/"], ["설치 화면", "eng/?install=1"], ["제이 전용(내 음성 서버)", "eng/jay.html"]],
+   todo: ["11/29 AI로 내 수준 회화 만들기", "12/2 카페 영어 주문 20", "12/6 여행 2주 전 영어", "12/9 스몰토크 영어 20", "12/13 맞장구 영어 20", "12/16 동사구 · 예문 2개", "12/21 미드 대사로 내 챕터", "12/23 단어장 인쇄"],
+   note: "11-14 공개판은 「내 서버」 숨김 · 듣기 목록 줄마다 ☆" },
+ { g: "app", id: "diary", n: "일기 노트", v: "v1.0", ic: "diary/icon-192.png", open: "2026-11-20T09:00", post: 821, posts: [821],
+   desc: "종이 다이어리처럼 펼쳐 쓰는 일기 앱. 사진 · 기분 도장 · 루틴을 남기고 비밀번호로 잠가요.",
+   feat: ["펼친 다이어리 화면(링 · 리본 · 인덱스 탭)", "사진(폴라로이드) · 기분 도장", "루틴 확인", "비밀번호 잠금(드라이브에도 잠긴 채)", "휴대폰 · PC 같이 쓰기"],
+   info: [["유형", "설치형(PC · 휴대폰)"], ["저장", "기기 + 구글 드라이브(암호화)"]],
+   links: [["열기", "diary/"], ["설치 화면", "diary/?install=1"]], todo: ["11/24 기능 글 ①", "11/27 기능 글 ②"], note: "시험 사용 중" },
+ { g: "app", id: "msg", n: "문자 · 인사말", v: "v1.0", ic: "msg/icon-192.png", open: "2026-11-23T09:00", post: 822, posts: [822, 841],
+   desc: "부고 · 조문 · 명절 · 모임 안내 문자를 상황만 고르면 완성하고, 붓글씨 감성 인사 카드 이미지까지 만드는 앱.",
+   feat: ["상황별 문자 41가지 · 빈칸 채우기", "인사 카드 — 상황 16 · 디자인 18 · 붓 글꼴 10", "세로쓰기 · 빨간 낙관", "정사각 · 4:5 · 스토리 크기", "카톡 · 인스타 공유 · 저장"],
+   info: [["유형", "설치형(PC · 휴대폰)"], ["기념일 계획", "수능(완료) → 크리스마스(12/7) → 새해(12월 중순) → 설(1월 중순)"]],
+   links: [["열기", "msg/"], ["설치 화면", "msg/?install=1"]], old: [["샘플판(11-09)", "msg-v1.0.html"]],
+   todo: ["822에 인사 카드 단락 넣기", "12/7 크리스마스 카드", "12월 중순 새해 · 연하장 카드", "1월 중순 설 인사 카드", "11/19 뒤 「수능 응원」 뒤로 옮기기"] },
+ { g: "app", id: "scrap", n: "스크랩 노트", v: "v1.0", ic: "scrap/icon-192.png", open: "2026-11-14T09:00", post: 792, posts: [792],
+   desc: "유튜브 · 링크 · 글 · 캡처를 한곳에 모아 두고 나중에 찾아보는 노트 앱.",
+   feat: ["링크 · 유튜브 · 글 · 사진 스크랩", "태그 · 찾기", "구글 드라이브 동기화"],
+   info: [["유형", "설치형(PC · 휴대폰)"]], links: [["열기", "scrap/"], ["설치 화면", "scrap/?install=1"]] },
+ { g: "app", id: "recipe", n: "레시피 노트", v: "v1.0", ic: "recipe/icon-192.png", open: "2026-10-29T09:00", post: 788, posts: [788, 789],
+   desc: "내 레시피를 저장하고, 인분만 바꾸면 재료 양을 자동으로 계산해 장보기 목록까지 만드는 앱.",
+   feat: ["레시피 저장 · 사진", "인분 바꾸면 재료 자동 계산", "장보기 목록", "구글 드라이브 동기화"],
+   info: [["유형", "설치형(PC · 휴대폰)"]], links: [["열기", "recipe/"], ["설치 화면", "recipe/?install=1"]],
+   old: [["다운로드판 v1.0 (zip)", "downloads/recipe-note-v1.0.zip"]] },
+ { g: "app", id: "trip", n: "여행 노트", v: "v1.0", ic: "trip/icon-192.png", open: "2027-01-01T09:00", post: 793, posts: [793],
+   desc: "여행 계획표 · 여행 중 안내판 · 사진 일지를 한 권으로. 여행사 일정을 붙여넣으면 일정표가 만들어져요.",
+   feat: ["여행사 일정 붙여넣기", "지도 위치 · 길안내(네이버 · 카카오 · 티맵 · 구글)", "지난 일정 확인 띠", "준비물 · 예산"],
+   info: [["유형", "설치형(PC · 휴대폰)"], ["메모", "793은 이미 공개(11/09) — 허브 공개일은 다시 확인 필요"]],
+   links: [["열기", "trip/"], ["설치 화면", "trip/?install=1"]], note: "11-10 예전 3.0을 v1.0으로 출시(예전 1 · 2 폐쇄)" },
+ { g: "app", id: "photo", n: "사진 뷰어", v: "v1.0", ic: "photo/icon-192.png", open: "2026-11-17T09:00", post: 794, posts: [794],
+   desc: "PC 사진 폴더를 한곳에 모아 찍은 날 · 기기 · 장소 · 태그로 찾고, 복사 · 이동 · 휴지통까지 하는 PC 앱.",
+   feat: ["폴더째 열기 · 하위 폴더", "찍은 날 · 기기 · 장소 · 태그 찾기", "태그(JPG 안 XMP)", "찍은 날짜 고치기", "취소하면 원래대로"],
+   info: [["유형", "PC 설치형 + 다운로드판"]], links: [["열기(PC)", "photo/"], ["다운로드판 (zip)", "downloads/photo-viewer-v1.0.zip"]] },
+ { g: "app", id: "photoed", n: "이미지 편집기", v: "v2.0", ic: "photo-editor/icon-192.png", open: "2026-11-18T09:00", post: 798, posts: [798],
+   desc: "여러 장 사진을 한 번에 자르고 · 줄이고 · 글자를 넣는 PC 편집기(사진 뷰어 짝).",
+   info: [["유형", "PC 설치형 + 다운로드판"]], links: [["열기(PC)", "photo-editor/"], ["다운로드판 (zip)", "downloads/photo-editor-v2.0.zip"]] },
+ { g: "app", id: "quote", n: "견적서 발행기", v: "v1.0", ic: "quote/icon-192.png", open: "2026-10-22T09:00", post: 784, posts: [784, 785, 815, 816],
+   desc: "견적서 · 거래명세서 · 청구서를 한 번에 만드는 앱. 거래처 · 품목을 저장하고 부가세를 자동 계산해요.",
+   feat: ["견적서 → 거래명세서 · 청구서", "부가세 별도 · 포함 계산", "거래처 · 품목 저장", "A4 인쇄 · PDF"],
+   info: [["유형", "설치형 + 다운로드판"]], docs: [["견적서 설명서", "pages/quote"]],
+   links: [["열기", "quote/"], ["설치 화면", "quote/?install=1"], ["다운로드판 (zip)", "downloads/quote-issuer-v1.0.zip"]] },
+ { g: "app", id: "jaso", n: "자기소개서 쓰기", v: "v1.0", ic: "jaso/icon-192.png", open: "2026-10-24T09:00", post: 786, posts: [786, 787, 817],
+   desc: "공고 문항을 붙여넣으면 문항이 만들어지고, 질문에 답하면 초안이 나오는 자기소개서 작성 프로그램.",
+   feat: ["공고 문항 붙여넣기 → 문항 자동", "질문에 답하면 초안", "글자수 세기", "회사별 저장 · 복사", "Word · PDF · 텍스트", "맞춤법은 외부 검사기 「복사하고 열기」"],
+   info: [["유형", "설치형 + 다운로드판"]], links: [["열기", "jaso/"], ["다운로드판 (zip)", "downloads/jaso-writer-v1.0.zip"]],
+   todo: ["11/28~ 맞춤법 검사기 쓰는 법"] },
+ { g: "app", id: "budget", n: "가계부 달력", v: "v1.1", ic: "budget/icon-192.png", open: "2026-09-19T09:00", post: 725, posts: [725],
+   desc: "달력에 바로 쓰는 가계부. 설치 · 가입 없이 쓰고 v1.1부터 설치형으로 휴대폰 · PC에서 같이 써요.",
+   info: [["유형", "설치형(v1.1) · v1.0은 다운로드판"]], links: [["열기", "budget/"], ["설치 화면", "budget/?install=1"]],
+   old: [["v1.0 다운로드판 (zip)", "downloads/budget-calendar-v1.0.zip"]], note: "725는 v1.0 기준 글 — v1.1 새 글 필요" },
+ { g: "app", id: "trading", n: "매매일지", v: "v1.1", ic: "trading/icon-192.png", open: "2026-09-19T09:00", post: 726, posts: [726],
+   desc: "보유 종목 · 실현 손익 · 승률을 자동으로 계산하는 주식 매매일지.",
+   info: [["유형", "설치형(v1.1) · v1.0은 다운로드판"]], links: [["열기", "trading/"], ["설치 화면", "trading/?install=1"]],
+   old: [["v1.0 다운로드판 (zip)", "downloads/trading-journal-v1.0.zip"]], note: "726은 v1.0 기준 글 — v1.1 새 글 필요" },
+ { g: "app", id: "kit", n: "무료 도구 키트", v: "v1.0", ic: "kit/icon-192.png", open: "2026-10-31T17:00", post: 803, posts: [803, 790, 791],
+   desc: "Blog J 무료 도구를 바탕화면 아이콘 하나로 모아 여는 런처. 설치 · 저장 위치 안내 글(790 · 791)도 여기에 모아 둠.",
+   info: [["유형", "설치형"], ["공통 안내", "790 설치 · 삭제 / 791 저장 위치"]], links: [["열기", "kit/"], ["설치 화면", "kit/?install=1"]] },
+
  /* ── 블로그 실행형 웹 도구 ── */
- { g: "web", n: "제사 지방 출력", v: "v2.0", open: "2026-09-21T09:00", post: 727, posts: [["제사 날짜 계산 729", 729], ["제사 도구 설명서", "pages/jesa"]], links: [["지방", "jibang-v2.0.html?tab=print"], ["제사 날짜 계산", "jibang-v2.0.html?tab=calc"], ["차례상", "jibang-v2.0.html?tab=charye"]], old: [["v1.0 웹", "jibang.html"], ["v2.0 다운로드판 (zip)", "downloads/jesa-jibang-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/jesa-jibang-v1.0.zip"], ["제사 도구 설명서 PDF", "downloads/jesa-tools-manual.pdf"]] },
- { g: "web", n: "축문 자동 작성", v: "v2.0", open: "2026-10-17T09:00", post: 744, posts: [["시제 축문 773", 773]], links: [["기제사", "chukmun-v2.0.html?tab=all"], ["시제 · 묘제", "chukmun-v2.0.html?tab=sije"]], old: [["v1.1", "chukmun-v1.1.html"], ["v1.0", "chukmun.html"]] },
- { g: "web", n: "라벨 출력기", v: "v2.0", open: "2026-10-16T09:00", post: 769, posts: [["주소 라벨 770", 770], ["이름 스티커 771", 771], ["라벨 설명서", "pages/label"]], links: [["전체", "label-v2.0.html?tab=all"], ["주소 라벨", "label-v2.0.html?tab=addr"], ["일반 라벨", "label-v2.0.html?tab=gen"]], old: [["v1.0 웹", "label.html"], ["v2.0 다운로드판 (zip)", "downloads/label-printer-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/label-printer-v1.0.zip"], ["주소 검색 시험", "juso-test.html"]] },
- { g: "web", n: "달력 만들기", todo: ["12/1 2027 음력 달력", "12/20 2027년 1월 달력", "매달 20일 다음 달 달력"], v: "v1.1", open: "2026-11-06T20:00", post: 802, posts: [["탁상달력 807", 807], ["달력 설명서", "pages/calendar"]], links: [["전체", "calendar-v1.1.html?tab=month"], ["탁상 달력", "calendar-v1.1.html?tab=desk"], ["주간 일정표", "calendar-v1.1.html?tab=week"], ["1년 계획", "calendar-v1.1.html?tab=plan"]], old: [["v1.0", "calendar-v1.0.html"]] },
- { g: "web", n: "다이어리 속지 만들기", v: "v1.0", open: "2026-11-10T20:00", post: 808, links: [["열기", "planner-v1.0.html"]] },
- { g: "web", n: "파일 변환", v: "v1.0", open: "2026-11-14T20:00", post: 809, posts: [["CSV 한글 810", 810]], links: [["처음", "convert-v1.0.html"], ["HEIC → JPG", "convert-v1.0.html?tab=heic"], ["CSV 한글", "convert-v1.0.html?tab=csv"]] },
- { g: "web", n: "무료 아이콘", v: "v1.0", open: "2026-11-11T09:00", post: 812, links: [["열기", "icon-v1.0.html"]] },
- { g: "web", n: "무료 양식", v: "v1.0", open: "2026-11-08T20:00", post: 804, links: [["열기", "form-v1.0.html"]] },
- { g: "web", n: "연말정산 계산기", todo: ["11/21 맞벌이 몰아주기", "11/25 월세 세액공제", "11/29 의료비 세액공제", "12/2 고향사랑기부", "12/6 2026 바뀐 것", "1월 중순 간소화 체크리스트"], v: "v1.0", open: "2026-11-11T22:50", post: 823, posts: [["연금저축 833", 833], ["카드 공제 839", 839], ["부모님 공제 840", 840]], links: [["열기", "yearend-v1.0.html?tab=all"]] },
- { g: "web", n: "김치 양념 계산기", v: "v1.0", open: "2026-11-08T09:00", post: 805, links: [["열기", "kimchi-v1.0.html"]] },
- { g: "web", n: "PDF 편집 도구", v: "v1.0", open: "2026-10-19T22:00", post: 745, posts: [["PDF 설명서", "pages/pdf"]], links: [["열기", "pdf.html"]] },
- { g: "web", n: "이미지 도구", v: "v1.0", open: "2026-10-01T09:00", post: 732, posts: [["용량 줄이기 733", 733], ["증명사진 734", 734], ["이미지 설명서", "pages/image-tool"]], links: [["전체", "image.html?tab=all"], ["용량 줄이기", "image.html?tab=compress"], ["증명사진", "image.html?tab=idphoto"]], old: [["v1.0 다운로드판 (zip)", "downloads/image-tool-v1.0.zip"]] },
- { g: "web", n: "차트 만들기", v: "v1.0", open: "2026-10-12T22:00", post: 748, posts: [["차트 설명서", "pages/chart"]], links: [["열기", "chart.html?tab=all"]] },
- { g: "web", n: "쓰기 연습장", v: "v1.0", open: "2026-10-06T09:00", post: 739, posts: [["쓰기 설명서", "pages/write"]], links: [["한글", "write.html?tab=ko"], ["받아쓰기", "write.html?tab=test"], ["영어", "write.html?tab=en"]] },
- { g: "web", n: "상장 만들기", v: "v1.0", open: "2026-11-26T09:00", post: 835, links: [["열기", "award-v1.0.html"], ["감사장으로 시작", "award-v1.0.html?tab=gam"], ["칭찬 상장으로 시작", "award-v1.0.html?tab=kids"]], note: "블로그 실행형 · 종류 10 × 고급 테두리 6 + 기본 7 · 금박 장식 · 직인 이미지 · 잠금은 글 공개 때 켬" },
-  { g: "web", n: "달력 배경화면 만들기", todo: ["12/5 내 사진으로 만들기", "12/12 듀얼 모니터 설정 방법", "12/19 휴대폰 잠금화면", "12/26 2027년 1월", "1/23 2월 · 설날", "매달 하순 ○월 배경화면"], v: "v1.0", open: "2026-11-21T20:00", post: 838, links: [["열기", "wallcal-v1.0.html"]], note: "블로그 실행형 · 배경 29 + 내 사진 · 달력 4모양 · 모니터 2대(가로 = 거울 이어 붙이기) · 잠금은 11/21 20:00부터 자동 · 11-13" },
- /* ── 개발 중 · 샘플 ── */
- { g: "dev", n: "복불복 게임", todo: ["대표 글(12월 초 · 송년회)"], v: "v1.0", links: [["열기", "game-v1.0.html"]], note: "블로그 글 아직 없음" },
- { g: "dev", n: "일정표 노트(간트)", todo: ["대표 글(12월 중순 전)"], v: "v1.0", links: [["열기", "gantt/"], ["예시로 열기", "gantt/?demo=1"], ["설치 화면", "gantt/?install=1"]], old: [["블로그 실행형 간트 v1.0(미공개)", "gantt-v1.0.html"]], note: "설치형 · 일정표 여러 개 · 처음 계획 대비 늦어짐 · 이번 주 · 바뀐 기록 · 드라이브 「일정표노트」 · 11-12" },
- /* ── 아이디어 · 미개발 (아이디어 보드 기준 · 11-11) ── */
- { g: "idea", n: "돈 계산기 — 연봉 실수령 · 3.3% · 부가세", v: "", plan: "2026-12", note: "4대보험 + 간이세액표 · 3.3% 환급 · 부가세 역산", links: [] },
- { g: "idea", n: "만능 변환기", v: "", plan: "2026-12", note: "평수 · 단위 · 만 나이 · D-day · 음력 ↔ 양력 · 60갑자 · 띠(제사 엔진 재사용)", links: [] },
- { g: "idea", n: "파일 정리 도우미", v: "", plan: "2026-12", note: "용량 지도 · 큰 파일 · 중복 파일(내용 비교) · 다운로드 폴더 정리", links: [] },
- { g: "idea", n: "공개용 티스토리 스킨", v: "", plan: "2026-11 말 ~ 12", note: "Blog J 스킨 — 개인 부분은 스킨 설정으로 · 버전별 zip", links: [] },
- { g: "idea", n: "무료 양식 v1.1", v: "", plan: "2026-12 말", note: "이력서 경력형 · 위임장 용도별 · 동의서 · 생활 양식 · 공책 옵션", links: [] },
- { g: "idea", n: "봉투 인쇄", v: "", plan: "2027-01", note: "부의 · 축의 · 세뱃돈 · 제사 봉투 — 규격 봉투에 글자만(mm 보정)", links: [] },
- { g: "idea", n: "색상표", v: "", plan: "2027-01", note: "한국 전통색 · 웹 색 · 대비 검사 · 사진에서 색 뽑기 · 내 팔레트", links: [] },
- { g: "idea", n: "명함 관리기", v: "", plan: "2027-01", note: "명함 사진 · 정보가 내 PC에만 · 연락처(.vcf) · 엑셀 · 견적서 거래처로", links: [] },
- { g: "idea", n: "노후 자금 계산기", v: "", plan: "2027-01 ~ 02", note: "공단 예상액 넣어 부족분 · 월 저축액", links: [] },
- { g: "idea", n: "쓰기 연습장 「숫자」 탭", v: "", plan: "2027-01 ~ 02", note: "0~9 따라 쓰기 · 획 순서 · 수 세기 그림 · 숫자표", links: [] },
- { g: "idea", n: "영어 단어장", v: "", plan: "2027-02", note: "내 단어로 인쇄 단어장 + 휴대폰 복습 앱(망각 곡선 · 소리)", links: [] },
- { g: "idea", n: "임금(급여)명세서 발행기", v: "", plan: "2027-02 ~ 03", note: "직원 목록 · 매달 복사 · 필수 기재사항 빠짐 검사 · A4 · PDF", links: [] },
- { g: "idea", n: "메모 노트", v: "", plan: "일기 노트 뒤", note: "노트 가족 메모 앱(편집기 메모장 모듈 재사용)", links: [] },
- { g: "idea", n: "이모티콘", v: "", plan: "반응 보고", note: "무료 아이콘 3번째 탭 — Blog J 오리지널 표정 · 말풍선", links: [] },
- { g: "idea", n: "엑셀 수식 노트", v: "", plan: "반응 보고", note: "함수 찾기 · 한국어 예제 · 「직접 해 보기」 표", links: [] },
- { g: "idea", n: "왕 계보 한눈에", v: "", plan: "방학(1월)", note: "조선 · 고려 · 삼국 재위 막대 · 계보 · A4 한 장", links: [] },
- { g: "idea", n: "원고 작업실", v: "", plan: "반응 보고", note: "작가용 — 회차 나무 · 글자수 목표 · 원고는 내 PC 폴더", links: [] },
- { g: "idea", n: "음악 정리기", v: "", plan: "파일 정리 도우미 뒤", note: "MP3 태그 · 앨범 사진 · 한글 깨진 태그 · 차량용 USB", links: [] },
- { g: "idea", n: "색칠 도안", v: "", plan: "여름방학 전", note: "규칙으로 자동 그리기 + 내 사진으로 만들기", links: [] },
- { g: "idea", n: "차트 v1.1", v: "", plan: "반응 보고", note: "산점도 · 영역 · 누적 막대 · 예제 파일", links: [] },
- { g: "idea", n: "생활 환산 · 전월세 전환 · 전기요금", v: "", plan: "빈 주에", note: "평수 · 계량 · 사이즈 · 전월세 전환율 · 전기요금", links: [] },
- { g: "idea", n: "임신 주수 · 출산 예정일", v: "", plan: "건강정보 디자인과", note: "건강정보 앱 탭", links: [] },
- { g: "idea", n: "캡처 설명 표시", v: "", plan: "반응 보고", note: "화살표 · 번호 · 빨간 상자로 캡처 꾸미기", links: [] },
+ { g: "web", id: "jibang", n: "제사 지방 출력", v: "v2.0", ic: "icons/apps/jesa.png", open: "2026-09-21T09:00", post: 727, posts: [727, 728, 729, 730, 731, 814],
+   desc: "관계만 고르면 지방을 완성해 A4 한 장에 2매 인쇄. 제사 날짜 계산기(음력 · 윤달 · 49재)와 차례상 배치도까지.",
+   feat: ["관계 26가지 · 한자 · 한글 · 우리말", "직함 · 본관", "지방틀 60×220mm · 글꼴 4종", "제사 날짜 계산(1901~2050 음력)", "차례상 3종"],
+   info: [["유형", "블로그 실행형 + 다운로드판"], ["주소 값", "tab=print|calc|charye · cat=parents…"]], docs: [["제사 도구 설명서", "pages/jesa"], ["설명서 PDF", "downloads/jesa-tools-manual.pdf"]],
+   links: [["지방", "jibang-v2.0.html?tab=print"], ["제사 날짜 계산", "jibang-v2.0.html?tab=calc"], ["차례상", "jibang-v2.0.html?tab=charye"]],
+   old: [["v1.0 웹", "jibang.html"], ["v2.0 다운로드판 (zip)", "downloads/jesa-jibang-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/jesa-jibang-v1.0.zip"]] },
+ { g: "web", id: "chukmun", n: "축문 자동 작성", v: "v2.0", ic: "icons/apps/jesa.png", open: "2026-10-17T09:00", post: 744, posts: [744, 773, 775, 776, 795, 796, 797, 799, 800, 801],
+   desc: "날짜만 넣으면 간지까지 자동으로 넣는 축문 작성기. 기제사 + 시제 · 묘제 + 산신축. 시제 철(음력 10월) 글 묶음도 여기.",
+   feat: ["기제사 17관계", "시제 · 묘제(5대조 이상)", "산신축 · 토지축", "간지 자동", "한글 축문"],
+   info: [["유형", "블로그 실행형(웹 전용)"], ["시즌", "2026 음력 10월 = 11/9~12/8"]],
+   links: [["기제사", "chukmun-v2.0.html?tab=all"], ["시제 · 묘제", "chukmun-v2.0.html?tab=sije"]], old: [["v1.1", "chukmun-v1.1.html"], ["v1.0", "chukmun.html"]] },
+ { g: "web", id: "yearend", n: "연말정산 계산기", v: "v1.0", ic: "icons/apps/yearend.png", open: "2026-11-11T22:50", post: 823, posts: [823, 833, 839, 840],
+   desc: "올해 연말정산을 미리 계산하고, 12월 31일 전에 더 돌려받을 방법(카드 · 연금저축 · 부양가족)을 찾는 계산기.",
+   feat: ["총급여 · 공제 항목 입력", "환급 · 추가 납부 예상", "카드 25% 문턱", "연금저축 · IRP", "부양가족"],
+   info: [["유형", "블로그 실행형"]], links: [["열기", "yearend-v1.0.html?tab=all"]],
+   todo: ["11/21 맞벌이 몰아주기", "11/25 월세 세액공제", "11/29 의료비 세액공제", "12/2 고향사랑기부", "12/6 2026 바뀐 것", "1월 중순 간소화 체크리스트"] },
+ { g: "web", id: "wallcal", n: "달력 배경화면 만들기", v: "v1.0", ic: "icons/apps/wallcal.png", open: "2026-11-21T20:00", post: 838, posts: [838],
+   desc: "PC · 노트북 · 휴대폰 해상도에 맞춰 달력 배경화면을 만드는 도구. 배경 29종 또는 내 사진, 모니터 2대도.",
+   feat: ["배경 29 + 내 사진", "달력 4모양", "듀얼 모니터(거울 이어 붙이기)", "휴대폰 잠금화면 크기"],
+   info: [["유형", "블로그 실행형"], ["잠금", "11/21 20:00부터 자동"]], links: [["열기", "wallcal-v1.0.html"]],
+   todo: ["12/5 내 사진으로 만들기", "12/12 듀얼 모니터 설정 방법", "12/19 휴대폰 잠금화면", "12/26 2027년 1월", "1/23 2월 · 설날", "매달 하순 ○월 배경화면"] },
+ { g: "web", id: "award", n: "상장 만들기", v: "v1.0", ic: "icons/apps/award.png", open: "2026-11-26T09:00", post: 835, posts: [835],
+   desc: "상장 · 표창장 · 감사장 · 수료증을 여러 명 한 번에 만드는 도구. 고급 테두리 · 금박 장식 · 직인 이미지.",
+   feat: ["종류 10", "고급 테두리 6 + 기본 7", "금박 장식", "직인 이미지", "여러 명 한 번에"],
+   info: [["유형", "블로그 실행형"], ["잠금", "글 공개 때 켬"]],
+   links: [["열기", "award-v1.0.html"], ["감사장으로 시작", "award-v1.0.html?tab=gam"], ["칭찬 상장으로 시작", "award-v1.0.html?tab=kids"]] },
+ { g: "web", id: "calendar", n: "달력 만들기", v: "v1.1", ic: "icons/apps/calendar.png", open: "2026-11-06T20:00", post: 802, posts: [802, 807, 813, 820],
+   desc: "공휴일 · 음력 · 손 없는 날을 넣은 달력을 A4로. 탁상달력 · 주간 일정표 · 1년 계획까지.",
+   info: [["유형", "블로그 실행형"]], docs: [["달력 설명서", "pages/calendar"]],
+   links: [["전체", "calendar-v1.1.html?tab=month"], ["탁상 달력", "calendar-v1.1.html?tab=desk"], ["주간 일정표", "calendar-v1.1.html?tab=week"], ["1년 계획", "calendar-v1.1.html?tab=plan"]],
+   old: [["v1.0", "calendar-v1.0.html"]], todo: ["12/1 2027 음력 달력", "12/20 2027년 1월 달력", "매달 20일 다음 달 달력"] },
+ { g: "web", id: "planner", n: "다이어리 속지 만들기", v: "v1.0", ic: "icons/apps/planner.png", open: "2026-11-10T20:00", post: 808, posts: [808],
+   desc: "먼슬리 · 위클리 · 데일리 다이어리 속지를 골라 인쇄하는 도구.", info: [["유형", "블로그 실행형"]], links: [["열기", "planner-v1.0.html"]] },
+ { g: "web", id: "convert", n: "파일 변환", v: "v1.0", ic: "icons/apps/convert.png", open: "2026-11-14T20:00", post: 809, posts: [809, 810],
+   desc: "아이폰 HEIC 사진을 JPG로, 엑셀에서 깨지는 CSV 한글을 고치는 변환 도구.",
+   info: [["유형", "블로그 실행형"]], links: [["처음", "convert-v1.0.html"], ["HEIC → JPG", "convert-v1.0.html?tab=heic"], ["CSV 한글", "convert-v1.0.html?tab=csv"]] },
+ { g: "web", id: "icon", n: "무료 아이콘", v: "v1.0", ic: "icons/apps/icon.png", open: "2026-11-11T09:00", post: 812, posts: [812],
+   desc: "Blog J가 직접 그린 선 아이콘 140개 · 색 스티커 178개를 PNG · SVG로 받는 곳.", info: [["유형", "블로그 실행형"]], links: [["열기", "icon-v1.0.html"]] },
+ { g: "web", id: "form", n: "무료 양식", v: "v1.0", ic: "icons/apps/form.png", open: "2026-11-08T20:00", post: 804, posts: [804],
+   desc: "이력서 · 사직서 등 빈 양식 67가지를 고쳐서 인쇄 · 저장하는 곳.", info: [["유형", "블로그 실행형(온라인 전용)"]], links: [["열기", "form-v1.0.html"]] },
+ { g: "web", id: "kimchi", n: "김치 양념 계산기", v: "v1.0", ic: "icons/apps/kimchi.png", open: "2026-11-08T09:00", post: 805, posts: [805],
+   desc: "절임배추 무게만 넣으면 김치 18가지 양념 비율을 계산.", info: [["유형", "블로그 실행형"]], links: [["열기", "kimchi-v1.0.html"]] },
+ { g: "web", id: "label", n: "라벨 출력기", v: "v2.0", ic: "icons/apps/label.png", open: "2026-10-16T09:00", post: 769, posts: [769, 770, 771, 772, 806],
+   desc: "엑셀 주소록을 붙여넣으면 우편번호를 자동으로 찾아 폼텍 · 애니라벨 라벨지에 인쇄. 이름 스티커 · 판촉물 스티커도.",
+   feat: ["폼텍 · 애니라벨 각 10종 + 직접 입력", "우편번호 자동 검색(도로명주소 API)", "일반 라벨 배치 6가지", "시험 인쇄 · mm 보정", "인쇄 · PDF · 엑셀"],
+   info: [["유형", "블로그 실행형 + 다운로드판"]], docs: [["라벨 설명서", "pages/label"]],
+   links: [["전체", "label-v2.0.html?tab=all"], ["주소 라벨", "label-v2.0.html?tab=addr"], ["일반 라벨", "label-v2.0.html?tab=gen"]],
+   old: [["v1.0 웹", "label.html"], ["v2.0 다운로드판 (zip)", "downloads/label-printer-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/label-printer-v1.0.zip"], ["주소 검색 시험", "juso-test.html"]] },
+ { g: "web", id: "pdf", n: "PDF 편집 도구", v: "v1.0", ic: "icons/apps/pdf.png", open: "2026-10-19T22:00", post: 745, posts: [745, 756, 757, 758, 759, 760, 761, 762, 763, 764, 766, 767],
+   desc: "설치 없이 PDF 합치기 · 나누기 · 용량 줄이기 · 서명 · 워터마크 등 12가지 기능.",
+   feat: ["합치기 · 나누기 · 추출", "JPG ↔ PDF", "용량 줄이기", "삭제 · 회전", "개인정보 가리기 · 서명", "쪽 번호 · 워터마크"],
+   info: [["유형", "블로그 실행형(12화면)"]], docs: [["PDF 설명서", "pages/pdf"]], links: [["열기", "pdf.html"]] },
+ { g: "web", id: "image", n: "이미지 도구", v: "v1.0", ic: "icons/apps/image.png", open: "2026-10-01T09:00", post: 732, posts: [732, 733, 734, 735, 736, 737, 738, 811],
+   desc: "사진 용량 줄이기 · 증명사진 · 형식 변환 · 크기 · 자르기 · 워터마크를 여러 장 한 번에.",
+   info: [["유형", "블로그 실행형 + 다운로드판"], ["v2.0", "image-v2.0.html 비공개 — 811 얼굴 모자이크 공개(11/26) 때 함께 확인"]], docs: [["이미지 설명서", "pages/image-tool"]],
+   links: [["전체", "image.html?tab=all"], ["용량 줄이기", "image.html?tab=compress"], ["증명사진", "image.html?tab=idphoto"]],
+   old: [["v1.0 다운로드판 (zip)", "downloads/image-tool-v1.0.zip"]] },
+ { g: "web", id: "chart", n: "차트 만들기", v: "v1.0", ic: "icons/apps/chart.png", open: "2026-10-12T22:00", post: 748, posts: [748, 749, 750, 752, 753, 754],
+   desc: "엑셀 표를 붙여넣으면 막대 · 꺾은선 · 원 · 콤보 차트를 만들어 PPT · 보고서에 넣는 도구.",
+   info: [["유형", "블로그 실행형"], ["주소 값", "tab=all|bar|hbar|line|pie|combo"]], docs: [["차트 설명서", "pages/chart"]], links: [["열기", "chart.html?tab=all"]] },
+ { g: "web", id: "write", n: "쓰기 연습장", v: "v1.0", ic: "icons/apps/write.png", open: "2026-10-06T09:00", post: 739, posts: [739, 740, 741, 742, 743],
+   desc: "한글 따라쓰기 · 받아쓰기 시험지 · 알파벳 · 영어 단어 · 속담 연습장을 매번 새로 만들어 인쇄.",
+   info: [["유형", "블로그 실행형"]], docs: [["쓰기 설명서", "pages/write"]],
+   links: [["한글", "write.html?tab=ko"], ["받아쓰기", "write.html?tab=test"], ["영어", "write.html?tab=en"]] },
+
+ /* ── 아이디어 · 미개발 ── */
+ { g: "idea", id: "i-edge", n: "엣지 단축키(단축키 사전에 추가)", plan: "2026-11 말", desc: "크롬과 거의 같지만 엣지만의 키(세로 탭 · 컬렉션 · 사이드바 등)를 따로 표시 — 엣지 사용자가 「엣지 단축키」로 찾아오게(11-14 제이)." },
+ { g: "idea", id: "i-money", n: "돈 계산기 — 연봉 실수령 · 3.3% · 부가세", plan: "2026-12", desc: "4대보험 + 간이세액표 · 3.3% 환급 · 부가세 역산" },
+ { g: "idea", id: "i-conv", n: "만능 변환기", plan: "2026-12", desc: "평수 · 단위 · 만 나이 · D-day · 음력 ↔ 양력 · 60갑자 · 띠(제사 엔진 재사용)" },
+ { g: "idea", id: "i-files", n: "파일 정리 도우미", plan: "2026-12", desc: "용량 지도 · 큰 파일 · 중복 파일(내용 비교) · 다운로드 폴더 정리" },
+ { g: "idea", id: "i-skin", n: "공개용 티스토리 스킨", plan: "2026-11 말 ~ 12", desc: "Blog J 스킨 v4.2 기반 — 개인 부분은 스킨 설정으로 · 버전별 zip · 시험 블로그 j-blog2.tistory.com",
+   links: [["시험 블로그", "https://j-blog2.tistory.com/"], ["시험 블로그 관리", "https://j-blog2.tistory.com/manage"]] },
+ { g: "idea", id: "i-form11", n: "무료 양식 v1.1", plan: "2026-12 말", desc: "이력서 경력형 · 위임장 용도별 · 동의서 · 생활 양식 · 공책 옵션" },
+ { g: "idea", id: "i-env", n: "봉투 인쇄", plan: "2027-01", desc: "부의 · 축의 · 세뱃돈 · 제사 봉투 — 규격 봉투에 글자만(mm 보정)" },
+ { g: "idea", id: "i-color", n: "색상표", plan: "2027-01", desc: "한국 전통색 · 웹 색 · 대비 검사 · 사진에서 색 뽑기 · 내 팔레트" },
+ { g: "idea", id: "i-card", n: "명함 관리기", plan: "2027-01", desc: "명함 사진 · 정보가 내 PC에만 · 연락처(.vcf) · 엑셀 · 견적서 거래처로" },
+ { g: "idea", id: "i-retire", n: "노후 자금 계산기", plan: "2027-01 ~ 02", desc: "공단 예상액 넣어 부족분 · 월 저축액" },
+ { g: "idea", id: "i-num", n: "쓰기 연습장 「숫자」 탭", plan: "2027-01 ~ 02", desc: "0~9 따라 쓰기 · 획 순서 · 수 세기 그림 · 숫자표" },
+ { g: "idea", id: "i-voca", n: "영어 단어장", plan: "2027-02", desc: "내 단어로 인쇄 단어장 + 휴대폰 복습 앱(망각 곡선 · 소리)" },
+ { g: "idea", id: "i-pay", n: "임금(급여)명세서 발행기", plan: "2027-02 ~ 03", desc: "직원 목록 · 매달 복사 · 필수 기재사항 빠짐 검사 · A4 · PDF" },
+ { g: "idea", id: "i-memo", n: "메모 노트", plan: "일기 노트 뒤", desc: "노트 가족 메모 앱(편집기 메모장 모듈 재사용)" },
+ { g: "idea", id: "i-emo", n: "이모티콘", plan: "반응 보고", desc: "무료 아이콘 3번째 탭 — Blog J 오리지널 표정 · 말풍선" },
+ { g: "idea", id: "i-xl", n: "엑셀 수식 노트", plan: "반응 보고", desc: "함수 찾기 · 한국어 예제 · 「직접 해 보기」 표" },
+ { g: "idea", id: "i-king", n: "왕 계보 한눈에", plan: "방학(1월)", desc: "조선 · 고려 · 삼국 재위 막대 · 계보 · A4 한 장" },
+ { g: "idea", id: "i-novel", n: "원고 작업실", plan: "반응 보고", desc: "작가용 — 회차 나무 · 글자수 목표 · 원고는 내 PC 폴더" },
+ { g: "idea", id: "i-music", n: "음악 정리기", plan: "파일 정리 도우미 뒤", desc: "MP3 태그 · 앨범 사진 · 한글 깨진 태그 · 차량용 USB" },
+ { g: "idea", id: "i-color2", n: "색칠 도안", plan: "여름방학 전", desc: "규칙으로 자동 그리기 + 내 사진으로 만들기" },
+ { g: "idea", id: "i-chart11", n: "차트 v1.1", plan: "반응 보고", desc: "산점도 · 영역 · 누적 막대 · 예제 파일" },
+ { g: "idea", id: "i-life", n: "생활 환산 · 전월세 전환 · 전기요금", plan: "빈 주에", desc: "평수 · 계량 · 사이즈 · 전월세 전환율 · 전기요금" },
+ { g: "idea", id: "i-preg", n: "임신 주수 · 출산 예정일", plan: "건강정보 디자인과", desc: "건강정보 앱 탭" },
+ { g: "idea", id: "i-cap", n: "캡처 설명 표시", plan: "반응 보고", desc: "화살표 · 번호 · 빨간 상자로 캡처 꾸미기" },
+
  /* ── 블로그 · 관리 ── */
- { g: "etc", n: "블로그 · 관리", v: "", links: [["블로그 첫 화면", P("")], ["무료 도구 페이지", P("pages/tools")], ["블로그 관리", P("manage")], ["tools.json", "tools.json"], ["실행 카드 launch.html", "launch.html"], ["개인정보 처리방침", "privacy.html"]] }
+ { g: "etc", id: "blog", n: "블로그 · 관리", ic: "", desc: "블로그 첫 화면 · 관리 · 공통 파일 바로 가기.",
+   links: [["블로그 첫 화면", "https://luvbong.tistory.com/"], ["무료 도구 페이지", "https://luvbong.tistory.com/pages/tools"], ["블로그 관리", "https://luvbong.tistory.com/manage"], ["tools.json", "tools.json"], ["실행 카드 launch.html", "launch.html"], ["개인정보 처리방침", "privacy.html"]] },
+ { g: "etc", id: "itposts", n: "IT 문제 해결 글(도구 없음)", ic: "", desc: "Blog J 도구와 직접 연결되지 않은 최근 IT · 생활 글(번호 725 이후).",
+   posts: [768, 778, 779, 780, 781, 782, 783, 818, 819, 765], links: [] }
 ];
-const SEC = { dev: ["개발 중 · 샘플", "블로그에 아직 안 나간 것"], app: ["설치형 앱", "주소 하나로 PC · 휴대폰 — 잠금 없음"], web: ["블로그 실행형 웹 도구", "블로그 글의 실행 카드로 열기 — 바로 열기는 시험 모드에서만"], idea: ["아이디어 · 미개발", "아이디어 보드에 있고 아직 만들지 않은 것 — 시기는 계획(안)"], etc: ["블로그 · 관리", ""] };
-const WK = "일월화수목금토", ymdw = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}(${WK[d.getDay()]})`;
-const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+const SEC = [["dev", "개발 중 · 샘플"], ["app", "설치형 앱"], ["web", "블로그 실행형 웹 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]];
+const TYPE = { dev: "개발 중", app: "설치형", web: "블로그 실행형", idea: "아이디어", etc: "블로그 · 관리" };
+const WK = "일월화수목금토", pad = n => String(n).padStart(2, "0");
+const ymdw = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}(${WK[d.getDay()]})`;
+const pdate = s => { const [m, d] = s.split("-").map(Number); return ymdw(new Date(m >= 9 ? 2026 : 2026, m - 1, d)); };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const U = h => /^https?:/.test(h) ? h : B + h;
+const EXT = '<svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 const A = (l, cls) => `<a class="${cls || ""}" href="${esc(U(l[1]))}" target="_blank" rel="noopener">${esc(l[0])}</a>`;
-function status(a) {
-  if (a.g === "dev" || !a.open) return ['<span class="st dev">개발 중</span>'];
-  const t = new Date(a.open + ":00+09:00"); return [Date.now() >= t ? `<span class="st num">공개 ${ymdw(t)}</span>` : `<span class="st soon num">공개 예정 ${ymdw(t)}</span>`];
-}
-function draw() {
-  const q = document.getElementById("q").value.trim().toLowerCase(); let h = "";
-  for (const g of Object.keys(SEC)) {
-    const items = APPS.filter(a => a.g === g && (!q || (a.n + " " + a.v + " " + (a.note || "") + " " + (a.todo || []).join(" ") + " " + (a.plan || "") + " " + (a.g === "idea" ? "미개발" : "") + " " + a.links.concat(a.old || []).map(l => l.join(" ")).join(" ")).toLowerCase().includes(q)));
-    if (!items.length) continue;
-    h += `<div class="sec"><h2>${SEC[g][0]}</h2><span>${SEC[g][1]}</span></div>`;
-    if (g === "idea") { h += `<div class="xt"><table><thead><tr><th class="nm">아이디어</th><th>상태</th><th>계획 시기</th><th>내용</th></tr></thead><tbody>${items.map(a => `<tr><td class="nm"><b>${esc(a.n)}</b></td><td><span class="st idea">미개발</span></td><td class="num">${esc(a.plan || "")}</td><td><div class="ty">${esc(a.note || "")}</div></td></tr>`).join("")}</tbody></table></div>`; continue; }
-    if (g === "etc") { h += `<div class="xt"><table><tbody>${items.map(a => `<tr><td class="nm">${esc(a.n)}</td><td colspan="5"><div class="links">${a.links.map(l => A(l)).join("")}</div></td></tr>`).join("")}</tbody></table></div>`; continue; }
-    h += `<div class="xt"><table><thead><tr><th class="nm">앱</th><th>버전</th><th>공개</th><th>열기</th><th>블로그 글</th><th>지난 버전 · 다운로드 · 메모</th></tr></thead><tbody>`;
-    for (const a of items) {
-      const web = a.g === "web" && a.post;
-      const open = web ? `<div class="links">${A(["블로그 글에서 열기", P(a.post)], "main")}</div><div class="links sm">${a.links.map(l => A(l)).join("")}</div>`
-                       : `<div class="links">${a.links.map((l, i) => A(l, i === 0 ? "main" : "")).join("")}</div>`;
-      const posts = (a.post ? [A(["" + a.post, P(a.post)], "post")] : []).concat((a.posts || []).map(([t, n]) => A([t, P(n)], "post")));
-      const todo = (a.todo || []).map(t => `<span class="todo">${esc(t)}</span>`).join("");
-      const extra = (a.old || []).map(l => A(l)).join("");
-      h += `<tr><td class="nm"><b>${esc(a.n)}</b><div class="ty">${a.g === "app" ? "설치형" : a.g === "web" ? "블로그 실행형" : "개발 중"}</div></td>
-        <td class="num"><span class="ver">${esc(a.v)}</span></td>
-        <td class="num">${status(a)[0]}</td>
-        <td>${open}</td>
-        <td><div class="links">${posts.join("") || (todo ? "" : '<span class="dash">—</span>')}</div>${todo ? `<div class="todos"><div class="tl">아직 안 쓴 글 ${a.todo.length}</div>${todo}</div>` : ""}</td>
-        <td>${extra ? `<div class="links">${extra}</div>` : ""}${a.note ? `<div class="ty">${esc(a.note)}</div>` : ""}${!extra && !a.note ? '<span class="dash">—</span>' : ""}</td></tr>`;
-    }
-    h += `</tbody></table></div>`;
-    if (g === "web" && !owner()) h += `<div class="gate">작은 단추(바로 열기)는 시험 모드가 꺼져 있으면 막힘 화면이 나와요 — 「블로그 글에서 열기」의 실행 카드로 여세요</div>`;
-  }
-  document.getElementById("list").innerHTML = h || `<div class="none">찾는 앱이 없어요</div>`;
-}
-/* 시험 모드: 같은 사이트(pegasus0710-arch.github.io)의 모든 도구가 이 값을 보고 잠금을 건너뜀 — 이 브라우저에만 */
+const ls = { get(k, d) { try { const v = localStorage.getItem("jhub-" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem("jhub-" + k, JSON.stringify(v)); } catch (e) {} } };
 const owner = () => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } };
+const STAR = '<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.8z"/></svg>';
+let fav = ls.get("fav", []);
+const isFav = id => fav.includes(id);
+function togFav(id) { fav = isFav(id) ? fav.filter(x => x !== id) : fav.concat(id); ls.set("fav", fav); drawSide(); drawMain(); }
+let shut = ls.get("shut", ["idea"]), cur = (location.hash.match(/app=([\w-]+)/) || [])[1] || ls.get("cur", "");
+if (!APPS.some(a => a.id === cur)) cur = APPS[0].id;
+function status(a) {
+  if (a.g === "idea") return `<span class="tag">계획 ${esc(a.plan || "")}</span>`;
+  if (a.g === "etc") return "";
+  if (a.g === "dev" || !a.open) return '<span class="tag dev">개발 중</span>';
+  const t = new Date(a.open + ":00+09:00");
+  return Date.now() >= t ? `<span class="tag pub num">공개 ${ymdw(t)}</span>` : `<span class="tag soon num">공개 예정 ${ymdw(t)}</span>`;
+}
+const icon = (a, big) => a.ic ? `<img class="${big ? "big" : "ii"}" src="${esc(U(a.ic))}" alt="" loading="lazy">` : `<span class="${big ? "bigl" : "il"}">${esc(a.n.trim()[0])}</span>`;
+const hay = a => [a.n, a.v, a.desc, a.note, a.plan, (a.todo || []).join(" "), (a.feat || []).join(" "), (a.posts || []).map(n => n + " " + (POSTS[n] ? POSTS[n][0] : "")).join(" "), (a.links || []).concat(a.old || []).map(l => l[0]).join(" ")].join(" ").toLowerCase();
+function drawSide() {
+  const q = document.getElementById("q").value.trim().toLowerCase(); let h = "";
+  for (const [g, name] of [["fav", "★ 즐겨찾기"]].concat(SEC)) {
+    const items = g === "fav" ? fav.map(id => APPS.find(a => a.id === id)).filter(a => a && (!q || hay(a).includes(q))) : APPS.filter(a => a.g === g && (!q || hay(a).includes(q)));
+    if (g === "fav" && !items.length && !q) { h += `<div class="grp"><div class="gh fav" style="cursor:default">★ 즐겨찾기<span class="cn" style="font-weight:600">앱 옆 ☆를 누르면 여기에</span></div></div>`; continue; }
+    if (!items.length) continue;
+    const isShut = !q && shut.includes(g);
+    h += `<div class="grp${isShut ? " shut" : ""}"><button class="gh ${g}" data-g="${g}"><svg class="ar" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>${name}<span class="cn">${items.length}</span></button><div class="gl">`;
+    for (const a of items) h += `<button class="it${a.id === cur ? " on" : ""}" data-id="${a.id}">${icon(a)}<span class="in">${esc(a.n)}</span>${a.v ? `<span class="iv">${esc(a.v)}</span>` : ""}${(a.todo || []).length ? '<span class="tdo" title="아직 안 쓴 글"></span>' : ""}<span class="ip num">${(a.posts || []).length || ""}</span><span class="fs${isFav(a.id) ? " on" : ""}" data-fav="${a.id}" role="button" aria-label="즐겨찾기">${STAR}</span></button>`;
+    h += `</div></div>`;
+  }
+  document.getElementById("side").innerHTML = h || '<div class="none">찾는 앱이 없어요</div>';
+}
+function drawMain() {
+  const a = APPS.find(x => x.id === cur); if (!a) return;
+  const web = a.g === "web" && a.post;
+  let btn = "";
+  if (web) btn += A(["블로그 글에서 열기", P(a.post)], "pri");
+  (a.links || []).forEach((l, i) => btn += A(l, !web && i === 0 ? "pri" : ""));
+  if (a.post && !web) btn += A(["대표 글 " + a.post, P(a.post)]);
+  let h = `<section class="card"><div class="hd">${icon(a, 1)}<div style="min-width:0;flex:1"><h1>${esc(a.n)}${a.v ? `<span class="ver">${esc(a.v)}</span>` : ""}<span class="tag">${TYPE[a.g]}</span>${status(a)}<button class="hfs${isFav(a.id) ? " on" : ""}" data-hfav="${a.id}">${STAR}${isFav(a.id) ? "즐겨찾기 됨" : "즐겨찾기"}</button></h1>${a.desc ? `<p class="desc">${esc(a.desc)}</p>` : ""}</div></div>`;
+  if (btn) h += `<div class="btns">${btn.replace(/<\/a>/g, EXT + "</a>")}</div>`;
+  if (web && !owner()) h += `<div class="gate">바로 열기 단추는 시험 모드가 꺼져 있으면 막힘 화면이 나와요 — 「블로그 글에서 열기」로 여세요</div>`;
+  h += `</section>`;
+  // 정보 · 기능
+  const info = [["유형", TYPE[a.g]]].concat(a.v ? [["버전", a.v]] : []).concat(a.open ? [["공개", status(a).replace(/<[^>]+>/g, "")]] : []).concat(a.post ? [["대표 글", `<a href="${P(a.post)}" target="_blank" rel="noopener">${a.post} ${esc(POSTS[a.post] ? POSTS[a.post][0] : "")}</a>`]] : []).concat((a.info || []).filter(r => r[0] !== "유형").map(r => [r[0], esc(r[1])]));
+  const left = `<section class="card"><h2 class="ct">정보</h2><table class="info">${info.map(r => `<tr><th>${esc(r[0])}</th><td>${r[1]}</td></tr>`).join("")}</table></section>`;
+  let right = "";
+  if ((a.feat || []).length) right += `<section class="card"><h2 class="ct">핵심 기능</h2><ul class="feat">${a.feat.map(f => `<li>${esc(f)}</li>`).join("")}</ul></section>`;
+  if ((a.todo || []).length) right += `<section class="card"><h2 class="ct"><span class="tl" style="font-size:15px;font-weight:900">아직 안 쓴 글 · 할 일</span><span>${a.todo.length}</span></h2><div class="todos">${a.todo.map(t => `<span class="todo">${esc(t)}</span>`).join("")}</div></section>`;
+  h += `<div class="cols"><div style="display:flex;flex-direction:column;gap:14px;min-width:0">${left}${a.note ? `<section class="card"><h2 class="ct">메모</h2><div class="memo">${esc(a.note)}</div></section>` : ""}</div><div style="display:flex;flex-direction:column;gap:14px;min-width:0">${right || ""}</div></div>`;
+  if ((a.docs || []).length || (a.old || []).length) h += `<section class="card">${(a.docs || []).length ? `<h2 class="ct">설명서 · 페이지</h2><div class="chips" style="margin-bottom:${(a.old || []).length ? 16 : 0}px">${a.docs.map(l => A([l[0], /^pages\//.test(l[1]) ? P(l[1]) : l[1]])).join("")}</div>` : ""}${(a.old || []).length ? `<h2 class="ct">지난 버전 · 다운로드</h2><div class="chips">${a.old.map(l => A(l)).join("")}</div>` : ""}</section>`;
+  // 글 목록
+  const ps = (a.posts || []).map(n => [n, POSTS[n]]).filter(x => x[1]).sort((x, y) => x[1][2] < y[1][2] ? -1 : x[1][2] > y[1][2] ? 1 : x[0] - y[0]);
+  if (a.g !== "idea" || ps.length) {
+    const pub = ps.filter(x => x[1][1] === "P").length;
+    h += `<section class="card"><h2 class="ct">블로그 글<span class="num">${ps.length}편 · 공개 ${pub} · 예약 ${ps.length - pub}</span></h2>${ps.length ? `<div class="pl">${ps.map(([n, p]) => `<a class="pr" href="${P(n)}" target="_blank" rel="noopener"><span class="pn num">${n}</span><span class="pt" title="${esc(p[0])}">${n === a.post ? "<b>대표</b>" : ""}${esc(p[0])}</span><span class="ps ${p[1]}">${p[1] === "P" ? "공개" : "예약"}</span><span class="pd num">${pdate(p[2])}</span></a>`).join("")}</div>` : '<div class="empty">아직 글이 없어요</div>'}</section>`;
+  }
+  document.getElementById("main").innerHTML = h;
+}
+function pick(id, scroll) { cur = id; ls.set("cur", id); history.replaceState(null, "", "#app=" + id); drawSide(); drawMain(); if (scroll && innerWidth <= 900) document.getElementById("main").scrollIntoView({ behavior: "smooth", block: "start" }); }
+document.getElementById("side").onclick = e => {
+  const g = e.target.closest(".gh"); if (g) { const k = g.dataset.g; shut = shut.includes(k) ? shut.filter(x => x !== k) : shut.concat(k); ls.set("shut", shut); drawSide(); return; }
+  const f = e.target.closest("[data-fav]"); if (f) { e.stopPropagation(); togFav(f.dataset.fav); return; }
+  const it = e.target.closest(".it"); if (it) pick(it.dataset.id, true);
+};
+document.getElementById("q").oninput = () => { drawSide(); const q = document.getElementById("q").value.trim().toLowerCase(); if (q) { const f = APPS.find(a => hay(a).includes(q)); if (f && !hay(APPS.find(a => a.id === cur)).includes(q)) { cur = f.id; drawSide(); drawMain(); } } };
 function paintOwner() { const on = owner(), b = document.getElementById("owner"); b.classList.toggle("on", on); document.getElementById("ownerT").textContent = on ? "시험 모드 켜짐" : "시험 모드 꺼짐"; }
-document.getElementById("owner").onclick = () => { try { owner() ? localStorage.removeItem("bj-owner") : localStorage.setItem("bj-owner", "1"); } catch (e) {} paintOwner(); draw(); };
-document.getElementById("q").oninput = draw;
+document.getElementById("main").addEventListener("click", e => { const b = e.target.closest("[data-hfav]"); if (b) togFav(b.dataset.hfav); });
+document.getElementById("owner").onclick = () => { try { owner() ? localStorage.removeItem("bj-owner") : localStorage.setItem("bj-owner", "1"); } catch (e) {} paintOwner(); drawMain(); };
 document.getElementById("today").textContent = "오늘 " + ymdw(new Date());
-paintOwner(); draw();
+paintOwner(); drawSide(); drawMain();
 </script>
 </body>
 </html>

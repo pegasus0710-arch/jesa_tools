@@ -515,7 +515,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 12:52";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 13:08";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -575,7 +575,7 @@ function ensureBase(force) {
   return n;
 }
 ensureBase(false); ls.set("data", D);
-const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, bg: false, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
+const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
   engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true };
 let SET = Object.assign({}, SET0, ls.get("set", {}));
 const saveSet = () => ls.set("set", SET);
@@ -605,7 +605,40 @@ const dueList = () => D.chapters.filter(c => { const d = rvDue(c); return d && d
 
 /* ── 화면 상태 ── */
 const U = { scr: "home", sel: new Set(), edit: null, sec: ls.get("sec", "talk") };
-function go(s) { U.scr = s; render(); scrollTo(0, 0); }
+/* 뒤로 가기 = 이전 화면 · 맨 처음 화면에서는 「종료할까요?」 (브라우저 기록: [지킴이] → [화면들…]) */
+function go(s, fromPop) {
+  if (U.scr === "edit" && s !== "edit" && !fromPop) saveEdit();
+  const changed = U.scr !== s || (s === "edit" && history.state && history.state.edit !== U.edit);
+  U.scr = s; render(); scrollTo(0, 0);
+  if (!fromPop && changed) { try { history.pushState({ scr: s, edit: U.edit }, ""); } catch (e) {} }
+}
+function navInit() {
+  try { history.replaceState({ guard: 1 }, ""); history.pushState({ scr: U.scr, edit: U.edit }, ""); } catch (e) {}
+}
+let EXITING = false;
+addEventListener("popstate", e => {
+  if (EXITING) return;
+  const st = e.state || {};
+  const sh = $("#sheet");
+  if (!sh.hidden) {  /* 창이 열려 있으면 창만 닫고 화면은 그대로 */
+    const wasExit = sh.dataset.exit === "1"; sh.hidden = true; sh.dataset.exit = "";
+    try { history.pushState({ scr: U.scr, edit: U.edit }, ""); } catch (er) {}
+    if (wasExit) return;
+    return;
+  }
+  if (st.scr) { if (U.scr === "edit") saveEdit(); if (st.edit) U.edit = st.edit; go(st.scr, true); return; }
+  /* 지킴이까지 왔음 = 앱을 나가려는 뒤로 가기 → 한 칸 되돌리고 확인 */
+  try { history.pushState({ scr: U.scr, edit: U.edit }, ""); } catch (er) {}
+  askExit();
+});
+function askExit() {
+  if (U.scr === "edit") saveEdit();
+  const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "1";
+  sh.innerHTML = `<div class="shbox exitbox" role="alertdialog" aria-modal="true"><div class="edh"><b>영어 노트를 닫을까요?</b></div>
+  <p class="lead" style="margin-bottom:14px">${P.playing ? "지금 듣고 있는 것도 멈춰요. " : ""}고친 내용은 모두 저장돼 있어요.</p>
+  <div class="row" style="justify-content:flex-end"><button class="btn" data-a="exitno">계속 쓰기</button><button class="btn go" data-a="exityes">닫기</button></div></div>`;
+}
+function openSheet(html) { const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = ""; sh.innerHTML = html; }
 function render() {
   const nav = [["home", "챕터", IC.home], ["play", "듣기", IC.head], ["stat", "기록", IC.chart], ["set", "설정", IC.gear]];
   $("#nav").innerHTML = nav.map(([k, t, i]) => `<button data-nav="${k}" class="${U.scr === k ? "on" : ""}">${svg(i)}${t}</button>`).join("");
@@ -689,7 +722,7 @@ function parseWords(txt) {
   return out;
 }
 function openPaste(chId) {
-  const sh = $("#sheet"); sh.hidden = false;
+  const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
   const c0 = chId ? D.chapters.find(x => x.id === chId) : null, W = (c0 ? c0.sec : U.sec) === "word", un = W ? "단어" : "문장";
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>${chId ? un + " 붙여넣기" : `붙여넣어 새 ${SECN[W ? "word" : "talk"]} 챕터 만들기`}</b><button class="btn sm" data-a="close">닫기</button></div>
   ${chId ? "" : `<div class="lab">챕터 이름</div><input class="inp" id="pName" value="${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(c => c.sec === (W ? "word" : "talk")).length + 1}" maxlength="40" style="margin-bottom:12px">`}
@@ -775,16 +808,8 @@ function sayDevice(text, lang, rate, tok) {
     SS.cancel(); setTimeout(() => { if (tok === P.tok) SS.speak(u); else fin(); }, 60);
   });
 }
-/* 「화면 꺼도 계속 듣기(실험)」: 소리 없는 오디오를 함께 틀어 휴대폰이 앱을 덜 재우게 함 — 기종 · 절전 설정에 따라 안 될 수 있음 */
-let KA = null;
-function bgKeep(on) {
-  try {
-    if (on && SET.bg) { if (!KA) { const n = 8000, b = new DataView(new ArrayBuffer(44 + n * 2)); const W = (p, s) => { for (let i = 0; i < s.length; i++) b.setUint8(p + i, s.charCodeAt(i)); }; W(0, "RIFF"); b.setUint32(4, 36 + n * 2, true); W(8, "WAVE"); W(12, "fmt "); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 1, true); b.setUint32(24, 8000, true); b.setUint32(28, 16000, true); b.setUint16(32, 2, true); b.setUint16(34, 16, true); W(36, "data"); b.setUint32(40, n * 2, true); KA = new Audio(URL.createObjectURL(new Blob([b], { type: "audio/wav" }))); KA.loop = true; } KA.play().catch(() => {}); mediaMeta(); }
-    else if (KA) KA.pause();
-  } catch (e) {}
-}
 async function runDevice() {
-  const tok = ++P.tok; P.playing = true; keepOn(true); bgKeep(true); paintPlay();
+  const tok = ++P.tok; P.playing = true; P.hidStop = false; keepOn(true); paintPlay();
   while (tok === P.tok) {
     const it = curIt(); if (!it) break;
     paintPlay();
@@ -797,7 +822,7 @@ async function runDevice() {
     if (tok !== P.tok) break;
     logSent(); if (!advance()) break;
   }
-  if (tok === P.tok) { P.playing = false; keepOn(false); bgKeep(false); paintPlay(); }
+  if (tok === P.tok) { P.playing = false; keepOn(false); paintPlay(); }
 }
 function waitTok(ms, tok) { return new Promise(r => { const t0 = Date.now(); const iv = setInterval(() => { if (tok !== P.tok || Date.now() - t0 >= ms) { clearInterval(iv); r(); } }, 80); }); }
 /* 다음 문장 · 다음 챕터 · 반복 */
@@ -815,7 +840,12 @@ let WL = null;
 async function keepOn(on) {
   try { if (on && SET.keep && "wakeLock" in navigator && !WL) { WL = await navigator.wakeLock.request("screen"); WL.addEventListener("release", () => { WL = null; }); } if (!on && WL) { WL.release(); WL = null; } } catch (e) {}
 }
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && P.playing && SET.engine === "device") keepOn(true); });
+/* 기기 음성은 화면이 꺼지면 휴대폰이 소리를 막음(재생 순서만 계속 넘어감) → 그 문장에서 멈추고, 다시 켜면 이어 듣기 안내 */
+document.addEventListener("visibilitychange", () => {
+  if (SET.engine !== "device") return;
+  if (document.visibilityState === "hidden" && P.playing) { stopAll(); P.hidStop = true; paintPlay(); return; }
+  if (document.visibilityState === "visible" && P.hidStop) { P.hidStop = false; setTimeout(() => toast(`화면이 꺼진 동안 ${P.qi + 1}번째에서 멈췄어요 — ▶를 누르면 이어서 들어요`), 300); }
+});
 
 /* ── 고품질 음성(Azure — 내 서버 경유) ── */
 const IDB = { db: null };
@@ -926,7 +956,7 @@ if ("mediaSession" in navigator) {
   A("seekforward", () => jump(1)); A("seekbackward", () => jump(0));
 }
 /* ── 단추 ── */
-function stopAll() { P.tok++; if (SS) SS.cancel(); const au = $("#au"); try { au.pause(); } catch (e) {} P.playing = false; keepOn(false); bgKeep(false); }
+function stopAll() { P.tok++; if (SS) SS.cancel(); const au = $("#au"); try { au.pause(); } catch (e) {} P.playing = false; keepOn(false); }
 function playPause(want) {
   const on = want == null ? !P.playing : want;
   if (!P.ch) { const c = dueList()[0] || D.chapters.find(x => x.sec === U.sec && x.items.length) || D.chapters.find(x => x.items.length); if (!c) return toast("챕터를 먼저 만들어 주세요"); P.list = [c.id]; loadCh(0); }
@@ -979,7 +1009,7 @@ function drawPlay() {
 function engineNote() {
   if (SET.engine === "azkey") return `<div class="engine az"><b>고품질 음성(내 Azure 키)</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 넘겨요.</div>`;
   if (SET.engine === "azure") return `<div class="engine az"><b>고품질 음성</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 문장을 넘겨요.</div>`;
-  return `<div class="engine"><b>기기 음성</b> — 인터넷 없이 바로 들려요. 대신 <b>화면을 켜 두어야</b> 해요(재생 중 화면이 꺼지지 않게 막아 둠). 화면을 끄고 들으려면 설정 → 음성 → 「내 Azure 키」.</div>`;
+  return `<div class="engine"><b>기기 음성</b> — 인터넷 없이 바로 들려요. 대신 <b>화면을 켜 두어야</b> 해요(재생 중 화면이 꺼지지 않게 막아 둠 · 전원 단추로 끄면 그 문장에서 멈춰요). 화면을 끄고 들으려면 설정 → 음성 → 「내 Azure 키」.</div>`;
 }
 const isCur = id => !!(P.ch && P.ch.id === id);
 function paintCards() {
@@ -1057,13 +1087,12 @@ async function drawSet() {
   let h = `<div class="vh"><div><h2>설정</h2><p>영어 노트 v${APP_VER}</p></div></div><div class="setg">`;
   h += `<div class="sc"><div class="sh2">${svg(IC.head)}음성</div><div class="seg" data-k="engine" style="margin-bottom:10px"><button data-v="device" class="${SET.engine === "device" ? "on" : ""}">기기 음성</button><button data-v="azkey" class="${SET.engine === "azkey" ? "on" : ""}">내 Azure 키</button><button data-v="azure" class="${SET.engine === "azure" ? "on" : ""}">내 음성 서버</button></div>`;
   if (SET.engine === "device") {
-    h += `<p>휴대폰 · PC에 들어 있는 음성이에요. 인터넷 없이 되지만 <b>화면을 켜 두어야</b> 해요.</p>
+    h += `<p>휴대폰 · PC에 들어 있는 음성이에요. 인터넷 없이 바로 되지만 <b>화면을 켜 두어야</b> 들려요.</p>
     <div class="lab">한국어 목소리</div><select class="inp" data-s="vKo"><option value="">자동</option>${vk.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vKo === v.voiceURI ? "selected" : ""}>${esc(v.name)}</option>`).join("")}</select>
     <div class="lab" style="margin-top:10px">영어 목소리</div><select class="inp" data-s="vEn"><option value="">자동</option>${ve.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vEn === v.voiceURI ? "selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select>
     <div class="row" style="margin-top:10px"><button class="btn sm" data-a="vtest" data-v="ko">한국어 들어 보기</button><button class="btn sm" data-a="vtest" data-v="en">영어 들어 보기</button></div>
     <label class="tg" style="margin-top:8px"><input type="checkbox" data-t="keep" ${SET.keep ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>
-    <label class="tg"><input type="checkbox" data-t="bg" ${SET.bg ? "checked" : ""}><span>화면 꺼도 계속 듣기 <b style="color:var(--sun)">(실험)</b></span></label>
-    <p class="hint">「실험」은 안드로이드에서 될 수 있어요(기종 · 절전 설정에 따라 다름). 아이폰은 화면이 꺼지면 기기 음성이 멈춰요. 확실하게 화면을 끄고 들으려면 「내 Azure 키」를 쓰세요.</p>`;
+    <p class="hint">기기 음성은 화면이 꺼지면 휴대폰이 소리를 막아요. 그래서 화면이 꺼지면 그 문장에서 멈추고, 다시 켜면 ▶로 이어 들을 수 있어요. 화면을 끄고 들으려면 「내 Azure 키」를 쓰세요.</p>`;
   } else if (SET.engine === "azkey") {
     const n = await idbCount(), RG = [["koreacentral", "한국 중부 (koreacentral)"], ["japaneast", "일본 동부 (japaneast)"], ["eastasia", "동아시아 (eastasia)"], ["southeastasia", "동남아시아 (southeastasia)"], ["eastus", "미국 동부 (eastus)"], ["westus2", "미국 서부 2 (westus2)"], ["westeurope", "서유럽 (westeurope)"]];
     h += `<p>마이크로소프트 Azure의 고품질 음성을 <b>내 무료 키</b>로 바로 받아요. 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 재생되고, 한 번 받은 음성은 이 기기에 저장해 다시 써요.</p>
@@ -1095,7 +1124,7 @@ async function drawSet() {
 
 /* ── 단어장 인쇄 (A4 · 뜻 가리기 / 단어 가리기) ── */
 function openPrint(id) {
-  const c = chById(id); if (!c) return; const sh = $("#sheet"); sh.hidden = false;
+  const c = chById(id); if (!c) return; const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>단어장 인쇄 — ${esc(c.name)}</b><button class="btn sm" data-a="close">닫기</button></div>
   <div class="lab">가리기</div><div class="seg" id="prHide"><button data-v="none" class="on">모두 보이기</button><button data-v="mean">뜻 가리기</button><button data-v="word">단어 가리기</button></div>
   <label class="tg" style="margin-top:10px"><input type="checkbox" id="prEx" checked><span>예문 넣기</span></label>
@@ -1213,7 +1242,7 @@ function openInstall() {
     : sam ? ["오른쪽 아래 「≡」 메뉴", "「현재 페이지 추가」 → 「홈 화면」", "「추가」"]
     : and ? ["오른쪽 위 「⋮」 메뉴", "「앱 설치」 또는 「홈 화면에 추가」", "「설치」"]
     : ["주소창 오른쪽의 설치 아이콘을 누르세요", "없으면 「⋮」 → 「저장 및 공유」 → 「앱 설치」", "「설치」"];
-  const sh = $("#sheet"); sh.hidden = false;
+  const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>앱으로 설치하기</b><button class="btn sm" data-a="close">닫기</button></div>
   <div class="iapp"><img src="icon-192.png" alt="" width="56" height="56"><div><b>영어 노트</b><span>Blog J · 가입 없이</span></div></div>
   ${INST.ev ? `<button class="btn go full" data-a="inst">${svg(IC.phone)}지금 설치하기</button>` : ""}
@@ -1223,7 +1252,7 @@ if ("serviceWorker" in navigator && gdHttp()) addEventListener("load", () => nav
 
 /* ── 누름 처리 ── */
 document.addEventListener("click", async e => {
-  const nv = e.target.closest("[data-nav]"); if (nv) { if (U.scr === "edit") saveEdit(); go(nv.dataset.nav); return; }
+  const nv = e.target.closest("[data-nav]"); if (nv) { go(nv.dataset.nav); return; }
   const sg = e.target.closest(".seg[data-k] button"); if (sg) {
     const k = sg.parentElement.dataset.k, v = sg.dataset.v; SET[k] = /^-?[\d.]+$/.test(v) && k !== "think" ? +v : v; saveSet();
     if (k === "engine") { stopAll(); P.built = null; drawSet(); return; }
@@ -1231,7 +1260,8 @@ document.addEventListener("click", async e => {
     return;
   }
   const el = e.target.closest("[data-a]"); if (!el) return; const a = el.dataset.a;
-  if (a === "close") { $("#sheet").hidden = true; return; }
+  if (a === "close" || a === "exitno") { $("#sheet").hidden = true; $("#sheet").dataset.exit = ""; return; }
+  if (a === "exityes") { EXITING = true; stopAll(); $("#sheet").hidden = true; logTick(); try { history.go(-2); } catch (er) {} setTimeout(() => { try { window.close(); } catch (er) {} EXITING = false; }, 400); return; }
   if (a === "sec") { U.sec = el.dataset.v; ls.set("sec", U.sec); U.sel.clear(); drawHome(); return; }
   if (a === "newch") { const W = U.sec === "word"; const c = { id: uid(), sec: U.sec, name: `${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(x => x.sec === U.sec).length + 1}`, at: Date.now(), items: [W ? { id: uid(), ko: "", en: "", ex: "", exk: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }], rv: null }; D.chapters.push(c); touch(c); U.edit = c.id; go("edit"); return; }
   if (a === "print") { if (U.scr === "edit") saveEdit(); return openPrint(el.dataset.id); }
@@ -1297,7 +1327,7 @@ SYNC = BJSync.create({ app: "eng", clientId: GD_CLIENT_ID, scope: GD_SCOPE, isOn
 const q0 = new URLSearchParams(location.search);
 const gdBackOk = gdBack();
 if (q0.get("install") === "1" && !INST.standalone) setTimeout(openInstall, 600);
-render(); SYNC.start(); paintSync();
+render(); navInit(); SYNC.start(); paintSync();
 if (gdBackOk) setTimeout(() => { if (U.scr === "set") drawSet(); }, 1500);
 
 </script>

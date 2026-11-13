@@ -254,7 +254,32 @@ textarea.inp{height:auto;min-height:90px;padding:11px 13px;line-height:1.6;resiz
 <footer class="ft" id="ft"></footer>
 <div id="sheet" hidden></div>
 <div id="toast" role="status" aria-live="polite"></div>
-<script>const HOL={"2026-01-01": "신정", "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴", "2026-03-01": "삼일절", "2026-03-02": "대체공휴일", "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-05-25": "대체공휴일", "2026-06-03": "지방선거", "2026-06-06": "현충일", "2026-07-17": "제헌절", "2026-08-15": "광복절", "2026-08-17": "대체공휴일", "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴", "2026-10-03": "개천절", "2026-10-05": "대체공휴일", "2026-10-09": "한글날", "2026-12-25": "성탄절", "2027-01-01": "신정", "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴", "2027-02-09": "대체공휴일", "2027-03-01": "삼일절", "2027-05-01": "노동절", "2027-05-03": "대체공휴일", "2027-05-05": "어린이날", "2027-05-13": "부처님오신날", "2027-06-06": "현충일", "2027-07-17": "제헌절", "2027-07-19": "대체공휴일", "2027-08-15": "광복절", "2027-08-16": "대체공휴일", "2027-09-14": "추석 연휴", "2027-09-15": "추석", "2027-09-16": "추석 연휴", "2027-10-03": "개천절", "2027-10-04": "대체공휴일", "2027-10-09": "한글날", "2027-10-11": "대체공휴일", "2027-12-25": "성탄절", "2027-12-27": "대체공휴일", "2028-01-01": "신정", "2028-01-26": "설날 연휴", "2028-01-27": "설날", "2028-01-28": "설날 연휴", "2028-03-01": "삼일절", "2028-04-12": "국회의원선거", "2028-05-01": "노동절", "2028-05-02": "부처님오신날", "2028-05-05": "어린이날", "2028-06-06": "현충일", "2028-07-17": "제헌절", "2028-08-15": "광복절", "2028-10-02": "추석 연휴", "2028-10-03": "추석 · 개천절", "2028-10-04": "추석 연휴", "2028-10-05": "대체공휴일", "2028-10-09": "한글날", "2028-12-25": "성탄절"};
+<script>
+/* Blog J 공통 — 휴대폰 · PC 뒤로 가기 v2 (11-13 제이: 뒤로 가기로 앱이 바로 꺼지지 않게 · 이전 화면으로 · 닫기 전에 꼭 확인)
+   한 번 누를 때마다 한 단계씩: 떠 있는 창 닫기 → 앱의 이전 화면(views) → 앱이 정한 단계(hook) → 맨 처음이면 「○○ 앱을 닫을까요?」 확인 창.
+   확인 창에서 「닫기」를 누를 때만 앱이 닫힘(뒤로 한 번 더 누르면 확인 창만 닫힘).
+   쓰는 법: BJBACK.init({ ov: [창 선택자...], views: { get: () => 지금 화면, set: v => 그 화면으로 }, hook: () => true(처리함)/false }) */
+(function () {
+  if (window.bjAskExit) return;
+  const name = () => (document.title.split("|")[0] || "").trim() || "이";
+  window.bjAskOpen = () => !!document.getElementById("bjAsk");
+  window.bjAskClose = () => { const o = document.getElementById("bjAsk"); if (o) o.remove(); };
+  window.bjAskExit = function (o) {
+    o = o || {}; if (window.bjAskOpen()) return;
+    const w = document.createElement("div"); w.id = "bjAsk"; w.setAttribute("role", "alertdialog"); w.setAttribute("aria-modal", "true");
+    w.style.cssText = "position:fixed;inset:0;z-index:2147483600;background:rgba(11,25,32,.5);display:flex;align-items:center;justify-content:center;padding:20px;font-family:SUIT,Pretendard,'Malgun Gothic',system-ui,sans-serif";
+    w.innerHTML = '<div style="background:#fff;color:#14202B;border-radius:18px;padding:22px 22px 18px;width:min(360px,100%);box-shadow:0 20px 50px rgba(0,0,0,.3)">'
+      + '<b style="display:block;font-size:18px;font-weight:900;letter-spacing:-.02em;margin-bottom:8px"></b>'
+      + '<p style="margin:0 0 18px;font-size:14.5px;line-height:1.6;color:#5F6B7A">다시 열면 이어서 쓸 수 있어요.</p>'
+      + '<div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" data-k="stay" style="height:44px;padding:0 16px;border-radius:11px;border:0;background:#fff;box-shadow:0 0 0 1px #CDD3DC;font:inherit;font-weight:800;font-size:15px;color:#14202B;cursor:pointer">계속 쓰기</button>'
+      + '<button type="button" data-k="leave" style="height:44px;padding:0 18px;border-radius:11px;border:0;background:#0C737D;color:#fff;font:inherit;font-weight:800;font-size:15px;cursor:pointer">닫기</button></div></div>';
+    w.querySelector("b").textContent = name() + " 앱을 닫을까요?";
+    w.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b && e.target !== w) return; window.bjAskClose(); if (b && b.dataset.k === "leave") { if (o.leave) o.leave(); } else if (o.stay) o.stay(); });
+    w.addEventListener("keydown", e => { if (e.key === "Escape") { window.bjAskClose(); if (o.stay) o.stay(); } });
+    document.body.appendChild(w); setTimeout(() => { const b = w.querySelector('[data-k="stay"]'); if (b) b.focus(); }, 30);
+  };
+})();
+const HOL={"2026-01-01": "신정", "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴", "2026-03-01": "삼일절", "2026-03-02": "대체공휴일", "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-05-25": "대체공휴일", "2026-06-03": "지방선거", "2026-06-06": "현충일", "2026-07-17": "제헌절", "2026-08-15": "광복절", "2026-08-17": "대체공휴일", "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴", "2026-10-03": "개천절", "2026-10-05": "대체공휴일", "2026-10-09": "한글날", "2026-12-25": "성탄절", "2027-01-01": "신정", "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴", "2027-02-09": "대체공휴일", "2027-03-01": "삼일절", "2027-05-01": "노동절", "2027-05-03": "대체공휴일", "2027-05-05": "어린이날", "2027-05-13": "부처님오신날", "2027-06-06": "현충일", "2027-07-17": "제헌절", "2027-07-19": "대체공휴일", "2027-08-15": "광복절", "2027-08-16": "대체공휴일", "2027-09-14": "추석 연휴", "2027-09-15": "추석", "2027-09-16": "추석 연휴", "2027-10-03": "개천절", "2027-10-04": "대체공휴일", "2027-10-09": "한글날", "2027-10-11": "대체공휴일", "2027-12-25": "성탄절", "2027-12-27": "대체공휴일", "2028-01-01": "신정", "2028-01-26": "설날 연휴", "2028-01-27": "설날", "2028-01-28": "설날 연휴", "2028-03-01": "삼일절", "2028-04-12": "국회의원선거", "2028-05-01": "노동절", "2028-05-02": "부처님오신날", "2028-05-05": "어린이날", "2028-06-06": "현충일", "2028-07-17": "제헌절", "2028-08-15": "광복절", "2028-10-02": "추석 연휴", "2028-10-03": "추석 · 개천절", "2028-10-04": "추석 연휴", "2028-10-05": "대체공휴일", "2028-10-09": "한글날", "2028-12-25": "성탄절"};
 </script>
 <script>/* ═══════════════════════════════════════════════════════════════════════════
    Blog J 공통 동기화 핵심(bj-sync-core.js) — 2026-11-08 점검안 · 서버 없음
@@ -1157,8 +1182,8 @@ function render() {
   if (U.scr === "home") drawHome(); else if (U.scr === "proj") drawProj(); else drawSet();
   $("#ft").innerHTML = `일정표 노트 v${APP_VER} · Blog J · 자료는 이 기기${SET.gdOn ? "와 내 구글 드라이브" : ""}에만 저장돼요`;
 }
-function go(scr, extra) { Object.assign(U, extra || {}); U.scr = scr; try { history.pushState({ s: scr }, ""); } catch (e) {} render(); scrollTo(0, 0); }
-addEventListener("popstate", () => { if (!$("#sheet").hidden) { closeSheet(); return; } if (U.scr !== "home") { U.scr = "home"; render(); } });
+function go(scr, extra) { Object.assign(U, extra || {}); U.scr = scr; try { history.pushState({ s: scr, x: extra || null }, ""); } catch (e) {} render(); scrollTo(0, 0); }
+addEventListener("popstate", e => { if (e.state && e.state.bjroot) { if (window.__bjExit) { history.back(); return; } try { history.pushState({ s0: 1 }, ""); } catch (er) {} if (window.bjAskOpen()) { window.bjAskClose(); return; } window.bjAskExit({ leave: () => { window.__bjExit = true; history.back(); } }); return; } if (!$("#sheet").hidden) { closeSheet(); return; } const st = e.state || {}; if (st.s) { if (st.x) Object.assign(U, st.x); U.scr = st.s; render(); scrollTo(0, 0); return; } if (U.scr !== "home") { U.scr = "home"; render(); } });
 
 /* ── 누르기 ── */
 document.addEventListener("click", async e => {
@@ -1379,5 +1404,8 @@ if (q0.get("install") === "1" && !INST.standalone) setTimeout(openInstall, 600);
 if (q0.get("demo") === "1" && !D.projects.length) { const s = SAMPLE_P(); D.projects.push(s); ls.set("data", D); }
 render(); SYNC.start(); paintSync();
 if (gdBackOk) setTimeout(() => { if (U.scr === "set") drawSet(); }, 1500);
+
+/* 11-13 제이: 뒤로 가기로 앱이 바로 꺼지지 않게 — 맨 아래에 지킴이를 두고, 거기까지 오면 「닫을까요?」 */
+try { const s0 = history.state; history.replaceState({ bjroot: 1 }, ""); history.pushState(s0 && !s0.bjroot ? s0 : { s0: 1 }, ""); } catch (e) {}
 </script>
 </body></html>

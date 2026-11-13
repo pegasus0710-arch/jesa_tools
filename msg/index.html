@@ -365,7 +365,32 @@ input.cd-in{height:46px}
 <div class="sheet" id="sheet" hidden></div>
 <div class="foot">문장은 Blog J가 직접 쓴 예시예요. 집안 · 모임마다 쓰는 말이 다를 수 있으니 보내기 전에 한 번 읽어 보세요.<br>날짜 · 49재 · 발인 계산은 참고용이에요. · <a href="https://luvbong.tistory.com" target="_blank" rel="noopener">Blog J 무료 도구</a></div>
 <div class="toast" id="toast"></div>
-<script>/* ── 문자 · 인사말 만들기 — 상황별 문장 (모든 문장은 Blog J가 직접 씀) ──
+<script>
+/* Blog J 공통 — 휴대폰 · PC 뒤로 가기 v2 (11-13 제이: 뒤로 가기로 앱이 바로 꺼지지 않게 · 이전 화면으로 · 닫기 전에 꼭 확인)
+   한 번 누를 때마다 한 단계씩: 떠 있는 창 닫기 → 앱의 이전 화면(views) → 앱이 정한 단계(hook) → 맨 처음이면 「○○ 앱을 닫을까요?」 확인 창.
+   확인 창에서 「닫기」를 누를 때만 앱이 닫힘(뒤로 한 번 더 누르면 확인 창만 닫힘).
+   쓰는 법: BJBACK.init({ ov: [창 선택자...], views: { get: () => 지금 화면, set: v => 그 화면으로 }, hook: () => true(처리함)/false }) */
+(function () {
+  if (window.bjAskExit) return;
+  const name = () => (document.title.split("|")[0] || "").trim() || "이";
+  window.bjAskOpen = () => !!document.getElementById("bjAsk");
+  window.bjAskClose = () => { const o = document.getElementById("bjAsk"); if (o) o.remove(); };
+  window.bjAskExit = function (o) {
+    o = o || {}; if (window.bjAskOpen()) return;
+    const w = document.createElement("div"); w.id = "bjAsk"; w.setAttribute("role", "alertdialog"); w.setAttribute("aria-modal", "true");
+    w.style.cssText = "position:fixed;inset:0;z-index:2147483600;background:rgba(11,25,32,.5);display:flex;align-items:center;justify-content:center;padding:20px;font-family:SUIT,Pretendard,'Malgun Gothic',system-ui,sans-serif";
+    w.innerHTML = '<div style="background:#fff;color:#14202B;border-radius:18px;padding:22px 22px 18px;width:min(360px,100%);box-shadow:0 20px 50px rgba(0,0,0,.3)">'
+      + '<b style="display:block;font-size:18px;font-weight:900;letter-spacing:-.02em;margin-bottom:8px"></b>'
+      + '<p style="margin:0 0 18px;font-size:14.5px;line-height:1.6;color:#5F6B7A">다시 열면 이어서 쓸 수 있어요.</p>'
+      + '<div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" data-k="stay" style="height:44px;padding:0 16px;border-radius:11px;border:0;background:#fff;box-shadow:0 0 0 1px #CDD3DC;font:inherit;font-weight:800;font-size:15px;color:#14202B;cursor:pointer">계속 쓰기</button>'
+      + '<button type="button" data-k="leave" style="height:44px;padding:0 18px;border-radius:11px;border:0;background:#0C737D;color:#fff;font:inherit;font-weight:800;font-size:15px;cursor:pointer">닫기</button></div></div>';
+    w.querySelector("b").textContent = name() + " 앱을 닫을까요?";
+    w.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b && e.target !== w) return; window.bjAskClose(); if (b && b.dataset.k === "leave") { if (o.leave) o.leave(); } else if (o.stay) o.stay(); });
+    w.addEventListener("keydown", e => { if (e.key === "Escape") { window.bjAskClose(); if (o.stay) o.stay(); } });
+    document.body.appendChild(w); setTimeout(() => { const b = w.querySelector('[data-k="stay"]'); if (b) b.focus(); }, 30);
+  };
+})();
+/* ── 문자 · 인사말 만들기 — 상황별 문장 (모든 문장은 Blog J가 직접 씀) ──
    gen(v, k): v = 칸 값, k = 말투(0 정중하게 · 1 다정하게 · 2 짧게) */
 const CATS = [
   { id: "event", n: "경조사 알림" }, { id: "congrats", n: "축하" }, { id: "condole", n: "위로 · 조문" },
@@ -1685,10 +1710,10 @@ const refresh = () => { S.custom = null; S.card = null; keep(() => { drawEdit();
 function go(o, push) {
   const was = { view: S.view, mob: S.mob, myed: S.myed, mcat: S.mcat };
   Object.assign(S, o); if (S.view !== "my" && S.view !== "fav" && S.view !== "recent" && S.view !== "set") S.myed = S.myed && S.view === "tpl" ? null : S.myed;
-  if (push && MOB()) { try { history.pushState({ s: { view: S.view, mob: S.mob, myed: S.myed, mcat: S.mcat } }, ""); } catch (e) {} }
+  if ((was.view !== S.view || was.mob !== S.mob || was.myed !== S.myed || was.mcat !== S.mcat)) { try { history.pushState({ s: { view: S.view, mob: S.mob, myed: S.myed, mcat: S.mcat } }, ""); } catch (e) {} }
   render(); if (MOB() && (was.view !== S.view || was.mob !== S.mob || was.myed !== S.myed || was.mcat !== S.mcat)) scrollTo(0, 0);
 }
-window.addEventListener("popstate", e => { const s = e.state && e.state.s; S.draft = null; if (s) { Object.assign(S, s); } else { S.mob = "list"; S.myed = null; S.mcat = null; } render(); });
+window.addEventListener("popstate", e => { if (e.state && e.state.bjroot) { if (window.__bjExit) { history.back(); return; } try { history.pushState({ s: { view: S.view, mob: S.mob, myed: S.myed, mcat: S.mcat } }, ""); } catch (er) {} if (window.bjAskOpen()) { window.bjAskClose(); return; } window.bjAskExit({ leave: () => { window.__bjExit = true; history.back(); } }); return; } const s = e.state && e.state.s; S.draft = null; if (s) { Object.assign(S, s); } else { S.mob = "list"; S.myed = null; S.mcat = null; } render(); });
 
 /* ── 카드 이미지 ── 아래 makeCard() 그대로 ── */
 
@@ -1899,6 +1924,9 @@ if (gdBackOk) setTimeout(() => drawSet(), 1500);   /* 돌아오면 SYNC.start()�
 if (q0.get("install") === "1") setTimeout(openInstall, 300);
 addEventListener("resize", (() => { let w = innerWidth; return () => { if ((w <= 760) !== (innerWidth <= 760)) { w = innerWidth; if (!MOB() && S.view === "tpl") S.mob = "edit"; render(); } }; })());
 
+
+/* 11-13 제이: 뒤로 가기로 앱이 바로 꺼지지 않게 — 맨 아래에 지킴이를 두고, 거기까지 오면 「닫을까요?」 */
+try { history.replaceState({ bjroot: 1 }, ""); history.pushState({ s: { view: S.view, mob: S.mob, myed: S.myed, mcat: S.mcat } }, ""); } catch (e) {}
 </script>
 </body>
 </html>

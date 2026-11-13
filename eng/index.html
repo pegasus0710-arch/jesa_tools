@@ -114,7 +114,13 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .qi .tx{flex:1;min-width:0}
 .qi .tx b{display:block;font-size:14.5px;font-weight:800}
 .qi .tx small{display:block;font-size:13px;color:var(--sub)}
-.qi .s{color:var(--sun);flex-shrink:0}
+.qrow{display:flex;align-items:stretch;gap:2px;border-radius:10px}
+.qrow.on{background:var(--seal);box-shadow:inset 3px 0 0 var(--sea)}
+.qrow .qi.on{background:none;box-shadow:none}
+.qrow .qi{flex:1;min-width:0}
+.qs{width:40px;flex-shrink:0;display:grid;place-items:center;color:var(--sub);border-radius:10px;opacity:.55}
+@media (hover:hover){.qs:hover{background:var(--in);opacity:1}}
+.qs.on{color:var(--sun);opacity:1}
 /* 편집 */
 .inp{height:42px;border-radius:10px;border:0;background:#fff;box-shadow:0 0 0 1px var(--line);padding:0 11px;font-size:15px;outline:0;min-width:0;width:100%}
 .inp:focus,textarea.inp:focus{box-shadow:0 0 0 2px var(--sea)}
@@ -521,7 +527,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-14(토) 01:08";
+const APP_VER = "1.0", BUILD = "2026-11-14(토) 01:16";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -718,8 +724,8 @@ function drawEdit() {
 }
 function itRow(it, i, virt) {
   const c = findItem(it.id)[0];
-  if (c && c.sec === "word") return `<div class="it w" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp wd2" data-f="en" value="${esc(it.en)}" placeholder="단어 (영어)" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="off"><input class="inp mn2" data-f="ko" value="${esc(it.ko)}" placeholder="뜻" ${virt ? "readonly" : ""}><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 단어">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}<input class="inp ex2" data-f="ex" value="${esc(it.ex || "")}" placeholder="예문 1 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2" data-f="exk" value="${esc(it.exk || "")}" placeholder="예문 1 뜻" ${virt ? "readonly" : ""}><input class="inp ex2 exb" data-f="ex2" value="${esc(it.ex2 || "")}" placeholder="예문 2 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2 exb" data-f="exk2" value="${esc(it.exk2 || "")}" placeholder="예문 2 뜻" ${virt ? "readonly" : ""}></div>`;
-  return `<div class="it" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp ko2" data-f="ko" value="${esc(it.ko)}" placeholder="한글 문장" ${virt ? "readonly" : ""}><input class="inp en2" data-f="en" value="${esc(it.en)}" placeholder="English sentence" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="sentences"><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 문장">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}</div>`;
+  if (c && c.sec === "word") return `<div class="it w" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp wd2" data-f="en" value="${esc(it.en)}" placeholder="단어 (영어)" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="off"><input class="inp mn2" data-f="ko" value="${esc(it.ko)}" placeholder="뜻" ${virt ? "readonly" : ""}>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}<button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 단어">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button><input class="inp ex2" data-f="ex" value="${esc(it.ex || "")}" placeholder="예문 1 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2" data-f="exk" value="${esc(it.exk || "")}" placeholder="예문 1 뜻" ${virt ? "readonly" : ""}><input class="inp ex2 exb" data-f="ex2" value="${esc(it.ex2 || "")}" placeholder="예문 2 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2 exb" data-f="exk2" value="${esc(it.exk2 || "")}" placeholder="예문 2 뜻" ${virt ? "readonly" : ""}></div>`;
+  return `<div class="it" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp ko2" data-f="ko" value="${esc(it.ko)}" placeholder="한글 문장" ${virt ? "readonly" : ""}><input class="inp en2" data-f="en" value="${esc(it.en)}" placeholder="English sentence" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="sentences">${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}<button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 문장">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button></div>`;
 }
 function findItem(id) { for (const c of D.chapters) { const it = c.items.find(i => i.id === id); if (it) return [c, it]; } return [null, null]; }
 
@@ -1097,7 +1103,7 @@ function paintPlay() {
   else stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="ko" id="pko">${esc(P.mode === "e2k" ? "" : it.ko)}</div><div class="en" id="pen">${esc(it.en)}</div>${foot}`;
   $("#ppb").innerHTML = svg(P.playing ? IC.pause : IC.play); $("#ppb").setAttribute("aria-label", P.playing ? "멈추기" : "재생");
   const [, real] = findItem(it.id); $("#stb").classList.toggle("on", !!(real || it).star);
-  const ql = $("#ql"); if (ql) { ql.innerHTML = P.queue.map((x, i) => `<button class="qi${i === P.qi ? " on" : ""}" data-a="goq" data-i="${i}"><span class="n num">${i + 1}</span><span class="tx">${c.sec === "word" ? `<b>${esc(x.en)}</b><small>${esc(x.ko)}</small>` : `<b>${esc(x.ko)}</b><small>${esc(x.en)}</small>`}</span>${x.star ? `<span class="s">${svg(IC.star).replace('class="i"', 'class="i" style="fill:currentColor"')}</span>` : ""}</button>`).join(""); }
+  const ql = $("#ql"); if (ql) { ql.innerHTML = P.queue.map((x, i) => `<div class="qrow${i === P.qi ? " on" : ""}"><button class="qi${i === P.qi ? " on" : ""}" data-a="goq" data-i="${i}"><span class="n num">${i + 1}</span><span class="tx">${c.sec === "word" ? `<b>${esc(x.en)}</b><small>${esc(x.ko)}</small>` : `<b>${esc(x.ko)}</b><small>${esc(x.en)}</small>`}</span></button><button class="qs${(findItem(x.id)[1] || x).star ? " on" : ""}" data-a="qstar" data-id="${x.id}" aria-label="어려운 ${c.sec === "word" ? "단어" : "문장"} 표시">${svg(IC.star).replace('class="i"', `class="i" style="fill:${(findItem(x.id)[1] || x).star ? "currentColor" : "none"}"`)}</button></div>`).join(""); }
   paintPhase();
 }
 function paintPhase() {
@@ -1356,6 +1362,7 @@ document.addEventListener("click", async e => {
   if (a === "prev") return jump(-1);
   if (a === "goq") { const i = +el.dataset.i; if (isAz() && P.built) { jump(i - P.qi); } else { const was = P.playing; stopAll(); P.qi = i; P.phase = ""; paintPlay(); if (was) runDevice(); } return; }
   if (a === "engset") { go("set"); setTimeout(() => { const sg = $(".seg[data-k=engine]"); if (sg) sg.scrollIntoView({ block: "center" }); }, 250); return; }
+  if (a === "qstar") { toggleStar(el.dataset.id); paintPlay(); return; }
   if (a === "starhelp") { toast(`듣기 화면의 ☆를 누르거나 시험에서 틀리면 여기 모여요`); return; }
   if (a === "starcur") { const it = curIt(); if (it) { toggleStar(it.id); paintPlay(); toast(findItem(it.id)[1] && findItem(it.id)[1].star ? `☆ 어려운 ${unitOf(P.ch)}에 넣었어요` : "☆ 뺐어요"); } return; }
   if (a === "judge") return judge(el.dataset.v === "1");

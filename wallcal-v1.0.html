@@ -514,7 +514,7 @@ function addThemes(D, X) {
 }
 </script>
 <script>/* 달력 배경화면 만들기 v1.0 — Blog J (블로그 실행형 · 그림은 이 기기에서만 만들어요) */
-const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 18:15 판";
+const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 19:10 판";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-wallcal1";
 const $ = s => document.querySelector(s);
@@ -742,7 +742,7 @@ function bodyRes() {
   let h = `<button class="btn" data-a="mine" style="width:100%;margin-bottom:6px">${svg(IC.screen)}지금 이 화면에 맞추기 <span class="num" style="color:var(--sub);font-weight:700">${sw}×${sh}</span></button>`;
   RES.forEach(([g, L]) => { h += `<div class="lab">${g}</div><div class="res">${L.map(([w, hh, n, d, mo]) => `<button class="${S.w === w && S.h === hh && (S.mon || "1") === (mo || "1") ? "on" : ""}" data-a="res" data-w="${w}" data-h="${hh}" data-mon="${mo || "1"}"><span class="num">${w}×${hh}</span> · ${n}<small>${d}</small></button>`).join("")}</div>`; });
   h += `<div class="lab">모니터</div><div class="seg">${[["1", "1대"], ["h2", "가로 2대"], ["v2", "위아래 2대"]].map(([v, t]) => `<button class="${(S.mon || "1") === v ? "on" : ""}" data-a="set" data-k="mon" data-v="${v}">${t}</button>`).join("")}</div>
-  ${MONS() ? `<p class="hint">두 모니터에 한 장으로 걸려면 윈도우 「설정 → 개인 설정 → 배경」에서 맞춤을 <b>「범위」</b>로 고르세요. 달력은 한 화면 안에만 들어가요(가운데 이음매에 걸리지 않게).</p>` : ""}`;
+  ${MONS() ? `<p class="hint">두 모니터에 한 장으로 걸려면 윈도우 「설정 → 개인 설정 → 배경」에서 받은 그림을 고르고, 「데스크톱 이미지에 맞게 선택」을 <b>「스팬」</b>으로 바꾸세요(그림을 오른쪽 클릭해 「바탕 화면 배경으로 설정」만 하면 모니터마다 따로 걸려요). 달력은 한 화면 안에만 들어가요(가운데 이음매에 걸리지 않게).</p>` : ""}`;
   h += `<div class="lab">직접 넣기</div><div class="row" style="flex-wrap:nowrap"><input class="inp num" data-k="w" value="${S.w}" inputmode="numeric" style="width:46%"><span>×</span><input class="inp num" data-k="h" value="${S.h}" inputmode="numeric" style="width:46%"></div>
   <div class="lab">파일 형식</div><div class="seg"><button class="${S.fmt === "png" ? "on" : ""}" data-a="set" data-k="fmt" data-v="png">PNG (선명)</button><button class="${S.fmt === "jpg" ? "on" : ""}" data-a="set" data-k="fmt" data-v="jpg">JPG (작은 용량)</button></div>
   <p class="hint">모니터 크기를 모르면 「지금 이 화면에 맞추기」를 누르세요. 큰 크기로 받아도 그림이 흐려지지 않아요.</p>`;

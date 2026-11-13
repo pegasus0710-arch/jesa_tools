@@ -64,6 +64,11 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .ch.star .pl{background:var(--deep)}
 .tag{font-size:12px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--in);color:var(--sub);margin-left:6px;vertical-align:1px}
 .tag.due{background:#FBE7DD;color:#9A4320}
+.engchip{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:5px 10px;border-radius:8px;font-size:13px;font-weight:800;border:0;cursor:pointer;font-family:inherit}
+.engchip svg{width:15px;height:15px}.engchip small{font-weight:700;opacity:.75;margin-left:4px}
+.engchip.dev{background:var(--in);color:var(--sub)}.engchip.az{background:#0C737D;color:#fff}
+.tag.azok{background:#DDF0EE;color:#0C5F66}.tag.azpart{background:#FBEFD9;color:#8A5A12}.tag.aznone{background:var(--in);color:var(--sub)}
+
 .selbar{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));margin-top:12px;display:flex;gap:8px;align-items:center;background:var(--deep);color:#fff;border-radius:14px;padding:10px 12px;z-index:20}
 .selbar span{flex:1;font-weight:800;font-size:14px;min-width:0}
 .selbar .btn{color:var(--ink)}.selbar .btn.go{color:#fff;background:var(--sun)}
@@ -516,7 +521,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 18:01";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 19:25";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -649,10 +654,25 @@ function render() {
 }
 
 /* ── 홈(챕터) ── */
+function engChip() { const a = isAz(); return `<button class="engchip ${a ? "az" : "dev"}" data-a="engset" title="음성 바꾸기">${svg(IC.head)}${a ? (SET.engine === "azkey" ? "고품질 음성 · 내 Azure 키" : "고품질 음성 · 내 서버") : "기기 음성 · 화면 켜 두기"}<small>바꾸기 ›</small></button>`; }
+/* 챕터 카드: 고품질 음성을 얼마나 받아 두었는지(이 기기 저장소 기준) */
+const AZR = {};
+async function azReady(c) {
+  const mode = modeOf(c), keys = new Set();
+  for (const it of c.items) for (const st of stepsFor(it, mode)) if (st.t === "say") keys.add((st.lang === "ko" ? SET.azKo : SET.azEn) + "|" + rateQ(st.rate) + "|" + st.text);
+  const sig = [mode, SET.azKo, SET.azEn, ...keys].join("#");
+  if (AZR[c.id] && AZR[c.id].sig === sig && AZR[c.id].pct === 100) return 100;
+  let n = 0; for (const k of keys) if (await idbGet(k)) n++;
+  const pct = keys.size ? Math.floor(n * 100 / keys.size) : 0; AZR[c.id] = { sig, pct }; return pct;
+}
+async function paintReady() {
+  if (!isAz() || U.scr !== "home") return;
+  for (const el of $$(".ch [data-ready]")) { const c = chById(el.dataset.ready); if (!c || !c.items.length) continue; let p = 0; try { p = await azReady(c); } catch (e) { continue; } if (U.scr !== "home" || !el.isConnected) return; el.textContent = p >= 100 ? "고품질 준비됨" : p > 0 ? `고품질 ${p}%` : "고품질 아직"; el.className = "tag " + (p >= 100 ? "azok" : p > 0 ? "azpart" : "aznone"); }
+}
 function drawHome() {
   const due = dueList(), sec = U.sec, CH = D.chapters.filter(c => c.sec === sec), un = sec === "word" ? "단어" : "문장";
   let h = `<div class="sectab" role="tablist"><button data-a="sec" data-v="talk" class="${sec === "talk" ? "on" : ""}" role="tab">회화<small>${D.chapters.filter(c => c.sec === "talk").length}챕터${starCh("talk").items.length ? ` · ☆ ${starCh("talk").items.length}` : ""}</small></button><button data-a="sec" data-v="word" class="${sec === "word" ? "on" : ""}" role="tab">단어<small>${D.chapters.filter(c => c.sec === "word").length}챕터${starCh("word").items.length ? ` · ☆ ${starCh("word").items.length}` : ""}</small></button></div>`;
-  h += `<div class="vh"><div><h2>${SECN[sec]} 챕터</h2><p>${ymdw(todayS())} · 챕터 ${CH.length}개 · ${un} ${CH.reduce((k, c) => k + c.items.length, 0)}개</p></div><div class="row"><button class="btn" data-a="paste">${svg(IC.paste)}붙여넣어 만들기</button><button class="btn go" data-a="newch">${svg(IC.plus)}새 챕터</button></div></div>`;
+  h += `<div class="vh"><div><h2>${SECN[sec]} 챕터</h2><p>${ymdw(todayS())} · 챕터 ${CH.length}개 · ${un} ${CH.reduce((k, c) => k + c.items.length, 0)}개</p>${engChip()}</div><div class="row"><button class="btn" data-a="paste">${svg(IC.paste)}붙여넣어 만들기</button><button class="btn go" data-a="newch">${svg(IC.plus)}새 챕터</button></div></div>`;
   if (due.length) h += `<div class="rvband"><i class="pip"></i><div class="tx"><b>오늘 복습할 챕터 ${due.length}개</b><br>${due.map(c => `[${SECN[c.sec]}] ` + esc(c.name)).join(" · ")}</div><button class="btn go sm" data-a="playrv">${svg(IC.play)}복습 이어 듣기</button></div>`;
   const sc = starCh(sec);
   h += `<div class="chs">`;
@@ -660,7 +680,7 @@ function drawHome() {
     const okn = c.items.reduce((k, i) => k + (i.ok || 0), 0), ngn = c.items.reduce((k, i) => k + (i.ng || 0), 0), rate = okn + ngn ? Math.round(okn * 100 / (okn + ngn)) : null;
     const due = !virt && rvDue(c) && rvDue(c) <= todayS();
     return `<div class="ch${U.sel.has(c.id) ? " sel" : ""}${virt ? " star" : ""}">${virt && !c.items.length ? `<span class="ck" style="visibility:hidden"></span>` : `<button class="ck" data-a="sel" data-id="${c.id}" aria-label="고르기">${U.sel.has(c.id) ? svg(IC.check) : ""}</button>`}
-      <button class="tx" data-a="${virt && !c.items.length ? "starhelp" : "open"}" data-id="${c.id}" aria-label="${esc(c.name)} 듣기 화면 열기"><b>${esc(c.name)}${c.base ? '<span class="tag">기본</span>' : ""}</b><small>${virt && !c.items.length ? `듣다가 ☆를 누르면 여기 모여요` : `${c.items.length}${unitOf(c)}${rate != null ? ` · 시험 ${rate}%` : ""}${virt ? ` · 챕터 모두에서 ☆ 표시한 ${unitOf(c)}` : ""}`}${!virt ? `<span class="tag${due ? " due" : ""}">${rvLabel(c)}</span>` : ""}</small></button>
+      <button class="tx" data-a="${virt && !c.items.length ? "starhelp" : "open"}" data-id="${c.id}" aria-label="${esc(c.name)} 듣기 화면 열기"><b>${esc(c.name)}${c.base ? '<span class="tag">기본</span>' : ""}</b><small>${virt && !c.items.length ? `듣다가 ☆를 누르면 여기 모여요` : `${c.items.length}${unitOf(c)}${rate != null ? ` · 시험 ${rate}%` : ""}${virt ? ` · 챕터 모두에서 ☆ 표시한 ${unitOf(c)}` : ""}`}${!virt ? `<span class="tag${due ? " due" : ""}">${rvLabel(c)}</span>` : ""}${isAz() && c.items.length ? `<span class="tag aznone" data-ready="${c.id}">고품질 …</span>` : ""}</small></button>
       ${virt ? "" : `<button class="ed" data-a="edit" data-id="${c.id}" aria-label="고치기">${svg(IC.edit)}</button>`}
       <button class="pl" data-a="play1" data-id="${c.id}" aria-label="${isCur(c.id) && P.playing ? "멈추기" : "듣기"}" ${c.items.length ? "" : "disabled"}>${svg(isCur(c.id) && P.playing ? IC.pause : IC.play)}</button></div>`;
   };
@@ -671,6 +691,7 @@ function drawHome() {
   if (U.sel.size) h += `<div class="selbar"><span>${U.sel.size}개 챕터 골랐어요 — 차례로 이어 들어요</span><button class="btn sm" data-a="selclr">취소</button><button class="btn go sm" data-a="playsel">${svg(IC.play)}이어 듣기</button></div>`;
   h += `<p class="hint">「기본」 챕터는 Blog J가 넣어 둔 실전 표현이에요 — 고치거나 지워도 되고, 지운 것은 설정 → 기본 자료에서 다시 넣을 수 있어요.<br>카드의 네모를 눌러 여러 챕터를 고르면 이어서 들을 수 있어요. 챕터를 끝까지 들으면 복습 날짜(1 · 3 · 7 · 14일 뒤)가 정해지고, 그날 앱을 열면 위에 보여 드려요(앱이 닫혀 있을 땐 알림을 보내지 못해요).</p>`;
   $("#main").innerHTML = h;
+  paintReady();
 }
 
 /* ── 챕터 고치기 ── */
@@ -938,7 +959,7 @@ async function runAzure(fromQi) {
     $("#busy").hidden = false; B.cancel = false; AZP = ""; $("#busyT").textContent = "음성 만드는 중…"; $("#busyB").style.width = "0";
     if (SET.engine === "azkey") { const seen = new Set(); let nn = 0; for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const vv = st.lang === "ko" ? SET.azKo : SET.azEn, kk = vv + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!(await idbGet(kk))) nn++; } } if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
     try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { AZP = `음성 만드는 중 ${k} / ${n}`; $("#busyT").textContent = AZP; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
-    catch (e) { $("#busy").hidden = true; P.playing = false; paintPlay(); if (e.message !== "멈췄어요") { toast(e.message); if (confirmFallback()) { SET.engine = "device"; saveSet(); runDevice(); } } return; }
+    catch (e) { $("#busy").hidden = true; P.playing = false; paintPlay(); if (e.message !== "멈췄어요") toast(e.message + " — ▶를 다시 누르면 받은 데서부터 이어서 만들어요"); return; }
     $("#busy").hidden = true;
     if (tok !== P.tok) return;
     au.src = P.built.url;
@@ -1062,7 +1083,7 @@ function paintPlay() {
   const it = curIt(), c = P.ch;
   if (!it) { stg.innerHTML = `<div class="ko" style="margin:auto 0">챕터를 골라 주세요</div>`; $("#ppb").innerHTML = svg(IC.play); return; }
   const n = P.queue.length;
-  const foot = `<div class="count"><div class="bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div><span class="num" style="font-size:13px;color:var(--deeps)">${modeName(P.mode)}</span></div>`;
+  const foot = `<div class="count"><div class="bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div><span class="num" style="font-size:13px;color:var(--deeps)">${modeName(P.mode)} · ${isAz() ? "고품질" : "기기 음성"}</span></div>`;
   if (c.sec === "word") stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="wdx" id="pwd">${esc(it.en)}</div><div class="mnx" id="pmn">${esc(it.ko)}</div>${it.ex || it.ex2 ? `<div class="exx" id="pex">${[[it.ex, it.exk], [it.ex2, it.exk2]].filter(x => x[0]).map(([e, k]) => `<p>${esc(e)}${k ? `<small>${esc(k)}</small>` : ""}</p>`).join("")}</div>` : ""}${foot}`;
   else stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="ko" id="pko">${esc(P.mode === "e2k" ? "" : it.ko)}</div><div class="en" id="pen">${esc(it.en)}</div>${foot}`;
   $("#ppb").innerHTML = svg(P.playing ? IC.pause : IC.play); $("#ppb").setAttribute("aria-label", P.playing ? "멈추기" : "재생");
@@ -1323,6 +1344,7 @@ document.addEventListener("click", async e => {
   if (a === "next") return jump(1);
   if (a === "prev") return jump(-1);
   if (a === "goq") { const i = +el.dataset.i; if (isAz() && P.built) { jump(i - P.qi); } else { const was = P.playing; stopAll(); P.qi = i; P.phase = ""; paintPlay(); if (was) runDevice(); } return; }
+  if (a === "engset") { go("set"); setTimeout(() => { const sg = $(".seg[data-k=engine]"); if (sg) sg.scrollIntoView({ block: "center" }); }, 250); return; }
   if (a === "starhelp") { toast(`듣기 화면의 ☆를 누르거나 시험에서 틀리면 여기 모여요`); return; }
   if (a === "starcur") { const it = curIt(); if (it) { toggleStar(it.id); paintPlay(); toast(findItem(it.id)[1] && findItem(it.id)[1].star ? `☆ 어려운 ${unitOf(P.ch)}에 넣었어요` : "☆ 뺐어요"); } return; }
   if (a === "judge") return judge(el.dataset.v === "1");

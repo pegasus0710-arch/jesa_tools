@@ -1,8 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="only light"><meta name="theme-color" content="#0B3D4A">
-<title>영어회화 노트 | Blog J</title>
-<meta name="robots" content="noindex">
+<title>영어 노트 | Blog J</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -168,6 +167,44 @@ select.inp{appearance:auto}
 .iapp img{border-radius:12px}
 .iapp b{display:block;font-size:16px}.iapp span{font-size:13px;color:var(--sub)}
 .isteps{padding-left:20px;margin:10px 0;line-height:1.9}
+/* 회화 · 단어 구역 */
+.sectab{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--in);border-radius:14px;padding:4px;margin-bottom:16px;max-width:460px}
+.sectab button{height:48px;border-radius:11px;font-size:17px;font-weight:900;color:var(--sub);display:flex;align-items:center;justify-content:center;gap:8px}
+.sectab button small{font-size:12.5px;font-weight:700;color:var(--sub)}
+.sectab button.on{background:var(--sea);color:#fff;box-shadow:var(--up)}
+.sectab button.on small{color:var(--deeps)}
+.ch .tx b .tag{margin-left:6px}
+/* 단어 줄 */
+.it.w{grid-template-columns:28px minmax(0,1fr) minmax(0,1.2fr) 34px 34px;row-gap:4px;padding-bottom:8px;border-bottom:1px dashed var(--hair);margin-bottom:8px}
+.it.w .ex2{grid-column:2/4}.it.w .exk2{grid-column:2/4;height:36px;font-size:14px}
+.it.w .ex2{height:36px;font-size:14px}
+/* 단어 무대 */
+.wdx{font-size:clamp(30px,7vw,46px);font-weight:900;letter-spacing:-.01em;line-height:1.15;word-break:break-word}
+.mnx{font-size:clamp(20px,4.4vw,26px);font-weight:800;margin-top:10px;color:var(--deeps);word-break:keep-all}
+.exx{font-size:16px;margin-top:16px;line-height:1.5;color:#fff;opacity:.92}
+.exx small{display:block;font-size:14px;color:var(--deeps);margin-top:2px}
+.exx.dim{opacity:.25}
+.wdx.hide,.mnx.hide{color:transparent;text-shadow:0 0 14px rgba(255,255,255,.55);user-select:none}
+/* 단어장 인쇄 */
+#prt{display:none}
+@media print{
+  @page{size:A4;margin:14mm 12mm}
+  body.printing{background:#fff!important;padding:0!important}
+  body.printing>*:not(#prt){display:none!important}
+  body.printing #prt{display:block;color:#000;font-family:SUIT,"Malgun Gothic",sans-serif}
+  #prt h1{font-size:18pt;margin:0 0 2mm}
+  #prt .prs{font-size:9.5pt;color:#555;margin:0 0 4mm}
+  #prt table{width:100%;border-collapse:collapse;font-size:11pt}
+  #prt th,#prt td{border:0.3mm solid #999;padding:2.4mm 2.5mm;text-align:left;vertical-align:top}
+  #prt th{background:#eee;font-size:9.5pt}
+  #prt td:first-child{width:8mm;text-align:center;color:#666}
+  #prt td.w{font-weight:800;width:38mm}
+  #prt td.e{font-size:9.5pt}
+  #prt td.e small{color:#555}
+  #prt tr{break-inside:avoid}
+  #prt .prf{font-size:8.5pt;color:#888;text-align:right;margin-top:3mm}
+}
+@media (max-width:600px){.it.w{grid-template-columns:22px minmax(0,1fr) 34px 34px}.it.w .wd2{grid-column:2/3}.it.w .mn2{grid-column:2/5;grid-row:2}.it.w .ex2,.it.w .exk2{grid-column:2/5}}
 /* 아래 미니 플레이어(다른 화면에서도 재생 상태) */
 #mini{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom));z-index:39;background:var(--deep);color:#fff;box-shadow:0 -8px 22px rgba(11,25,32,.22)}
 #mini[hidden]{display:none}
@@ -208,7 +245,7 @@ body.hasmini #syband{bottom:calc(148px + env(safe-area-inset-bottom))}
   .stagep{min-height:300px}
 }
 </style></head><body>
-<header class="hd"><div class="hd-in"><div class="logo"><img src="icon-192.png" alt=""><div><small>Blog J 개인 학습</small><b>영어회화 노트</b></div></div><span class="sp"></span><nav class="nav" id="nav"></nav><span class="gdot" id="gdot"></span></div></header>
+<header class="hd"><div class="hd-in"><div class="logo"><img src="icon-192.png" alt=""><div><small>Blog J · 회화 · 단어</small><b>영어 노트</b></div></div><span class="sp"></span><nav class="nav" id="nav"></nav><span class="gdot" id="gdot"></span></div></header>
 <main class="wrap" id="main"></main>
 <div id="mini" hidden></div>
 <nav class="tabs" id="tabs"></nav>
@@ -461,12 +498,24 @@ const SYNC = BJSync.create({
 
 </script>
 <script>
-/* 영어회화 노트 v1.0 — Blog J 개인 학습 앱 (설치형 · 구글 드라이브 동기화)
-   한글을 듣고 → 영어로 말해 보고(생각 시간) → 영어 문장을 2~3번 따라 말하기
-   음성: ① 기기 음성(화면 켜 둠) ② 고품질 음성(Azure · 내 서버 경유 · 챕터 한 파일 → 화면 꺼도 재생) */
+/* 기본 회화 · 기본 단어 — Blog J가 직접 쓴 실전 일상 표현 (교과서식이 아닌 원어민이 자주 쓰는 말). 사용자가 고치고 지울 수 있고, 설정 → 기본 자료에서 다시 넣을 수 있음 */
+const BASE_TALK = [["b-t1", "카페 · 주문", [["아이스 아메리카노 한 잔 주세요.", "Can I get an iced Americano?"], ["제일 큰 사이즈로 주세요.", "Make it a large, please."], ["여기서 마시고 갈게요.", "For here, please."], ["가져갈게요.", "It's to go."], ["시럽은 빼 주세요.", "No syrup, please."], ["우유를 두유로 바꿀 수 있어요?", "Can I swap the milk for soy?"], ["샷 하나 추가해 주세요.", "Can I add an extra shot?"], ["디카페인 있어요?", "Do you have decaf?"], ["이거 두 개 주세요.", "I'll take two of these."], ["와이파이 돼요?", "Do you have Wi-Fi here?"], ["여기 자리 있어요?", "Is this seat taken?"], ["근처에 콘센트 있어요?", "Is there an outlet around here?"], ["주문하신 거 나왔어요.", "Your order's ready."], ["제가 주문한 게 아닌 것 같아요.", "I don't think this is what I ordered."], ["빨대 좀 주실래요?", "Could I get a straw?"], ["오늘은 내가 살게.", "It's on me today."], ["다음엔 네가 사.", "You can get the next one."], ["여기 커피 진짜 맛있다.", "The coffee here is really good."], ["잠깐 앉았다 갈래?", "Wanna sit for a bit?"], ["리필 돼요?", "Do you do refills?"]]], ["b-t2", "식당 · 주문", [["예약은 안 했는데 자리 있어요?", "We don't have a reservation. Do you have a table?"], ["얼마나 기다려야 해요?", "How long is the wait?"], ["창가 자리로 앉을 수 있어요?", "Could we sit by the window?"], ["아직 고르는 중이에요.", "We're still deciding."], ["뭐 추천해 주실래요?", "What do you recommend?"], ["저도 같은 걸로 할게요.", "I'll have the same."], ["고수는 빼 주세요.", "No cilantro, please."], ["이거 많이 매워요?", "Is this really spicy?"], ["나눠 먹을 거예요.", "We're going to share."], ["앞접시 좀 더 주시겠어요?", "Could we get some extra plates?"], ["이건 저희가 주문 안 했어요.", "I don't think we ordered this."], ["음식이 아직 안 나왔어요.", "Our food hasn't come out yet."], ["다 맛있었어요.", "Everything was great."], ["남은 거 포장해 갈 수 있어요?", "Can I get a box for this?"], ["배불러 죽겠다.", "I'm so stuffed."], ["계산서 주세요.", "Can we get the check?"], ["각자 낼게요.", "We'll split the bill."], ["이건 내가 낼게.", "I've got this."], ["팁 포함된 거예요?", "Is the tip included?"], ["잘 먹었습니다.", "That was delicious, thank you."]]], ["b-t3", "친구와 수다 · 맞장구", [["말도 안 돼!", "No way!"], ["진심이야?", "Are you serious?"], ["내 말이!", "Tell me about it."], ["그러니까!", "Exactly!"], ["그럴 줄 알았어.", "I knew it."], ["대박이다.", "That's awesome."], ["헐, 어떡해.", "Oh no, that's terrible."], ["그래서 어떻게 됐어?", "So what happened?"], ["무슨 말인지 알아.", "I know what you mean."], ["별일 아니야.", "It's no big deal."], ["신경 쓰지 마.", "Never mind."], ["나도 그래.", "Same here."], ["그럴 수도 있지.", "It happens."], ["농담이야.", "I'm just kidding."], ["그건 잘 모르겠는데.", "I'm not so sure about that."], ["완전 이해해.", "I totally get it."], ["잘됐다!", "Good for you!"], ["아쉽다.", "That's too bad."], ["생각 좀 해 볼게.", "Let me think about it."], ["나중에 얘기해 줄게.", "I'll tell you later."]]], ["b-t4", "회사 동료와 스몰토크", [["주말 어땠어요?", "How was your weekend?"], ["오늘 좀 피곤해 보여요.", "You look a little tired today."], ["요즘 바빴어요?", "Have you been busy lately?"], ["점심 뭐 먹을래요?", "What do you want for lunch?"], ["드디어 금요일이다.", "Thank God it's Friday."], ["퇴근하고 뭐 해요?", "Any plans after work?"], ["회의가 몇 시였죠?", "What time is the meeting again?"], ["잠깐 시간 돼요?", "Got a minute?"], ["그거 제가 알아볼게요.", "Let me look into that."], ["이따가 다시 얘기해요.", "Let's catch up later."], ["그거 어떻게 하는지 보여 줄래요?", "Can you show me how to do that?"], ["무슨 말인지 알겠어요.", "I see what you mean."], ["좋은 지적이에요.", "That's a good point."], ["그럼 그렇게 진행할게요.", "I'll go ahead with it."], ["오늘 안에 끝낼 수 있을 것 같아요.", "I think I can get it done today."], ["시간이 조금 더 필요해요.", "I need a little more time."], ["제 실수예요.", "That's my mistake."], ["오늘 수고했어요.", "Good job today."], ["먼저 들어갈게요.", "I'm heading out."], ["내일 봬요.", "See you tomorrow."]]], ["b-t5", "쇼핑 · 계산", [["그냥 구경하는 중이에요.", "I'm just browsing."], ["이거 다른 사이즈 있어요?", "Do you have this in a different size?"], ["입어 봐도 돼요?", "Can I try this on?"], ["탈의실이 어디예요?", "Where's the fitting room?"], ["저한테 좀 크네요.", "It's a bit big on me."], ["이거 세일 중이에요?", "Is this on sale?"], ["이거 얼마예요?", "How much is this?"], ["생각보다 비싸네요.", "That's more than I expected."], ["좀 더 둘러볼게요.", "I'll look around a bit more."], ["이걸로 할게요.", "I'll take it."], ["카드 돼요?", "Do you take cards?"], ["현금으로 할게요.", "I'll pay in cash."], ["봉투는 괜찮아요.", "I don't need a bag."], ["영수증 주세요.", "Can I get a receipt?"], ["선물 포장 돼요?", "Can you gift wrap it?"], ["이거 교환할 수 있어요?", "Can I exchange this?"], ["이거 반품하고 싶어요.", "I'd like to return this."], ["영수증 여기 있어요.", "Here's the receipt."], ["언제 다시 들어와요?", "When will you have more in stock?"], ["계산이 잘못된 것 같아요.", "I think there's a mistake on the bill."]]], ["b-t6", "길 묻기 · 교통", [["실례지만, 길 좀 물어봐도 될까요?", "Excuse me, can I ask for directions?"], ["지하철역 어떻게 가요?", "How do I get to the subway station?"], ["여기서 멀어요?", "Is it far from here?"], ["걸어서 10분쯤 걸려요.", "It's about a ten-minute walk."], ["쭉 가다가 오른쪽으로 도세요.", "Go straight and turn right."], ["이 버스 시내 가요?", "Does this bus go downtown?"], ["어디서 내려야 해요?", "Where should I get off?"], ["몇 정거장 가야 해요?", "How many stops is it?"], ["갈아타야 해요?", "Do I need to transfer?"], ["여기 누구 앉아요?", "Is anyone sitting here?"], ["택시는 어디서 잡아요?", "Where can I get a taxi?"], ["여기로 가 주세요.", "Take me here, please."], ["얼마나 걸릴까요?", "How long will it take?"], ["여기서 내려 주세요.", "You can drop me off here."], ["길을 잃은 것 같아요.", "I think I'm lost."], ["지도에서 보여 주실래요?", "Can you show me on the map?"], ["저도 여기 처음이에요.", "I'm new here too."], ["차가 엄청 막히네요.", "Traffic is really bad."], ["막차가 몇 시예요?", "What time is the last train?"], ["거의 다 왔어요.", "We're almost there."]]], ["b-t7", "숙소 · 호텔", [["체크인할게요.", "I'd like to check in."], ["박지민 이름으로 예약했어요.", "I have a reservation under Park Jimin."], ["일찍 체크인할 수 있어요?", "Can I check in early?"], ["짐 좀 맡아 주실 수 있어요?", "Could you hold my bags?"], ["조식은 몇 시까지예요?", "What time is breakfast until?"], ["와이파이 비밀번호가 뭐예요?", "What's the Wi-Fi password?"], ["방에 수건이 없어요.", "There are no towels in my room."], ["에어컨이 안 돼요.", "The AC isn't working."], ["방을 바꿀 수 있을까요?", "Could I switch rooms?"], ["옆방이 너무 시끄러워요.", "The room next door is really loud."], ["내일 7시에 모닝콜 부탁해요.", "Can I get a wake-up call at seven?"], ["근처에 맛집 있어요?", "Any good places to eat around here?"], ["방에 키를 두고 나왔어요.", "I locked myself out."], ["하루 더 묵을 수 있어요?", "Can I stay one more night?"], ["체크아웃은 몇 시예요?", "What time is checkout?"], ["늦게 체크아웃해도 돼요?", "Can I get a late checkout?"], ["택시 좀 불러 주실래요?", "Could you call me a taxi?"], ["체크아웃할게요.", "I'd like to check out."], ["미니바는 안 썼어요.", "I didn't use the minibar."], ["덕분에 잘 지냈어요.", "I really enjoyed my stay."]]], ["b-t8", "공항 · 비행기", [["창가 자리로 주세요.", "Can I get a window seat?"], ["통로 쪽이 좋아요.", "I'd prefer an aisle seat."], ["짐은 몇 개까지 부칠 수 있어요?", "How many bags can I check?"], ["이건 들고 탈게요.", "I'll carry this on."], ["제 탑승구가 어디예요?", "Where's my gate?"], ["비행기가 지연됐대요.", "The flight's been delayed."], ["탑승 시작했어요?", "Has boarding started?"], ["여기 제 자리인 것 같은데요.", "I think you're in my seat."], ["자리 좀 바꿔 주실 수 있어요?", "Would you mind switching seats?"], ["담요 하나 더 주실래요?", "Could I get an extra blanket?"], ["물 좀 주세요.", "Can I get some water?"], ["등받이 좀 세워 주시겠어요?", "Could you put your seat up?"], ["좀 지나갈게요.", "Can I get by?"], ["환승하려면 어디로 가요?", "Where do I go for my connecting flight?"], ["여행 왔어요.", "I'm here on vacation."], ["일주일 있을 거예요.", "I'm staying for a week."], ["신고할 물건 없어요.", "I have nothing to declare."], ["제 짐이 안 나왔어요.", "My bag didn't come out."], ["환전은 어디서 해요?", "Where can I exchange money?"], ["시내 가는 버스는 어디서 타요?", "Where do I catch the bus downtown?"]]], ["b-t9", "전화 · 약속 잡기", [["지금 통화 괜찮아?", "Is now a good time?"], ["소리가 자꾸 끊겨.", "You're breaking up."], ["다시 전화할게.", "I'll call you back."], ["문자 보낼게.", "I'll text you."], ["이번 주말에 시간 돼?", "Are you free this weekend?"], ["토요일 어때?", "How about Saturday?"], ["나 그날은 안 돼.", "I can't make it that day."], ["다른 날은 어때?", "Does another day work?"], ["몇 시가 좋아?", "What time works for you?"], ["7시에 거기서 보자.", "Let's meet there at seven."], ["위치 보내 줄게.", "I'll send you the location."], ["나 좀 늦을 것 같아.", "I'm running a little late."], ["거의 다 왔어.", "I'm almost there."], ["어디야?", "Where are you?"], ["도착하면 문자해.", "Text me when you get there."], ["약속 좀 미뤄도 될까?", "Can we push it back?"], ["미안, 오늘 못 갈 것 같아.", "Sorry, I don't think I can make it today."], ["그럼 그때 보자.", "See you then."], ["확인하고 다시 알려 줄게.", "Let me check and get back to you."], ["다음엔 꼭 보자.", "Let's definitely hang out next time."]]], ["b-t10", "부탁 · 사과 · 감사", [["부탁 하나 해도 돼?", "Can I ask you a favor?"], ["좀 도와줄 수 있어?", "Could you give me a hand?"], ["괜찮으면 한번 봐 줄래?", "Would you mind taking a look?"], ["정말 고마워.", "Thanks a lot."], ["덕분에 살았어.", "You saved my life."], ["신세 졌네.", "I owe you one."], ["별거 아니야.", "It's nothing."], ["언제든지.", "Anytime."], ["미안, 내 잘못이야.", "I'm sorry, that's on me."], ["일부러 그런 건 아니야.", "I didn't mean to."], ["다시는 안 그럴게.", "It won't happen again."], ["괜찮아, 신경 쓰지 마.", "It's fine, don't worry about it."], ["이해해 줘서 고마워.", "Thanks for understanding."], ["실례합니다.", "Excuse me."], ["잠깐만요.", "Hang on a second."], ["다시 한번 말해 줄래요?", "Could you say that again?"], ["조금만 천천히 말해 줄래요?", "Could you slow down a little?"], ["무슨 뜻이에요?", "What do you mean?"], ["알겠어요.", "Got it."], ["알려 줘서 고마워.", "Thanks for letting me know."]]]];
+/* 단어: [단어, 뜻, 예문, 예문 뜻] */
+const BASE_WORD = [["b-w1", "자주 쓰는 동사구", [["pick up", "데리러 가다, 집어 들다", "I'll pick you up at six.", "6시에 데리러 갈게."], ["figure out", "알아내다, 해결하다", "I can't figure out this app.", "이 앱 어떻게 쓰는지 모르겠어."], ["run out of", "~이 떨어지다", "We ran out of milk.", "우유가 다 떨어졌어."], ["hang out", "어울려 놀다", "Do you want to hang out this weekend?", "이번 주말에 같이 놀래?"], ["show up", "나타나다, 오다", "He didn't show up to the meeting.", "그는 회의에 안 나왔어."], ["come up with", "(생각을) 떠올리다", "She came up with a great idea.", "그녀가 좋은 생각을 떠올렸어."], ["look forward to", "~을 기대하다", "I'm looking forward to the trip.", "여행이 기대돼."], ["put off", "미루다", "Don't put it off until tomorrow.", "내일로 미루지 마."], ["give up", "포기하다", "Don't give up so easily.", "그렇게 쉽게 포기하지 마."], ["catch up", "밀린 이야기를 나누다", "Let's grab lunch and catch up.", "점심 먹으면서 그동안 얘기하자."], ["check out", "확인하다, 가 보다", "You should check out this café.", "이 카페 꼭 가 봐."], ["turn down", "거절하다, 소리를 줄이다", "Can you turn down the music?", "음악 소리 좀 줄여 줄래?"], ["get along", "사이좋게 지내다", "I get along well with my coworkers.", "나는 동료들이랑 잘 지내."], ["work out", "운동하다, 잘 풀리다", "I work out three times a week.", "일주일에 세 번 운동해."], ["drop by", "잠깐 들르다", "Feel free to drop by anytime.", "언제든 편하게 들러."], ["look up", "(정보를) 찾아보다", "Let me look it up online.", "인터넷에서 찾아볼게."], ["sign up", "가입하다, 신청하다", "I signed up for a yoga class.", "요가 수업을 신청했어."], ["take off", "이륙하다, (옷을) 벗다", "The plane takes off at noon.", "비행기는 정오에 이륙해."], ["fill out", "(서류를) 작성하다", "Please fill out this form.", "이 양식을 작성해 주세요."], ["end up", "결국 ~하게 되다", "We ended up staying home.", "우리는 결국 집에 있었어."]]], ["b-w2", "감정 · 기분", [["excited", "신난, 들뜬", "I'm so excited about the concert.", "콘서트 때문에 너무 신나."], ["stressed out", "스트레스를 받은", "I'm really stressed out these days.", "요즘 스트레스를 많이 받아."], ["annoyed", "짜증 난", "I'm a little annoyed with him.", "그 사람 때문에 좀 짜증 나."], ["relieved", "안심한", "I'm relieved to hear that.", "그 말 들으니 안심이야."], ["embarrassed", "창피한", "I was so embarrassed.", "너무 창피했어."], ["disappointed", "실망한", "I'm a bit disappointed.", "좀 실망했어."], ["frustrated", "답답한, 속상한", "I'm frustrated with this project.", "이 프로젝트 때문에 답답해."], ["grateful", "고마워하는", "I'm really grateful for your help.", "도와줘서 정말 고마워."], ["proud", "자랑스러운", "I'm so proud of you.", "네가 정말 자랑스러워."], ["jealous", "부러운, 질투하는", "I'm so jealous of your trip!", "여행 가는 거 너무 부럽다!"], ["bored", "심심한, 지루한", "I'm bored. Let's go out.", "심심해. 나가자."], ["confused", "헷갈리는", "I'm confused about the schedule.", "일정이 헷갈려."], ["worried", "걱정되는", "I'm worried about my mom.", "엄마가 걱정돼."], ["upset", "속상한, 화난", "She's upset about the news.", "그녀는 그 소식에 속상해해."], ["satisfied", "만족한", "I'm satisfied with the result.", "결과에 만족해."], ["homesick", "집이 그리운", "I get homesick sometimes.", "가끔 집이 그리워."], ["scared", "무서운", "I'm scared of heights.", "나는 높은 곳이 무서워."], ["thrilled", "너무 기쁜", "We're thrilled with the news.", "그 소식에 정말 기뻐."], ["exhausted", "녹초가 된", "I'm exhausted after work.", "퇴근하면 녹초야."], ["moved", "감동한", "I was really moved by the movie.", "그 영화 보고 정말 감동했어."]]], ["b-w3", "음식 · 요리", [["leftovers", "남은 음식", "Let's have the leftovers for dinner.", "저녁은 남은 음식으로 먹자."], ["takeout", "포장 음식", "Let's just get takeout tonight.", "오늘은 그냥 포장해 오자."], ["spicy", "매운", "I can't eat spicy food.", "나는 매운 거 못 먹어."], ["bland", "싱거운", "The soup is a little bland.", "국이 좀 싱거워."], ["salty", "짠", "It's too salty for me.", "나한테는 너무 짜."], ["greasy", "기름진", "I don't want anything greasy.", "기름진 건 먹기 싫어."], ["crispy", "바삭한", "The chicken is really crispy.", "치킨이 진짜 바삭해."], ["dessert", "디저트, 후식", "Let's save room for dessert.", "디저트 먹을 배는 남겨 두자."], ["snack", "간식", "Do you want a snack?", "간식 먹을래?"], ["appetizer", "전채 요리", "Let's order an appetizer first.", "애피타이저 먼저 시키자."], ["ingredient", "재료", "What ingredients do we need?", "재료 뭐가 필요해?"], ["recipe", "요리법", "This recipe is really easy.", "이 요리법 진짜 쉬워."], ["boil", "끓이다, 삶다", "Boil the water first.", "먼저 물을 끓여."], ["fry", "튀기다, 부치다", "I'll fry some eggs.", "계란 좀 부칠게."], ["grill", "굽다", "Let's grill some meat this weekend.", "이번 주말에 고기 굽자."], ["chop", "썰다", "Can you chop the onions?", "양파 좀 썰어 줄래?"], ["frozen", "냉동된", "I bought some frozen dumplings.", "냉동 만두 좀 샀어."], ["expired", "유통기한이 지난", "This milk has expired.", "이 우유 유통기한 지났어."], ["portion", "(음식) 양", "The portions here are huge.", "여기 양이 엄청 많아."], ["craving", "몹시 당기는 것", "I have a craving for pizza.", "피자가 너무 당겨."]]], ["b-w4", "집 · 생활", [["chores", "집안일", "We split the chores.", "우리는 집안일을 나눠서 해."], ["laundry", "빨래", "I need to do the laundry.", "빨래해야 해."], ["dishes", "설거지(할 그릇)", "It's your turn to do the dishes.", "이번엔 네가 설거지할 차례야."], ["vacuum", "청소기를 돌리다", "I vacuum the floor every day.", "매일 청소기를 돌려."], ["take out the trash", "쓰레기를 버리다", "Can you take out the trash?", "쓰레기 좀 버려 줄래?"], ["recycling", "분리수거", "Recycling day is Tuesday.", "분리수거 날은 화요일이야."], ["neighbor", "이웃", "Our neighbors are really nice.", "우리 이웃들은 정말 친절해."], ["landlord", "집주인", "I'll call the landlord about the leak.", "물 새는 거 집주인한테 전화할게."], ["rent", "월세", "The rent went up again.", "월세가 또 올랐어."], ["utilities", "공과금", "Utilities are included in the rent.", "공과금은 월세에 포함돼 있어."], ["leak", "(물이) 새다", "The faucet is leaking.", "수도꼭지에서 물이 새."], ["broken", "고장 난", "The washing machine is broken.", "세탁기가 고장 났어."], ["fix", "고치다", "Can you fix the door?", "문 좀 고쳐 줄래?"], ["messy", "지저분한", "My room is so messy.", "내 방 너무 지저분해."], ["tidy up", "정리하다", "Let's tidy up before the guests come.", "손님 오기 전에 정리하자."], ["move out", "이사 나가다", "We're moving out next month.", "우리 다음 달에 이사 나가."], ["package", "택배, 소포", "A package came for you.", "너한테 택배 왔어."], ["delivery", "배달", "The delivery is running late.", "배달이 늦어지고 있어."], ["power outage", "정전", "There was a power outage last night.", "어젯밤에 정전이 됐어."], ["commute", "출퇴근", "My commute is about an hour.", "출퇴근에 한 시간쯤 걸려."]]], ["b-w5", "쇼핑 · 돈", [["on sale", "할인 중인", "These shoes are on sale.", "이 신발 할인 중이야."], ["discount", "할인", "Can I get a student discount?", "학생 할인 받을 수 있어요?"], ["deal", "싸게 산 것", "That's a great deal!", "진짜 싸게 샀다!"], ["rip-off", "바가지", "That price is a total rip-off.", "그 가격은 완전 바가지야."], ["afford", "(돈의) 여유가 되다", "I can't afford a new car.", "새 차 살 여유가 없어."], ["budget", "예산", "I'm on a tight budget.", "요즘 예산이 빠듯해."], ["receipt", "영수증", "Do you need the receipt?", "영수증 필요하세요?"], ["refund", "환불", "Can I get a refund?", "환불받을 수 있어요?"], ["exchange", "교환하다", "I'd like to exchange this for a smaller size.", "이거 더 작은 사이즈로 바꾸고 싶어요."], ["out of stock", "품절된", "Sorry, it's out of stock.", "죄송해요, 품절이에요."], ["cash", "현금", "Do you take cash?", "현금 받으세요?"], ["change", "거스름돈", "Keep the change.", "잔돈은 됐어요."], ["installment", "할부", "Can I pay in installments?", "할부로 할 수 있어요?"], ["split", "나누다", "Let's split it fifty-fifty.", "반반 나눠 내자."], ["save", "(돈을) 모으다", "I'm saving up for a trip.", "여행 가려고 돈 모으는 중이야."], ["spend", "(돈을) 쓰다", "I spent too much this month.", "이번 달에 돈을 너무 많이 썼어."], ["worth it", "그만한 가치가 있는", "It's expensive, but it's worth it.", "비싸지만 그만한 가치가 있어."], ["cart", "장바구니", "I left it in my cart.", "장바구니에 넣어 뒀어."], ["shipping", "배송", "Is shipping free?", "배송비 무료예요?"], ["price tag", "가격표", "There's no price tag on this.", "이거 가격표가 없어요."]]], ["b-w6", "여행 · 교통", [["passport", "여권", "Don't forget your passport.", "여권 잊지 마."], ["boarding pass", "탑승권", "Here's your boarding pass.", "탑승권 여기 있습니다."], ["luggage", "짐", "How much luggage do you have?", "짐이 얼마나 돼요?"], ["carry-on", "기내 반입 가방", "Is this small enough for a carry-on?", "이거 기내에 들고 탈 수 있는 크기예요?"], ["delay", "지연", "There's a two-hour delay.", "두 시간 지연됐어요."], ["layover", "경유", "We have a three-hour layover in Tokyo.", "도쿄에서 세 시간 경유해."], ["aisle seat", "통로 쪽 좌석", "Can I get an aisle seat?", "통로 쪽 좌석으로 주실 수 있어요?"], ["window seat", "창가 좌석", "I always get a window seat.", "나는 항상 창가 자리에 앉아."], ["customs", "세관", "We went through customs quickly.", "세관을 빨리 통과했어."], ["exchange rate", "환율", "What's the exchange rate today?", "오늘 환율이 어떻게 돼요?"], ["souvenir", "기념품", "I picked up some souvenirs.", "기념품을 좀 샀어."], ["sightseeing", "관광", "We went sightseeing all day.", "하루 종일 관광했어."], ["itinerary", "여행 일정", "Let me check our itinerary.", "여행 일정 좀 확인해 볼게."], ["round trip", "왕복", "A round-trip ticket, please.", "왕복표로 주세요."], ["one-way", "편도의", "I need a one-way ticket to Busan.", "부산 가는 편도표가 필요해요."], ["platform", "승강장", "The train leaves from platform 3.", "기차는 3번 승강장에서 출발해."], ["lost and found", "분실물 보관소", "Where's the lost and found?", "분실물 보관소가 어디예요?"], ["rush hour", "출퇴근 시간", "Avoid the subway during rush hour.", "출퇴근 시간엔 지하철을 피해."], ["fare", "요금", "How much is the bus fare?", "버스 요금이 얼마예요?"], ["jet lag", "시차 피로", "I still have jet lag.", "아직 시차 적응이 안 됐어."]]], ["b-w7", "회사 · 업무", [["meeting", "회의", "I'm in a meeting until three.", "3시까지 회의 중이에요."], ["deadline", "마감", "The deadline is next Monday.", "마감은 다음 주 월요일이에요."], ["schedule", "일정", "Let me check my schedule.", "일정 좀 확인해 볼게요."], ["report", "보고서", "I'm working on the report.", "보고서 쓰는 중이에요."], ["coworker", "동료", "My coworker covered for me.", "동료가 내 일을 대신 해 줬어."], ["boss", "상사", "My boss is pretty cool.", "우리 상사는 꽤 괜찮아."], ["client", "고객, 거래처", "I have a call with a client.", "고객이랑 통화가 있어요."], ["presentation", "발표", "I have a presentation tomorrow.", "내일 발표가 있어요."], ["attach", "첨부하다", "I attached the file.", "파일 첨부했어요."], ["postpone", "미루다", "We postponed the meeting.", "회의를 미뤘어요."], ["follow up", "후속 연락하다", "I'll follow up with an email.", "이메일로 다시 연락드릴게요."], ["heads-up", "미리 알림", "Thanks for the heads-up.", "미리 알려 줘서 고마워요."], ["on the same page", "같은 생각인", "Let's make sure we're on the same page.", "우리가 같은 생각인지 확인해 봐요."], ["work from home", "재택근무하다", "I work from home on Fridays.", "금요일엔 재택근무해요."], ["day off", "쉬는 날", "I'm taking a day off tomorrow.", "내일 하루 쉬어요."], ["sick day", "병가", "I need to take a sick day.", "오늘 병가 내야겠어요."], ["overtime", "야근, 초과 근무", "I worked overtime yesterday.", "어제 야근했어요."], ["business trip", "출장", "He's on a business trip.", "그는 출장 중이에요."], ["promotion", "승진", "She got a promotion.", "그녀가 승진했어요."], ["quit", "그만두다", "He quit his job last month.", "그는 지난달에 회사를 그만뒀어."]]], ["b-w8", "건강 · 몸 상태", [["headache", "두통", "I have a terrible headache.", "머리가 너무 아파."], ["sore throat", "목 아픔", "I have a sore throat.", "목이 아파."], ["runny nose", "콧물", "I've got a runny nose.", "콧물이 나."], ["fever", "열", "I think I have a fever.", "열이 있는 것 같아."], ["cough", "기침하다", "I can't stop coughing.", "기침이 멈추질 않아."], ["catch a cold", "감기에 걸리다", "I think I'm catching a cold.", "감기 걸리려나 봐."], ["dizzy", "어지러운", "I feel a little dizzy.", "좀 어지러워."], ["sore", "쑤시는", "My legs are sore from hiking.", "등산해서 다리가 쑤셔."], ["stomachache", "복통", "I have a stomachache.", "배가 아파."], ["allergic", "알레르기가 있는", "I'm allergic to peanuts.", "나 땅콩 알레르기 있어."], ["pharmacy", "약국", "Is there a pharmacy nearby?", "근처에 약국 있어요?"], ["painkiller", "진통제", "Do you have any painkillers?", "진통제 있어요?"], ["appointment", "진료 예약", "I made a doctor's appointment.", "병원 예약했어."], ["checkup", "건강 검진", "I have a checkup next week.", "다음 주에 건강 검진 있어."], ["get some rest", "좀 쉬다", "You should get some rest.", "좀 쉬어."], ["feel better", "(몸이) 나아지다", "I hope you feel better soon.", "빨리 낫길 바라."], ["sprain", "삐다", "I sprained my ankle.", "발목을 삐었어."], ["out of shape", "몸이 둔해진", "I'm so out of shape.", "몸이 너무 둔해졌어."], ["stay hydrated", "물을 충분히 마시다", "Make sure you stay hydrated.", "물 충분히 마셔."], ["sleep in", "늦잠 자다", "I slept in this morning.", "오늘 아침에 늦잠 잤어."]]]];
+const BASE_IDS = [...BASE_TALK, ...BASE_WORD].map(x => x[0]);
+function baseChapters() {
+  const p2 = n => String(n).padStart(2, "0"), out = [];
+  BASE_TALK.forEach(([id, name, L]) => out.push({ id, name, sec: "talk", base: true, at: 1, rv: null, items: L.map(([ko, en], i) => ({ id: id + "-" + p2(i + 1), ko, en, star: false, ok: 0, ng: 0 })) }));
+  BASE_WORD.forEach(([id, name, L]) => out.push({ id, name, sec: "word", base: true, at: 1, rv: null, items: L.map(([en, ko, ex, exk], i) => ({ id: id + "-" + p2(i + 1), ko, en, ex, exk, star: false, ok: 0, ng: 0 })) }));
+  return out;
+}
+
+/* 영어 노트 v1.0 — Blog J 설치형 학습 앱 (회화 · 단어, 구글 드라이브 동기화)
+   회화: 한글 → 영어로 말해 보기(생각 시간) → 영어 2~3번 따라 말하기 / 단어: 단어 → 뜻 → 따라 말하기 · 철자 · 예문
+   음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 12:14";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 12:52";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -495,7 +544,8 @@ const IC = {
   drive: '<path d="M8 3h8l6 10-4 7H6l-4-7z"/><path d="M8 3l8 17M16 3L6 20M2 13h20"/>', dl: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', upl: '<path d="M12 20V9M7 14l5-5 5 5M5 4h14"/>',
   phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>', paste: '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/>',
   shuf: '<path d="M16 4h4v4M20 4l-7 7M4 20l6-6M16 20h4v-4M20 20l-5-5M4 4l5 5"/>', help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.3 2.4c-.5.2-.8.6-.8 1.1v.5M12 17h.01"/>',
-  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  print: '<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>', key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/>', book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>'
 };
 const svg = (p, c = "i") => `<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
 
@@ -511,18 +561,31 @@ const SAMPLE = [
   ["그 일은 제 담당이 아니에요.", "That's not my responsibility."], ["마감이 언제까지예요?", "When is the deadline?"], ["메일로 보내 드릴게요.", "I'll send it to you by email."],
   ["다시 한번 확인해 볼게요.", "Let me double-check."], ["오늘 수고 많으셨어요.", "Thanks for all your hard work today."]
 ];
-const sampleCh = () => ({ id: uid(), name: "예시 · 일상 · 회사 회화 20", at: Date.now(), items: SAMPLE.map(([ko, en]) => ({ id: uid(), ko, en, star: false, ok: 0, ng: 0 })), rv: null });
 let D = ls.get("data", null);
-if (!D) { D = { chapters: [sampleCh()], log: {}, gone: {} }; ls.set("data", D); }
-D.log = D.log || {}; D.gone = D.gone || {};
-const SET0 = { mode: "k2e", reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
+if (!D) D = { chapters: [], log: {}, gone: {} };
+D.log = D.log || {}; D.gone = D.gone || {}; D.chapters = D.chapters || [];
+/* 예전 시험판의 예시 챕터(고치지 않은 것)는 기본 회화가 대신함 */
+D.chapters = D.chapters.filter(c => !(c.name === "예시 · 일상 · 회사 회화 20" && c.items.length === SAMPLE.length && c.items.every((it, i) => it.ko === SAMPLE[i][0] && it.en === SAMPLE[i][1])));
+D.chapters.forEach(c => { if (!c.sec) c.sec = "talk"; });
+/* 기본 자료: at = 1 이라 사용자가 지우거나 고친 쪽이 늘 이김(다른 기기 동기화 때도) */
+function ensureBase(force) {
+  let n = 0;
+  baseChapters().forEach(b => { if (force) delete D.gone[b.id]; if (!D.gone[b.id] && !D.chapters.some(c => c.id === b.id)) { if (force) b.at = Date.now(); D.chapters.push(b); n++; } });
+  if (n) { const order = id => { const i = BASE_IDS.indexOf(id); return i < 0 ? 999 : i; }; D.chapters.sort((a, b) => (a.base || b.base) ? order(a.id) - order(b.id) : 0); }
+  return n;
+}
+ensureBase(false); ls.set("data", D);
+const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, bg: false, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
   engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true };
 let SET = Object.assign({}, SET0, ls.get("set", {}));
 const saveSet = () => ls.set("set", SET);
 function touch(ch) { if (ch) ch.at = Date.now(); ls.set("data", D); if (SYNC) SYNC.markDirty(); }
-const STAR_ID = "__star";
-function starCh() { const items = []; D.chapters.forEach(c => c.items.forEach(it => { if (it.star) items.push(it); })); return { id: STAR_ID, name: "☆ 어려운 문장 모음", items, virtual: true }; }
-const chById = id => id === STAR_ID ? starCh() : D.chapters.find(c => c.id === id);
+const STAR = { talk: "__star_talk", word: "__star_word" };
+function starCh(sec) { const items = []; D.chapters.forEach(c => { if (c.sec === sec) c.items.forEach(it => { if (it.star) items.push(it); }); }); return { id: STAR[sec], sec, name: sec === "word" ? "☆ 어려운 단어 모음" : "☆ 어려운 문장 모음", items, virtual: true }; }
+const chById = id => id === STAR.talk ? starCh("talk") : id === STAR.word ? starCh("word") : D.chapters.find(c => c.id === id);
+const SECN = { talk: "회화", word: "단어" };
+const unitOf = c => (c && c.sec === "word") ? "단어" : "문장";
+const isAz = () => SET.engine === "azure" || SET.engine === "azkey";
 
 /* ── 복습 1 · 3 · 7 · 14일 ── */
 const RV = [1, 3, 7, 14];
@@ -541,7 +604,7 @@ function rvLabel(c) {
 const dueList = () => D.chapters.filter(c => { const d = rvDue(c); return d && d <= todayS(); });
 
 /* ── 화면 상태 ── */
-const U = { scr: "home", sel: new Set(), edit: null };
+const U = { scr: "home", sel: new Set(), edit: null, sec: ls.get("sec", "talk") };
 function go(s) { U.scr = s; render(); scrollTo(0, 0); }
 function render() {
   const nav = [["home", "챕터", IC.home], ["play", "듣기", IC.head], ["stat", "기록", IC.chart], ["set", "설정", IC.gear]];
@@ -553,25 +616,26 @@ function render() {
 
 /* ── 홈(챕터) ── */
 function drawHome() {
-  const due = dueList();
-  let h = `<div class="vh"><div><h2>챕터</h2><p>${ymdw(todayS())} · 챕터 ${D.chapters.length}개 · 문장 ${D.chapters.reduce((k, c) => k + c.items.length, 0)}개</p></div><div class="row"><button class="btn" data-a="paste">${svg(IC.paste)}붙여넣어 만들기</button><button class="btn go" data-a="newch">${svg(IC.plus)}새 챕터</button></div></div>`;
-  if (due.length) h += `<div class="rvband"><i class="pip"></i><div class="tx"><b>오늘 복습할 챕터 ${due.length}개</b><br>${due.map(c => esc(c.name)).join(" · ")}</div><button class="btn go sm" data-a="playrv">${svg(IC.play)}복습 이어 듣기</button></div>`;
-  const sc = starCh();
+  const due = dueList(), sec = U.sec, CH = D.chapters.filter(c => c.sec === sec), un = sec === "word" ? "단어" : "문장";
+  let h = `<div class="sectab" role="tablist"><button data-a="sec" data-v="talk" class="${sec === "talk" ? "on" : ""}" role="tab">회화<small>${D.chapters.filter(c => c.sec === "talk").length}챕터</small></button><button data-a="sec" data-v="word" class="${sec === "word" ? "on" : ""}" role="tab">단어<small>${D.chapters.filter(c => c.sec === "word").length}챕터</small></button></div>`;
+  h += `<div class="vh"><div><h2>${SECN[sec]} 챕터</h2><p>${ymdw(todayS())} · 챕터 ${CH.length}개 · ${un} ${CH.reduce((k, c) => k + c.items.length, 0)}개</p></div><div class="row"><button class="btn" data-a="paste">${svg(IC.paste)}붙여넣어 만들기</button><button class="btn go" data-a="newch">${svg(IC.plus)}새 챕터</button></div></div>`;
+  if (due.length) h += `<div class="rvband"><i class="pip"></i><div class="tx"><b>오늘 복습할 챕터 ${due.length}개</b><br>${due.map(c => `[${SECN[c.sec]}] ` + esc(c.name)).join(" · ")}</div><button class="btn go sm" data-a="playrv">${svg(IC.play)}복습 이어 듣기</button></div>`;
+  const sc = starCh(sec);
   h += `<div class="chs">`;
   const card = (c, virt) => {
     const okn = c.items.reduce((k, i) => k + (i.ok || 0), 0), ngn = c.items.reduce((k, i) => k + (i.ng || 0), 0), rate = okn + ngn ? Math.round(okn * 100 / (okn + ngn)) : null;
     const due = !virt && rvDue(c) && rvDue(c) <= todayS();
     return `<div class="ch${U.sel.has(c.id) ? " sel" : ""}${virt ? " star" : ""}"><button class="ck" data-a="sel" data-id="${c.id}" aria-label="고르기">${U.sel.has(c.id) ? svg(IC.check) : ""}</button>
-      <button class="tx" data-a="edit" data-id="${c.id}"><b>${esc(c.name)}</b><small>${c.items.length}문장${rate != null ? ` · 시험 ${rate}%` : ""}${virt ? " · ☆ 표시한 문장이 저절로 모여요" : ""}${!virt ? `<span class="tag${due ? " due" : ""}">${rvLabel(c)}</span>` : ""}</small></button>
+      <button class="tx" data-a="edit" data-id="${c.id}"><b>${esc(c.name)}${c.base ? '<span class="tag">기본</span>' : ""}</b><small>${c.items.length}${unitOf(c)}${rate != null ? ` · 시험 ${rate}%` : ""}${virt ? ` · ☆ 표시한 ${unitOf(c)}이 저절로 모여요` : ""}${!virt ? `<span class="tag${due ? " due" : ""}">${rvLabel(c)}</span>` : ""}</small></button>
       ${virt ? "" : `<button class="ed" data-a="edit" data-id="${c.id}" aria-label="고치기">${svg(IC.edit)}</button>`}
       <button class="pl" data-a="play1" data-id="${c.id}" aria-label="${isCur(c.id) && P.playing ? "멈추기" : "듣기"}" ${c.items.length ? "" : "disabled"}>${svg(isCur(c.id) && P.playing ? IC.pause : IC.play)}</button></div>`;
   };
-  D.chapters.forEach(c => h += card(c));
+  CH.forEach(c => h += card(c));
   if (sc.items.length) h += card(sc, true);
   h += `</div>`;
-  if (!D.chapters.length) h += `<p class="lead" style="margin-top:12px">챕터가 없어요. 「새 챕터」 또는 「붙여넣어 만들기」로 시작하세요.</p>`;
+  if (!CH.length) h += `<p class="lead" style="margin-top:12px">${SECN[sec]} 챕터가 없어요. 「새 챕터」 · 「붙여넣어 만들기」로 시작하거나, 설정 → 기본 자료에서 기본 챕터를 다시 넣을 수 있어요.</p>`;
   if (U.sel.size) h += `<div class="selbar"><span>${U.sel.size}개 챕터 골랐어요 — 차례로 이어 들어요</span><button class="btn sm" data-a="selclr">취소</button><button class="btn go sm" data-a="playsel">${svg(IC.play)}이어 듣기</button></div>`;
-  h += `<p class="hint">카드의 네모를 눌러 여러 챕터를 고르면 이어서 들을 수 있어요. 챕터를 끝까지 들으면 복습 날짜(1 · 3 · 7 · 14일 뒤)가 정해지고, 그날 앱을 열면 위에 보여 드려요(앱이 닫혀 있을 땐 알림을 보내지 못해요).</p>`;
+  h += `<p class="hint">「기본」 챕터는 Blog J가 넣어 둔 실전 표현이에요 — 고치거나 지워도 되고, 지운 것은 설정 → 기본 자료에서 다시 넣을 수 있어요.<br>카드의 네모를 눌러 여러 챕터를 고르면 이어서 들을 수 있어요. 챕터를 끝까지 들으면 복습 날짜(1 · 3 · 7 · 14일 뒤)가 정해지고, 그날 앱을 열면 위에 보여 드려요(앱이 닫혀 있을 땐 알림을 보내지 못해요).</p>`;
   $("#main").innerHTML = h;
 }
 
@@ -579,16 +643,19 @@ function drawHome() {
 function drawEdit() {
   const c = chById(U.edit); if (!c) return go("home");
   const virt = !!c.virtual;
-  let h = `<div class="vh"><div><h2>${virt ? esc(c.name) : "챕터 고치기"}</h2><p>${c.items.length}문장 · 20~30문장이 알맞아요</p></div><div class="row"><button class="btn" data-nav="home">← 챕터</button>${c.items.length ? `<button class="btn go" data-a="play1" data-id="${c.id}">${svg(IC.play)}듣기</button>` : ""}</div></div><div class="card">`;
+  const W = c.sec === "word", un = unitOf(c);
+  let h = `<div class="vh"><div><h2>${virt ? esc(c.name) : (W ? "단어 챕터 고치기" : "회화 챕터 고치기")}</h2><p>${c.items.length}${un} · 20~30${un}이 알맞아요</p></div><div class="row"><button class="btn" data-nav="home">← 챕터</button>${W && c.items.length ? `<button class="btn" data-a="print" data-id="${c.id}">${svg(IC.print)}단어장 인쇄</button>` : ""}${c.items.length ? `<button class="btn go" data-a="play1" data-id="${c.id}">${svg(IC.play)}듣기</button>` : ""}</div></div><div class="card">`;
   if (!virt) h += `<div class="lab">챕터 이름</div><input class="inp" id="chName" value="${esc(c.name)}" maxlength="40" style="margin-bottom:14px">`;
-  h += `<div class="lab"><span>문장 (한글 · 영어)</span><span>☆ = 어려운 문장</span></div><div id="its">`;
+  h += `<div class="lab"><span>${W ? "단어 · 뜻 · 예문(없어도 됨)" : "문장 (한글 · 영어)"}</span><span>☆ = 어려운 ${un}</span></div><div id="its"${W ? ' class="wlist"' : ""}>`;
   c.items.forEach((it, i) => { h += itRow(it, i, virt); });
   h += `</div>`;
-  if (!virt) h += `<div class="row" style="margin-top:10px"><button class="btn" data-a="addit">${svg(IC.plus)}문장 하나 더</button><button class="btn" data-a="paste" data-id="${c.id}">${svg(IC.paste)}여러 줄 붙여넣기</button><span class="sp" style="flex:1"></span><button class="btn red" data-a="delch">${svg(IC.trash)}챕터 지우기</button></div>`;
-  h += `</div><p class="hint">고친 내용은 바로 저장돼요. 고품질 음성은 바뀐 문장만 새로 만들어요(같은 문장은 저장해 둔 음성을 다시 씀).</p>`;
+  if (!virt) h += `<div class="row" style="margin-top:10px"><button class="btn" data-a="addit">${svg(IC.plus)}${un} 하나 더</button><button class="btn" data-a="paste" data-id="${c.id}">${svg(IC.paste)}여러 줄 붙여넣기</button><span class="sp" style="flex:1"></span><button class="btn red" data-a="delch">${svg(IC.trash)}챕터 지우기</button></div>`;
+  h += `</div><p class="hint">고친 내용은 바로 저장돼요. 고품질 음성은 바뀐 ${un}만 새로 만들어요(같은 것은 저장해 둔 음성을 다시 씀).${c.base ? "<br>기본 챕터예요 — 고친 내용은 내 것으로 남아요." : ""}</p>`;
   $("#main").innerHTML = h;
 }
 function itRow(it, i, virt) {
+  const c = findItem(it.id)[0];
+  if (c && c.sec === "word") return `<div class="it w" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp wd2" data-f="en" value="${esc(it.en)}" placeholder="단어 (영어)" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="off"><input class="inp mn2" data-f="ko" value="${esc(it.ko)}" placeholder="뜻" ${virt ? "readonly" : ""}><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 단어">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}<input class="inp ex2" data-f="ex" value="${esc(it.ex || "")}" placeholder="예문 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2" data-f="exk" value="${esc(it.exk || "")}" placeholder="예문 뜻" ${virt ? "readonly" : ""}></div>`;
   return `<div class="it" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp ko2" data-f="ko" value="${esc(it.ko)}" placeholder="한글 문장" ${virt ? "readonly" : ""}><input class="inp en2" data-f="en" value="${esc(it.en)}" placeholder="English sentence" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="sentences"><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 문장">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}</div>`;
 }
 function findItem(id) { for (const c of D.chapters) { const it = c.items.find(i => i.id === id); if (it) return [c, it]; } return [null, null]; }
@@ -608,14 +675,28 @@ function parsePaste(txt) {
   }
   return out;
 }
+/* 단어: 「단어[탭]뜻[탭]예문[탭]예문 뜻」 · 「단어 | 뜻 | 예문」 · 「단어 - 뜻」 */
+function parseWords(txt) {
+  const hasKo = s => /[가-힣]/.test(s), out = [];
+  txt.replace(/\r/g, "").split("\n").map(s => s.trim()).filter(Boolean).forEach(s => {
+    s = s.replace(/^\d+[.)]\s*/, "");
+    let p = s.includes("\t") ? s.split("\t") : /\s\|\s/.test(s) ? s.split(/\s\|\s/) : /\s[-–:]\s/.test(s) ? s.split(/\s[-–:]\s/) : null;
+    if (!p) return; p = p.map(x => x.trim()).filter(Boolean); if (p.length < 2) return;
+    let [a, b, ex = "", exk = ""] = p; if (hasKo(a) && !hasKo(b)) [a, b] = [b, a];
+    if (ex && hasKo(ex) && exk && !hasKo(exk)) [ex, exk] = [exk, ex];
+    out.push({ en: a, ko: b, ex, exk });
+  });
+  return out;
+}
 function openPaste(chId) {
   const sh = $("#sheet"); sh.hidden = false;
-  sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>${chId ? "문장 붙여넣기" : "붙여넣어 새 챕터 만들기"}</b><button class="btn sm" data-a="close">닫기</button></div>
-  ${chId ? "" : `<div class="lab">챕터 이름</div><input class="inp" id="pName" value="챕터 ${D.chapters.length + 1}" maxlength="40" style="margin-bottom:12px">`}
-  <div class="lab">한 줄에 한 문장 — 엑셀에서 두 칸(한글 · 영어)을 복사해 붙이면 돼요</div>
-  <textarea class="inp" id="pTxt" rows="9" placeholder="오늘 시간 있어요?&#9;Do you have time today?&#10;또는  오늘 시간 있어요? | Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"></textarea>
-  <p class="hint" id="pCnt">0문장</p><button class="btn go full" data-a="pasteok" data-id="${chId || ""}">${svg(IC.check)}넣기</button></div>`;
-  $("#pTxt").addEventListener("input", () => { $("#pCnt").textContent = parsePaste($("#pTxt").value).length + "문장 알아봤어요"; });
+  const c0 = chId ? D.chapters.find(x => x.id === chId) : null, W = (c0 ? c0.sec : U.sec) === "word", un = W ? "단어" : "문장";
+  sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>${chId ? un + " 붙여넣기" : `붙여넣어 새 ${SECN[W ? "word" : "talk"]} 챕터 만들기`}</b><button class="btn sm" data-a="close">닫기</button></div>
+  ${chId ? "" : `<div class="lab">챕터 이름</div><input class="inp" id="pName" value="${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(c => c.sec === (W ? "word" : "talk")).length + 1}" maxlength="40" style="margin-bottom:12px">`}
+  <div class="lab">${W ? "한 줄에 한 단어 — 엑셀에서 단어 · 뜻 · 예문 · 예문 뜻 칸을 복사해 붙이면 돼요(예문은 없어도 됨)" : "한 줄에 한 문장 — 엑셀에서 두 칸(한글 · 영어)을 복사해 붙이면 돼요"}</div>
+  <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다&#10;또는  figure out - 알아내다" : "오늘 시간 있어요?&#9;Do you have time today?&#10;또는  오늘 시간 있어요? | Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
+  <p class="hint" id="pCnt">0${un}</p><button class="btn go full" data-a="pasteok" data-id="${chId || ""}" data-w="${W ? 1 : ""}">${svg(IC.check)}넣기</button></div>`;
+  $("#pTxt").addEventListener("input", () => { $("#pCnt").textContent = (W ? parseWords($("#pTxt").value) : parsePaste($("#pTxt").value)).length + un + " 알아봤어요"; });
   setTimeout(() => $("#pTxt").focus(), 100);
 }
 
@@ -635,12 +716,28 @@ function stepsFor(it, mode) {
   else if (mode === "test") { S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "ko" }, { t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }, { t: "say", lang: "en", text: it.en, rate: sp, ph: "en1" }, { t: "gap", ms: 2200, ph: "judge" }); }
   else if (mode === "listen") { S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "ko" }, { t: "gap", ms: 700, ph: "ko" }); R.forEach((r, i) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph: "en" + (i + 1) }, { t: "gap", ms: 900, ph: "en" + (i + 1) })); }
   else if (mode === "e2k") { S.push({ t: "say", lang: "en", text: it.en, rate: sp, ph: "en1" }, { t: "gap", ms: thinkMs(it.ko, "ko"), ph: "think" }, { t: "say", lang: "ko", text: it.ko, rate: sp, ph: "ko" }, { t: "gap", ms: 600, ph: "ko" }, { t: "say", lang: "en", text: it.en, rate: sp, ph: "en2" }, { t: "gap", auto: 1, ph: "en2" }); }
+  else if (mode[0] === "w") {
+    const sayW = (r, ph) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph }), sayM = () => S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "mean" });
+    const reps = gap => R.forEach((r, i) => { sayW(r, "r" + (i + 1)); S.push(gap ? { t: "gap", ms: gap, ph: "r" + (i + 1) } : { t: "gap", auto: 1, ph: "r" + (i + 1) }); });
+    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex && it.ex) { S.push({ t: "say", lang: "en", text: it.ex, rate: sp, ph: "ex" }, { t: "gap", ms: 500, ph: "ex" }); if (it.exk) S.push({ t: "say", lang: "ko", text: it.exk, rate: sp, ph: "exk" }); } };
+    if (mode === "we2k") { sayW(1, "word"); S.push({ t: "gap", ms: thinkMs(it.ko, "ko"), ph: "think" }); sayM(); S.push({ t: "gap", ms: 500, ph: "mean" }); reps(0); tail(); }
+    else if (mode === "wk2e") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); reps(0); tail(); }
+    else if (mode === "wtest") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); sayW(1, "r1"); S.push({ t: "gap", ms: 2200, ph: "judge" }); }
+    else { sayW(1, "word"); S.push({ t: "gap", ms: 500, ph: "word" }); sayM(); S.push({ t: "gap", ms: 600, ph: "mean" }); reps(800); tail(); }
+  }
   S.push({ t: "gap", ms: 1100, ph: "next" });
   return S;
 }
+/* 철자 불러 주기: 「F, I, G, U, R, E ... O, U, T」 (여러 낱말은 사이를 쉼) */
+function spellOf(w) { const L = String(w || "").toUpperCase().split(/\s+/).map(x => x.replace(/[^A-Z]/g, "").split("").join(", ")).filter(Boolean); return L.length && L.join(". ").length <= 120 ? L.join(". ") + "." : ""; }
 const MODES = [["k2e", "한→영 말하기"], ["test", "시험"], ["listen", "듣기만"], ["e2k", "영→한"]];
-const PHN = { ko: "한글", think: "생각", en1: "영어 1", en2: "영어 2", en3: "영어 3", en4: "영어 4", judge: "맞혔나요?", next: "다음" };
-function phaseList(mode) { if (mode === "k2e") return ["ko", "think", ...rates(SET.reps).map((r, i) => "en" + (i + 1))]; if (mode === "test") return ["ko", "think", "en1", "judge"]; if (mode === "listen") return ["ko", ...rates(SET.reps).map((r, i) => "en" + (i + 1))]; return ["en1", "think", "ko", "en2"]; }
+const WMODES = [["we2k", "단어→뜻"], ["wk2e", "뜻→단어 말하기"], ["wtest", "시험"], ["wlisten", "듣기만"]];
+const modeName = m => ([...MODES, ...WMODES].find(x => x[0] === m) || [0, ""])[1];
+const modeOf = c => (c && c.sec === "word") ? SET.wmode : SET.mode;
+const PHN = { ko: "한글", think: "생각", en1: "영어 1", en2: "영어 2", en3: "영어 3", en4: "영어 4", judge: "맞혔나요?", next: "다음", word: "단어", mean: "뜻", r1: "따라 1", r2: "따라 2", r3: "따라 3", spell: "철자", ex: "예문", exk: "예문 뜻" };
+function phaseList(mode) {
+  if (mode[0] === "w") { const r = rates(SET.reps).map((x, i) => "r" + (i + 1)), t = [...(SET.spell ? ["spell"] : []), ...(SET.wex ? ["ex"] : [])];
+    if (mode === "we2k") return ["word", "think", "mean", ...r, ...t]; if (mode === "wk2e") return ["mean", "think", ...r, ...t]; if (mode === "wtest") return ["mean", "think", "r1", "judge"]; return ["word", "mean", ...r, ...t]; } if (mode === "k2e") return ["ko", "think", ...rates(SET.reps).map((r, i) => "en" + (i + 1))]; if (mode === "test") return ["ko", "think", "en1", "judge"]; if (mode === "listen") return ["ko", ...rates(SET.reps).map((r, i) => "en" + (i + 1))]; return ["en1", "think", "ko", "en2"]; }
 
 /* 재생 목록 준비 */
 function setList(ids) {
@@ -651,7 +748,7 @@ function setList(ids) {
 function loadCh(li) {
   const c = chById(P.list[li]); P.ch = c; P.li = li;
   let q = c.items.slice(); if (SET.shuffle) for (let i = q.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [q[i], q[j]] = [q[j], q[i]]; }
-  P.queue = q; P.qi = 0; P.phase = ""; P.built = null; P.mode = SET.mode;
+  P.queue = q; P.qi = 0; P.phase = ""; P.built = null; P.mode = modeOf(c);
 }
 const curIt = () => P.queue[P.qi];
 
@@ -678,8 +775,16 @@ function sayDevice(text, lang, rate, tok) {
     SS.cancel(); setTimeout(() => { if (tok === P.tok) SS.speak(u); else fin(); }, 60);
   });
 }
+/* 「화면 꺼도 계속 듣기(실험)」: 소리 없는 오디오를 함께 틀어 휴대폰이 앱을 덜 재우게 함 — 기종 · 절전 설정에 따라 안 될 수 있음 */
+let KA = null;
+function bgKeep(on) {
+  try {
+    if (on && SET.bg) { if (!KA) { const n = 8000, b = new DataView(new ArrayBuffer(44 + n * 2)); const W = (p, s) => { for (let i = 0; i < s.length; i++) b.setUint8(p + i, s.charCodeAt(i)); }; W(0, "RIFF"); b.setUint32(4, 36 + n * 2, true); W(8, "WAVE"); W(12, "fmt "); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 1, true); b.setUint32(24, 8000, true); b.setUint32(28, 16000, true); b.setUint16(32, 2, true); b.setUint16(34, 16, true); W(36, "data"); b.setUint32(40, n * 2, true); KA = new Audio(URL.createObjectURL(new Blob([b], { type: "audio/wav" }))); KA.loop = true; } KA.play().catch(() => {}); mediaMeta(); }
+    else if (KA) KA.pause();
+  } catch (e) {}
+}
 async function runDevice() {
-  const tok = ++P.tok; P.playing = true; keepOn(true); paintPlay();
+  const tok = ++P.tok; P.playing = true; keepOn(true); bgKeep(true); paintPlay();
   while (tok === P.tok) {
     const it = curIt(); if (!it) break;
     paintPlay();
@@ -692,7 +797,7 @@ async function runDevice() {
     if (tok !== P.tok) break;
     logSent(); if (!advance()) break;
   }
-  if (tok === P.tok) { P.playing = false; keepOn(false); paintPlay(); }
+  if (tok === P.tok) { P.playing = false; keepOn(false); bgKeep(false); paintPlay(); }
 }
 function waitTok(ms, tok) { return new Promise(r => { const t0 = Date.now(); const iv = setInterval(() => { if (tok !== P.tok || Date.now() - t0 >= ms) { clearInterval(iv); r(); } }, 80); }); }
 /* 다음 문장 · 다음 챕터 · 반복 */
@@ -720,18 +825,31 @@ async function idbPut(k, v) { const db = await idb(); return new Promise(res => 
 async function idbCount() { try { const db = await idb(); return await new Promise(res => { const r = db.transaction("a").objectStore("a").count(); r.onsuccess = () => res(r.result); r.onerror = () => res(0); }); } catch (e) { return 0; } }
 async function idbClear() { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").clear(); t.oncomplete = () => res(); }); }
 const rateQ = r => Math.round(r * 100) / 100;
-async function azGet(text, lang, rate) {
+async function azGet(text, lang, rate, fresh) {
   const voice = lang === "ko" ? SET.azKo : SET.azEn, r = rateQ(rate), k = voice + "|" + r + "|" + text;
-  const hit = await idbGet(k); if (hit) return hit;
-  if (!SET.azUrl) throw new Error("설정에서 음성 서버 주소를 넣어 주세요");
+  const hit = fresh ? null : await idbGet(k); if (hit) return hit;
+  const mk = todayS().slice(0, 7), cost = text.length + (text.match(/[가-힣]/g) || []).length;
+  const mine = SET.engine === "azkey";
+  if (mine && (SET.azChars[mk] || 0) + cost > (+SET.azCap || 450000)) throw new Error(`이번 달 한도(${(+SET.azCap).toLocaleString()}자)를 넘었어요 — 설정에서 늘리거나 다음 달에 써 주세요`);
+  if (mine && !SET.azMyKey) throw new Error("설정 → 음성에서 Azure 키를 넣어 주세요");
+  if (!mine && !SET.azUrl) throw new Error("설정에서 음성 서버 주소를 넣어 주세요");
   const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 20000);
   let res;
-  try { res = await fetch(SET.azUrl.replace(/\/$/, "") + "/tts", { method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", "X-BJ-Key": SET.azKey || "" }, body: JSON.stringify({ text, voice, rate: r }) }); }
-  catch (e) { throw new Error(e.name === "AbortError" ? "음성 서버가 응답하지 않아요" : "음성 서버에 연결하지 못했어요 (인터넷 · 주소 확인)"); }
+  try {
+    if (mine) {
+      const xe = s => String(s).replace(/[<>&'"]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" }[c]));
+      const ssml = `<speak version='1.0' xml:lang='${voice.slice(0, 5)}'><voice name='${voice}'><prosody rate='${(r >= 1 ? "+" : "") + Math.round((r - 1) * 100)}%'>${xe(text)}</prosody></voice></speak>`;
+      res = await fetch(`https://${SET.azRegion}.tts.speech.microsoft.com/cognitiveservices/v1`, { method: "POST", signal: ctl.signal, headers: { "Ocp-Apim-Subscription-Key": SET.azMyKey, "Content-Type": "application/ssml+xml", "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3" }, body: ssml });
+    } else res = await fetch(SET.azUrl.replace(/\/$/, "") + "/tts", { method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", "X-BJ-Key": SET.azKey || "" }, body: JSON.stringify({ text, voice, rate: r }) });
+  }
+  catch (e) { throw new Error(e.name === "AbortError" ? (mine ? "Azure가 응답하지 않아요" : "음성 서버가 응답하지 않아요") : (mine ? "Azure에 연결하지 못했어요 (인터넷 · 지역 확인)" : "음성 서버에 연결하지 못했어요 (인터넷 · 주소 확인)")); }
   finally { clearTimeout(tm); }
-  if (!res.ok) { let m = res.status; try { m = (await res.json()).error || m; } catch (e) {} throw new Error("음성 서버 오류 — " + m); }
+  if (!res.ok) {
+    if (mine) throw new Error(res.status === 401 ? "Azure 키가 맞지 않아요 — 키와 지역(만든 곳)을 확인해 주세요" : res.status === 429 ? "Azure 사용량 한도에 걸렸어요 — 잠시 뒤 또는 다음 달에" : res.status === 400 ? "목소리 이름을 Azure가 받지 않았어요" : "Azure 오류 — " + res.status);
+    let m = res.status; try { m = (await res.json()).error || m; } catch (e) {} throw new Error("음성 서버 오류 — " + m);
+  }
   const buf = await res.arrayBuffer();
-  const mk = todayS().slice(0, 7); SET.azChars[mk] = (SET.azChars[mk] || 0) + text.length + (text.match(/[가-힣]/g) || []).length; saveSet();
+  SET.azChars[mk] = (SET.azChars[mk] || 0) + cost; saveSet();
   await idbPut(k, buf); return buf;
 }
 const SR = 24000;
@@ -754,7 +872,7 @@ async function buildChapter(c, queue, mode, onp, cancel) {
   W(0, "RIFF"); hd.setUint32(4, 36 + pcm.length * 2, true); W(8, "WAVE"); W(12, "fmt "); hd.setUint32(16, 16, true); hd.setUint16(20, 1, true); hd.setUint16(22, 1, true); hd.setUint32(24, SR, true); hd.setUint32(28, SR * 2, true); hd.setUint16(32, 2, true); hd.setUint16(34, 16, true); W(36, "data"); hd.setUint32(40, pcm.length * 2, true);
   return { url: URL.createObjectURL(new Blob([hd, pcm], { type: "audio/wav" })), marks, dur: total / SR, sig: sigOf(queue, mode) };
 }
-const sigOf = (queue, mode) => [mode, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en).join("|")].join("#");
+const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + (i.ex || "") + (i.exk || "")).join("|")].join("#");
 const B = { cancel: false };
 async function runAzure(fromQi) {
   const au = $("#au"); const tok = ++P.tok;
@@ -778,7 +896,7 @@ async function prebuildNext() {
   try { for (const it of c.items) for (const s of stepsFor(it, P.mode)) if (s.t === "say") await azGet(s.text, s.lang, s.rate); } catch (e) {}
 }
 function azTick() {
-  const au = $("#au"); if (!P.built || SET.engine !== "azure") return;
+  const au = $("#au"); if (!P.built || !isAz()) return;
   const t = au.currentTime, M = P.built.marks; let qi = 0; for (let i = 0; i < M.length; i++) if (M[i].t <= t) qi = i;
   let ph = ""; for (const x of M[qi].ph) if (x.t <= t) ph = x.ph;
   if (qi !== P.qi) { const prev = P.qi; P.qi = qi; if (qi > prev) logSent(); paintPlay(); }
@@ -787,19 +905,19 @@ function azTick() {
 }
 $("#au").addEventListener("timeupdate", azTick);
 $("#au").addEventListener("ended", () => {
-  if (SET.engine !== "azure") return; logSent(); chDone();
+  if (!isAz()) return; logSent(); chDone();
   if (P.li < P.list.length - 1) { loadCh(P.li + 1); render(); runAzure(0); return; }
   if (SET.loop === "chapter") { P.qi = 0; runAzure(0); return; }
   if (SET.loop === "list") { loadCh(0); render(); runAzure(0); return; }
   P.playing = false; P.qi = 0; paintPlay(); toast("끝까지 들었어요 — 수고했어요");
 });
-$("#au").addEventListener("pause", () => { if (SET.engine === "azure" && !$("#au").ended) { P.playing = false; paintPlay(); } });
-$("#au").addEventListener("play", () => { if (SET.engine === "azure") { P.playing = true; paintPlay(); } });
+$("#au").addEventListener("pause", () => { if (isAz() && !$("#au").ended) { P.playing = false; paintPlay(); } });
+$("#au").addEventListener("play", () => { if (isAz()) { P.playing = true; paintPlay(); } });
 
 /* ── 잠금 화면 · 블루투스 단추(Media Session) ── */
 function mediaMeta() {
   if (!("mediaSession" in navigator)) return;
-  try { navigator.mediaSession.metadata = new MediaMetadata({ title: P.ch ? P.ch.name : "영어회화 노트", artist: "영어회화 노트 · " + (MODES.find(m => m[0] === P.mode) || [0, ""])[1], album: "Blog J", artwork: [{ src: "icon-192.png", sizes: "192x192", type: "image/png" }, { src: "icon-512.png", sizes: "512x512", type: "image/png" }] }); } catch (e) {}
+  try { navigator.mediaSession.metadata = new MediaMetadata({ title: P.ch ? P.ch.name : "영어 노트", artist: "영어 노트 · " + modeName(P.mode), album: "Blog J", artwork: [{ src: "icon-192.png", sizes: "192x192", type: "image/png" }, { src: "icon-512.png", sizes: "512x512", type: "image/png" }] }); } catch (e) {}
 }
 if ("mediaSession" in navigator) {
   const A = (a, f) => { try { navigator.mediaSession.setActionHandler(a, f); } catch (e) {} };
@@ -808,18 +926,18 @@ if ("mediaSession" in navigator) {
   A("seekforward", () => jump(1)); A("seekbackward", () => jump(0));
 }
 /* ── 단추 ── */
-function stopAll() { P.tok++; if (SS) SS.cancel(); const au = $("#au"); try { au.pause(); } catch (e) {} P.playing = false; keepOn(false); }
+function stopAll() { P.tok++; if (SS) SS.cancel(); const au = $("#au"); try { au.pause(); } catch (e) {} P.playing = false; keepOn(false); bgKeep(false); }
 function playPause(want) {
   const on = want == null ? !P.playing : want;
-  if (!P.ch) { const c = dueList()[0] || D.chapters.find(x => x.items.length); if (!c) return toast("챕터를 먼저 만들어 주세요"); P.list = [c.id]; loadCh(0); }
+  if (!P.ch) { const c = dueList()[0] || D.chapters.find(x => x.sec === U.sec && x.items.length) || D.chapters.find(x => x.items.length); if (!c) return toast("챕터를 먼저 만들어 주세요"); P.list = [c.id]; loadCh(0); }
   if (!on) { stopAll(); paintPlay(); return; }
-  P.mode = SET.mode; P.started = true; logStart();
-  if (SET.engine === "azure") { const au = $("#au"); if (P.built && P.built.sig === sigOf(P.queue, P.mode) && au.src) { au.play().catch(() => {}); P.playing = true; paintPlay(); } else runAzure(); }
+  P.mode = modeOf(P.ch); P.started = true; logStart();
+  if (isAz()) { const au = $("#au"); if (P.built && P.built.sig === sigOf(P.queue, P.mode) && au.src) { au.play().catch(() => {}); P.playing = true; paintPlay(); } else runAzure(); }
   else runDevice();
 }
 function jump(d) {
   const n = d === 0 ? P.qi : clamp(P.qi + d, 0, P.queue.length - 1);
-  if (SET.engine === "azure" && P.built) { P.qi = n; const au = $("#au"); au.currentTime = P.built.marks[n].t + 0.01; if (!P.playing) au.play().catch(() => {}); paintPlay(); return; }
+  if (isAz() && P.built) { P.qi = n; const au = $("#au"); au.currentTime = P.built.marks[n].t + 0.01; if (!P.playing) au.play().catch(() => {}); paintPlay(); return; }
   const was = P.playing; stopAll(); P.qi = n; P.phase = ""; paintPlay(); if (was) runDevice();
 }
 function judge(ok) {
@@ -827,7 +945,7 @@ function judge(ok) {
   const [, real] = findItem(it.id); const x = real || it;
   if (ok) x.ok = (x.ok || 0) + 1; else { x.ng = (x.ng || 0) + 1; if (SET.autoStar) x.star = true; }
   const L = dayLog(); if (ok) L.ok++; else L.ng++;
-  touch(); toast(ok ? "맞혔어요" : SET.autoStar ? "틀린 문장 — ☆ 어려운 문장에 넣었어요" : "다음엔 맞혀요");
+  const un = unitOf(P.ch); touch(); toast(ok ? (un === "단어" ? "알아요 — 좋아요" : "맞혔어요") : SET.autoStar ? `☆ 어려운 ${un}에 넣었어요` : "다음엔 맞혀요");
   if (SET.engine === "device" && P.phase === "judge") { P.tok++; if (SS) SS.cancel(); if (advance()) runDevice(); else { P.playing = false; paintPlay(); } }
 }
 function toggleStar(id) { const [c, it] = findItem(id); if (!it) return; it.star = !it.star; touch(c); }
@@ -841,25 +959,27 @@ function logSent() { dayLog().n++; ls.set("data", D); }
 
 /* ── 재생 화면 ── */
 function drawPlay() {
-  if (!P.ch) { const c = dueList()[0] || D.chapters.find(x => x.items.length); if (c) { P.list = [c.id]; loadCh(0); } }
-  const c = P.ch;
+  if (!P.ch) { const c = D.chapters.find(x => x.sec === U.sec && x.items.length) || D.chapters.find(x => x.items.length); if (c) { P.list = [c.id]; loadCh(0); } }
+  const c = P.ch, W = !!(c && c.sec === "word"), un = W ? "단어" : "문장";
   let h = `<div class="pv"><div><div class="stagep" id="stg"></div><div class="ctl"><button data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button><button class="big" data-a="pp" id="ppb" aria-label="재생"></button><button data-a="next" aria-label="다음 문장">${svg(IC.next)}</button><button class="st" data-a="starcur" id="stb" aria-label="어려운 문장">${svg(IC.star)}</button></div><div class="tst" id="tst"></div>`;
   h += `<div class="card qlist"><div class="lab"><span>${c ? esc(c.name) : "챕터 없음"}${P.list.length > 1 ? ` · ${P.li + 1}/${P.list.length}번째 챕터` : ""}</span><span>${SET.shuffle ? "섞어서" : "차례대로"}</span></div><div id="ql"></div></div></div>`;
-  h += `<div class="opt card"><div><div class="lab">연습 방법</div><div class="seg" data-k="mode">${MODES.map(([k, t]) => `<button data-v="${k}" class="${SET.mode === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
-    <div><div class="lab">영어 반복</div><div class="seg" data-k="reps">${[1, 2, 3].map(n => `<button data-v="${n}" class="${SET.reps === n ? "on" : ""}">${n}번</button>`).join("")}</div></div>
+  h += `<div class="opt card"><div><div class="lab">연습 방법 · ${W ? "단어" : "회화"}</div>${W ? `<div class="seg" data-k="wmode">${WMODES.map(([k, t]) => `<button data-v="${k}" class="${SET.wmode === k ? "on" : ""}">${t}</button>`).join("")}</div>` : `<div class="seg" data-k="mode">${MODES.map(([k, t]) => `<button data-v="${k}" class="${SET.mode === k ? "on" : ""}">${t}</button>`).join("")}</div>`}</div>
+    <div><div class="lab">${W ? "단어 따라 말하기" : "영어 반복"}</div><div class="seg" data-k="reps">${[1, 2, 3].map(n => `<button data-v="${n}" class="${SET.reps === n ? "on" : ""}">${n}번</button>`).join("")}</div></div>
     <div><div class="lab">생각 시간</div><div class="seg" data-k="think">${[["auto", "자동"], ["3", "3초"], ["5", "5초"], ["8", "8초"]].map(([k, t]) => `<button data-v="${k}" class="${String(SET.think) === k ? "on" : ""}">${t}</button>`).join("")}</div>${SET.think === "auto" ? `<div class="seg" data-k="thinkF" style="margin-top:6px">${[[0.7, "짧게"], [1, "보통"], [1.4, "넉넉히"]].map(([k, t]) => `<button data-v="${k}" class="${SET.thinkF === k ? "on" : ""}">${t}</button>`).join("")}</div>` : ""}</div>
     <div><div class="lab">말 빠르기</div><div class="seg" data-k="speed">${[[0.8, "느리게"], [0.9, "조금 느리게"], [1, "보통"], [1.1, "빠르게"]].map(([k, t]) => `<button data-v="${k}" class="${SET.speed === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
     <div><div class="lab">다 들으면</div><div class="seg" data-k="loop">${[["off", "멈춤"], ["chapter", "이 챕터 반복"], ["list", "목록 반복"]].map(([k, t]) => `<button data-v="${k}" class="${SET.loop === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
     <label class="tg"><input type="checkbox" data-t="faster" ${SET.faster ? "checked" : ""}><span>반복할수록 조금씩 빠르게</span></label>
-    <label class="tg"><input type="checkbox" data-t="shuffle" ${SET.shuffle ? "checked" : ""}><span>문장 섞기</span></label>
-    <label class="tg"><input type="checkbox" data-t="reveal" ${SET.reveal ? "checked" : ""}><span>영어는 들릴 때 보이기(먼저 가리기)</span></label>
-    <label class="tg"><input type="checkbox" data-t="autoStar" ${SET.autoStar ? "checked" : ""}><span>시험에서 틀린 문장은 ☆로</span></label>
+    ${W ? `<label class="tg"><input type="checkbox" data-t="spell" ${SET.spell ? "checked" : ""}><span>철자 불러 주기 (F, I, G…)</span></label><label class="tg"><input type="checkbox" data-t="wex" ${SET.wex ? "checked" : ""}><span>예문도 듣기</span></label>` : ""}
+    <label class="tg"><input type="checkbox" data-t="shuffle" ${SET.shuffle ? "checked" : ""}><span>${un} 섞기</span></label>
+    <label class="tg"><input type="checkbox" data-t="reveal" ${SET.reveal ? "checked" : ""}><span>${W ? "답(뜻 · 단어)은 들릴 때 보이기" : "영어는 들릴 때 보이기(먼저 가리기)"}</span></label>
+    <label class="tg"><input type="checkbox" data-t="autoStar" ${SET.autoStar ? "checked" : ""}><span>시험에서 ${W ? "모르는 단어" : "틀린 문장"}는 ☆로</span></label>
     ${engineNote()}</div></div>`;
   $("#main").innerHTML = h; paintPlay();
 }
 function engineNote() {
+  if (SET.engine === "azkey") return `<div class="engine az"><b>고품질 음성(내 Azure 키)</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 넘겨요.</div>`;
   if (SET.engine === "azure") return `<div class="engine az"><b>고품질 음성</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 문장을 넘겨요.</div>`;
-  return `<div class="engine"><b>기기 음성</b> — 인터넷 없이 바로 들려요. 대신 <b>화면을 켜 두어야</b> 해요(재생 중 화면이 꺼지지 않게 막아 둠). 화면을 끄고 들으려면 설정 → 고품질 음성.</div>`;
+  return `<div class="engine"><b>기기 음성</b> — 인터넷 없이 바로 들려요. 대신 <b>화면을 켜 두어야</b> 해요(재생 중 화면이 꺼지지 않게 막아 둠). 화면을 끄고 들으려면 설정 → 음성 → 「내 Azure 키」.</div>`;
 }
 const isCur = id => !!(P.ch && P.ch.id === id);
 function paintCards() {
@@ -872,7 +992,7 @@ function paintMini() {
   if (!show) return;
   const n = P.queue.length, ph = P.playing && P.phase ? (PHN[P.phase] || "") : "";
   mi.innerHTML = `<div class="mini-in"><div class="mini-bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div>
-    <button class="mini-tx" data-nav="play" aria-label="듣기 화면 열기"><small><span>${esc(P.ch.name)}</span><span class="num">${P.qi + 1} / ${n}</span><em class="${P.playing ? "live" : ""}">${P.playing ? (ph || "재생 중") : "멈춤"}</em></small><b>${esc(P.mode === "e2k" ? it.en : it.ko)}</b></button>
+    <button class="mini-tx" data-nav="play" aria-label="듣기 화면 열기"><small><span>${esc(P.ch.name)}</span><span class="num">${P.qi + 1} / ${n}</span><em class="${P.playing ? "live" : ""}">${P.playing ? (ph || "재생 중") : "멈춤"}</em></small><b>${esc(P.ch.sec === "word" ? it.en + " · " + it.ko : P.mode === "e2k" ? it.en : it.ko)}</b></button>
     <button class="mb" data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button>
     <button class="mb mpp" data-a="pp" aria-label="${P.playing ? "멈추기" : "재생"}">${svg(P.playing ? IC.pause : IC.play)}</button>
     <button class="mb" data-a="next" aria-label="다음 문장">${svg(IC.next)}</button></div>`;
@@ -883,10 +1003,12 @@ function paintPlay() {
   const it = curIt(), c = P.ch;
   if (!it) { stg.innerHTML = `<div class="ko" style="margin:auto 0">챕터를 골라 주세요</div>`; $("#ppb").innerHTML = svg(IC.play); return; }
   const n = P.queue.length;
-  stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="ko" id="pko">${esc(P.mode === "e2k" ? "" : it.ko)}</div><div class="en" id="pen">${esc(it.en)}</div><div class="count"><div class="bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div><span class="num" style="font-size:13px;color:var(--deeps)">${MODES.find(m => m[0] === P.mode)[1]}</span></div>`;
+  const foot = `<div class="count"><div class="bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div><span class="num" style="font-size:13px;color:var(--deeps)">${modeName(P.mode)}</span></div>`;
+  if (c.sec === "word") stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="wdx" id="pwd">${esc(it.en)}</div><div class="mnx" id="pmn">${esc(it.ko)}</div>${it.ex ? `<div class="exx" id="pex">${esc(it.ex)}${it.exk ? `<small>${esc(it.exk)}</small>` : ""}</div>` : ""}${foot}`;
+  else stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="ko" id="pko">${esc(P.mode === "e2k" ? "" : it.ko)}</div><div class="en" id="pen">${esc(it.en)}</div>${foot}`;
   $("#ppb").innerHTML = svg(P.playing ? IC.pause : IC.play); $("#ppb").setAttribute("aria-label", P.playing ? "멈추기" : "재생");
   const [, real] = findItem(it.id); $("#stb").classList.toggle("on", !!(real || it).star);
-  const ql = $("#ql"); if (ql) { ql.innerHTML = P.queue.map((x, i) => `<button class="qi${i === P.qi ? " on" : ""}" data-a="goq" data-i="${i}"><span class="n num">${i + 1}</span><span class="tx"><b>${esc(x.ko)}</b><small>${esc(x.en)}</small></span>${x.star ? `<span class="s">${svg(IC.star).replace('class="i"', 'class="i" style="fill:currentColor"')}</span>` : ""}</button>`).join(""); }
+  const ql = $("#ql"); if (ql) { ql.innerHTML = P.queue.map((x, i) => `<button class="qi${i === P.qi ? " on" : ""}" data-a="goq" data-i="${i}"><span class="n num">${i + 1}</span><span class="tx">${c.sec === "word" ? `<b>${esc(x.en)}</b><small>${esc(x.ko)}</small>` : `<b>${esc(x.ko)}</b><small>${esc(x.en)}</small>`}</span>${x.star ? `<span class="s">${svg(IC.star).replace('class="i"', 'class="i" style="fill:currentColor"')}</span>` : ""}</button>`).join(""); }
   paintPhase();
 }
 function paintPhase() {
@@ -895,9 +1017,16 @@ function paintPhase() {
   const L = phaseList(P.mode);
   ph.innerHTML = L.map(k => `<i class="${P.phase === k ? "on" : ""}">${PHN[k]}${k === "think" && P.phase === "think" ? " · 말해 보세요" : ""}</i>`).join("");
   const order = L.indexOf(P.phase), en = $("#pen"), ko = $("#pko");
+  if (P.ch && P.ch.sec === "word") {
+    const hid = at => SET.reveal && P.playing && at >= 0 && order < at && P.phase !== "next";
+    const wd = $("#pwd"), mn = $("#pmn"), ex = $("#pex");
+    if (wd) wd.classList.toggle("hide", hid(L.findIndex(k => k === "word" || k === "r1")));
+    if (mn) mn.classList.toggle("hide", hid(L.indexOf("mean")));
+    if (ex) ex.classList.toggle("dim", P.playing && L.includes("ex") && order < L.indexOf("ex") && P.phase !== "next");
+  }
   if (en) { const enAt = P.mode === "e2k" ? 0 : L.findIndex(k => /^en/.test(k)); en.classList.toggle("hide", SET.reveal && P.playing && order < enAt && P.phase !== "next"); }
   if (ko && P.mode === "e2k") ko.textContent = (!P.playing || order >= L.indexOf("ko") || P.phase === "next") ? it.ko : "";
-  const t = $("#tst"); if (t) t.innerHTML = P.mode === "test" ? `<button class="ok" data-a="judge" data-v="1">${svg(IC.check)} 맞혔어요</button><button class="ng" data-a="judge" data-v="0">${svg(IC.x)} 못 했어요</button>` : "";
+  const t = $("#tst"); if (t) t.innerHTML = P.mode === "wtest" ? `<button class="ok" data-a="judge" data-v="1">${svg(IC.check)} 알아요</button><button class="ng" data-a="judge" data-v="0">${svg(IC.x)} 몰라요</button>` : P.mode === "test" ? `<button class="ok" data-a="judge" data-v="1">${svg(IC.check)} 맞혔어요</button><button class="ng" data-a="judge" data-v="0">${svg(IC.x)} 못 했어요</button>` : "";
 }
 
 /* ── 기록 화면 ── */
@@ -910,11 +1039,14 @@ function drawStat() {
   const mx = Math.max(10, ...days.map(mins));
   let h = `<div class="vh"><div><h2>공부 기록</h2><p>${ymdw(todayS())} 기준</p></div></div><div class="kp"><div><small>연속 공부</small><b class="num">${streak}일</b></div><div><small>최근 7일</small><b class="num">${wk}분</b></div><div><small>들은 문장(누적)</small><b class="num">${all.toLocaleString()}</b></div><div><small>시험 맞힌 비율</small><b class="num">${ok + ng ? Math.round(ok * 100 / (ok + ng)) + "%" : "–"}</b></div></div>`;
   h += `<div class="card" style="margin-bottom:14px"><div class="lab"><span>최근 14일 들은 시간(분)</span></div><div class="days">${days.map(k => `<div><i class="${mins(k) ? "" : "z"}" style="height:${Math.max(2, mins(k) * 100 / mx)}%" title="${ymdw(k)} ${mins(k)}분"></i><span class="num">${+k.slice(8)}</span></div>`).join("")}</div></div>`;
-  h += `<div class="card"><div class="lab"><span>챕터별</span></div><table class="tbl"><thead><tr><th>챕터</th><th>문장</th><th>시험</th><th>☆</th><th>복습</th></tr></thead><tbody>${D.chapters.map(c => { const o = c.items.reduce((s, i) => s + (i.ok || 0), 0), g = c.items.reduce((s, i) => s + (i.ng || 0), 0); return `<tr><td>${esc(c.name)}</td><td class="num">${c.items.length}</td><td class="num">${o + g ? Math.round(o * 100 / (o + g)) + "%" : "–"}</td><td class="num">${c.items.filter(i => i.star).length}</td><td>${rvLabel(c)}</td></tr>`; }).join("")}</tbody></table></div>`;
+  h += `<div class="card"><div class="lab"><span>챕터별</span></div><table class="tbl"><thead><tr><th>구분</th><th>챕터</th><th>개수</th><th>시험</th><th>☆</th><th>복습</th></tr></thead><tbody>${D.chapters.map(c => { const o = c.items.reduce((s, i) => s + (i.ok || 0), 0), g = c.items.reduce((s, i) => s + (i.ng || 0), 0); return `<tr><td>${SECN[c.sec]}</td><td>${esc(c.name)}</td><td class="num">${c.items.length}</td><td class="num">${o + g ? Math.round(o * 100 / (o + g)) + "%" : "–"}</td><td class="num">${c.items.filter(i => i.star).length}</td><td>${rvLabel(c)}</td></tr>`; }).join("")}</tbody></table></div>`;
   $("#main").innerHTML = h;
 }
 
 /* ── 설정 ── */
+const KEY_HELP = "https://luvbong.tistory.com/";  /* 「화면 끄고 듣기 — Azure 무료 음성 키 넣는 법」 글 주소가 정해지면 바꿈 */
+function azVoiceSel() { return `<div class="lab" style="margin-top:10px">한국어 목소리</div><select class="inp" data-s="azKo">${AZV.ko.map(([k, t]) => `<option value="${k}" ${SET.azKo === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+    <div class="lab" style="margin-top:10px">영어 목소리</div><select class="inp" data-s="azEn">${AZV.en.map(([k, t]) => `<option value="${k}" ${SET.azEn === k ? "selected" : ""}>${t}</option>`).join("")}</select>`; }
 const AZV = { ko: [["ko-KR-SunHiNeural", "선희(여)"], ["ko-KR-InJoonNeural", "인준(남)"], ["ko-KR-JiMinNeural", "지민(여)"], ["ko-KR-BongJinNeural", "봉진(남)"], ["ko-KR-YuJinNeural", "유진(여)"]],
   en: [["en-US-JennyNeural", "Jenny · 미국(여)"], ["en-US-GuyNeural", "Guy · 미국(남)"], ["en-US-AriaNeural", "Aria · 미국(여)"], ["en-US-DavisNeural", "Davis · 미국(남)"], ["en-GB-SoniaNeural", "Sonia · 영국(여)"], ["en-GB-RyanNeural", "Ryan · 영국(남)"], ["en-AU-NatashaNeural", "Natasha · 호주(여)"]] };
 async function drawSet() {
@@ -922,37 +1054,68 @@ async function drawSet() {
   const st = !on ? ["", "연결 안 됨"] : s.busy ? ["", "동기화 중"] : s.live ? ["ok", "연결됨"] : ["", "쉬는 중"];
   const vk = VOICES.filter(v => /^ko/i.test(v.lang)), ve = VOICES.filter(v => /^en/i.test(v.lang));
   const mk = todayS().slice(0, 7);
-  let h = `<div class="vh"><div><h2>설정</h2><p>영어회화 노트 v${APP_VER}</p></div></div><div class="setg">`;
-  h += `<div class="sc"><div class="sh2">${svg(IC.head)}음성</div><div class="seg" data-k="engine" style="margin-bottom:10px"><button data-v="device" class="${SET.engine === "device" ? "on" : ""}">기기 음성</button><button data-v="azure" class="${SET.engine === "azure" ? "on" : ""}">고품질 음성</button></div>`;
+  let h = `<div class="vh"><div><h2>설정</h2><p>영어 노트 v${APP_VER}</p></div></div><div class="setg">`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.head)}음성</div><div class="seg" data-k="engine" style="margin-bottom:10px"><button data-v="device" class="${SET.engine === "device" ? "on" : ""}">기기 음성</button><button data-v="azkey" class="${SET.engine === "azkey" ? "on" : ""}">내 Azure 키</button><button data-v="azure" class="${SET.engine === "azure" ? "on" : ""}">내 음성 서버</button></div>`;
   if (SET.engine === "device") {
     h += `<p>휴대폰 · PC에 들어 있는 음성이에요. 인터넷 없이 되지만 <b>화면을 켜 두어야</b> 해요.</p>
     <div class="lab">한국어 목소리</div><select class="inp" data-s="vKo"><option value="">자동</option>${vk.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vKo === v.voiceURI ? "selected" : ""}>${esc(v.name)}</option>`).join("")}</select>
     <div class="lab" style="margin-top:10px">영어 목소리</div><select class="inp" data-s="vEn"><option value="">자동</option>${ve.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vEn === v.voiceURI ? "selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select>
     <div class="row" style="margin-top:10px"><button class="btn sm" data-a="vtest" data-v="ko">한국어 들어 보기</button><button class="btn sm" data-a="vtest" data-v="en">영어 들어 보기</button></div>
-    <label class="tg" style="margin-top:8px"><input type="checkbox" data-t="keep" ${SET.keep ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>`;
+    <label class="tg" style="margin-top:8px"><input type="checkbox" data-t="keep" ${SET.keep ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>
+    <label class="tg"><input type="checkbox" data-t="bg" ${SET.bg ? "checked" : ""}><span>화면 꺼도 계속 듣기 <b style="color:var(--sun)">(실험)</b></span></label>
+    <p class="hint">「실험」은 안드로이드에서 될 수 있어요(기종 · 절전 설정에 따라 다름). 아이폰은 화면이 꺼지면 기기 음성이 멈춰요. 확실하게 화면을 끄고 들으려면 「내 Azure 키」를 쓰세요.</p>`;
+  } else if (SET.engine === "azkey") {
+    const n = await idbCount(), RG = [["koreacentral", "한국 중부 (koreacentral)"], ["japaneast", "일본 동부 (japaneast)"], ["eastasia", "동아시아 (eastasia)"], ["southeastasia", "동남아시아 (southeastasia)"], ["eastus", "미국 동부 (eastus)"], ["westus2", "미국 서부 2 (westus2)"], ["westeurope", "서유럽 (westeurope)"]];
+    h += `<p>마이크로소프트 Azure의 고품질 음성을 <b>내 무료 키</b>로 바로 받아요. 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 재생되고, 한 번 받은 음성은 이 기기에 저장해 다시 써요.</p>
+    <div class="lab">Azure 음성 키 <a href="${KEY_HELP}" target="_blank" rel="noopener">키 받는 방법 ↗</a></div><input class="inp" data-s="azMyKey" type="password" value="${esc(SET.azMyKey)}" placeholder="Azure 「키 및 엔드포인트」의 키 1" autocomplete="off" spellcheck="false">
+    <div class="lab" style="margin-top:10px">지역 (키를 만든 곳)</div><select class="inp" data-s="azRegion">${RG.map(([k, t]) => `<option value="${k}" ${SET.azRegion === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+    ${azVoiceSel()}
+    <div class="lab" style="margin-top:10px">한 달 한도 (넘으면 멈춤)</div><select class="inp" data-s="azCap">${[100000, 200000, 300000, 450000].map(v => `<option value="${v}" ${+SET.azCap === v ? "selected" : ""}>${v.toLocaleString()}자${v === 450000 ? " (무료 50만 자 안쪽 · 추천)" : ""}</option>`).join("")}</select>
+    <div class="row" style="margin-top:10px"><button class="btn sm" data-a="aztest">${svg(IC.key)}연결 · 음성 확인</button><button class="btn sm" data-a="azclr">저장한 음성 지우기</button>${SET.azMyKey ? `<button class="btn sm red" data-a="azkeyclr">키 지우기</button>` : ""}</div>
+    <p class="hint">이번 달 ${(SET.azChars[mk] || 0).toLocaleString()}자 사용 · 저장한 음성 ${n.toLocaleString()}개 (한글은 2자로 셈)<br>· 키는 <b>이 기기에만</b> 저장돼요 — 구글 드라이브 · 백업 파일에는 들어가지 않아요. 공용 휴대폰 · PC에서는 쓰지 마세요.<br>· 이 방식을 쓰면 문장이 마이크로소프트 Azure로 보내져 음성이 돼요.<br>· 무료(F0)는 한 달 50만 자까지예요. 넘으면 그달은 멈추고 돈은 나가지 않아요(키를 만들 때 「Free F0」를 골랐을 때).</p>`;
   } else {
     const n = await idbCount();
     h += `<p>Azure 음성을 <b>내 서버(EC2)</b>를 거쳐 받아요. 챕터 하나를 한 파일로 만들어 <b>화면을 꺼도</b> 재생돼요. 한 번 받은 문장은 이 기기에 저장해 두고 다시 써요(바뀐 문장만 새로 받음).</p>
     <div class="lab">음성 서버 주소</div><input class="inp" data-s="azUrl" value="${esc(SET.azUrl)}" placeholder="https://내서버주소" spellcheck="false" inputmode="url">
     <div class="lab" style="margin-top:10px">앱 암호(서버에 정한 것)</div><input class="inp" data-s="azKey" type="password" value="${esc(SET.azKey)}" placeholder="서버 설정의 APP_KEY" autocomplete="off">
-    <div class="lab" style="margin-top:10px">한국어 목소리</div><select class="inp" data-s="azKo">${AZV.ko.map(([k, t]) => `<option value="${k}" ${SET.azKo === k ? "selected" : ""}>${t}</option>`).join("")}</select>
-    <div class="lab" style="margin-top:10px">영어 목소리</div><select class="inp" data-s="azEn">${AZV.en.map(([k, t]) => `<option value="${k}" ${SET.azEn === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+    ${azVoiceSel()}
     <div class="row" style="margin-top:10px"><button class="btn sm" data-a="aztest">연결 · 음성 확인</button><button class="btn sm" data-a="azclr">저장한 음성 지우기</button></div>
-    <p class="hint">저장한 문장 음성 ${n.toLocaleString()}개 · 이번 달 이 기기에서 새로 받은 글자 약 ${(SET.azChars[mk] || 0).toLocaleString()}자 (한글은 2자로 셈 · Azure 무료 F0 = 한 달 50만 자)<br>Azure 키는 서버에만 두고 이 앱에는 넣지 않아요.</p>`;
+    <p class="hint">저장한 문장 음성 ${n.toLocaleString()}개 · 이번 달 이 기기에서 새로 받은 글자 약 ${(SET.azChars[mk] || 0).toLocaleString()}자 (한글은 2자로 셈 · Azure 무료 F0 = 한 달 50만 자)<br>내 서버(EC2 · ttsproxy)를 거쳐 받아요 — Azure 키는 서버에만 있어요.</p>`;
   }
   h += `</div>`;
-  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록을 내 구글 드라이브 「영어회화노트」 폴더에 저장해요. PC에서 문장을 넣고 휴대폰에서 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
+  const miss = baseChapters().filter(b => !D.chapters.some(c => c.id === b.id)).length;
+  h += `<div class="sc"><div class="sh2">${svg(IC.book)}기본 자료</div><p>Blog J가 넣어 둔 실전 표현이에요 — 회화 ${BASE_TALK.length}챕터(상황별) · 단어 ${BASE_WORD.length}챕터(분야별), 챕터마다 20개. 고치거나 지워도 되고, 지운 챕터는 여기서 다시 넣을 수 있어요(고친 챕터는 그대로 둠).</p>${miss ? `<button class="btn go" data-a="baseadd">${svg(IC.plus)}지운 기본 챕터 ${miss}개 다시 넣기</button>` : `<p class="hint" style="margin:0">기본 챕터가 모두 들어 있어요.</p>`}</div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록을 내 구글 드라이브 「영어노트」 폴더에 저장해요. PC에서 문장을 넣고 휴대폰에서 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
   if (!MOB()) h += `<div class="sc"><div class="sh2">${svg(IC.phone)}휴대폰에서도 쓰기</div><div class="qrw"><div class="qr">${QR_SVG}</div><p>휴대폰 카메라로 찍으면 설치 화면이 열려요. 휴대폰에서도 <b>같은 구글 계정</b>으로 드라이브를 연결하면 PC에서 넣은 문장이 그대로 들어와요.</p></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.dl)}백업</div><p>모든 챕터 · 기록을 파일 하나로 받아 두고 되살릴 수 있어요.${SET.bkAt ? `<br><span class="num">마지막 백업 ${ymdw(ymdT(SET.bkAt))} ${hm(SET.bkAt)}</span>` : ""}</p><div class="row"><button class="btn" data-a="bk" data-v="make">${svg(IC.dl)}백업 만들기</button><button class="btn" data-a="bk" data-v="restore">${svg(IC.upl)}되살리기</button></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.phone)}앱으로 설치</div><p>${INST.standalone ? "지금 설치한 앱으로 쓰고 있어요." : "홈 화면 · 바탕 화면에 아이콘으로 두고 바로 열 수 있어요."}</p>${INST.standalone ? "" : `<button class="btn go" data-a="inst">${svg(IC.phone)}설치하기</button>`}</div>`;
-  h += `<div class="sc"><div class="sh2">${svg(IC.help)}알아 두세요</div><p>· 앱이 닫혀 있을 때는 복습 알림을 보내지 못해요 — 열 때 「오늘 복습할 챕터」를 보여 드려요.<br>· 기기 음성은 화면이 꺼지면 멈출 수 있어요(휴대폰이 앱을 재움). 운전 · 걷기에는 고품질 음성을 쓰세요.<br>· 내 목소리 녹음 · 비교는 다음 버전에 넣을 예정이에요.</p><p style="font-size:12.5px">${BUILD}</p></div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.help)}알아 두세요</div><p>· 앱이 닫혀 있을 때는 복습 알림을 보내지 못해요 — 열 때 「오늘 복습할 챕터」를 보여 드려요.<br>· 기기 음성은 화면이 꺼지면 멈출 수 있어요(휴대폰이 앱을 재움). 운전 · 걷기 중에는 「내 Azure 키」를 쓰세요.<br>· 기본 회화 · 단어는 Blog J가 직접 쓴 문장이에요. 같은 뜻을 다르게 말하는 방법도 많아요.<br>· 내 목소리 녹음 · 비교는 다음 버전에 넣을 예정이에요.</p><p style="font-size:12.5px">${BUILD}</p></div>`;
   if (U.scr !== "set") return; $("#main").innerHTML = h + `</div>`;
+}
+
+/* ── 단어장 인쇄 (A4 · 뜻 가리기 / 단어 가리기) ── */
+function openPrint(id) {
+  const c = chById(id); if (!c) return; const sh = $("#sheet"); sh.hidden = false;
+  sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>단어장 인쇄 — ${esc(c.name)}</b><button class="btn sm" data-a="close">닫기</button></div>
+  <div class="lab">가리기</div><div class="seg" id="prHide"><button data-v="none" class="on">모두 보이기</button><button data-v="mean">뜻 가리기</button><button data-v="word">단어 가리기</button></div>
+  <label class="tg" style="margin-top:10px"><input type="checkbox" id="prEx" checked><span>예문 넣기</span></label>
+  <p class="hint">가린 칸은 빈칸으로 나와요 — 직접 써 보고 접어서 확인해요. A4 · 실제 크기(100%)로 인쇄하세요.</p>
+  <button class="btn go full" data-a="printgo" data-id="${c.id}">${svg(IC.print)}인쇄하기</button></div>`;
+  $("#prHide").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $$("#prHide button").forEach(x => x.classList.toggle("on", x === b)); });
+}
+function printWords(id) {
+  const c = chById(id), hide = ($("#prHide .on") || {}).dataset.v || "none", ex = $("#prEx") && $("#prEx").checked;
+  let p = $("#prt"); if (!p) { p = document.createElement("div"); p.id = "prt"; document.body.appendChild(p); }
+  p.innerHTML = `<h1>${esc(c.name)}</h1><p class="prs">영어 노트 · ${ymdw(todayS())} · ${c.items.length}단어</p><table><thead><tr><th>#</th><th>단어</th><th>뜻</th>${ex ? "<th>예문</th>" : ""}</tr></thead><tbody>${c.items.map((it, i) => `<tr><td>${i + 1}</td><td class="w">${hide === "word" ? "" : esc(it.en)}</td><td>${hide === "mean" ? "" : esc(it.ko)}</td>${ex ? `<td class="e">${esc(it.ex || "")}${it.exk ? `<br><small>${esc(it.exk)}</small>` : ""}</td>` : ""}</tr>`).join("")}</tbody></table><p class="prf">Blog J · 영어 노트</p>`;
+  $("#sheet").hidden = true; document.body.classList.add("printing");
+  const done = () => { document.body.classList.remove("printing"); removeEventListener("afterprint", done); };
+  addEventListener("afterprint", done); setTimeout(() => { window.print(); setTimeout(done, 1500); }, 60);
 }
 
 /* ── 백업 · 합치기 ── */
 function exportObj() { return { app: "bj-eng", v: 1, at: Date.now(), chapters: D.chapters, log: D.log, gone: D.gone }; }
 function mergeIn(o) {
-  if (!o || o.app !== "bj-eng") throw new Error("영어회화 노트 자료가 아니에요");
+  if (!o || o.app !== "bj-eng") throw new Error("영어 노트 자료가 아니에요");
   let n = 0; const gone = Object.assign({}, D.gone);
   Object.entries(o.gone || {}).forEach(([id, ts]) => { if (!gone[id] || ts > gone[id]) gone[id] = ts; });
   const m = new Map(D.chapters.map(c => [c.id, c]));
@@ -963,14 +1126,14 @@ function mergeIn(o) {
 }
 function dl(b, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); }
 function backupMake() {
-  const b = new Blob([JSON.stringify(exportObj(), null, 1)], { type: "application/json" }), name = `영어회화노트_백업_${todayS()}.json`, f = new File([b], name, { type: "application/json" });
+  const b = new Blob([JSON.stringify(exportObj(), null, 1)], { type: "application/json" }), name = `영어노트_백업_${todayS()}.json`, f = new File([b], name, { type: "application/json" });
   (async () => { if (MOB() && navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f] }); } catch (er) { if (er.name === "AbortError") return; } } else dl(b, name);
     SET.bkAt = Date.now(); saveSet(); toast("백업 파일을 만들었어요"); render(); })();
 }
 function backupPick() { const ip = document.createElement("input"); ip.type = "file"; ip.accept = ".json,application/json"; ip.onchange = async () => { const f = ip.files[0]; if (!f) return; try { const n = mergeIn(JSON.parse(await f.text())); touch(); toast(`되살렸어요 — 챕터 ${n}개 반영`); go("home"); } catch (er) { toast("되살리지 못했어요 — " + er.message); } }; ip.click(); }
 
 /* ── 구글 드라이브 ── */
-const GD_CLIENT_ID = "1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com", GD_SCOPE = "https://www.googleapis.com/auth/drive.file", GDF = "영어회화노트", GDJ = "영어회화노트.json";
+const GD_CLIENT_ID = "1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com", GD_SCOPE = "https://www.googleapis.com/auth/drive.file", GDF = "영어노트", GDJ = "영어노트.json";
 const GD = { fid: null, busy: false, toastNext: false };
 const gdHttp = () => location.protocol === "https:" || location.hostname === "localhost";
 async function gdApi(url, opt = {}) {
@@ -1052,7 +1215,7 @@ function openInstall() {
     : ["주소창 오른쪽의 설치 아이콘을 누르세요", "없으면 「⋮」 → 「저장 및 공유」 → 「앱 설치」", "「설치」"];
   const sh = $("#sheet"); sh.hidden = false;
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>앱으로 설치하기</b><button class="btn sm" data-a="close">닫기</button></div>
-  <div class="iapp"><img src="icon-192.png" alt="" width="56" height="56"><div><b>영어회화 노트</b><span>Blog J · 가입 없이</span></div></div>
+  <div class="iapp"><img src="icon-192.png" alt="" width="56" height="56"><div><b>영어 노트</b><span>Blog J · 가입 없이</span></div></div>
   ${INST.ev ? `<button class="btn go full" data-a="inst">${svg(IC.phone)}지금 설치하기</button>` : ""}
   <ol class="isteps">${steps.map(s => `<li>${s}</li>`).join("")}</ol></div>`;
 }
@@ -1064,40 +1227,46 @@ document.addEventListener("click", async e => {
   const sg = e.target.closest(".seg[data-k] button"); if (sg) {
     const k = sg.parentElement.dataset.k, v = sg.dataset.v; SET[k] = /^-?[\d.]+$/.test(v) && k !== "think" ? +v : v; saveSet();
     if (k === "engine") { stopAll(); P.built = null; drawSet(); return; }
-    if (U.scr === "play") { const was = P.playing; if (was) stopAll(); if (k === "mode") P.mode = SET.mode; P.built = null; drawPlay(); if (was) playPause(true); } else render();
+    if (U.scr === "play") { const was = P.playing; if (was) stopAll(); P.mode = modeOf(P.ch); P.built = null; drawPlay(); if (was) playPause(true); } else render();
     return;
   }
   const el = e.target.closest("[data-a]"); if (!el) return; const a = el.dataset.a;
   if (a === "close") { $("#sheet").hidden = true; return; }
-  if (a === "newch") { const c = { id: uid(), name: `챕터 ${D.chapters.length + 1}`, at: Date.now(), items: [{ id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }], rv: null }; D.chapters.push(c); touch(c); U.edit = c.id; go("edit"); return; }
+  if (a === "sec") { U.sec = el.dataset.v; ls.set("sec", U.sec); U.sel.clear(); drawHome(); return; }
+  if (a === "newch") { const W = U.sec === "word"; const c = { id: uid(), sec: U.sec, name: `${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(x => x.sec === U.sec).length + 1}`, at: Date.now(), items: [W ? { id: uid(), ko: "", en: "", ex: "", exk: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }], rv: null }; D.chapters.push(c); touch(c); U.edit = c.id; go("edit"); return; }
+  if (a === "print") { if (U.scr === "edit") saveEdit(); return openPrint(el.dataset.id); }
+  if (a === "printgo") return printWords(el.dataset.id);
+  if (a === "baseadd") { const n = ensureBase(true); touch(); toast(`기본 챕터 ${n}개를 다시 넣었어요`); drawSet(); return; }
+  if (a === "azkeyclr") { if (!window.confirm("이 기기에 넣은 Azure 키를 지울까요?")) return; SET.azMyKey = ""; saveSet(); drawSet(); toast("키를 지웠어요"); return; }
   if (a === "paste") return openPaste(el.dataset.id || "");
   if (a === "pasteok") {
-    const L = parsePaste($("#pTxt").value); if (!L.length) return toast("알아본 문장이 없어요 — 한글 · 영어를 탭이나 「 | 」로 나눠 주세요");
-    const items = L.map(([ko, en]) => ({ id: uid(), ko, en, star: false, ok: 0, ng: 0 }));
+    const W = !!el.dataset.w;
+    const items = W ? parseWords($("#pTxt").value).map(x => ({ id: uid(), ...x, star: false, ok: 0, ng: 0 })) : parsePaste($("#pTxt").value).map(([ko, en]) => ({ id: uid(), ko, en, star: false, ok: 0, ng: 0 }));
+    if (!items.length) return toast(W ? "알아본 단어가 없어요 — 단어와 뜻을 탭 · 「 | 」 · 「 - 」로 나눠 주세요" : "알아본 문장이 없어요 — 한글 · 영어를 탭이나 「 | 」로 나눠 주세요");
     let c = el.dataset.id ? D.chapters.find(x => x.id === el.dataset.id) : null;
     if (c) { if (U.scr === "edit") saveEdit(); c.items = c.items.filter(i => i.ko || i.en).concat(items); }
-    else { c = { id: uid(), name: ($("#pName").value || "").trim() || `챕터 ${D.chapters.length + 1}`, at: Date.now(), items, rv: null }; D.chapters.push(c); }
-    touch(c); $("#sheet").hidden = true; toast(`${items.length}문장 넣었어요`); U.edit = c.id; go("edit"); return;
+    else { c = { id: uid(), sec: W ? "word" : "talk", name: ($("#pName").value || "").trim() || `챕터 ${D.chapters.length + 1}`, at: Date.now(), items, rv: null }; D.chapters.push(c); }
+    touch(c); $("#sheet").hidden = true; toast(`${items.length}${W ? "단어" : "문장"} 넣었어요`); U.edit = c.id; go("edit"); return;
   }
   if (a === "edit") { U.edit = el.dataset.id; go("edit"); return; }
   if (a === "sel") { const id = el.dataset.id; U.sel.has(id) ? U.sel.delete(id) : U.sel.add(id); drawHome(); return; }
   if (a === "selclr") { U.sel.clear(); drawHome(); return; }
-  if (a === "playsel") { const ids = [...D.chapters.map(c => c.id), STAR_ID].filter(id => U.sel.has(id)); U.sel.clear(); setList(ids); return; }
+  if (a === "playsel") { const ids = [...D.chapters.map(c => c.id), STAR.talk, STAR.word].filter(id => U.sel.has(id)); U.sel.clear(); setList(ids); return; }
   if (a === "play1") { if (U.scr === "edit") saveEdit(); if (isCur(el.dataset.id) && P.started && P.list.length === 1 && U.scr === "home") return playPause(); setList([el.dataset.id]); return; }
   if (a === "playrv") { setList(dueList().map(c => c.id)); return; }
-  if (a === "addit") { saveEdit(); const c = chById(U.edit); c.items.push({ id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }); touch(c); drawEdit(); const ins = $$("#its .ko2"); ins[ins.length - 1].focus(); return; }
+  if (a === "addit") { saveEdit(); const c = chById(U.edit), W = c.sec === "word"; c.items.push(W ? { id: uid(), ko: "", en: "", ex: "", exk: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }); touch(c); drawEdit(); const ins = $$(W ? "#its .wd2" : "#its .ko2"); ins[ins.length - 1].focus(); return; }
   if (a === "delit") { saveEdit(); const c = chById(U.edit); c.items = c.items.filter(i => i.id !== el.dataset.id); touch(c); drawEdit(); return; }
   if (a === "star") { if (U.scr === "edit") saveEdit(); toggleStar(el.dataset.id); if (U.scr === "edit") drawEdit(); return; }
-  if (a === "delch") { const c = chById(U.edit); if (!window.confirm(`「${c.name}」 챕터를 지울까요? (${c.items.length}문장)`)) return; D.chapters = D.chapters.filter(x => x.id !== c.id); D.gone[c.id] = Date.now(); touch(); if (P.ch && P.ch.id === c.id) { stopAll(); P.ch = null; P.list = []; } go("home"); toast("지웠어요"); return; }
+  if (a === "delch") { const c = chById(U.edit); if (!window.confirm(`「${c.name}」 챕터를 지울까요? (${c.items.length}${unitOf(c)})${c.base ? "\n기본 챕터는 설정 → 기본 자료에서 다시 넣을 수 있어요." : ""}`)) return; D.chapters = D.chapters.filter(x => x.id !== c.id); D.gone[c.id] = Date.now(); touch(); if (P.ch && P.ch.id === c.id) { stopAll(); P.ch = null; P.list = []; } go("home"); toast("지웠어요"); return; }
   if (a === "pp") return playPause();
   if (a === "next") return jump(1);
   if (a === "prev") return jump(-1);
-  if (a === "goq") { const i = +el.dataset.i; if (SET.engine === "azure" && P.built) { jump(i - P.qi); } else { const was = P.playing; stopAll(); P.qi = i; P.phase = ""; paintPlay(); if (was) runDevice(); } return; }
-  if (a === "starcur") { const it = curIt(); if (it) { toggleStar(it.id); paintPlay(); toast(findItem(it.id)[1] && findItem(it.id)[1].star ? "☆ 어려운 문장에 넣었어요" : "☆ 뺐어요"); } return; }
+  if (a === "goq") { const i = +el.dataset.i; if (isAz() && P.built) { jump(i - P.qi); } else { const was = P.playing; stopAll(); P.qi = i; P.phase = ""; paintPlay(); if (was) runDevice(); } return; }
+  if (a === "starcur") { const it = curIt(); if (it) { toggleStar(it.id); paintPlay(); toast(findItem(it.id)[1] && findItem(it.id)[1].star ? `☆ 어려운 ${unitOf(P.ch)}에 넣었어요` : "☆ 뺐어요"); } return; }
   if (a === "judge") return judge(el.dataset.v === "1");
   if (a === "cancel") { B.cancel = true; return; }
   if (a === "vtest") { const ko = el.dataset.v === "ko"; P.tok++; sayDevice(ko ? "안녕하세요. 오늘도 영어 연습을 시작해 볼까요?" : "Hello. Shall we start practicing English today?", ko ? "ko" : "en", 1, P.tok); return; }
-  if (a === "aztest") { saveSetInputs(); try { const buf = await azGet("Hello. This is a voice test.", "en", 1); const ab = await decode(buf); const au = new Audio(URL.createObjectURL(new Blob([buf], { type: "audio/mpeg" }))); au.play(); toast(`연결됐어요 — ${ab.duration.toFixed(1)}초 음성`); } catch (er) { toast(er.message); } return; }
+  if (a === "aztest") { saveSetInputs(); try { const buf = await azGet("Hello. This is a voice test.", "en", 1, true); const ab = await decode(buf); const au = new Audio(URL.createObjectURL(new Blob([buf], { type: "audio/mpeg" }))); au.play(); toast(`연결됐어요 — ${ab.duration.toFixed(1)}초 음성`); } catch (er) { toast(er.message); } return; }
   if (a === "azclr") { if (!window.confirm("이 기기에 저장한 문장 음성을 모두 지울까요?\n(다음에 들을 때 다시 받아요)")) return; await idbClear(); P.built = null; drawSet(); toast("지웠어요"); return; }
   if (a === "gd") return gdAction(el);
   if (a === "gdoff") { SET.gdOn = false; saveSet(); SYNC.invalidate(); render(); toast("연결을 끊었어요 — 드라이브의 자료는 그대로예요"); return; }
@@ -1106,15 +1275,15 @@ document.addEventListener("click", async e => {
 });
 document.addEventListener("change", e => {
   const t = e.target;
-  if (t.dataset.t) { SET[t.dataset.t] = t.checked; saveSet(); if (U.scr === "play") { const was = P.playing; if (["faster", "shuffle"].includes(t.dataset.t)) { if (was) stopAll(); if (t.dataset.t === "shuffle" && P.ch) loadCh(P.li); P.built = null; drawPlay(); if (was) playPause(true); } else paintPlay(); } return; }
-  if (t.dataset.s) { SET[t.dataset.s] = t.value.trim(); saveSet(); P.built = null; return; }
+  if (t.dataset.t) { SET[t.dataset.t] = t.checked; saveSet(); if (U.scr === "play") { const was = P.playing; if (["faster", "shuffle", "spell", "wex"].includes(t.dataset.t)) { if (was) stopAll(); if (t.dataset.t === "shuffle" && P.ch) loadCh(P.li); P.built = null; drawPlay(); if (was) playPause(true); } else paintPlay(); } return; }
+  if (t.dataset.s) { SET[t.dataset.s] = t.dataset.s === "azCap" ? +t.value : t.value.trim(); saveSet(); P.built = null; if (t.dataset.s === "azMyKey" && U.scr === "set") drawSet(); return; }
   if (U.scr === "edit" && (t.dataset.f || t.id === "chName")) saveEdit();
 });
-function saveSetInputs() { $$("[data-s]").forEach(i => { SET[i.dataset.s] = i.value.trim(); }); saveSet(); }
+function saveSetInputs() { $$("[data-s]").forEach(i => { SET[i.dataset.s] = i.dataset.s === "azCap" ? +i.value : i.value.trim(); }); saveSet(); }
 function saveEdit() {
   const c = chById(U.edit); if (!c || c.virtual) return;
   let ch = false; const nm = $("#chName"); if (nm && nm.value.trim() && nm.value.trim() !== c.name) { c.name = nm.value.trim(); ch = true; }
-  $$("#its .it").forEach(r => { const it = c.items.find(i => i.id === r.dataset.id); if (!it) return; const ko = r.querySelector('[data-f="ko"]').value.trim(), en = r.querySelector('[data-f="en"]').value.trim(); if (ko !== it.ko || en !== it.en) { it.ko = ko; it.en = en; ch = true; } });
+  $$("#its .it").forEach(r => { const it = c.items.find(i => i.id === r.dataset.id); if (!it) return; ["ko", "en", "ex", "exk"].forEach(f => { const ip = r.querySelector(`[data-f="${f}"]`); if (!ip) return; const v = ip.value.trim(); if (v !== (it[f] || "")) { it[f] = v; ch = true; } }); });
   if (ch) { touch(c); if (P.ch && P.ch.id === c.id) P.built = null; }
 }
 addEventListener("keydown", e => { if (U.scr === "play" && e.code === "Space" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); playPause(); } });

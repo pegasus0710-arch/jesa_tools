@@ -514,7 +514,7 @@ function addThemes(D, X) {
 }
 </script>
 <script>/* 달력 배경화면 만들기 v1.0 — Blog J (블로그 실행형 · 그림은 이 기기에서만 만들어요) */
-const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 00:16 판";
+const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 18:15 판";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-wallcal1";
 const $ = s => document.querySelector(s);
@@ -549,6 +549,7 @@ const CATS = [["추천", "이달 어울림"], ["겨울"], ["봄"], ["여름"], [
 const SOLID = [["#0B3D4A", "깊은 바다"], ["#14202B", "먹"], ["#2B3A55", "남색 밤"], ["#5A4A6E", "보랏빛"], ["#F3EEE3", "모래"], ["#E9EEF2", "구름"], ["#DCE8E0", "연두"], ["#F4DCD3", "살구"]];
 const RES = [
   ["PC · 모니터", [[1920, 1080, "FHD", "가장 흔한 모니터"], [2560, 1440, "QHD", "27인치 · 게임 모니터"], [3840, 2160, "4K", "4K 모니터"], [3440, 1440, "울트라와이드", "21:9 모니터"]]],
+  ["모니터 2대 (한 장으로 이어서)", [[3840, 1080, "가로 2대 · FHD", "FHD 모니터 2대 나란히", "h2"], [5120, 1440, "가로 2대 · QHD", "QHD 모니터 2대 나란히", "h2"], [1920, 2160, "위아래 2대 · FHD", "FHD 모니터 2대 위아래", "v2"], [2560, 2880, "위아래 2대 · QHD", "QHD 모니터 2대 위아래", "v2"]]],
   ["노트북 (16:10)", [[1920, 1200, "16:10", "노트북 · 사무용"], [2560, 1600, "16:10 고해상도", "갤럭시북 · 맥북 에어"], [2880, 1800, "레티나", "맥북 프로 15"], [3840, 2400, "16:10 4K", "고해상도 노트북"]]],
   ["휴대폰 · 태블릿", [[1080, 2340, "갤럭시 기본", "갤럭시 S · A 시리즈"], [1440, 3120, "갤럭시 고해상도", "갤럭시 S 울트라"], [1179, 2556, "아이폰", "아이폰 14 · 15 · 16"], [1290, 2796, "아이폰 맥스", "아이폰 플러스 · 프로 맥스"], [2048, 2732, "아이패드", "아이패드 프로 12.9"]]]
 ];
@@ -558,12 +559,14 @@ function BLANK() {
   return { step: 0, cat: "추천", scene: (SEASON[nx.getMonth() + 1] || ["sea"])[0], solid: "#0B3D4A", photo: false, dim: 0, py: 50,
     y: nx.getFullYear(), m: nx.getMonth() + 1, kind: "month", pos: "tr", posP: "bc", size: 100, panel: "auto", wk: 0,
     hol: true, lun: true, term: true, son: false, trad: true, font: "suit", motto: "", memos: [], mark: true,
-    w: MOBW() ? Math.round(screen.width * (devicePixelRatio || 1)) : 1920, h: MOBW() ? Math.round(screen.height * (devicePixelRatio || 1)) : 1080, fmt: "png" };
+    mon: "1", side: "a", w: MOBW() ? Math.round(screen.width * (devicePixelRatio || 1)) : 1920, h: MOBW() ? Math.round(screen.height * (devicePixelRatio || 1)) : 1080, fmt: "png" };
 }
 let S = (() => { try { const v = JSON.parse(localStorage.getItem(LSK) || "null"); if (v) { const b = BLANK(); const o = Object.assign(b, v, { photo: false }); const n = new Date(); if (o.y * 12 + o.m < n.getFullYear() * 12 + n.getMonth() + 1) { o.y = b.y; o.m = b.m; } if (o.cat === "내 사진") o.cat = "추천"; return o; } } catch (e) {} return BLANK(); })();
 let saveT; function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { const c = Object.assign({}, S); delete c.photo; localStorage.setItem(LSK, JSON.stringify(c)); } catch (e) {} }, 300); }
 let PHOTO = null;   /* 내 사진(이 기기 메모리에만) */
-const port = () => S.h > S.w;
+const MONS = () => S.mon === "h2" || S.mon === "v2";
+const areaOf = (w, h) => S.mon === "h2" ? { x: S.side === "b" ? w / 2 : 0, y: 0, w: w / 2, h } : S.mon === "v2" ? { x: 0, y: S.side === "b" ? h / 2 : 0, w, h: h / 2 } : { x: 0, y: 0, w, h };
+const port = () => { const a = areaOf(S.w, S.h); return a.h > a.w; };
 
 /* ── 날짜 정보 ── */
 function dayInfo(d) {
@@ -655,7 +658,8 @@ async function render(w, h, cv, quick) {
   const bg = await bgSource(w, h);
   paintBg(ctx, bg, w, h);
   const src = document.createElement("canvas"); src.width = w; src.height = h; src.getContext("2d").drawImage(cv, 0, 0);
-  const T = themeOf(bg), u = Math.min(w, h) / 1080 * (port() ? 1.25 : 1), sz = S.size / 100, P = port() ? S.posP : S.pos;
+  const A = areaOf(w, h), aw = A.w, ah = A.h;
+  const T = themeOf(bg), u = Math.min(aw, ah) / 1080 * (port() ? 1.25 : 1), sz = S.size / 100, P = port() ? S.posP : S.pos;
   /* 판 크기 */
   const fs = (S.kind === "month" ? 30 : S.kind === "small" ? 19 : S.kind === "two" ? 19 : 13.5) * u * sz;
   const pad = fs * (S.kind === "year" ? 1.3 : 1.15);
@@ -671,9 +675,9 @@ async function render(w, h, cv, quick) {
   const yearHead = S.kind === "year" ? fs * 3.2 : 0;
   const mottoH = S.motto ? fs * (S.kind === "month" ? 1.9 : 2.2) : 0, markH = S.mark ? fs * 1.5 : 0;
   const pw = cols * gw + (cols - 1) * gap + pad * 2, ph = yearHead + gh + mottoH + markH + pad * 2;
-  const mX = (port() ? .07 : .045) * w, mYt = (port() ? .30 : .07) * h, mYb = (port() ? .06 : .09) * h;
-  const px = P[1] === "l" ? mX : P[1] === "r" ? w - mX - pw : (w - pw) / 2;
-  const py = P[0] === "t" ? mYt : P[0] === "b" ? h - mYb - ph : (h - ph) / 2 + (port() ? h * .05 : 0);
+  const mX = (port() ? .07 : .045) * aw, mYt = (port() ? .30 : .07) * ah, mYb = (port() ? .06 : .09) * ah;
+  const px = A.x + (P[1] === "l" ? mX : P[1] === "r" ? aw - mX - pw : (aw - pw) / 2);
+  const py = A.y + (P[0] === "t" ? mYt : P[0] === "b" ? ah - mYb - ph : (ah - ph) / 2 + (port() ? ah * .05 : 0));
   panelBox(ctx, src, T, px, py, pw, ph, u);
   let cy = py + pad;
   if (yearHead) { txt(ctx, String(S.y), px + pad, cy + fs * 2.2, fs * 2.6, 900, T.acc, "left", 'SUIT, sans-serif'); ctx.font = `900 ${fs * 2.6}px SUIT, sans-serif`; txt(ctx, "CALENDAR", px + pad + ctx.measureText(String(S.y)).width + fs * .6, cy + fs * 2.1, fs * .95, 800, T.sub, "left", 'SUIT, sans-serif'); cy += yearHead; }
@@ -722,6 +726,7 @@ function bodyCal() {
   const posB = ["tl", "tc", "tr", "cl", "cc", "cr", "bl", "bc", "br"].map(p => { const lx = { l: 6, c: 16, r: 26 }[p[1]], ly = { t: 5, c: 11, b: 17 }[p[0]]; return `<button class="${S[posK] === p ? "on" : ""}" data-a="set" data-k="${posK}" data-v="${p}" aria-label="자리"><i style="left:${lx}px;top:${ly}px"></i></button>`; }).join("");
   let h = `<div class="lab">달</div><div class="mon"><button data-a="mon" data-v="-1" aria-label="이전 달">${svg(IC.l)}</button><b class="num">${S.y}년 ${S.m}월</b><button data-a="mon" data-v="1" aria-label="다음 달">${svg(IC.r)}</button></div>
   <div class="lab">모양</div>${segv("kind", [["month", "한 달"], ["small", "작은 한 달"], ["two", "두 달"], ["year", "1년"]])}
+  ${MONS() ? `<div class="lab">달력 놓을 화면</div>${segv("side", S.mon === "h2" ? [["a", "왼쪽 모니터"], ["b", "오른쪽 모니터"]] : [["a", "위 모니터"], ["b", "아래 모니터"]])}` : ""}
   <div class="lab">자리 <small style="font-weight:600">${port() ? "휴대폰은 시계를 피해 아래쪽이 좋아요" : ""}</small></div><div class="row" style="gap:14px;align-items:flex-start"><div class="pos">${posB}</div><div style="flex:1;min-width:140px"><div class="lab" style="margin-top:0">크기 <span class="num">${S.size}%</span></div><input class="rng" type="range" min="60" max="150" step="5" value="${S.size}" data-k="size"></div></div>
   <div class="lab">판</div>${segv("panel", [["auto", "그림에 맞춤"], ["glass", "유리"], ["paper", "종이"], ["dark", "어둡게"], ["none", "판 없이"]])}
   <div class="lab">글씨</div>${segv("font", Object.entries(FONTS).map(([k, v]) => [k, v[1]]))}
@@ -735,14 +740,16 @@ function bodyCal() {
 function bodyRes() {
   const dpr = window.devicePixelRatio || 1, sw = Math.round(screen.width * dpr), sh = Math.round(screen.height * dpr);
   let h = `<button class="btn" data-a="mine" style="width:100%;margin-bottom:6px">${svg(IC.screen)}지금 이 화면에 맞추기 <span class="num" style="color:var(--sub);font-weight:700">${sw}×${sh}</span></button>`;
-  RES.forEach(([g, L]) => { h += `<div class="lab">${g}</div><div class="res">${L.map(([w, hh, n, d]) => `<button class="${S.w === w && S.h === hh ? "on" : ""}" data-a="res" data-w="${w}" data-h="${hh}"><span class="num">${w}×${hh}</span> · ${n}<small>${d}</small></button>`).join("")}</div>`; });
+  RES.forEach(([g, L]) => { h += `<div class="lab">${g}</div><div class="res">${L.map(([w, hh, n, d, mo]) => `<button class="${S.w === w && S.h === hh && (S.mon || "1") === (mo || "1") ? "on" : ""}" data-a="res" data-w="${w}" data-h="${hh}" data-mon="${mo || "1"}"><span class="num">${w}×${hh}</span> · ${n}<small>${d}</small></button>`).join("")}</div>`; });
+  h += `<div class="lab">모니터</div><div class="seg">${[["1", "1대"], ["h2", "가로 2대"], ["v2", "위아래 2대"]].map(([v, t]) => `<button class="${(S.mon || "1") === v ? "on" : ""}" data-a="set" data-k="mon" data-v="${v}">${t}</button>`).join("")}</div>
+  ${MONS() ? `<p class="hint">두 모니터에 한 장으로 걸려면 윈도우 「설정 → 개인 설정 → 배경」에서 맞춤을 <b>「범위」</b>로 고르세요. 달력은 한 화면 안에만 들어가요(가운데 이음매에 걸리지 않게).</p>` : ""}`;
   h += `<div class="lab">직접 넣기</div><div class="row" style="flex-wrap:nowrap"><input class="inp num" data-k="w" value="${S.w}" inputmode="numeric" style="width:46%"><span>×</span><input class="inp num" data-k="h" value="${S.h}" inputmode="numeric" style="width:46%"></div>
   <div class="lab">파일 형식</div><div class="seg"><button class="${S.fmt === "png" ? "on" : ""}" data-a="set" data-k="fmt" data-v="png">PNG (선명)</button><button class="${S.fmt === "jpg" ? "on" : ""}" data-a="set" data-k="fmt" data-v="jpg">JPG (작은 용량)</button></div>
   <p class="hint">모니터 크기를 모르면 「지금 이 화면에 맞추기」를 누르세요. 큰 크기로 받아도 그림이 흐려지지 않아요.</p>`;
   return h;
 }
 function drawMain() {
-  $("#main").innerHTML = `<div class="pvc"><div class="pvh"><b>미리보기</b><small class="num" id="pvs">${S.w}×${S.h} · ${S.y}년 ${S.m}월</small></div><div class="stage${port() ? " port" : ""}"><canvas id="pv" aria-label="배경화면 미리보기"></canvas></div></div>
+  $("#main").innerHTML = `<div class="pvc"><div class="pvh"><b>미리보기</b><small class="num" id="pvs">${S.w}×${S.h} · ${S.y}년 ${S.m}월</small></div><div class="stage${S.h > S.w ? " port" : ""}"><canvas id="pv" aria-label="배경화면 미리보기"></canvas></div></div>
   <div class="dlbar"><button class="btn go" data-a="dl">${svg(IC.dl)}배경화면 받기 (${S.fmt.toUpperCase()})</button>${navigator.canShare ? `<button class="btn" data-a="share">${svg(IC.share)}휴대폰에 저장 · 보내기</button>` : ""}</div>
   <div class="how"><b>배경화면으로 쓰는 법</b><br>윈도우: 받은 그림을 오른쪽 클릭 → 「바탕 화면 배경으로 설정」 · 맥: 그림 오른쪽 클릭 → 「데스크탑 사진 설정」 · 갤럭시: 갤러리에서 그림 → ⋮ → 「배경화면으로 설정」 · 아이폰: 사진 앱 → 공유 → 「배경화면으로 사용」</div>`;
   paintPreview();
@@ -750,10 +757,11 @@ function drawMain() {
 let pvT = 0, pvN = 0;
 function paintPreview() { clearTimeout(pvT); pvT = setTimeout(async () => {
   const n = ++pvN, cv = $("#pv"); if (!cv) return;
-  const box = $(".stage"), maxW = Math.max(240, box.clientWidth), k = port() ? Math.min(1, (innerHeight * .7) / S.h, maxW / S.w) : Math.min(1, maxW / S.w), w = Math.round(S.w * k), h = Math.round(S.h * k);
+  const box = $(".stage"), maxW = Math.max(240, box.clientWidth), k = S.h > S.w ? Math.min(1, (innerHeight * .7) / S.h, maxW / S.w) : Math.min(1, maxW / S.w), w = Math.round(S.w * k), h = Math.round(S.h * k);
   const off = document.createElement("canvas");
   try { await render(w, h, off, true); } catch (e) { console.warn(e); return; }
-  if (n !== pvN) return; cv.width = w; cv.height = h; cv.getContext("2d").drawImage(off, 0, 0); cv.style.width = w + "px";
+  if (n !== pvN) return; cv.width = w; cv.height = h; const cx2 = cv.getContext("2d"); cx2.drawImage(off, 0, 0); cv.style.width = w + "px";
+  if (MONS()) { cx2.save(); cx2.setLineDash([8, 6]); cx2.strokeStyle = "rgba(255,255,255,.85)"; cx2.lineWidth = 2; cx2.beginPath(); if (S.mon === "h2") { cx2.moveTo(w / 2, 0); cx2.lineTo(w / 2, h); } else { cx2.moveTo(0, h / 2); cx2.lineTo(w, h / 2); } cx2.stroke(); cx2.restore(); }
   const s = $("#pvs"); if (s) s.textContent = `${S.w}×${S.h} · ${S.y}년 ${S.m}월`;
 }, 60); }
 function fname() { return `${S.y}년${S.m}월_달력배경화면_${S.w}x${S.h}.${S.fmt}`; }
@@ -777,8 +785,8 @@ document.addEventListener("click", async e => {
   if (a === "tog") { S[el.dataset.k] = !S[el.dataset.k]; render2(); return; }
   if (a === "addMemo") { const d = `${S.y}-${p2(S.m)}-01`; S.memos.push({ d, t: "" }); render2(); setTimeout(() => { const i = document.querySelectorAll("[data-mt]"); if (i.length) i[i.length - 1].focus(); }, 30); return; }
   if (a === "delMemo") { S.memos.splice(+v, 1); render2(); return; }
-  if (a === "res") { S.w = +el.dataset.w; S.h = +el.dataset.h; render2(); return; }
-  if (a === "mine") { const dpr = window.devicePixelRatio || 1; S.w = Math.round(screen.width * dpr); S.h = Math.round(screen.height * dpr); render2(); return toast(`${S.w}×${S.h}에 맞췄어요`); }
+  if (a === "res") { S.w = +el.dataset.w; S.h = +el.dataset.h; S.mon = el.dataset.mon || "1"; render2(); return; }
+  if (a === "mine") { const dpr = window.devicePixelRatio || 1; S.w = Math.round(screen.width * dpr); S.h = Math.round(screen.height * dpr); S.mon = "1"; render2(); return toast(`${S.w}×${S.h}에 맞췄어요`); }
   if (a === "dl") { const b = await makeBlob(); if (!b) return toast("그림을 만들지 못했어요"); const u = URL.createObjectURL(b), x = document.createElement("a"); x.href = u; x.download = fname(); document.body.appendChild(x); x.click(); x.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return toast("배경화면을 받았어요"); }
   if (a === "share") { const b = await makeBlob(); if (!b) return; const f = new File([b], fname(), { type: b.type }); if (navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f], title: "달력 배경화면" }); } catch (er) {} } else toast("이 브라우저는 보내기가 안 돼요 — 「배경화면 받기」를 써 주세요"); return; }
 });

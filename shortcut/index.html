@@ -162,6 +162,113 @@ mark{background:#FFE7A8;color:inherit;border-radius:3px;padding:0 1px}
 }
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
+<style id="skwall">/* 단축키 배경화면 만들기 */
+html.wopen,html.wopen body{overflow:hidden}
+#wallv{position:fixed;inset:0;z-index:60;background:var(--sand);display:flex;flex-direction:column}
+#wallv[hidden]{display:none}
+:where(#wallv) button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
+#wallv svg{width:18px;height:18px;flex-shrink:0}
+.wtop{background:var(--deep);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top))}
+.wback{display:flex;align-items:center;gap:4px;height:38px;padding:0 12px 0 6px;border-radius:10px;background:rgba(255,255,255,.12);font-weight:800;font-size:14px}
+.wtt{flex:1;min-width:0;font-weight:900;font-size:18px;letter-spacing:-.02em}
+.wtt small{margin-left:10px;font-weight:600;font-size:12.5px;color:var(--deepsub);letter-spacing:0}
+.wclose{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.12)}
+.wbody{flex:1;min-height:0;display:grid;grid-template-columns:400px minmax(0,1fr);gap:16px;padding:16px;max-width:2000px;width:100%;margin:0 auto;box-sizing:border-box}
+.wside{overflow:auto;min-height:0;display:flex;flex-direction:column;gap:8px;padding-bottom:20px}
+.wmain{min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;gap:8px;overflow:auto}
+.wpv{width:100%;display:flex;justify-content:center;align-items:flex-start;background:var(--sand3);border-radius:16px;padding:16px;box-sizing:border-box;box-shadow:inset 0 0 0 1px var(--hair)}
+#wcv{display:block;border-radius:6px;box-shadow:0 10px 30px rgba(20,32,43,.22);touch-action:none;max-width:100%}
+.wmeta{font-size:13px;color:var(--sub);font-weight:700}
+.wwarn2,.wwarn{font-size:13.5px;font-weight:800;color:var(--red);background:#fbe9e6;border-radius:9px;padding:8px 12px;margin:0}
+#wallv .wsave{display:none}
+.ws{background:#fff;border-radius:14px;box-shadow:0 0 0 1px var(--hair)}
+.ws.on{box-shadow:0 0 0 1.5px var(--sea)}
+.wsh{width:100%;display:flex;align-items:center;gap:10px;padding:13px 14px;text-align:left}
+.wsh .wn{width:24px;height:24px;border-radius:50%;background:var(--sand2);display:grid;place-items:center;font-weight:900;font-size:13px;color:var(--sub);flex-shrink:0}
+.ws.on .wn{background:var(--sea);color:#fff}
+.wsh b{font-size:15.5px;font-weight:900}
+.wsh small{flex:1;min-width:0;text-align:right;font-size:12.5px;color:var(--sub);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wsh svg{color:var(--sub);transition:transform .15s;transform:rotate(-90deg)}
+.ws.on .wsh svg{transform:none}
+.wsb{padding:2px 14px 16px}
+.wlab{font-size:12.5px;font-weight:900;color:var(--sub);margin:14px 0 7px;display:flex;align-items:center;gap:6px}
+.wres{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.wr{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:9px 11px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line);text-align:left}
+.wr b{font-size:14px;font-weight:900}.wr span{font-size:12.5px;font-weight:700;color:var(--ink)}.wr small{font-size:12.5px;color:var(--sub)}
+.wr.on,.wc.on,.wt.on,.wp.has,.wseg .on,.wpos .on{box-shadow:inset 0 0 0 2px var(--sea);background:var(--sealt)}
+.wrow{display:flex;align-items:center;gap:6px}
+.win{width:90px;height:40px;border-radius:9px;border:0;box-shadow:inset 0 0 0 1px var(--line);padding:0 10px;font:inherit;font-size:14.5px;background:#fff;color:var(--ink)}
+.wbtn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 14px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line);font-weight:800;font-size:14px;background:#fff}
+.wbtn.wide{width:100%;margin-top:10px}
+.wbtn.pri{background:var(--sea);color:#fff;box-shadow:none;height:46px;font-size:15px}
+.wbtn.pri:hover{background:var(--sea2)}
+.wtip{font-size:12.5px;color:var(--sub);line-height:1.6;margin:10px 0 0}
+.wchips{display:flex;flex-wrap:wrap;gap:6px}
+.wc{height:34px;padding:0 12px;border-radius:9px;box-shadow:inset 0 0 0 1px var(--line);font-size:13.5px;font-weight:800}
+.wth{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.wt{display:flex;flex-direction:column;gap:5px;padding:5px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line);text-align:left;font-size:12.5px;font-weight:700}
+.wt img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;background:var(--sand2);display:block}
+.wsol{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.wsw{width:40px;height:40px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--hair2)}
+.wsw.on{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--sea)}
+.wseg{display:flex;gap:4px;padding:4px;background:var(--sand2);border-radius:11px}
+.wseg button{flex:1;height:36px;border-radius:8px;font-size:13.5px;font-weight:800;color:var(--sub)}
+.wseg .on{background:#fff;color:var(--sea)}
+.wseg.big button{height:42px;font-size:14.5px}
+.wprog{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.wp{display:flex;align-items:center;gap:8px;height:42px;padding:0 10px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line);font-weight:800;font-size:14px;text-align:left}
+.wp i,.wcs i,.wbt i{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font-style:normal;font-weight:900;font-size:12.5px;flex-shrink:0}
+.wp em{margin-left:auto;font-style:normal;color:var(--sea)}
+.wcards{display:flex;flex-direction:column;gap:6px}
+.wcd{display:flex;align-items:center;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line)}
+.wcd.on{box-shadow:inset 0 0 0 2px var(--sea);background:var(--sealt)}
+.wcs{flex:1;display:flex;align-items:center;gap:8px;height:42px;padding:0 10px;text-align:left}
+.wcs b{font-size:14px;font-weight:800}.wcs span{margin-left:auto;font-size:12.5px;color:var(--sub);font-weight:700}
+.wx{width:40px;height:42px;display:grid;place-items:center;color:var(--sub)}
+.wbox{margin-top:12px;border-radius:12px;background:var(--sand);padding:4px 12px 12px;box-shadow:inset 0 0 0 1px var(--hair)}
+.wbt{display:flex;align-items:center;gap:8px;font-weight:900;font-size:14.5px;margin-top:10px}
+.wpos{display:grid;grid-template-columns:repeat(3,44px);gap:5px}
+.wpos button{height:30px;border-radius:7px;box-shadow:inset 0 0 0 1px var(--line);background:#fff;display:grid;place-items:center}
+.wpos i{width:10px;height:10px;border-radius:3px;background:var(--line)}
+.wpos .on i{background:var(--sea)}
+.wrange{width:100%;accent-color:var(--sea)}
+.wlink{font-size:12.5px;font-weight:800;color:var(--sky);text-decoration:underline;padding:0}
+.wgrp{border-top:1px solid var(--hair);padding:7px 0}
+.wgh{display:flex;align-items:center;gap:6px;font-size:13.5px}
+.wgh label{flex:1;display:flex;align-items:center;gap:6px;cursor:pointer}
+.wgh .num{color:var(--sub);font-size:12.5px}
+.wkeys{display:flex;flex-direction:column;gap:2px;margin:6px 0 2px 4px}
+.wk{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:4px 0;cursor:pointer}
+.wk .kk{font-weight:800;color:var(--sea);min-width:96px;font-size:12.5px}
+.wk .sub{margin-left:auto;color:var(--sub);font-size:12.5px}
+.wcats{display:flex;flex-direction:column;max-height:260px;overflow:auto;padding-right:4px}
+.wsw2{margin-top:14px}
+#wallv input[type=checkbox]{width:18px;height:18px;accent-color:var(--sea);flex-shrink:0}
+.wol{margin:0;padding-left:20px;font-size:13.5px;line-height:1.7}
+.wbusy{position:fixed;inset:0;z-index:70;background:rgba(11,25,32,.45);display:grid;place-items:center}
+.wbusy[hidden]{display:none}
+.wbusy div{background:#fff;border-radius:14px;padding:18px 22px;font-weight:800}
+.wtoast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:rgba(20,32,43,.92);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;transition:.2s;pointer-events:none;z-index:80}
+.wtoast.on{opacity:1;transform:translateX(-50%)}
+.tb.twall{background:rgba(255,255,255,.18)}
+@media (max-width:900px){
+  .wbody{grid-template-columns:1fr;grid-template-rows:auto 1fr;padding:10px;gap:10px;overflow:auto}
+  .wmain{order:-1;overflow:visible}
+  .wside{overflow:visible}
+  .wpv{padding:10px}
+  #wallv .wsave{display:inline-flex;width:100%}
+  .wtt small{display:none}
+  .wback span{display:none}
+}
+
+.wcta{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:14px;background:var(--deep);color:#fff;text-align:left;font:inherit;border:0;cursor:pointer;margin-top:12px;box-shadow:0 4px 14px rgba(11,61,74,.18)}
+.wcta:hover{background:#0d4a59}
+.wcta i{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex-shrink:0}
+.wcta svg{width:20px;height:20px}
+.wcta b{display:block;font-size:15px;font-weight:900}
+.wcta small{display:block;font-size:12.5px;color:var(--deepsub);margin-top:2px}
+@media (max-width:900px){.wcta{margin:0 0 10px}}
+</style>
 </head>
 <body>
 <div class="stk" id="stk"><header class="top"><div class="tin">
@@ -169,6 +276,7 @@ mark{background:#FFE7A8;color:inherit;border-radius:3px;padding:0 1px}
  <div class="tname">단축키 사전<small id="tsum"></small></div>
  <div class="tbtns">
   <button class="tb" id="binst" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span>설치</span></button>
+  <button class="tb twall" type="button" data-wallopen="" aria-label="배경화면 만들기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 8h4M7 11h7"/></svg><span>배경화면</span></button>
   <button class="tb" id="bset" type="button" aria-label="설정 · 도움말"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>도움말</span></button>
  </div>
 </div></header>
@@ -180,7 +288,7 @@ mark{background:#FFE7A8;color:inherit;border-radius:3px;padding:0 1px}
 </div></div></div>
 <div class="rband"><div class="recent" id="recent"></div></div>
 <div class="wrap">
- <aside class="side"><div class="card plist" id="plist"></div><div class="card clist" id="clist"></div></aside>
+ <aside class="side"><div class="card plist" id="plist"></div><div class="card clist" id="clist"></div><button type="button" class="wcta" data-wallopen=""><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 8h4M7 11h7"/></svg></i><span><b>단축키 배경화면 만들기</b><small>그림 · 해상도 고르고 단축키를 붙여 저장</small></span></button></aside>
  <main class="main card" id="main"></main>
 </div>
 <div class="foot" id="foot"></div>
@@ -455,6 +563,698 @@ if (!MOB()) setTimeout(() => { if (!document.activeElement || document.activeEle
   window.BJBACK = { init(o) { if (o) { if (o.ov) C.ov = C.ov.concat(o.ov); if (o.btn) Object.assign(C.btn, o.btn); if (o.hook) C.hook = o.hook; if (o.views) { C.views = o.views; VS.length = 0; track(); } } }, arm, say, ask };
 })();
 BJBACK.init({ ov: ["#sheet"] });
+</script>
+<script id="skwalljs">
+/* 배경 그림 — 단축키 배경화면(827~832)과 같은 그림 엔진. Blog J가 코드로 그린 선 · 면 그림(AI · 남의 그림 없음) */
+function SCENE(T, W, H) {
+  let MODE = "glass"; const VARS = {};
+  const document = { body: { set className(v) { MODE = v; } }, documentElement: { style: { setProperty(k, v) { VARS[k.replace(/^--/, "")] = v; } } } };
+/* ── 그림 도구 ── */
+let seed=7;const R=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
+const r2=n=>Math.round(n*10)/10;
+function ridge(base,amp,freq,ph,jag){let d=`M0 ${H}L0 ${base}`;const st=W/160;for(let x=0;x<=W+st;x+=st){const y=base-amp*(Math.sin(x/W*freq*6.28+ph)*.6+Math.sin(x/W*freq*2.3*6.28+ph*1.7)*.28+Math.sin(x/W*freq*5.1*6.28+ph*.3)*.12*jag);d+=`L${r2(x)} ${r2(y)}`;}return d+`L${W} ${H}Z`;}
+const grain=(o)=>`<filter id="gr"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 ${o} 0"/></filter><rect width="${W}" height="${H}" filter="url(#gr)"/>`;
+const lin=(id,a,b,v)=>`<linearGradient id="${id}" x1="0" y1="0" x2="${v?0:1}" y2="${v?1:0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const glow=(id,c,o)=>`<radialGradient id="${id}"><stop offset="0" stop-color="${c}" stop-opacity="${o}"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
+function set(v){for(const k in v)document.documentElement.style.setProperty('--'+k,v[k]);}
+const D={
+ /* 1 겨울 — 새벽 설산 (겹겹 산 · 유리 판) */
+ snowpeak(){document.body.className='glass';set({ink:'#0f2235',acc:'#1f4f7a',kbg:'#ffffff',kfg:'#16324d',ksh:'#9fb3c6',kln:'rgba(22,50,77,.12)',ga:'.55'});
+  let s=`<defs>${lin('sk','#f6d7c3','#7f9fbf',1)}${glow('sun','#fff4e0',.9)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.22}" cy="${H*.42}" r="${H*.38}" fill="url(#sun)"/><circle cx="${W*.22}" cy="${H*.42}" r="${H*.055}" fill="#fff8ee"/>`;
+  const C=['#c9d6e3','#a9bdd2','#86a1bd','#5f7f9f','#3f5f80','#26425f'];
+  C.forEach((c,i)=>{s+=`<path d="${ridge(H*(.5+i*.075),H*(.16-i*.012),1.1+i*.35,i*1.9,1+i*.4)}" fill="${c}"/>`;});
+  // 눈 덮인 봉우리 줄
+  s+=`<path d="${ridge(H*.5,H*.16,1.1,0,1)}" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>`;
+  for(let i=0;i<120;i++)s+=`<circle cx="${r2(R()*W)}" cy="${r2(R()*H)}" r="${r2(.8+R()*2.2)}" fill="#fff" opacity="${r2(.25+R()*.5)}"/>`;
+  return s+grain(.07);},
+ /* 2 겨울 밤 — 눈 내리는 숲 (어두운 판) */
+ nightforest(){document.body.className='dark';set({ink:'#eef3f8',acc:'#9cc3e6',kbg:'#1b2738',kfg:'#e9f1fa',ksh:'#05080d',kln:'rgba(255,255,255,.14)',pline:'rgba(156,195,230,.25)'});
+  let s=`<defs>${lin('sk','#0b1626','#1d3550',1)}${glow('mn','#cfe3ff',.35)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.3}" cy="${H*.2}" r="${H*.28}" fill="url(#mn)"/><circle cx="${W*.3}" cy="${H*.2}" r="${H*.045}" fill="#eef5ff"/>`;
+  for(let i=0;i<160;i++)s+=`<circle cx="${r2(R()*W)}" cy="${r2(R()*H*.6)}" r="${r2(.5+R()*1.3)}" fill="#fff" opacity="${r2(.2+R()*.6)}"/>`;
+  const layer=(y,sc,c,n,snow)=>{let o="";for(let i=0;i<n;i++){const x=(i+R()*.6)*W/n,k=sc*(.75+R()*.5),ty=y+R()*H*.02;o+=`<g transform="translate(${r2(x)} ${r2(ty)}) scale(${r2(k)})"><path d="M0 -220 L-34 -150 H-18 L-56 -80 H-30 L-78 0 H78 L30 -80 H56 L18 -150 H34Z" fill="${c}"/>${snow?`<path d="M-34 -150 L0 -160 L34 -150 M-56 -80 L0 -92 L56 -80 M-78 0 L0 -14 L78 0" stroke="#dce9f5" stroke-width="5" fill="none" opacity=".75" stroke-linecap="round"/>`:""}</g>`;}return o;};
+  s+=layer(H*.78,.7,'#1f3a55',26,false)+`<rect x="0" y="${H*.78}" width="${W}" height="${H}" fill="#1f3a55"/>`;
+  s+=layer(H*.88,1,'#14283d',18,true)+`<path d="M0 ${H*.88} C ${W*.3} ${H*.86}, ${W*.6} ${H*.9}, ${W} ${H*.87} V${H} H0Z" fill="#dbe7f2"/>`;
+  for(let i=0;i<90;i++)s+=`<circle cx="${r2(R()*W)}" cy="${r2(R()*H)}" r="${r2(1+R()*2.5)}" fill="#fff" opacity="${r2(.3+R()*.5)}"/>`;
+  return s+grain(.06);},
+ /* 3 봄 — 벚꽃 가지 (종이 판) */
+ sakura(){document.body.className='paper';set({ink:'#3a2228',acc:'#b8546a',kbg:'#fff',kfg:'#8f3a4f',ksh:'#e7b9c3',kln:'rgba(143,58,79,.25)',pbg:'rgba(255,250,251,.86)',pline:'rgba(184,84,106,.18)'});
+  let s=`<defs>${lin('sk','#fde9ec','#f6d3db',1)}${glow('gl','#fff',.8)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.18}" cy="${H*.7}" r="${H*.5}" fill="url(#gl)"/>`;
+  const br=(d,w)=>`<path d="${d}" fill="none" stroke="#5a3a33" stroke-width="${w}" stroke-linecap="round"/>`;
+  s+=br(`M-20 ${H*.12} C ${W*.12} ${H*.16}, ${W*.2} ${H*.1}, ${W*.32} ${H*.2} S ${W*.5} ${H*.34}, ${W*.6} ${H*.3}`,16)+br(`M${W*.2} ${H*.13} C ${W*.24} ${H*.04}, ${W*.3} ${H*.02}, ${W*.36} ${H*.0}`,8)+br(`M${W*.32} ${H*.2} C ${W*.35} ${H*.3}, ${W*.33} ${H*.38}, ${W*.36} ${H*.46}`,7)+br(`M${W*.46} ${H*.3} C ${W*.5} ${H*.22}, ${W*.55} ${H*.2}, ${W*.6} ${H*.14}`,6);
+  const fl=(x,y,r,rot,c)=>{let p="";for(let i=0;i<5;i++)p+=`<path d="M0 0 C ${-r*.55} ${-r*.35}, ${-r*.45} ${-r*1.05}, 0 ${-r} C ${r*.45} ${-r*1.05}, ${r*.55} ${-r*.35}, 0 0Z" transform="rotate(${i*72})" fill="${c}"/>`;return `<g transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(rot)})">${p}<circle r="${r*.18}" fill="#c7506a"/>${[0,1,2,3,4].map(i=>`<circle cx="${r2(Math.cos(i*1.256)*r*.36)}" cy="${r2(Math.sin(i*1.256)*r*.36)}" r="${r*.05}" fill="#a83c56"/>`).join("")}</g>`;};
+  const pts=[[.06,.13],[.12,.17],[.18,.12],[.24,.1],[.27,.16],[.3,.05],[.34,.02],[.33,.24],[.35,.32],[.36,.42],[.4,.27],[.44,.3],[.48,.24],[.52,.21],[.57,.17],[.58,.29],[.22,.04],[.15,.2]];
+  pts.forEach(([x,y],i)=>s+=fl(W*x+(R()-.5)*30,H*y+(R()-.5)*30,22+R()*16,R()*72,i%3?'#f7c6d0':'#fbdde3'));
+  for(let i=0;i<40;i++){const x=R()*W*.75,y=H*.3+R()*H*.7,r=6+R()*7;s+=`<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(r)}" ry="${r2(r*.55)}" transform="rotate(${r2(R()*180)} ${r2(x)} ${r2(y)})" fill="#f4b6c3" opacity="${r2(.5+R()*.4)}"/>`;}
+  return s+grain(.05);},
+ /* 4 여름 — 모래 · 바다 · 하늘 (유리 판) */
+ sea(){document.body.className='glass';set({ink:'#0c2a33',acc:'#0e7c86',kbg:'#fff',kfg:'#0a5c66',ksh:'#9cc9cd',kln:'rgba(14,124,134,.2)',ga:'.6'});
+  let s=`<defs>${lin('sk','#cfe8f3','#f9f1e2',1)}${lin('se','#2b8fa0','#0b4f62',1)}${glow('sn','#fff7e8',.9)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.26}" cy="${H*.5}" r="${H*.34}" fill="url(#sn)"/><circle cx="${W*.26}" cy="${H*.5}" r="${H*.06}" fill="#fff6e6"/>`;
+  // 구름
+  [[.08,.18,1],[.4,.12,.8],[.6,.24,.6]].forEach(([x,y,k])=>s+=`<g transform="translate(${W*x} ${H*y}) scale(${k})" fill="#fff" opacity=".9"><ellipse cx="0" cy="0" rx="110" ry="26"/><ellipse cx="-30" cy="-22" rx="52" ry="34"/><ellipse cx="34" cy="-16" rx="44" ry="28"/></g>`);
+  s+=`<rect x="0" y="${H*.56}" width="${W}" height="${H*.44}" fill="url(#se)"/>`;
+  for(let i=0;i<9;i++){const y=H*(.58+i*.035);let d=`M0 ${y}`;for(let x=0;x<=W;x+=W/80)d+=`L${r2(x)} ${r2(y+Math.sin(x/(60+i*14)+i)*(2+i*.6))}`;s+=`<path d="${d}" fill="none" stroke="#e6f6f8" stroke-width="${1.2+i*.15}" opacity="${r2(.15+i*.04)}"/>`;}
+  s+=`<path d="M0 ${H*.86} C ${W*.25} ${H*.8}, ${W*.5} ${H*.9}, ${W} ${H*.84} V${H} H0Z" fill="#efe2c8"/><path d="M0 ${H*.86} C ${W*.25} ${H*.8}, ${W*.5} ${H*.9}, ${W} ${H*.84}" fill="none" stroke="#fff" stroke-width="5" opacity=".8"/>`;
+  return s+grain(.05);},
+ /* 5 가을 — 단풍 산 (종이 판) */
+ maple(){document.body.className='paper';set({ink:'#2b1a10',acc:'#a2481a',kbg:'#fffaf2',kfg:'#8a3b12',ksh:'#d9a77d',kln:'rgba(138,59,18,.25)',pbg:'rgba(255,250,242,.88)',pline:'rgba(162,72,26,.2)'});
+  let s=`<defs>${lin('sk','#fbe3c3','#f1c39a',1)}${glow('sn','#fff1d6',.9)}</defs><rect width="${W}" height="${H}" fill="url(#sk)"/><circle cx="${W*.24}" cy="${H*.36}" r="${H*.3}" fill="url(#sn)"/><circle cx="${W*.24}" cy="${H*.36}" r="${H*.05}" fill="#fff4e0"/>`;
+  const C=['#efb98a','#e59a64','#d97a45','#c45a2c','#9e3f1e','#6e2a14'];
+  C.forEach((c,i)=>{s+=`<path d="${ridge(H*(.5+i*.08),H*(.13-i*.01),.9+i*.4,i*2.3+1,1+i*.3)}" fill="${c}"/>`;});
+  // 앞 나무 단풍 점
+  for(let i=0;i<60;i++){const x=R()*W,y=H*(.84+R()*.16),r=10+R()*18;s+=`<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r)}" fill="${['#b8401c','#d8682c','#e89a3c','#8f2f14'][i%4]}" opacity=".9"/>`;}
+  // 떨어지는 잎
+  const leaf=(x,y,r,rot,c)=>`<g transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(rot)}) scale(${r2(r)})"><path d="M0 -30 L7 -14 L22 -20 L16 -6 L30 0 L14 6 L18 22 L4 12 L0 30 L-4 12 L-18 22 L-14 6 L-30 0 L-16 -6 L-22 -20 L-7 -14Z" fill="${c}"/><path d="M0 30 V40" stroke="${c}" stroke-width="3"/></g>`;
+  for(let i=0;i<16;i++)s+=leaf(R()*W*.7,R()*H*.75,.5+R()*.6,R()*360,['#c4471f','#e07b33','#a8361a'][i%3]);
+  return s+grain(.06);},
+ /* 6 한지 · 달항아리 (종이 판 — Blog J 한국 감성) */
+ moonjar(){document.body.className='paper';set({ink:'#2a2622',acc:'#6b5a46',kbg:'#fffdf8',kfg:'#3b3228',ksh:'#cfc3b0',kln:'rgba(59,50,40,.2)',pbg:'rgba(253,250,244,.9)',pline:'rgba(107,90,70,.2)'});
+  let s=`<rect width="${W}" height="${H}" fill="#efe8dc"/>`;
+  // 한지 섬유
+  s+=`<filter id="fb"><feTurbulence type="fractalNoise" baseFrequency=".012 .06" numOctaves="3" seed="3"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 .22 0"/></filter><rect width="${W}" height="${H}" filter="url(#fb)"/>`;
+  const cx=W*.25,cy=H*.52,rw=H*.25,rh=H*.27;
+  s+=`<ellipse cx="${cx+20}" cy="${cy+rh+10}" rx="${rw*.9}" ry="${H*.025}" fill="#000" opacity=".08"/>`;
+  s+=`<defs><radialGradient id="jar" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#fffdf7"/><stop offset=".7" stop-color="#f1ebdf"/><stop offset="1" stop-color="#ddd3c2"/></radialGradient></defs>`;
+  const mw=rw*.36,fw=rw*.42,sh=cy-rh*.35;
+  s+=`<path d="M${cx-mw} ${cy-rh} L${cx-mw*.92} ${cy-rh*.9} C ${cx-rw*1.02} ${cy-rh*.82}, ${cx-rw*1.1} ${cy-rh*.05}, ${cx-rw*.98} ${cy+rh*.25} C ${cx-rw*.86} ${cy+rh*.62}, ${cx-fw*1.25} ${cy+rh*.86}, ${cx-fw} ${cy+rh*.92} L${cx-fw} ${cy+rh} L${cx+fw} ${cy+rh} L${cx+fw} ${cy+rh*.92} C ${cx+fw*1.25} ${cy+rh*.86}, ${cx+rw*.86} ${cy+rh*.62}, ${cx+rw*.98} ${cy+rh*.25} C ${cx+rw*1.1} ${cy-rh*.05}, ${cx+rw*1.02} ${cy-rh*.82}, ${cx+mw*.92} ${cy-rh*.9} L${cx+mw} ${cy-rh} Z" fill="url(#jar)" stroke="#c8bba6" stroke-width="1.5"/>`;
+  s+=`<ellipse cx="${cx}" cy="${cy-rh}" rx="${mw}" ry="${rh*.04}" fill="#e6ddcd" stroke="#bfb19b" stroke-width="1.5"/><path d="M${cx-rw*1.04} ${cy+rh*.02} C ${cx-rw*.4} ${cy+rh*.12}, ${cx+rw*.4} ${cy+rh*.12}, ${cx+rw*1.04} ${cy+rh*.02}" fill="none" stroke="#d6cbb7" stroke-width="1.2"/><ellipse cx="${cx-rw*.38}" cy="${cy-rh*.42}" rx="${rw*.16}" ry="${rh*.28}" fill="#fff" opacity=".55" transform="rotate(-18 ${cx-rw*.38} ${cy-rh*.42})"/>`;
+  // 붉은 낙관
+  s+=`<rect x="${cx+rw*1.15}" y="${cy+rh*.6}" width="34" height="34" fill="#b0342a" rx="3"/><text x="${cx+rw*1.15+17}" y="${cy+rh*.6+23}" text-anchor="middle" font-size="15" font-weight="800" fill="#f7e9e2" font-family="SUIT">J</text>`;
+  // 먹 선 하나
+  s+=`<path d="M${W*.05} ${H*.12} C ${W*.2} ${H*.1}, ${W*.32} ${H*.14}, ${W*.48} ${H*.11}" stroke="#3b3228" stroke-width="2.2" fill="none" opacity=".55" stroke-linecap="round"/>`;
+  return s+grain(.05);},
+ /* 7 어두운 화면 — 등고선 금선 (어두운 판) */
+ contour(){document.body.className='dark';set({ink:'#f2ece0',acc:'#d8b56a',kbg:'#1e1b16',kfg:'#f0d9a4',ksh:'#000',kln:'rgba(216,181,106,.35)',pline:'rgba(216,181,106,.3)'});
+  let s=`<defs>${lin('cbg','#121212','#1e1a14',0)}</defs><rect width="${W}" height="${H}" fill="url(#cbg)"/>`;
+  const peaks=[[W*.22,H*.5,1],[W*.45,H*.18,.6],[W*.08,H*.9,.7]];
+  peaks.forEach(([px,py,k],j)=>{for(let i=1;i<=22;i++){const rr=i*26*k;let d="";for(let a=0;a<=360;a+=5){const t=a*Math.PI/180,w=rr*(1+.12*Math.sin(3*t+j+i*.3)+.06*Math.sin(5*t+i));d+=(a?"L":"M")+r2(px+Math.cos(t)*w*1.3)+" "+r2(py+Math.sin(t)*w*.85);}s+=`<path d="${d}Z" fill="none" stroke="#d8b56a" stroke-width="${i%5?0.7:1.4}" opacity="${i%5?.28:.5}"/>`;}});
+  return s+grain(.08);},
+ /* 8 대리석 · 금 (종이 판 — 고급) */
+ marble(){document.body.className='paper';set({ink:'#22201c',acc:'#8a6a2a',kbg:'#fffefb',kfg:'#5a4518',ksh:'#d6c9a8',kln:'rgba(138,106,42,.3)',pbg:'rgba(255,255,253,.82)',pline:'rgba(138,106,42,.28)'});
+  let s=`<rect width="${W}" height="${H}" fill="#f6f4f0"/>`;
+  s+=`<filter id="mc"><feTurbulence type="fractalNoise" baseFrequency=".0018 .004" numOctaves="4" seed="5"/><feColorMatrix values="0 0 0 0 .62  0 0 0 0 .6  0 0 0 0 .57  0 0 0 .9 -.35"/></filter><rect width="${W}" height="${H}" filter="url(#mc)" opacity=".5"/>`;
+  const vein=(x0,y0,len,ang,w,c,o)=>{let d=`M${r2(x0)} ${r2(y0)}`,x=x0,y=y0,a=ang;for(let i=0;i<len;i++){a+=(R()-.5)*.5;x+=Math.cos(a)*14;y+=Math.sin(a)*14;d+=`L${r2(x)} ${r2(y)}`;}return `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" opacity="${o}" stroke-linecap="round" stroke-linejoin="round"/>`;};
+  for(let i=0;i<14;i++)s+=vein(-40+R()*W*.3,R()*H,60+R()*80,-.35+R()*.3,.6+R()*1.4,'#8c8780',.25+R()*.3);
+  for(let i=0;i<26;i++)s+=vein(R()*W,R()*H,10+R()*30,R()*6.28,.4+R()*.6,'#9a948c',.2+R()*.25);
+  s+=`<defs>${lin('au','#a9802f','#f1d98d',0)}</defs>`;
+  for(let i=0;i<3;i++)s+=vein(-30,H*(.2+i*.3)+R()*60,110,-.2+R()*.25,2.4-i*.5,'url(#au)',.95);
+  return s+grain(.04);},
+ /* 9 사계절 무난 — 판 색 모눈 (종이 판, Blog J 4.0 모래 · 바다) */
+ grid(){document.body.className='paper';set({ink:'#14202b',acc:'#0e7c86',kbg:'#fff',kfg:'#0a5c66',ksh:'#b9d3d5',kln:'rgba(14,124,134,.22)',pbg:'rgba(255,255,255,.9)',pline:'rgba(14,124,134,.2)'});
+  let s=`<rect width="${W}" height="${H}" fill="#faf6ee"/><defs><pattern id="gp" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#e6ddcc" stroke-width="1"/></pattern><pattern id="gp2" width="160" height="160" patternUnits="userSpaceOnUse"><path d="M160 0H0V160" fill="none" stroke="#d9cdb6" stroke-width="1.4"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#gp)"/><rect width="${W}" height="${H}" fill="url(#gp2)"/>`;
+  // 엑셀 칸 느낌의 선 그림: 막대그래프 + 연필
+  const bx=W*.1,by=H*.72;[.28,.42,.36,.55,.48,.66].forEach((v,i)=>s+=`<rect x="${bx+i*64}" y="${by-v*H*.5}" width="40" height="${v*H*.5}" rx="6" fill="${i===5?'#0e7c86':'#0e7c86'}" opacity="${i===5?1:.22+i*.08}"/>`);
+  s+=`<path d="M${bx-20} ${by} H${bx+400}" stroke="#14202b" stroke-width="3" stroke-linecap="round"/><circle cx="${bx+5*64+20}" cy="${by-.66*H*.5-26}" r="9" fill="#F56D03"/>`;
+  return s+grain(.035);}
+};
+
+/* 프로그램마다 다른 그림 — Blog J가 직접 그린 선 · 면 그림 (AI · 남의 그림 없음) */
+function addThemes(D, X) {
+  const { W, H, R, r2, ridge, grain, lin, glow, set } = X;
+  const paper = (v) => { document.body.className = 'paper'; set(v); };
+  const glass = (v) => { document.body.className = 'glass'; set(v); };
+  const dark = (v) => { document.body.className = 'dark'; set(v); };
+  const hanji = (base, fib) => `<rect width="${W}" height="${H}" fill="${base}"/><filter id="hj"><feTurbulence type="fractalNoise" baseFrequency=".012 .06" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .46  0 0 0 0 .4  0 0 0 ${fib} 0"/></filter><rect width="${W}" height="${H}" filter="url(#hj)"/>`;
+  const seal = (x, y, t) => `<rect x="${x}" y="${y}" width="34" height="34" rx="3" fill="#b0342a"/><text x="${x + 17}" y="${y + 23}" text-anchor="middle" font-size="15" font-weight="800" fill="#f7e9e2">${t}</text>`;
+  /* 먹 붓 줄기: 굵기가 점점 가늘어지는 면 */
+  const brush = (pts, w0, w1, c) => { let L = [], Rr = []; for (let i = 0; i < pts.length; i++) { const [x, y] = pts[i], [nx, ny] = pts[Math.min(i + 1, pts.length - 1)], [px, py] = pts[Math.max(i - 1, 0)]; let dx = nx - px, dy = ny - py; const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l; const w = (w0 + (w1 - w0) * i / (pts.length - 1)) / 2; L.push([x - dy * w, y + dx * w]); Rr.push([x + dy * w, y - dx * w]); } const P = L.concat(Rr.reverse()); return `<path d="M${P.map(p => r2(p[0]) + ' ' + r2(p[1])).join('L')}Z" fill="${c}"/>`; };
+  const curve = (x0, y0, x1, y1, bend, n) => { const a = []; for (let i = 0; i <= n; i++) { const t = i / n; a.push([x0 + (x1 - x0) * t + Math.sin(t * Math.PI) * bend * (y1 - y0) / Math.hypot(x1 - x0, y1 - y0 || 1), y0 + (y1 - y0) * t - Math.sin(t * Math.PI) * bend * (x1 - x0) / Math.hypot(x1 - x0, y1 - y0 || 1)]); } return a; };
+  const HANP = (acc, kfg) => ({ ink: '#2a2622', acc, kbg: '#fffdf8', kfg, ksh: '#cfc3b0', kln: 'rgba(59,50,40,.2)', pbg: 'rgba(253,250,244,.9)', pline: 'rgba(107,90,70,.2)' });
+
+  /* ═══ 한글 — 사군자 · 한지 · 먹 ═══ */
+  D.plum = () => { paper(HANP('#9a3b45', '#7a2e37'));
+    let s = hanji('#f1ebe0', .2);
+    s += brush(curve(-40, H * .82, W * .28, H * .3, 60, 30), 30, 9, '#2f2a26') + brush(curve(W * .14, H * .6, W * .34, H * .62, -40, 20), 14, 4, '#2f2a26') + brush(curve(W * .22, H * .42, W * .44, H * .2, 50, 20), 12, 3, '#2f2a26') + brush(curve(W * .25, H * .36, W * .3, H * .08, -30, 16), 9, 2, '#2f2a26');
+    const fl = (x, y, r, c) => { let o = ''; for (let i = 0; i < 5; i++) { const a = i * 72 * Math.PI / 180 + .3; o += `<circle cx="${r2(x + Math.cos(a) * r * .55)}" cy="${r2(y + Math.sin(a) * r * .55)}" r="${r2(r * .5)}" fill="${c}"/>`; } return o + `<circle cx="${x}" cy="${y}" r="${r2(r * .22)}" fill="#f4d36b"/>`; };
+    [[.1, .7], [.17, .55], [.2, .47], [.24, .4], [.27, .33], [.3, .14], [.33, .6], [.38, .28], [.42, .22], [.28, .5], [.13, .63], [.36, .63], [.26, .24], [.4, .32]].forEach(([x, y], i) => s += fl(W * x + (R() - .5) * 30, H * y + (R() - .5) * 20, 12 + R() * 9, i % 3 ? '#d9485b' : '#f08a99'));
+    for (let i = 0; i < 26; i++) s += `<circle cx="${r2(W * .05 + R() * W * .42)}" cy="${r2(H * .12 + R() * H * .7)}" r="${r2(2 + R() * 3)}" fill="#c43d50" opacity=".7"/>`;
+    s += seal(W * .06, H * .86, '梅');
+    return s + grain(.05); };
+  D.bamboo = () => { paper(HANP('#3d6b45', '#2d5636'));
+    let s = hanji('#eef0e6', .18);
+    [[.08, 1.25, 26, '#33533b'], [.17, 1.1, 20, '#4e7357'], [.27, 1.3, 30, '#2b4732'], [.38, 1.05, 16, '#6e8f74']].forEach(([x, k, w, c], j) => { const cx = W * x; for (let y = H + 20; y > -60; y -= 150 * k) { s += `<path d="M${cx - w / 2} ${y} L${cx - w / 2 + 2} ${y - 140 * k} L${cx + w / 2 - 2} ${y - 140 * k} L${cx + w / 2} ${y}Z" fill="${c}"/><path d="M${cx - w / 2 - 4} ${y - 140 * k} Q ${cx} ${y - 140 * k - 8} ${cx + w / 2 + 4} ${y - 140 * k}" stroke="#1f3325" stroke-width="3" fill="none"/>`; } });
+    const leaf = (x, y, a, L, c) => { const p = curve(x, y, x + Math.cos(a) * L, y + Math.sin(a) * L, L * .08, 10); return brush(p, 16, 1, c); };
+    [[.08, .3], [.08, .55], [.17, .2], [.27, .4], [.27, .15], [.38, .5], [.17, .65]].forEach(([x, y], i) => { for (let k = 0; k < 5; k++) s += leaf(W * x, H * y, (i % 2 ? .3 : 2.6) + (R() - .5) * 1.2, 90 + R() * 60, ['#2b4732', '#3d6b45', '#5c8565'][k % 3]); });
+    s += seal(W * .45, H * .86, '竹');
+    return s + grain(.05); };
+  D.chrysan = () => { paper(HANP('#9a6a12', '#7a520c'));
+    let s = hanji('#f3ead8', .2);
+    s += brush(curve(W * .2, H * 1.02, W * .22, H * .45, 30, 20), 10, 5, '#4a5a36') + brush(curve(W * .3, H * 1.02, W * .34, H * .6, -30, 20), 9, 4, '#4a5a36') + brush(curve(W * .12, H * 1.02, W * .1, H * .62, -20, 20), 8, 4, '#4a5a36');
+    const fl = (x, y, r, c, c2) => { let o = ''; for (let i = 0; i < 34; i++) { const a = i / 34 * Math.PI * 2, L = r * (.75 + R() * .25); o += `<path d="M${x} ${y} Q ${r2(x + Math.cos(a + .08) * L * .6)} ${r2(y + Math.sin(a + .08) * L * .6)} ${r2(x + Math.cos(a) * L)} ${r2(y + Math.sin(a) * L)}" stroke="${i % 2 ? c : c2}" stroke-width="${r * .09}" stroke-linecap="round" fill="none"/>`; } return o + `<circle cx="${x}" cy="${y}" r="${r * .2}" fill="#b5741a"/>`; };
+    s += fl(W * .22, H * .42, 92, '#e8a92e', '#f3c95a') + fl(W * .34, H * .57, 70, '#d9902a', '#efbd52') + fl(W * .1, H * .6, 60, '#efb43f', '#f7d474');
+    const lf = (x, y, a) => `<path d="M0 0 C 20 -26, 52 -24, 70 0 C 52 18, 24 22, 0 0Z" transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(a)})" fill="#5a6e3e" opacity=".9"/>`;
+    for (let i = 0; i < 9; i++) s += lf(W * (.1 + R() * .26), H * (.68 + R() * .26), R() * 360);
+    s += seal(W * .44, H * .86, '菊');
+    return s + grain(.05); };
+  D.pine = () => { paper(HANP('#3f5560', '#2f444e'));
+    let s = hanji('#eceef0', .16);
+    for (let i = 0; i < 90; i++) s += `<circle cx="${r2(R() * W * .55)}" cy="${r2(R() * H)}" r="${r2(1.5 + R() * 3)}" fill="#fff" opacity=".9"/>`;
+    s += brush(curve(W * .16, H * 1.02, W * .2, H * .2, 90, 30), 46, 14, '#3b3029') + brush(curve(W * .19, H * .55, W * .42, H * .44, -40, 20), 18, 5, '#3b3029') + brush(curve(W * .19, H * .36, W * .04, H * .26, 30, 16), 14, 4, '#3b3029') + brush(curve(W * .2, H * .25, W * .36, H * .14, -20, 14), 12, 4, '#3b3029');
+    const tuft = (x, y, r) => { let o = ''; for (let i = 0; i < 26; i++) { const a = Math.PI + i / 25 * Math.PI; o += `<line x1="${x}" y1="${y}" x2="${r2(x + Math.cos(a) * r)}" y2="${r2(y + Math.sin(a) * r * .6)}" stroke="#2f4a3a" stroke-width="2.4" stroke-linecap="round"/>`; } return o + `<ellipse cx="${x}" cy="${y - r * .55}" rx="${r * .9}" ry="${r * .22}" fill="#fff"/>`; };
+    [[.42, .44, 60], [.36, .47, 50], [.3, .5, 46], [.05, .26, 50], [.1, .3, 44], [.36, .14, 52], [.3, .17, 44], [.22, .22, 40]].forEach(([x, y, r]) => s += tuft(W * x, H * y, r));
+    s += `<path d="M0 ${H * .9} C ${W * .3} ${H * .86}, ${W * .6} ${H * .92}, ${W} ${H * .88} V${H} H0Z" fill="#fff"/>`;
+    s += seal(W * .45, H * .82, '松');
+    return s + grain(.04); };
+
+  /* ═══ 윈도우 11 — 하늘과 빛 ═══ */
+  const sky = (a, b, c) => `<defs><linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset=".6" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#sky3)"/>`;
+  const cloud = (x, y, k, c, o) => `<g transform="translate(${r2(x)} ${r2(y)}) scale(${k})" fill="${c}" opacity="${o}"><ellipse cx="0" cy="0" rx="160" ry="38"/><ellipse cx="-60" cy="-30" rx="70" ry="48"/><ellipse cx="20" cy="-52" rx="80" ry="62"/><ellipse cx="90" cy="-24" rx="60" ry="40"/></g>`;
+  const WINK = { kbg: '#fff', kfg: '#1d3a63', ksh: '#a9bad3', kln: 'rgba(29,58,99,.18)', ink: '#11223a', acc: '#2b5fa0', ga: '.55' };
+  D.dawn = () => { glass(WINK);
+    let s = sky('#c9d7f2', '#f3d9e3', '#fbe6cf') + `<defs>${glow('dg', '#fff3e2', .95)}</defs><circle cx="${W * .26}" cy="${H * .78}" r="${H * .5}" fill="url(#dg)"/>`;
+    s += cloud(W * .12, H * .3, 1.1, '#fff', .75) + cloud(W * .38, H * .2, .8, '#fff', .6) + cloud(W * .55, H * .55, 1.3, '#fff', .5);
+    s += `<path d="${ridge(H * .86, H * .05, 1.2, 1, 1)}" fill="#b8a6c9" opacity=".7"/><path d="${ridge(H * .92, H * .04, 1.6, 3, 1)}" fill="#8f7fad" opacity=".8"/>`;
+    return s + grain(.05); };
+  D.cloud = () => { glass(WINK);
+    let s = sky('#2f7bd9', '#7fb7f0', '#d9ecfb');
+    s += cloud(W * .2, H * .55, 2.2, '#fff', .96) + cloud(W * .08, H * .78, 1.6, '#f3f8ff', .95) + cloud(W * .45, H * .3, 1.1, '#fff', .9) + cloud(W * .7, H * .85, 1.8, '#eef5ff', .9) + cloud(W * .32, H * .12, .7, '#fff', .8);
+    s += `<path d="M${W * .05} ${H * .2} q 14 -10 28 0 q 14 -10 28 0" stroke="#1d3a63" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M${W * .1} ${H * .26} q 10 -7 20 0 q 10 -7 20 0" stroke="#1d3a63" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+    return s + grain(.04); };
+  D.sunset = () => { glass(Object.assign({}, WINK, { kfg: '#5a2a1e', ksh: '#e2b39b', acc: '#b4532a', ink: '#2b1610' }));
+    let s = sky('#3b2a63', '#d9637a', '#f8b26a') + `<defs>${glow('sg', '#ffd9a0', .9)}</defs><circle cx="${W * .3}" cy="${H * .72}" r="${H * .45}" fill="url(#sg)"/><circle cx="${W * .3}" cy="${H * .72}" r="${H * .07}" fill="#ffe2b0"/>`;
+    for (let i = 0; i < 6; i++) s += `<rect x="0" y="${H * (.28 + i * .05)}" width="${W * .6}" height="${2 + i}" fill="#ffd2a6" opacity="${.15 + i * .04}"/>`;
+    s += `<path d="${ridge(H * .8, H * .06, 1.1, 2, 1)}" fill="#5a2f4f"/><path d="${ridge(H * .88, H * .05, 1.7, 4, 1)}" fill="#3a1f36"/>`;
+    [[.12, .4], [.16, .37], [.2, .42], [.45, .3]].forEach(([x, y]) => s += `<path d="M${W * x} ${H * y} q 9 -7 18 0 q 9 -7 18 0" stroke="#2b1630" stroke-width="2.6" fill="none" stroke-linecap="round"/>`);
+    return s + grain(.05); };
+  D.aurora = () => { dark({ ink: '#eaf3f2', acc: '#7fe0c4', kbg: '#14262b', kfg: '#d8f7ee', ksh: '#03080a', kln: 'rgba(127,224,196,.25)', pline: 'rgba(127,224,196,.25)' });
+    let s = sky('#040b16', '#0b1f33', '#123349');
+    for (let i = 0; i < 220; i++) s += `<circle cx="${r2(R() * W)}" cy="${r2(R() * H * .7)}" r="${r2(.4 + R() * 1.4)}" fill="#fff" opacity="${r2(.2 + R() * .7)}"/>`;
+    s += `<defs><linearGradient id="au1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#57e3b5" stop-opacity="0"/><stop offset=".55" stop-color="#57e3b5" stop-opacity=".55"/><stop offset="1" stop-color="#57e3b5" stop-opacity="0"/></linearGradient><linearGradient id="au2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f7cf0" stop-opacity="0"/><stop offset=".5" stop-color="#8f7cf0" stop-opacity=".4"/><stop offset="1" stop-color="#8f7cf0" stop-opacity="0"/></linearGradient><filter id="bl"><feGaussianBlur stdDeviation="18"/></filter></defs>`;
+    for (let k = 0; k < 2; k++) { let d = `M-50 ${H * (.35 + k * .1)}`; for (let x = 0; x <= W * .75; x += 40) d += `L${x} ${r2(H * (.35 + k * .1) + Math.sin(x / 210 + k) * 70 + Math.sin(x / 70) * 14)}`; s += `<path d="${d}" stroke="url(#au${k + 1})" stroke-width="${180 - k * 50}" fill="none" filter="url(#bl)"/>`; }
+    s += `<path d="${ridge(H * .86, H * .06, 1.3, 2, 1.4)}" fill="#07131d"/><path d="M0 ${H * .93} H${W}" stroke="#0b1d2a" stroke-width="${H * .14}"/>`;
+    return s + grain(.06); };
+
+  /* ═══ 크롬 — 길과 도시 ═══ */
+  const CHK = (acc, kfg, ksh) => ({ ink: '#1c2229', acc, kbg: '#fff', kfg, ksh, kln: 'rgba(0,0,0,.12)', pbg: 'rgba(255,255,255,.9)', pline: 'rgba(0,0,0,.08)', ga: '.6' });
+  const house = (x, y, w, h, wall, roof, win) => `<rect x="${x}" y="${y - h}" width="${w}" height="${h}" fill="${wall}"/><path d="M${x - 8} ${y - h} L${x + w / 2} ${y - h - w * .42} L${x + w + 8} ${y - h}Z" fill="${roof}"/><rect x="${x + w * .2}" y="${y - h * .7}" width="${w * .22}" height="${h * .25}" rx="3" fill="${win}"/><rect x="${x + w * .58}" y="${y - h * .7}" width="${w * .22}" height="${h * .25}" rx="3" fill="${win}"/><rect x="${x + w * .4}" y="${y - h * .36}" width="${w * .2}" height="${h * .36}" rx="3" fill="${roof}"/>`;
+  D.alley = () => { paper(CHK('#b8546a', '#8f3a4f', '#e7b9c3'));
+    let s = `<rect width="${W}" height="${H}" fill="#fbeff0"/>`;
+    const C = [['#f6e3cf', '#c9705a'], ['#e9eef3', '#6b87a6'], ['#f3ead8', '#9a7c4e'], ['#f1e1e8', '#b05d75'], ['#e6efe6', '#5f8a6a']];
+    for (let i = 0; i < 7; i++) { const [w, r] = C[i % 5]; s += house(-20 + i * 150, H * .78, 120, 150 + (i % 3) * 40, w, r, '#fff7ea'); }
+    s += `<path d="M0 ${H * .78} H${W} V${H} H0Z" fill="#e7d8c6"/><path d="M${W * .2} ${H} L${W * .3} ${H * .78} H${W * .36} L${W * .5} ${H}Z" fill="#d6c3ad"/>`;
+    for (let i = 0; i < 70; i++) { const x = R() * W * .55, y = R() * H * .85; s += `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="6" ry="3.4" transform="rotate(${r2(R() * 180)} ${r2(x)} ${r2(y)})" fill="#f2a9b8" opacity="${r2(.5 + R() * .4)}"/>`; }
+    s += `<path d="M-10 ${H * .1} C ${W * .15} ${H * .16}, ${W * .3} ${H * .08}, ${W * .45} ${H * .14}" stroke="#5a3a33" stroke-width="10" fill="none" stroke-linecap="round"/>`;
+    for (let i = 0; i < 14; i++) s += `<circle cx="${r2(W * .02 + i * W * .03)}" cy="${r2(H * (.12 + Math.sin(i) * .02))}" r="${r2(12 + R() * 8)}" fill="#f7c6d0"/>`;
+    return s + grain(.04); };
+  D.coast = () => { glass(Object.assign(CHK('#0e7c86', '#0a5c66', '#9cc9cd'), { ga: '.6' }));
+    let s = `<defs>${lin('cs', '#bfe3f1', '#f4f1e6', 1)}</defs><rect width="${W}" height="${H}" fill="url(#cs)"/>`;
+    s += `<rect x="0" y="${H * .52}" width="${W}" height="${H * .2}" fill="#2a8fa3"/>`;
+    for (let i = 0; i < 6; i++) s += `<path d="M0 ${H * (.55 + i * .028)} H${W}" stroke="#d8f1f5" stroke-width="2" opacity="${.2 + i * .05}"/>`;
+    s += `<path d="M0 ${H * .72} C ${W * .3} ${H * .66}, ${W * .55} ${H * .76}, ${W} ${H * .7} V${H} H0Z" fill="#e9dcc0"/>`;
+    s += `<path d="M${W * .05} ${H} C ${W * .2} ${H * .85}, ${W * .3} ${H * .78}, ${W * .55} ${H * .74} L${W * .6} ${H * .75} C ${W * .38} ${H * .8}, ${W * .3} ${H * .9}, ${W * .22} ${H}Z" fill="#5d6670"/>`;
+    s += `<path d="M${W * .14} ${H} C ${W * .25} ${H * .87}, ${W * .34} ${H * .8}, ${W * .57} ${H * .745}" stroke="#fff" stroke-width="4" stroke-dasharray="26 22" fill="none"/>`;
+    s += cloud(W * .15, H * .25, .9, '#fff', .9) + cloud(W * .45, H * .16, .6, '#fff', .8);
+    s += `<circle cx="${W * .35}" cy="${H * .2}" r="${H * .05}" fill="#fff4dd"/>`;
+    return s + grain(.04); };
+  D.avenue = () => { paper(CHK('#a2481a', '#8a3b12', '#d9a77d'));
+    let s = `<defs>${lin('av', '#fbe7cc', '#f3d0a6', 1)}</defs><rect width="${W}" height="${H}" fill="url(#av)"/>`;
+    const vx = W * .3, vy = H * .5;
+    s += `<path d="M${vx - 6} ${vy} L${vx + 6} ${vy} L${W * .62} ${H} L${W * -.02} ${H}Z" fill="#8c7f72"/><path d="M${vx} ${vy} L${vx} ${H}" stroke="#f3d27a" stroke-width="6" stroke-dasharray="30 26"/>`;
+    for (let i = 0; i < 9; i++) { const t = (i + 1) / 9, k = t * t; [-1, 1].forEach(sd => { const x = vx + sd * (20 + k * W * .3), y = vy + k * H * .42, r = 14 + k * 70; s += `<rect x="${r2(x - 3 - k * 6)}" y="${r2(y - r * .4)}" width="${r2(6 + k * 12)}" height="${r2(r * .6)}" fill="#6b4126"/><circle cx="${r2(x)}" cy="${r2(y - r * .7)}" r="${r2(r)}" fill="${['#d8642a', '#e88f35', '#c9461f', '#eab04a'][(i + (sd > 0 ? 1 : 0)) % 4]}"/>`; }); }
+    for (let i = 0; i < 40; i++) s += `<circle cx="${r2(R() * W * .6)}" cy="${r2(H * .6 + R() * H * .4)}" r="${r2(3 + R() * 5)}" fill="${['#d8642a', '#eab04a', '#c9461f'][i % 3]}" opacity=".85"/>`;
+    return s + grain(.05); };
+  D.city = () => { dark({ ink: '#f2f2ee', acc: '#ffcf6b', kbg: '#1c1f28', kfg: '#ffe7b0', ksh: '#000', kln: 'rgba(255,207,107,.28)', pline: 'rgba(255,207,107,.25)' });
+    let s = `<defs>${lin('ct', '#0c1424', '#1c2a44', 1)}</defs><rect width="${W}" height="${H}" fill="url(#ct)"/>`;
+    for (let i = 0; i < 100; i++) s += `<circle cx="${r2(R() * W)}" cy="${r2(R() * H * .5)}" r="${r2(.5 + R())}" fill="#fff" opacity="${r2(.2 + R() * .5)}"/>`;
+    const bld = (x, w, h, c) => { let o = `<rect x="${x}" y="${H * .86 - h}" width="${w}" height="${h}" fill="${c}"/>`; for (let yy = H * .86 - h + 18; yy < H * .84; yy += 22) for (let xx = x + 10; xx < x + w - 12; xx += 20) if (R() > .45) o += `<rect x="${r2(xx)}" y="${r2(yy)}" width="9" height="12" fill="${R() > .3 ? '#ffd27a' : '#ffefc4'}" opacity="${r2(.6 + R() * .4)}"/>`; return o; };
+    let x = -20; while (x < W * .62) { const w = 70 + R() * 90, h = H * (.18 + R() * .42); s += bld(x, w, h, R() > .5 ? '#1a2235' : '#222b40'); x += w + 6; }
+    s += `<rect x="0" y="${H * .86}" width="${W}" height="${H * .14}" fill="#e9eef5"/>`;
+    for (let i = 0; i < 120; i++) s += `<circle cx="${r2(R() * W)}" cy="${r2(R() * H)}" r="${r2(1 + R() * 2.4)}" fill="#fff" opacity="${r2(.3 + R() * .5)}"/>`;
+    return s + grain(.06); };
+
+  /* ═══ 파워포인트 — 도형 · 무대 ═══ */
+  const PPK = (acc, kfg, ksh) => ({ ink: '#1f1d22', acc, kbg: '#fff', kfg, ksh, kln: 'rgba(0,0,0,.12)', pbg: 'rgba(255,255,255,.9)', pline: 'rgba(0,0,0,.08)' });
+  D.arches = () => { paper(PPK('#c45a6a', '#9c3f4f', '#efc3cb'));
+    let s = `<rect width="${W}" height="${H}" fill="#fbf1ea"/>`;
+    const arch = (x, y, w, h, c) => `<path d="M${x} ${y} V${y - h + w / 2} A ${w / 2} ${w / 2} 0 0 1 ${x + w} ${y - h + w / 2} V${y}Z" fill="${c}"/>`;
+    s += arch(W * .04, H, 260, 640, '#f2c4c9') + arch(W * .16, H, 220, 520, '#f6dcb5') + arch(W * .27, H, 300, 760, '#c8dcd2') + arch(W * .42, H, 180, 420, '#d9d0ef');
+    s += `<circle cx="${W * .2}" cy="${H * .22}" r="70" fill="#f08a6a"/><circle cx="${W * .44}" cy="${H * .3}" r="26" fill="#2b4a6b"/><path d="M${W * .06} ${H * .3} q 30 -40 60 0 t 60 0 t 60 0" stroke="#2b4a6b" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+    s += `<rect x="${W * .34}" y="${H * .12}" width="90" height="90" rx="10" fill="none" stroke="#c45a6a" stroke-width="6" transform="rotate(12 ${W * .34 + 45} ${H * .12 + 45})"/>`;
+    return s + grain(.04); };
+  D.bauhaus = () => { paper(PPK('#1d4e9e', '#173f80', '#b7c6e3'));
+    let s = `<rect width="${W}" height="${H}" fill="#f4efe4"/>`;
+    s += `<circle cx="${W * .18}" cy="${H * .34}" r="${H * .2}" fill="#e2483b"/><rect x="${W * .26}" y="${H * .3}" width="${W * .16}" height="${H * .5}" fill="#1d4e9e"/><path d="M${W * .02} ${H * .95} L${W * .2} ${H * .5} L${W * .38} ${H * .95}Z" fill="#f2b632"/>`;
+    s += `<path d="M${W * .44} ${H * .1} A ${H * .14} ${H * .14} 0 0 1 ${W * .44} ${H * .38}Z" fill="#1f1d22"/><rect x="${W * .05}" y="${H * .08}" width="${W * .1}" height="14" fill="#1f1d22"/><circle cx="${W * .36}" cy="${H * .18}" r="18" fill="#1f1d22"/>`;
+    for (let i = 0; i < 6; i++) s += `<line x1="${W * .02}" x2="${W * .14}" y1="${H * (.62 + i * .03)}" y2="${H * (.62 + i * .03)}" stroke="#1f1d22" stroke-width="4"/>`;
+    return s + grain(.05); };
+  D.papercut = () => { paper(PPK('#a5512a', '#83401f', '#e0b494'));
+    let s = `<rect width="${W}" height="${H}" fill="#f7e6d2"/>`;
+    const C = ['#f2c58e', '#e9a061', '#d77a43', '#b85c33', '#8a4025'];
+    C.forEach((c, i) => { const r = H * (.95 - i * .14); s += `<circle cx="${W * .22}" cy="${H * 1.05}" r="${r}" fill="${c}" filter="drop-shadow(0 -6px 10px rgba(80,30,10,.25))"/>`; });
+    s += `<defs><filter id="ds"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#5a2a10" flood-opacity=".3"/></filter></defs>`;
+    s += `<circle cx="${W * .4}" cy="${H * .22}" r="${H * .08}" fill="#fff6e6" filter="url(#ds)"/>`;
+    return s + grain(.05); };
+  D.stage = () => { dark({ ink: '#f4efe7', acc: '#ffb35c', kbg: '#211c19', kfg: '#ffdcae', ksh: '#000', kln: 'rgba(255,179,92,.3)', pline: 'rgba(255,179,92,.25)' });
+    let s = `<rect width="${W}" height="${H}" fill="#120f12"/><defs><linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe8c2" stop-opacity=".55"/><stop offset="1" stop-color="#ffe8c2" stop-opacity="0"/></linearGradient><radialGradient id="pool"><stop offset="0" stop-color="#ffdca8" stop-opacity=".55"/><stop offset="1" stop-color="#ffdca8" stop-opacity="0"/></radialGradient></defs>`;
+    s += `<path d="M${W * .12} 0 L${W * .18} 0 L${W * .34} ${H * .82} L${W * .02} ${H * .82}Z" fill="url(#beam)"/><path d="M${W * .36} 0 L${W * .4} 0 L${W * .5} ${H * .82} L${W * .24} ${H * .82}Z" fill="url(#beam)" opacity=".7"/>`;
+    s += `<ellipse cx="${W * .2}" cy="${H * .84}" rx="${W * .17}" ry="${H * .05}" fill="url(#pool)"/><rect x="0" y="${H * .84}" width="${W}" height="${H * .16}" fill="#2a1b14"/>`;
+    for (let i = 0; i < 14; i++) s += `<path d="M${i * W / 14} 0 V${H * .2}" stroke="#5e1a1f" stroke-width="${W / 14 * .9}" opacity=".85"/><path d="M${i * W / 14 + W / 28} 0 V${H * .22}" stroke="#7a2228" stroke-width="10" opacity=".9"/>`;
+    s += `<rect x="${W * .16}" y="${H * .5}" width="${W * .08}" height="${H * .32}" rx="6" fill="#3a2a22"/><rect x="${W * .155}" y="${H * .48}" width="${W * .09}" height="16" rx="4" fill="#5a4234"/>`;
+    return s + grain(.07); };
+
+  /* ═══ 워드 — 책상 · 문구 ═══ */
+  const WDK = (acc, kfg, ksh) => ({ ink: '#1e2430', acc, kbg: '#fff', kfg, ksh, kln: 'rgba(0,0,0,.12)', pbg: 'rgba(255,255,255,.9)', pline: 'rgba(0,0,0,.08)' });
+  const shadow = `<defs><filter id="sh"><feDropShadow dx="6" dy="10" stdDeviation="10" flood-color="#3a2a14" flood-opacity=".25"/></filter></defs>`;
+  const note = (x, y, w, h, rot, line) => { let o = `<g transform="rotate(${rot} ${x + w / 2} ${y + h / 2})" filter="url(#sh)"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#fffdf6"/>`; for (let yy = y + 60; yy < y + h - 20; yy += 34) o += `<line x1="${x + 30}" x2="${x + w - 24}" y1="${yy}" y2="${yy}" stroke="${line}" stroke-width="1.5"/>`; return o + `<line x1="${x + 58}" x2="${x + 58}" y1="${y}" y2="${y + h}" stroke="#e8a0a0" stroke-width="1.5"/></g>`; };
+  const pencil = (x, y, L, rot, c) => `<g transform="translate(${x} ${y}) rotate(${rot})" filter="url(#sh)"><rect x="0" y="-11" width="${L}" height="22" fill="${c}"/><rect x="${L * .86}" y="-11" width="${L * .06}" height="22" fill="#c9c2b4"/><rect x="${L * .92}" y="-11" width="${L * .08}" height="22" rx="4" fill="#e98a8a"/><path d="M0 -11 L-34 0 L0 11Z" fill="#f2d5ab"/><path d="M-22 -4 L-34 0 L-22 4Z" fill="#333"/></g>`;
+  const mug = (x, y, r, c, top) => `<g filter="url(#sh)"><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r * .78}" fill="${top}"/><path d="M${x + r * .9} ${y - r * .3} a ${r * .4} ${r * .4} 0 1 1 0 ${r * .6}" stroke="${c}" stroke-width="${r * .18}" fill="none"/></g>`;
+  D.desk_spring = () => { paper(WDK('#3f6fb0', '#2c5591', '#b9cbe6'));
+    let s = `<rect width="${W}" height="${H}" fill="#eef1ea"/>` + shadow + note(W * .06, H * .2, 520, 680, -6, '#c8d6e8');
+    s += pencil(W * .3, H * .78, 380, -28, '#f2c14e') + mug(W * .44, H * .2, 70, '#e7eef6', '#c48b5a');
+    s += `<g filter="url(#sh)"><rect x="${W * .36}" y="${H * .5}" width="90" height="150" rx="40" fill="#cfe0ea"/></g>`;
+    for (let i = 0; i < 5; i++) { const x = W * .38 + Math.cos(i) * 60, y = H * .42 + Math.sin(i * 2) * 40; s += `<line x1="${W * .38}" y1="${H * .52}" x2="${r2(x)}" y2="${r2(y)}" stroke="#5f8a5a" stroke-width="4"/><circle cx="${r2(x)}" cy="${r2(y)}" r="20" fill="${['#f4a6b8', '#f7d06b', '#f4a6b8', '#fff', '#f08a9a'][i]}"/>`; }
+    return s + grain(.04); };
+  D.desk_summer = () => { paper(WDK('#0e7c86', '#0a5c66', '#9cc9cd'));
+    let s = `<rect width="${W}" height="${H}" fill="#f3efe5"/>` + shadow;
+    s += `<g transform="rotate(4 ${W * .22} ${H * .5})" filter="url(#sh)"><rect x="${W * .05}" y="${H * .14}" width="560" height="760" fill="#fffdf6"/>`;
+    for (let r = 0; r < 20; r++) for (let c = 0; c < 14; c++) s += `<rect x="${W * .05 + 30 + c * 36}" y="${H * .14 + 40 + r * 34}" width="36" height="28" fill="none" stroke="#e6a4a4" stroke-width="1"/>`;
+    s += `</g>`;
+    s += `<g filter="url(#sh)"><path d="M${W * .42} ${H * .18} L${W * .47} ${H * .18} L${W * .46} ${H * .46} L${W * .43} ${H * .46}Z" fill="#c9e6ea" opacity=".9"/><rect x="${W * .43}" y="${H * .24}" width="${W * .03}" height="${H * .2}" fill="#9a6a44" opacity=".85"/><rect x="${W * .445}" y="${H * .1}" width="8" height="${H * .2}" fill="#e2483b"/></g>`;
+    s += pencil(W * .1, H * .9, 420, -4, '#2b6cb0');
+    return s + grain(.04); };
+  D.desk_autumn = () => { paper(WDK('#9a4d22', '#7a3b18', '#ddb08c'));
+    let s = `<rect width="${W}" height="${H}" fill="#f1e5d4"/>` + shadow;
+    const book = (x, y, w, h, c, rot) => `<g transform="rotate(${rot} ${x + w / 2} ${y + h / 2})" filter="url(#sh)"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${c}"/><rect x="${x}" y="${y + h - 16}" width="${w}" height="16" fill="#fffaf0"/></g>`;
+    s += book(W * .06, H * .52, 420, 120, '#7a3b18', -3) + book(W * .08, H * .42, 400, 110, '#3f5f58', 2) + book(W * .05, H * .33, 430, 105, '#b8732e', -1);
+    s += mug(W * .36, H * .32, 80, '#f7f1e6', '#a2683c');
+    const leaf = (x, y, r, rot, c) => `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${r})"><path d="M0 -30 L7 -14 L22 -20 L16 -6 L30 0 L14 6 L18 22 L4 12 L0 30 L-4 12 L-18 22 L-14 6 L-30 0 L-16 -6 L-22 -20 L-7 -14Z" fill="${c}"/></g>`;
+    [[.3, .72, 1.6, 20], [.4, .6, 1.2, -30], [.2, .18, 1.4, 60], [.44, .82, 1.1, 10]].forEach(([x, y, r, a], i) => s += leaf(W * x, H * y, r, a, ['#c9461f', '#e0832e', '#b43a1c', '#eab04a'][i]));
+    return s + grain(.05); };
+  D.desk_winter = () => { paper(WDK('#3f5873', '#2e445c', '#b4c2d3'));
+    let s = `<rect width="${W}" height="${H}" fill="#e9ecef"/>` + shadow;
+    s += `<g transform="rotate(-5 ${W * .2} ${H * .5})" filter="url(#sh)"><rect x="${W * .06}" y="${H * .18}" width="520" height="700" fill="#fffef9"/>`;
+    for (let i = 0; i < 9; i++) s += `<path d="M${W * .06 + 50} ${H * .18 + 120 + i * 56} q 120 ${-8 + (i % 2) * 6} 240 0 t ${160 + (i % 3) * 30} 0" stroke="#3f5873" stroke-width="2.2" fill="none" opacity=".55"/>`;
+    s += `</g>`;
+    s += `<g transform="translate(${W * .32} ${H * .72}) rotate(-35)" filter="url(#sh)"><rect x="0" y="-14" width="330" height="28" rx="14" fill="#1f2b3a"/><rect x="230" y="-15" width="16" height="30" fill="#c9a24a"/><path d="M0 -14 L-60 0 L0 14Z" fill="#c9a24a"/></g>`;
+    s += mug(W * .43, H * .24, 82, '#b8463c', '#5a3826');
+    for (let i = 0; i < 3; i++) s += `<path d="M${W * .43 - 20 + i * 20} ${H * .14} q -14 -24 0 -46 q 14 -22 0 -44" stroke="#fff" stroke-width="4" fill="none" opacity=".7" stroke-linecap="round"/>`;
+    s += `<g filter="url(#sh)"><circle cx="${W * .44}" cy="${H * .62}" r="70" fill="#d9c7a8"/>`; for (let i = -60; i <= 60; i += 14) s += `<path d="M${W * .44 - 66} ${H * .62 + i} Q ${W * .44} ${H * .62 + i - 26} ${W * .44 + 66} ${H * .62 + i}" stroke="#bfa985" stroke-width="3" fill="none"/>`; s += `</g>`;
+    return s + grain(.04); };
+}
+
+  addThemes(D,{W,H,R,r2,ridge,grain,lin,glow,set});
+  seed = 7; if (!D[T]) T = "sea";
+  const body = D[T]();
+  return { svg: `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" font-family="SUIT, sans-serif">${body}</svg>`, mode: MODE, vars: VARS };
+}
+
+const WREC = {"excel":{"t":"엑셀 단축키","g":[["입력이 빨라지는 키",[[["Ctrl","E"],"빠른 채우기"],[["Ctrl","Enter"],"여러 칸 한 번에 입력"],[["Ctrl","D"],"위 칸 그대로 아래로"],[["Ctrl","Shift","\""],"위 칸 값 가져오기"],[["Ctrl",";"],"오늘 날짜 넣기"],[["Ctrl","Shift",":"],"지금 시각 넣기"],[["Alt","Enter"],"셀 안에서 줄 바꿈"],[["F4"],"$ 고정 바꾸기"]]],["선택 · 정리",[[["Ctrl","Shift","*"],"표 전체 한 번에 선택"],[["Ctrl","Shift","방향키"],"데이터 끝까지 선택"],[["Ctrl","Shift","End"],"마지막 칸까지 선택"],[["Ctrl","Space"],"열 전체 선택"],[["Shift","Space"],"행 전체 선택"],[["Ctrl","-"],"행 · 칸 삭제 창"],[["Ctrl","Shift","+"],"행 · 칸 삽입 창"],[["Ctrl","PgUp/PgDn"],"시트 넘기기"]]],["숫자 모양 한 번에",[[["Ctrl","Shift","!"],"천 단위 쉼표"],[["Ctrl","Shift","%"],"백분율"],[["Ctrl","Shift","$"],"통화"],[["Ctrl","Shift","#"],"날짜 모양"],[["Ctrl","Shift","~"],"일반으로 되돌리기"],[["Ctrl","Shift","&"],"바깥 테두리"],[["Ctrl","5"],"취소선"],[["Ctrl","1"],"셀 서식 창"]]],["계산 · 표 · 차트",[[["Alt","="],"자동 합계"],[["Ctrl","T"],"표로 만들기"],[["Alt","F1"],"바로 차트"],[["F11"],"차트를 새 시트로"],[["Ctrl","`"],"수식 한눈에 보기"],[["Ctrl","Alt","V"],"선택하여 붙여넣기"],[["Shift","F3"],"함수 찾아 넣기"],[["Ctrl","9"],"행 숨기기"]]]]},"hwp":{"t":"한글(한컴) 단축키","g":[["문서 모양 잡기",[[["Alt","L"],"글자 모양"],[["Alt","T"],"문단 모양"],[["F6"],"스타일"],[["Alt","C"],"모양 복사"],[["F7"],"편집 용지"],[["Ctrl","N",",","P"],"쪽 번호 매기기"],[["Ctrl","N",",","H"],"머리말 · 꼬리말"],[["Ctrl","N",",","N"],"각주"]]],["쪽 · 글자 다듬기",[[["Ctrl","Enter"],"쪽 나누기"],[["Alt","Shift","Enter"],"구역 나누기"],[["Alt","Shift","E/R"],"글자 크게 · 작게"],[["Alt","Shift","W/N"],"자간 넓게 · 좁게"],[["Alt","Shift","Z/A"],"줄 간격 넓게 · 좁게"],[["Ctrl","F10"],"문자표(특수 문자)"],[["F9"],"한자로 바꾸기"],[["F8"],"맞춤법 검사"]]],["표 빨리 만들기",[[["Ctrl","N",",","T"],"표 만들기"],[["F5"],"셀 선택"],[["M"],"셀 합치기(셀 선택 뒤)"],[["S"],"셀 나누기(셀 선택 뒤)"],[["H/W"],"높이 · 너비 같게(셀 선택 뒤)"],[["Alt","Insert"],"줄 · 칸 추가"],[["Alt","Delete"],"줄 · 칸 지우기"],[["Ctrl","Shift","S"],"블록 합계"]]],["알면 편해지는 키",[[["Alt","I"],"상용구(첫 글자 뒤)"],[["Ctrl","K",",","D"],"날짜 넣기"],[["Ctrl","G",",","L"],"쪽 윤곽 보기"],[["Ctrl","N",",","I"],"그림 넣기"],[["Ctrl","F2"],"찾아 바꾸기"],[["Ctrl","K",",","H"],"하이퍼링크"],[["Ctrl","N",",","M"],"수식 입력"],[["Shift","Esc"],"표 빠져나가기"]]]]},"win":{"t":"윈도우 11 단축키","g":[["창 · 화면 정리",[[["Win","Z"],"스냅 레이아웃"],[["Win","←/→"],"창을 반쪽으로"],[["Win","↑"],"창 최대화"],[["Win","Shift","←/→"],"창을 다른 모니터로"],[["Win","Home"],"지금 창만 남기기"],[["Win","D"],"바탕 화면 보기 · 돌아오기"],[["Win",","],"바탕 화면 잠깐 보기"],[["Win","M"],"모든 창 최소화"]]],["작업 · 데스크톱 넘기기",[[["Win","Tab"],"작업 보기"],[["Win","Ctrl","D"],"새 가상 데스크톱"],[["Win","Ctrl","←/→"],"데스크톱 넘기기"],[["Win","Ctrl","F4"],"지금 데스크톱 닫기"],[["Win","1~9"],"작업 표시줄 앱 열기"],[["Win","T"],"작업 표시줄 앱 돌아보기"],[["Ctrl","Alt","Tab"],"모든 창 미리 보기"],[["Ctrl","Shift","Esc"],"작업 관리자"]]],["캡처 · 입력",[[["Win","Shift","S"],"영역 골라 캡처"],[["Win","PrtScn"],"전체 캡처 · 바로 저장"],[["Win","V"],"클립보드 기록"],[["Win","."],"이모지 · 기호"],[["Win","H"],"음성 받아쓰기"],[["Win","Alt","K"],"마이크 켜기 · 끄기"],[["Win","K"],"무선 화면 연결"],[["Win","P"],"모니터 · 빔 화면 모드"]]],["빠르게 열기 · 파일 탐색기",[[["Win","E"],"파일 탐색기"],[["Win","I"],"설정"],[["Win","X"],"빠른 링크 메뉴"],[["Win","R"],"실행 창"],[["Win","L"],"PC 잠금"],[["Ctrl","Shift","N"],"새 폴더(탐색기)"],[["Alt","P"],"미리 보기 창(탐색기)"],[["Alt","Enter"],"속성 보기(탐색기)"]]]]},"chrome":{"t":"크롬 단축키","g":[["탭 다루기",[[["Ctrl","Shift","T"],"닫은 탭 되살리기"],[["Ctrl","1~8"],"몇 번째 탭으로"],[["Ctrl","9"],"맨 오른쪽 탭으로"],[["Ctrl","Tab"],"다음 탭으로"],[["Ctrl","Shift","PgUp/PgDn"],"탭 자리 옮기기"],[["Ctrl","W"],"탭 닫기"],[["Ctrl","Shift","W"],"창 닫기"],[["Ctrl","클릭"],"링크를 뒤 탭으로"]]],["찾기 · 이동",[[["Ctrl","L"],"주소창으로"],[["Alt","Enter"],"새 탭에서 검색"],[["Ctrl","K"],"어디서나 검색"],[["Ctrl","F"],"페이지에서 찾기"],[["Ctrl","G"],"다음 찾은 곳"],[["Alt","←/→"],"뒤로 · 앞으로"],[["Space"],"한 화면 아래로"],[["Ctrl","Enter"],"www · .com 붙여 열기"]]],["북마크 · 기록",[[["Ctrl","D"],"북마크 저장"],[["Ctrl","Shift","D"],"열린 탭 모두 북마크"],[["Ctrl","Shift","B"],"북마크바 보이기"],[["Ctrl","Shift","O"],"북마크 관리자"],[["Ctrl","H"],"방문 기록"],[["Ctrl","J"],"다운로드 목록"],[["Ctrl","Shift","Del"],"기록 · 캐시 지우기"],[["Ctrl","Shift","N"],"시크릿 창"]]],["보기 · 문제 해결",[[["Ctrl","+/-"],"확대 · 축소"],[["Ctrl","0"],"원래 크기로"],[["F11"],"전체 화면"],[["Shift","F5"],"캐시 없이 새로고침"],[["Shift","Esc"],"크롬 작업 관리자"],[["Ctrl","P"],"인쇄"],[["Ctrl","S"],"페이지 저장"],[["F12"],"개발자 도구"]]]]},"ppt":{"t":"파워포인트 단축키","g":[["발표 시작 · 넘기기",[[["F5"],"처음부터 발표"],[["Shift","F5"],"지금 슬라이드부터"],[["Alt","F5"],"발표자 보기로 시작"],[["숫자","Enter"],"그 슬라이드로 바로"],[["B"],"검은 화면 · 돌아오기"],[["W"],"흰 화면 · 돌아오기"],[["Home/End"],"첫 · 마지막 슬라이드"],[["Ctrl","S"],"슬라이드 목록(쇼 중)"]]],["발표 중 펜 · 포인터",[[["Ctrl","L"],"레이저 포인터"],[["Ctrl","P"],"펜으로 쓰기"],[["Ctrl","A"],"화살표로 돌아가기"],[["E"],"쓴 글씨 지우기"],[["Ctrl","M"],"잉크 보이기 · 숨기기"],[["Ctrl","H"],"포인터 숨기기"],[["Alt","P"],"동영상 재생 · 멈춤"],[["Alt","↑/↓"],"소리 크게 · 작게"]]],["만들 때 — 개체",[[["Ctrl","D"],"개체 복제"],[["Ctrl","G"],"그룹으로 묶기"],[["Ctrl","Shift","G"],"그룹 풀기"],[["Ctrl","Shift","C"],"서식 복사"],[["Ctrl","Shift","V"],"서식 붙여넣기"],[["Ctrl","Shift","]/["],"한 칸 앞 · 뒤로"],[["Alt","F10"],"선택 창(개체 목록)"],[["Alt","F9"],"안내선 보이기"]]],["만들 때 — 글자 · 슬라이드",[[["Ctrl","M"],"새 슬라이드"],[["Ctrl","Enter"],"다음 글 상자로"],[["Alt","Shift","←/→"],"목록 수준 올리기 · 내리기"],[["Ctrl","Shift",">/<"],"글꼴 크게 · 작게"],[["Shift","F3"],"영문 대소문자 바꾸기"],[["Ctrl","Alt","V"],"선택하여 붙여넣기"],[["Ctrl","Shift","Tab"],"개요 · 축소판 보기"],[["Shift","F9"],"눈금 보이기"]]]]},"word":{"t":"워드 단축키","g":[["서식 한 번에",[[["Ctrl","Alt","C"],"서식 복사"],[["Ctrl","Alt","V"],"서식 붙여넣기"],[["Ctrl","Space"],"글자 서식 지우기"],[["Ctrl","Q"],"단락 서식 지우기"],[["Ctrl","]/["],"글꼴 1포인트씩"],[["Ctrl","Shift","N"],"일반 스타일"],[["Ctrl","Alt","1/2/3"],"제목 1 · 2 · 3 스타일"],[["Shift","F3"],"영문 대소문자 바꾸기"]]],["단락 · 줄",[[["Ctrl","E/L/R/J"],"가운데 · 왼쪽 · 오른쪽 · 양쪽"],[["Ctrl","1/2/5"],"줄 간격 1 · 2 · 1.5"],[["Ctrl","M"],"들여쓰기"],[["Ctrl","Shift","M"],"들여쓰기 없애기"],[["Ctrl","T"],"첫 줄 내어쓰기"],[["Shift","Enter"],"단락 안에서 줄 바꿈"],[["Ctrl","Enter"],"페이지 나누기"],[["Ctrl","Shift","Space"],"끊기지 않는 공백"]]],["편집 · 이동",[[["Ctrl","Shift","V"],"텍스트만 붙여넣기"],[["Ctrl","Backspace"],"단어째 지우기"],[["Ctrl","Shift","↑/↓"],"단락 끝까지 선택"],[["F8"],"선택 넓히기"],[["Ctrl","G"],"쪽 · 표로 이동"],[["Shift","F5"],"이전 편집 위치로"],[["Ctrl","H"],"찾아 바꾸기"],[["Ctrl","Shift","8"],"편집 기호 보기"]]],["문서 마무리",[[["Ctrl","Alt","F"],"각주 넣기"],[["Ctrl","Alt","M"],"메모 넣기"],[["Ctrl","Shift","E"],"변경 내용 추적"],[["F7"],"맞춤법 · 문법 검사"],[["Ctrl","K"],"하이퍼링크"],[["F9"],"필드(차례) 업데이트"],[["Ctrl","Alt","S"],"창 나누기"],[["Ctrl","F2"],"인쇄 미리 보기"]]]]},"edge":{"t":"엣지 단축키","g":[["탭 · 창 빠르게",[[["Ctrl","T"],"새 탭"],[["Ctrl","Shift","T"],"닫은 탭 되살리기"],[["Ctrl","W"],"탭 닫기"],[["Ctrl","Tab"],"다음 탭"],[["Ctrl","1~8"],"n번째 탭으로"],[["Ctrl","9"],"마지막 탭으로"],[["Ctrl","Shift","K"],"탭 복제"],[["Ctrl","M"],"탭 소리 끄기 · 켜기"]]],["주소 · 찾기",[[["Alt","D"],"주소 표시줄 선택"],[["Ctrl","E"],"주소창에서 검색"],[["Ctrl","Shift","L"],"붙여넣고 바로 이동"],[["Ctrl","Enter"],"www. · .com 붙이기"],[["Ctrl","F"],"페이지에서 찾기"],[["Ctrl","G"],"다음 찾은 곳"],[["Ctrl","Shift","V"],"서식 없이 붙여넣기"],[["Ctrl","Shift","N"],"InPrivate 창"]]],["엣지만의 기능",[[["Ctrl","Shift","Y"],"컬렉션"],[["F9"],"몰입형 리더(글만 읽기)"],[["Ctrl","Shift","U"],"소리 내어 읽기"],[["Ctrl","Shift","E"],"사이드바 검색"],[["Ctrl","Shift","B"],"즐겨찾기 모음 보이기"],[["Ctrl","D"],"즐겨찾기 저장"],[["Ctrl","Shift","D"],"모든 탭 즐겨찾기"],[["Ctrl","Shift","O"],"즐겨찾기 관리"]]],["페이지 · 기록",[[["Ctrl","H"],"방문 기록"],[["Ctrl","J"],"다운로드 목록"],[["Ctrl","Shift","Delete"],"기록 지우기"],[["Ctrl","Shift","R"],"강력 새로 고침"],[["Ctrl","0"],"확대 원래대로"],[["Ctrl","\\"],"PDF 너비 · 페이지 맞추기"],[["Ctrl","]"],"PDF 90도 돌리기"],[["F11"],"전체 화면"]]]]}};
+
+/* ═══ 단축키 배경화면 만들기 (11-14) — 크기 · 배경 · 단축키 골라 배치 → PNG ═══
+   그림 = 달력 배경화면과 같은 엔진(SCENE) · 단축키 = 프로그램별 추천 32개(WREC) 또는 한 프로그램 전체(DATA) */
+(function () {
+const WSC = {
+  contour: ["등고선 금선", "도형"], marble: ["대리석 · 금", "도형"], grid: ["모래 · 바다 모눈", "도형"], stage: ["겨울 무대 조명", "도형"], arches: ["봄 파스텔 도형", "도형"], bauhaus: ["여름 원색 도형", "도형"], papercut: ["가을 종이 공예", "도형"],
+  desk_winter: ["겨울 편지", "책상"], desk_spring: ["봄 책상", "책상"], desk_summer: ["여름 원고지", "책상"], desk_autumn: ["가을 책과 차", "책상"],
+  snowpeak: ["새벽 설산", "겨울"], nightforest: ["눈 내리는 숲", "겨울"], pine: ["겨울 소나무", "한국"], city: ["겨울 밤 도시", "도시"], aurora: ["오로라 별밤", "하늘"],
+  sakura: ["벚꽃 가지", "봄"], plum: ["봄 매화", "한국"], alley: ["봄 골목", "도시"], dawn: ["새벽 하늘", "하늘"],
+  sea: ["모래 · 바다 · 하늘", "여름"], coast: ["여름 해안 도로", "도시"], bamboo: ["여름 대나무", "한국"], cloud: ["한낮 구름", "하늘"],
+  maple: ["단풍 산", "가을"], avenue: ["가을 가로수길", "도시"], chrysan: ["가을 국화", "한국"], sunset: ["노을", "하늘"], moonjar: ["한지 · 달항아리", "한국"]
+};
+const WCATS = ["도형", "책상", "겨울", "봄", "여름", "가을", "한국", "하늘", "도시", "단색", "내 사진"];
+const WSOLID = [["#0B3D4A", "깊은 바다"], ["#14202B", "먹"], ["#2B3A55", "남색 밤"], ["#1E3A2F", "숲"], ["#F3EEE3", "모래"], ["#E9EEF2", "구름"], ["#FFFFFF", "흰색"], ["#F4DCD3", "살구"]];
+const WRES = [
+  ["PC · 모니터", [[1920, 1080, "FHD", "가장 흔한 모니터"], [2560, 1440, "QHD", "27인치"], [3840, 2160, "4K", "4K 모니터"], [3440, 1440, "울트라와이드", "21:9"]]],
+  ["노트북", [[1366, 768, "HD", "오래된 노트북"], [1536, 864, "FHD 125%", "15인치 노트북"], [1920, 1200, "16:10", "노트북 · 사무용"], [2560, 1600, "16:10 고해상도", "갤럭시북 · 맥북"]]],
+  ["휴대폰", [[1080, 2340, "갤럭시", "갤럭시 S · A"], [1440, 3120, "갤럭시 고해상도", "S 울트라"], [1179, 2556, "아이폰", "14 · 15 · 16"], [1290, 2796, "아이폰 맥스", "Plus · Pro Max"]]]
+];
+const LK = "bj-sk-wall1";
+const mob = () => /Android|iPhone|iPad|iPod/.test(navigator.userAgent) && Math.min(screen.width, screen.height) < 700;
+function BL() {
+  const dpr = devicePixelRatio || 1, sw = Math.round(screen.width * dpr), sh = Math.round(screen.height * dpr);
+  return { step: 2, w: sw > 600 ? sw : 1920, h: sh > 400 ? sh : 1080, cat: "도형", scene: "contour", solid: "#0B3D4A", panel: "auto", dim: 0,
+    mode: "pick", cards: [{ p: "excel", off: [], size: 100, fx: .94, fy: .5 }], sel: 0, open: {}, fp: "excel", fsrc: "rec", fcats: [], icon: true, fmt: "png" };
+}
+let W = (() => { try { const v = JSON.parse(localStorage.getItem(LK) || "null"); if (v && v.cards) return Object.assign(BL(), v); } catch (e) {} return BL(); })();
+if (!W.cards.length) W.cards = BL().cards;
+let svT; const wsave = () => { clearTimeout(svT); svT = setTimeout(() => { try { localStorage.setItem(LK, JSON.stringify(W)); } catch (e) {} }, 300); };
+let PHOTO = null;
+const $w = s => document.querySelector("#wallv " + s);
+const e_ = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const port = () => W.h > W.w;
+const FONT = '"SUIT Variable", SUIT, "Malgun Gothic", sans-serif';
+
+/* ── 배경 ── */
+function sceneImg(name, w, h) {
+  const k = Math.max(w, h) / 1920, r = SCENE(name, Math.round(w / k), Math.round(h / k));
+  const s = r.svg.replace(/width="\d+" height="\d+"/, `width="${w}" height="${h}"`);
+  return new Promise((ok, no) => { const im = new Image(); const u = URL.createObjectURL(new Blob([s], { type: "image/svg+xml" })); im.onload = () => { URL.revokeObjectURL(u); ok({ im, mode: r.mode, vars: r.vars }); }; im.onerror = e => { URL.revokeObjectURL(u); no(e); }; im.src = u; });
+}
+const luma = hex => { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * .299 + ((n >> 8) & 255) * .587 + (n & 255) * .114) / 255; };
+async function bgOf(pw, ph) {
+  if (W.cat === "내 사진" && PHOTO) return { im: PHOTO, photo: true, mode: "glass", vars: {}, darkBg: true };
+  if (W.cat === "단색") { const l = luma(W.solid); return { solid: W.solid, mode: l > .6 ? "paper" : "glass", vars: l > .6 ? { pbg: "rgba(255,255,255,.8)" } : { ga: ".12" }, darkBg: l <= .6 }; }
+  return await sceneImg(W.scene, pw, ph);
+}
+function theme(bg) {
+  let mode = W.panel === "auto" ? (bg.mode || "glass") : W.panel; const v = bg.vars || {};
+  const dark = mode === "dark" || (mode === "none" && bg.darkBg);
+  return { mode, dark, ink: dark ? "#F4F2EC" : (bg.mode === "dark" && mode !== "paper" && mode !== "glass" ? "#14202B" : (v.ink || "#14202B")), acc: dark ? "#9CC3E6" : (v.acc || "#0C737D"),
+    sub: dark ? "rgba(244,242,236,.7)" : "rgba(20,32,43,.6)", pbg: v.pbg || "rgba(253,250,244,.9)", pline: v.pline || "rgba(20,32,43,.14)", ga: +(v.ga || .2),
+    cap: dark ? "rgba(255,255,255,.12)" : "#FFFFFF", capl: dark ? "rgba(255,255,255,.26)" : "rgba(20,32,43,.22)" };
+}
+function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function panel(c, src, k, T, x, y, w, h, u) {
+  if (T.mode === "none") return; const r = 22 * u;
+  if (T.mode === "glass" || T.mode === "dark") {
+    const q = 1 / 18, t = document.createElement("canvas"); t.width = Math.max(2, Math.round(w * k * q)); t.height = Math.max(2, Math.round(h * k * q));
+    const tc = t.getContext("2d"); tc.imageSmoothingQuality = "high"; tc.drawImage(src, x * k, y * k, w * k, h * k, 0, 0, t.width, t.height);
+    c.save(); rr(c, x, y, w, h, r); c.clip(); c.drawImage(t, x, y, w, h);
+    c.fillStyle = T.mode === "dark" ? "rgba(10,14,22,.68)" : `rgba(255,255,255,${Math.min(.84, Math.max(.36, T.ga + .14))})`; c.fillRect(x, y, w, h); c.restore();
+    c.save(); rr(c, x + .5, y + .5, w - 1, h - 1, r); c.strokeStyle = T.mode === "dark" ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.6)"; c.lineWidth = 1.5 * u; c.stroke(); c.restore();
+  } else {
+    c.save(); c.shadowColor = "rgba(40,30,10,.25)"; c.shadowBlur = 36 * u; c.shadowOffsetY = 14 * u; rr(c, x, y, w, h, r); c.fillStyle = T.pbg; c.fill(); c.restore();
+    c.save(); rr(c, x + .5, y + .5, w - 1, h - 1, r); c.strokeStyle = T.pline; c.lineWidth = 1.2 * u; c.stroke(); c.restore();
+  }
+}
+const F = (c, sz, wt) => { c.font = `${wt} ${sz}px ${FONT}`; };
+function T_(c, s, x, y, sz, wt, col, al) { F(c, sz, wt); c.fillStyle = col; c.textAlign = al || "left"; c.textBaseline = "middle"; c.fillText(s, x, y); }
+function fit(c, s, max) { if (c.measureText(s).width <= max) return s; while (s.length > 1 && c.measureText(s + "…").width > max) s = s.slice(0, -1); return s + "…"; }
+const keyName = k => k.replace(/^PgUp\/PgDn$/, "PgUp/Dn");
+
+/* ── 카드(추천 단축키) ── */
+function cardItems(cd) { const R = WREC[cd.p]; const off = new Set(cd.off || []); return R.g.map((g, gi) => [g[0], g[1].map((it, ki) => [it, gi + ":" + ki]).filter(x => !off.has(x[1])).map(x => x[0])]).filter(g => g[1].length); }
+function capsW(c, keys, ks) { F(c, ks, 800); let w = 0; keys.forEach((k, i) => { w += c.measureText(keyName(k)).width + ks * 1.1; if (i) w += ks * .9; }); return w; }
+function drawCaps(c, T, keys, x, y, ks) {
+  F(c, ks, 800); let cx = x; const h = ks * 1.75;
+  keys.forEach((k, i) => {
+    if (i) { T_(c, "+", cx + ks * .45, y, ks * .9, 700, T.sub, "center"); cx += ks * .9; }
+    const t = keyName(k); F(c, ks, 800); const kw = c.measureText(t).width + ks * 1.1;
+    rr(c, cx, y - h / 2, kw, h, ks * .38); c.fillStyle = T.cap; c.fill(); c.strokeStyle = T.capl; c.lineWidth = Math.max(1, ks * .08); c.stroke();
+    c.fillStyle = T.dark ? "rgba(0,0,0,.25)" : "rgba(20,32,43,.08)"; c.fillRect(cx + ks * .3, y + h / 2 - ks * .1, kw - ks * .6, ks * .07);
+    T_(c, t, cx + kw / 2, y + ks * .02, ks, 800, T.ink, "center"); cx += kw;
+  });
+  return cx - x;
+}
+function layoutCard(c, cd, u) {
+  const s = u * (cd.size || 100) / 100, ks = 13 * s, ls = 15.5 * s, gs = 13 * s, rh = 34 * s, gh = 30 * s, pad = 22 * s, colGap = 28 * s;
+  const G = cardItems(cd), n = G.reduce((a, g) => a + g[1].length, 0);
+  const cols = n > 12 && G.length > 1 ? 2 : 1;
+  /* 묶음을 칸에 나누기(줄 수 고르게) */
+  const C = [[], []]; let hA = 0, hB = 0; G.forEach(g => { const hh = gh + g[1].length * rh; if (cols === 1 || hA <= hB) { C[0].push(g); hA += hh; } else { C[1].push(g); hB += hh; } });
+  let capMax = 0, labMax = 0; G.forEach(g => g[1].forEach(it => { capMax = Math.max(capMax, capsW(c, it[0], ks)); F(c, ls, 600); labMax = Math.max(labMax, c.measureText(it[1]).width); }));
+  const colW = capMax + 14 * s + labMax;
+  const head = 54 * s, foot = 26 * s;
+  const w = pad * 2 + cols * colW + (cols - 1) * colGap, h = pad + head + Math.max(hA, hB) + foot + pad * .4;
+  return { s, ks, ls, gs, rh, gh, pad, colGap, cols, C, capMax, colW, head, foot, w, h, n };
+}
+function drawCard(c, T, cd, L, x, y) {
+  const P = PROG[cd.p], s = L.s;
+  const bx = x + L.pad, by = y + L.pad + 14 * s;
+  rr(c, bx, by - 14 * s, 28 * s, 28 * s, 7 * s); c.fillStyle = P.c; c.fill(); T_(c, P.ab, bx + 14 * s, by + .5 * s, 15 * s, 900, "#fff", "center");
+  T_(c, P.n + " 단축키", bx + 38 * s, by, 21 * s, 900, T.ink); F(c, 21 * s, 900); const tw = c.measureText(P.n + " 단축키").width;
+  T_(c, L.n + "개", bx + 38 * s + tw + 10 * s, by + 1 * s, 13 * s, 700, T.sub);
+  c.fillStyle = T.dark ? "rgba(255,255,255,.16)" : "rgba(20,32,43,.12)"; c.fillRect(x + L.pad, y + L.pad + L.head - 14 * s, L.w - L.pad * 2, Math.max(1, s));
+  for (let ci = 0; ci < L.cols; ci++) {
+    let cy = y + L.pad + L.head; const cx = x + L.pad + ci * (L.colW + L.colGap);
+    for (const g of L.C[ci]) {
+      T_(c, g[0], cx, cy + L.gh * .45, L.gs, 900, T.acc); cy += L.gh;
+      for (const it of g[1]) { drawCaps(c, T, it[0], cx, cy + L.rh / 2, L.ks); T_(c, it[1], cx + L.capMax + 14 * s, cy + L.rh / 2, L.ls, 600, T.ink); cy += L.rh; }
+    }
+  }
+  T_(c, "Blog J 단축키 사전", x + L.w - L.pad, y + L.h - L.pad * .4 - L.foot * .45, 11 * s, 700, T.sub, "right");
+}
+function safe(w, h, u) {
+  if (h > w) return { x0: w * .06, x1: w * .94, y0: h * .24, y1: h * .93 };
+  return { x0: W.icon ? Math.min(w * .1, 190 * u) : w * .03, x1: w - w * .025, y0: h * .045, y1: h - 62 * u };
+}
+
+/* ── 한 프로그램 꽉 채우기 ── */
+function fullList() {
+  if (W.fsrc === "rec") return WREC[W.fp].g.map(g => [g[0], g[1].map(it => [it[0], it[1], 1])]);
+  const M = new Map(); for (const x of DATA.items) if (x.p === W.fp) { if (!M.has(x.c)) M.set(x.c, []); M.get(x.c).push([x.k, x.d, 0]); }
+  const off = new Set(W.fcats || []); return [...M].filter(([k]) => !off.has(k));
+}
+function catsOf(p) { const M = new Map(); for (const x of DATA.items) if (x.p === p) M.set(x.c, (M.get(x.c) || 0) + 1); return [...M]; }
+function drawFull(c, src, k, T, w, h, u) {
+  const A = safe(w, h, u), P = PROG[W.fp], G = fullList();
+  const n = G.reduce((a, g) => a + g[1].length, 0);
+  const px = A.x0, py = A.y0, pw = A.x1 - A.x0, ph = A.y1 - A.y0;
+  panel(c, src, k, T, px, py, pw, ph, u);
+  const pad = 26 * u, head = 58 * u;
+  rr(c, px + pad, py + pad + 4 * u, 34 * u, 34 * u, 8 * u); c.fillStyle = P.c; c.fill(); T_(c, P.ab, px + pad + 17 * u, py + pad + 21.5 * u, 18 * u, 900, "#fff", "center");
+  T_(c, P.n + " 단축키", px + pad + 46 * u, py + pad + 21 * u, 26 * u, 900, T.ink); F(c, 26 * u, 900);
+  T_(c, `${n}개 · ${P.v}`, px + pad + 46 * u + c.measureText(P.n + " 단축키").width + 12 * u, py + pad + 22 * u, 14 * u, 700, T.sub);
+  T_(c, "Blog J 단축키 사전", px + pw - pad, py + pad + 22 * u, 12.5 * u, 700, T.sub, "right");
+  const X0 = px + pad, Y0 = py + pad + head, CW = pw - pad * 2, CH = ph - pad * 2 - head;
+  /* 글자 크기 · 칸 수 찾기 — 다 들어가는 가장 큰 글자 */
+  let best = null;
+  for (let fs = 19; fs >= 8.5; fs -= .5) {
+    const f = fs * u, lh = f * 1.62, hh = f * 2.05, gap = f * 1.6;
+    const cols = Math.max(1, Math.floor((CW + gap) / (f * (W.fsrc === "rec" ? 21 : 24) + gap)));
+    const cw = (CW - (cols - 1) * gap) / cols;
+    let col = 0, y = 0, ok = true;
+    for (const g of G) {
+      if (y > 0 && y + hh + lh > CH) { col++; y = 0; }
+      y += hh;
+      for (let i = 0; i < g[1].length; i++) { if (y + lh > CH) { col++; y = 0; } y += lh; }
+      if (col >= cols) { ok = false; break; }
+    }
+    if (ok) { best = { f, lh, hh, gap, cols, cw }; break; }
+  }
+  const small = !best;
+  if (!best) { const f = 8.5 * u; best = { f, lh: f * 1.62, hh: f * 2.05, gap: f * 1.6, cols: Math.max(1, Math.floor(CW / (f * 24))), cw: 0 }; best.cw = (CW - (best.cols - 1) * best.gap) / best.cols; }
+  const { f, lh, hh, gap, cols, cw } = best; const kw = cw * (W.fsrc === "rec" ? .46 : .4);
+  let col = 0, y = 0; const X = () => X0 + col * (cw + gap);
+  for (const g of G) {
+    if (y > 0 && y + hh + lh > CH) { col++; y = 0; } if (col >= cols) break;
+    T_(c, g[0], X(), Y0 + y + hh * .55, f * 1.05, 900, T.acc); c.fillStyle = T.dark ? "rgba(255,255,255,.14)" : "rgba(20,32,43,.1)"; c.fillRect(X(), Y0 + y + hh - f * .32, cw, Math.max(1, u * .8)); y += hh;
+    for (const it of g[1]) {
+      if (y + lh > CH) { col++; y = 0; } if (col >= cols) break;
+      const cyy = Y0 + y + lh / 2;
+      if (it[2]) { const capw = capsW(c, it[0], f * .86); if (capw <= kw) drawCaps(c, T, it[0], X(), cyy, f * .86); else { F(c, f * .92, 800); T_(c, fit(c, it[0].join("+"), kw), X(), cyy, f * .92, 800, T.acc); } }
+      else { F(c, f * .92, 800); T_(c, fit(c, String(it[0]).replace(/ \/ /g, " · "), kw - f * .6), X(), cyy, f * .92, 800, T.acc); }
+      F(c, f, 600); T_(c, fit(c, it[1], cw - kw - f * .3), X() + kw, cyy, f, 600, T.ink);
+      y += lh;
+    }
+  }
+  return { small, n };
+}
+
+/* ── 그리기 ── */
+let RECTS = [], LASTINFO = {};
+async function render(cv, k) {
+  const w = W.w, h = W.h, pw = Math.max(2, Math.round(w * k)), ph = Math.max(2, Math.round(h * k));
+  cv.width = pw; cv.height = ph; const c = cv.getContext("2d");
+  try { await document.fonts.load(`800 20px "SUIT Variable"`); } catch (e) {}
+  const bg = await bgOf(pw, ph);
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  if (bg.solid) { c.fillStyle = bg.solid; c.fillRect(0, 0, pw, ph); }
+  else if (bg.photo) { const im = bg.im, r = Math.max(pw / im.width, ph / im.height), dw = im.width * r, dh = im.height * r; c.drawImage(im, (pw - dw) / 2, (ph - dh) / 2, dw, dh); if (W.dim) { c.fillStyle = `rgba(0,0,0,${W.dim / 100})`; c.fillRect(0, 0, pw, ph); } }
+  else c.drawImage(bg.im, 0, 0, pw, ph);
+  const src = document.createElement("canvas"); src.width = pw; src.height = ph; src.getContext("2d").drawImage(cv, 0, 0);
+  c.setTransform(k, 0, 0, k, 0, 0);
+  const T = theme(bg), u = Math.min(w, h) / 1080 * (port() ? 1.3 : 1);
+  RECTS = []; LASTINFO = {};
+  if (W.mode === "full") { LASTINFO = drawFull(c, src, k, T, w, h, u); return; }
+  const A = safe(w, h, u);
+  const order = W.cards.map((cd, i) => i).filter(i => i !== W.sel).concat(W.cards[W.sel] ? [W.sel] : []);   /* 고른 카드를 맨 위에 */
+  order.forEach(i => { const cd = W.cards[i];
+    if (!WREC[cd.p]) return; const L = layoutCard(c, cd, u); if (!L.n) return;
+    let x = A.x0 + (A.x1 - A.x0) * cd.fx - L.w / 2, y = A.y0 + (A.y1 - A.y0) * cd.fy - L.h / 2;
+    x = Math.max(A.x0, Math.min(A.x1 - L.w, x)); y = Math.max(A.y0, Math.min(A.y1 - L.h, y));
+    panel(c, src, k, T, x, y, L.w, L.h, L.s); drawCard(c, T, cd, L, x, y);
+    RECTS.push({ i, x, y, w: L.w, h: L.h, A, over: L.w > A.x1 - A.x0 || L.h > A.y1 - A.y0 });
+  });
+  LASTINFO.over = RECTS.some(r => r.over);
+}
+
+/* ── 화면 ── */
+const IC = {
+  x: '<path d="M6 6l12 12M18 6L6 18"/>', back: '<path d="M15 18l-6-6 6-6"/>', dl: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>', up: '<path d="M6 9l6 6 6-6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', img: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/>'
+};
+const svg = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+const resName = () => { for (const [, L] of WRES) for (const r of L) if (r[0] === W.w && r[1] === W.h) return r[2]; return "직접"; };
+const STEPS = [["크기", () => `${W.w.toLocaleString()} × ${W.h.toLocaleString()} · ${resName()}`], ["배경", () => W.cat === "단색" ? "단색" : W.cat === "내 사진" ? "내 사진" : (WSC[W.scene] || ["그림"])[0]],
+  ["단축키", () => W.mode === "full" ? `${PROG[W.fp].n} ${W.fsrc === "rec" ? "추천 32개" : "전체"} 꽉 채우기` : `카드 ${W.cards.length}장 · ${W.cards.map(c => PROG[c.p].n).join(" · ")}`], ["저장", () => (W.fmt || "png").toUpperCase()]];
+function side() {
+  let h = "";
+  STEPS.forEach(([t, sm], i) => {
+    const on = W.step === i;
+    h += `<section class="ws${on ? " on" : ""}"><button class="wsh" data-w="step" data-v="${i}" type="button"><span class="wn">${i + 1}</span><b>${t}</b><small>${e_(sm())}</small>${svg("up")}</button>${on ? `<div class="wsb">${[bSize, bBg, bKeys, bSave][i]()}</div>` : ""}</section>`;
+  });
+  $w(".wside").innerHTML = h; if (W.step === 1) thumbs();
+}
+function bSize() {
+  return WRES.map(([g, L]) => `<div class="wlab">${g}</div><div class="wres">${L.map(r => `<button type="button" class="wr${r[0] === W.w && r[1] === W.h ? " on" : ""}" data-w="res" data-v="${r[0]}x${r[1]}"><b>${r[2]}</b><span class="num">${r[0]} × ${r[1]}</span><small>${r[3]}</small></button>`).join("")}</div>`).join("")
+    + `<div class="wlab">직접 입력 · 내 화면</div><div class="wrow"><input class="win num" id="wW" type="number" min="320" max="7680" value="${W.w}" aria-label="가로"><span>×</span><input class="win num" id="wH" type="number" min="320" max="7680" value="${W.h}" aria-label="세로"><button type="button" class="wbtn" data-w="mine">내 화면 크기</button></div>`
+    + `<p class="wtip">윈도우: 바탕 화면 오른쪽 클릭 → 「디스플레이 설정」의 「디스플레이 해상도」와 같게 고르면 가장 선명해요.</p>`;
+}
+function bBg() {
+  let h = `<div class="wchips">${WCATS.map(c => `<button type="button" class="wc${W.cat === c ? " on" : ""}" data-w="cat" data-v="${c}">${c}</button>`).join("")}</div>`;
+  if (W.cat === "단색") h += `<div class="wsol">${WSOLID.map(([c, n]) => `<button type="button" class="wsw${W.solid === c ? " on" : ""}" data-w="solid" data-v="${c}" style="background:${c}" title="${n}" aria-label="${n}"></button>`).join("")}</div>`;
+  else if (W.cat === "내 사진") h += `<button type="button" class="wbtn wide" data-w="photo">${svg("img")}${PHOTO ? "다른 사진 고르기" : "사진 고르기"}</button><p class="wtip">사진은 이 기기에서만 쓰여요 — 어디에도 올리지 않아요.</p>${PHOTO ? `<div class="wlab">어둡게 ${W.dim}%</div><input type="range" min="0" max="60" value="${W.dim}" data-wr="dim" class="wrange">` : ""}`;
+  else h += `<div class="wth">${Object.keys(WSC).filter(k => WSC[k][1] === W.cat).map(k => `<button type="button" class="wt${W.scene === k ? " on" : ""}" data-w="scene" data-v="${k}"><img data-sc="${k}" alt=""><span>${WSC[k][0]}</span></button>`).join("")}</div>`;
+  h += `<div class="wlab">단축키 판</div><div class="wseg">${[["auto", "자동"], ["glass", "유리"], ["paper", "종이"], ["dark", "어둡게"], ["none", "판 없이"]].map(([v, n]) => `<button type="button" class="${W.panel === v ? "on" : ""}" data-w="panel" data-v="${v}">${n}</button>`).join("")}</div>`;
+  return h;
+}
+function bKeys() {
+  let h = `<div class="wseg big"><button type="button" class="${W.mode === "pick" ? "on" : ""}" data-w="mode" data-v="pick">골라서 붙이기</button><button type="button" class="${W.mode === "full" ? "on" : ""}" data-w="mode" data-v="full">한 프로그램 꽉 채우기</button></div>`;
+  if (W.mode === "pick") {
+    h += `<p class="wtip">프로그램을 누르면 추천 단축키 카드가 생겨요. 미리보기에서 카드를 끌어 옮기거나 아래 9칸으로 자리를 정해요.</p><div class="wlab">카드 더하기</div><div class="wprog">${ORDER.map(p => { const has = W.cards.findIndex(c => c.p === p); return `<button type="button" class="wp${has >= 0 ? " has" : ""}" data-w="add" data-v="${p}"><i style="background:${PROG[p].c}">${PROG[p].ab}</i>${PROG[p].n}${has >= 0 ? "<em>✓</em>" : ""}</button>`; }).join("")}</div>`;
+    h += `<div class="wlab">붙인 카드 ${W.cards.length}장</div><div class="wcards">${W.cards.map((cd, i) => { const n = cardItems(cd).reduce((a, g) => a + g[1].length, 0); return `<div class="wcd${i === W.sel ? " on" : ""}"><button type="button" class="wcs" data-w="sel" data-v="${i}"><i style="background:${PROG[cd.p].c}">${PROG[cd.p].ab}</i><b>${PROG[cd.p].n}</b><span class="num">${n} / 32</span></button><button type="button" class="wx" data-w="del" data-v="${i}" aria-label="${PROG[cd.p].n} 카드 빼기">${svg("x")}</button></div>`; }).join("") || '<div class="wtip">위에서 프로그램을 골라 카드를 더하세요</div>'}</div>`;
+    const cd = W.cards[W.sel];
+    if (cd) {
+      const R = WREC[cd.p], off = new Set(cd.off || []);
+      h += `<div class="wbox"><div class="wbt"><i style="background:${PROG[cd.p].c}">${PROG[cd.p].ab}</i>${PROG[cd.p].n} 카드</div>`
+        + `<div class="wlab">자리</div><div class="wpos">${[[.06, .06], [.5, .06], [.94, .06], [.06, .5], [.5, .5], [.94, .5], [.06, .94], [.5, .94], [.94, .94]].map(([x, y]) => `<button type="button" class="${Math.abs(cd.fx - x) < .02 && Math.abs(cd.fy - y) < .02 ? "on" : ""}" data-w="pos" data-v="${x},${y}"><i></i></button>`).join("")}</div>`
+        + `<div class="wlab">크기 <span class="num">${cd.size}%</span></div><input type="range" min="50" max="170" step="5" value="${cd.size}" data-wr="size" class="wrange">`
+        + `<div class="wlab">넣을 단축키 <button type="button" class="wlink" data-w="all">모두</button> · <button type="button" class="wlink" data-w="none">모두 빼기</button></div>`
+        + R.g.map((g, gi) => { const ids = g[1].map((_, ki) => gi + ":" + ki), cnt = ids.filter(x => !off.has(x)).length, op = W.open[cd.p + gi];
+          return `<div class="wgrp"><div class="wgh"><label><input type="checkbox" data-wg="${gi}" ${cnt === ids.length ? "checked" : ""} ${cnt && cnt < ids.length ? 'data-mixed="1"' : ""}> <b>${e_(g[0])}</b> <span class="num">${cnt}/${ids.length}</span></label><button type="button" class="wlink" data-w="open" data-v="${gi}">${op ? "접기" : "하나씩 고르기"}</button></div>${op ? `<div class="wkeys">${g[1].map((it, ki) => `<label class="wk"><input type="checkbox" data-wk="${gi}:${ki}" ${off.has(gi + ":" + ki) ? "" : "checked"}><span class="kk">${it[0].map(e_).join("+")}</span><span>${e_(it[1])}</span></label>`).join("")}</div>` : ""}</div>`; }).join("")
+        + `</div>`;
+    }
+  } else {
+    h += `<div class="wlab">프로그램</div><div class="wprog">${ORDER.map(p => `<button type="button" class="wp${W.fp === p ? " has" : ""}" data-w="fp" data-v="${p}"><i style="background:${PROG[p].c}">${PROG[p].ab}</i>${PROG[p].n}</button>`).join("")}</div>`;
+    const all = DATA.items.filter(x => x.p === W.fp).length;
+    h += `<div class="wlab">담을 단축키</div><div class="wseg"><button type="button" class="${W.fsrc === "rec" ? "on" : ""}" data-w="fsrc" data-v="rec">추천 32개(크게)</button><button type="button" class="${W.fsrc === "all" ? "on" : ""}" data-w="fsrc" data-v="all">전체 ${all}개(작게)</button></div>`;
+    if (W.fsrc === "all") { const off = new Set(W.fcats || []); h += `<div class="wlab">분류 — 빼면 글자가 커져요</div><div class="wcats">${catsOf(W.fp).map(([cn, n]) => `<label class="wk"><input type="checkbox" data-wc="${e_(cn)}" ${off.has(cn) ? "" : "checked"}><span>${e_(cn)}</span><span class="num sub">${n}</span></label>`).join("")}</div>`; }
+    if (LASTINFO.small) h += `<p class="wwarn">다 넣기엔 화면이 좁아 일부가 잘려요 — 분류를 줄이거나 4K로 만들어 보세요.</p>`;
+  }
+  if (!port()) h += `<label class="wk wsw2"><input type="checkbox" data-w2="icon" ${W.icon ? "checked" : ""}><span>왼쪽 바탕화면 아이콘 자리 비워 두기</span></label>`;
+  return h;
+}
+function bSave() {
+  return `<div class="wseg"><button type="button" class="${W.fmt !== "jpg" ? "on" : ""}" data-w="fmt" data-v="png">PNG(선명)</button><button type="button" class="${W.fmt === "jpg" ? "on" : ""}" data-w="fmt" data-v="jpg">JPG(가볍게)</button></div>
+  <button type="button" class="wbtn pri wide" data-w="save">${svg("dl")}배경화면 저장 <span class="num">${W.w} × ${W.h}</span></button>
+  <div class="wlab">바탕화면에 넣기</div><ol class="wol"><li><b>윈도우</b> — 저장한 그림을 오른쪽 클릭 → 「바탕 화면 배경으로 설정」</li><li><b>맥</b> — 그림을 오른쪽 클릭 → 「빠른 동작」 → 「데스크탑 사진 설정」</li><li><b>휴대폰</b> — 갤러리(사진)에서 열고 → 「배경화면으로 설정」</li></ol>
+  <p class="wtip">그림과 단축키 판은 이 기기에서 만들어져요 — 어디에도 올리지 않아요.</p>`;
+}
+const TH = {};
+async function thumbs() {
+  const pt = port(), tw = pt ? 90 : 160, th = pt ? 190 : 90;
+  for (const img of document.querySelectorAll("#wallv img[data-sc]")) {
+    const k = img.dataset.sc, id = k + (pt ? "p" : "l");
+    if (!TH[id]) { try { const r = SCENE(k, pt ? 900 : 1920, pt ? 1900 : 1080); TH[id] = URL.createObjectURL(new Blob([r.svg.replace(/width="\d+" height="\d+"/, `width="${tw * 2}" height="${th * 2}"`)], { type: "image/svg+xml" })); } catch (e) { continue; } }
+    img.src = TH[id]; await new Promise(r => setTimeout(r, 0));
+  }
+}
+let pvT, pvBusy = false, pvAgain = false;
+function preview() { clearTimeout(pvT); pvT = setTimeout(async () => {
+  if (pvBusy) { pvAgain = true; return; } pvBusy = true;
+  try { const cv = $w("#wcv"), box = $w(".wpv"); const bw = box.clientWidth, bh = Math.max(220, Math.min(innerHeight * (innerWidth < 900 ? .5 : .74), box.clientWidth * W.h / W.w));
+    const k = Math.min(bw / W.w, bh / W.h) * Math.min(2, devicePixelRatio || 1);
+    await render(cv, k); cv.style.width = (W.w * k / Math.min(2, devicePixelRatio || 1)) + "px"; cv.style.height = (W.h * k / Math.min(2, devicePixelRatio || 1)) + "px";
+    $w(".wmeta").textContent = `${W.w.toLocaleString()} × ${W.h.toLocaleString()} 미리보기${W.mode === "pick" ? " · 카드를 끌어 옮길 수 있어요" : ""}`;
+    const warn = W.mode === "pick" && LASTINFO.over ? "카드가 화면보다 커요 — 크기를 줄이거나 단축키를 덜어 주세요" : W.mode === "full" && LASTINFO.small ? "다 넣기엔 좁아 일부가 잘려요 — 분류를 줄이거나 큰 해상도로" : "";
+    $w(".wwarn2").textContent = warn; $w(".wwarn2").hidden = !warn;
+  } catch (e) { console.warn(e); }
+  pvBusy = false; if (pvAgain) { pvAgain = false; preview(); }
+}, 60); }
+function redraw() { side(); preview(); wsave(); }
+function toast(m) { const t = $w(".wtoast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), 2200); }
+
+async function saveFile() {
+  const busy = $w(".wbusy"); busy.hidden = false;
+  try {
+    const cv = document.createElement("canvas"); await render(cv, 1);
+    const blob = await new Promise(r => cv.toBlob(r, W.fmt === "jpg" ? "image/jpeg" : "image/png", .93));
+    const name = `단축키배경화면_${W.mode === "full" ? PROG[W.fp].n : W.cards.map(c => PROG[c.p].n).join("_")}_${W.w}x${W.h}.${W.fmt === "jpg" ? "jpg" : "png"}`;
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+    toast("저장했어요 — 다운로드 폴더를 확인하세요");
+  } catch (e) { toast("저장하지 못했어요 — 크기를 줄여 다시 해 보세요"); }
+  busy.hidden = true;
+}
+function pickPhoto() {
+  const i = document.createElement("input"); i.type = "file"; i.accept = "image/*";
+  i.onchange = () => { const f = i.files[0]; if (!f) return; const im = new Image(); im.onload = () => { PHOTO = im; redraw(); }; im.src = URL.createObjectURL(f); };
+  i.click();
+}
+
+/* 새 카드 자리: 겹치지 않는 9칸 중 하나(안 되면 작게) */
+function place(cd) {
+  const w = W.w, h = W.h, u = Math.min(w, h) / 1080 * (port() ? 1.3 : 1), A = safe(w, h, u), c = document.createElement("canvas").getContext("2d");
+  const spots = [[.94, .5], [.06, .5], [.94, .06], [.06, .06], [.94, .94], [.06, .94], [.5, .06], [.5, .94], [.5, .5]];
+  const box = (L, fx, fy) => { let x = A.x0 + (A.x1 - A.x0) * fx - L.w / 2, y = A.y0 + (A.y1 - A.y0) * fy - L.h / 2; x = Math.max(A.x0, Math.min(A.x1 - L.w, x)); y = Math.max(A.y0, Math.min(A.y1 - L.h, y)); return { x, y, w: L.w, h: L.h }; };
+  const hit = (a, b) => a.x < b.x + b.w + 8 && b.x < a.x + a.w + 8 && a.y < b.y + b.h + 8 && b.y < a.y + a.h + 8;
+  const EX = W.cards.filter(x => WREC[x.p]).map(x => box(layoutCard(c, x, u), x.fx, x.fy));
+  const fine = []; for (let i = 0; i <= 10; i++) for (let j = 0; j <= 10; j++) fine.push([i / 10, j / 10]);
+  for (const sz of [cd.size, 70, 55, 45]) { cd.size = sz; const L = layoutCard(c, cd, u);
+    for (const [fx, fy] of spots.concat(fine)) { const r = box(L, fx, fy); if (!EX.some(R => hit(r, R))) { cd.fx = fx; cd.fy = fy; return cd; } } }
+  /* 다 겹치면 가장 덜 겹치는 자리 */
+  cd.size = 70; const L = layoutCard(c, cd, u); let best = null;
+  for (const [fx, fy] of spots) { const r = box(L, fx, fy); const ov = EX.reduce((a, R) => a + Math.max(0, Math.min(r.x + r.w, R.x + R.w) - Math.max(r.x, R.x)) * Math.max(0, Math.min(r.y + r.h, R.y + R.h) - Math.max(r.y, R.y)), 0); if (!best || ov < best[0]) best = [ov, fx, fy]; }
+  cd.fx = best[1]; cd.fy = best[2]; return cd;
+}
+function onClick(e) {
+  if (e.target === e.currentTarget && !e.isTrusted) return closeW();
+  const b = e.target.closest("[data-w]"); if (!b || !e.currentTarget.contains(b)) return;
+  const a = b.dataset.w, v = b.dataset.v;
+  if (a === "close") return closeW();
+  if (a === "step") { W.step = W.step === +v ? -1 : +v; side(); wsave(); return; }
+  if (a === "res") { const [w, h] = v.split("x").map(Number); W.w = w; W.h = h; return redraw(); }
+  if (a === "mine") { const d = devicePixelRatio || 1; W.w = Math.round(screen.width * d); W.h = Math.round(screen.height * d); return redraw(); }
+  if (a === "cat") { W.cat = v; if (v !== "단색" && v !== "내 사진" && WSC[W.scene][1] !== v) W.scene = Object.keys(WSC).find(k => WSC[k][1] === v); if (v === "내 사진" && !PHOTO) { side(); return pickPhoto(); } return redraw(); }
+  if (a === "scene") { W.scene = v; return redraw(); }
+  if (a === "solid") { W.solid = v; return redraw(); }
+  if (a === "photo") return pickPhoto();
+  if (a === "panel") { W.panel = v; return redraw(); }
+  if (a === "mode") { W.mode = v; return redraw(); }
+  if (a === "add") { const i = W.cards.findIndex(c => c.p === v); if (i >= 0) { W.sel = i; return redraw(); }
+    W.cards.push(place({ p: v, off: [], size: W.cards.length ? 80 : 100, fx: .5, fy: .5 })); W.sel = W.cards.length - 1; return redraw(); }
+  if (a === "sel") { W.sel = +v; return redraw(); }
+  if (a === "del") { W.cards.splice(+v, 1); W.sel = Math.max(0, Math.min(W.sel, W.cards.length - 1)); return redraw(); }
+  if (a === "pos") { const [x, y] = v.split(",").map(Number); const cd = W.cards[W.sel]; if (cd) { cd.fx = x; cd.fy = y; } return redraw(); }
+  if (a === "all" || a === "none") { const cd = W.cards[W.sel]; if (!cd) return; cd.off = a === "all" ? [] : WREC[cd.p].g.flatMap((g, gi) => g[1].map((_, ki) => gi + ":" + ki)); return redraw(); }
+  if (a === "open") { const cd = W.cards[W.sel]; const k = cd.p + v; W.open[k] = !W.open[k]; side(); wsave(); return; }
+  if (a === "fp") { W.fp = v; W.fcats = []; return redraw(); }
+  if (a === "fsrc") { W.fsrc = v; return redraw(); }
+  if (a === "fmt") { W.fmt = v; side(); wsave(); return; }
+  if (a === "save") return saveFile();
+}
+function onChange(e) {
+  const t = e.target, cd = W.cards[W.sel];
+  if (t.id === "wW" || t.id === "wH") { const v = Math.max(320, Math.min(7680, Math.round(+t.value || 0))); if (t.id === "wW") W.w = v; else W.h = v; return redraw(); }
+  if (t.dataset.wg != null && cd) { const gi = +t.dataset.wg, ids = WREC[cd.p].g[gi][1].map((_, ki) => gi + ":" + ki); const off = new Set(cd.off); ids.forEach(x => t.checked ? off.delete(x) : off.add(x)); cd.off = [...off]; return redraw(); }
+  if (t.dataset.wk && cd) { const off = new Set(cd.off); t.checked ? off.delete(t.dataset.wk) : off.add(t.dataset.wk); cd.off = [...off]; return redraw(); }
+  if (t.dataset.wc != null) { const off = new Set(W.fcats); t.checked ? off.delete(t.dataset.wc) : off.add(t.dataset.wc); W.fcats = [...off]; return redraw(); }
+  if (t.dataset.w2 === "icon") { W.icon = t.checked; return redraw(); }
+}
+function onInput(e) {
+  const t = e.target; if (!t.dataset.wr) return;
+  if (t.dataset.wr === "size") { const cd = W.cards[W.sel]; if (cd) cd.size = +t.value; const l = t.previousElementSibling.querySelector("span"); if (l) l.textContent = t.value + "%"; }
+  if (t.dataset.wr === "dim") { W.dim = +t.value; t.previousElementSibling.textContent = `어둡게 ${W.dim}%`; }
+  preview(); wsave();
+}
+/* 미리보기에서 카드 끌기 */
+let drag = null;
+function ptr(e) { const cv = $w("#wcv"), r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * W.w, y: (e.clientY - r.top) / r.height * W.h }; }
+function onDown(e) {
+  if (W.mode !== "pick") return; const p = ptr(e);
+  for (let j = RECTS.length - 1; j >= 0; j--) { const R = RECTS[j]; if (p.x >= R.x && p.x <= R.x + R.w && p.y >= R.y && p.y <= R.y + R.h) {
+    drag = { i: R.i, dx: p.x - (R.x + R.w / 2), dy: p.y - (R.y + R.h / 2), A: R.A, moved: false }; $w("#wcv").setPointerCapture(e.pointerId); e.preventDefault();
+    if (W.sel !== R.i) { W.sel = R.i; side(); } return; } }
+}
+function onMove(e) {
+  const cv = $w("#wcv"); if (!drag) { if (W.mode === "pick") { const p = ptr(e); cv.style.cursor = RECTS.some(R => p.x >= R.x && p.x <= R.x + R.w && p.y >= R.y && p.y <= R.y + R.h) ? "grab" : "default"; } return; }
+  const p = ptr(e), A = drag.A, cd = W.cards[drag.i]; if (!cd) return;
+  cd.fx = Math.max(0, Math.min(1, (p.x - drag.dx - A.x0) / (A.x1 - A.x0))); cd.fy = Math.max(0, Math.min(1, (p.y - drag.dy - A.y0) / (A.y1 - A.y0)));
+  drag.moved = true; cv.style.cursor = "grabbing"; preview();
+}
+function onUp() { if (drag && drag.moved) { wsave(); side(); } drag = null; }
+
+/* ── 열고 닫기 ── */
+let built = false;
+function build() {
+  const d = document.createElement("div"); d.id = "wallv"; d.hidden = true; d.setAttribute("role", "dialog"); d.setAttribute("aria-label", "단축키 배경화면 만들기");
+  d.innerHTML = `<div class="wtop"><button type="button" class="wback" data-w="close" aria-label="단축키 사전으로">${svg("back")}<span>단축키 사전</span></button><div class="wtt">단축키 배경화면 만들기<small>그림 · 해상도 고르고 단축키를 붙여 저장</small></div><button type="button" class="wclose" data-w="close" aria-label="닫기">${svg("x")}</button></div>
+  <div class="wbody"><aside class="wside"></aside><section class="wmain"><div class="wpv"><canvas id="wcv"></canvas></div><div class="wmeta num"></div><div class="wwarn2" hidden></div><button type="button" class="wbtn pri wsave" data-w="save">${svg("dl")}배경화면 저장</button></section></div>
+  <div class="wbusy" hidden><div>배경화면을 만드는 중…</div></div><div class="wtoast" role="status"></div>`;
+  document.body.appendChild(d);
+  d.addEventListener("click", onClick); d.addEventListener("change", onChange); d.addEventListener("input", onInput);
+  d.addEventListener("keydown", e => { if (e.key === "Escape") closeW(); });
+  const cv = d.querySelector("#wcv"); cv.addEventListener("pointerdown", onDown); cv.addEventListener("pointermove", onMove); cv.addEventListener("pointerup", onUp); cv.addEventListener("pointercancel", onUp);
+  addEventListener("resize", () => { if (!d.hidden) preview(); });
+  built = true;
+}
+function openW() { if (!built) build(); const d = document.getElementById("wallv"); d.hidden = false; document.documentElement.classList.add("wopen"); if (W.step < 0) W.step = 2; side(); preview(); setTimeout(() => { const b = d.querySelector(".wback"); if (b) b.focus(); }, 30); try { history.replaceState(history.state, "", location.pathname + location.search.replace(/[?&]wall=1/, "") + (location.search ? "&" : "?") + "wall=1"); } catch (e) {} }
+function closeW() { const d = document.getElementById("wallv"); if (!d) return; d.hidden = true; document.documentElement.classList.remove("wopen"); try { history.replaceState(history.state, "", location.href.replace(/[?&]wall=1/, "").replace(/\?$/, "")); } catch (e) {} }
+window.SKWALL = { open: openW, close: closeW, preset(p) { W.mode = "pick"; if (!W.cards.some(c => c.p === p)) W.cards = [{ p, off: [], size: 100, fx: .94, fy: .5 }]; W.sel = W.cards.findIndex(c => c.p === p); W.step = 2; openW(); } };
+if (window.BJBACK) BJBACK.init({ ov: ["#wallv"] });
+document.addEventListener("click", e => { const b = e.target.closest("[data-wallopen]"); if (!b) return; e.preventDefault(); const p = b.dataset.wallopen; if (p && PROG[p]) SKWALL.preset(p); else openW(); });
+if (/[?&]wall=1/.test(location.search)) setTimeout(openW, 50);
+})();
+
 </script>
 </body>
 </html>

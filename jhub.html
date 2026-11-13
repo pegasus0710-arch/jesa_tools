@@ -18,8 +18,8 @@ a{color:inherit}
 button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .num{font-variant-numeric:tabular-nums}
 /* 머리띠 */
-.top{background:var(--deep);color:#fff;padding:12px 16px 14px}
-.top-in{max-width:1320px;margin:0 auto}
+.top{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;padding:12px 16px 14px;box-shadow:0 2px 10px rgba(11,61,74,.25)}
+.top-in{max-width:1680px;margin:0 auto}
 .tr{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .logo{width:40px;height:40px;border-radius:10px;flex-shrink:0;display:block}
 .tt{font-weight:900;font-size:19px;letter-spacing:-.3px}
@@ -34,8 +34,9 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .q{width:100%;padding:14px 16px 14px 46px;border-radius:12px;border:0;background:#fff;font:inherit;font-size:16px;outline:none;color:var(--ink)}
 .q:focus{box-shadow:0 0 0 3px rgba(127,208,214,.6)}
 /* 몸통 */
-.body{max-width:1320px;margin:0 auto;padding:16px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:16px;align-items:start}
-.side{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;background:var(--card);border-radius:16px;box-shadow:0 0 0 1px var(--hair);padding:8px}
+.body{max-width:1680px;margin:0 auto;padding:16px;display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;align-items:start}
+@media (min-width:1900px){.body,.top-in,.foot{max-width:1880px}.body{grid-template-columns:420px minmax(0,1fr)}}
+.side{position:sticky;top:calc(var(--toph,128px) + 12px);max-height:calc(100vh - var(--toph,128px) - 24px);overflow:auto;background:var(--card);border-radius:16px;box-shadow:0 0 0 1px var(--hair);padding:8px}
 .grp{border-top:1px solid var(--hair)}
 .grp:first-child{border-top:0}
 .gh{width:100%;display:flex;align-items:center;gap:8px;padding:11px 10px;font-size:13px;font-weight:900;color:var(--sub);text-align:left;border-radius:10px}
@@ -115,8 +116,9 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .ps.R{color:#8a4a0e;background:#fff3dc}
 .pd{font-size:13px;color:var(--sub);text-align:right}
 .empty{color:var(--sub);font-size:14px;padding:6px 0}
-.foot{max-width:1320px;margin:0 auto;padding:0 16px 40px;font-size:12.5px;color:var(--sub);text-align:center;line-height:1.7}
+.foot{max-width:1680px;margin:0 auto;padding:0 16px 40px;font-size:12.5px;color:var(--sub);text-align:center;line-height:1.7}
 .mtog{display:none}
+@media (max-width:1100px) and (min-width:901px){.body{grid-template-columns:300px minmax(0,1fr)}}
 @media (max-width:900px){
   .body{grid-template-columns:1fr}
   .side{position:static;max-height:none}
@@ -404,7 +406,7 @@ function drawMain() {
   }
   document.getElementById("main").innerHTML = h;
 }
-function pick(id, scroll) { cur = id; ls.set("cur", id); history.replaceState(null, "", "#app=" + id); drawSide(); drawMain(); if (scroll && innerWidth <= 900) document.getElementById("main").scrollIntoView({ behavior: "smooth", block: "start" }); }
+function pick(id, scroll) { cur = id; ls.set("cur", id); history.replaceState(null, "", "#app=" + id); drawSide(); drawMain(); if (scroll && innerWidth <= 900) { const y = document.getElementById("main").getBoundingClientRect().top + scrollY - document.querySelector(".top").offsetHeight - 8; scrollTo({ top: y, behavior: "smooth" }); } }
 document.getElementById("side").onclick = e => {
   const g = e.target.closest(".gh"); if (g) { const k = g.dataset.g; shut = shut.includes(k) ? shut.filter(x => x !== k) : shut.concat(k); ls.set("shut", shut); drawSide(); return; }
   const f = e.target.closest("[data-fav]"); if (f) { e.stopPropagation(); togFav(f.dataset.fav); return; }
@@ -415,6 +417,7 @@ function paintOwner() { const on = owner(), b = document.getElementById("owner")
 document.getElementById("main").addEventListener("click", e => { const b = e.target.closest("[data-hfav]"); if (b) togFav(b.dataset.hfav); });
 document.getElementById("owner").onclick = () => { try { owner() ? localStorage.removeItem("bj-owner") : localStorage.setItem("bj-owner", "1"); } catch (e) {} paintOwner(); drawMain(); };
 document.getElementById("today").textContent = "오늘 " + ymdw(new Date());
+const setTop = () => document.documentElement.style.setProperty("--toph", document.querySelector(".top").offsetHeight + "px"); setTop(); addEventListener("resize", setTop);
 paintOwner(); drawSide(); drawMain();
 </script>
 </body>

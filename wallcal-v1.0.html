@@ -514,7 +514,7 @@ function addThemes(D, X) {
 }
 </script>
 <script>/* 달력 배경화면 만들기 v1.0 — Blog J (블로그 실행형 · 그림은 이 기기에서만 만들어요) */
-const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 19:10 판";
+const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 21:54 판";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-wallcal1";
 const $ = s => document.querySelector(s);
@@ -598,12 +598,17 @@ function themeOf(bg) {   /* 판 · 글자 색 */
 async function bgSource(w, h) {
   if (S.cat === "내 사진" && PHOTO) return { im: PHOTO, photo: true, mode: "glass", vars: {}, darkBg: true };
   if (S.cat === "단색") { const c = S.solid, l = luma(c); return { solid: c, mode: l > .6 ? "paper" : "glass", vars: l > .6 ? { pbg: "rgba(255,255,255,.75)" } : { ga: ".12" }, darkBg: l <= .6 }; }
+  if (S.mon === "h2") { const r = await sceneImage(S.scene, Math.round(w / 2), h); r.half = true; return r; }   /* 가로 2대: 한 화면 크기 그림 + 오른쪽은 거울로 이어 붙임(이음매가 자연스럽게) */
   return await sceneImage(S.scene, w, h);
 }
 function luma(hex) { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * .299 + ((n >> 8) & 255) * .587 + (n & 255) * .114) / 255; }
 function paintBg(ctx, bg, w, h) {
   if (bg.solid) { ctx.fillStyle = bg.solid; ctx.fillRect(0, 0, w, h); return; }
   if (bg.photo) { const im = bg.im, r = Math.max(w / im.width, h / im.height), dw = im.width * r, dh = im.height * r; ctx.drawImage(im, (w - dw) / 2, (h - dh) * (S.py / 100), dw, dh); if (S.dim) { ctx.fillStyle = `rgba(0,0,0,${S.dim / 100})`; ctx.fillRect(0, 0, w, h); } return; }
+  if (bg.half) { const hw = Math.round(w / 2);   /* 달력 놓는 화면은 원래 그림, 다른 화면은 거울 */
+    if (S.side === "b") { ctx.drawImage(bg.im, hw, 0, w - hw, h); ctx.save(); ctx.translate(hw, 0); ctx.scale(-1, 1); ctx.drawImage(bg.im, 0, 0, hw, h); ctx.restore(); }
+    else { ctx.drawImage(bg.im, 0, 0, hw, h); ctx.save(); ctx.translate(w, 0); ctx.scale(-1, 1); ctx.drawImage(bg.im, 0, 0, w - hw, h); ctx.restore(); }
+    return; }
   ctx.drawImage(bg.im, 0, 0, w, h);
 }
 function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
@@ -814,7 +819,7 @@ function pickPhoto() {
 let rzT = 0; addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(paintPreview, 200); });
 
 /* ── 시작 ── */
-const GATE_ON = false;   /* 대표 글 공개 시각이 정해지면 Date.now() >= Date.parse("…+09:00") 로 */
+const GATE_ON = Date.now() >= Date.parse("2026-11-21T20:00:00+09:00");   /* 대표 글 공개(11/21 20:00)부터 블로그 경유 잠금 */
 (async () => {
   if (GATE_ON && !(await BJ_GATE.check(TOOL, "all"))) return;
   document.body.insertAdjacentHTML("afterbegin", `<header class="hd"><div class="hd-in"><div class="logo"><span class="lg">${'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M7 15l3-3 3 3 2-2 2 2"/></svg>'}<i></i></span><div><small>BLOG J 무료 도구 · 생활</small><b>달력 배경화면 만들기</b></div></div><div class="sp"></div><a class="hbtn" href="https://luvbong.tistory.com/" target="_blank" rel="noopener">${svg(IC.cal)}<span class="tx">Blog J 다른 도구</span></a></div></header>`);

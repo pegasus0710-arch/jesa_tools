@@ -516,7 +516,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 17:55";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 18:01";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -576,7 +576,7 @@ function ensureBase(force) {
   return n;
 }
 ensureBase(false); ls.set("data", D);
-const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
+const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, exReps: 1, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
   engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true };
 let SET = Object.assign({}, SET0, ls.get("set", {}));
 const saveSet = () => ls.set("set", SET);
@@ -770,7 +770,7 @@ function stepsFor(it, mode) {
   else if (mode[0] === "w") {
     const sayW = (r, ph) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph }), sayM = () => S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "mean" });
     const reps = gap => R.forEach((r, i) => { sayW(r, "r" + (i + 1)); S.push(gap ? { t: "gap", ms: gap, ph: "r" + (i + 1) } : { t: "gap", auto: 1, ph: "r" + (i + 1) }); });
-    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex) [[it.ex, it.exk], [it.ex2, it.exk2]].forEach(([e, k], j) => { if (!e) return; if (j) S.push({ t: "gap", ms: 700, ph: "exk" }); S.push({ t: "say", lang: "en", text: e, rate: sp, ph: "ex" }, { t: "gap", ms: 500, ph: "ex" }); if (k) S.push({ t: "say", lang: "ko", text: k, rate: sp, ph: "exk" }); }); };
+    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex) [[it.ex, it.exk], [it.ex2, it.exk2]].forEach(([e, k], j) => { if (!e) return; if (j) S.push({ t: "gap", ms: 700, ph: "exk" }); const xn = Math.max(1, Math.min(3, +SET.exReps || 1)); for (let x = 0; x < xn; x++) { S.push({ t: "say", lang: "en", text: e, rate: sp, ph: "ex" }); S.push(x < xn - 1 ? { t: "gap", auto: 1, ph: "ex" } : { t: "gap", ms: 500, ph: "ex" }); } if (k) S.push({ t: "say", lang: "ko", text: k, rate: sp, ph: "exk" }); }); };
     if (mode === "we2k") { sayW(1, "word"); S.push({ t: "gap", ms: thinkMs(it.ko, "ko"), ph: "think" }); sayM(); S.push({ t: "gap", ms: 500, ph: "mean" }); reps(0); tail(); }
     else if (mode === "wk2e") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); reps(0); tail(); }
     else if (mode === "wtest") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); sayW(1, "r1"); S.push({ t: "gap", ms: 2200, ph: "judge" }); }
@@ -873,6 +873,11 @@ async function idbPut(k, v) { const db = await idb(); return new Promise(res => 
 async function idbCount() { try { const db = await idb(); return await new Promise(res => { const r = db.transaction("a").objectStore("a").count(); r.onsuccess = () => res(r.result); r.onerror = () => res(0); }); } catch (e) { return 0; } }
 async function idbClear() { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").clear(); t.oncomplete = () => res(); }); }
 const rateQ = r => Math.round(r * 100) / 100;
+/* Azure 무료(F0)는 1분에 20번까지만 받음 → 19번 넘으면 기다렸다가 받기 · 429면 잠시 뒤 다시 */
+const AZQ = []; let AZP = "";
+function azNote(t) { const b = $("#busy"); if (b && !b.hidden) $("#busyT").textContent = (AZP ? AZP + " — " : "") + t; }
+async function azWait(ms) { const end = Date.now() + ms; while (Date.now() < end) { if (B.cancel) throw new Error("멈췄어요"); azNote(`무료 키는 1분에 20문장까지라 잠깐 쉬는 중 ${Math.ceil((end - Date.now()) / 1000)}초`); await sleep(500); } }
+async function azSlot() { for (;;) { const now = Date.now(); while (AZQ.length && now - AZQ[0] > 61000) AZQ.shift(); if (AZQ.length < 19) { AZQ.push(now); return; } await azWait(61000 - (now - AZQ[0]) + 100); } }
 async function azGet(text, lang, rate, fresh) {
   const voice = lang === "ko" ? SET.azKo : SET.azEn, r = rateQ(rate), k = voice + "|" + r + "|" + text;
   const hit = fresh ? null : await idbGet(k); if (hit) return hit;
@@ -881,8 +886,10 @@ async function azGet(text, lang, rate, fresh) {
   if (mine && (SET.azChars[mk] || 0) + cost > (+SET.azCap || 450000)) throw new Error(`이번 달 한도(${(+SET.azCap).toLocaleString()}자)를 넘었어요 — 설정에서 늘리거나 다음 달에 써 주세요`);
   if (mine && !SET.azMyKey) throw new Error("설정 → 음성에서 Azure 키를 넣어 주세요");
   if (!mine && !SET.azUrl) throw new Error("설정에서 음성 서버 주소를 넣어 주세요");
-  const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 20000);
   let res;
+  for (let tr = 0; ; tr++) {
+  if (mine) await azSlot();
+  const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 20000);
   try {
     if (mine) {
       const xe = s => String(s).replace(/[<>&'"]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" }[c]));
@@ -892,8 +899,11 @@ async function azGet(text, lang, rate, fresh) {
   }
   catch (e) { throw new Error(e.name === "AbortError" ? (mine ? "Azure가 응답하지 않아요" : "음성 서버가 응답하지 않아요") : (mine ? "Azure에 연결하지 못했어요 (인터넷 · 지역 확인)" : "음성 서버에 연결하지 못했어요 (인터넷 · 주소 확인)")); }
   finally { clearTimeout(tm); }
+  if (mine && res.status === 429 && tr < 6) { await azWait((+res.headers.get("Retry-After") || 20) * 1000 + 500); continue; }
+  break;
+  }
   if (!res.ok) {
-    if (mine) throw new Error(res.status === 401 ? "Azure 키가 맞지 않아요 — 키와 지역(만든 곳)을 확인해 주세요" : res.status === 429 ? "Azure 사용량 한도에 걸렸어요 — 잠시 뒤 또는 다음 달에" : res.status === 400 ? "목소리 이름을 Azure가 받지 않았어요" : "Azure 오류 — " + res.status);
+    if (mine) throw new Error(res.status === 401 ? "Azure 키가 맞지 않아요 — 키와 지역(만든 곳)을 확인해 주세요" : res.status === 429 ? "Azure가 지금 바빠요(무료 키는 1분에 20문장까지) — 잠시 뒤 ▶를 다시 눌러 주세요. 받은 문장은 저장돼 있어요" : res.status === 403 ? "Azure 구독이 멈췄어요 — 포털에서 구독 상태(활성)를 확인해 주세요" : res.status === 400 ? "목소리 이름을 Azure가 받지 않았어요" : "Azure 오류 — " + res.status);
     let m = res.status; try { m = (await res.json()).error || m; } catch (e) {} throw new Error("음성 서버 오류 — " + m);
   }
   const buf = await res.arrayBuffer();
@@ -920,13 +930,14 @@ async function buildChapter(c, queue, mode, onp, cancel) {
   W(0, "RIFF"); hd.setUint32(4, 36 + pcm.length * 2, true); W(8, "WAVE"); W(12, "fmt "); hd.setUint32(16, 16, true); hd.setUint16(20, 1, true); hd.setUint16(22, 1, true); hd.setUint32(24, SR, true); hd.setUint32(28, SR * 2, true); hd.setUint16(32, 2, true); hd.setUint16(34, 16, true); W(36, "data"); hd.setUint32(40, pcm.length * 2, true);
   return { url: URL.createObjectURL(new Blob([hd, pcm], { type: "audio/wav" })), marks, dur: total / SR, sig: sigOf(queue, mode) };
 }
-const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + (i.ex || "") + (i.exk || "") + (i.ex2 || "") + (i.exk2 || "")).join("|")].join("#");
+const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.exReps, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + (i.ex || "") + (i.exk || "") + (i.ex2 || "") + (i.exk2 || "")).join("|")].join("#");
 const B = { cancel: false };
 async function runAzure(fromQi) {
   const au = $("#au"); const tok = ++P.tok;
   if (!P.built || P.built.sig !== sigOf(P.queue, P.mode)) {
-    $("#busy").hidden = false; B.cancel = false; $("#busyT").textContent = "음성 만드는 중…"; $("#busyB").style.width = "0";
-    try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { $("#busyT").textContent = `음성 만드는 중 ${k} / ${n}`; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
+    $("#busy").hidden = false; B.cancel = false; AZP = ""; $("#busyT").textContent = "음성 만드는 중…"; $("#busyB").style.width = "0";
+    if (SET.engine === "azkey") { const seen = new Set(); let nn = 0; for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const vv = st.lang === "ko" ? SET.azKo : SET.azEn, kk = vv + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!(await idbGet(kk))) nn++; } } if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
+    try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { AZP = `음성 만드는 중 ${k} / ${n}`; $("#busyT").textContent = AZP; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
     catch (e) { $("#busy").hidden = true; P.playing = false; paintPlay(); if (e.message !== "멈췄어요") { toast(e.message); if (confirmFallback()) { SET.engine = "device"; saveSet(); runDevice(); } } return; }
     $("#busy").hidden = true;
     if (tok !== P.tok) return;
@@ -1017,7 +1028,7 @@ function drawPlay() {
     <div><div class="lab">말 빠르기</div><div class="seg" data-k="speed">${[[0.8, "느리게"], [0.9, "조금 느리게"], [1, "보통"], [1.1, "빠르게"]].map(([k, t]) => `<button data-v="${k}" class="${SET.speed === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
     <div><div class="lab">다 들으면</div><div class="seg" data-k="loop">${[["off", "멈춤"], ["chapter", "이 챕터 반복"], ["list", "목록 반복"]].map(([k, t]) => `<button data-v="${k}" class="${SET.loop === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
     <label class="tg"><input type="checkbox" data-t="faster" ${SET.faster ? "checked" : ""}><span>반복할수록 조금씩 빠르게</span></label>
-    ${W ? `<label class="tg"><input type="checkbox" data-t="spell" ${SET.spell ? "checked" : ""}><span>철자 불러 주기 (F, I, G…)</span></label><label class="tg"><input type="checkbox" data-t="wex" ${SET.wex ? "checked" : ""}><span>예문도 듣기</span></label>` : ""}
+    ${W ? `<label class="tg"><input type="checkbox" data-t="spell" ${SET.spell ? "checked" : ""}><span>철자 불러 주기 (F, I, G…)</span></label><label class="tg"><input type="checkbox" data-t="wex" ${SET.wex ? "checked" : ""}><span>예문도 듣기</span></label><div style="margin-top:6px"><div class="lab">예문 반복 (예문마다)</div><div class="seg" data-k="exReps">${[1, 2, 3].map(n => `<button data-v="${n}" class="${(+SET.exReps || 1) === n ? "on" : ""}">${n}번</button>`).join("")}</div></div>` : ""}
     <label class="tg"><input type="checkbox" data-t="shuffle" ${SET.shuffle ? "checked" : ""}><span>${un} 섞기</span></label>
     <label class="tg"><input type="checkbox" data-t="reveal" ${SET.reveal ? "checked" : ""}><span>${W ? "답(뜻 · 단어)은 들릴 때 보이기" : "영어는 들릴 때 보이기(먼저 가리기)"}</span></label>
     <label class="tg"><input type="checkbox" data-t="autoStar" ${SET.autoStar ? "checked" : ""}><span>시험에서 ${W ? "모르는 단어" : "틀린 문장"}는 ☆로</span></label>

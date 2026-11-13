@@ -47,6 +47,8 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .links a.main{background:var(--g);color:#fff;box-shadow:none}
 .links a.main:hover{background:var(--gh);color:#fff}
 .links a.post{color:var(--sub)}
+.todos{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}.todos .tl{width:100%;font-size:12px;font-weight:800;color:#a0520c}
+.todo{display:inline-block;padding:4px 9px;border-radius:8px;font-size:12.5px;font-weight:700;color:#8a4a0e;background:#fff3dc;box-shadow:0 0 0 1px #f0cf95 inset}
 .old{margin-top:10px;padding-top:9px;border-top:1px dashed var(--hair)}
 .old .lb{font-size:12.5px;font-weight:800;color:var(--sub2);margin-bottom:6px}
 .old a{font-weight:700}
@@ -122,38 +124,38 @@ const APPS = [
  /* ── 설치형 앱 ── */
  { g: "app", n: "레시피 노트", v: "v1.0", open: "2026-10-29T09:00", post: 788, links: [["열기", "recipe/"], ["설치 화면", "recipe/?install=1"]], old: [["다운로드판 v1.0 (zip)", "downloads/recipe-note-v1.0.zip"]] },
  { g: "app", n: "스크랩 노트", v: "v1.0", open: "2026-11-14T09:00", post: 792, links: [["열기", "scrap/"], ["설치 화면", "scrap/?install=1"]] },
- { g: "app", n: "여행 노트", v: "v1.0", open: "2027-01-01T09:00", post: 793, note: "11-10: 예전 3.0을 v1.0으로 출시(예전 1 · 2 폐쇄, trip2 · trip3 폴더 지움) — 793 날짜 정하는 중(추천 11/22 09:00)", links: [["열기", "trip/"], ["설치 화면", "trip/?install=1"]] },
- { g: "app", n: "일기 노트", v: "v1.0", open: "2026-11-20T09:00", post: 821, note: "시험 사용 중", links: [["열기", "diary/"], ["설치 화면", "diary/?install=1"]] },
+ { g: "app", n: "여행 노트", todo: ["793 대표 글(날짜 정하면 예약)"], v: "v1.0", open: "2027-01-01T09:00", post: 793, note: "11-10: 예전 3.0을 v1.0으로 출시(예전 1 · 2 폐쇄, trip2 · trip3 폴더 지움) — 793 날짜 정하는 중(추천 11/22 09:00)", links: [["열기", "trip/"], ["설치 화면", "trip/?install=1"]] },
+ { g: "app", n: "일기 노트", todo: ["11/24 기능 글 ①", "11/27 기능 글 ②"], v: "v1.0", open: "2026-11-20T09:00", post: 821, note: "시험 사용 중", links: [["열기", "diary/"], ["설치 화면", "diary/?install=1"]] },
  { g: "app", n: "단축키 사전", v: "v1.0", open: "2026-11-15T20:00", post: 834, posts: [["엑셀 배경화면 827", 827], ["한글 828", 828], ["윈도우 11 829", 829], ["크롬 830", 830], ["파워포인트 831", 831], ["워드 832", 832]], note: "PC 설치형 · 6개 프로그램 1,348개 · 하고 싶은 일 · 키로 찾기 · ☆ · 인쇄 · 11-13 뒤로 가기 · 닫기 확인", links: [["열기", "shortcut/"], ["설치 화면", "shortcut/?install=1"]] },
  { g: "app", n: "가계부 달력", v: "v1.1", open: "2026-09-19T09:00", post: 725, links: [["열기", "budget/"], ["설치 화면", "budget/?install=1"]], old: [["v1.0 다운로드판 (zip)", "downloads/budget-calendar-v1.0.zip"]] },
  { g: "app", n: "매매일지", v: "v1.1", open: "2026-09-19T09:00", post: 726, links: [["열기", "trading/"], ["설치 화면", "trading/?install=1"]], old: [["v1.0 다운로드판 (zip)", "downloads/trading-journal-v1.0.zip"]] },
  { g: "app", n: "견적서 발행기", v: "v1.0", open: "2026-10-22T09:00", post: 784, posts: [["사용설명서 785", 785], ["견적서 설명서", "pages/quote"]], links: [["열기", "quote/"], ["설치 화면", "quote/?install=1"], ["다운로드판 (zip)", "downloads/quote-issuer-v1.0.zip"]] },
- { g: "app", n: "자기소개서 쓰기", v: "v1.0", open: "2026-10-24T09:00", post: 786, links: [["열기", "jaso/"], ["다운로드판 (zip)", "downloads/jaso-writer-v1.0.zip"]] },
+ { g: "app", n: "자기소개서 쓰기", todo: ["11/28~ 맞춤법 검사기 쓰는 법"], v: "v1.0", open: "2026-10-24T09:00", post: 786, links: [["열기", "jaso/"], ["다운로드판 (zip)", "downloads/jaso-writer-v1.0.zip"]] },
  { g: "app", n: "사진 뷰어", v: "v1.0", open: "2026-11-17T09:00", post: 794, links: [["열기(PC)", "photo/"], ["다운로드판 (zip)", "downloads/photo-viewer-v1.0.zip"]] },
  { g: "app", n: "이미지 편집기", v: "v2.0", open: "2026-11-18T09:00", post: 798, links: [["열기(PC)", "photo-editor/"], ["다운로드판 (zip)", "downloads/photo-editor-v2.0.zip"]] },
- { g: "app", n: "문자 · 인사말", v: "v1.0", open: "2026-11-23T09:00", post: 822, posts: [["수능 응원 카드 841", 841]], note: "11-13 수능 응원(상황 + 디자인 3) · 「인사 카드」 탭 — 상황 15 · 디자인 15 · 붓글씨 글꼴 10 · 세로쓰기 · 낙관 · 정사각/4:5/스토리", links: [["열기", "msg/"], ["설치 화면", "msg/?install=1"]], old: [["샘플판(11-09)", "msg-v1.0.html"]] },
-  { g: "app", n: "영어 노트", v: "v1.0", open: "2026-11-22T20:00", post: 836, posts: [["Azure 음성 키 837", 837]], note: "설치형 · 회화 10 · 단어 8 기본 챕터 · 붙여넣기(예문 2개) · 예문 반복 · ☆ 모음 · 음성 표시(기기 / 고품질) · Azure 1분 20문장 쉬어 가기 · 11-13", links: [["열기", "eng/"], ["설치 화면", "eng/?install=1"]] },
+ { g: "app", n: "문자 · 인사말", todo: ["822에 인사 카드 단락 넣기", "12/7 크리스마스 카드", "12월 중순 새해 · 연하장 카드", "1월 중순 설 인사 카드"], v: "v1.0", open: "2026-11-23T09:00", post: 822, posts: [["수능 응원 카드 841", 841]], note: "11-13 수능 응원(상황 + 디자인 3) · 「인사 카드」 탭 — 상황 15 · 디자인 15 · 붓글씨 글꼴 10 · 세로쓰기 · 낙관 · 정사각/4:5/스토리", links: [["열기", "msg/"], ["설치 화면", "msg/?install=1"]], old: [["샘플판(11-09)", "msg-v1.0.html"]] },
+  { g: "app", n: "영어 노트", todo: ["11/29 AI로 내 수준 회화 만들기", "12/2 카페 영어 주문 20", "12/6 여행 2주 전 영어", "12/9 스몰토크 영어 20", "12/13 맞장구 영어 20", "12/16 동사구 · 예문 2개", "12/21 미드 대사로 내 챕터", "12/23 단어장 인쇄"], v: "v1.0", open: "2026-11-22T20:00", post: 836, posts: [["Azure 음성 키 837", 837]], note: "설치형 · 회화 10 · 단어 8 기본 챕터 · 붙여넣기(예문 2개) · 예문 반복 · ☆ 모음 · 음성 표시(기기 / 고품질) · Azure 1분 20문장 쉬어 가기 · 11-13", links: [["열기", "eng/"], ["설치 화면", "eng/?install=1"]] },
  { g: "app", n: "무료 도구 키트", v: "v1.0", open: "2026-10-31T17:00", post: 803, links: [["열기", "kit/"], ["설치 화면", "kit/?install=1"]] },
  /* ── 블로그 실행형 웹 도구 ── */
  { g: "web", n: "제사 지방 출력", v: "v2.0", open: "2026-09-21T09:00", post: 727, posts: [["제사 날짜 계산 729", 729], ["제사 도구 설명서", "pages/jesa"]], links: [["지방", "jibang-v2.0.html?tab=print"], ["제사 날짜 계산", "jibang-v2.0.html?tab=calc"], ["차례상", "jibang-v2.0.html?tab=charye"]], old: [["v1.0 웹", "jibang.html"], ["v2.0 다운로드판 (zip)", "downloads/jesa-jibang-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/jesa-jibang-v1.0.zip"], ["제사 도구 설명서 PDF", "downloads/jesa-tools-manual.pdf"]] },
  { g: "web", n: "축문 자동 작성", v: "v2.0", open: "2026-10-17T09:00", post: 744, posts: [["시제 축문 773", 773]], links: [["기제사", "chukmun-v2.0.html?tab=all"], ["시제 · 묘제", "chukmun-v2.0.html?tab=sije"]], old: [["v1.1", "chukmun-v1.1.html"], ["v1.0", "chukmun.html"]] },
  { g: "web", n: "라벨 출력기", v: "v2.0", open: "2026-10-16T09:00", post: 769, posts: [["주소 라벨 770", 770], ["이름 스티커 771", 771], ["라벨 설명서", "pages/label"]], links: [["전체", "label-v2.0.html?tab=all"], ["주소 라벨", "label-v2.0.html?tab=addr"], ["일반 라벨", "label-v2.0.html?tab=gen"]], old: [["v1.0 웹", "label.html"], ["v2.0 다운로드판 (zip)", "downloads/label-printer-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/label-printer-v1.0.zip"], ["주소 검색 시험", "juso-test.html"]] },
- { g: "web", n: "달력 만들기", v: "v1.1", open: "2026-11-06T20:00", post: 802, posts: [["탁상달력 807", 807], ["달력 설명서", "pages/calendar"]], links: [["전체", "calendar-v1.1.html?tab=month"], ["탁상 달력", "calendar-v1.1.html?tab=desk"], ["주간 일정표", "calendar-v1.1.html?tab=week"], ["1년 계획", "calendar-v1.1.html?tab=plan"]], old: [["v1.0", "calendar-v1.0.html"]] },
+ { g: "web", n: "달력 만들기", todo: ["12/1 2027 음력 달력", "12/20 2027년 1월 달력", "매달 20일 다음 달 달력"], v: "v1.1", open: "2026-11-06T20:00", post: 802, posts: [["탁상달력 807", 807], ["달력 설명서", "pages/calendar"]], links: [["전체", "calendar-v1.1.html?tab=month"], ["탁상 달력", "calendar-v1.1.html?tab=desk"], ["주간 일정표", "calendar-v1.1.html?tab=week"], ["1년 계획", "calendar-v1.1.html?tab=plan"]], old: [["v1.0", "calendar-v1.0.html"]] },
  { g: "web", n: "다이어리 속지 만들기", v: "v1.0", open: "2026-11-10T20:00", post: 808, links: [["열기", "planner-v1.0.html"]] },
  { g: "web", n: "파일 변환", v: "v1.0", open: "2026-11-14T20:00", post: 809, posts: [["CSV 한글 810", 810]], links: [["처음", "convert-v1.0.html"], ["HEIC → JPG", "convert-v1.0.html?tab=heic"], ["CSV 한글", "convert-v1.0.html?tab=csv"]] },
  { g: "web", n: "무료 아이콘", v: "v1.0", open: "2026-11-11T09:00", post: 812, links: [["열기", "icon-v1.0.html"]] },
  { g: "web", n: "무료 양식", v: "v1.0", open: "2026-11-08T20:00", post: 804, links: [["열기", "form-v1.0.html"]] },
- { g: "web", n: "연말정산 계산기", v: "v1.0", open: "2026-11-11T22:50", post: 823, posts: [["연금저축 833", 833], ["카드 공제 839", 839], ["부모님 공제 840", 840]], links: [["열기", "yearend-v1.0.html?tab=all"]] },
+ { g: "web", n: "연말정산 계산기", todo: ["11/21 맞벌이 몰아주기", "11/25 월세 세액공제", "11/29 의료비 세액공제", "12/2 고향사랑기부", "12/6 2026 바뀐 것", "1월 중순 간소화 체크리스트"], v: "v1.0", open: "2026-11-11T22:50", post: 823, posts: [["연금저축 833", 833], ["카드 공제 839", 839], ["부모님 공제 840", 840]], links: [["열기", "yearend-v1.0.html?tab=all"]] },
  { g: "web", n: "김치 양념 계산기", v: "v1.0", open: "2026-11-08T09:00", post: 805, links: [["열기", "kimchi-v1.0.html"]] },
  { g: "web", n: "PDF 편집 도구", v: "v1.0", open: "2026-10-19T22:00", post: 745, posts: [["PDF 설명서", "pages/pdf"]], links: [["열기", "pdf.html"]] },
  { g: "web", n: "이미지 도구", v: "v1.0", open: "2026-10-01T09:00", post: 732, posts: [["용량 줄이기 733", 733], ["증명사진 734", 734], ["이미지 설명서", "pages/image-tool"]], links: [["전체", "image.html?tab=all"], ["용량 줄이기", "image.html?tab=compress"], ["증명사진", "image.html?tab=idphoto"]], old: [["v1.0 다운로드판 (zip)", "downloads/image-tool-v1.0.zip"]] },
  { g: "web", n: "차트 만들기", v: "v1.0", open: "2026-10-12T22:00", post: 748, posts: [["차트 설명서", "pages/chart"]], links: [["열기", "chart.html?tab=all"]] },
  { g: "web", n: "쓰기 연습장", v: "v1.0", open: "2026-10-06T09:00", post: 739, posts: [["쓰기 설명서", "pages/write"]], links: [["한글", "write.html?tab=ko"], ["받아쓰기", "write.html?tab=test"], ["영어", "write.html?tab=en"]] },
  { g: "web", n: "상장 만들기", v: "v1.0", open: "2026-11-26T09:00", post: 835, links: [["열기", "award-v1.0.html"], ["감사장으로 시작", "award-v1.0.html?tab=gam"], ["칭찬 상장으로 시작", "award-v1.0.html?tab=kids"]], note: "블로그 실행형 · 종류 10 × 고급 테두리 6 + 기본 7 · 금박 장식 · 직인 이미지 · 잠금은 글 공개 때 켬" },
-  { g: "web", n: "달력 배경화면 만들기", v: "v1.0", open: "2026-11-21T20:00", post: 838, links: [["열기", "wallcal-v1.0.html"]], note: "블로그 실행형 · 배경 29 + 내 사진 · 달력 4모양 · 모니터 2대(가로 = 거울 이어 붙이기) · 잠금은 11/21 20:00부터 자동 · 11-13" },
+  { g: "web", n: "달력 배경화면 만들기", todo: ["12/5 내 사진으로 만들기", "12/12 듀얼 모니터 설정 방법", "12/19 휴대폰 잠금화면", "12/26 2027년 1월", "1/23 2월 · 설날", "매달 하순 ○월 배경화면"], v: "v1.0", open: "2026-11-21T20:00", post: 838, links: [["열기", "wallcal-v1.0.html"]], note: "블로그 실행형 · 배경 29 + 내 사진 · 달력 4모양 · 모니터 2대(가로 = 거울 이어 붙이기) · 잠금은 11/21 20:00부터 자동 · 11-13" },
  /* ── 개발 중 · 샘플 ── */
- { g: "dev", n: "복불복 게임", v: "v1.0", links: [["열기", "game-v1.0.html"]], note: "블로그 글 아직 없음" },
- { g: "dev", n: "일정표 노트(간트)", v: "v1.0", links: [["열기", "gantt/"], ["예시로 열기", "gantt/?demo=1"], ["설치 화면", "gantt/?install=1"]], old: [["블로그 실행형 간트 v1.0(미공개)", "gantt-v1.0.html"]], note: "설치형 · 일정표 여러 개 · 처음 계획 대비 늦어짐 · 이번 주 · 바뀐 기록 · 드라이브 「일정표노트」 · 11-12" },
+ { g: "dev", n: "복불복 게임", todo: ["대표 글(12월 초 · 송년회)"], v: "v1.0", links: [["열기", "game-v1.0.html"]], note: "블로그 글 아직 없음" },
+ { g: "dev", n: "일정표 노트(간트)", todo: ["대표 글(12월 중순 전)"], v: "v1.0", links: [["열기", "gantt/"], ["예시로 열기", "gantt/?demo=1"], ["설치 화면", "gantt/?install=1"]], old: [["블로그 실행형 간트 v1.0(미공개)", "gantt-v1.0.html"]], note: "설치형 · 일정표 여러 개 · 처음 계획 대비 늦어짐 · 이번 주 · 바뀐 기록 · 드라이브 「일정표노트」 · 11-12" },
  /* ── 아이디어 · 미개발 (아이디어 보드 기준 · 11-11) ── */
  { g: "idea", n: "돈 계산기 — 연봉 실수령 · 3.3% · 부가세", v: "", plan: "2026-12", note: "4대보험 + 간이세액표 · 3.3% 환급 · 부가세 역산", links: [] },
  { g: "idea", n: "만능 변환기", v: "", plan: "2026-12", note: "평수 · 단위 · 만 나이 · D-day · 음력 ↔ 양력 · 60갑자 · 띠(제사 엔진 재사용)", links: [] },
@@ -193,7 +195,7 @@ function status(a) {
 function draw() {
   const q = document.getElementById("q").value.trim().toLowerCase(); let h = "";
   for (const g of Object.keys(SEC)) {
-    const items = APPS.filter(a => a.g === g && (!q || (a.n + " " + a.v + " " + (a.note || "") + " " + (a.plan || "") + " " + (a.g === "idea" ? "미개발" : "") + " " + a.links.concat(a.old || []).map(l => l.join(" ")).join(" ")).toLowerCase().includes(q)));
+    const items = APPS.filter(a => a.g === g && (!q || (a.n + " " + a.v + " " + (a.note || "") + " " + (a.todo || []).join(" ") + " " + (a.plan || "") + " " + (a.g === "idea" ? "미개발" : "") + " " + a.links.concat(a.old || []).map(l => l.join(" ")).join(" ")).toLowerCase().includes(q)));
     if (!items.length) continue;
     h += `<div class="sec"><h2>${SEC[g][0]}</h2><span>${SEC[g][1]}</span></div>`;
     if (g === "idea") { h += `<div class="xt"><table><thead><tr><th class="nm">아이디어</th><th>상태</th><th>계획 시기</th><th>내용</th></tr></thead><tbody>${items.map(a => `<tr><td class="nm"><b>${esc(a.n)}</b></td><td><span class="st idea">미개발</span></td><td class="num">${esc(a.plan || "")}</td><td><div class="ty">${esc(a.note || "")}</div></td></tr>`).join("")}</tbody></table></div>`; continue; }
@@ -204,12 +206,13 @@ function draw() {
       const open = web ? `<div class="links">${A(["블로그 글에서 열기", P(a.post)], "main")}</div><div class="links sm">${a.links.map(l => A(l)).join("")}</div>`
                        : `<div class="links">${a.links.map((l, i) => A(l, i === 0 ? "main" : "")).join("")}</div>`;
       const posts = (a.post ? [A(["" + a.post, P(a.post)], "post")] : []).concat((a.posts || []).map(([t, n]) => A([t, P(n)], "post")));
+      const todo = (a.todo || []).map(t => `<span class="todo">${esc(t)}</span>`).join("");
       const extra = (a.old || []).map(l => A(l)).join("");
       h += `<tr><td class="nm"><b>${esc(a.n)}</b><div class="ty">${a.g === "app" ? "설치형" : a.g === "web" ? "블로그 실행형" : "개발 중"}</div></td>
         <td class="num"><span class="ver">${esc(a.v)}</span></td>
         <td class="num">${status(a)[0]}</td>
         <td>${open}</td>
-        <td><div class="links">${posts.join("") || '<span class="dash">—</span>'}</div></td>
+        <td><div class="links">${posts.join("") || (todo ? "" : '<span class="dash">—</span>')}</div>${todo ? `<div class="todos"><div class="tl">아직 안 쓴 글 ${a.todo.length}</div>${todo}</div>` : ""}</td>
         <td>${extra ? `<div class="links">${extra}</div>` : ""}${a.note ? `<div class="ty">${esc(a.note)}</div>` : ""}${!extra && !a.note ? '<span class="dash">—</span>' : ""}</td></tr>`;
     }
     h += `</tbody></table></div>`;

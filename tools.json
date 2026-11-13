@@ -579,6 +579,27 @@
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/eng/",
    "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/eng.png"
+  },
+  {
+   "name": "달력 배경화면 만들기",
+   "category": "디지털",
+   "area": "life",
+   "icon": "calendar",
+   "type": [
+    "온라인"
+   ],
+   "desc": "다음 달 달력이 들어간 배경화면을 PC · 노트북 · 휴대폰 · 모니터 2대 해상도에 맞춰 — 그림 29가지 · 내 사진, 공휴일 · 음력 · 기념일 메모",
+   "short": "PC · 휴대폰 달력 배경화면",
+   "link": "https://luvbong.tistory.com/838",
+   "open": "2026-11-21T20:00:00+09:00",
+   "ver": "1.0",
+   "run": [
+    {
+     "n": "달력 배경화면 만들기",
+     "q": "wallcal"
+    }
+   ],
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/wallcal.png"
   }
  ],
  "soon": [
@@ -861,6 +882,21 @@
    "no": 837,
    "t": "Azure 음성 키 무료로 받는 법 — 화면 꺼도 고품질 영어 듣기",
    "at": "2026-11-25T20:00:00+09:00"
+  },
+  {
+   "no": 838,
+   "t": "12월 달력 배경화면 무료로 만들기 — PC · 노트북 · 휴대폰 해상도에 맞춰",
+   "at": "2026-11-21T20:00:00+09:00"
+  },
+  {
+   "no": 839,
+   "t": "신용카드 소득공제 계산법 2026 — 25% 넘으면 체크카드",
+   "at": "2026-11-15T09:00:00+09:00"
+  },
+  {
+   "no": 840,
+   "t": "부모님 부양가족 공제 조건 2026 — 소득 100만원 · 따로 살아도",
+   "at": "2026-11-16T09:00:00+09:00"
   }
  ],
  "kit": {

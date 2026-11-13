@@ -2,7 +2,7 @@
  "id": "/jesa_tools/shortcut/",
  "name": "단축키 사전 — Blog J",
  "short_name": "단축키 사전",
- "description": "엑셀 · 한글 · 윈도우 11 · 크롬 · 파워포인트 · 워드 단축키를 하고 싶은 일로 찾기",
+ "description": "엑셀 · 한글 · 윈도우 11 · 크롬 · 엣지 · 파워포인트 · 워드 단축키를 하고 싶은 일로 찾기",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",

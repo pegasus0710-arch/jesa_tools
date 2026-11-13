@@ -1,7 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="only light"><meta name="theme-color" content="#0B3D4A">
-<title>영어 말하기 연습 | Blog J</title>
+<title>영어회화 노트 | Blog J</title>
 <meta name="robots" content="noindex">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.png" type="image/png">
@@ -184,7 +184,7 @@ select.inp{appearance:auto}
   .stagep{min-height:300px}
 }
 </style></head><body>
-<header class="hd"><div class="hd-in"><div class="logo"><img src="icon-192.png" alt=""><div><small>Blog J 개인 학습</small><b>영어 말하기 연습</b></div></div><span class="sp"></span><nav class="nav" id="nav"></nav><span class="gdot" id="gdot"></span></div></header>
+<header class="hd"><div class="hd-in"><div class="logo"><img src="icon-192.png" alt=""><div><small>Blog J 개인 학습</small><b>영어회화 노트</b></div></div><span class="sp"></span><nav class="nav" id="nav"></nav><span class="gdot" id="gdot"></span></div></header>
 <main class="wrap" id="main"></main>
 <nav class="tabs" id="tabs"></nav>
 <div id="sheet" hidden></div>
@@ -436,12 +436,12 @@ const SYNC = BJSync.create({
 
 </script>
 <script>
-/* 영어 말하기 연습 v1.0 — Blog J 개인 학습 앱 (설치형 · 구글 드라이브 동기화)
+/* 영어회화 노트 v1.0 — Blog J 개인 학습 앱 (설치형 · 구글 드라이브 동기화)
    한글을 듣고 → 영어로 말해 보고(생각 시간) → 영어 문장을 2~3번 따라 말하기
    음성: ① 기기 음성(화면 켜 둠) ② 고품질 음성(Azure · 내 서버 경유 · 챕터 한 파일 → 화면 꺼도 재생) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 00:48";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 08:52";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -657,6 +657,7 @@ async function runDevice() {
   const tok = ++P.tok; P.playing = true; keepOn(true); paintPlay();
   while (tok === P.tok) {
     const it = curIt(); if (!it) break;
+    paintPlay();
     const S = stepsFor(it, P.mode); let lastMs = 0;
     for (let si = 0; si < S.length && tok === P.tok; si++) {
       const s = S[si]; P.phase = s.ph; paintPhase();
@@ -773,7 +774,7 @@ $("#au").addEventListener("play", () => { if (SET.engine === "azure") { P.playin
 /* ── 잠금 화면 · 블루투스 단추(Media Session) ── */
 function mediaMeta() {
   if (!("mediaSession" in navigator)) return;
-  try { navigator.mediaSession.metadata = new MediaMetadata({ title: P.ch ? P.ch.name : "영어 말하기 연습", artist: "영어 말하기 연습 · " + (MODES.find(m => m[0] === P.mode) || [0, ""])[1], album: "Blog J", artwork: [{ src: "icon-192.png", sizes: "192x192", type: "image/png" }, { src: "icon-512.png", sizes: "512x512", type: "image/png" }] }); } catch (e) {}
+  try { navigator.mediaSession.metadata = new MediaMetadata({ title: P.ch ? P.ch.name : "영어회화 노트", artist: "영어회화 노트 · " + (MODES.find(m => m[0] === P.mode) || [0, ""])[1], album: "Blog J", artwork: [{ src: "icon-192.png", sizes: "192x192", type: "image/png" }, { src: "icon-512.png", sizes: "512x512", type: "image/png" }] }); } catch (e) {}
 }
 if ("mediaSession" in navigator) {
   const A = (a, f) => { try { navigator.mediaSession.setActionHandler(a, f); } catch (e) {} };
@@ -878,7 +879,7 @@ async function drawSet() {
   const st = !on ? ["", "연결 안 됨"] : s.busy ? ["", "동기화 중"] : s.live ? ["ok", "연결됨"] : ["", "쉬는 중"];
   const vk = VOICES.filter(v => /^ko/i.test(v.lang)), ve = VOICES.filter(v => /^en/i.test(v.lang));
   const mk = todayS().slice(0, 7);
-  let h = `<div class="vh"><div><h2>설정</h2><p>영어 말하기 연습 v${APP_VER}</p></div></div><div class="setg">`;
+  let h = `<div class="vh"><div><h2>설정</h2><p>영어회화 노트 v${APP_VER}</p></div></div><div class="setg">`;
   h += `<div class="sc"><div class="sh2">${svg(IC.head)}음성</div><div class="seg" data-k="engine" style="margin-bottom:10px"><button data-v="device" class="${SET.engine === "device" ? "on" : ""}">기기 음성</button><button data-v="azure" class="${SET.engine === "azure" ? "on" : ""}">고품질 음성</button></div>`;
   if (SET.engine === "device") {
     h += `<p>휴대폰 · PC에 들어 있는 음성이에요. 인터넷 없이 되지만 <b>화면을 켜 두어야</b> 해요.</p>
@@ -897,7 +898,7 @@ async function drawSet() {
     <p class="hint">저장한 문장 음성 ${n.toLocaleString()}개 · 이번 달 이 기기에서 새로 받은 글자 약 ${(SET.azChars[mk] || 0).toLocaleString()}자 (한글은 2자로 셈 · Azure 무료 F0 = 한 달 50만 자)<br>Azure 키는 서버에만 두고 이 앱에는 넣지 않아요.</p>`;
   }
   h += `</div>`;
-  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록을 내 구글 드라이브 「영어말하기」 폴더에 저장해요. PC에서 문장을 넣고 휴대폰에서 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록을 내 구글 드라이브 「영어회화노트」 폴더에 저장해요. PC에서 문장을 넣고 휴대폰에서 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
   if (!MOB()) h += `<div class="sc"><div class="sh2">${svg(IC.phone)}휴대폰에서도 쓰기</div><div class="qrw"><div class="qr">${QR_SVG}</div><p>휴대폰 카메라로 찍으면 설치 화면이 열려요. 휴대폰에서도 <b>같은 구글 계정</b>으로 드라이브를 연결하면 PC에서 넣은 문장이 그대로 들어와요.</p></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.dl)}백업</div><p>모든 챕터 · 기록을 파일 하나로 받아 두고 되살릴 수 있어요.${SET.bkAt ? `<br><span class="num">마지막 백업 ${ymdw(ymdT(SET.bkAt))} ${hm(SET.bkAt)}</span>` : ""}</p><div class="row"><button class="btn" data-a="bk" data-v="make">${svg(IC.dl)}백업 만들기</button><button class="btn" data-a="bk" data-v="restore">${svg(IC.upl)}되살리기</button></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.phone)}앱으로 설치</div><p>${INST.standalone ? "지금 설치한 앱으로 쓰고 있어요." : "홈 화면 · 바탕 화면에 아이콘으로 두고 바로 열 수 있어요."}</p>${INST.standalone ? "" : `<button class="btn go" data-a="inst">${svg(IC.phone)}설치하기</button>`}</div>`;
@@ -908,7 +909,7 @@ async function drawSet() {
 /* ── 백업 · 합치기 ── */
 function exportObj() { return { app: "bj-eng", v: 1, at: Date.now(), chapters: D.chapters, log: D.log, gone: D.gone }; }
 function mergeIn(o) {
-  if (!o || o.app !== "bj-eng") throw new Error("영어 말하기 연습 자료가 아니에요");
+  if (!o || o.app !== "bj-eng") throw new Error("영어회화 노트 자료가 아니에요");
   let n = 0; const gone = Object.assign({}, D.gone);
   Object.entries(o.gone || {}).forEach(([id, ts]) => { if (!gone[id] || ts > gone[id]) gone[id] = ts; });
   const m = new Map(D.chapters.map(c => [c.id, c]));
@@ -919,14 +920,14 @@ function mergeIn(o) {
 }
 function dl(b, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); }
 function backupMake() {
-  const b = new Blob([JSON.stringify(exportObj(), null, 1)], { type: "application/json" }), name = `영어말하기_백업_${todayS()}.json`, f = new File([b], name, { type: "application/json" });
+  const b = new Blob([JSON.stringify(exportObj(), null, 1)], { type: "application/json" }), name = `영어회화노트_백업_${todayS()}.json`, f = new File([b], name, { type: "application/json" });
   (async () => { if (MOB() && navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f] }); } catch (er) { if (er.name === "AbortError") return; } } else dl(b, name);
     SET.bkAt = Date.now(); saveSet(); toast("백업 파일을 만들었어요"); render(); })();
 }
 function backupPick() { const ip = document.createElement("input"); ip.type = "file"; ip.accept = ".json,application/json"; ip.onchange = async () => { const f = ip.files[0]; if (!f) return; try { const n = mergeIn(JSON.parse(await f.text())); touch(); toast(`되살렸어요 — 챕터 ${n}개 반영`); go("home"); } catch (er) { toast("되살리지 못했어요 — " + er.message); } }; ip.click(); }
 
 /* ── 구글 드라이브 ── */
-const GD_CLIENT_ID = "1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com", GD_SCOPE = "https://www.googleapis.com/auth/drive.file", GDF = "영어말하기", GDJ = "영어말하기.json";
+const GD_CLIENT_ID = "1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com", GD_SCOPE = "https://www.googleapis.com/auth/drive.file", GDF = "영어회화노트", GDJ = "영어회화노트.json";
 const GD = { fid: null, busy: false, toastNext: false };
 const gdHttp = () => location.protocol === "https:" || location.hostname === "localhost";
 async function gdApi(url, opt = {}) {
@@ -1008,7 +1009,7 @@ function openInstall() {
     : ["주소창 오른쪽의 설치 아이콘을 누르세요", "없으면 「⋮」 → 「저장 및 공유」 → 「앱 설치」", "「설치」"];
   const sh = $("#sheet"); sh.hidden = false;
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>앱으로 설치하기</b><button class="btn sm" data-a="close">닫기</button></div>
-  <div class="iapp"><img src="icon-192.png" alt="" width="56" height="56"><div><b>영어 말하기 연습</b><span>Blog J · 가입 없이</span></div></div>
+  <div class="iapp"><img src="icon-192.png" alt="" width="56" height="56"><div><b>영어회화 노트</b><span>Blog J · 가입 없이</span></div></div>
   ${INST.ev ? `<button class="btn go full" data-a="inst">${svg(IC.phone)}지금 설치하기</button>` : ""}
   <ol class="isteps">${steps.map(s => `<li>${s}</li>`).join("")}</ol></div>`;
 }
@@ -1048,7 +1049,7 @@ document.addEventListener("click", async e => {
   if (a === "pp") return playPause();
   if (a === "next") return jump(1);
   if (a === "prev") return jump(-1);
-  if (a === "goq") { const i = +el.dataset.i; if (SET.engine === "azure" && P.built) { jump(i - P.qi); } else { stopAll(); P.qi = i; P.phase = ""; paintPlay(); } return; }
+  if (a === "goq") { const i = +el.dataset.i; if (SET.engine === "azure" && P.built) { jump(i - P.qi); } else { const was = P.playing; stopAll(); P.qi = i; P.phase = ""; paintPlay(); if (was) runDevice(); } return; }
   if (a === "starcur") { const it = curIt(); if (it) { toggleStar(it.id); paintPlay(); toast(findItem(it.id)[1] && findItem(it.id)[1].star ? "☆ 어려운 문장에 넣었어요" : "☆ 뺐어요"); } return; }
   if (a === "judge") return judge(el.dataset.v === "1");
   if (a === "cancel") { B.cancel = true; return; }

@@ -168,6 +168,30 @@ select.inp{appearance:auto}
 .iapp img{border-radius:12px}
 .iapp b{display:block;font-size:16px}.iapp span{font-size:13px;color:var(--sub)}
 .isteps{padding-left:20px;margin:10px 0;line-height:1.9}
+/* 아래 미니 플레이어(다른 화면에서도 재생 상태) */
+#mini{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom));z-index:39;background:var(--deep);color:#fff;box-shadow:0 -8px 22px rgba(11,25,32,.22)}
+#mini[hidden]{display:none}
+.mini-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:9px 12px 9px 16px;position:relative}
+.mini-bar{position:absolute;left:0;right:0;top:0;height:3px;background:rgba(255,255,255,.14)}
+.mini-bar i{display:block;height:100%;background:var(--sun)}
+.mini-tx{flex:1;min-width:0;text-align:left;color:#fff;padding:2px 0}
+.mini-tx small{display:flex;gap:6px;align-items:center;font-size:12.5px;font-weight:700;color:var(--deeps);white-space:nowrap;overflow:hidden}
+.mini-tx small span{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mini-tx small span.num{flex-shrink:0;overflow:visible}
+.mini-tx small em{font-style:normal;font-weight:800;padding:1px 7px;border-radius:6px;background:rgba(255,255,255,.12);color:#fff;flex-shrink:0}
+.mini-tx small em.live{background:var(--sun)}
+.mini-tx b{display:block;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-in .mb{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;flex-shrink:0}
+.mini-in .mb:hover{background:rgba(255,255,255,.12)}
+.mini-in .mb svg{width:20px;height:20px}
+.mini-in .mpp{width:48px;height:48px;background:#fff;color:var(--deep)}
+.mini-in .mpp:hover{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
+.mini-in .mpp svg{width:22px;height:22px}
+body.hasmini{padding-bottom:calc(140px + env(safe-area-inset-bottom))}
+body.hasmini .selbar{bottom:calc(148px + env(safe-area-inset-bottom))}
+body.hasmini #toast{bottom:calc(156px + env(safe-area-inset-bottom))}
+body.hasmini #syband{bottom:calc(148px + env(safe-area-inset-bottom))}
+@media (min-width:901px){#mini{bottom:0}body.hasmini{padding-bottom:76px}body.hasmini .selbar{bottom:80px}body.hasmini #toast{bottom:90px}body.hasmini #syband{bottom:84px}}
 @media (min-width:901px){body{padding-bottom:0}.selbar{bottom:12px}#toast{bottom:24px}#syband{bottom:16px}}
 @media (max-width:900px){
   .nav{display:none}.tabs{display:grid}
@@ -186,6 +210,7 @@ select.inp{appearance:auto}
 </style></head><body>
 <header class="hd"><div class="hd-in"><div class="logo"><img src="icon-192.png" alt=""><div><small>Blog J 개인 학습</small><b>영어회화 노트</b></div></div><span class="sp"></span><nav class="nav" id="nav"></nav><span class="gdot" id="gdot"></span></div></header>
 <main class="wrap" id="main"></main>
+<div id="mini" hidden></div>
 <nav class="tabs" id="tabs"></nav>
 <div id="sheet" hidden></div>
 <div id="busy" hidden><div class="bx"><div id="busyT">음성 만드는 중</div><div class="bar"><i id="busyB"></i></div><button class="btn sm" data-a="cancel">멈추기</button></div></div>
@@ -441,7 +466,7 @@ const SYNC = BJSync.create({
    음성: ① 기기 음성(화면 켜 둠) ② 고품질 음성(Azure · 내 서버 경유 · 챕터 한 파일 → 화면 꺼도 재생) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 08:52";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 12:14";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -523,7 +548,7 @@ function render() {
   $("#nav").innerHTML = nav.map(([k, t, i]) => `<button data-nav="${k}" class="${U.scr === k ? "on" : ""}">${svg(i)}${t}</button>`).join("");
   $("#tabs").innerHTML = nav.map(([k, t, i]) => `<button data-nav="${k}" class="${U.scr === k ? "on" : ""}">${svg(i)}${t}</button>`).join("");
   if (U.scr === "home") drawHome(); else if (U.scr === "play") drawPlay(); else if (U.scr === "stat") drawStat(); else if (U.scr === "set") drawSet(); else if (U.scr === "edit") drawEdit();
-  paintSync();
+  paintSync(); paintMini();
 }
 
 /* ── 홈(챕터) ── */
@@ -539,7 +564,7 @@ function drawHome() {
     return `<div class="ch${U.sel.has(c.id) ? " sel" : ""}${virt ? " star" : ""}"><button class="ck" data-a="sel" data-id="${c.id}" aria-label="고르기">${U.sel.has(c.id) ? svg(IC.check) : ""}</button>
       <button class="tx" data-a="edit" data-id="${c.id}"><b>${esc(c.name)}</b><small>${c.items.length}문장${rate != null ? ` · 시험 ${rate}%` : ""}${virt ? " · ☆ 표시한 문장이 저절로 모여요" : ""}${!virt ? `<span class="tag${due ? " due" : ""}">${rvLabel(c)}</span>` : ""}</small></button>
       ${virt ? "" : `<button class="ed" data-a="edit" data-id="${c.id}" aria-label="고치기">${svg(IC.edit)}</button>`}
-      <button class="pl" data-a="play1" data-id="${c.id}" aria-label="듣기" ${c.items.length ? "" : "disabled"}>${svg(IC.play)}</button></div>`;
+      <button class="pl" data-a="play1" data-id="${c.id}" aria-label="${isCur(c.id) && P.playing ? "멈추기" : "듣기"}" ${c.items.length ? "" : "disabled"}>${svg(isCur(c.id) && P.playing ? IC.pause : IC.play)}</button></div>`;
   };
   D.chapters.forEach(c => h += card(c));
   if (sc.items.length) h += card(sc, true);
@@ -788,7 +813,7 @@ function playPause(want) {
   const on = want == null ? !P.playing : want;
   if (!P.ch) { const c = dueList()[0] || D.chapters.find(x => x.items.length); if (!c) return toast("챕터를 먼저 만들어 주세요"); P.list = [c.id]; loadCh(0); }
   if (!on) { stopAll(); paintPlay(); return; }
-  P.mode = SET.mode; logStart();
+  P.mode = SET.mode; P.started = true; logStart();
   if (SET.engine === "azure") { const au = $("#au"); if (P.built && P.built.sig === sigOf(P.queue, P.mode) && au.src) { au.play().catch(() => {}); P.playing = true; paintPlay(); } else runAzure(); }
   else runDevice();
 }
@@ -836,7 +861,24 @@ function engineNote() {
   if (SET.engine === "azure") return `<div class="engine az"><b>고품질 음성</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 문장을 넘겨요.</div>`;
   return `<div class="engine"><b>기기 음성</b> — 인터넷 없이 바로 들려요. 대신 <b>화면을 켜 두어야</b> 해요(재생 중 화면이 꺼지지 않게 막아 둠). 화면을 끄고 들으려면 설정 → 고품질 음성.</div>`;
 }
+const isCur = id => !!(P.ch && P.ch.id === id);
+function paintCards() {
+  $$('.pl[data-a="play1"]').forEach(b => { const on = isCur(b.dataset.id) && P.playing; b.innerHTML = svg(on ? IC.pause : IC.play); b.setAttribute("aria-label", on ? "멈추기" : "듣기"); });
+}
+function paintMini() {
+  const mi = $("#mini"); if (!mi) return;
+  const it = curIt(), show = !!(P.ch && it && P.started && U.scr !== "play");
+  mi.hidden = !show; document.body.classList.toggle("hasmini", show);
+  if (!show) return;
+  const n = P.queue.length, ph = P.playing && P.phase ? (PHN[P.phase] || "") : "";
+  mi.innerHTML = `<div class="mini-in"><div class="mini-bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div>
+    <button class="mini-tx" data-nav="play" aria-label="듣기 화면 열기"><small><span>${esc(P.ch.name)}</span><span class="num">${P.qi + 1} / ${n}</span><em class="${P.playing ? "live" : ""}">${P.playing ? (ph || "재생 중") : "멈춤"}</em></small><b>${esc(P.mode === "e2k" ? it.en : it.ko)}</b></button>
+    <button class="mb" data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button>
+    <button class="mb mpp" data-a="pp" aria-label="${P.playing ? "멈추기" : "재생"}">${svg(P.playing ? IC.pause : IC.play)}</button>
+    <button class="mb" data-a="next" aria-label="다음 문장">${svg(IC.next)}</button></div>`;
+}
 function paintPlay() {
+  paintMini(); paintCards();
   const stg = $("#stg"); if (!stg) return;
   const it = curIt(), c = P.ch;
   if (!it) { stg.innerHTML = `<div class="ko" style="margin:auto 0">챕터를 골라 주세요</div>`; $("#ppb").innerHTML = svg(IC.play); return; }
@@ -848,6 +890,7 @@ function paintPlay() {
   paintPhase();
 }
 function paintPhase() {
+  const em = $("#mini .mini-tx em"); if (em && P.playing) { em.textContent = PHN[P.phase] || "재생 중"; em.className = "live"; }
   const ph = $("#phs"); if (!ph) return; const it = curIt(); if (!it) return;
   const L = phaseList(P.mode);
   ph.innerHTML = L.map(k => `<i class="${P.phase === k ? "on" : ""}">${PHN[k]}${k === "think" && P.phase === "think" ? " · 말해 보세요" : ""}</i>`).join("");
@@ -1017,7 +1060,7 @@ if ("serviceWorker" in navigator && gdHttp()) addEventListener("load", () => nav
 
 /* ── 누름 처리 ── */
 document.addEventListener("click", async e => {
-  const nv = e.target.closest("[data-nav]"); if (nv) { if (nv.dataset.nav !== "play" && U.scr === "edit") saveEdit(); go(nv.dataset.nav); return; }
+  const nv = e.target.closest("[data-nav]"); if (nv) { if (U.scr === "edit") saveEdit(); go(nv.dataset.nav); return; }
   const sg = e.target.closest(".seg[data-k] button"); if (sg) {
     const k = sg.parentElement.dataset.k, v = sg.dataset.v; SET[k] = /^-?[\d.]+$/.test(v) && k !== "think" ? +v : v; saveSet();
     if (k === "engine") { stopAll(); P.built = null; drawSet(); return; }
@@ -1040,7 +1083,7 @@ document.addEventListener("click", async e => {
   if (a === "sel") { const id = el.dataset.id; U.sel.has(id) ? U.sel.delete(id) : U.sel.add(id); drawHome(); return; }
   if (a === "selclr") { U.sel.clear(); drawHome(); return; }
   if (a === "playsel") { const ids = [...D.chapters.map(c => c.id), STAR_ID].filter(id => U.sel.has(id)); U.sel.clear(); setList(ids); return; }
-  if (a === "play1") { if (U.scr === "edit") saveEdit(); setList([el.dataset.id]); return; }
+  if (a === "play1") { if (U.scr === "edit") saveEdit(); if (isCur(el.dataset.id) && P.started && P.list.length === 1 && U.scr === "home") return playPause(); setList([el.dataset.id]); return; }
   if (a === "playrv") { setList(dueList().map(c => c.id)); return; }
   if (a === "addit") { saveEdit(); const c = chById(U.edit); c.items.push({ id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }); touch(c); drawEdit(); const ins = $$("#its .ko2"); ins[ins.length - 1].focus(); return; }
   if (a === "delit") { saveEdit(); const c = chById(U.edit); c.items = c.items.filter(i => i.id !== el.dataset.id); touch(c); drawEdit(); return; }

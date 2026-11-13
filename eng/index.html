@@ -184,6 +184,7 @@ select.inp{appearance:auto}
 .exx{font-size:16px;margin-top:16px;line-height:1.5;color:#fff;opacity:.92}
 .exx small{display:block;font-size:14px;color:var(--deeps);margin-top:2px}
 .exx.dim{opacity:.25}
+.exx p{margin:0}.exx p+p{margin-top:10px}
 .wdx.hide,.mnx.hide{color:transparent;text-shadow:0 0 14px rgba(255,255,255,.55);user-select:none}
 /* 단어장 인쇄 */
 #prt{display:none}
@@ -515,7 +516,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 15:36";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 17:35";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -688,7 +689,7 @@ function drawEdit() {
 }
 function itRow(it, i, virt) {
   const c = findItem(it.id)[0];
-  if (c && c.sec === "word") return `<div class="it w" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp wd2" data-f="en" value="${esc(it.en)}" placeholder="단어 (영어)" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="off"><input class="inp mn2" data-f="ko" value="${esc(it.ko)}" placeholder="뜻" ${virt ? "readonly" : ""}><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 단어">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}<input class="inp ex2" data-f="ex" value="${esc(it.ex || "")}" placeholder="예문 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2" data-f="exk" value="${esc(it.exk || "")}" placeholder="예문 뜻" ${virt ? "readonly" : ""}></div>`;
+  if (c && c.sec === "word") return `<div class="it w" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp wd2" data-f="en" value="${esc(it.en)}" placeholder="단어 (영어)" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="off"><input class="inp mn2" data-f="ko" value="${esc(it.ko)}" placeholder="뜻" ${virt ? "readonly" : ""}><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 단어">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}<input class="inp ex2" data-f="ex" value="${esc(it.ex || "")}" placeholder="예문 1 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2" data-f="exk" value="${esc(it.exk || "")}" placeholder="예문 1 뜻" ${virt ? "readonly" : ""}><input class="inp ex2 exb" data-f="ex2" value="${esc(it.ex2 || "")}" placeholder="예문 2 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2 exb" data-f="exk2" value="${esc(it.exk2 || "")}" placeholder="예문 2 뜻" ${virt ? "readonly" : ""}></div>`;
   return `<div class="it" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp ko2" data-f="ko" value="${esc(it.ko)}" placeholder="한글 문장" ${virt ? "readonly" : ""}><input class="inp en2" data-f="en" value="${esc(it.en)}" placeholder="English sentence" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="sentences"><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 문장">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}</div>`;
 }
 function findItem(id) { for (const c of D.chapters) { const it = c.items.find(i => i.id === id); if (it) return [c, it]; } return [null, null]; }
@@ -711,13 +712,26 @@ function parsePaste(txt) {
 /* 단어: 「단어[탭]뜻[탭]예문[탭]예문 뜻」 · 「단어 | 뜻 | 예문」 · 「단어 - 뜻」 */
 function parseWords(txt) {
   const hasKo = s => /[가-힣]/.test(s), out = [];
-  txt.replace(/\r/g, "").split("\n").map(s => s.trim()).filter(Boolean).forEach(s => {
-    s = s.replace(/^\d+[.)]\s*/, "");
-    let p = s.includes("\t") ? s.split("\t") : /\s\|\s/.test(s) ? s.split(/\s\|\s/) : /\s[-–:]\s/.test(s) ? s.split(/\s[-–:]\s/) : null;
-    if (!p) return; p = p.map(x => x.trim()).filter(Boolean); if (p.length < 2) return;
-    let [a, b, ex = "", exk = ""] = p; if (hasKo(a) && !hasKo(b)) [a, b] = [b, a];
-    if (ex && hasKo(ex) && exk && !hasKo(exk)) [ex, exk] = [exk, ex];
-    out.push({ en: a, ko: b, ex, exk });
+  const BUL = /^[*•·▪◦‣\-–]\s+/, ARW = /\s*(?:→|->|=>|⇒|➜|➔)\s*/;
+  const splitEx = s => { let p = ARW.test(s) ? s.split(ARW) : s.includes("\t") ? s.split("\t") : /\s\|\s/.test(s) ? s.split(/\s\|\s/) : /\s[-–]\s/.test(s) ? s.split(/\s[-–]\s/) : [s];
+    p = p.map(x => x.trim()).filter(Boolean); let [e, k = ""] = p; if (hasKo(e) && k && !hasKo(k)) [e, k] = [k, e]; if (hasKo(e) && !k) [e, k] = ["", e]; return e ? [e, k] : null; };
+  const addEx = (w, e) => { if (!w || !e) return; if (!w.ex) { w.ex = e[0]; w.exk = e[1]; } else if (!w.ex2) { w.ex2 = e[0]; w.exk2 = e[1]; } };
+  let cur = null;
+  txt.replace(/\r/g, "").split("\n").map(s => s.trim()).filter(Boolean).forEach(s0 => {
+    // 예문 줄: 「* 영어 → 한글」 · 「- 영어 → 한글」 · 「→」가 있고 앞에 번호가 없는 문장
+    if (cur && (BUL.test(s0) || (ARW.test(s0) && !/^\d+[.)]/.test(s0)))) { addEx(cur, splitEx(s0.replace(BUL, ""))); return; }
+    const s = s0.replace(/^\d+[.)]\s*/, "").replace(BUL, "");
+    let w = null, m = s.match(/^(.+?)\s*[(（]([^()（）]+)[)）]\s*$/);
+    if (m) { let [a, b] = [m[1].trim(), m[2].trim()]; if (hasKo(a) && !hasKo(b)) [a, b] = [b, a]; w = { en: a, ko: b, ex: "", exk: "", ex2: "", exk2: "" }; }
+    else {
+      let p = s.includes("\t") ? s.split("\t") : /\s\|\s/.test(s) ? s.split(/\s\|\s/) : ARW.test(s) ? s.split(ARW) : /\s[-–:]\s/.test(s) ? s.split(/\s[-–:]\s/) : null;
+      if (!p) return; p = p.map(x => x.trim()).filter(Boolean); if (p.length < 2) return;
+      let [a, b, ex = "", exk = "", ex2 = "", exk2 = ""] = p; if (hasKo(a) && !hasKo(b)) [a, b] = [b, a];
+      if (ex && hasKo(ex) && exk && !hasKo(exk)) [ex, exk] = [exk, ex];
+      if (ex2 && hasKo(ex2) && exk2 && !hasKo(exk2)) [ex2, exk2] = [exk2, ex2];
+      w = { en: a, ko: b, ex, exk, ex2, exk2 };
+    }
+    out.push(w); cur = w;
   });
   return out;
 }
@@ -726,10 +740,10 @@ function openPaste(chId) {
   const c0 = chId ? D.chapters.find(x => x.id === chId) : null, W = (c0 ? c0.sec : U.sec) === "word", un = W ? "단어" : "문장";
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>${chId ? un + " 붙여넣기" : `붙여넣어 새 ${SECN[W ? "word" : "talk"]} 챕터 만들기`}</b><button class="btn sm" data-a="close">닫기</button></div>
   ${chId ? "" : `<div class="lab">챕터 이름</div><input class="inp" id="pName" value="${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(c => c.sec === (W ? "word" : "talk")).length + 1}" maxlength="40" style="margin-bottom:12px">`}
-  <div class="lab">${W ? "한 줄에 한 단어 — 엑셀에서 단어 · 뜻 · 예문 · 예문 뜻 칸을 복사해 붙이면 돼요(예문은 없어도 됨)" : "한 줄에 한 문장 — 엑셀에서 두 칸(한글 · 영어)을 복사해 붙이면 돼요"}</div>
-  <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다&#10;또는  figure out - 알아내다" : "오늘 시간 있어요?&#9;Do you have time today?&#10;또는  오늘 시간 있어요? | Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
+  <div class="lab">${W ? "「1. take a look (한번 보다)」 줄 아래에 「* 예문 → 뜻」을 두 개까지 — 엑셀 칸(단어 · 뜻 · 예문 · 예문 뜻)을 복사해 붙여도 돼요" : "한 줄에 한 문장 — 엑셀에서 두 칸(한글 · 영어)을 복사해 붙이면 돼요"}</div>
+  <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "1. take a look (한번 보다)&#10;* Can you take a look at this? → 이것 좀 봐 줄래요?&#10;* Let me take a look. → 제가 한번 볼게요.&#10;&#10;또는  figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다" : "오늘 시간 있어요?&#9;Do you have time today?&#10;또는  오늘 시간 있어요? | Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
   <p class="hint" id="pCnt">0${un}</p><button class="btn go full" data-a="pasteok" data-id="${chId || ""}" data-w="${W ? 1 : ""}">${svg(IC.check)}넣기</button></div>`;
-  $("#pTxt").addEventListener("input", () => { $("#pCnt").textContent = (W ? parseWords($("#pTxt").value) : parsePaste($("#pTxt").value)).length + un + " 알아봤어요"; });
+  $("#pTxt").addEventListener("input", () => { if (W) { const r = parseWords($("#pTxt").value), ne = r.reduce((k, w) => k + (w.ex ? 1 : 0) + (w.ex2 ? 1 : 0), 0); $("#pCnt").textContent = r.length + "단어" + (ne ? ` · 예문 ${ne}개` : "") + " 알아봤어요"; } else $("#pCnt").textContent = parsePaste($("#pTxt").value).length + un + " 알아봤어요"; });
   setTimeout(() => $("#pTxt").focus(), 100);
 }
 
@@ -752,7 +766,7 @@ function stepsFor(it, mode) {
   else if (mode[0] === "w") {
     const sayW = (r, ph) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph }), sayM = () => S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "mean" });
     const reps = gap => R.forEach((r, i) => { sayW(r, "r" + (i + 1)); S.push(gap ? { t: "gap", ms: gap, ph: "r" + (i + 1) } : { t: "gap", auto: 1, ph: "r" + (i + 1) }); });
-    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex && it.ex) { S.push({ t: "say", lang: "en", text: it.ex, rate: sp, ph: "ex" }, { t: "gap", ms: 500, ph: "ex" }); if (it.exk) S.push({ t: "say", lang: "ko", text: it.exk, rate: sp, ph: "exk" }); } };
+    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex) [[it.ex, it.exk], [it.ex2, it.exk2]].forEach(([e, k], j) => { if (!e) return; if (j) S.push({ t: "gap", ms: 700, ph: "exk" }); S.push({ t: "say", lang: "en", text: e, rate: sp, ph: "ex" }, { t: "gap", ms: 500, ph: "ex" }); if (k) S.push({ t: "say", lang: "ko", text: k, rate: sp, ph: "exk" }); }); };
     if (mode === "we2k") { sayW(1, "word"); S.push({ t: "gap", ms: thinkMs(it.ko, "ko"), ph: "think" }); sayM(); S.push({ t: "gap", ms: 500, ph: "mean" }); reps(0); tail(); }
     else if (mode === "wk2e") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); reps(0); tail(); }
     else if (mode === "wtest") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); sayW(1, "r1"); S.push({ t: "gap", ms: 2200, ph: "judge" }); }
@@ -902,7 +916,7 @@ async function buildChapter(c, queue, mode, onp, cancel) {
   W(0, "RIFF"); hd.setUint32(4, 36 + pcm.length * 2, true); W(8, "WAVE"); W(12, "fmt "); hd.setUint32(16, 16, true); hd.setUint16(20, 1, true); hd.setUint16(22, 1, true); hd.setUint32(24, SR, true); hd.setUint32(28, SR * 2, true); hd.setUint16(32, 2, true); hd.setUint16(34, 16, true); W(36, "data"); hd.setUint32(40, pcm.length * 2, true);
   return { url: URL.createObjectURL(new Blob([hd, pcm], { type: "audio/wav" })), marks, dur: total / SR, sig: sigOf(queue, mode) };
 }
-const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + (i.ex || "") + (i.exk || "")).join("|")].join("#");
+const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + (i.ex || "") + (i.exk || "") + (i.ex2 || "") + (i.exk2 || "")).join("|")].join("#");
 const B = { cancel: false };
 async function runAzure(fromQi) {
   const au = $("#au"); const tok = ++P.tok;
@@ -1034,7 +1048,7 @@ function paintPlay() {
   if (!it) { stg.innerHTML = `<div class="ko" style="margin:auto 0">챕터를 골라 주세요</div>`; $("#ppb").innerHTML = svg(IC.play); return; }
   const n = P.queue.length;
   const foot = `<div class="count"><div class="bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div><span class="num" style="font-size:13px;color:var(--deeps)">${modeName(P.mode)}</span></div>`;
-  if (c.sec === "word") stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="wdx" id="pwd">${esc(it.en)}</div><div class="mnx" id="pmn">${esc(it.ko)}</div>${it.ex ? `<div class="exx" id="pex">${esc(it.ex)}${it.exk ? `<small>${esc(it.exk)}</small>` : ""}</div>` : ""}${foot}`;
+  if (c.sec === "word") stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="wdx" id="pwd">${esc(it.en)}</div><div class="mnx" id="pmn">${esc(it.ko)}</div>${it.ex || it.ex2 ? `<div class="exx" id="pex">${[[it.ex, it.exk], [it.ex2, it.exk2]].filter(x => x[0]).map(([e, k]) => `<p>${esc(e)}${k ? `<small>${esc(k)}</small>` : ""}</p>`).join("")}</div>` : ""}${foot}`;
   else stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="ko" id="pko">${esc(P.mode === "e2k" ? "" : it.ko)}</div><div class="en" id="pen">${esc(it.en)}</div>${foot}`;
   $("#ppb").innerHTML = svg(P.playing ? IC.pause : IC.play); $("#ppb").setAttribute("aria-label", P.playing ? "멈추기" : "재생");
   const [, real] = findItem(it.id); $("#stb").classList.toggle("on", !!(real || it).star);
@@ -1135,7 +1149,7 @@ function openPrint(id) {
 function printWords(id) {
   const c = chById(id), hide = ($("#prHide .on") || {}).dataset.v || "none", ex = $("#prEx") && $("#prEx").checked;
   let p = $("#prt"); if (!p) { p = document.createElement("div"); p.id = "prt"; document.body.appendChild(p); }
-  p.innerHTML = `<h1>${esc(c.name)}</h1><p class="prs">영어 노트 · ${ymdw(todayS())} · ${c.items.length}단어</p><table><thead><tr><th>#</th><th>단어</th><th>뜻</th>${ex ? "<th>예문</th>" : ""}</tr></thead><tbody>${c.items.map((it, i) => `<tr><td>${i + 1}</td><td class="w">${hide === "word" ? "" : esc(it.en)}</td><td>${hide === "mean" ? "" : esc(it.ko)}</td>${ex ? `<td class="e">${esc(it.ex || "")}${it.exk ? `<br><small>${esc(it.exk)}</small>` : ""}</td>` : ""}</tr>`).join("")}</tbody></table><p class="prf">Blog J · 영어 노트</p>`;
+  p.innerHTML = `<h1>${esc(c.name)}</h1><p class="prs">영어 노트 · ${ymdw(todayS())} · ${c.items.length}단어</p><table><thead><tr><th>#</th><th>단어</th><th>뜻</th>${ex ? "<th>예문</th>" : ""}</tr></thead><tbody>${c.items.map((it, i) => `<tr><td>${i + 1}</td><td class="w">${hide === "word" ? "" : esc(it.en)}</td><td>${hide === "mean" ? "" : esc(it.ko)}</td>${ex ? `<td class="e">${[[it.ex, it.exk], [it.ex2, it.exk2]].filter(x => x[0]).map(([e, k]) => `${esc(e)}${k ? `<br><small>${esc(k)}</small>` : ""}`).join("<br>")}</td>` : ""}</tr>`).join("")}</tbody></table><p class="prf">Blog J · 영어 노트</p>`;
   $("#sheet").hidden = true; document.body.classList.add("printing");
   const done = () => { document.body.classList.remove("printing"); removeEventListener("afterprint", done); };
   addEventListener("afterprint", done); setTimeout(() => { window.print(); setTimeout(done, 1500); }, 60);
@@ -1263,7 +1277,7 @@ document.addEventListener("click", async e => {
   if (a === "close" || a === "exitno") { $("#sheet").hidden = true; $("#sheet").dataset.exit = ""; return; }
   if (a === "exityes") { EXITING = true; stopAll(); $("#sheet").hidden = true; logTick(); try { history.go(-2); } catch (er) {} setTimeout(() => { try { window.close(); } catch (er) {} EXITING = false; }, 400); return; }
   if (a === "sec") { U.sec = el.dataset.v; ls.set("sec", U.sec); U.sel.clear(); drawHome(); return; }
-  if (a === "newch") { const W = U.sec === "word"; const c = { id: uid(), sec: U.sec, name: `${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(x => x.sec === U.sec).length + 1}`, at: Date.now(), items: [W ? { id: uid(), ko: "", en: "", ex: "", exk: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }], rv: null }; D.chapters.push(c); touch(c); U.edit = c.id; go("edit"); return; }
+  if (a === "newch") { const W = U.sec === "word"; const c = { id: uid(), sec: U.sec, name: `${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(x => x.sec === U.sec).length + 1}`, at: Date.now(), items: [W ? { id: uid(), ko: "", en: "", ex: "", exk: "", ex2: "", exk2: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }], rv: null }; D.chapters.push(c); touch(c); U.edit = c.id; go("edit"); return; }
   if (a === "print") { if (U.scr === "edit") saveEdit(); return openPrint(el.dataset.id); }
   if (a === "printgo") return printWords(el.dataset.id);
   if (a === "baseadd") { const n = ensureBase(true); touch(); toast(`기본 챕터 ${n}개를 다시 넣었어요`); drawSet(); return; }
@@ -1286,7 +1300,7 @@ document.addEventListener("click", async e => {
   if (a === "playsel") { const ids = [...D.chapters.map(c => c.id), STAR.talk, STAR.word].filter(id => U.sel.has(id)); U.sel.clear(); setList(ids); return; }
   if (a === "play1") { if (U.scr === "edit") saveEdit(); if (isCur(el.dataset.id) && P.started && P.list.length === 1 && U.scr === "home") return playPause(); setList([el.dataset.id]); return; }
   if (a === "playrv") { setList(dueList().map(c => c.id)); return; }
-  if (a === "addit") { saveEdit(); const c = chById(U.edit), W = c.sec === "word"; c.items.push(W ? { id: uid(), ko: "", en: "", ex: "", exk: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }); touch(c); drawEdit(); const ins = $$(W ? "#its .wd2" : "#its .ko2"); ins[ins.length - 1].focus(); return; }
+  if (a === "addit") { saveEdit(); const c = chById(U.edit), W = c.sec === "word"; c.items.push(W ? { id: uid(), ko: "", en: "", ex: "", exk: "", ex2: "", exk2: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }); touch(c); drawEdit(); const ins = $$(W ? "#its .wd2" : "#its .ko2"); ins[ins.length - 1].focus(); return; }
   if (a === "delit") { saveEdit(); const c = chById(U.edit); c.items = c.items.filter(i => i.id !== el.dataset.id); touch(c); drawEdit(); return; }
   if (a === "star") { if (U.scr === "edit") saveEdit(); toggleStar(el.dataset.id); if (U.scr === "edit") drawEdit(); return; }
   if (a === "delch") { const c = chById(U.edit); if (!window.confirm(`「${c.name}」 챕터를 지울까요? (${c.items.length}${unitOf(c)})${c.base ? "\n기본 챕터는 설정 → 기본 자료에서 다시 넣을 수 있어요." : ""}`)) return; D.chapters = D.chapters.filter(x => x.id !== c.id); D.gone[c.id] = Date.now(); touch(); if (P.ch && P.ch.id === c.id) { stopAll(); P.ch = null; P.list = []; } go("home"); toast("지웠어요"); return; }
@@ -1315,7 +1329,7 @@ function saveSetInputs() { $$("[data-s]").forEach(i => { SET[i.dataset.s] = i.da
 function saveEdit() {
   const c = chById(U.edit); if (!c || c.virtual) return;
   let ch = false; const nm = $("#chName"); if (nm && nm.value.trim() && nm.value.trim() !== c.name) { c.name = nm.value.trim(); ch = true; }
-  $$("#its .it").forEach(r => { const it = c.items.find(i => i.id === r.dataset.id); if (!it) return; ["ko", "en", "ex", "exk"].forEach(f => { const ip = r.querySelector(`[data-f="${f}"]`); if (!ip) return; const v = ip.value.trim(); if (v !== (it[f] || "")) { it[f] = v; ch = true; } }); });
+  $$("#its .it").forEach(r => { const it = c.items.find(i => i.id === r.dataset.id); if (!it) return; ["ko", "en", "ex", "exk", "ex2", "exk2"].forEach(f => { const ip = r.querySelector(`[data-f="${f}"]`); if (!ip) return; const v = ip.value.trim(); if (v !== (it[f] || "")) { it[f] = v; ch = true; } }); });
   if (ch) { touch(c); if (P.ch && P.ch.id === c.id) P.built = null; }
 }
 addEventListener("keydown", e => { if (U.scr === "play" && e.code === "Space" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); playPause(); } });

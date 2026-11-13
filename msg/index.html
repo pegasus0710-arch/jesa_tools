@@ -1256,6 +1256,7 @@ const CD_FONTS = [
 const CD_FI = Object.fromEntries(CD_FONTS.map(f => [f[0], f]));
 /* 상황 — 문구는 Blog J가 직접 쓴 문장(좋은 글의 속담 표시는 예부터 내려오는 말) */
 const CD_OCC = [
+  { id: "suneung", n: "수능 응원", d: ["exam", "bujeok", "note", "sky"], m: [["수능 대박\n기원", "아는 문제는 다 맞고, 모르는 문제는 잘 찍기를!"], ["지금까지\n잘해 왔어", "긴장하지 말고 평소처럼만. 끝까지 응원할게."], ["너를\n믿어", "노력한 시간은 어디 가지 않아. 편안한 마음으로 다녀와."], ["엄마 아빠가\n응원해", "결과보다 네가 더 소중해. 아침 든든히 먹고 잘 다녀오렴."], ["찰떡같이\n붙어라", "엿처럼, 찹쌀떡처럼 착 붙기를!"], ["배운 대로만\n하면 된다", "그동안 정말 열심히 했다. 선생님이 끝까지 응원한다."], ["수고했어\n정말", "긴 시간 버텨 줘서 고마워. 오늘은 아무 생각 말고 푹 쉬어."], ["끝났다\n고생했어", "결과는 잠시 잊고, 맛있는 거 먹으러 가자."]] },
   { id: "newyear", n: "새해", d: ["sunrise", "hanji", "wash", "ink"], m: [["새해 복\n많이 받으세요", "지난 한 해 고마웠어요. 새해에도 웃는 날이 많기를 바랄게요."], ["행복 가득한\n한 해 되세요", "건강하고 평안한 새해 보내세요."], ["올해도\n잘 부탁해요", "새해에도 함께해서 든든해요."], ["건강하고\n평안한 새해", "하시는 일 모두 잘되기를 빕니다."]] },
   { id: "seol", n: "설날", d: ["hanji", "wash", "frame", "ink"], m: [["즐거운\n설 명절", "가족과 함께 따뜻한 설 보내세요."], ["넉넉하고\n따뜻한 설", "오가는 길 조심하시고 즐거운 명절 되세요."], ["새해 복 많이\n받으세요", "늘 건강하시고 웃음 가득한 한 해 되세요."]] },
   { id: "chuseok", n: "추석", d: ["moon", "hanji", "wash", "frame"], m: [["풍성한\n한가위", "가족과 함께하는 시간, 마음까지 넉넉한 한가위 되세요."], ["보름달처럼\n넉넉하게", "둥근 달처럼 모든 일이 원만하기를 바랄게요."], ["행복한\n추석 보내세요", "오가는 길 조심하시고 편안한 명절 되세요."]] },
@@ -1287,12 +1288,15 @@ const CD_DES = {
   ink: { n: "먹 번짐", lay: "vert", serif: true, pals: [["먹", ["#f7f4ee"], "#1d1b19", "#55504a", "#b0342a"], ["쪽빛 먹", ["#f4f5f2"], "#1c2b3a", "#4f5b66", "#b0342a"], ["갈색 먹", ["#f6f0e6"], "#33241a", "#665547", "#a13a24"]] },
   stars: { n: "금빛 별", lay: "center", serif: false, pals: [["남색 · 금", ["#14213d", "#22355e"], "#ffffff", "#d8dceb", "#e9c46a"], ["검정 · 금", ["#151515", "#2a2622"], "#fff8e8", "#d6cfbf", "#d8b25a"], ["자주 · 금", ["#3a1a3a", "#5a2a55"], "#fff6f0", "#e6d3df", "#f0c46a"]] },
   bloom: { n: "꽃잎 흩날림", lay: "center", serif: true, pals: [["벚꽃", ["#fdf2f3", "#fbe4e8"], "#4a2832", "#755a62", ["#f4b6c2", "#f8cfd7", "#ec9fb0", "#6e4a3a"]], ["매화", ["#f8f3ee", "#f1e6dc"], "#3b2420", "#6a524c", ["#d9576b", "#e98a98", "#f3b9c1", "#3a2a22"]], ["노란 꽃", ["#fdf8ea", "#f7edd0"], "#3a2c12", "#6c5a3a", ["#f2c94c", "#f7dc84", "#e8a93a", "#5a4a2a"]]] },
+  exam: { n: "응원 선 그림", lay: "center", serif: false, pals: [["크림 · 남색", ["#fbf6ea"], "#1f2a44", "#4d5670", ["#1f2a44", "#e07a4f", "#f3c44f"]], ["칠판", ["#22443a", "#1b3a31"], "#ffffff", "#dfeee6", ["#ffffff", "#ffd479", "#ffb3a1"]], ["노랑 · 먹", ["#ffe9a6"], "#2a2622", "#5c544a", ["#2a2622", "#d2452f", "#ffffff"]], ["하늘 · 남색", ["#e3f1fb"], "#17324d", "#45607a", ["#17324d", "#e07a4f", "#ffffff"]]] },
+  bujeok: { n: "합격 부적", lay: "center", serif: true, pals: [["노랑 · 빨강", ["#f6cf4a"], "#b3261e", "#8a2a1f", "#b3261e"], ["한지 · 빨강", ["#f3ece0"], "#b0342a", "#7a3a30", "#b0342a"], ["빨강 · 금", ["#a52a22", "#8a1f1a"], "#ffe9a6", "#ffe1c2", "#f5d06a"]] },
+  note: { n: "응원 쪽지", lay: "center", serif: false, pals: [["줄 노트", ["#fdfaf2"], "#22314a", "#55627a", ["#a9c4e8", "#e58a8a", "#3f8f5f"]], ["모눈", ["#f7f9f6"], "#1f3a34", "#52655f", ["#b9d6cc", "#e9a36f", "#3f8f5f"]], ["노란 메모", ["#ffe98f"], "#2a2622", "#5c544a", ["#e6c95a", "#d2452f", "#3f8f5f"]]] },
   solid: { n: "단색", lay: "center", serif: false, pals: [["깊은 바다", ["#0B3D4A"], "#ffffff", "#cfe3e6", "#e07a4f"], ["먹", ["#1d1f24"], "#ffffff", "#c9ccd2", "#e9c46a"], ["모래", ["#f3eee3"], "#14202b", "#5f6b7a", "#0c737d"], ["살구", ["#f6dccf"], "#3a2418", "#6d5244", "#c45a3a"]] },
   photo: { n: "내 사진", lay: "bottom", serif: false, pals: [["어둡게", ["#000"], "#ffffff", "#eeeeee", "#ffd479"], ["밝게", ["#fff"], "#1d1f24", "#3c3f46", "#c45a3a"]] }
 };
-const CD_ORDER = ["wash", "hanji", "moon", "sunrise", "confetti", "balloon", "wreath", "frame", "snow", "sky", "ink", "stars", "bloom", "solid", "photo"];
+const CD_ORDER = ["wash", "hanji", "moon", "sunrise", "confetti", "balloon", "wreath", "frame", "snow", "sky", "ink", "stars", "bloom", "exam", "bujeok", "note", "solid", "photo"];
 const CDLS = { get(k, d) { return ls.get("cd_" + k, d); }, set(k, v) { ls.set("cd_" + k, v); } };
-function CD0() { const o = CD_OCC[0]; return { occ: o.id, main: o.m[0][0], sub: o.m[0][1], from: "", seal: false, des: o.d[0], pal: 0, font: "brush", brush: true, fsz: 100, lay: "auto", size: "sq", mark: true, tab: "occ" }; }
+function CD0() { const t = new Date(), o = (t.getMonth() === 10 && t.getDate() <= 19) ? CD_OCC[0] : CD_OCC[1]; return { occ: o.id, main: o.m[0][0], sub: o.m[0][1], from: "", seal: false, des: o.d[0], pal: 0, font: "brush", brush: true, fsz: 100, lay: "auto", size: "sq", mark: true, tab: "occ" }; }
 let CD = Object.assign(CD0(), CDLS.get("st", {}));
 let CDPHOTO = null;
 const cdSave = () => { const c = Object.assign({}, CD); CDLS.set("st", c); };
@@ -1377,6 +1381,30 @@ const CD_PAINT = {
     const pts2 = []; for (let i = 0; i <= 16; i++) { const t = i / 16; pts2.push([W * (.2 + t * .14), H * (.09 + t * .12)]); } cdBrushPath(x, pts2, base * .012, base * .004, br, .8);
     [[.08, .06], [.18, .1], [.27, .09], [.36, .13], [.44, .12], [.31, .2], [.24, .15]].forEach(([fx, fy], i) => cdFlower(x, W * fx, H * fy, base * (.03 + (i % 2) * .008), [p1, p2, p3][i % 3], "#f7e3a0"));
     for (let i = 0; i < 70; i++) { const px = R() * W, py = R() * H; if (Math.abs(px - W / 2) < W * .3 && Math.abs(py - H / 2) < H * .2) continue; x.save(); x.translate(px, py); x.rotate(R() * 6.28); x.fillStyle = hexA([p1, p2, p3][i % 3], .5 + R() * .45); x.beginPath(); x.ellipse(0, 0, base * .009, base * .015, 0, 0, 7); x.fill(); x.restore(); } cdGrain(x, W, H, .04); },
+  exam(x, W, H, P, R) { if (P[1].length > 1) cdLin(x, W, H, [P[1][0], P[1][1]]); else { x.fillStyle = P[1][0]; x.fillRect(0, 0, W, H); } cdGrain(x, W, H, .05, P[0] === "칠판" ? "overlay" : "multiply");
+    const base = Math.min(W, H), [c1, c2, c3] = P[4], s = base * .125;
+    const band = [["pencil", .13, .1, -.5], ["clover", .36, .075, .1], ["yeot", .62, .1, .2], ["clock", .87, .095, .1], ["tteok", .1, .9, 0], ["omr", .33, .915, -.12], ["fork", .58, .905, .5], ["tissue", .8, .9, 0], ["star", .95, .78, .3], ["star", .05, .22, 0], ["score", .93, .26, .12], ["star", .06, .76, .5]];
+    band.forEach(([k, fx, fy, rot], i) => cdDoodle(x, k, W * fx + (R() - .5) * s * .2, H * fy + (R() - .5) * s * .15, s * (k === "star" ? .45 : 1), rot + (R() - .5) * .12, c1, k === "score" || i % 2 ? c2 : c3)); },
+  bujeok(x, W, H, P, R) { if (P[1].length > 1) cdLin(x, W, H, [P[1][0], P[1][1]]); else { x.fillStyle = P[1][0]; x.fillRect(0, 0, W, H); } cdGrain(x, W, H, .12, "multiply");
+    const base = Math.min(W, H), c = P[4], m = base * .06; x.strokeStyle = c; x.lineCap = "round"; x.lineJoin = "round";
+    const wob = (x0, y0, x1, y1, lw) => { x.lineWidth = lw; x.beginPath(); x.moveTo(x0, y0); const n = 14; for (let i = 1; i <= n; i++) { const t = i / n; x.lineTo(x0 + (x1 - x0) * t + (R() - .5) * lw * .5, y0 + (y1 - y0) * t + (R() - .5) * lw * .5); } x.stroke(); };
+    [[m, base * .012], [m * 1.5, base * .004]].forEach(([d, lw]) => { wob(d, d, W - d, d, lw); wob(W - d, d, W - d, H - d, lw); wob(W - d, H - d, d, H - d, lw); wob(d, H - d, d, d, lw); });
+    /* 위: 붉은 동그라미 도장 「합격」 */
+    const sr = base * .075, sx = W / 2, sy = m * 1.5 + sr * 1.35; x.lineWidth = base * .009; x.beginPath(); for (let i = 0; i <= 40; i++) { const a = i / 40 * Math.PI * 2, rr = sr * (1 + (R() - .5) * .04); x.lineTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr); } x.closePath(); x.stroke();
+    x.fillStyle = c; x.textAlign = "center"; x.font = `700 ${sr * .62}px "Gowun Batang", serif`; x.fillText("합격", sx, sy + sr * .27);
+    /* 아래: 소용돌이 · 물결 선 */
+    const by = H - m * 1.5 - base * .07; x.lineWidth = base * .006;
+    [-1, 1].forEach(d => { const cx = W / 2 + d * base * .17; x.beginPath(); for (let i = 0; i <= 60; i++) { const a = i / 60 * Math.PI * 4.5, rr = base * .045 * (1 - i / 75); x.lineTo(cx + Math.cos(a * d) * rr, by + Math.sin(a) * rr); } x.stroke(); });
+    x.beginPath(); for (let i = 0; i <= 40; i++) { const t = i / 40; x.lineTo(W / 2 - base * .09 + base * .18 * t, by + Math.sin(t * Math.PI * 4) * base * .014); } x.stroke();
+    [[m * 2.6, m * 2.6], [W - m * 2.6, m * 2.6], [m * 2.6, H - m * 2.6], [W - m * 2.6, H - m * 2.6]].forEach(([px, py]) => cdDoodle(x, "star", px, py, base * .035, R(), c, c)); },
+  note(x, W, H, P, R) { x.fillStyle = P[1][0]; x.fillRect(0, 0, W, H); cdGrain(x, W, H, .05, "multiply"); const base = Math.min(W, H), [ln, red, grn] = P[4], gap = base * .062;
+    x.strokeStyle = hexA(ln, .75); x.lineWidth = Math.max(1, base * .0022);
+    for (let y = base * .16; y < H - base * .05; y += gap) { x.beginPath(); x.moveTo(0, y); x.lineTo(W, y); x.stroke(); }
+    if (P[0] === "모눈") for (let px = gap; px < W; px += gap) { x.beginPath(); x.moveTo(px, 0); x.lineTo(px, H); x.stroke(); }
+    else if (P[0] === "줄 노트") { x.strokeStyle = hexA(red, .7); x.beginPath(); x.moveTo(base * .13, 0); x.lineTo(base * .13, H); x.stroke(); for (let i = 0; i < 3; i++) { x.fillStyle = "rgba(0,0,0,.12)"; x.beginPath(); x.arc(base * .06, H * (.2 + i * .3), base * .016, 0, 7); x.fill(); } }
+    /* 마스킹 테이프 */
+    x.save(); x.translate(W / 2, base * .045); x.rotate(-.03); x.fillStyle = hexA(red, .45); x.fillRect(-base * .13, -base * .028, base * .26, base * .056); x.restore();
+    cdDoodle(x, "clover", W - base * .15, H - base * .14, base * .1, .15, grn, grn); cdDoodle(x, "pencil", W - base * .3, H - base * .1, base * .09, -.9, P[2], red); cdDoodle(x, "star", base * .22, H - base * .1, base * .04, .2, P[2], red); },
   solid(x, W, H, P) { x.fillStyle = P[1][0]; x.fillRect(0, 0, W, H); cdGrain(x, W, H, .06); const m = Math.min(W, H) * .045; x.strokeStyle = hexA(P[2], .35); x.lineWidth = Math.min(W, H) * .002; x.strokeRect(m, m, W - m * 2, H - m * 2); },
   photo(x, W, H, P) { if (!CDPHOTO) { x.fillStyle = "#cfd6dc"; x.fillRect(0, 0, W, H); x.fillStyle = "#5f6b7a"; x.font = `800 ${W * .045}px SUIT, sans-serif`; x.textAlign = "center"; x.fillText("「사진 고르기」로 내 사진을 넣어요", W / 2, H / 2); return; }
     const im = CDPHOTO, r = Math.max(W / im.width, H / im.height); x.drawImage(im, (W - im.width * r) / 2, (H - im.height * r) / 2, im.width * r, im.height * r);
@@ -1408,7 +1436,25 @@ function cdSeal(x, cx, cy, s, name, col) { name = String(name).replace(/\s*(드�
   if (t.length === 1) x.fillText(t[0], cx, cy + s * .03); else if (t.length === 2) { x.fillText(t[0], cx, cy - s * .2); x.fillText(t[1], cx, cy + s * .22); } else { const g = [[t[0], .22, -.2], [t[1], .22, .22], [t[2], -.2, -.2], [t[3] || "", -.2, .22]]; g.forEach(([c, dx, dy]) => x.fillText(c, cx + s * dx, cy + s * dy)); }
   x.globalCompositeOperation = "destination-out"; x.globalAlpha = .25; x.fillStyle = x.createPattern(cdNoise(), "repeat"); x.fillRect(cx - s / 2, cy - s / 2, s, s); x.restore(); }
 
-const CD_DARK = st => ["moon", "sunrise", "snow", "stars"].includes(st.des) || (st.des === "confetti" && st.pal === 2) || (st.des === "solid" && st.pal < 2) || (st.des === "photo" && st.pal === 0);
+const CD_DARK = st => ["moon", "sunrise", "snow", "stars"].includes(st.des) || (st.des === "exam" && st.pal === 1) || (st.des === "bujeok" && st.pal === 2) || (st.des === "confetti" && st.pal === 2) || (st.des === "solid" && st.pal < 2) || (st.des === "photo" && st.pal === 0);
+/* 선 그림(직접 그린 것) — k: 종류 · s: 크기 · c: 선 색 · c2: 포인트 색 */
+function cdDoodle(x, k, cx, cy, s, rot, c, c2) {
+  x.save(); x.translate(cx, cy); x.rotate(rot || 0); x.strokeStyle = c; x.fillStyle = c2; x.lineWidth = Math.max(1.5, s * .055); x.lineCap = "round"; x.lineJoin = "round";
+  const L = (...p) => { x.beginPath(); x.moveTo(p[0] * s, p[1] * s); for (let i = 2; i < p.length; i += 2) x.lineTo(p[i] * s, p[i + 1] * s); x.stroke(); };
+  const C = (px, py, r, fill) => { x.beginPath(); x.arc(px * s, py * s, r * s, 0, 7); fill ? x.fill() : x.stroke(); };
+  const RR = (px, py, w, h, r) => { x.beginPath(); if (x.roundRect) x.roundRect(px * s, py * s, w * s, h * s, r * s); else x.rect(px * s, py * s, w * s, h * s); x.stroke(); };
+  if (k === "pencil") { L(-.6, -.11, .34, -.11, .62, 0, .34, .11, -.6, .11, -.6, -.11); L(.34, -.11, .34, .11); L(-.42, -.11, -.42, .11); L(.5, -.045, .5, .045); x.beginPath(); x.moveTo(.53 * s, -.034 * s); x.lineTo(.62 * s, 0); x.lineTo(.53 * s, .034 * s); x.closePath(); x.fillStyle = c; x.fill(); x.fillStyle = c2; x.globalAlpha = .55; x.fillRect(-.6 * s, -.11 * s, .18 * s, .22 * s); x.globalAlpha = 1; }
+  else if (k === "clover") { [[0, -.2], [.2, 0], [0, .2], [-.2, 0]].forEach(([dx, dy], i) => { x.save(); x.translate(dx * s, dy * s); x.rotate(i * Math.PI / 2); x.beginPath(); x.moveTo(0, .17 * s); x.bezierCurveTo(-.3 * s, .02 * s, -.16 * s, -.26 * s, 0, -.1 * s); x.bezierCurveTo(.16 * s, -.26 * s, .3 * s, .02 * s, 0, .17 * s); x.globalAlpha = .28; x.fill(); x.globalAlpha = 1; x.stroke(); x.restore(); }); x.beginPath(); x.moveTo(.05 * s, .1 * s); x.quadraticCurveTo(.2 * s, .4 * s, .42 * s, .52 * s); x.stroke(); }
+  else if (k === "yeot") { RR(-.5, -.13, 1, .26, .13); for (let i = -3; i <= 3; i++) L(i * .13 - .06, -.13, i * .13 + .06, .13); L(-.5, 0, -.68, -.12); L(-.5, 0, -.68, .12); L(.5, 0, .68, -.12); L(.5, 0, .68, .12); }
+  else if (k === "tteok") { x.beginPath(); x.ellipse(0, 0, .42 * s, .34 * s, 0, 0, 7); x.globalAlpha = .3; x.fill(); x.globalAlpha = 1; x.stroke(); x.beginPath(); x.arc(-.08 * s, -.04 * s, .26 * s, Math.PI * 1.05, Math.PI * 1.55); x.stroke(); [[.12, .1], [-.16, .14], [.2, -.1], [0, .2]].forEach(([a, b]) => C(a, b, .012, 1)); x.beginPath(); x.moveTo(-.5 * s, .3 * s); x.quadraticCurveTo(0, .52 * s, .5 * s, .3 * s); x.stroke(); }
+  else if (k === "fork") { L(0, .6, 0, -.05); x.beginPath(); x.moveTo(-.17 * s, -.55 * s); x.lineTo(-.17 * s, -.2 * s); x.quadraticCurveTo(-.17 * s, -.05 * s, 0, -.05 * s); x.quadraticCurveTo(.17 * s, -.05 * s, .17 * s, -.2 * s); x.lineTo(.17 * s, -.55 * s); x.stroke(); L(-.057, -.55, -.057, -.2); L(.057, -.55, .057, -.2); }
+  else if (k === "clock") { C(0, .03, .36); L(0, .03, 0, -.19); L(0, .03, .15, .1); C(0, .03, .025, 1); x.beginPath(); x.arc(-.27 * s, -.33 * s, .11 * s, Math.PI * .75, Math.PI * 1.75); x.stroke(); x.beginPath(); x.arc(.27 * s, -.33 * s, .11 * s, Math.PI * 1.25, Math.PI * 2.25); x.stroke(); L(-.2, .34, -.3, .46); L(.2, .34, .3, .46); L(0, -.33, 0, -.42); }
+  else if (k === "omr") { RR(-.5, -.32, 1, .64, .05); for (let r = 0; r < 3; r++) for (let q = 0; q < 5; q++) { x.beginPath(); x.ellipse((-.3 + q * .15) * s, (-.16 + r * .16) * s, .045 * s, .055 * s, 0, 0, 7); if ((r * 2 + 1) % 5 === q) { x.fillStyle = c; x.fill(); } else x.stroke(); } }
+  else if (k === "tissue") { x.beginPath(); x.ellipse(-.1 * s, -.22 * s, .3 * s, .13 * s, 0, 0, 7); x.stroke(); x.beginPath(); x.ellipse(-.1 * s, -.22 * s, .08 * s, .035 * s, 0, 0, 7); x.stroke(); L(-.4, -.22, -.4, .28); x.beginPath(); x.ellipse(-.1 * s, .28 * s, .3 * s, .13 * s, 0, 0, Math.PI); x.stroke(); L(.2, -.22, .2, .28); x.beginPath(); x.moveTo(.2 * s, -.1 * s); x.lineTo(.42 * s, -.1 * s); x.lineTo(.42 * s, .4 * s); x.quadraticCurveTo(.31 * s, .48 * s, .2 * s, .4 * s); x.stroke(); L(.24, .15, .38, .15); }
+  else if (k === "score") { x.font = `900 ${s * .5}px SUIT, sans-serif`; x.textAlign = "center"; x.fillStyle = c2; x.fillText("100", 0, s * .12); x.strokeStyle = c2; L(-.42, .26, .42, .22); L(-.36, .36, .4, .32); }
+  else { x.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = (i % 2 ? .42 : 1) * s; x.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } x.closePath(); x.globalAlpha = .3; x.fill(); x.globalAlpha = 1; x.stroke(); }
+  x.restore();
+}
 /* 카드 한 장 그리기 */
 async function cdRender(W, H, st, thumb) {
   const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
@@ -1430,11 +1476,11 @@ async function cdRender(W, H, st, thumb) {
     if (st.from) { x.font = `${fw} ${base * .05 * fk}px ${fam}`; x.fillStyle = ink; x.fillText(st.from, W * .1, sy + base * .04); sy += base * .07; }
     if (st.seal) cdSeal(x, W * .1 + base * .045, Math.min(H * .93, sy + base * .07), base * .09, st.from || "Blog J", "#b0342a");
   } else {
-    const maxW = W * (st.des === "wreath" ? .56 : .8); lx.font = `${fw} ${mfs0}px ${fam}`; let fs = mfs0; const widest = () => Math.max(...lines.map(l => { lx.font = `${fw} ${fs}px ${fam}`; return lx.measureText(l).width * (st.brush ? 1.06 : 1); }));
+    const maxW = W * (st.des === "wreath" ? .56 : st.des === "exam" || st.des === "bujeok" ? .7 : .8); lx.font = `${fw} ${mfs0}px ${fam}`; let fs = mfs0; const widest = () => Math.max(...lines.map(l => { lx.font = `${fw} ${fs}px ${fam}`; return lx.measureText(l).width * (st.brush ? 1.06 : 1); }));
     while (lines.length && widest() > maxW && fs > base * .04) fs *= .95;
     x.font = `${subW} ${base * .036}px ${subFam}`; const sl = cdWrap(x, st.sub, W * (st.des === "wreath" ? .5 : .74)).slice(0, 4);
     const lh = fs * 1.12, sh = sl.length * base * .052, fh = st.from ? base * .08 : 0, gap = st.sub ? base * .045 : 0, total = lines.length * lh + gap + sh + fh + (st.seal ? base * .02 : 0);
-    const room = lay === "center" ? H * .8 : H * .5;
+    const room = st.des === "exam" || st.des === "bujeok" ? H * .58 : lay === "center" ? H * .8 : H * .5;
     if (total > room && lines.length) { const k = room / total; fs *= Math.max(.6, k); }
     const lh2 = fs * 1.12, total2 = lines.length * lh2 + gap + sh + fh + (st.seal ? base * .02 : 0);
     let top = lay === "top" ? H * .09 : lay === "bottom" ? H - H * .09 - total2 : (H - total2) / 2;
@@ -1445,7 +1491,7 @@ async function cdRender(W, H, st, thumb) {
     if (st.from) { y += base * .07; x.font = `${fw} ${base * .052 * fk}px ${fam}`; x.fillStyle = ink; const fwid = x.measureText(st.from).width; x.fillText(st.from, W / 2 - (st.seal ? base * .035 : 0), y); if (st.seal) cdSeal(x, W / 2 + fwid / 2 + base * .02, y - base * .02, base * .06, st.from, "#b0342a"); }
     else if (st.seal) cdSeal(x, W / 2, y + base * .06, base * .07, "Blog J", "#b0342a");
   }
-  if (st.mark) { x.font = `700 ${base * .021}px SUIT, sans-serif`; x.textAlign = "right"; x.fillStyle = hexA(st.des === "photo" && P[0] === "어둡게" || ["moon", "sunrise", "snow", "stars"].includes(st.des) || (st.des === "confetti" && st.pal === 2) || (st.des === "solid" && st.pal < 2) ? "#ffffff" : "#000000", .38); x.fillText("Blog J 문자 · 인사말", W - base * .04, H - base * .035); }
+  if (st.mark) { x.font = `700 ${base * .021}px SUIT, sans-serif`; x.textAlign = "right"; x.fillStyle = hexA(st.des === "photo" && P[0] === "어둡게" || ["moon", "sunrise", "snow", "stars"].includes(st.des) || (st.des === "exam" && st.pal === 1) || (st.des === "bujeok" && st.pal === 2) || (st.des === "confetti" && st.pal === 2) || (st.des === "solid" && st.pal < 2) ? "#ffffff" : "#000000", .38); x.fillText("Blog J 문자 · 인사말", W - base * .04, H - base * .035); }
   return c;
 }
 

@@ -516,7 +516,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 17:35";
+const APP_VER = "1.0", BUILD = "2026-11-13(금) 17:38";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -701,10 +701,14 @@ function parsePaste(txt) {
   let pend = null;
   for (const s of L) {
     let p = null;
+    const s1 = s.replace(/^[*•·▪◦‣\-–]\s+/, "").replace(/^\d+[.)]\s*/, "");
+    if (/\s*(?:→|->|=>|⇒|➜|➔)\s*/.test(s1)) { let [x, y] = s1.split(/\s*(?:→|->|=>|⇒|➜|➔)\s*/).map(v => v.trim()); if (x && y) { if (!hasKo(x) && hasKo(y)) [x, y] = [y, x]; out.push([x, y]); } pend = null; continue; }
+    const m = s1.match(/^(.+?)\s*[(（]([^()（）]+)[)）]\s*$/);
+    if (m && hasKo(m[1]) !== hasKo(m[2]) && /[A-Za-z]/.test(m[1] + m[2])) { let [x, y] = [m[1].trim(), m[2].trim()]; if (!hasKo(x)) [x, y] = [y, x]; out.push([x, y]); pend = null; continue; }
     if (s.includes("\t")) p = s.split("\t").map(x => x.trim()).filter(Boolean);
     else if (/\s\|\s|\s\/\/\s/.test(s)) p = s.split(/\s\|\s|\s\/\/\s/).map(x => x.trim());
     if (p && p.length >= 2) { let [a, b] = p; if (!hasKo(a) && hasKo(b)) [a, b] = [b, a]; out.push([a.replace(/^\d+[.)]\s*/, ""), b]); pend = null; continue; }
-    const t = s.replace(/^\d+[.)]\s*/, "");
+    const t = s1;
     if (hasKo(t)) { pend = t; } else if (pend) { out.push([pend, t]); pend = null; }
   }
   return out;
@@ -740,8 +744,8 @@ function openPaste(chId) {
   const c0 = chId ? D.chapters.find(x => x.id === chId) : null, W = (c0 ? c0.sec : U.sec) === "word", un = W ? "단어" : "문장";
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>${chId ? un + " 붙여넣기" : `붙여넣어 새 ${SECN[W ? "word" : "talk"]} 챕터 만들기`}</b><button class="btn sm" data-a="close">닫기</button></div>
   ${chId ? "" : `<div class="lab">챕터 이름</div><input class="inp" id="pName" value="${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(c => c.sec === (W ? "word" : "talk")).length + 1}" maxlength="40" style="margin-bottom:12px">`}
-  <div class="lab">${W ? "「1. take a look (한번 보다)」 줄 아래에 「* 예문 → 뜻」을 두 개까지 — 엑셀 칸(단어 · 뜻 · 예문 · 예문 뜻)을 복사해 붙여도 돼요" : "한 줄에 한 문장 — 엑셀에서 두 칸(한글 · 영어)을 복사해 붙이면 돼요"}</div>
-  <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "1. take a look (한번 보다)&#10;* Can you take a look at this? → 이것 좀 봐 줄래요?&#10;* Let me take a look. → 제가 한번 볼게요.&#10;&#10;또는  figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다" : "오늘 시간 있어요?&#9;Do you have time today?&#10;또는  오늘 시간 있어요? | Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
+  <div class="lab">${W ? "「1. take a look (한번 보다)」 줄 아래에 「* 예문 → 뜻」을 두 개까지 — 엑셀 칸(단어 · 뜻 · 예문 · 예문 뜻)을 복사해 붙여도 돼요" : "한 줄에 한 문장 — 「* 영어 → 한글」 · 「영어 (한글)」 · 엑셀 두 칸(한글 · 영어) · 한글 줄과 영어 줄 번갈아, 모두 돼요"}</div>
+  <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "1. take a look (한번 보다)&#10;* Can you take a look at this? → 이것 좀 봐 줄래요?&#10;* Let me take a look. → 제가 한번 볼게요.&#10;&#10;또는  figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다" : "카페에서&#10;* Can I get an iced Americano? → 아이스 아메리카노 하나 주세요.&#10;* For here or to go? → 드시고 가세요, 가져가세요?&#10;&#10;또는  오늘 시간 있어요?&#9;Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
   <p class="hint" id="pCnt">0${un}</p><button class="btn go full" data-a="pasteok" data-id="${chId || ""}" data-w="${W ? 1 : ""}">${svg(IC.check)}넣기</button></div>`;
   $("#pTxt").addEventListener("input", () => { if (W) { const r = parseWords($("#pTxt").value), ne = r.reduce((k, w) => k + (w.ex ? 1 : 0) + (w.ex2 ? 1 : 0), 0); $("#pCnt").textContent = r.length + "단어" + (ne ? ` · 예문 ${ne}개` : "") + " 알아봤어요"; } else $("#pCnt").textContent = parsePaste($("#pTxt").value).length + un + " 알아봤어요"; });
   setTimeout(() => $("#pTxt").focus(), 100);

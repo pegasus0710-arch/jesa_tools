@@ -260,6 +260,22 @@ html.wopen,html.wopen body{overflow:hidden}
   .wtt small{display:none}
   .wback span{display:none}
 }
+.wplist{display:flex;flex-direction:column;gap:6px}
+.wpr{display:flex;align-items:center;gap:4px;padding-left:12px;border-radius:11px;box-shadow:inset 0 0 0 1px var(--line);background:#fff}
+.wpr.has{box-shadow:inset 0 0 0 1px var(--sea)}
+.wpr.sel{box-shadow:inset 0 0 0 2px #E07A4F;background:#FDF3EE}
+.wpn{flex:1;display:flex;align-items:center;gap:9px;height:46px;padding:0 12px 0 6px;text-align:left;min-width:0}
+.wpn b{font-size:14.5px;font-weight:800}
+.wpn span{margin-left:auto;font-size:12.5px;color:var(--sub);font-weight:700}
+.wpn em{font-style:normal;font-size:12px;font-weight:900;color:#fff;background:#E07A4F;border-radius:6px;padding:2px 7px}
+.wpn i{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font-style:normal;font-weight:900;font-size:12.5px;flex-shrink:0}
+.whow{width:100%;max-width:960px;background:#fff;border-radius:14px;box-shadow:0 0 0 1px var(--hair);padding:14px 18px;box-sizing:border-box}
+.wht{display:block;font-size:15px;font-weight:900;margin-bottom:8px}
+.whow ol{margin:0;padding:0;list-style:none;counter-reset:h;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.whow li{counter-increment:h;display:flex;flex-direction:column;gap:3px;font-size:14px;line-height:1.5;color:var(--ink)}
+.whow li b{display:flex;align-items:center;gap:7px;font-weight:900;font-size:14.5px}
+.whow li b:before{content:counter(h);width:22px;height:22px;border-radius:50%;background:var(--sea);color:#fff;display:grid;place-items:center;font-size:12.5px;flex-shrink:0}
+.whow li span{color:#3c4856}
 
 .wcta{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:14px;background:var(--deep);color:#fff;text-align:left;font:inherit;border:0;cursor:pointer;margin-top:12px;box-shadow:0 4px 14px rgba(11,61,74,.18)}
 .wcta:hover{background:#0d4a59}
@@ -865,12 +881,12 @@ const WREC = {"excel":{"t":"엑셀 단축키","g":[["입력이 빨라지는 키"
 const WSC = {
   contour: ["등고선 금선", "도형"], marble: ["대리석 · 금", "도형"], grid: ["모래 · 바다 모눈", "도형"], stage: ["겨울 무대 조명", "도형"], arches: ["봄 파스텔 도형", "도형"], bauhaus: ["여름 원색 도형", "도형"], papercut: ["가을 종이 공예", "도형"],
   desk_winter: ["겨울 편지", "책상"], desk_spring: ["봄 책상", "책상"], desk_summer: ["여름 원고지", "책상"], desk_autumn: ["가을 책과 차", "책상"],
-  snowpeak: ["새벽 설산", "겨울"], nightforest: ["눈 내리는 숲", "겨울"], pine: ["겨울 소나무", "한국"], city: ["겨울 밤 도시", "도시"], aurora: ["오로라 별밤", "하늘"],
-  sakura: ["벚꽃 가지", "봄"], plum: ["봄 매화", "한국"], alley: ["봄 골목", "도시"], dawn: ["새벽 하늘", "하늘"],
-  sea: ["모래 · 바다 · 하늘", "여름"], coast: ["여름 해안 도로", "도시"], bamboo: ["여름 대나무", "한국"], cloud: ["한낮 구름", "하늘"],
-  maple: ["단풍 산", "가을"], avenue: ["가을 가로수길", "도시"], chrysan: ["가을 국화", "한국"], sunset: ["노을", "하늘"], moonjar: ["한지 · 달항아리", "한국"]
+  snowpeak: ["새벽 설산", "계절"], nightforest: ["눈 내리는 숲", "계절"], pine: ["겨울 소나무", "한국"], city: ["겨울 밤 도시", "도시"], aurora: ["오로라 별밤", "하늘"],
+  sakura: ["벚꽃 가지", "계절"], plum: ["봄 매화", "한국"], alley: ["봄 골목", "도시"], dawn: ["새벽 하늘", "하늘"],
+  sea: ["모래 · 바다 · 하늘", "계절"], coast: ["여름 해안 도로", "도시"], bamboo: ["여름 대나무", "한국"], cloud: ["한낮 구름", "하늘"],
+  maple: ["단풍 산", "계절"], avenue: ["가을 가로수길", "도시"], chrysan: ["가을 국화", "한국"], sunset: ["노을", "하늘"], moonjar: ["한지 · 달항아리", "한국"]
 };
-const WCATS = ["도형", "책상", "겨울", "봄", "여름", "가을", "한국", "하늘", "도시", "단색", "내 사진"];
+const WCATS = ["계절", "도형", "책상", "한국", "하늘", "도시", "단색", "내 사진"];
 const WSOLID = [["#0B3D4A", "깊은 바다"], ["#14202B", "먹"], ["#2B3A55", "남색 밤"], ["#1E3A2F", "숲"], ["#F3EEE3", "모래"], ["#E9EEF2", "구름"], ["#FFFFFF", "흰색"], ["#F4DCD3", "살구"]];
 const WRES = [
   ["PC · 모니터", [[1920, 1080, "FHD", "가장 흔한 모니터"], [2560, 1440, "QHD", "27인치"], [3840, 2160, "4K", "4K 모니터"], [3440, 1440, "울트라와이드", "21:9"]]],
@@ -885,7 +901,7 @@ function BL() {
     mode: "pick", cards: [{ p: "excel", off: [], size: 100, fx: .94, fy: .5 }], sel: 0, open: {}, fp: "excel", fsrc: "rec", fcats: [], icon: true, fmt: "png" };
 }
 let W = (() => { try { const v = JSON.parse(localStorage.getItem(LK) || "null"); if (v && v.cards) return Object.assign(BL(), v); } catch (e) {} return BL(); })();
-if (!W.cards.length) W.cards = BL().cards;
+if (!W.cards) W.cards = BL().cards; if (!WCATS.includes(W.cat)) W.cat = "계절";
 let svT; const wsave = () => { clearTimeout(svT); svT = setTimeout(() => { try { localStorage.setItem(LK, JSON.stringify(W)); } catch (e) {} }, 300); };
 let PHOTO = null;
 const $w = s => document.querySelector("#wallv " + s);
@@ -913,16 +929,15 @@ function theme(bg) {
     cap: dark ? "rgba(255,255,255,.12)" : "#FFFFFF", capl: dark ? "rgba(255,255,255,.26)" : "rgba(20,32,43,.22)" };
 }
 function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
-function panel(c, src, k, T, x, y, w, h, u) {
+function panel(c, src, k, T, x, y, w, h, u, op) {   /* src = 미리 흐리게 줄인 배경(blur) */
   if (T.mode === "none") return; const r = 22 * u;
   if (T.mode === "glass" || T.mode === "dark") {
-    const q = 1 / 18, t = document.createElement("canvas"); t.width = Math.max(2, Math.round(w * k * q)); t.height = Math.max(2, Math.round(h * k * q));
-    const tc = t.getContext("2d"); tc.imageSmoothingQuality = "high"; tc.drawImage(src, x * k, y * k, w * k, h * k, 0, 0, t.width, t.height);
-    c.save(); rr(c, x, y, w, h, r); c.clip(); c.drawImage(t, x, y, w, h);
-    c.fillStyle = T.mode === "dark" ? "rgba(10,14,22,.68)" : `rgba(255,255,255,${Math.min(.84, Math.max(.36, T.ga + .14))})`; c.fillRect(x, y, w, h); c.restore();
+    const q = src.width / (W.w * k);
+    c.save(); rr(c, x, y, w, h, r); c.clip(); c.imageSmoothingQuality = "high"; c.drawImage(src, x * k * q, y * k * q, Math.max(1, w * k * q), Math.max(1, h * k * q), x, y, w, h);
+    c.fillStyle = T.mode === "dark" ? `rgba(10,14,22,${op || .68})` : `rgba(255,255,255,${op || Math.min(.84, Math.max(.36, T.ga + .14))})`; c.fillRect(x, y, w, h); c.restore();
     c.save(); rr(c, x + .5, y + .5, w - 1, h - 1, r); c.strokeStyle = T.mode === "dark" ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.6)"; c.lineWidth = 1.5 * u; c.stroke(); c.restore();
   } else {
-    c.save(); c.shadowColor = "rgba(40,30,10,.25)"; c.shadowBlur = 36 * u; c.shadowOffsetY = 14 * u; rr(c, x, y, w, h, r); c.fillStyle = T.pbg; c.fill(); c.restore();
+    c.save(); c.shadowColor = "rgba(40,30,10,.25)"; c.shadowBlur = 36 * u; c.shadowOffsetY = 14 * u; rr(c, x, y, w, h, r); c.fillStyle = op ? `rgba(253,250,244,${op + .06})` : T.pbg; c.fill(); c.restore();
     c.save(); rr(c, x + .5, y + .5, w - 1, h - 1, r); c.strokeStyle = T.pline; c.lineWidth = 1.2 * u; c.stroke(); c.restore();
   }
 }
@@ -986,77 +1001,92 @@ function fullList() {
 }
 function catsOf(p) { const M = new Map(); for (const x of DATA.items) if (x.p === p) M.set(x.c, (M.get(x.c) || 0) + 1); return [...M]; }
 function drawFull(c, src, k, T, w, h, u) {
-  const A = safe(w, h, u), P = PROG[W.fp], G = fullList();
+  const rec = W.fsrc === "rec";
+  let A = safe(w, h, u); if (!rec && !port()) A = { x0: W.icon ? Math.min(w * .075, 150 * u) : w * .012, x1: w - w * .012, y0: h * .018, y1: h - 58 * u };   /* 전체 = 화면 가득 */
+  const P = PROG[W.fp], G = fullList();
   const n = G.reduce((a, g) => a + g[1].length, 0);
-  const px = A.x0, py = A.y0, pw = A.x1 - A.x0, ph = A.y1 - A.y0;
-  panel(c, src, k, T, px, py, pw, ph, u);
-  const pad = 26 * u, head = 58 * u;
-  rr(c, px + pad, py + pad + 4 * u, 34 * u, 34 * u, 8 * u); c.fillStyle = P.c; c.fill(); T_(c, P.ab, px + pad + 17 * u, py + pad + 21.5 * u, 18 * u, 900, "#fff", "center");
-  T_(c, P.n + " 단축키", px + pad + 46 * u, py + pad + 21 * u, 26 * u, 900, T.ink); F(c, 26 * u, 900);
-  T_(c, `${n}개 · ${P.v}`, px + pad + 46 * u + c.measureText(P.n + " 단축키").width + 12 * u, py + pad + 22 * u, 14 * u, 700, T.sub);
-  T_(c, "Blog J 단축키 사전", px + pw - pad, py + pad + 22 * u, 12.5 * u, 700, T.sub, "right");
-  const X0 = px + pad, Y0 = py + pad + head, CW = pw - pad * 2, CH = ph - pad * 2 - head;
-  /* 글자 크기 · 칸 수 찾기 — 다 들어가는 가장 큰 글자 */
+  const pad = (rec ? 26 : 20) * u, head = (rec ? 58 : 50) * u, AW = A.x1 - A.x0, AH = A.y1 - A.y0, CW = AW - pad * 2, CH = AH - pad * 2 - head;
+  /* 글자 크기 · 칸 수 찾기 — 다 들어가는 가장 큰 글자(추천은 너무 크지 않게) */
+  const tryFit = (f, cols, cw) => { const lh = f * 1.62, hh = f * 2.05; let col = 0, y = 0, maxY = 0;
+    for (const g of G) { if (y > 0 && y + hh + lh > CH) { col++; y = 0; } y += hh;
+      for (let i = 0; i < g[1].length; i++) { if (y + lh > CH) { col++; y = 0; } y += lh; maxY = Math.max(maxY, y); }
+      if (col >= cols) return null; }
+    return { used: col + 1, maxY }; };
   let best = null;
-  for (let fs = 19; fs >= 8.5; fs -= .5) {
-    const f = fs * u, lh = f * 1.62, hh = f * 2.05, gap = f * 1.6;
-    const cols = Math.max(1, Math.floor((CW + gap) / (f * (W.fsrc === "rec" ? 21 : 24) + gap)));
-    const cw = (CW - (cols - 1) * gap) / cols;
-    let col = 0, y = 0, ok = true;
-    for (const g of G) {
-      if (y > 0 && y + hh + lh > CH) { col++; y = 0; }
-      y += hh;
-      for (let i = 0; i < g[1].length; i++) { if (y + lh > CH) { col++; y = 0; } y += lh; }
-      if (col >= cols) { ok = false; break; }
-    }
-    if (ok) { best = { f, lh, hh, gap, cols, cw }; break; }
+  for (let fs = rec ? 17 : 19; fs >= 8.5; fs -= .5) {
+    const f = fs * u, gap = f * 1.6, cols = Math.max(1, Math.floor((CW + gap) / (f * (rec ? 21 : 24) + gap))), cw = (CW - (cols - 1) * gap) / cols;
+    const r = tryFit(f, cols, cw); if (r) { best = { f, gap, cols, cw, used: r.used, maxY: r.maxY }; break; }
   }
   const small = !best;
-  if (!best) { const f = 8.5 * u; best = { f, lh: f * 1.62, hh: f * 2.05, gap: f * 1.6, cols: Math.max(1, Math.floor(CW / (f * 24))), cw: 0 }; best.cw = (CW - (best.cols - 1) * best.gap) / best.cols; }
-  const { f, lh, hh, gap, cols, cw } = best; const kw = cw * (W.fsrc === "rec" ? .46 : .4);
+  if (!best) { const f = 8.5 * u, gap = f * 1.6, cols = Math.max(1, Math.floor(CW / (f * 24))); best = { f, gap, cols, cw: (CW - (cols - 1) * gap) / cols, used: cols, maxY: CH }; }
+  let { f, gap, cw, used, maxY } = best; const lh = f * 1.62, hh = f * 2.05;
+  /* 판 크기 = 내용만큼(남는 공간 없이) — 추천은 칸 너비도 내용에 맞춤 */
+  if (rec) { let need = 0, cm = 0, lm = 0; G.forEach(g => g[1].forEach(it => { cm = Math.max(cm, capsW(c, it[0], f * .86)); F(c, f, 600); lm = Math.max(lm, c.measureText(it[1]).width); })); G.forEach(g => g[1].forEach(it => { const cw0 = capsW(c, it[0], f * .86); F(c, f, 600); need = Math.max(need, cw0 + f * 1.2 + c.measureText(it[1]).width); })); need = Math.max(need, cm + f * 1.2 + lm); cw = Math.min(cw, need + f); }
+  const kw = rec ? null : cw * .4;
+  const pw = Math.min(AW, pad * 2 + used * cw + (used - 1) * gap), ph = Math.min(AH, pad * 2 + head + maxY);
+  const px = rec ? A.x1 - pw : A.x0 + (AW - pw) / 2, py = A.y0 + (AH - ph) / 2;
+  panel(c, src, k, T, px, py, pw, ph, u, rec ? 0 : .86);
+  rr(c, px + pad, py + pad + 4 * u, 34 * u, 34 * u, 8 * u); c.fillStyle = P.c; c.fill(); T_(c, P.ab, px + pad + 17 * u, py + pad + 21.5 * u, 18 * u, 900, "#fff", "center");
+  T_(c, P.n + " 단축키", px + pad + 46 * u, py + pad + 21 * u, 26 * u, 900, T.ink); F(c, 26 * u, 900); const tw = c.measureText(P.n + " 단축키").width;
+  T_(c, rec ? `추천 ${n}개` : `${n}개 · ${P.v}`, px + pad + 46 * u + tw + 12 * u, py + pad + 22 * u, 14 * u, 700, T.sub);
+  if (pw > 520 * u) T_(c, "Blog J 단축키 사전", px + pw - pad, py + pad + 22 * u, 12.5 * u, 700, T.sub, "right");
+  const X0 = px + pad, Y0 = py + pad + head, CH2 = ph - pad * 2 - head;
+  let capMax = 0; if (rec) G.forEach(g => g[1].forEach(it => { capMax = Math.max(capMax, capsW(c, it[0], f * .86)); }));
   let col = 0, y = 0; const X = () => X0 + col * (cw + gap);
   for (const g of G) {
-    if (y > 0 && y + hh + lh > CH) { col++; y = 0; } if (col >= cols) break;
+    if (y > 0 && y + hh + lh > CH2 + 1) { col++; y = 0; } if (col >= used) break;
     T_(c, g[0], X(), Y0 + y + hh * .55, f * 1.05, 900, T.acc); c.fillStyle = T.dark ? "rgba(255,255,255,.14)" : "rgba(20,32,43,.1)"; c.fillRect(X(), Y0 + y + hh - f * .32, cw, Math.max(1, u * .8)); y += hh;
     for (const it of g[1]) {
-      if (y + lh > CH) { col++; y = 0; } if (col >= cols) break;
+      if (y + lh > CH2 + 1) { col++; y = 0; } if (col >= used) break;
       const cyy = Y0 + y + lh / 2;
-      if (it[2]) { const capw = capsW(c, it[0], f * .86); if (capw <= kw) drawCaps(c, T, it[0], X(), cyy, f * .86); else { F(c, f * .92, 800); T_(c, fit(c, it[0].join("+"), kw), X(), cyy, f * .92, 800, T.acc); } }
-      else { F(c, f * .92, 800); T_(c, fit(c, String(it[0]).replace(/ \/ /g, " · "), kw - f * .6), X(), cyy, f * .92, 800, T.acc); }
-      F(c, f, 600); T_(c, fit(c, it[1], cw - kw - f * .3), X() + kw, cyy, f, 600, T.ink);
+      if (it[2]) { drawCaps(c, T, it[0], X(), cyy, f * .86); F(c, f, 600); T_(c, fit(c, it[1], cw - capMax - f * 1.2), X() + capMax + f * 1.2, cyy, f, 600, T.ink); }
+      else { F(c, f * .92, 800); T_(c, fit(c, String(it[0]).replace(/ \/ /g, " · "), kw - f * .6), X(), cyy, f * .92, 800, T.acc); F(c, f, 600); T_(c, fit(c, it[1], cw - kw - f * .3), X() + kw, cyy, f, 600, T.ink); }
       y += lh;
     }
   }
   return { small, n };
 }
 
-/* ── 그리기 ── */
-let RECTS = [], LASTINFO = {};
-async function render(cv, k) {
+/* ── 그리기 ── 배경은 한 번만 그려 두고(BGC), 카드만 다시 그림 → 끌 때 부드럽게 */
+let RECTS = [], LASTINFO = {}; const BGC = {}; let photoId = 0;
+async function ensureBg(k, slot) {
   const w = W.w, h = W.h, pw = Math.max(2, Math.round(w * k)), ph = Math.max(2, Math.round(h * k));
-  cv.width = pw; cv.height = ph; const c = cv.getContext("2d");
+  const key = [pw, ph, W.cat, W.scene, W.solid, W.dim, photoId].join("|");
+  if (BGC[slot] && BGC[slot].key === key) return BGC[slot];
   try { await document.fonts.load(`800 20px "SUIT Variable"`); } catch (e) {}
-  const bg = await bgOf(pw, ph);
-  c.setTransform(1, 0, 0, 1, 0, 0);
+  const bg = await bgOf(pw, ph), cv = document.createElement("canvas"); cv.width = pw; cv.height = ph; const c = cv.getContext("2d");
   if (bg.solid) { c.fillStyle = bg.solid; c.fillRect(0, 0, pw, ph); }
   else if (bg.photo) { const im = bg.im, r = Math.max(pw / im.width, ph / im.height), dw = im.width * r, dh = im.height * r; c.drawImage(im, (pw - dw) / 2, (ph - dh) / 2, dw, dh); if (W.dim) { c.fillStyle = `rgba(0,0,0,${W.dim / 100})`; c.fillRect(0, 0, pw, ph); } }
   else c.drawImage(bg.im, 0, 0, pw, ph);
-  const src = document.createElement("canvas"); src.width = pw; src.height = ph; src.getContext("2d").drawImage(cv, 0, 0);
-  c.setTransform(k, 0, 0, k, 0, 0);
-  const T = theme(bg), u = Math.min(w, h) / 1080 * (port() ? 1.3 : 1);
-  RECTS = []; LASTINFO = {};
-  if (W.mode === "full") { LASTINFO = drawFull(c, src, k, T, w, h, u); return; }
+  const bl = document.createElement("canvas"); bl.width = Math.max(2, Math.round(pw / 18)); bl.height = Math.max(2, Math.round(ph / 18)); const bc = bl.getContext("2d"); bc.imageSmoothingQuality = "high"; bc.drawImage(cv, 0, 0, bl.width, bl.height);
+  return (BGC[slot] = { key, cv, bl, bg, k, pw, ph });
+}
+function compose(out, B, pv, bgOnly) {
+  const w = W.w, h = W.h, k = B.k; if (out.width !== B.pw) out.width = B.pw; if (out.height !== B.ph) out.height = B.ph;
+  const c = out.getContext("2d"); c.setTransform(1, 0, 0, 1, 0, 0); c.drawImage(B.cv, 0, 0); c.setTransform(k, 0, 0, k, 0, 0);
+  const T = theme(B.bg), u = Math.min(w, h) / 1080 * (port() ? 1.3 : 1);
+  RECTS = []; LASTINFO = {}; if (bgOnly) return;
+  if (W.mode === "full") { LASTINFO = drawFull(c, B.bl, k, T, w, h, u); return; }
   const A = safe(w, h, u);
   const order = W.cards.map((cd, i) => i).filter(i => i !== W.sel).concat(W.cards[W.sel] ? [W.sel] : []);   /* 고른 카드를 맨 위에 */
   order.forEach(i => { const cd = W.cards[i];
     if (!WREC[cd.p]) return; const L = layoutCard(c, cd, u); if (!L.n) return;
     let x = A.x0 + (A.x1 - A.x0) * cd.fx - L.w / 2, y = A.y0 + (A.y1 - A.y0) * cd.fy - L.h / 2;
     x = Math.max(A.x0, Math.min(A.x1 - L.w, x)); y = Math.max(A.y0, Math.min(A.y1 - L.h, y));
-    panel(c, src, k, T, x, y, L.w, L.h, L.s); drawCard(c, T, cd, L, x, y);
+    const lift = pv && drag && drag.i === i;
+    if (lift) { c.save(); const cx = x + L.w / 2, cy = y + L.h / 2; c.translate(cx, cy); c.scale(1.025, 1.025); c.translate(-cx, -cy);
+      c.save(); c.shadowColor = "rgba(0,0,0,.45)"; c.shadowBlur = 60 * L.s; c.shadowOffsetY = 28 * L.s; rr(c, x, y, L.w, L.h, 22 * L.s); c.fillStyle = "rgba(0,0,0,.25)"; c.fill(); c.restore(); }
+    panel(c, B.bl, k, T, x, y, L.w, L.h, L.s); drawCard(c, T, cd, L, x, y);
+    if (pv && i === W.sel && W.cards.length) {   /* 미리보기에서만: 고른 카드 표시(저장 그림에는 없음) */
+      const lw = 3 / k, g = 6 / k; c.save(); rr(c, x - g, y - g, L.w + g * 2, L.h + g * 2, 22 * L.s + g); c.strokeStyle = "#E07A4F"; c.lineWidth = lw; c.setLineDash([10 / k, 6 / k]); c.stroke(); c.setLineDash([]);
+      const tag = "선택됨 · 끌어서 옮기기"; c.font = `800 ${13 / k}px ${FONT}`; const tw = c.measureText(tag).width + 18 / k, th = 24 / k, tx = x - g, ty = Math.max(th / 2, y - g - th - 4 / k);
+      rr(c, tx, ty, tw, th, 7 / k); c.fillStyle = "#E07A4F"; c.fill(); c.fillStyle = "#fff"; c.textAlign = "left"; c.textBaseline = "middle"; c.fillText(tag, tx + 9 / k, ty + th / 2 + .5 / k); c.restore(); }
+    if (lift) c.restore();
     RECTS.push({ i, x, y, w: L.w, h: L.h, A, over: L.w > A.x1 - A.x0 || L.h > A.y1 - A.y0 });
   });
   LASTINFO.over = RECTS.some(r => r.over);
 }
+async function render(cv, k, slot, pv, bgOnly) { const B = await ensureBg(k, slot || "save"); compose(cv, B, pv, bgOnly); }
 
 /* ── 화면 ── */
 const IC = {
@@ -1066,7 +1096,7 @@ const IC = {
 const svg = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
 const resName = () => { for (const [, L] of WRES) for (const r of L) if (r[0] === W.w && r[1] === W.h) return r[2]; return "직접"; };
 const STEPS = [["크기", () => `${W.w.toLocaleString()} × ${W.h.toLocaleString()} · ${resName()}`], ["배경", () => W.cat === "단색" ? "단색" : W.cat === "내 사진" ? "내 사진" : (WSC[W.scene] || ["그림"])[0]],
-  ["단축키", () => W.mode === "full" ? `${PROG[W.fp].n} ${W.fsrc === "rec" ? "추천 32개" : "전체"} 꽉 채우기` : `카드 ${W.cards.length}장 · ${W.cards.map(c => PROG[c.p].n).join(" · ")}`], ["저장", () => (W.fmt || "png").toUpperCase()]];
+  ["단축키", () => W.mode === "full" ? `${PROG[W.fp].n} ${W.fsrc === "rec" ? "추천 32개" : "전체"} 꽉 채우기` : (W.cards.length ? `카드 ${W.cards.length}장 · ${W.cards.map(c => PROG[c.p].n).join(" · ")}` : "카드 없음 · 그림만")], ["저장", () => (W.fmt || "png").toUpperCase()]];
 function side() {
   let h = "";
   STEPS.forEach(([t, sm], i) => {
@@ -1091,13 +1121,12 @@ function bBg() {
 function bKeys() {
   let h = `<div class="wseg big"><button type="button" class="${W.mode === "pick" ? "on" : ""}" data-w="mode" data-v="pick">골라서 붙이기</button><button type="button" class="${W.mode === "full" ? "on" : ""}" data-w="mode" data-v="full">한 프로그램 꽉 채우기</button></div>`;
   if (W.mode === "pick") {
-    h += `<p class="wtip">프로그램을 누르면 추천 단축키 카드가 생겨요. 미리보기에서 카드를 끌어 옮기거나 아래 9칸으로 자리를 정해요.</p><div class="wlab">카드 더하기</div><div class="wprog">${ORDER.map(p => { const has = W.cards.findIndex(c => c.p === p); return `<button type="button" class="wp${has >= 0 ? " has" : ""}" data-w="add" data-v="${p}"><i style="background:${PROG[p].c}">${PROG[p].ab}</i>${PROG[p].n}${has >= 0 ? "<em>✓</em>" : ""}</button>`; }).join("")}</div>`;
-    h += `<div class="wlab">붙인 카드 ${W.cards.length}장</div><div class="wcards">${W.cards.map((cd, i) => { const n = cardItems(cd).reduce((a, g) => a + g[1].length, 0); return `<div class="wcd${i === W.sel ? " on" : ""}"><button type="button" class="wcs" data-w="sel" data-v="${i}"><i style="background:${PROG[cd.p].c}">${PROG[cd.p].ab}</i><b>${PROG[cd.p].n}</b><span class="num">${n} / 32</span></button><button type="button" class="wx" data-w="del" data-v="${i}" aria-label="${PROG[cd.p].n} 카드 빼기">${svg("x")}</button></div>`; }).join("") || '<div class="wtip">위에서 프로그램을 골라 카드를 더하세요</div>'}</div>`;
+    h += `<div class="wlab">카드 — 체크하면 배경화면에 붙어요</div><div class="wplist">${ORDER.map(p => { const i = W.cards.findIndex(c => c.p === p), on = i >= 0, cd = W.cards[i], n = on ? cardItems(cd).reduce((a, g) => a + g[1].length, 0) : 32;
+      return `<div class="wpr${on ? " has" : ""}${on && i === W.sel ? " sel" : ""}"><input type="checkbox" data-wcard="${p}" ${on ? "checked" : ""} aria-label="${PROG[p].n} 카드 붙이기"><button type="button" class="wpn" data-w="selp" data-v="${p}"><i style="background:${PROG[p].c}">${PROG[p].ab}</i><b>${PROG[p].n}</b><span class="num">${on ? n + " / 32" : "추천 32"}</span>${on && i === W.sel ? '<em>선택됨</em>' : ""}</button></div>`; }).join("")}</div>`;
     const cd = W.cards[W.sel];
     if (cd) {
       const R = WREC[cd.p], off = new Set(cd.off || []);
-      h += `<div class="wbox"><div class="wbt"><i style="background:${PROG[cd.p].c}">${PROG[cd.p].ab}</i>${PROG[cd.p].n} 카드</div>`
-        + `<div class="wlab">자리</div><div class="wpos">${[[.06, .06], [.5, .06], [.94, .06], [.06, .5], [.5, .5], [.94, .5], [.06, .94], [.5, .94], [.94, .94]].map(([x, y]) => `<button type="button" class="${Math.abs(cd.fx - x) < .02 && Math.abs(cd.fy - y) < .02 ? "on" : ""}" data-w="pos" data-v="${x},${y}"><i></i></button>`).join("")}</div>`
+      h += `<div class="wbox"><div class="wbt"><i style="background:${PROG[cd.p].c}">${PROG[cd.p].ab}</i>${PROG[cd.p].n} 카드 설정</div>`
         + `<div class="wlab">크기 <span class="num">${cd.size}%</span></div><input type="range" min="50" max="170" step="5" value="${cd.size}" data-wr="size" class="wrange">`
         + `<div class="wlab">넣을 단축키 <button type="button" class="wlink" data-w="all">모두</button> · <button type="button" class="wlink" data-w="none">모두 빼기</button></div>`
         + R.g.map((g, gi) => { const ids = g[1].map((_, ki) => gi + ":" + ki), cnt = ids.filter(x => !off.has(x)).length, op = W.open[cd.p + gi];
@@ -1116,7 +1145,7 @@ function bKeys() {
 }
 function bSave() {
   return `<div class="wseg"><button type="button" class="${W.fmt !== "jpg" ? "on" : ""}" data-w="fmt" data-v="png">PNG(선명)</button><button type="button" class="${W.fmt === "jpg" ? "on" : ""}" data-w="fmt" data-v="jpg">JPG(가볍게)</button></div>
-  <button type="button" class="wbtn pri wide" data-w="save">${svg("dl")}배경화면 저장 <span class="num">${W.w} × ${W.h}</span></button>
+  <button type="button" class="wbtn pri wide" data-w="save">${svg("dl")}배경화면 저장 <span class="num">${W.w} × ${W.h}</span></button><button type="button" class="wbtn wide" data-w="savebg">${svg("img")}단축키 없이 그림만 저장</button>
   <div class="wlab">바탕화면에 넣기</div><ol class="wol"><li><b>윈도우</b> — 저장한 그림을 오른쪽 클릭 → 「바탕 화면 배경으로 설정」</li><li><b>맥</b> — 그림을 오른쪽 클릭 → 「빠른 동작」 → 「데스크탑 사진 설정」</li><li><b>휴대폰</b> — 갤러리(사진)에서 열고 → 「배경화면으로 설정」</li></ol>
   <p class="wtip">그림과 단축키 판은 이 기기에서 만들어져요 — 어디에도 올리지 않아요.</p>`;
 }
@@ -1134,22 +1163,27 @@ function preview() { clearTimeout(pvT); pvT = setTimeout(async () => {
   if (pvBusy) { pvAgain = true; return; } pvBusy = true;
   try { const cv = $w("#wcv"), box = $w(".wpv"); const bw = box.clientWidth, bh = Math.max(220, Math.min(innerHeight * (innerWidth < 900 ? .5 : .74), box.clientWidth * W.h / W.w));
     const k = Math.min(bw / W.w, bh / W.h) * Math.min(2, devicePixelRatio || 1);
-    await render(cv, k); cv.style.width = (W.w * k / Math.min(2, devicePixelRatio || 1)) + "px"; cv.style.height = (W.h * k / Math.min(2, devicePixelRatio || 1)) + "px";
+    await render(cv, k, "pv", true); cv.style.width = (W.w * k / Math.min(2, devicePixelRatio || 1)) + "px"; cv.style.height = (W.h * k / Math.min(2, devicePixelRatio || 1)) + "px";
     $w(".wmeta").textContent = `${W.w.toLocaleString()} × ${W.h.toLocaleString()} 미리보기${W.mode === "pick" ? " · 카드를 끌어 옮길 수 있어요" : ""}`;
     const warn = W.mode === "pick" && LASTINFO.over ? "카드가 화면보다 커요 — 크기를 줄이거나 단축키를 덜어 주세요" : W.mode === "full" && LASTINFO.small ? "다 넣기엔 좁아 일부가 잘려요 — 분류를 줄이거나 큰 해상도로" : "";
-    $w(".wwarn2").textContent = warn; $w(".wwarn2").hidden = !warn;
+    $w(".wwarn2").textContent = warn; $w(".wwarn2").hidden = !warn; how();
   } catch (e) { console.warn(e); }
   pvBusy = false; if (pvAgain) { pvAgain = false; preview(); }
 }, 60); }
+function how() {
+  const L = W.mode === "pick" ? [["크기 · 배경", "왼쪽 ① ②에서 내 화면 크기와 그림을 골라요"], ["카드 붙이기", "③에서 프로그램에 체크하면 추천 단축키 카드가 붙어요(여러 장 가능)"], ["옮기기", "미리보기에서 카드를 마우스(손가락)로 잡고 원하는 곳에 놓아요 — 잡은 카드가 「선택됨」"], ["다듬기", "선택한 카드의 크기 · 넣을 단축키는 ③ 아래 「카드 설정」에서"], ["저장", "④에서 저장 → 그림을 오른쪽 클릭 「바탕 화면 배경으로 설정」"]]
+    : [["크기 · 배경", "왼쪽 ① ②에서 내 화면 크기와 그림을 골라요"], ["프로그램", "③에서 프로그램 하나를 골라요"], ["담을 단축키", "추천 32개(크게) 또는 전체(작게) — 분류를 빼면 글자가 커져요"], ["저장", "④에서 저장 → 그림을 오른쪽 클릭 「바탕 화면 배경으로 설정」"]];
+  $w(".whow").innerHTML = `<b class="wht">사용 방법</b><ol>${L.map(([t, d]) => `<li><b>${t}</b><span>${d}</span></li>`).join("")}</ol>`;
+}
 function redraw() { side(); preview(); wsave(); }
 function toast(m) { const t = $w(".wtoast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), 2200); }
 
-async function saveFile() {
+async function saveFile(bgOnly) {
   const busy = $w(".wbusy"); busy.hidden = false;
   try {
-    const cv = document.createElement("canvas"); await render(cv, 1);
+    const cv = document.createElement("canvas"); await render(cv, 1, "save", false, bgOnly); delete BGC.save;
     const blob = await new Promise(r => cv.toBlob(r, W.fmt === "jpg" ? "image/jpeg" : "image/png", .93));
-    const name = `단축키배경화면_${W.mode === "full" ? PROG[W.fp].n : W.cards.map(c => PROG[c.p].n).join("_")}_${W.w}x${W.h}.${W.fmt === "jpg" ? "jpg" : "png"}`;
+    const name = bgOnly ? `배경화면_${W.cat === "단색" ? "단색" : W.cat === "내 사진" ? "내사진" : (WSC[W.scene] || ["그림"])[0].replace(/[ ·]+/g, "")}_${W.w}x${W.h}` : `단축키배경화면_${W.mode === "full" ? PROG[W.fp].n : (W.cards.map(c => PROG[c.p].n).join("_") || "그림만")}_${W.w}x${W.h}.${W.fmt === "jpg" ? "jpg" : "png"}`;
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
     toast("저장했어요 — 다운로드 폴더를 확인하세요");
   } catch (e) { toast("저장하지 못했어요 — 크기를 줄여 다시 해 보세요"); }
@@ -1157,7 +1191,7 @@ async function saveFile() {
 }
 function pickPhoto() {
   const i = document.createElement("input"); i.type = "file"; i.accept = "image/*";
-  i.onchange = () => { const f = i.files[0]; if (!f) return; const im = new Image(); im.onload = () => { PHOTO = im; redraw(); }; im.src = URL.createObjectURL(f); };
+  i.onchange = () => { const f = i.files[0]; if (!f) return; const im = new Image(); im.onload = () => { PHOTO = im; photoId++; redraw(); }; im.src = URL.createObjectURL(f); };
   i.click();
 }
 
@@ -1192,7 +1226,7 @@ function onClick(e) {
   if (a === "mode") { W.mode = v; return redraw(); }
   if (a === "add") { const i = W.cards.findIndex(c => c.p === v); if (i >= 0) { W.sel = i; return redraw(); }
     W.cards.push(place({ p: v, off: [], size: W.cards.length ? 80 : 100, fx: .5, fy: .5 })); W.sel = W.cards.length - 1; return redraw(); }
-  if (a === "sel") { W.sel = +v; return redraw(); }
+  if (a === "selp") { let i = W.cards.findIndex(c => c.p === v); if (i < 0) { W.cards.push(place({ p: v, off: [], size: W.cards.length ? 80 : 100, fx: .5, fy: .5 })); i = W.cards.length - 1; } W.sel = i; return redraw(); }
   if (a === "del") { W.cards.splice(+v, 1); W.sel = Math.max(0, Math.min(W.sel, W.cards.length - 1)); return redraw(); }
   if (a === "pos") { const [x, y] = v.split(",").map(Number); const cd = W.cards[W.sel]; if (cd) { cd.fx = x; cd.fy = y; } return redraw(); }
   if (a === "all" || a === "none") { const cd = W.cards[W.sel]; if (!cd) return; cd.off = a === "all" ? [] : WREC[cd.p].g.flatMap((g, gi) => g[1].map((_, ki) => gi + ":" + ki)); return redraw(); }
@@ -1200,7 +1234,8 @@ function onClick(e) {
   if (a === "fp") { W.fp = v; W.fcats = []; return redraw(); }
   if (a === "fsrc") { W.fsrc = v; return redraw(); }
   if (a === "fmt") { W.fmt = v; side(); wsave(); return; }
-  if (a === "save") return saveFile();
+  if (a === "save") return saveFile(false);
+  if (a === "savebg") return saveFile(true);
 }
 function onChange(e) {
   const t = e.target, cd = W.cards[W.sel];
@@ -1208,6 +1243,7 @@ function onChange(e) {
   if (t.dataset.wg != null && cd) { const gi = +t.dataset.wg, ids = WREC[cd.p].g[gi][1].map((_, ki) => gi + ":" + ki); const off = new Set(cd.off); ids.forEach(x => t.checked ? off.delete(x) : off.add(x)); cd.off = [...off]; return redraw(); }
   if (t.dataset.wk && cd) { const off = new Set(cd.off); t.checked ? off.delete(t.dataset.wk) : off.add(t.dataset.wk); cd.off = [...off]; return redraw(); }
   if (t.dataset.wc != null) { const off = new Set(W.fcats); t.checked ? off.delete(t.dataset.wc) : off.add(t.dataset.wc); W.fcats = [...off]; return redraw(); }
+  if (t.dataset.wcard) { const p = t.dataset.wcard, i = W.cards.findIndex(c => c.p === p); if (t.checked && i < 0) { W.cards.push(place({ p, off: [], size: W.cards.length ? 80 : 100, fx: .5, fy: .5 })); W.sel = W.cards.length - 1; } else if (!t.checked && i >= 0) { W.cards.splice(i, 1); W.sel = Math.max(0, Math.min(W.sel >= i ? W.sel - (W.sel > i ? 1 : 0) : W.sel, W.cards.length - 1)); } return redraw(); }
   if (t.dataset.w2 === "icon") { W.icon = t.checked; return redraw(); }
 }
 function onInput(e) {
@@ -1219,26 +1255,31 @@ function onInput(e) {
 /* 미리보기에서 카드 끌기 */
 let drag = null;
 function ptr(e) { const cv = $w("#wcv"), r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * W.w, y: (e.clientY - r.top) / r.height * W.h }; }
+let rafD = 0;
+function fastDraw() { if (rafD) return; rafD = requestAnimationFrame(() => { rafD = 0; const B = BGC.pv; if (B) compose($w("#wcv"), B, true); else preview(); }); }
 function onDown(e) {
   if (W.mode !== "pick") return; const p = ptr(e);
   for (let j = RECTS.length - 1; j >= 0; j--) { const R = RECTS[j]; if (p.x >= R.x && p.x <= R.x + R.w && p.y >= R.y && p.y <= R.y + R.h) {
-    drag = { i: R.i, dx: p.x - (R.x + R.w / 2), dy: p.y - (R.y + R.h / 2), A: R.A, moved: false }; $w("#wcv").setPointerCapture(e.pointerId); e.preventDefault();
-    if (W.sel !== R.i) { W.sel = R.i; side(); } return; } }
+    drag = { i: R.i, dx: p.x - (R.x + R.w / 2), dy: p.y - (R.y + R.h / 2), A: R.A, w: R.w, h: R.h, moved: false }; $w("#wcv").setPointerCapture(e.pointerId); e.preventDefault();
+    $w("#wcv").style.cursor = "grabbing"; const chg = W.sel !== R.i; W.sel = R.i; fastDraw(); if (chg) side(); return; } }
 }
 function onMove(e) {
   const cv = $w("#wcv"); if (!drag) { if (W.mode === "pick") { const p = ptr(e); cv.style.cursor = RECTS.some(R => p.x >= R.x && p.x <= R.x + R.w && p.y >= R.y && p.y <= R.y + R.h) ? "grab" : "default"; } return; }
   const p = ptr(e), A = drag.A, cd = W.cards[drag.i]; if (!cd) return;
-  cd.fx = Math.max(0, Math.min(1, (p.x - drag.dx - A.x0) / (A.x1 - A.x0))); cd.fy = Math.max(0, Math.min(1, (p.y - drag.dy - A.y0) / (A.y1 - A.y0)));
-  drag.moved = true; cv.style.cursor = "grabbing"; preview();
+  /* 카드 가운데 = 손가락 위치 그대로(자리 비율은 카드가 화면 안에 머무는 범위로 환산) */
+  const sw = Math.max(1, A.x1 - A.x0 - drag.w), sh = Math.max(1, A.y1 - A.y0 - drag.h);
+  const left = Math.max(A.x0, Math.min(A.x1 - drag.w, p.x - drag.dx - drag.w / 2)), top = Math.max(A.y0, Math.min(A.y1 - drag.h, p.y - drag.dy - drag.h / 2));
+  cd.fx = (left - A.x0 + drag.w / 2) / (A.x1 - A.x0); cd.fy = (top - A.y0 + drag.h / 2) / (A.y1 - A.y0);
+  drag.moved = true; fastDraw();
 }
-function onUp() { if (drag && drag.moved) { wsave(); side(); } drag = null; }
+function onUp() { const d = drag; drag = null; if (d) { $w("#wcv").style.cursor = "grab"; fastDraw(); if (d.moved) wsave(); } }
 
 /* ── 열고 닫기 ── */
 let built = false;
 function build() {
   const d = document.createElement("div"); d.id = "wallv"; d.hidden = true; d.setAttribute("role", "dialog"); d.setAttribute("aria-label", "단축키 배경화면 만들기");
   d.innerHTML = `<div class="wtop"><button type="button" class="wback" data-w="close" aria-label="단축키 사전으로">${svg("back")}<span>단축키 사전</span></button><div class="wtt">단축키 배경화면 만들기<small>그림 · 해상도 고르고 단축키를 붙여 저장</small></div><button type="button" class="wclose" data-w="close" aria-label="닫기">${svg("x")}</button></div>
-  <div class="wbody"><aside class="wside"></aside><section class="wmain"><div class="wpv"><canvas id="wcv"></canvas></div><div class="wmeta num"></div><div class="wwarn2" hidden></div><button type="button" class="wbtn pri wsave" data-w="save">${svg("dl")}배경화면 저장</button></section></div>
+  <div class="wbody"><aside class="wside"></aside><section class="wmain"><div class="wpv"><canvas id="wcv"></canvas></div><div class="wmeta num"></div><div class="wwarn2" hidden></div><div class="whow"></div><button type="button" class="wbtn pri wsave" data-w="save">${svg("dl")}배경화면 저장</button></section></div>
   <div class="wbusy" hidden><div>배경화면을 만드는 중…</div></div><div class="wtoast" role="status"></div>`;
   document.body.appendChild(d);
   d.addEventListener("click", onClick); d.addEventListener("change", onChange); d.addEventListener("input", onInput);

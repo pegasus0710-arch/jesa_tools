@@ -329,7 +329,7 @@ input.cd-in{height:46px}
   .cd-wrap{grid-template-columns:minmax(0,1fr);gap:0}
   .cd-stage{position:sticky;top:57px;z-index:5;border-radius:0 0 16px 16px;padding:10px;margin:-12px -12px 10px}
   #cdpv{max-height:38vh;width:auto;max-width:100%}
-  .cd-side{border-radius:16px}
+  .cd-side{border-radius:16px;overflow:clip}   /* hidden이면 그 안이 스크롤 틀이 돼 아래 단추(sticky)가 내용을 가림 — 11-14 폴드 */
   .cd-body{max-height:none;overflow:visible;padding:12px 12px 4px}
   .cd-acts{position:sticky;bottom:calc(62px + env(safe-area-inset-bottom));z-index:6;border-radius:0 0 16px 16px;padding-bottom:12px}
   .cd-th{grid-template-columns:repeat(3,minmax(0,1fr))}

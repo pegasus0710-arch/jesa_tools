@@ -521,7 +521,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-13(금) 19:25";
+const APP_VER = "1.0", BUILD = "2026-11-14(토) 00:37";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -583,8 +583,16 @@ function ensureBase(force) {
 ensureBase(false); ls.set("data", D);
 const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, exReps: 1, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
   engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true };
-let SET = Object.assign({}, SET0, ls.get("set", {}));
-const saveSet = () => ls.set("set", SET);
+/* 「내 음성 서버」는 제이 전용 파일(jay.html)에서만 — 공개판(index.html)에서는 숨김.
+   챕터 · 기록 · 다른 설정은 둘이 같이 쓰고, 음성 고르기(engine · 서버 주소 · 앱 암호)만 jay.html이 따로 기억("setj") */
+const SERVER_OK = /*SERVER_OK*/false, SRVK = ["engine", "azUrl", "azKey"];
+let SET = Object.assign({}, SET0, ls.get("set", {}), SERVER_OK ? ls.get("setj", {}) : {});
+if (!SERVER_OK && SET.engine === "azure") SET.engine = SET.azMyKey ? "azkey" : "device";
+const saveSet = () => {
+  if (!SERVER_OK) return ls.set("set", SET);
+  ls.set("setj", Object.fromEntries(SRVK.map(k => [k, SET[k]])));
+  const b = Object.assign({}, SET), o = ls.get("set", {}); if (b.engine === "azure") b.engine = o.engine && o.engine !== "azure" ? o.engine : (SET.azMyKey ? "azkey" : "device"); ls.set("set", b);
+};
 function touch(ch) { if (ch) ch.at = Date.now(); ls.set("data", D); if (SYNC) SYNC.markDirty(); }
 const STAR = { talk: "__star_talk", word: "__star_word" };
 function starCh(sec) { const items = []; D.chapters.forEach(c => { if (c.sec === sec) c.items.forEach(it => { if (it.star) items.push(it); }); }); return { id: STAR[sec], sec, name: sec === "word" ? "☆ 어려운 단어 모음" : "☆ 어려운 문장 모음", items, virtual: true }; }
@@ -1135,7 +1143,7 @@ async function drawSet() {
   const vk = VOICES.filter(v => /^ko/i.test(v.lang)), ve = VOICES.filter(v => /^en/i.test(v.lang));
   const mk = todayS().slice(0, 7);
   let h = `<div class="vh"><div><h2>설정</h2><p>영어 노트 v${APP_VER}</p></div></div><div class="setg">`;
-  h += `<div class="sc"><div class="sh2">${svg(IC.head)}음성</div><div class="seg" data-k="engine" style="margin-bottom:10px"><button data-v="device" class="${SET.engine === "device" ? "on" : ""}">기기 음성</button><button data-v="azkey" class="${SET.engine === "azkey" ? "on" : ""}">내 Azure 키</button><button data-v="azure" class="${SET.engine === "azure" ? "on" : ""}">내 음성 서버</button></div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.head)}음성</div><div class="seg" data-k="engine" style="margin-bottom:10px"><button data-v="device" class="${SET.engine === "device" ? "on" : ""}">기기 음성</button><button data-v="azkey" class="${SET.engine === "azkey" ? "on" : ""}">내 Azure 키</button>${SERVER_OK ? `<button data-v="azure" class="${SET.engine === "azure" ? "on" : ""}">내 음성 서버</button>` : ""}</div>`;
   if (SET.engine === "device") {
     h += `<p>휴대폰 · PC에 들어 있는 음성이에요. 인터넷 없이 바로 되지만 <b>화면을 켜 두어야</b> 들려요.</p>
     <div class="lab">한국어 목소리</div><select class="inp" data-s="vKo"><option value="">자동</option>${vk.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vKo === v.voiceURI ? "selected" : ""}>${esc(v.name)}</option>`).join("")}</select>
@@ -1252,8 +1260,8 @@ function knownEmail() { try { const o = JSON.parse(localStorage.getItem("bj-gd-t
 function gdRedirect() {
   if (!navigator.onLine) return toast("인터넷에 연결된 뒤 다시 눌러 주세요");
   if (P.playing) stopAll();
-  const st = "g" + Math.random().toString(36).slice(2, 12); try { localStorage.setItem(LSK + "oauth", st); } catch (e) {}
-  const q = new URLSearchParams({ client_id: GD_CLIENT_ID, redirect_uri: location.origin + location.pathname.replace(/index\.html$/, ""), response_type: "token", scope: GD_SCOPE, include_granted_scopes: "true", state: st });
+  const st = (SERVER_OK ? "j" : "g") + Math.random().toString(36).slice(2, 12); try { localStorage.setItem(LSK + "oauth", st); } catch (e) {}
+  const q = new URLSearchParams({ client_id: GD_CLIENT_ID, redirect_uri: location.origin + location.pathname.replace(/(index|jay)\.html$/, ""), response_type: "token", scope: GD_SCOPE, include_granted_scopes: "true", state: st });
   const em = SET.gdEmail || knownEmail(); if (em) q.set("login_hint", em); if (!SET.gdOn) q.set("prompt", "consent");
   toast("구글로 넘어가요 — 허용하면 이 화면으로 돌아와요");
   setTimeout(() => location.assign("https://accounts.google.com/o/oauth2/v2/auth?" + q), 300);
@@ -1265,7 +1273,9 @@ function gdBack() {
   if (!st0 || p.get("state") !== st0) return false;
   if (p.get("error")) { setTimeout(() => toast(p.get("error") === "access_denied" ? "구글 연결을 취소했어요" : "구글 연결을 못 했어요 — " + p.get("error")), 400); return false; }
   try { localStorage.setItem("bj-gd-token", JSON.stringify({ t: p.get("access_token"), e: Date.now() + (+p.get("expires_in") || 3600) * 1000, m: SET.gdEmail || "" })); } catch (e) {}
-  SET.gdOn = true; saveSet(); GD.toastNext = true; U.scr = "set"; return true;
+  SET.gdOn = true; saveSet(); GD.toastNext = true; U.scr = "set";
+  if (st0[0] === "j" && !SERVER_OK) { location.replace("jay.html"); return false; }   /* 제이 전용 파일에서 연결했으면 그쪽으로 돌아가기 */
+  return true;
 }
 async function gdAction(el) {
   if (!gdHttp()) return toast("구글 드라이브는 인터넷 주소(https)에서 열었을 때만 돼요");

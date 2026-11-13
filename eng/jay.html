@@ -1,0 +1,1398 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0B3D4A">
+<title>영어 노트(제이) | Blog J</title><meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="jay.webmanifest">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+<style>
+:root{--bg:#FAF6EE;--in:#F3EEE3;--desk:#F0EADF;--card:#fff;--line:#CDD3DC;--hair:rgba(20,32,43,.12);--ink:#14202B;--sub:#5F6B7A;--sea:#0C737D;--sea2:#0A5C66;--seal:#EEF6F7;--deep:#0B3D4A;--deeps:#CFE3E6;--sky:#2B5FA0;--sun:#E07A4F;--red:#C23A2B;--up:0 1px 2px rgba(20,32,43,.06),0 0 0 1px rgba(20,32,43,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:SUIT,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;min-height:100vh;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:var(--sky)}
+.num{font-variant-numeric:tabular-nums}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.hd{background:var(--deep);color:#fff;position:sticky;top:0;z-index:30}
+.hd-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 18px;min-height:60px}
+.logo{display:flex;align-items:center;gap:10px;min-width:0}
+.logo img{width:38px;height:38px;border-radius:10px;flex-shrink:0}
+.logo small{display:block;font-size:11.5px;font-weight:700;color:var(--deeps)}
+.logo b{display:block;font-size:18px;font-weight:900;letter-spacing:-.02em;white-space:nowrap}
+.hd .sp{flex:1}
+.gdot{width:9px;height:9px;border-radius:50%;background:#9AA3AE;display:inline-block;flex-shrink:0}
+.gdot.ok{background:#2f8a57}.gdot.busy{background:var(--sun)}
+.nav{display:flex;gap:4px}
+.nav button{height:38px;padding:0 13px;border-radius:10px;color:var(--deeps);font-weight:800;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.nav button.on{background:rgba(255,255,255,.14);color:#fff}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 18px 40px}
+.btn{height:42px;padding:0 15px;border-radius:11px;background:#fff;box-shadow:var(--up);display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:800;font-size:14.5px;white-space:nowrap}
+.btn:hover{box-shadow:0 0 0 2px var(--sea)}
+.btn.go{background:var(--sea);color:#fff;box-shadow:none}
+.btn.go:hover{background:var(--sea2)}
+.btn.sm{height:34px;padding:0 11px;font-size:13.5px;border-radius:9px}
+.btn.red{color:var(--red)}
+.btn.full{width:100%}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.vh{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.vh h2{font-size:21px;font-weight:900;letter-spacing:-.02em}
+.vh p{font-size:13.5px;color:var(--sub)}
+.card{background:#fff;border-radius:16px;box-shadow:var(--up);padding:16px}
+.lead{color:var(--sub);font-size:13.5px}
+.hint{font-size:13px;color:var(--sub);line-height:1.6;margin-top:8px}
+/* 복습 띠 */
+.rvband{background:var(--seal);border-radius:14px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:inset 0 0 0 1px rgba(12,115,125,.25)}
+.rvband .pip{width:10px;height:10px;border-radius:50%;background:var(--sun);flex-shrink:0}
+.rvband b{font-size:15px}
+.rvband .tx{flex:1;min-width:200px;font-size:14px}
+/* 챕터 목록 */
+.chs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.ch{background:#fff;border-radius:14px;box-shadow:var(--up);padding:12px 12px 12px 10px;display:flex;gap:10px;align-items:center}
+.ch.sel{box-shadow:0 0 0 2px var(--sea)}
+.ch .ck{width:26px;height:26px;border-radius:7px;background:var(--in);display:grid;place-items:center;flex-shrink:0}
+.ch.sel .ck{background:var(--sea);color:#fff}
+.ch .tx{flex:1;min-width:0;text-align:left}
+.ch .tx b{display:block;font-size:15.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch .tx small{display:block;font-size:12.5px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch .pl{width:44px;height:44px;border-radius:12px;background:var(--sea);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.ch .pl svg{width:20px;height:20px}
+.ch .ed{width:36px;height:44px;border-radius:10px;display:grid;place-items:center;color:var(--sub);flex-shrink:0}
+.ch.star .pl{background:var(--deep)}
+.tag{font-size:12px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--in);color:var(--sub);margin-left:6px;vertical-align:1px}
+.tag.due{background:#FBE7DD;color:#9A4320}
+.engchip{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:5px 10px;border-radius:8px;font-size:13px;font-weight:800;border:0;cursor:pointer;font-family:inherit}
+.engchip svg{width:15px;height:15px}.engchip small{font-weight:700;opacity:.75;margin-left:4px}
+.engchip.dev{background:var(--in);color:var(--sub)}.engchip.az{background:#0C737D;color:#fff}
+.tag.azok{background:#DDF0EE;color:#0C5F66}.tag.azpart{background:#FBEFD9;color:#8A5A12}.tag.aznone{background:var(--in);color:var(--sub)}
+
+.selbar{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));margin-top:12px;display:flex;gap:8px;align-items:center;background:var(--deep);color:#fff;border-radius:14px;padding:10px 12px;z-index:20}
+.selbar span{flex:1;font-weight:800;font-size:14px;min-width:0}
+.selbar .btn{color:var(--ink)}.selbar .btn.go{color:#fff;background:var(--sun)}
+/* 플레이어 */
+.pv{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.stagep{background:var(--deep);color:#fff;border-radius:20px;padding:18px 18px 16px;min-height:330px;display:flex;flex-direction:column}
+.stagep .top{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--deeps);font-weight:700}
+.stagep .top b{color:#fff}
+.phase{display:flex;gap:6px;margin:14px 0 10px;flex-wrap:wrap}
+.phase i{font-style:normal;font-size:12.5px;font-weight:800;padding:4px 9px;border-radius:8px;background:rgba(255,255,255,.1);color:var(--deeps)}
+.phase i.on{background:var(--sun);color:#fff}
+.ko{font-size:clamp(22px,4.6vw,30px);font-weight:900;line-height:1.35;letter-spacing:-.02em;word-break:keep-all}
+.en{font-size:clamp(20px,4.2vw,27px);font-weight:700;line-height:1.4;margin-top:14px;color:#fff;word-break:break-word}
+.en.hide{color:transparent;text-shadow:0 0 14px rgba(255,255,255,.55);user-select:none}
+.count{margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:10px}
+.bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.15);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sun);width:0}
+.ctl{display:flex;justify-content:center;align-items:center;gap:14px;margin:14px 0 4px}
+.ctl button{width:54px;height:54px;border-radius:50%;background:#fff;box-shadow:var(--up);display:grid;place-items:center}
+.ctl button svg{width:22px;height:22px}
+.ctl .big{width:76px;height:76px;background:var(--sea);color:#fff;box-shadow:none}
+.ctl .big svg{width:32px;height:32px}
+.ctl .st.on{background:var(--sun);color:#fff}
+.tst{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.tst button{height:46px;padding:0 20px;border-radius:12px;font-weight:900;font-size:15px;background:#fff;box-shadow:var(--up)}
+.tst .ok{color:#1f7a4a}.tst .ng{color:var(--red)}
+.opt{display:flex;flex-direction:column;gap:12px}
+.lab{font-size:13px;font-weight:800;color:var(--sub);margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.seg{display:flex;background:var(--in);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{flex:1 0 auto;height:34px;padding:0 9px;border-radius:8px;font-size:13.5px;font-weight:700;color:var(--sub)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:var(--up)}
+.tg{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;padding:4px 0;cursor:pointer}
+.tg input{width:20px;height:20px;accent-color:var(--sea);flex-shrink:0}
+.tg span{flex:1}
+.engine{font-size:13px;border-radius:10px;padding:9px 11px;background:var(--in);color:var(--sub);line-height:1.55}
+.engine b{color:var(--ink)}
+.engine.az{background:var(--seal)}
+.qlist{margin-top:14px}
+.qi{display:flex;gap:10px;padding:9px 10px;border-radius:10px;text-align:left;width:100%;align-items:flex-start}
+.qi:hover{background:var(--in)}
+.qi.on{background:var(--seal);box-shadow:inset 3px 0 0 var(--sea)}
+.qi .n{font-size:12.5px;color:var(--sub);font-weight:800;width:24px;flex-shrink:0;padding-top:2px}
+.qi .tx{flex:1;min-width:0}
+.qi .tx b{display:block;font-size:14.5px;font-weight:800}
+.qi .tx small{display:block;font-size:13px;color:var(--sub)}
+.qi .s{color:var(--sun);flex-shrink:0}
+/* 편집 */
+.inp{height:42px;border-radius:10px;border:0;background:#fff;box-shadow:0 0 0 1px var(--line);padding:0 11px;font-size:15px;outline:0;min-width:0;width:100%}
+.inp:focus,textarea.inp:focus{box-shadow:0 0 0 2px var(--sea)}
+textarea.inp{height:auto;padding:10px 11px;line-height:1.55;resize:vertical}
+.it{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) 34px 34px;gap:6px;align-items:center;margin-bottom:6px}
+.it .n{font-size:12.5px;font-weight:800;color:var(--sub);text-align:right}
+.it .x,.it .sx{width:34px;height:42px;border-radius:9px;background:var(--in);display:grid;place-items:center;color:var(--sub)}
+.it .sx.on{color:var(--sun)}
+/* 통계 */
+.kp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.kp div{background:#fff;border-radius:14px;box-shadow:var(--up);padding:12px 14px}
+.kp small{display:block;font-size:12.5px;color:var(--sub);font-weight:700}
+.kp b{display:block;font-size:24px;font-weight:900;margin-top:2px}
+.days{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;align-items:end;height:120px;margin-top:8px}
+.days div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.days i{display:block;width:100%;border-radius:4px 4px 2px 2px;background:var(--sea);min-height:2px}
+.days i.z{background:var(--line)}
+.days span{font-size:11.5px;color:var(--sub)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--hair)}
+.tbl th{font-size:12.5px;color:var(--sub);white-space:nowrap}
+.tbl td.num{white-space:nowrap}
+@media (max-width:600px){.tbl{font-size:13px}.tbl th,.tbl td{padding:7px 4px}}
+/* 설정 */
+.setg{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.sc{background:#fff;border-radius:16px;box-shadow:var(--up);padding:16px}
+.sh2{display:flex;align-items:center;gap:8px;font-weight:900;font-size:16px;margin-bottom:8px}
+.sc p{font-size:13.5px;color:var(--sub);line-height:1.6;margin-bottom:10px}
+.stc{margin-left:auto;font-size:12.5px;font-weight:800;color:var(--sub);background:var(--in);padding:2px 8px;border-radius:6px}
+.stc.ok{background:#E3F2EA;color:#1f7a4a}
+.qrw{display:flex;gap:12px;align-items:center}
+.qr{width:120px;flex-shrink:0;background:#fff}
+.qr svg{width:100%;height:auto;display:block}
+.links{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+select.inp{appearance:auto}
+/* 시트 · 알림 */
+#sheet{position:fixed;inset:0;background:rgba(11,25,32,.45);z-index:60;display:flex;align-items:flex-end;justify-content:center}
+#sheet[hidden]{display:none}
+.shbox{background:var(--bg);width:min(640px,100%);max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom))}
+.edh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.edh b{font-size:17px;font-weight:900}
+#busy{position:fixed;inset:0;background:rgba(11,25,32,.5);z-index:70;display:grid;place-items:center;padding:20px}
+#busy[hidden]{display:none}
+#busy .bx{background:#fff;border-radius:16px;padding:20px 22px;font-weight:800;box-shadow:0 20px 50px rgba(0,0,0,.3);width:min(360px,100%);text-align:center}
+#busy .bar{background:var(--in);margin:12px 0}
+#toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:80;max-width:calc(100vw - 32px)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#syband{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:50;display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:10px;background:#fffdf7;border:1px solid #d9cfbd;font-weight:700;font-size:13.5px}
+#syband button{font-weight:900;color:var(--sea)}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:#fff;box-shadow:0 -1px 0 var(--hair);display:none;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom);z-index:40}
+.tabs button{height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:800;color:var(--sub)}
+.tabs button.on{color:var(--sea)}
+.tabs svg{width:22px;height:22px}
+.iapp{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.iapp img{border-radius:12px}
+.iapp b{display:block;font-size:16px}.iapp span{font-size:13px;color:var(--sub)}
+.isteps{padding-left:20px;margin:10px 0;line-height:1.9}
+/* 회화 · 단어 구역 */
+.sectab{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--in);border-radius:14px;padding:4px;margin-bottom:16px;max-width:460px}
+.sectab button{height:48px;border-radius:11px;font-size:17px;font-weight:900;color:var(--sub);display:flex;align-items:center;justify-content:center;gap:8px}
+.sectab button small{font-size:12.5px;font-weight:700;color:var(--sub)}
+.sectab button.on{background:var(--sea);color:#fff;box-shadow:var(--up)}
+.sectab button.on small{color:var(--deeps)}
+.ch .tx b .tag{margin-left:6px}
+/* 단어 줄 */
+.it.w{grid-template-columns:28px minmax(0,1fr) minmax(0,1.2fr) 34px 34px;row-gap:4px;padding-bottom:8px;border-bottom:1px dashed var(--hair);margin-bottom:8px}
+.it.w .ex2{grid-column:2/4}.it.w .exk2{grid-column:2/4;height:36px;font-size:14px}
+.it.w .ex2{height:36px;font-size:14px}
+/* 단어 무대 */
+.wdx{font-size:clamp(30px,7vw,46px);font-weight:900;letter-spacing:-.01em;line-height:1.15;word-break:break-word}
+.mnx{font-size:clamp(20px,4.4vw,26px);font-weight:800;margin-top:10px;color:var(--deeps);word-break:keep-all}
+.exx{font-size:16px;margin-top:16px;line-height:1.5;color:#fff;opacity:.92}
+.exx small{display:block;font-size:14px;color:var(--deeps);margin-top:2px}
+.exx.dim{opacity:.25}
+.exx p{margin:0}.exx p+p{margin-top:10px}
+.wdx.hide,.mnx.hide{color:transparent;text-shadow:0 0 14px rgba(255,255,255,.55);user-select:none}
+/* 단어장 인쇄 */
+#prt{display:none}
+@media print{
+  @page{size:A4;margin:14mm 12mm}
+  body.printing{background:#fff!important;padding:0!important}
+  body.printing>*:not(#prt){display:none!important}
+  body.printing #prt{display:block;color:#000;font-family:SUIT,"Malgun Gothic",sans-serif}
+  #prt h1{font-size:18pt;margin:0 0 2mm}
+  #prt .prs{font-size:9.5pt;color:#555;margin:0 0 4mm}
+  #prt table{width:100%;border-collapse:collapse;font-size:11pt}
+  #prt th,#prt td{border:0.3mm solid #999;padding:2.4mm 2.5mm;text-align:left;vertical-align:top}
+  #prt th{background:#eee;font-size:9.5pt}
+  #prt td:first-child{width:8mm;text-align:center;color:#666}
+  #prt td.w{font-weight:800;width:38mm}
+  #prt td.e{font-size:9.5pt}
+  #prt td.e small{color:#555}
+  #prt tr{break-inside:avoid}
+  #prt .prf{font-size:8.5pt;color:#888;text-align:right;margin-top:3mm}
+}
+@media (max-width:600px){.it.w{grid-template-columns:22px minmax(0,1fr) 34px 34px}.it.w .wd2{grid-column:2/3}.it.w .mn2{grid-column:2/5;grid-row:2}.it.w .ex2,.it.w .exk2{grid-column:2/5}}
+/* 아래 미니 플레이어(다른 화면에서도 재생 상태) */
+#mini{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom));z-index:39;background:var(--deep);color:#fff;box-shadow:0 -8px 22px rgba(11,25,32,.22)}
+#mini[hidden]{display:none}
+.mini-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:9px 12px 9px 16px;position:relative}
+.mini-bar{position:absolute;left:0;right:0;top:0;height:3px;background:rgba(255,255,255,.14)}
+.mini-bar i{display:block;height:100%;background:var(--sun)}
+.mini-tx{flex:1;min-width:0;text-align:left;color:#fff;padding:2px 0}
+.mini-tx small{display:flex;gap:6px;align-items:center;font-size:12.5px;font-weight:700;color:var(--deeps);white-space:nowrap;overflow:hidden}
+.mini-tx small span{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mini-tx small span.num{flex-shrink:0;overflow:visible}
+.mini-tx small em{font-style:normal;font-weight:800;padding:1px 7px;border-radius:6px;background:rgba(255,255,255,.12);color:#fff;flex-shrink:0}
+.mini-tx small em.live{background:var(--sun)}
+.mini-tx b{display:block;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-in .mb{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;flex-shrink:0}
+.mini-in .mb:hover{background:rgba(255,255,255,.12)}
+.mini-in .mb svg{width:20px;height:20px}
+.mini-in .mpp{width:48px;height:48px;background:#fff;color:var(--deep)}
+.mini-in .mpp:hover{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
+.mini-in .mpp svg{width:22px;height:22px}
+body.hasmini{padding-bottom:calc(140px + env(safe-area-inset-bottom))}
+body.hasmini .selbar{bottom:calc(148px + env(safe-area-inset-bottom))}
+body.hasmini #toast{bottom:calc(156px + env(safe-area-inset-bottom))}
+body.hasmini #syband{bottom:calc(148px + env(safe-area-inset-bottom))}
+@media (min-width:901px){#mini{bottom:0}body.hasmini{padding-bottom:76px}body.hasmini .selbar{bottom:80px}body.hasmini #toast{bottom:90px}body.hasmini #syband{bottom:84px}}
+@media (min-width:901px){body{padding-bottom:0}.selbar{bottom:12px}#toast{bottom:24px}#syband{bottom:16px}}
+@media (max-width:900px){
+  .nav{display:none}.tabs{display:grid}
+  .pv{grid-template-columns:minmax(0,1fr)}
+  .kp{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wrap{padding:14px 14px 30px}
+}
+@media (max-width:600px){
+  .logo small{display:none}
+  .it{grid-template-columns:22px minmax(0,1fr) 34px 34px}
+  .it .en2{grid-column:2/3}
+  .it .ko2{grid-column:2/5}
+  .chs{grid-template-columns:minmax(0,1fr)}
+  .stagep{min-height:300px}
+}
+</style></head><body>
+<header class="hd"><div class="hd-in"><div class="logo"><img src="icon-192.png" alt=""><div><small>Blog J · 회화 · 단어</small><b>영어 노트</b></div></div><span class="sp"></span><nav class="nav" id="nav"></nav><span class="gdot" id="gdot"></span></div></header>
+<main class="wrap" id="main"></main>
+<div id="mini" hidden></div>
+<nav class="tabs" id="tabs"></nav>
+<div id="sheet" hidden></div>
+<div id="busy" hidden><div class="bx"><div id="busyT">음성 만드는 중</div><div class="bar"><i id="busyB"></i></div><button class="btn sm" data-a="cancel">멈추기</button></div></div>
+<div id="toast" role="status"></div>
+<audio id="au" preload="auto" playsinline></audio>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Blog J 공통 동기화 핵심(bj-sync-core.js) — 2026-11-08 점검안 · 서버 없음
+   ───────────────────────────────────────────────────────────────────────────
+   목적(제이 불편 3가지):
+     ① 쓰다 보면 구글이 끊긴 것처럼 보이고 처음 화면이 다시 나옴
+     ② PC · 휴대폰이 바로 맞춰지지 않음
+     ③ PC 폴더를 연결해도 저절로 저장이 잘 안 됨
+   원칙:
+     · 「연결됨」은 저장된 표시(앱의 gdOn)로 정한다 — 토큰(1시간짜리) 유무로 정하지 않는다.
+       토큰이 없으면 「쉬는 중」일 뿐, 처음 화면 · 설정 화면을 다시 띄우지 않는다.
+     · 토큰은 모든 Blog J 앱이 같은 주소(origin)라서 localStorage 「bj-gd-token」 하나를 같이 쓴다
+       (클라이언트 ID · 권한(drive.file)이 같아서 한 앱에서 받은 토큰을 다른 앱도 쓸 수 있음).
+     · 토큰 다시 받기는 브라우저가 「사용자가 누른 순간」에만 구글 창(잠깐 열렸다 닫힘)을 허락한다.
+       → 화면을 누를 때(pointerdown/keydown) 조용히(prompt:'none' + login_hint) 다시 받는다.
+       → 누름 없이(백그라운드 · 401) 구글 창을 열지 않는다(열면 팝업 차단 → 오류만 남음).
+     · 고친 것은 「올릴 것 있음」 표시를 localStorage에 남겨(앱을 닫아도 남음) 연결이 돌아오면 올린다.
+     · 열려 있고 화면이 보이는 동안: 다시 볼 때 · 창에 들어올 때 · 인터넷이 돌아올 때 + 90초마다
+       드라이브 파일의 수정 시각만 가볍게 확인 → 바뀌었으면 맞추기(받기+합치기+올리기).
+     · PC 폴더: 권한이 'prompt'가 되면(브라우저를 다시 열면 흔함) 조용히 실패하지 않고
+       작은 띠 「PC 폴더 다시 연결」 → 누르면 그 누름으로 허용을 받고 밀린 것을 한꺼번에 씀.
+   서버 없이 안 되는 것(정직하게):
+     · 새로 고침 토큰(refresh token)이 없다 → 1시간마다 토큰이 끝나고, 다시 받으려면 「누름」이 한 번 필요.
+       (구글 로그인 · 앱 허용이 살아 있으면 창이 잠깐 깜빡이고 끝, 로그아웃 · 쿠키 삭제 · 여러 계정이면 계정 고르기 창)
+     · 앱이 닫혀 있을 때(또는 휴대폰이 앱을 얼려 둔 동안) 동기화는 불가 — 다음에 열고 한 번 누를 때 맞춤.
+     · 사파리 · 일부 브라우저는 prompt:'none' 창을 막거나 서드파티 쿠키 때문에 실패할 수 있음 → 띠 단추로.
+     · 드라이브 v3에는 「바뀌지 않았을 때만 덮어쓰기」 조건 저장이 공식적으로 없다 →
+       올리기 바로 전에 수정 시각을 한 번 더 보고 바뀌었으면 한 번 더 합친 뒤 올림(beforePush 훅).
+   쓰는 법: 맨 아래 「앱에 붙이기」 + sync_plan/integration_checklist.md
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function (W) {
+  "use strict";
+  const TK = "bj-gd-token";                     /* 기존 trip2 와 같은 키 · 같은 모양 {t,e,m} */
+  const now = () => Date.now();
+  const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const hasGesture = () => !!(navigator.userActivation && navigator.userActivation.isActive);
+  const visible = () => document.visibilityState === "visible";
+
+  function create(cfg) {
+    /* cfg = {
+         app:        "trip2"                       — 로컬 저장 키 이름에 씀
+         clientId, scope                           — GIS
+         isOn():     bool                          — 저장된 「드라이브 연결함」 표시(D.set.gdOn 등). 토큰과 무관
+         email():    string                        — 연결한 계정(login_hint). 없으면 조용한 갱신이 덜 됨
+         setEmail(e)                               — (선택) 처음 맞출 때 받은 계정 저장
+         sync(why):  Promise                       — 앱의 맞추기(받기 → 합치기 → 올리기). 토큰은 core.token()으로
+         remoteStamp(): Promise<string|null>       — (선택) 드라이브 본 파일의 modifiedTime 만 가볍게. 없으면 주기 확인 때 전체 맞추기
+         paint(state)                              — (선택) 앱 머리줄 · 상태 줄 다시 그리기
+         folder: {                                 — (선택) PC · 안드로이드 폴더
+           handle(): FileSystemDirectoryHandle|null
+           onPerm(p)                               — 'granted' | 'prompt' | 'denied' 를 앱 상태(D.dirPerm 등)에 반영
+           writeAll(): Promise                     — 지금 자료 전부 폴더에 쓰기(앱의 folderWrite / dirWrite(true) / Store.writeFile 들)
+           name(): string
+         }
+         band: true                                — 기본 띠를 core가 그림(false면 앱이 state로 직접)
+       } */
+    const K = { dirty: "bj-sync:" + cfg.app + ":dirty", fdirty: "bj-sync:" + cfg.app + ":fdirty", stamp: "bj-sync:" + cfg.app + ":stamp" };
+    const C = { token: null, exp: 0, tc: null, silentAt: 0, silentFails: 0, busy: false, again: false, err: "", lastPull: 0, timer: null, pushT: null, needGesture: false, folderPerm: null };
+
+    /* ── 토큰 ───────────────────────────────────────────── */
+    const live = () => !!C.token && now() < C.exp - 60000;
+    function restore() {   /* 같은 주소의 다른 Blog J 앱이 받은 토큰도 씀(계정이 같을 때만) */
+      const o = lsGet(TK, null), m = (cfg.email && cfg.email()) || "";
+      if (o && o.t && o.e > now() + 120000 && (!o.m || !m || o.m === m)) { C.token = o.t; C.exp = o.e; return true; }
+      return false;
+    }
+    function keep() { lsSet(TK, { t: C.token, e: C.exp, m: (cfg.email && cfg.email()) || "" }); }
+    function invalidate() { C.token = null; C.exp = 0; const o = lsGet(TK, null); if (o && o.t) lsSet(TK, null); }
+    function loadGis() {
+      return new Promise((res, rej) => { if (W.google && google.accounts && google.accounts.oauth2) return res();
+        const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+        s.onload = () => res(); s.onerror = () => rej(new Error("구글 로그인 도구를 불러오지 못했어요 (인터넷 확인)")); document.head.appendChild(s); });
+    }
+    /* 토큰 받기 — mode: 'silent'(prompt:none, 누름 안에서만) | 'interactive'(prompt:'' 또는 처음이면 consent) */
+    function request(mode) {
+      return loadGis().then(() => new Promise((res, rej) => {
+        const em = (cfg.email && cfg.email()) || undefined;
+        const tc = google.accounts.oauth2.initTokenClient({ client_id: cfg.clientId, scope: cfg.scope, hint: em, login_hint: em,
+          callback: r => { if (r.error) return rej(Object.assign(new Error(r.error_description || r.error), { code: r.error }));
+            C.token = r.access_token; C.exp = now() + (+r.expires_in || 3600) * 1000; keep(); res(C.token); },
+          error_callback: e => rej(Object.assign(new Error(e && e.type === "popup_failed_to_open" ? "구글 창이 막혔어요 — 「다시 연결」을 눌러 주세요" : e && e.type === "popup_closed" ? "구글 창을 닫았어요" : "구글 연결이 취소됐어요"), { code: e && e.type })) });
+        tc.requestAccessToken({ prompt: mode === "silent" ? "none" : (cfg.isOn() ? "" : "consent") });
+      }));
+    }
+    /* 앱의 gdToken 대신: 살아 있으면 바로, 없으면 누름이 있을 때만 다시 받음. 누름이 없으면 창을 열지 않고 NEED_GESTURE */
+    /* 11-09: 한 번만 받기 — 사진을 여러 장 동시에 올리다 토큰이 끝나도 구글 창은 한 번만 열고 같이 씀 */
+    let tokP = null;
+    function token(interactive) {
+      if (live()) return Promise.resolve(C.token);
+      return tokP || (tokP = token0(interactive).finally(() => { tokP = null; }));
+    }
+    async function token0(interactive) {
+      if (live()) return C.token;
+      if (restore()) return C.token;
+      if (!hasGesture()) { C.needGesture = true; paint(); throw Object.assign(new Error("구글 연결이 쉬는 중이에요 — 화면을 한 번 누르면 이어서 맞춰요"), { code: "NEED_GESTURE" }); }
+      const t = await request(interactive ? "interactive" : "silent");
+      C.needGesture = false; C.silentFails = 0; return t;
+    }
+
+    /* ── 올릴 것 표시(앱을 닫아도 남음) ───────────────────── */
+    const dirtyAt = () => +lsGet(K.dirty, 0) || 0;
+    function markDirty() {                  /* 앱의 touch() / save() 마다 */
+      lsSet(K.dirty, now());
+      if (cfg.folder) lsSet(K.fdirty, now());
+      if (!cfg.isOn()) return;
+      clearTimeout(C.pushT);
+      if (live()) C.pushT = setTimeout(() => run("push"), 2500); else { C.needGesture = true; paint(); }
+    }
+    /* ── 맞추기 실행(겹치지 않게 · 실패해도 표시는 남김) ─────── */
+    async function run(why) {
+      if (!cfg.isOn()) return;
+      if (C.busy) { C.again = true; return; }
+      if (!live() && !restore()) { C.needGesture = true; paint(); return; }
+      C.busy = true; C.err = ""; paint();
+      const started = now();
+      try {
+        await cfg.sync(why);
+        if (dirtyAt() <= started) lsSet(K.dirty, null);     /* 맞추는 동안 또 고쳤으면 표시 유지 */
+        C.lastPull = now();
+        if (cfg.remoteStamp) { try { lsSet(K.stamp, await cfg.remoteStamp()); } catch (e) {} }
+        if (cfg.folder) folderFlush();                         /* ③ 받은 것도 폴더에 — 지금은 레시피 · 스크랩 · 가계부가 안 씀 */
+      } catch (e) {
+        if (e && (e.status === 401 || /401|Invalid Credentials/.test(e.message || ""))) { invalidate(); C.needGesture = true; }
+        else if (!(e && e.code === "NEED_GESTURE")) C.err = (e && e.message) || "동기화 오류";
+      }
+      C.busy = false; paint();
+      if (C.again) { C.again = false; setTimeout(() => run("again"), 600); }
+    }
+    /* 가벼운 확인: 드라이브 본 파일 수정 시각만 보고 바뀌었을 때만 맞춤(요청 1번) */
+    async function check(why) {
+      if (!cfg.isOn() || !visible() || C.busy) return;
+      if (!live() && !restore()) { C.needGesture = true; paint(); return; }
+      if (dirtyAt()) return run(why);                          /* 올릴 것이 있으면 바로 맞추기 */
+      if (!cfg.remoteStamp) return run(why);
+      try { const s = await cfg.remoteStamp(); if (s && s !== lsGet(K.stamp, null)) return run(why); C.lastPull = now(); }
+      catch (e) { if (/401/.test(e && e.message || "")) { invalidate(); C.needGesture = true; paint(); } }
+    }
+
+    /* ── 화면을 누를 때: 조용히 토큰 다시 받기(누름 안에서만 창 허용) ── */
+    function onGesture(e) {
+      if (!cfg.isOn() || live() || C.busy) return;
+      if (e && e.target && e.target.closest && e.target.closest("[data-bjs-band],[data-gdoff]")) return;
+      if (restore()) { run("restore"); return; }
+      if (cfg.noSilent && cfg.noSilent()) { C.needGesture = true; paint(); return; }   /* 11-10: 휴대폰 설치 앱은 창 대신 띠 「다시 연결」(같은 화면 이동) */
+      const gap = C.silentFails ? Math.min(10 * 60000, 30000 * Math.pow(2, C.silentFails)) : 0;   /* 실패하면 30초 · 1분 · 2분 … 최대 10분 */
+      if (now() - C.silentAt < gap) return;
+      C.silentAt = now();
+      request("silent").then(() => { C.needGesture = false; C.silentFails = 0; run("gesture"); })
+        .catch(() => { C.silentFails++; C.needGesture = true; paint(); });
+    }
+
+    /* ── PC 폴더 ───────────────────────────────────────── */
+    async function folderCheck() {
+      const h = cfg.folder && cfg.folder.handle(); if (!h || !h.queryPermission) return;
+      let p = "prompt"; try { p = await h.queryPermission({ mode: "readwrite" }); } catch (e) {}
+      if (p !== C.folderPerm) { C.folderPerm = p; cfg.folder.onPerm && cfg.folder.onPerm(p); paint(); }
+      if (p === "granted" && lsGet(K.fdirty, 0)) folderFlush();
+    }
+    let fBusy = false;
+    async function folderFlush() {
+      const h = cfg.folder && cfg.folder.handle(); if (!h || fBusy) return;
+      if (C.folderPerm !== "granted") { await folderCheck(); if (C.folderPerm !== "granted") return; }
+      fBusy = true; const t0 = now();
+      try { await cfg.folder.writeAll(); if (+lsGet(K.fdirty, 0) <= t0) lsSet(K.fdirty, null); }
+      catch (e) { if (e && e.name === "NotAllowedError") { C.folderPerm = "prompt"; cfg.folder.onPerm && cfg.folder.onPerm("prompt"); } }
+      fBusy = false; paint();
+    }
+    async function folderGrant() {      /* 띠 단추 — 반드시 누름 안에서 */
+      const h = cfg.folder && cfg.folder.handle(); if (!h) return false;
+      let p = "denied"; try { p = await h.requestPermission({ mode: "readwrite" }); } catch (e) {}
+      C.folderPerm = p; cfg.folder.onPerm && cfg.folder.onPerm(p);
+      if (p === "granted") { lsSet(K.fdirty, now()); await folderFlush(); }
+      paint(); return p === "granted";
+      /* 크롬(PC) 122+ 는 다시 물을 때 「방문할 때마다 허용」을 고를 수 있음 → 그 뒤로는 브라우저를 다시 열어도 'granted' */
+    }
+
+    /* ── 띠(작게 · 가리지 않게) ─────────────────────────── */
+    function state() {
+      const on = cfg.isOn(), pend = !!dirtyAt();
+      return { on, live: live(), busy: C.busy, err: C.err, pending: pend, needGesture: on && !live() && C.needGesture,
+        folder: cfg.folder && cfg.folder.handle() ? (C.folderPerm || "?") : null, fpending: !!lsGet(K.fdirty, 0), lastPull: C.lastPull };
+    }
+    function paint() {
+      const s = state(); try { cfg.paint && cfg.paint(s); } catch (e) {}
+      if (cfg.band === false) return;
+      let el = document.getElementById("bjsBand");
+      const items = [];
+      if (s.on && !s.live && (s.needGesture || s.pending)) items.push(`<span>구글 드라이브 연결이 쉬는 중${s.pending ? " · 올릴 것 있음" : ""}</span><button type="button" data-bjs-band="gd">다시 연결</button>`);
+      if (s.folder && s.folder !== "granted" && s.folder !== "?") items.push(`<span>PC 폴더 「${(cfg.folder.name && cfg.folder.name()) || "저장 폴더"}」 쉬는 중</span><button type="button" data-bjs-band="dir">폴더 다시 연결</button>`);
+      if (!items.length) { if (el) el.remove(); return; }
+      if (!el) { el = document.createElement("div"); el.id = "bjsBand"; el.setAttribute("role", "status");
+        el.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:9000;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;max-width:min(560px,calc(100vw - 32px));padding:8px 12px;border-radius:10px;background:#fffdf7;border:1px solid #d9cfbd;box-shadow:0 2px 8px rgba(0,0,0,.12);font:600 13.5px/1.4 SUIT,Pretendard,sans-serif;color:#1f2125";
+        document.body.appendChild(el); }
+      el.innerHTML = items.map(x => `<div style="display:flex;gap:8px;align-items:center">${x}</div>`).join("");
+      el.querySelectorAll("button").forEach(b => { b.style.cssText = "border:1px solid #195455;background:#195455;color:#fff;border-radius:8px;padding:4px 10px;font:inherit;cursor:pointer"; });
+    }
+    document.addEventListener("click", async e => {
+      const b = e.target.closest && e.target.closest("[data-bjs-band]"); if (!b) return;
+      if (b.dataset.bjsBand === "gd") { try { await token(true); run("band"); } catch (er) { C.err = er.message; paint(); } }
+      else folderGrant();
+    });
+
+    /* ── 시작 · 이벤트 ───────────────────────────────────── */
+    function start() {
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});   /* 휴대폰이 저장소를 비우지 않게 */
+      document.addEventListener("pointerdown", onGesture, true);
+      document.addEventListener("keydown", onGesture, true);
+      document.addEventListener("visibilitychange", () => { if (visible()) { check("visible"); folderCheck(); } else if (dirtyAt() && live()) run("hide"); });   /* 내릴 때 남은 것 올리기 */
+      W.addEventListener("focus", () => check("focus"));
+      W.addEventListener("online", () => check("online"));
+      W.addEventListener("pageshow", e => { if (e.persisted) check("bfcache"); });
+      C.timer = setInterval(() => { if (visible() && now() - C.lastPull > 85000) check("tick"); paint(); }, 30000);   /* 약 90초마다 가볍게 확인 */
+      if (cfg.isOn()) { if (restore()) setTimeout(() => run("start"), 800); else { C.needGesture = true; paint(); } }
+      folderCheck();
+    }
+    return { start, token, invalidate, markDirty, run, check, folderGrant, folderFlush, state, live, restore, _C: C };
+  }
+
+  /* 처음 화면(처음 써요 / 전에 쓰던 자료)을 띄울지 — 저장된 흔적이 하나라도 있으면 절대 띄우지 않음 */
+  function shouldWelcome(o) {
+    /* o = { gdOn, dirSaved(폴더 핸들 저장됨), storeAsked, hasData, setupDone } */
+    return !(o.gdOn || o.dirSaved || o.storeAsked || o.hasData || o.setupDone);
+  }
+  W.BJSync = { create, shouldWelcome };
+})(window);
+
+/* ───────── 앱에 붙이기(여행 노트 v2.0 예) ─────────
+const SYNC = BJSync.create({
+  app: "trip2", clientId: GD_CLIENT_ID, scope: GD_SCOPE,
+  isOn: () => !!D.set.gdOn, email: () => D.set.gdEmail || "",
+  sync: why => gdSync({ toast: false }),                         // gdSync 안의 gdToken(...) → SYNC.token(...)
+  remoteStamp: async () => { const fid = await gdFolder(); const r = await (await gdApi(`files?q=${gq(`'${fid}' in parents and name='${GDJ}' and trashed=false`)}&fields=files(modifiedTime)`)).json(); return r.files && r.files[0] ? r.files[0].modifiedTime : null; },
+  paint: () => gdPaint(),
+  folder: { handle: () => D.dir, onPerm: p => { D.dirPerm = p; gdPaint(); }, writeAll: () => folderWrite(), name: () => D.dir && D.dir.name },
+});
+// gdToken(i)  → return SYNC.token(i)
+// gdApi 401   → SYNC.invalidate(); throw Object.assign(new Error("401"), { status: 401 })   (다시 창을 열지 않음)
+// touch()     → … SYNC.markDirty()   (gdAuto() 는 지움)
+// 처음 화면    → if (BJSync.shouldWelcome({ gdOn: D.set.gdOn, dirSaved: !!(await getMeta("dir")), storeAsked: D.set.storeAsked, hasData: D.items.length })) S.sheet = "wel";
+// init 끝     → SYNC.start()    · 기존 visibilitychange · 첫 누름(prompt:none) · gdPrepSilent · 30초 setInterval 동기화 부분은 지움
+*/
+
+</script>
+<script>
+/* 기본 회화 · 기본 단어 — Blog J가 직접 쓴 실전 일상 표현 (교과서식이 아닌 원어민이 자주 쓰는 말). 사용자가 고치고 지울 수 있고, 설정 → 기본 자료에서 다시 넣을 수 있음 */
+const BASE_TALK = [["b-t1", "카페 · 주문", [["아이스 아메리카노 한 잔 주세요.", "Can I get an iced Americano?"], ["제일 큰 사이즈로 주세요.", "Make it a large, please."], ["여기서 마시고 갈게요.", "For here, please."], ["가져갈게요.", "It's to go."], ["시럽은 빼 주세요.", "No syrup, please."], ["우유를 두유로 바꿀 수 있어요?", "Can I swap the milk for soy?"], ["샷 하나 추가해 주세요.", "Can I add an extra shot?"], ["디카페인 있어요?", "Do you have decaf?"], ["이거 두 개 주세요.", "I'll take two of these."], ["와이파이 돼요?", "Do you have Wi-Fi here?"], ["여기 자리 있어요?", "Is this seat taken?"], ["근처에 콘센트 있어요?", "Is there an outlet around here?"], ["주문하신 거 나왔어요.", "Your order's ready."], ["제가 주문한 게 아닌 것 같아요.", "I don't think this is what I ordered."], ["빨대 좀 주실래요?", "Could I get a straw?"], ["오늘은 내가 살게.", "It's on me today."], ["다음엔 네가 사.", "You can get the next one."], ["여기 커피 진짜 맛있다.", "The coffee here is really good."], ["잠깐 앉았다 갈래?", "Wanna sit for a bit?"], ["리필 돼요?", "Do you do refills?"]]], ["b-t2", "식당 · 주문", [["예약은 안 했는데 자리 있어요?", "We don't have a reservation. Do you have a table?"], ["얼마나 기다려야 해요?", "How long is the wait?"], ["창가 자리로 앉을 수 있어요?", "Could we sit by the window?"], ["아직 고르는 중이에요.", "We're still deciding."], ["뭐 추천해 주실래요?", "What do you recommend?"], ["저도 같은 걸로 할게요.", "I'll have the same."], ["고수는 빼 주세요.", "No cilantro, please."], ["이거 많이 매워요?", "Is this really spicy?"], ["나눠 먹을 거예요.", "We're going to share."], ["앞접시 좀 더 주시겠어요?", "Could we get some extra plates?"], ["이건 저희가 주문 안 했어요.", "I don't think we ordered this."], ["음식이 아직 안 나왔어요.", "Our food hasn't come out yet."], ["다 맛있었어요.", "Everything was great."], ["남은 거 포장해 갈 수 있어요?", "Can I get a box for this?"], ["배불러 죽겠다.", "I'm so stuffed."], ["계산서 주세요.", "Can we get the check?"], ["각자 낼게요.", "We'll split the bill."], ["이건 내가 낼게.", "I've got this."], ["팁 포함된 거예요?", "Is the tip included?"], ["잘 먹었습니다.", "That was delicious, thank you."]]], ["b-t3", "친구와 수다 · 맞장구", [["말도 안 돼!", "No way!"], ["진심이야?", "Are you serious?"], ["내 말이!", "Tell me about it."], ["그러니까!", "Exactly!"], ["그럴 줄 알았어.", "I knew it."], ["대박이다.", "That's awesome."], ["헐, 어떡해.", "Oh no, that's terrible."], ["그래서 어떻게 됐어?", "So what happened?"], ["무슨 말인지 알아.", "I know what you mean."], ["별일 아니야.", "It's no big deal."], ["신경 쓰지 마.", "Never mind."], ["나도 그래.", "Same here."], ["그럴 수도 있지.", "It happens."], ["농담이야.", "I'm just kidding."], ["그건 잘 모르겠는데.", "I'm not so sure about that."], ["완전 이해해.", "I totally get it."], ["잘됐다!", "Good for you!"], ["아쉽다.", "That's too bad."], ["생각 좀 해 볼게.", "Let me think about it."], ["나중에 얘기해 줄게.", "I'll tell you later."]]], ["b-t4", "회사 동료와 스몰토크", [["주말 어땠어요?", "How was your weekend?"], ["오늘 좀 피곤해 보여요.", "You look a little tired today."], ["요즘 바빴어요?", "Have you been busy lately?"], ["점심 뭐 먹을래요?", "What do you want for lunch?"], ["드디어 금요일이다.", "Thank God it's Friday."], ["퇴근하고 뭐 해요?", "Any plans after work?"], ["회의가 몇 시였죠?", "What time is the meeting again?"], ["잠깐 시간 돼요?", "Got a minute?"], ["그거 제가 알아볼게요.", "Let me look into that."], ["이따가 다시 얘기해요.", "Let's catch up later."], ["그거 어떻게 하는지 보여 줄래요?", "Can you show me how to do that?"], ["무슨 말인지 알겠어요.", "I see what you mean."], ["좋은 지적이에요.", "That's a good point."], ["그럼 그렇게 진행할게요.", "I'll go ahead with it."], ["오늘 안에 끝낼 수 있을 것 같아요.", "I think I can get it done today."], ["시간이 조금 더 필요해요.", "I need a little more time."], ["제 실수예요.", "That's my mistake."], ["오늘 수고했어요.", "Good job today."], ["먼저 들어갈게요.", "I'm heading out."], ["내일 봬요.", "See you tomorrow."]]], ["b-t5", "쇼핑 · 계산", [["그냥 구경하는 중이에요.", "I'm just browsing."], ["이거 다른 사이즈 있어요?", "Do you have this in a different size?"], ["입어 봐도 돼요?", "Can I try this on?"], ["탈의실이 어디예요?", "Where's the fitting room?"], ["저한테 좀 크네요.", "It's a bit big on me."], ["이거 세일 중이에요?", "Is this on sale?"], ["이거 얼마예요?", "How much is this?"], ["생각보다 비싸네요.", "That's more than I expected."], ["좀 더 둘러볼게요.", "I'll look around a bit more."], ["이걸로 할게요.", "I'll take it."], ["카드 돼요?", "Do you take cards?"], ["현금으로 할게요.", "I'll pay in cash."], ["봉투는 괜찮아요.", "I don't need a bag."], ["영수증 주세요.", "Can I get a receipt?"], ["선물 포장 돼요?", "Can you gift wrap it?"], ["이거 교환할 수 있어요?", "Can I exchange this?"], ["이거 반품하고 싶어요.", "I'd like to return this."], ["영수증 여기 있어요.", "Here's the receipt."], ["언제 다시 들어와요?", "When will you have more in stock?"], ["계산이 잘못된 것 같아요.", "I think there's a mistake on the bill."]]], ["b-t6", "길 묻기 · 교통", [["실례지만, 길 좀 물어봐도 될까요?", "Excuse me, can I ask for directions?"], ["지하철역 어떻게 가요?", "How do I get to the subway station?"], ["여기서 멀어요?", "Is it far from here?"], ["걸어서 10분쯤 걸려요.", "It's about a ten-minute walk."], ["쭉 가다가 오른쪽으로 도세요.", "Go straight and turn right."], ["이 버스 시내 가요?", "Does this bus go downtown?"], ["어디서 내려야 해요?", "Where should I get off?"], ["몇 정거장 가야 해요?", "How many stops is it?"], ["갈아타야 해요?", "Do I need to transfer?"], ["여기 누구 앉아요?", "Is anyone sitting here?"], ["택시는 어디서 잡아요?", "Where can I get a taxi?"], ["여기로 가 주세요.", "Take me here, please."], ["얼마나 걸릴까요?", "How long will it take?"], ["여기서 내려 주세요.", "You can drop me off here."], ["길을 잃은 것 같아요.", "I think I'm lost."], ["지도에서 보여 주실래요?", "Can you show me on the map?"], ["저도 여기 처음이에요.", "I'm new here too."], ["차가 엄청 막히네요.", "Traffic is really bad."], ["막차가 몇 시예요?", "What time is the last train?"], ["거의 다 왔어요.", "We're almost there."]]], ["b-t7", "숙소 · 호텔", [["체크인할게요.", "I'd like to check in."], ["박지민 이름으로 예약했어요.", "I have a reservation under Park Jimin."], ["일찍 체크인할 수 있어요?", "Can I check in early?"], ["짐 좀 맡아 주실 수 있어요?", "Could you hold my bags?"], ["조식은 몇 시까지예요?", "What time is breakfast until?"], ["와이파이 비밀번호가 뭐예요?", "What's the Wi-Fi password?"], ["방에 수건이 없어요.", "There are no towels in my room."], ["에어컨이 안 돼요.", "The AC isn't working."], ["방을 바꿀 수 있을까요?", "Could I switch rooms?"], ["옆방이 너무 시끄러워요.", "The room next door is really loud."], ["내일 7시에 모닝콜 부탁해요.", "Can I get a wake-up call at seven?"], ["근처에 맛집 있어요?", "Any good places to eat around here?"], ["방에 키를 두고 나왔어요.", "I locked myself out."], ["하루 더 묵을 수 있어요?", "Can I stay one more night?"], ["체크아웃은 몇 시예요?", "What time is checkout?"], ["늦게 체크아웃해도 돼요?", "Can I get a late checkout?"], ["택시 좀 불러 주실래요?", "Could you call me a taxi?"], ["체크아웃할게요.", "I'd like to check out."], ["미니바는 안 썼어요.", "I didn't use the minibar."], ["덕분에 잘 지냈어요.", "I really enjoyed my stay."]]], ["b-t8", "공항 · 비행기", [["창가 자리로 주세요.", "Can I get a window seat?"], ["통로 쪽이 좋아요.", "I'd prefer an aisle seat."], ["짐은 몇 개까지 부칠 수 있어요?", "How many bags can I check?"], ["이건 들고 탈게요.", "I'll carry this on."], ["제 탑승구가 어디예요?", "Where's my gate?"], ["비행기가 지연됐대요.", "The flight's been delayed."], ["탑승 시작했어요?", "Has boarding started?"], ["여기 제 자리인 것 같은데요.", "I think you're in my seat."], ["자리 좀 바꿔 주실 수 있어요?", "Would you mind switching seats?"], ["담요 하나 더 주실래요?", "Could I get an extra blanket?"], ["물 좀 주세요.", "Can I get some water?"], ["등받이 좀 세워 주시겠어요?", "Could you put your seat up?"], ["좀 지나갈게요.", "Can I get by?"], ["환승하려면 어디로 가요?", "Where do I go for my connecting flight?"], ["여행 왔어요.", "I'm here on vacation."], ["일주일 있을 거예요.", "I'm staying for a week."], ["신고할 물건 없어요.", "I have nothing to declare."], ["제 짐이 안 나왔어요.", "My bag didn't come out."], ["환전은 어디서 해요?", "Where can I exchange money?"], ["시내 가는 버스는 어디서 타요?", "Where do I catch the bus downtown?"]]], ["b-t9", "전화 · 약속 잡기", [["지금 통화 괜찮아?", "Is now a good time?"], ["소리가 자꾸 끊겨.", "You're breaking up."], ["다시 전화할게.", "I'll call you back."], ["문자 보낼게.", "I'll text you."], ["이번 주말에 시간 돼?", "Are you free this weekend?"], ["토요일 어때?", "How about Saturday?"], ["나 그날은 안 돼.", "I can't make it that day."], ["다른 날은 어때?", "Does another day work?"], ["몇 시가 좋아?", "What time works for you?"], ["7시에 거기서 보자.", "Let's meet there at seven."], ["위치 보내 줄게.", "I'll send you the location."], ["나 좀 늦을 것 같아.", "I'm running a little late."], ["거의 다 왔어.", "I'm almost there."], ["어디야?", "Where are you?"], ["도착하면 문자해.", "Text me when you get there."], ["약속 좀 미뤄도 될까?", "Can we push it back?"], ["미안, 오늘 못 갈 것 같아.", "Sorry, I don't think I can make it today."], ["그럼 그때 보자.", "See you then."], ["확인하고 다시 알려 줄게.", "Let me check and get back to you."], ["다음엔 꼭 보자.", "Let's definitely hang out next time."]]], ["b-t10", "부탁 · 사과 · 감사", [["부탁 하나 해도 돼?", "Can I ask you a favor?"], ["좀 도와줄 수 있어?", "Could you give me a hand?"], ["괜찮으면 한번 봐 줄래?", "Would you mind taking a look?"], ["정말 고마워.", "Thanks a lot."], ["덕분에 살았어.", "You saved my life."], ["신세 졌네.", "I owe you one."], ["별거 아니야.", "It's nothing."], ["언제든지.", "Anytime."], ["미안, 내 잘못이야.", "I'm sorry, that's on me."], ["일부러 그런 건 아니야.", "I didn't mean to."], ["다시는 안 그럴게.", "It won't happen again."], ["괜찮아, 신경 쓰지 마.", "It's fine, don't worry about it."], ["이해해 줘서 고마워.", "Thanks for understanding."], ["실례합니다.", "Excuse me."], ["잠깐만요.", "Hang on a second."], ["다시 한번 말해 줄래요?", "Could you say that again?"], ["조금만 천천히 말해 줄래요?", "Could you slow down a little?"], ["무슨 뜻이에요?", "What do you mean?"], ["알겠어요.", "Got it."], ["알려 줘서 고마워.", "Thanks for letting me know."]]]];
+/* 단어: [단어, 뜻, 예문, 예문 뜻] */
+const BASE_WORD = [["b-w1", "자주 쓰는 동사구", [["pick up", "데리러 가다, 집어 들다", "I'll pick you up at six.", "6시에 데리러 갈게."], ["figure out", "알아내다, 해결하다", "I can't figure out this app.", "이 앱 어떻게 쓰는지 모르겠어."], ["run out of", "~이 떨어지다", "We ran out of milk.", "우유가 다 떨어졌어."], ["hang out", "어울려 놀다", "Do you want to hang out this weekend?", "이번 주말에 같이 놀래?"], ["show up", "나타나다, 오다", "He didn't show up to the meeting.", "그는 회의에 안 나왔어."], ["come up with", "(생각을) 떠올리다", "She came up with a great idea.", "그녀가 좋은 생각을 떠올렸어."], ["look forward to", "~을 기대하다", "I'm looking forward to the trip.", "여행이 기대돼."], ["put off", "미루다", "Don't put it off until tomorrow.", "내일로 미루지 마."], ["give up", "포기하다", "Don't give up so easily.", "그렇게 쉽게 포기하지 마."], ["catch up", "밀린 이야기를 나누다", "Let's grab lunch and catch up.", "점심 먹으면서 그동안 얘기하자."], ["check out", "확인하다, 가 보다", "You should check out this café.", "이 카페 꼭 가 봐."], ["turn down", "거절하다, 소리를 줄이다", "Can you turn down the music?", "음악 소리 좀 줄여 줄래?"], ["get along", "사이좋게 지내다", "I get along well with my coworkers.", "나는 동료들이랑 잘 지내."], ["work out", "운동하다, 잘 풀리다", "I work out three times a week.", "일주일에 세 번 운동해."], ["drop by", "잠깐 들르다", "Feel free to drop by anytime.", "언제든 편하게 들러."], ["look up", "(정보를) 찾아보다", "Let me look it up online.", "인터넷에서 찾아볼게."], ["sign up", "가입하다, 신청하다", "I signed up for a yoga class.", "요가 수업을 신청했어."], ["take off", "이륙하다, (옷을) 벗다", "The plane takes off at noon.", "비행기는 정오에 이륙해."], ["fill out", "(서류를) 작성하다", "Please fill out this form.", "이 양식을 작성해 주세요."], ["end up", "결국 ~하게 되다", "We ended up staying home.", "우리는 결국 집에 있었어."]]], ["b-w2", "감정 · 기분", [["excited", "신난, 들뜬", "I'm so excited about the concert.", "콘서트 때문에 너무 신나."], ["stressed out", "스트레스를 받은", "I'm really stressed out these days.", "요즘 스트레스를 많이 받아."], ["annoyed", "짜증 난", "I'm a little annoyed with him.", "그 사람 때문에 좀 짜증 나."], ["relieved", "안심한", "I'm relieved to hear that.", "그 말 들으니 안심이야."], ["embarrassed", "창피한", "I was so embarrassed.", "너무 창피했어."], ["disappointed", "실망한", "I'm a bit disappointed.", "좀 실망했어."], ["frustrated", "답답한, 속상한", "I'm frustrated with this project.", "이 프로젝트 때문에 답답해."], ["grateful", "고마워하는", "I'm really grateful for your help.", "도와줘서 정말 고마워."], ["proud", "자랑스러운", "I'm so proud of you.", "네가 정말 자랑스러워."], ["jealous", "부러운, 질투하는", "I'm so jealous of your trip!", "여행 가는 거 너무 부럽다!"], ["bored", "심심한, 지루한", "I'm bored. Let's go out.", "심심해. 나가자."], ["confused", "헷갈리는", "I'm confused about the schedule.", "일정이 헷갈려."], ["worried", "걱정되는", "I'm worried about my mom.", "엄마가 걱정돼."], ["upset", "속상한, 화난", "She's upset about the news.", "그녀는 그 소식에 속상해해."], ["satisfied", "만족한", "I'm satisfied with the result.", "결과에 만족해."], ["homesick", "집이 그리운", "I get homesick sometimes.", "가끔 집이 그리워."], ["scared", "무서운", "I'm scared of heights.", "나는 높은 곳이 무서워."], ["thrilled", "너무 기쁜", "We're thrilled with the news.", "그 소식에 정말 기뻐."], ["exhausted", "녹초가 된", "I'm exhausted after work.", "퇴근하면 녹초야."], ["moved", "감동한", "I was really moved by the movie.", "그 영화 보고 정말 감동했어."]]], ["b-w3", "음식 · 요리", [["leftovers", "남은 음식", "Let's have the leftovers for dinner.", "저녁은 남은 음식으로 먹자."], ["takeout", "포장 음식", "Let's just get takeout tonight.", "오늘은 그냥 포장해 오자."], ["spicy", "매운", "I can't eat spicy food.", "나는 매운 거 못 먹어."], ["bland", "싱거운", "The soup is a little bland.", "국이 좀 싱거워."], ["salty", "짠", "It's too salty for me.", "나한테는 너무 짜."], ["greasy", "기름진", "I don't want anything greasy.", "기름진 건 먹기 싫어."], ["crispy", "바삭한", "The chicken is really crispy.", "치킨이 진짜 바삭해."], ["dessert", "디저트, 후식", "Let's save room for dessert.", "디저트 먹을 배는 남겨 두자."], ["snack", "간식", "Do you want a snack?", "간식 먹을래?"], ["appetizer", "전채 요리", "Let's order an appetizer first.", "애피타이저 먼저 시키자."], ["ingredient", "재료", "What ingredients do we need?", "재료 뭐가 필요해?"], ["recipe", "요리법", "This recipe is really easy.", "이 요리법 진짜 쉬워."], ["boil", "끓이다, 삶다", "Boil the water first.", "먼저 물을 끓여."], ["fry", "튀기다, 부치다", "I'll fry some eggs.", "계란 좀 부칠게."], ["grill", "굽다", "Let's grill some meat this weekend.", "이번 주말에 고기 굽자."], ["chop", "썰다", "Can you chop the onions?", "양파 좀 썰어 줄래?"], ["frozen", "냉동된", "I bought some frozen dumplings.", "냉동 만두 좀 샀어."], ["expired", "유통기한이 지난", "This milk has expired.", "이 우유 유통기한 지났어."], ["portion", "(음식) 양", "The portions here are huge.", "여기 양이 엄청 많아."], ["craving", "몹시 당기는 것", "I have a craving for pizza.", "피자가 너무 당겨."]]], ["b-w4", "집 · 생활", [["chores", "집안일", "We split the chores.", "우리는 집안일을 나눠서 해."], ["laundry", "빨래", "I need to do the laundry.", "빨래해야 해."], ["dishes", "설거지(할 그릇)", "It's your turn to do the dishes.", "이번엔 네가 설거지할 차례야."], ["vacuum", "청소기를 돌리다", "I vacuum the floor every day.", "매일 청소기를 돌려."], ["take out the trash", "쓰레기를 버리다", "Can you take out the trash?", "쓰레기 좀 버려 줄래?"], ["recycling", "분리수거", "Recycling day is Tuesday.", "분리수거 날은 화요일이야."], ["neighbor", "이웃", "Our neighbors are really nice.", "우리 이웃들은 정말 친절해."], ["landlord", "집주인", "I'll call the landlord about the leak.", "물 새는 거 집주인한테 전화할게."], ["rent", "월세", "The rent went up again.", "월세가 또 올랐어."], ["utilities", "공과금", "Utilities are included in the rent.", "공과금은 월세에 포함돼 있어."], ["leak", "(물이) 새다", "The faucet is leaking.", "수도꼭지에서 물이 새."], ["broken", "고장 난", "The washing machine is broken.", "세탁기가 고장 났어."], ["fix", "고치다", "Can you fix the door?", "문 좀 고쳐 줄래?"], ["messy", "지저분한", "My room is so messy.", "내 방 너무 지저분해."], ["tidy up", "정리하다", "Let's tidy up before the guests come.", "손님 오기 전에 정리하자."], ["move out", "이사 나가다", "We're moving out next month.", "우리 다음 달에 이사 나가."], ["package", "택배, 소포", "A package came for you.", "너한테 택배 왔어."], ["delivery", "배달", "The delivery is running late.", "배달이 늦어지고 있어."], ["power outage", "정전", "There was a power outage last night.", "어젯밤에 정전이 됐어."], ["commute", "출퇴근", "My commute is about an hour.", "출퇴근에 한 시간쯤 걸려."]]], ["b-w5", "쇼핑 · 돈", [["on sale", "할인 중인", "These shoes are on sale.", "이 신발 할인 중이야."], ["discount", "할인", "Can I get a student discount?", "학생 할인 받을 수 있어요?"], ["deal", "싸게 산 것", "That's a great deal!", "진짜 싸게 샀다!"], ["rip-off", "바가지", "That price is a total rip-off.", "그 가격은 완전 바가지야."], ["afford", "(돈의) 여유가 되다", "I can't afford a new car.", "새 차 살 여유가 없어."], ["budget", "예산", "I'm on a tight budget.", "요즘 예산이 빠듯해."], ["receipt", "영수증", "Do you need the receipt?", "영수증 필요하세요?"], ["refund", "환불", "Can I get a refund?", "환불받을 수 있어요?"], ["exchange", "교환하다", "I'd like to exchange this for a smaller size.", "이거 더 작은 사이즈로 바꾸고 싶어요."], ["out of stock", "품절된", "Sorry, it's out of stock.", "죄송해요, 품절이에요."], ["cash", "현금", "Do you take cash?", "현금 받으세요?"], ["change", "거스름돈", "Keep the change.", "잔돈은 됐어요."], ["installment", "할부", "Can I pay in installments?", "할부로 할 수 있어요?"], ["split", "나누다", "Let's split it fifty-fifty.", "반반 나눠 내자."], ["save", "(돈을) 모으다", "I'm saving up for a trip.", "여행 가려고 돈 모으는 중이야."], ["spend", "(돈을) 쓰다", "I spent too much this month.", "이번 달에 돈을 너무 많이 썼어."], ["worth it", "그만한 가치가 있는", "It's expensive, but it's worth it.", "비싸지만 그만한 가치가 있어."], ["cart", "장바구니", "I left it in my cart.", "장바구니에 넣어 뒀어."], ["shipping", "배송", "Is shipping free?", "배송비 무료예요?"], ["price tag", "가격표", "There's no price tag on this.", "이거 가격표가 없어요."]]], ["b-w6", "여행 · 교통", [["passport", "여권", "Don't forget your passport.", "여권 잊지 마."], ["boarding pass", "탑승권", "Here's your boarding pass.", "탑승권 여기 있습니다."], ["luggage", "짐", "How much luggage do you have?", "짐이 얼마나 돼요?"], ["carry-on", "기내 반입 가방", "Is this small enough for a carry-on?", "이거 기내에 들고 탈 수 있는 크기예요?"], ["delay", "지연", "There's a two-hour delay.", "두 시간 지연됐어요."], ["layover", "경유", "We have a three-hour layover in Tokyo.", "도쿄에서 세 시간 경유해."], ["aisle seat", "통로 쪽 좌석", "Can I get an aisle seat?", "통로 쪽 좌석으로 주실 수 있어요?"], ["window seat", "창가 좌석", "I always get a window seat.", "나는 항상 창가 자리에 앉아."], ["customs", "세관", "We went through customs quickly.", "세관을 빨리 통과했어."], ["exchange rate", "환율", "What's the exchange rate today?", "오늘 환율이 어떻게 돼요?"], ["souvenir", "기념품", "I picked up some souvenirs.", "기념품을 좀 샀어."], ["sightseeing", "관광", "We went sightseeing all day.", "하루 종일 관광했어."], ["itinerary", "여행 일정", "Let me check our itinerary.", "여행 일정 좀 확인해 볼게."], ["round trip", "왕복", "A round-trip ticket, please.", "왕복표로 주세요."], ["one-way", "편도의", "I need a one-way ticket to Busan.", "부산 가는 편도표가 필요해요."], ["platform", "승강장", "The train leaves from platform 3.", "기차는 3번 승강장에서 출발해."], ["lost and found", "분실물 보관소", "Where's the lost and found?", "분실물 보관소가 어디예요?"], ["rush hour", "출퇴근 시간", "Avoid the subway during rush hour.", "출퇴근 시간엔 지하철을 피해."], ["fare", "요금", "How much is the bus fare?", "버스 요금이 얼마예요?"], ["jet lag", "시차 피로", "I still have jet lag.", "아직 시차 적응이 안 됐어."]]], ["b-w7", "회사 · 업무", [["meeting", "회의", "I'm in a meeting until three.", "3시까지 회의 중이에요."], ["deadline", "마감", "The deadline is next Monday.", "마감은 다음 주 월요일이에요."], ["schedule", "일정", "Let me check my schedule.", "일정 좀 확인해 볼게요."], ["report", "보고서", "I'm working on the report.", "보고서 쓰는 중이에요."], ["coworker", "동료", "My coworker covered for me.", "동료가 내 일을 대신 해 줬어."], ["boss", "상사", "My boss is pretty cool.", "우리 상사는 꽤 괜찮아."], ["client", "고객, 거래처", "I have a call with a client.", "고객이랑 통화가 있어요."], ["presentation", "발표", "I have a presentation tomorrow.", "내일 발표가 있어요."], ["attach", "첨부하다", "I attached the file.", "파일 첨부했어요."], ["postpone", "미루다", "We postponed the meeting.", "회의를 미뤘어요."], ["follow up", "후속 연락하다", "I'll follow up with an email.", "이메일로 다시 연락드릴게요."], ["heads-up", "미리 알림", "Thanks for the heads-up.", "미리 알려 줘서 고마워요."], ["on the same page", "같은 생각인", "Let's make sure we're on the same page.", "우리가 같은 생각인지 확인해 봐요."], ["work from home", "재택근무하다", "I work from home on Fridays.", "금요일엔 재택근무해요."], ["day off", "쉬는 날", "I'm taking a day off tomorrow.", "내일 하루 쉬어요."], ["sick day", "병가", "I need to take a sick day.", "오늘 병가 내야겠어요."], ["overtime", "야근, 초과 근무", "I worked overtime yesterday.", "어제 야근했어요."], ["business trip", "출장", "He's on a business trip.", "그는 출장 중이에요."], ["promotion", "승진", "She got a promotion.", "그녀가 승진했어요."], ["quit", "그만두다", "He quit his job last month.", "그는 지난달에 회사를 그만뒀어."]]], ["b-w8", "건강 · 몸 상태", [["headache", "두통", "I have a terrible headache.", "머리가 너무 아파."], ["sore throat", "목 아픔", "I have a sore throat.", "목이 아파."], ["runny nose", "콧물", "I've got a runny nose.", "콧물이 나."], ["fever", "열", "I think I have a fever.", "열이 있는 것 같아."], ["cough", "기침하다", "I can't stop coughing.", "기침이 멈추질 않아."], ["catch a cold", "감기에 걸리다", "I think I'm catching a cold.", "감기 걸리려나 봐."], ["dizzy", "어지러운", "I feel a little dizzy.", "좀 어지러워."], ["sore", "쑤시는", "My legs are sore from hiking.", "등산해서 다리가 쑤셔."], ["stomachache", "복통", "I have a stomachache.", "배가 아파."], ["allergic", "알레르기가 있는", "I'm allergic to peanuts.", "나 땅콩 알레르기 있어."], ["pharmacy", "약국", "Is there a pharmacy nearby?", "근처에 약국 있어요?"], ["painkiller", "진통제", "Do you have any painkillers?", "진통제 있어요?"], ["appointment", "진료 예약", "I made a doctor's appointment.", "병원 예약했어."], ["checkup", "건강 검진", "I have a checkup next week.", "다음 주에 건강 검진 있어."], ["get some rest", "좀 쉬다", "You should get some rest.", "좀 쉬어."], ["feel better", "(몸이) 나아지다", "I hope you feel better soon.", "빨리 낫길 바라."], ["sprain", "삐다", "I sprained my ankle.", "발목을 삐었어."], ["out of shape", "몸이 둔해진", "I'm so out of shape.", "몸이 너무 둔해졌어."], ["stay hydrated", "물을 충분히 마시다", "Make sure you stay hydrated.", "물 충분히 마셔."], ["sleep in", "늦잠 자다", "I slept in this morning.", "오늘 아침에 늦잠 잤어."]]]];
+const BASE_IDS = [...BASE_TALK, ...BASE_WORD].map(x => x[0]);
+function baseChapters() {
+  const p2 = n => String(n).padStart(2, "0"), out = [];
+  BASE_TALK.forEach(([id, name, L]) => out.push({ id, name, sec: "talk", base: true, at: 1, rv: null, items: L.map(([ko, en], i) => ({ id: id + "-" + p2(i + 1), ko, en, star: false, ok: 0, ng: 0 })) }));
+  BASE_WORD.forEach(([id, name, L]) => out.push({ id, name, sec: "word", base: true, at: 1, rv: null, items: L.map(([en, ko, ex, exk], i) => ({ id: id + "-" + p2(i + 1), ko, en, ex, exk, star: false, ok: 0, ng: 0 })) }));
+  return out;
+}
+
+/* 영어 노트 v1.0 — Blog J 설치형 학습 앱 (회화 · 단어, 구글 드라이브 동기화)
+   회화: 한글 → 영어로 말해 보기(생각 시간) → 영어 2~3번 따라 말하기 / 단어: 단어 → 뜻 → 따라 말하기 · 철자 · 예문
+   음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
+"use strict";
+const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
+const APP_VER = "1.0", BUILD = "2026-11-14(토) 00:37";
+const LSK = "bj-eng-";
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ls = { get(k, d) { try { const v = localStorage.getItem(LSK + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(LSK + k, JSON.stringify(v)); } catch (e) {} } };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const WD = "일월화수목금토";
+const pad = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const todayS = () => ymd(new Date());
+const ymdT = t => ymd(new Date(t));
+const dOf = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const ymdw = s => s ? `${s}(${WD[dOf(s).getDay()]})` : "";
+const addD = (s, n) => { const d = dOf(s); d.setDate(d.getDate() + n); return ymd(d); };
+const diffD = (a, b) => Math.round((dOf(b) - dOf(a)) / 864e5);
+const hm = t => { const d = new Date(t); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const MOB = () => matchMedia("(max-width:900px)").matches;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), 2600); }
+const IC = {
+  play: '<path d="M7 4.5v15l12-7.5z" fill="currentColor" stroke="none"/>', pause: '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" stroke="none"/>',
+  next: '<path d="M6 5l9 7-9 7zM18 5v14"/>', prev: '<path d="M18 5l-9 7 9 7zM6 5v14"/>', star: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.8z"/>',
+  home: '<path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>', head: '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/>', x: '<path d="M6 6l12 12M18 6L6 18"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  drive: '<path d="M8 3h8l6 10-4 7H6l-4-7z"/><path d="M8 3l8 17M16 3L6 20M2 13h20"/>', dl: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', upl: '<path d="M12 20V9M7 14l5-5 5 5M5 4h14"/>',
+  phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>', paste: '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/>',
+  shuf: '<path d="M16 4h4v4M20 4l-7 7M4 20l6-6M16 20h4v-4M20 20l-5-5M4 4l5 5"/>', help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.3 2.4c-.5.2-.8.6-.8 1.1v.5M12 17h.01"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  print: '<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>', key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/>', book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>'
+};
+const svg = (p, c = "i") => `<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+
+/* ── 자료 ──
+   D.chapters = [{ id, name, at, items:[{id, ko, en, star, ok, ng}], rv:{start, stage, last}, done }]
+   D.log = { "YYYY-MM-DD": { ms, n, ok, ng } }   D.gone = { id: ts } */
+const SAMPLE = [
+  ["오늘 시간 좀 있어요?", "Do you have some time today?"], ["그거 좋은 생각이네요.", "That's a good idea."], ["잠깐만 기다려 주시겠어요?", "Could you wait a moment, please?"],
+  ["제가 다시 연락드릴게요.", "I'll get back to you."], ["무슨 뜻인지 잘 모르겠어요.", "I'm not sure what you mean."], ["천천히 말씀해 주시겠어요?", "Could you speak a little more slowly?"],
+  ["이건 제가 처리할게요.", "I'll take care of this."], ["오늘은 일찍 퇴근하려고요.", "I'm planning to leave work early today."], ["그 회의는 다음 주로 미뤄졌어요.", "The meeting has been pushed to next week."],
+  ["생각보다 오래 걸렸어요.", "It took longer than I expected."], ["이번 주말에 뭐 할 거예요?", "What are you doing this weekend?"], ["커피 한잔할래요?", "Do you want to grab a coffee?"],
+  ["그건 처음 들어 봐요.", "That's the first time I've heard of it."], ["제 말이 그 말이에요.", "That's exactly what I'm saying."], ["너무 신경 쓰지 마세요.", "Don't worry about it too much."],
+  ["그 일은 제 담당이 아니에요.", "That's not my responsibility."], ["마감이 언제까지예요?", "When is the deadline?"], ["메일로 보내 드릴게요.", "I'll send it to you by email."],
+  ["다시 한번 확인해 볼게요.", "Let me double-check."], ["오늘 수고 많으셨어요.", "Thanks for all your hard work today."]
+];
+let D = ls.get("data", null);
+if (!D) D = { chapters: [], log: {}, gone: {} };
+D.log = D.log || {}; D.gone = D.gone || {}; D.chapters = D.chapters || [];
+/* 예전 시험판의 예시 챕터(고치지 않은 것)는 기본 회화가 대신함 */
+D.chapters = D.chapters.filter(c => !(c.name === "예시 · 일상 · 회사 회화 20" && c.items.length === SAMPLE.length && c.items.every((it, i) => it.ko === SAMPLE[i][0] && it.en === SAMPLE[i][1])));
+D.chapters.forEach(c => { if (!c.sec) c.sec = "talk"; });
+/* 기본 자료: at = 1 이라 사용자가 지우거나 고친 쪽이 늘 이김(다른 기기 동기화 때도) */
+function ensureBase(force) {
+  let n = 0;
+  baseChapters().forEach(b => { if (force) delete D.gone[b.id]; if (!D.gone[b.id] && !D.chapters.some(c => c.id === b.id)) { if (force) b.at = Date.now(); D.chapters.push(b); n++; } });
+  if (n) { const order = id => { const i = BASE_IDS.indexOf(id); return i < 0 ? 999 : i; }; D.chapters.sort((a, b) => (a.base || b.base) ? order(a.id) - order(b.id) : 0); }
+  return n;
+}
+ensureBase(false); ls.set("data", D);
+const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, exReps: 1, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
+  engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true };
+/* 「내 음성 서버」는 제이 전용 파일(jay.html)에서만 — 공개판(index.html)에서는 숨김.
+   챕터 · 기록 · 다른 설정은 둘이 같이 쓰고, 음성 고르기(engine · 서버 주소 · 앱 암호)만 jay.html이 따로 기억("setj") */
+const SERVER_OK = true, SRVK = ["engine", "azUrl", "azKey"];
+let SET = Object.assign({}, SET0, ls.get("set", {}), SERVER_OK ? ls.get("setj", {}) : {});
+if (!SERVER_OK && SET.engine === "azure") SET.engine = SET.azMyKey ? "azkey" : "device";
+const saveSet = () => {
+  if (!SERVER_OK) return ls.set("set", SET);
+  ls.set("setj", Object.fromEntries(SRVK.map(k => [k, SET[k]])));
+  const b = Object.assign({}, SET), o = ls.get("set", {}); if (b.engine === "azure") b.engine = o.engine && o.engine !== "azure" ? o.engine : (SET.azMyKey ? "azkey" : "device"); ls.set("set", b);
+};
+function touch(ch) { if (ch) ch.at = Date.now(); ls.set("data", D); if (SYNC) SYNC.markDirty(); }
+const STAR = { talk: "__star_talk", word: "__star_word" };
+function starCh(sec) { const items = []; D.chapters.forEach(c => { if (c.sec === sec) c.items.forEach(it => { if (it.star) items.push(it); }); }); return { id: STAR[sec], sec, name: sec === "word" ? "☆ 어려운 단어 모음" : "☆ 어려운 문장 모음", items, virtual: true }; }
+const chById = id => id === STAR.talk ? starCh("talk") : id === STAR.word ? starCh("word") : D.chapters.find(c => c.id === id);
+const SECN = { talk: "회화", word: "단어" };
+const unitOf = c => (c && c.sec === "word") ? "단어" : "문장";
+const isAz = () => SET.engine === "azure" || SET.engine === "azkey";
+
+/* ── 복습 1 · 3 · 7 · 14일 ── */
+const RV = [1, 3, 7, 14];
+function rvDue(c) { if (!c.rv) return null; if (c.rv.stage >= RV.length) return null; return addD(c.rv.start, RV[c.rv.stage]); }
+function rvDone(c) {
+  if (!c || c.virtual) return; const t = todayS();
+  if (!c.rv) c.rv = { start: t, stage: 0, last: t };
+  else { const due = rvDue(c); if (due && t >= due && c.rv.last !== t) { c.rv.stage++; } c.rv.last = t; }
+  touch(c);
+}
+function rvLabel(c) {
+  if (!c.rv) return "아직 안 들음";
+  const due = rvDue(c); if (!due) return "복습 끝(14일)";
+  const n = diffD(todayS(), due); return n <= 0 ? `오늘 복습 (${c.rv.stage + 1}/4)` : `다음 복습 ${ymdw(due)}`;
+}
+const dueList = () => D.chapters.filter(c => { const d = rvDue(c); return d && d <= todayS(); });
+
+/* ── 화면 상태 ── */
+const U = { scr: "home", sel: new Set(), edit: null, sec: ls.get("sec", "talk") };
+/* 뒤로 가기 = 이전 화면 · 맨 처음 화면에서는 「종료할까요?」 (브라우저 기록: [지킴이] → [화면들…]) */
+function go(s, fromPop) {
+  if (U.scr === "edit" && s !== "edit" && !fromPop) saveEdit();
+  const changed = U.scr !== s || (s === "edit" && history.state && history.state.edit !== U.edit);
+  U.scr = s; render(); scrollTo(0, 0);
+  if (!fromPop && changed) { try { history.pushState({ scr: s, edit: U.edit }, ""); } catch (e) {} }
+}
+function navInit() {
+  try { history.replaceState({ guard: 1 }, ""); history.pushState({ scr: U.scr, edit: U.edit }, ""); } catch (e) {}
+}
+let EXITING = false;
+addEventListener("popstate", e => {
+  if (EXITING) return;
+  const st = e.state || {};
+  const sh = $("#sheet");
+  if (!sh.hidden) {  /* 창이 열려 있으면 창만 닫고 화면은 그대로 */
+    const wasExit = sh.dataset.exit === "1"; sh.hidden = true; sh.dataset.exit = "";
+    try { history.pushState({ scr: U.scr, edit: U.edit }, ""); } catch (er) {}
+    if (wasExit) return;
+    return;
+  }
+  if (st.scr) { if (U.scr === "edit") saveEdit(); if (st.edit) U.edit = st.edit; go(st.scr, true); return; }
+  /* 지킴이까지 왔음 = 앱을 나가려는 뒤로 가기 → 한 칸 되돌리고 확인 */
+  try { history.pushState({ scr: U.scr, edit: U.edit }, ""); } catch (er) {}
+  askExit();
+});
+function askExit() {
+  if (U.scr === "edit") saveEdit();
+  const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "1";
+  sh.innerHTML = `<div class="shbox exitbox" role="alertdialog" aria-modal="true"><div class="edh"><b>영어 노트를 닫을까요?</b></div>
+  <p class="lead" style="margin-bottom:14px">${P.playing ? "지금 듣고 있는 것도 멈춰요. " : ""}고친 내용은 모두 저장돼 있어요.</p>
+  <div class="row" style="justify-content:flex-end"><button class="btn" data-a="exitno">계속 쓰기</button><button class="btn go" data-a="exityes">닫기</button></div></div>`;
+}
+function openSheet(html) { const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = ""; sh.innerHTML = html; }
+function render() {
+  const nav = [["home", "챕터", IC.home], ["play", "듣기", IC.head], ["stat", "기록", IC.chart], ["set", "설정", IC.gear]];
+  $("#nav").innerHTML = nav.map(([k, t, i]) => `<button data-nav="${k}" class="${U.scr === k ? "on" : ""}">${svg(i)}${t}</button>`).join("");
+  $("#tabs").innerHTML = nav.map(([k, t, i]) => `<button data-nav="${k}" class="${U.scr === k ? "on" : ""}">${svg(i)}${t}</button>`).join("");
+  if (U.scr === "home") drawHome(); else if (U.scr === "play") drawPlay(); else if (U.scr === "stat") drawStat(); else if (U.scr === "set") drawSet(); else if (U.scr === "edit") drawEdit();
+  paintSync(); paintMini();
+}
+
+/* ── 홈(챕터) ── */
+function engChip() { const a = isAz(); return `<button class="engchip ${a ? "az" : "dev"}" data-a="engset" title="음성 바꾸기">${svg(IC.head)}${a ? (SET.engine === "azkey" ? "고품질 음성 · 내 Azure 키" : "고품질 음성 · 내 서버") : "기기 음성 · 화면 켜 두기"}<small>바꾸기 ›</small></button>`; }
+/* 챕터 카드: 고품질 음성을 얼마나 받아 두었는지(이 기기 저장소 기준) */
+const AZR = {};
+async function azReady(c) {
+  const mode = modeOf(c), keys = new Set();
+  for (const it of c.items) for (const st of stepsFor(it, mode)) if (st.t === "say") keys.add((st.lang === "ko" ? SET.azKo : SET.azEn) + "|" + rateQ(st.rate) + "|" + st.text);
+  const sig = [mode, SET.azKo, SET.azEn, ...keys].join("#");
+  if (AZR[c.id] && AZR[c.id].sig === sig && AZR[c.id].pct === 100) return 100;
+  let n = 0; for (const k of keys) if (await idbGet(k)) n++;
+  const pct = keys.size ? Math.floor(n * 100 / keys.size) : 0; AZR[c.id] = { sig, pct }; return pct;
+}
+async function paintReady() {
+  if (!isAz() || U.scr !== "home") return;
+  for (const el of $$(".ch [data-ready]")) { const c = chById(el.dataset.ready); if (!c || !c.items.length) continue; let p = 0; try { p = await azReady(c); } catch (e) { continue; } if (U.scr !== "home" || !el.isConnected) return; el.textContent = p >= 100 ? "고품질 준비됨" : p > 0 ? `고품질 ${p}%` : "고품질 아직"; el.className = "tag " + (p >= 100 ? "azok" : p > 0 ? "azpart" : "aznone"); }
+}
+function drawHome() {
+  const due = dueList(), sec = U.sec, CH = D.chapters.filter(c => c.sec === sec), un = sec === "word" ? "단어" : "문장";
+  let h = `<div class="sectab" role="tablist"><button data-a="sec" data-v="talk" class="${sec === "talk" ? "on" : ""}" role="tab">회화<small>${D.chapters.filter(c => c.sec === "talk").length}챕터${starCh("talk").items.length ? ` · ☆ ${starCh("talk").items.length}` : ""}</small></button><button data-a="sec" data-v="word" class="${sec === "word" ? "on" : ""}" role="tab">단어<small>${D.chapters.filter(c => c.sec === "word").length}챕터${starCh("word").items.length ? ` · ☆ ${starCh("word").items.length}` : ""}</small></button></div>`;
+  h += `<div class="vh"><div><h2>${SECN[sec]} 챕터</h2><p>${ymdw(todayS())} · 챕터 ${CH.length}개 · ${un} ${CH.reduce((k, c) => k + c.items.length, 0)}개</p>${engChip()}</div><div class="row"><button class="btn" data-a="paste">${svg(IC.paste)}붙여넣어 만들기</button><button class="btn go" data-a="newch">${svg(IC.plus)}새 챕터</button></div></div>`;
+  if (due.length) h += `<div class="rvband"><i class="pip"></i><div class="tx"><b>오늘 복습할 챕터 ${due.length}개</b><br>${due.map(c => `[${SECN[c.sec]}] ` + esc(c.name)).join(" · ")}</div><button class="btn go sm" data-a="playrv">${svg(IC.play)}복습 이어 듣기</button></div>`;
+  const sc = starCh(sec);
+  h += `<div class="chs">`;
+  const card = (c, virt) => {
+    const okn = c.items.reduce((k, i) => k + (i.ok || 0), 0), ngn = c.items.reduce((k, i) => k + (i.ng || 0), 0), rate = okn + ngn ? Math.round(okn * 100 / (okn + ngn)) : null;
+    const due = !virt && rvDue(c) && rvDue(c) <= todayS();
+    return `<div class="ch${U.sel.has(c.id) ? " sel" : ""}${virt ? " star" : ""}">${virt && !c.items.length ? `<span class="ck" style="visibility:hidden"></span>` : `<button class="ck" data-a="sel" data-id="${c.id}" aria-label="고르기">${U.sel.has(c.id) ? svg(IC.check) : ""}</button>`}
+      <button class="tx" data-a="${virt && !c.items.length ? "starhelp" : "open"}" data-id="${c.id}" aria-label="${esc(c.name)} 듣기 화면 열기"><b>${esc(c.name)}${c.base ? '<span class="tag">기본</span>' : ""}</b><small>${virt && !c.items.length ? `듣다가 ☆를 누르면 여기 모여요` : `${c.items.length}${unitOf(c)}${rate != null ? ` · 시험 ${rate}%` : ""}${virt ? ` · 챕터 모두에서 ☆ 표시한 ${unitOf(c)}` : ""}`}${!virt ? `<span class="tag${due ? " due" : ""}">${rvLabel(c)}</span>` : ""}${isAz() && c.items.length ? `<span class="tag aznone" data-ready="${c.id}">고품질 …</span>` : ""}</small></button>
+      ${virt ? "" : `<button class="ed" data-a="edit" data-id="${c.id}" aria-label="고치기">${svg(IC.edit)}</button>`}
+      <button class="pl" data-a="play1" data-id="${c.id}" aria-label="${isCur(c.id) && P.playing ? "멈추기" : "듣기"}" ${c.items.length ? "" : "disabled"}>${svg(isCur(c.id) && P.playing ? IC.pause : IC.play)}</button></div>`;
+  };
+  h += card(sc, true);
+  CH.forEach(c => h += card(c));
+  h += `</div>`;
+  if (!CH.length) h += `<p class="lead" style="margin-top:12px">${SECN[sec]} 챕터가 없어요. 「새 챕터」 · 「붙여넣어 만들기」로 시작하거나, 설정 → 기본 자료에서 기본 챕터를 다시 넣을 수 있어요.</p>`;
+  if (U.sel.size) h += `<div class="selbar"><span>${U.sel.size}개 챕터 골랐어요 — 차례로 이어 들어요</span><button class="btn sm" data-a="selclr">취소</button><button class="btn go sm" data-a="playsel">${svg(IC.play)}이어 듣기</button></div>`;
+  h += `<p class="hint">「기본」 챕터는 Blog J가 넣어 둔 실전 표현이에요 — 고치거나 지워도 되고, 지운 것은 설정 → 기본 자료에서 다시 넣을 수 있어요.<br>카드의 네모를 눌러 여러 챕터를 고르면 이어서 들을 수 있어요. 챕터를 끝까지 들으면 복습 날짜(1 · 3 · 7 · 14일 뒤)가 정해지고, 그날 앱을 열면 위에 보여 드려요(앱이 닫혀 있을 땐 알림을 보내지 못해요).</p>`;
+  $("#main").innerHTML = h;
+  paintReady();
+}
+
+/* ── 챕터 고치기 ── */
+function drawEdit() {
+  const c = chById(U.edit); if (!c) return go("home");
+  const virt = !!c.virtual;
+  const W = c.sec === "word", un = unitOf(c);
+  let h = `<div class="vh"><div><h2>${virt ? esc(c.name) : (W ? "단어 챕터 고치기" : "회화 챕터 고치기")}</h2><p>${c.items.length}${un} · 20~30${un}이 알맞아요</p></div><div class="row"><button class="btn" data-nav="home">← 챕터</button>${W && c.items.length ? `<button class="btn" data-a="print" data-id="${c.id}">${svg(IC.print)}단어장 인쇄</button>` : ""}${c.items.length ? `<button class="btn go" data-a="play1" data-id="${c.id}">${svg(IC.play)}듣기</button>` : ""}</div></div><div class="card">`;
+  if (!virt) h += `<div class="lab">챕터 이름</div><input class="inp" id="chName" value="${esc(c.name)}" maxlength="40" style="margin-bottom:14px">`;
+  h += `<div class="lab"><span>${W ? "단어 · 뜻 · 예문(없어도 됨)" : "문장 (한글 · 영어)"}</span><span>☆ = 어려운 ${un}</span></div><div id="its"${W ? ' class="wlist"' : ""}>`;
+  c.items.forEach((it, i) => { h += itRow(it, i, virt); });
+  h += `</div>`;
+  if (!virt) h += `<div class="row" style="margin-top:10px"><button class="btn" data-a="addit">${svg(IC.plus)}${un} 하나 더</button><button class="btn" data-a="paste" data-id="${c.id}">${svg(IC.paste)}여러 줄 붙여넣기</button><span class="sp" style="flex:1"></span><button class="btn red" data-a="delch">${svg(IC.trash)}챕터 지우기</button></div>`;
+  h += `</div><p class="hint">고친 내용은 바로 저장돼요. 고품질 음성은 바뀐 ${un}만 새로 만들어요(같은 것은 저장해 둔 음성을 다시 씀).${c.base ? "<br>기본 챕터예요 — 고친 내용은 내 것으로 남아요." : ""}</p>`;
+  $("#main").innerHTML = h;
+}
+function itRow(it, i, virt) {
+  const c = findItem(it.id)[0];
+  if (c && c.sec === "word") return `<div class="it w" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp wd2" data-f="en" value="${esc(it.en)}" placeholder="단어 (영어)" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="off"><input class="inp mn2" data-f="ko" value="${esc(it.ko)}" placeholder="뜻" ${virt ? "readonly" : ""}><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 단어">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}<input class="inp ex2" data-f="ex" value="${esc(it.ex || "")}" placeholder="예문 1 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2" data-f="exk" value="${esc(it.exk || "")}" placeholder="예문 1 뜻" ${virt ? "readonly" : ""}><input class="inp ex2 exb" data-f="ex2" value="${esc(it.ex2 || "")}" placeholder="예문 2 (영어, 없어도 됨)" ${virt ? "readonly" : ""} spellcheck="false"><input class="inp exk2 exb" data-f="exk2" value="${esc(it.exk2 || "")}" placeholder="예문 2 뜻" ${virt ? "readonly" : ""}></div>`;
+  return `<div class="it" data-id="${it.id}"><span class="n num">${i + 1}</span><input class="inp ko2" data-f="ko" value="${esc(it.ko)}" placeholder="한글 문장" ${virt ? "readonly" : ""}><input class="inp en2" data-f="en" value="${esc(it.en)}" placeholder="English sentence" ${virt ? "readonly" : ""} spellcheck="false" autocapitalize="sentences"><button class="sx${it.star ? " on" : ""}" data-a="star" data-id="${it.id}" aria-label="어려운 문장">${svg(IC.star).replace('class="i"', `class="i" style="fill:${it.star ? "currentColor" : "none"}"`)}</button>${virt ? "<span></span>" : `<button class="x" data-a="delit" data-id="${it.id}" aria-label="지우기">${svg(IC.x)}</button>`}</div>`;
+}
+function findItem(id) { for (const c of D.chapters) { const it = c.items.find(i => i.id === id); if (it) return [c, it]; } return [null, null]; }
+
+/* 붙여넣기: 「한글[탭]영어」 · 「한글 | 영어」 · 한 줄씩 번갈아 */
+function parsePaste(txt) {
+  const L = txt.replace(/\r/g, "").split("\n").map(s => s.trim()).filter(Boolean), out = [];
+  const hasKo = s => /[가-힣]/.test(s);
+  let pend = null;
+  for (const s of L) {
+    let p = null;
+    const s1 = s.replace(/^[*•·▪◦‣\-–]\s+/, "").replace(/^\d+[.)]\s*/, "");
+    if (/\s*(?:→|->|=>|⇒|➜|➔)\s*/.test(s1)) { let [x, y] = s1.split(/\s*(?:→|->|=>|⇒|➜|➔)\s*/).map(v => v.trim()); if (x && y) { if (!hasKo(x) && hasKo(y)) [x, y] = [y, x]; out.push([x, y]); } pend = null; continue; }
+    const m = s1.match(/^(.+?)\s*[(（]([^()（）]+)[)）]\s*$/);
+    if (m && hasKo(m[1]) !== hasKo(m[2]) && /[A-Za-z]/.test(m[1] + m[2])) { let [x, y] = [m[1].trim(), m[2].trim()]; if (!hasKo(x)) [x, y] = [y, x]; out.push([x, y]); pend = null; continue; }
+    if (s.includes("\t")) p = s.split("\t").map(x => x.trim()).filter(Boolean);
+    else if (/\s\|\s|\s\/\/\s/.test(s)) p = s.split(/\s\|\s|\s\/\/\s/).map(x => x.trim());
+    if (p && p.length >= 2) { let [a, b] = p; if (!hasKo(a) && hasKo(b)) [a, b] = [b, a]; out.push([a.replace(/^\d+[.)]\s*/, ""), b]); pend = null; continue; }
+    const t = s1;
+    if (hasKo(t)) { pend = t; } else if (pend) { out.push([pend, t]); pend = null; }
+  }
+  return out;
+}
+/* 단어: 「단어[탭]뜻[탭]예문[탭]예문 뜻」 · 「단어 | 뜻 | 예문」 · 「단어 - 뜻」 */
+function parseWords(txt) {
+  const hasKo = s => /[가-힣]/.test(s), out = [];
+  const BUL = /^[*•·▪◦‣\-–]\s+/, ARW = /\s*(?:→|->|=>|⇒|➜|➔)\s*/;
+  const splitEx = s => { let p = ARW.test(s) ? s.split(ARW) : s.includes("\t") ? s.split("\t") : /\s\|\s/.test(s) ? s.split(/\s\|\s/) : /\s[-–]\s/.test(s) ? s.split(/\s[-–]\s/) : [s];
+    p = p.map(x => x.trim()).filter(Boolean); let [e, k = ""] = p; if (hasKo(e) && k && !hasKo(k)) [e, k] = [k, e]; if (hasKo(e) && !k) [e, k] = ["", e]; return e ? [e, k] : null; };
+  const addEx = (w, e) => { if (!w || !e) return; if (!w.ex) { w.ex = e[0]; w.exk = e[1]; } else if (!w.ex2) { w.ex2 = e[0]; w.exk2 = e[1]; } };
+  let cur = null;
+  txt.replace(/\r/g, "").split("\n").map(s => s.trim()).filter(Boolean).forEach(s0 => {
+    // 예문 줄: 「* 영어 → 한글」 · 「- 영어 → 한글」 · 「→」가 있고 앞에 번호가 없는 문장
+    if (cur && (BUL.test(s0) || (ARW.test(s0) && !/^\d+[.)]/.test(s0)))) { addEx(cur, splitEx(s0.replace(BUL, ""))); return; }
+    const s = s0.replace(/^\d+[.)]\s*/, "").replace(BUL, "");
+    let w = null, m = s.match(/^(.+?)\s*[(（]([^()（）]+)[)）]\s*$/);
+    if (m) { let [a, b] = [m[1].trim(), m[2].trim()]; if (hasKo(a) && !hasKo(b)) [a, b] = [b, a]; w = { en: a, ko: b, ex: "", exk: "", ex2: "", exk2: "" }; }
+    else {
+      let p = s.includes("\t") ? s.split("\t") : /\s\|\s/.test(s) ? s.split(/\s\|\s/) : ARW.test(s) ? s.split(ARW) : /\s[-–:]\s/.test(s) ? s.split(/\s[-–:]\s/) : null;
+      if (!p) return; p = p.map(x => x.trim()).filter(Boolean); if (p.length < 2) return;
+      let [a, b, ex = "", exk = "", ex2 = "", exk2 = ""] = p; if (hasKo(a) && !hasKo(b)) [a, b] = [b, a];
+      if (ex && hasKo(ex) && exk && !hasKo(exk)) [ex, exk] = [exk, ex];
+      if (ex2 && hasKo(ex2) && exk2 && !hasKo(exk2)) [ex2, exk2] = [exk2, ex2];
+      w = { en: a, ko: b, ex, exk, ex2, exk2 };
+    }
+    out.push(w); cur = w;
+  });
+  return out;
+}
+function openPaste(chId) {
+  const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
+  const c0 = chId ? D.chapters.find(x => x.id === chId) : null, W = (c0 ? c0.sec : U.sec) === "word", un = W ? "단어" : "문장";
+  sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>${chId ? un + " 붙여넣기" : `붙여넣어 새 ${SECN[W ? "word" : "talk"]} 챕터 만들기`}</b><button class="btn sm" data-a="close">닫기</button></div>
+  ${chId ? "" : `<div class="lab">챕터 이름</div><input class="inp" id="pName" value="${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(c => c.sec === (W ? "word" : "talk")).length + 1}" maxlength="40" style="margin-bottom:12px">`}
+  <div class="lab">${W ? "「1. take a look (한번 보다)」 줄 아래에 「* 예문 → 뜻」을 두 개까지 — 엑셀 칸(단어 · 뜻 · 예문 · 예문 뜻)을 복사해 붙여도 돼요" : "한 줄에 한 문장 — 「* 영어 → 한글」 · 「영어 (한글)」 · 엑셀 두 칸(한글 · 영어) · 한글 줄과 영어 줄 번갈아, 모두 돼요"}</div>
+  <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "1. take a look (한번 보다)&#10;* Can you take a look at this? → 이것 좀 봐 줄래요?&#10;* Let me take a look. → 제가 한번 볼게요.&#10;&#10;또는  figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다" : "카페에서&#10;* Can I get an iced Americano? → 아이스 아메리카노 하나 주세요.&#10;* For here or to go? → 드시고 가세요, 가져가세요?&#10;&#10;또는  오늘 시간 있어요?&#9;Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
+  <p class="hint" id="pCnt">0${un}</p><button class="btn go full" data-a="pasteok" data-id="${chId || ""}" data-w="${W ? 1 : ""}">${svg(IC.check)}넣기</button></div>`;
+  $("#pTxt").addEventListener("input", () => { if (W) { const r = parseWords($("#pTxt").value), ne = r.reduce((k, w) => k + (w.ex ? 1 : 0) + (w.ex2 ? 1 : 0), 0); $("#pCnt").textContent = r.length + "단어" + (ne ? ` · 예문 ${ne}개` : "") + " 알아봤어요"; } else $("#pCnt").textContent = parsePaste($("#pTxt").value).length + un + " 알아봤어요"; });
+  setTimeout(() => $("#pTxt").focus(), 100);
+}
+
+/* ═══════════ 재생 ═══════════ */
+/* 단계(step): {t:"say", lang:"ko"|"en", text, rate, ph} | {t:"gap", ms|auto, ph}
+   ph(화면 표시 단계): ko · think · en1..3 · next */
+const P = { queue: [], qi: 0, playing: false, ch: null, tok: 0, phase: "", rep: 0, startAt: 0, mode: "", list: [], li: 0, built: null, testWait: false, lastDur: 0 };
+function thinkMs(text, lang) {
+  if (SET.think !== "auto") return (+SET.think) * 1000;
+  const w = lang === "en" ? text.split(/\s+/).filter(Boolean).length : Math.ceil(text.replace(/\s/g, "").length / 2.6);
+  return Math.round(clamp(2 + 0.45 * w, 3, 10) * SET.thinkF * 1000);
+}
+function rates(n) { if (!SET.faster || n < 2) return Array(n).fill(1); return n === 2 ? [0.9, 1.08] : n === 3 ? [0.85, 1, 1.12] : [0.82, 0.92, 1.02, 1.12].slice(0, n); }
+function stepsFor(it, mode) {
+  const S = [], sp = SET.speed, R = rates(SET.reps);
+  if (mode === "k2e") { S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "ko" }, { t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); R.forEach((r, i) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph: "en" + (i + 1) }, { t: "gap", auto: 1, ph: "en" + (i + 1) })); }
+  else if (mode === "test") { S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "ko" }, { t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }, { t: "say", lang: "en", text: it.en, rate: sp, ph: "en1" }, { t: "gap", ms: 2200, ph: "judge" }); }
+  else if (mode === "listen") { S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "ko" }, { t: "gap", ms: 700, ph: "ko" }); R.forEach((r, i) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph: "en" + (i + 1) }, { t: "gap", ms: 900, ph: "en" + (i + 1) })); }
+  else if (mode === "e2k") { S.push({ t: "say", lang: "en", text: it.en, rate: sp, ph: "en1" }, { t: "gap", ms: thinkMs(it.ko, "ko"), ph: "think" }, { t: "say", lang: "ko", text: it.ko, rate: sp, ph: "ko" }, { t: "gap", ms: 600, ph: "ko" }, { t: "say", lang: "en", text: it.en, rate: sp, ph: "en2" }, { t: "gap", auto: 1, ph: "en2" }); }
+  else if (mode[0] === "w") {
+    const sayW = (r, ph) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph }), sayM = () => S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "mean" });
+    const reps = gap => R.forEach((r, i) => { sayW(r, "r" + (i + 1)); S.push(gap ? { t: "gap", ms: gap, ph: "r" + (i + 1) } : { t: "gap", auto: 1, ph: "r" + (i + 1) }); });
+    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex) [[it.ex, it.exk], [it.ex2, it.exk2]].forEach(([e, k], j) => { if (!e) return; if (j) S.push({ t: "gap", ms: 700, ph: "exk" }); const xn = Math.max(1, Math.min(3, +SET.exReps || 1)); for (let x = 0; x < xn; x++) { S.push({ t: "say", lang: "en", text: e, rate: sp, ph: "ex" }); S.push(x < xn - 1 ? { t: "gap", auto: 1, ph: "ex" } : { t: "gap", ms: 500, ph: "ex" }); } if (k) S.push({ t: "say", lang: "ko", text: k, rate: sp, ph: "exk" }); }); };
+    if (mode === "we2k") { sayW(1, "word"); S.push({ t: "gap", ms: thinkMs(it.ko, "ko"), ph: "think" }); sayM(); S.push({ t: "gap", ms: 500, ph: "mean" }); reps(0); tail(); }
+    else if (mode === "wk2e") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); reps(0); tail(); }
+    else if (mode === "wtest") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); sayW(1, "r1"); S.push({ t: "gap", ms: 2200, ph: "judge" }); }
+    else { sayW(1, "word"); S.push({ t: "gap", ms: 500, ph: "word" }); sayM(); S.push({ t: "gap", ms: 600, ph: "mean" }); reps(800); tail(); }
+  }
+  S.push({ t: "gap", ms: 1100, ph: "next" });
+  return S;
+}
+/* 철자 불러 주기: 「F, I, G, U, R, E ... O, U, T」 (여러 낱말은 사이를 쉼) */
+function spellOf(w) { const L = String(w || "").toUpperCase().split(/\s+/).map(x => x.replace(/[^A-Z]/g, "").split("").join(", ")).filter(Boolean); return L.length && L.join(". ").length <= 120 ? L.join(". ") + "." : ""; }
+const MODES = [["k2e", "한→영 말하기"], ["test", "시험"], ["listen", "듣기만"], ["e2k", "영→한"]];
+const WMODES = [["we2k", "단어→뜻"], ["wk2e", "뜻→단어 말하기"], ["wtest", "시험"], ["wlisten", "듣기만"]];
+const modeName = m => ([...MODES, ...WMODES].find(x => x[0] === m) || [0, ""])[1];
+const modeOf = c => (c && c.sec === "word") ? SET.wmode : SET.mode;
+const PHN = { ko: "한글", think: "생각", en1: "영어 1", en2: "영어 2", en3: "영어 3", en4: "영어 4", judge: "맞혔나요?", next: "다음", word: "단어", mean: "뜻", r1: "따라 1", r2: "따라 2", r3: "따라 3", spell: "철자", ex: "예문", exk: "예문 뜻" };
+function phaseList(mode) {
+  if (mode[0] === "w") { const r = rates(SET.reps).map((x, i) => "r" + (i + 1)), t = [...(SET.spell ? ["spell"] : []), ...(SET.wex ? ["ex"] : [])];
+    if (mode === "we2k") return ["word", "think", "mean", ...r, ...t]; if (mode === "wk2e") return ["mean", "think", ...r, ...t]; if (mode === "wtest") return ["mean", "think", "r1", "judge"]; return ["word", "mean", ...r, ...t]; } if (mode === "k2e") return ["ko", "think", ...rates(SET.reps).map((r, i) => "en" + (i + 1))]; if (mode === "test") return ["ko", "think", "en1", "judge"]; if (mode === "listen") return ["ko", ...rates(SET.reps).map((r, i) => "en" + (i + 1))]; return ["en1", "think", "ko", "en2"]; }
+
+/* 재생 목록 준비 */
+function setList(ids) {
+  const L = ids.map(chById).filter(c => c && c.items.length);
+  if (!L.length) return toast("들을 문장이 없어요");
+  stopAll(); P.list = L.map(c => c.id); P.li = 0; loadCh(0); go("play");
+}
+function loadCh(li) {
+  const c = chById(P.list[li]); P.ch = c; P.li = li;
+  let q = c.items.slice(); if (SET.shuffle) for (let i = q.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [q[i], q[j]] = [q[j], q[i]]; }
+  P.queue = q; P.qi = 0; P.phase = ""; P.built = null; P.mode = modeOf(c);
+}
+const curIt = () => P.queue[P.qi];
+
+/* ── 기기 음성(speechSynthesis) ── */
+const SS = window.speechSynthesis;
+let VOICES = [];
+function loadVoices() { if (!SS) return; VOICES = SS.getVoices(); if (U.scr === "set" && $("#sheet").hidden) drawSet(); }
+if (SS) { loadVoices(); SS.onvoiceschanged = loadVoices; }
+function pickVoice(lang) {
+  const want = lang === "ko" ? SET.vKo : SET.vEn, pre = lang === "ko" ? "ko" : "en";
+  const L = VOICES.filter(v => v.lang && v.lang.toLowerCase().startsWith(pre));
+  return L.find(v => v.voiceURI === want) || L.find(v => /natural|neural|online|google/i.test(v.name) && (pre === "ko" || /US/i.test(v.lang))) || L.find(v => pre === "ko" || /en[-_]US/i.test(v.lang)) || L[0] || null;
+}
+function sayDevice(text, lang, rate, tok) {
+  return new Promise(res => {
+    if (!SS) return res(0);
+    const u = new SpeechSynthesisUtterance(text), v = pickVoice(lang);
+    u.lang = lang === "ko" ? "ko-KR" : "en-US"; if (v) u.voice = v; u.rate = clamp(rate, .5, 2);
+    const t0 = performance.now(); let done = false;
+    const fin = () => { if (done) return; done = true; clearTimeout(tm); res(performance.now() - t0); };
+    u.onend = fin; u.onerror = fin;
+    const est = (lang === "en" ? text.split(/\s+/).length * 420 : text.length * 230) / u.rate + 2500;
+    const tm = setTimeout(() => { fin(); }, est * 2 + 3000);  /* 안드로이드 크롬: onend가 안 오는 일 대비 */
+    SS.cancel(); setTimeout(() => { if (tok === P.tok) SS.speak(u); else fin(); }, 60);
+  });
+}
+async function runDevice() {
+  const tok = ++P.tok; P.playing = true; P.hidStop = false; keepOn(true); paintPlay();
+  while (tok === P.tok) {
+    const it = curIt(); if (!it) break;
+    paintPlay();
+    const S = stepsFor(it, P.mode); let lastMs = 0;
+    for (let si = 0; si < S.length && tok === P.tok; si++) {
+      const s = S[si]; P.phase = s.ph; paintPhase();
+      if (s.t === "say") lastMs = await sayDevice(s.text, s.lang, s.rate, tok);
+      else await waitTok(s.auto ? (lastMs * 1.05 + 700) * SET.gapF : s.ms, tok);
+    }
+    if (tok !== P.tok) break;
+    logSent(); if (!advance()) break;
+  }
+  if (tok === P.tok) { P.playing = false; keepOn(false); paintPlay(); }
+}
+function waitTok(ms, tok) { return new Promise(r => { const t0 = Date.now(); const iv = setInterval(() => { if (tok !== P.tok || Date.now() - t0 >= ms) { clearInterval(iv); r(); } }, 80); }); }
+/* 다음 문장 · 다음 챕터 · 반복 */
+function advance() {
+  if (P.qi < P.queue.length - 1) { P.qi++; return true; }
+  chDone();
+  if (P.li < P.list.length - 1) { loadCh(P.li + 1); toast(`다음 챕터 — ${P.ch.name}`); return true; }
+  if (SET.loop === "chapter" || SET.loop === "list") { if (SET.loop === "list") loadCh(0); else loadCh(P.li); return true; }
+  return false;
+}
+function chDone() { const c = P.ch; if (c && !c.virtual) { const real = D.chapters.find(x => x.id === c.id); rvDone(real); } }
+
+/* ── 화면 켜 두기(Wake Lock) · 백그라운드 유지(조용한 소리) ── */
+let WL = null;
+async function keepOn(on) {
+  try { if (on && SET.keep && "wakeLock" in navigator && !WL) { WL = await navigator.wakeLock.request("screen"); WL.addEventListener("release", () => { WL = null; }); } if (!on && WL) { WL.release(); WL = null; } } catch (e) {}
+}
+/* 기기 음성은 화면이 꺼지면 휴대폰이 소리를 막음(재생 순서만 계속 넘어감) → 그 문장에서 멈추고, 다시 켜면 이어 듣기 안내 */
+document.addEventListener("visibilitychange", () => {
+  if (SET.engine !== "device") return;
+  if (document.visibilityState === "hidden" && P.playing) { stopAll(); P.hidStop = true; paintPlay(); return; }
+  if (document.visibilityState === "visible" && P.hidStop) { P.hidStop = false; setTimeout(() => toast(`화면이 꺼진 동안 ${P.qi + 1}번째에서 멈췄어요 — ▶를 누르면 이어서 들어요`), 300); }
+});
+
+/* ── 고품질 음성(Azure — 내 서버 경유) ── */
+const IDB = { db: null };
+function idb() { if (IDB.db) return Promise.resolve(IDB.db); return new Promise((res, rej) => { const r = indexedDB.open("bj-eng-tts", 1); r.onupgradeneeded = () => r.result.createObjectStore("a"); r.onsuccess = () => res(IDB.db = r.result); r.onerror = () => rej(r.error); }); }
+async function idbGet(k) { const db = await idb(); return new Promise(res => { const r = db.transaction("a").objectStore("a").get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }); }
+async function idbPut(k, v) { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").put(v, k); t.oncomplete = () => res(); t.onerror = () => res(); }); }
+async function idbCount() { try { const db = await idb(); return await new Promise(res => { const r = db.transaction("a").objectStore("a").count(); r.onsuccess = () => res(r.result); r.onerror = () => res(0); }); } catch (e) { return 0; } }
+async function idbClear() { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").clear(); t.oncomplete = () => res(); }); }
+const rateQ = r => Math.round(r * 100) / 100;
+/* Azure 무료(F0)는 1분에 20번까지만 받음 → 19번 넘으면 기다렸다가 받기 · 429면 잠시 뒤 다시 */
+const AZQ = []; let AZP = "";
+function azNote(t) { const b = $("#busy"); if (b && !b.hidden) $("#busyT").textContent = (AZP ? AZP + " — " : "") + t; }
+async function azWait(ms) { const end = Date.now() + ms; while (Date.now() < end) { if (B.cancel) throw new Error("멈췄어요"); azNote(`무료 키는 1분에 20문장까지라 잠깐 쉬는 중 ${Math.ceil((end - Date.now()) / 1000)}초`); await sleep(500); } }
+async function azSlot() { for (;;) { const now = Date.now(); while (AZQ.length && now - AZQ[0] > 61000) AZQ.shift(); if (AZQ.length < 19) { AZQ.push(now); return; } await azWait(61000 - (now - AZQ[0]) + 100); } }
+async function azGet(text, lang, rate, fresh) {
+  const voice = lang === "ko" ? SET.azKo : SET.azEn, r = rateQ(rate), k = voice + "|" + r + "|" + text;
+  const hit = fresh ? null : await idbGet(k); if (hit) return hit;
+  const mk = todayS().slice(0, 7), cost = text.length + (text.match(/[가-힣]/g) || []).length;
+  const mine = SET.engine === "azkey";
+  if (mine && (SET.azChars[mk] || 0) + cost > (+SET.azCap || 450000)) throw new Error(`이번 달 한도(${(+SET.azCap).toLocaleString()}자)를 넘었어요 — 설정에서 늘리거나 다음 달에 써 주세요`);
+  if (mine && !SET.azMyKey) throw new Error("설정 → 음성에서 Azure 키를 넣어 주세요");
+  if (!mine && !SET.azUrl) throw new Error("설정에서 음성 서버 주소를 넣어 주세요");
+  let res;
+  for (let tr = 0; ; tr++) {
+  if (mine) await azSlot();
+  const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 20000);
+  try {
+    if (mine) {
+      const xe = s => String(s).replace(/[<>&'"]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" }[c]));
+      const ssml = `<speak version='1.0' xml:lang='${voice.slice(0, 5)}'><voice name='${voice}'><prosody rate='${(r >= 1 ? "+" : "") + Math.round((r - 1) * 100)}%'>${xe(text)}</prosody></voice></speak>`;
+      res = await fetch(`https://${SET.azRegion}.tts.speech.microsoft.com/cognitiveservices/v1`, { method: "POST", signal: ctl.signal, headers: { "Ocp-Apim-Subscription-Key": SET.azMyKey, "Content-Type": "application/ssml+xml", "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3" }, body: ssml });
+    } else res = await fetch(SET.azUrl.replace(/\/$/, "") + "/tts", { method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", "X-BJ-Key": SET.azKey || "" }, body: JSON.stringify({ text, voice, rate: r }) });
+  }
+  catch (e) { throw new Error(e.name === "AbortError" ? (mine ? "Azure가 응답하지 않아요" : "음성 서버가 응답하지 않아요") : (mine ? "Azure에 연결하지 못했어요 (인터넷 · 지역 확인)" : "음성 서버에 연결하지 못했어요 (인터넷 · 주소 확인)")); }
+  finally { clearTimeout(tm); }
+  if (mine && res.status === 429 && tr < 6) { await azWait((+res.headers.get("Retry-After") || 20) * 1000 + 500); continue; }
+  break;
+  }
+  if (!res.ok) {
+    if (mine) throw new Error(res.status === 401 ? "Azure 키가 맞지 않아요 — 키와 지역(만든 곳)을 확인해 주세요" : res.status === 429 ? "Azure가 지금 바빠요(무료 키는 1분에 20문장까지) — 잠시 뒤 ▶를 다시 눌러 주세요. 받은 문장은 저장돼 있어요" : res.status === 403 ? "Azure 구독이 멈췄어요 — 포털에서 구독 상태(활성)를 확인해 주세요" : res.status === 400 ? "목소리 이름을 Azure가 받지 않았어요" : "Azure 오류 — " + res.status);
+    let m = res.status; try { m = (await res.json()).error || m; } catch (e) {} throw new Error("음성 서버 오류 — " + m);
+  }
+  const buf = await res.arrayBuffer();
+  SET.azChars[mk] = (SET.azChars[mk] || 0) + cost; saveSet();
+  await idbPut(k, buf); return buf;
+}
+const SR = 24000;
+async function decode(buf) { const oc = new OfflineAudioContext(1, 1, SR); return await oc.decodeAudioData(buf.slice(0)); }
+/* 챕터 전체를 한 파일(WAV)로: 한글 · 생각 시간 · 영어 반복 · 따라 말할 시간 */
+async function buildChapter(c, queue, mode, onp, cancel) {
+  const parts = [], marks = []; let total = 0; const sil = ms => { const n = Math.round(SR * ms / 1000); parts.push(new Float32Array(n)); total += n; };
+  const allSteps = queue.map(it => stepsFor(it, mode)); const nSay = allSteps.flat().filter(s => s.t === "say").length; let k = 0;
+  for (let qi = 0; qi < queue.length; qi++) {
+    marks.push({ qi, t: total / SR, ph: [] }); let lastSec = 0;
+    for (const s of allSteps[qi]) {
+      if (cancel()) throw new Error("멈췄어요");
+      marks[qi].ph.push({ t: total / SR, ph: s.ph });
+      if (s.t === "say") { const ab = await decode(await azGet(s.text, s.lang, s.rate)); const d = ab.getChannelData(0); parts.push(d); total += d.length; lastSec = d.length / SR; onp(++k, nSay); }
+      else sil(s.auto ? (lastSec * 1000 * 1.05 + 700) * SET.gapF : s.ms);
+    }
+  }
+  const pcm = new Int16Array(total); let o = 0; for (const p of parts) { for (let i = 0; i < p.length; i++) { const v = Math.max(-1, Math.min(1, p[i])); pcm[o++] = v < 0 ? v * 0x8000 : v * 0x7fff; } }
+  const hd = new DataView(new ArrayBuffer(44)); const W = (p, s) => { for (let i = 0; i < s.length; i++) hd.setUint8(p + i, s.charCodeAt(i)); };
+  W(0, "RIFF"); hd.setUint32(4, 36 + pcm.length * 2, true); W(8, "WAVE"); W(12, "fmt "); hd.setUint32(16, 16, true); hd.setUint16(20, 1, true); hd.setUint16(22, 1, true); hd.setUint32(24, SR, true); hd.setUint32(28, SR * 2, true); hd.setUint16(32, 2, true); hd.setUint16(34, 16, true); W(36, "data"); hd.setUint32(40, pcm.length * 2, true);
+  return { url: URL.createObjectURL(new Blob([hd, pcm], { type: "audio/wav" })), marks, dur: total / SR, sig: sigOf(queue, mode) };
+}
+const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.exReps, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + (i.ex || "") + (i.exk || "") + (i.ex2 || "") + (i.exk2 || "")).join("|")].join("#");
+const B = { cancel: false };
+async function runAzure(fromQi) {
+  const au = $("#au"); const tok = ++P.tok;
+  if (!P.built || P.built.sig !== sigOf(P.queue, P.mode)) {
+    $("#busy").hidden = false; B.cancel = false; AZP = ""; $("#busyT").textContent = "음성 만드는 중…"; $("#busyB").style.width = "0";
+    if (SET.engine === "azkey") { const seen = new Set(); let nn = 0; for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const vv = st.lang === "ko" ? SET.azKo : SET.azEn, kk = vv + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!(await idbGet(kk))) nn++; } } if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
+    try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { AZP = `음성 만드는 중 ${k} / ${n}`; $("#busyT").textContent = AZP; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
+    catch (e) { $("#busy").hidden = true; P.playing = false; paintPlay(); if (e.message !== "멈췄어요") toast(e.message + " — ▶를 다시 누르면 받은 데서부터 이어서 만들어요"); return; }
+    $("#busy").hidden = true;
+    if (tok !== P.tok) return;
+    au.src = P.built.url;
+  }
+  const m = P.built.marks[fromQi != null ? fromQi : P.qi]; if (m) au.currentTime = m.t + 0.01;
+  P.playing = true; mediaMeta();
+  try { await au.play(); } catch (e) { P.playing = false; toast("재생을 시작하지 못했어요 — 한 번 더 눌러 주세요"); }
+  paintPlay(); prebuildNext();
+}
+function confirmFallback() { return SS && window.confirm("고품질 음성을 만들지 못했어요.\n이번에는 기기 음성으로 들을까요? (화면을 켜 두어야 해요)"); }
+/* 다음 챕터는 미리 만들어 둠(이어 듣기 끊김 줄이기) — 음성만 저장소에 받아 둠 */
+async function prebuildNext() {
+  if (P.li >= P.list.length - 1) return; const c = chById(P.list[P.li + 1]); if (!c) return;
+  try { for (const it of c.items) for (const s of stepsFor(it, P.mode)) if (s.t === "say") await azGet(s.text, s.lang, s.rate); } catch (e) {}
+}
+function azTick() {
+  const au = $("#au"); if (!P.built || !isAz()) return;
+  const t = au.currentTime, M = P.built.marks; let qi = 0; for (let i = 0; i < M.length; i++) if (M[i].t <= t) qi = i;
+  let ph = ""; for (const x of M[qi].ph) if (x.t <= t) ph = x.ph;
+  if (qi !== P.qi) { const prev = P.qi; P.qi = qi; if (qi > prev) logSent(); paintPlay(); }
+  if (ph !== P.phase) { P.phase = ph; paintPhase(); }
+  if ("mediaSession" in navigator && navigator.mediaSession.setPositionState && au.duration && isFinite(au.duration)) { try { navigator.mediaSession.setPositionState({ duration: au.duration, position: Math.min(t, au.duration), playbackRate: 1 }); } catch (e) {} }
+}
+$("#au").addEventListener("timeupdate", azTick);
+$("#au").addEventListener("ended", () => {
+  if (!isAz()) return; logSent(); chDone();
+  if (P.li < P.list.length - 1) { loadCh(P.li + 1); render(); runAzure(0); return; }
+  if (SET.loop === "chapter") { P.qi = 0; runAzure(0); return; }
+  if (SET.loop === "list") { loadCh(0); render(); runAzure(0); return; }
+  P.playing = false; P.qi = 0; paintPlay(); toast("끝까지 들었어요 — 수고했어요");
+});
+$("#au").addEventListener("pause", () => { if (isAz() && !$("#au").ended) { P.playing = false; paintPlay(); } });
+$("#au").addEventListener("play", () => { if (isAz()) { P.playing = true; paintPlay(); } });
+
+/* ── 잠금 화면 · 블루투스 단추(Media Session) ── */
+function mediaMeta() {
+  if (!("mediaSession" in navigator)) return;
+  try { navigator.mediaSession.metadata = new MediaMetadata({ title: P.ch ? P.ch.name : "영어 노트", artist: "영어 노트 · " + modeName(P.mode), album: "Blog J", artwork: [{ src: "icon-192.png", sizes: "192x192", type: "image/png" }, { src: "icon-512.png", sizes: "512x512", type: "image/png" }] }); } catch (e) {}
+}
+if ("mediaSession" in navigator) {
+  const A = (a, f) => { try { navigator.mediaSession.setActionHandler(a, f); } catch (e) {} };
+  A("play", () => playPause(true)); A("pause", () => playPause(false));
+  A("nexttrack", () => jump(1)); A("previoustrack", () => jump(-1));
+  A("seekforward", () => jump(1)); A("seekbackward", () => jump(0));
+}
+/* ── 단추 ── */
+function stopAll() { P.tok++; if (SS) SS.cancel(); const au = $("#au"); try { au.pause(); } catch (e) {} P.playing = false; keepOn(false); }
+function playPause(want) {
+  const on = want == null ? !P.playing : want;
+  if (!P.ch) { const c = dueList()[0] || D.chapters.find(x => x.sec === U.sec && x.items.length) || D.chapters.find(x => x.items.length); if (!c) return toast("챕터를 먼저 만들어 주세요"); P.list = [c.id]; loadCh(0); }
+  if (!on) { stopAll(); paintPlay(); return; }
+  P.mode = modeOf(P.ch); P.started = true; logStart();
+  if (isAz()) { const au = $("#au"); if (P.built && P.built.sig === sigOf(P.queue, P.mode) && au.src) { au.play().catch(() => {}); P.playing = true; paintPlay(); } else runAzure(); }
+  else runDevice();
+}
+function jump(d) {
+  const n = d === 0 ? P.qi : clamp(P.qi + d, 0, P.queue.length - 1);
+  if (isAz() && P.built) { P.qi = n; const au = $("#au"); au.currentTime = P.built.marks[n].t + 0.01; if (!P.playing) au.play().catch(() => {}); paintPlay(); return; }
+  const was = P.playing; stopAll(); P.qi = n; P.phase = ""; paintPlay(); if (was) runDevice();
+}
+function judge(ok) {
+  const it = curIt(); if (!it) return;
+  const [, real] = findItem(it.id); const x = real || it;
+  if (ok) x.ok = (x.ok || 0) + 1; else { x.ng = (x.ng || 0) + 1; if (SET.autoStar) x.star = true; }
+  const L = dayLog(); if (ok) L.ok++; else L.ng++;
+  const un = unitOf(P.ch); touch(); toast(ok ? (un === "단어" ? "알아요 — 좋아요" : "맞혔어요") : SET.autoStar ? `☆ 어려운 ${un}에 넣었어요` : "다음엔 맞혀요");
+  if (SET.engine === "device" && P.phase === "judge") { P.tok++; if (SS) SS.cancel(); if (advance()) runDevice(); else { P.playing = false; paintPlay(); } }
+}
+function toggleStar(id) { const [c, it] = findItem(id); if (!it) return; it.star = !it.star; touch(c); }
+
+/* ── 기록 ── */
+function dayLog() { const k = todayS(); return D.log[k] = D.log[k] || { ms: 0, n: 0, ok: 0, ng: 0 }; }
+function logStart() { P.startAt = Date.now(); }
+function logTick() { if (P.playing && P.startAt) { const now = Date.now(); dayLog().ms += now - P.startAt; P.startAt = now; ls.set("data", D); } else P.startAt = P.playing ? Date.now() : 0; }
+setInterval(logTick, 15000);
+function logSent() { dayLog().n++; ls.set("data", D); }
+
+/* ── 재생 화면 ── */
+function drawPlay() {
+  if (!P.ch) { const c = D.chapters.find(x => x.sec === U.sec && x.items.length) || D.chapters.find(x => x.items.length); if (c) { P.list = [c.id]; loadCh(0); } }
+  const c = P.ch, W = !!(c && c.sec === "word"), un = W ? "단어" : "문장";
+  let h = `<div class="pv"><div><div class="stagep" id="stg"></div><div class="ctl"><button data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button><button class="big" data-a="pp" id="ppb" aria-label="재생"></button><button data-a="next" aria-label="다음 문장">${svg(IC.next)}</button><button class="st" data-a="starcur" id="stb" aria-label="어려운 문장">${svg(IC.star)}</button></div><div class="tst" id="tst"></div>`;
+  h += `<div class="card qlist"><div class="lab"><span>${c ? esc(c.name) : "챕터 없음"}${P.list.length > 1 ? ` · ${P.li + 1}/${P.list.length}번째 챕터` : ""}</span><span>${SET.shuffle ? "섞어서" : "차례대로"}</span></div><div id="ql"></div></div></div>`;
+  h += `<div class="opt card"><div><div class="lab">연습 방법 · ${W ? "단어" : "회화"}</div>${W ? `<div class="seg" data-k="wmode">${WMODES.map(([k, t]) => `<button data-v="${k}" class="${SET.wmode === k ? "on" : ""}">${t}</button>`).join("")}</div>` : `<div class="seg" data-k="mode">${MODES.map(([k, t]) => `<button data-v="${k}" class="${SET.mode === k ? "on" : ""}">${t}</button>`).join("")}</div>`}</div>
+    <div><div class="lab">${W ? "단어 따라 말하기" : "영어 반복"}</div><div class="seg" data-k="reps">${[1, 2, 3].map(n => `<button data-v="${n}" class="${SET.reps === n ? "on" : ""}">${n}번</button>`).join("")}</div></div>
+    <div><div class="lab">생각 시간</div><div class="seg" data-k="think">${[["auto", "자동"], ["3", "3초"], ["5", "5초"], ["8", "8초"]].map(([k, t]) => `<button data-v="${k}" class="${String(SET.think) === k ? "on" : ""}">${t}</button>`).join("")}</div>${SET.think === "auto" ? `<div class="seg" data-k="thinkF" style="margin-top:6px">${[[0.7, "짧게"], [1, "보통"], [1.4, "넉넉히"]].map(([k, t]) => `<button data-v="${k}" class="${SET.thinkF === k ? "on" : ""}">${t}</button>`).join("")}</div>` : ""}</div>
+    <div><div class="lab">말 빠르기</div><div class="seg" data-k="speed">${[[0.8, "느리게"], [0.9, "조금 느리게"], [1, "보통"], [1.1, "빠르게"]].map(([k, t]) => `<button data-v="${k}" class="${SET.speed === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
+    <div><div class="lab">다 들으면</div><div class="seg" data-k="loop">${[["off", "멈춤"], ["chapter", "이 챕터 반복"], ["list", "목록 반복"]].map(([k, t]) => `<button data-v="${k}" class="${SET.loop === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
+    <label class="tg"><input type="checkbox" data-t="faster" ${SET.faster ? "checked" : ""}><span>반복할수록 조금씩 빠르게</span></label>
+    ${W ? `<label class="tg"><input type="checkbox" data-t="spell" ${SET.spell ? "checked" : ""}><span>철자 불러 주기 (F, I, G…)</span></label><label class="tg"><input type="checkbox" data-t="wex" ${SET.wex ? "checked" : ""}><span>예문도 듣기</span></label><div style="margin-top:6px"><div class="lab">예문 반복 (예문마다)</div><div class="seg" data-k="exReps">${[1, 2, 3].map(n => `<button data-v="${n}" class="${(+SET.exReps || 1) === n ? "on" : ""}">${n}번</button>`).join("")}</div></div>` : ""}
+    <label class="tg"><input type="checkbox" data-t="shuffle" ${SET.shuffle ? "checked" : ""}><span>${un} 섞기</span></label>
+    <label class="tg"><input type="checkbox" data-t="reveal" ${SET.reveal ? "checked" : ""}><span>${W ? "답(뜻 · 단어)은 들릴 때 보이기" : "영어는 들릴 때 보이기(먼저 가리기)"}</span></label>
+    <label class="tg"><input type="checkbox" data-t="autoStar" ${SET.autoStar ? "checked" : ""}><span>시험에서 ${W ? "모르는 단어" : "틀린 문장"}는 ☆로</span></label>
+    ${engineNote()}</div></div>`;
+  $("#main").innerHTML = h; paintPlay();
+}
+function engineNote() {
+  if (SET.engine === "azkey") return `<div class="engine az"><b>고품질 음성(내 Azure 키)</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 넘겨요.</div>`;
+  if (SET.engine === "azure") return `<div class="engine az"><b>고품질 음성</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 문장을 넘겨요.</div>`;
+  return `<div class="engine"><b>기기 음성</b> — 인터넷 없이 바로 들려요. 대신 <b>화면을 켜 두어야</b> 해요(재생 중 화면이 꺼지지 않게 막아 둠 · 전원 단추로 끄면 그 문장에서 멈춰요). 화면을 끄고 들으려면 설정 → 음성 → 「내 Azure 키」.</div>`;
+}
+const isCur = id => !!(P.ch && P.ch.id === id);
+function paintCards() {
+  $$('.pl[data-a="play1"]').forEach(b => { const on = isCur(b.dataset.id) && P.playing; b.innerHTML = svg(on ? IC.pause : IC.play); b.setAttribute("aria-label", on ? "멈추기" : "듣기"); });
+}
+function paintMini() {
+  const mi = $("#mini"); if (!mi) return;
+  const it = curIt(), show = !!(P.ch && it && P.started && U.scr !== "play");
+  mi.hidden = !show; document.body.classList.toggle("hasmini", show);
+  if (!show) return;
+  const n = P.queue.length, ph = P.playing && P.phase ? (PHN[P.phase] || "") : "";
+  mi.innerHTML = `<div class="mini-in"><div class="mini-bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div>
+    <button class="mini-tx" data-nav="play" aria-label="듣기 화면 열기"><small><span>${esc(P.ch.name)}</span><span class="num">${P.qi + 1} / ${n}</span><em class="${P.playing ? "live" : ""}">${P.playing ? (ph || "재생 중") : "멈춤"}</em></small><b>${esc(P.ch.sec === "word" ? it.en + " · " + it.ko : P.mode === "e2k" ? it.en : it.ko)}</b></button>
+    <button class="mb" data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button>
+    <button class="mb mpp" data-a="pp" aria-label="${P.playing ? "멈추기" : "재생"}">${svg(P.playing ? IC.pause : IC.play)}</button>
+    <button class="mb" data-a="next" aria-label="다음 문장">${svg(IC.next)}</button></div>`;
+}
+function paintPlay() {
+  paintMini(); paintCards();
+  const stg = $("#stg"); if (!stg) return;
+  const it = curIt(), c = P.ch;
+  if (!it) { stg.innerHTML = `<div class="ko" style="margin:auto 0">챕터를 골라 주세요</div>`; $("#ppb").innerHTML = svg(IC.play); return; }
+  const n = P.queue.length;
+  const foot = `<div class="count"><div class="bar"><i style="width:${(P.qi + 1) * 100 / n}%"></i></div><span class="num" style="font-size:13px;color:var(--deeps)">${modeName(P.mode)} · ${isAz() ? "고품질" : "기기 음성"}</span></div>`;
+  if (c.sec === "word") stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="wdx" id="pwd">${esc(it.en)}</div><div class="mnx" id="pmn">${esc(it.ko)}</div>${it.ex || it.ex2 ? `<div class="exx" id="pex">${[[it.ex, it.exk], [it.ex2, it.exk2]].filter(x => x[0]).map(([e, k]) => `<p>${esc(e)}${k ? `<small>${esc(k)}</small>` : ""}</p>`).join("")}</div>` : ""}${foot}`;
+  else stg.innerHTML = `<div class="top"><span><b>${esc(c.name)}</b></span><span class="num">${P.qi + 1} / ${n}</span></div><div class="phase" id="phs"></div><div class="ko" id="pko">${esc(P.mode === "e2k" ? "" : it.ko)}</div><div class="en" id="pen">${esc(it.en)}</div>${foot}`;
+  $("#ppb").innerHTML = svg(P.playing ? IC.pause : IC.play); $("#ppb").setAttribute("aria-label", P.playing ? "멈추기" : "재생");
+  const [, real] = findItem(it.id); $("#stb").classList.toggle("on", !!(real || it).star);
+  const ql = $("#ql"); if (ql) { ql.innerHTML = P.queue.map((x, i) => `<button class="qi${i === P.qi ? " on" : ""}" data-a="goq" data-i="${i}"><span class="n num">${i + 1}</span><span class="tx">${c.sec === "word" ? `<b>${esc(x.en)}</b><small>${esc(x.ko)}</small>` : `<b>${esc(x.ko)}</b><small>${esc(x.en)}</small>`}</span>${x.star ? `<span class="s">${svg(IC.star).replace('class="i"', 'class="i" style="fill:currentColor"')}</span>` : ""}</button>`).join(""); }
+  paintPhase();
+}
+function paintPhase() {
+  const em = $("#mini .mini-tx em"); if (em && P.playing) { em.textContent = PHN[P.phase] || "재생 중"; em.className = "live"; }
+  const ph = $("#phs"); if (!ph) return; const it = curIt(); if (!it) return;
+  const L = phaseList(P.mode);
+  ph.innerHTML = L.map(k => `<i class="${P.phase === k ? "on" : ""}">${PHN[k]}${k === "think" && P.phase === "think" ? " · 말해 보세요" : ""}</i>`).join("");
+  const order = L.indexOf(P.phase), en = $("#pen"), ko = $("#pko");
+  if (P.ch && P.ch.sec === "word") {
+    const hid = at => SET.reveal && P.playing && at >= 0 && order < at && P.phase !== "next";
+    const wd = $("#pwd"), mn = $("#pmn"), ex = $("#pex");
+    if (wd) wd.classList.toggle("hide", hid(L.findIndex(k => k === "word" || k === "r1")));
+    if (mn) mn.classList.toggle("hide", hid(L.indexOf("mean")));
+    if (ex) ex.classList.toggle("dim", P.playing && L.includes("ex") && order < L.indexOf("ex") && P.phase !== "next");
+  }
+  if (en) { const enAt = P.mode === "e2k" ? 0 : L.findIndex(k => /^en/.test(k)); en.classList.toggle("hide", SET.reveal && P.playing && order < enAt && P.phase !== "next"); }
+  if (ko && P.mode === "e2k") ko.textContent = (!P.playing || order >= L.indexOf("ko") || P.phase === "next") ? it.ko : "";
+  const t = $("#tst"); if (t) t.innerHTML = P.mode === "wtest" ? `<button class="ok" data-a="judge" data-v="1">${svg(IC.check)} 알아요</button><button class="ng" data-a="judge" data-v="0">${svg(IC.x)} 몰라요</button>` : P.mode === "test" ? `<button class="ok" data-a="judge" data-v="1">${svg(IC.check)} 맞혔어요</button><button class="ng" data-a="judge" data-v="0">${svg(IC.x)} 못 했어요</button>` : "";
+}
+
+/* ── 기록 화면 ── */
+function drawStat() {
+  const days = []; for (let i = 13; i >= 0; i--) days.push(addD(todayS(), -i));
+  const mins = k => Math.round(((D.log[k] || {}).ms || 0) / 60000);
+  let streak = 0; for (let i = 0; ; i++) { const k = addD(todayS(), -i); if ((D.log[k] || {}).n) streak++; else if (i > 0 || !(D.log[k] || {}).n) { if (i === 0) continue; break; } if (i > 400) break; }
+  const wk = days.slice(-7).reduce((s, k) => s + mins(k), 0), all = Object.values(D.log).reduce((s, l) => s + (l.n || 0), 0);
+  const ok = Object.values(D.log).reduce((s, l) => s + (l.ok || 0), 0), ng = Object.values(D.log).reduce((s, l) => s + (l.ng || 0), 0);
+  const mx = Math.max(10, ...days.map(mins));
+  let h = `<div class="vh"><div><h2>공부 기록</h2><p>${ymdw(todayS())} 기준</p></div></div><div class="kp"><div><small>연속 공부</small><b class="num">${streak}일</b></div><div><small>최근 7일</small><b class="num">${wk}분</b></div><div><small>들은 문장(누적)</small><b class="num">${all.toLocaleString()}</b></div><div><small>시험 맞힌 비율</small><b class="num">${ok + ng ? Math.round(ok * 100 / (ok + ng)) + "%" : "–"}</b></div></div>`;
+  h += `<div class="card" style="margin-bottom:14px"><div class="lab"><span>최근 14일 들은 시간(분)</span></div><div class="days">${days.map(k => `<div><i class="${mins(k) ? "" : "z"}" style="height:${Math.max(2, mins(k) * 100 / mx)}%" title="${ymdw(k)} ${mins(k)}분"></i><span class="num">${+k.slice(8)}</span></div>`).join("")}</div></div>`;
+  h += `<div class="card"><div class="lab"><span>챕터별</span></div><table class="tbl"><thead><tr><th>구분</th><th>챕터</th><th>개수</th><th>시험</th><th>☆</th><th>복습</th></tr></thead><tbody>${D.chapters.map(c => { const o = c.items.reduce((s, i) => s + (i.ok || 0), 0), g = c.items.reduce((s, i) => s + (i.ng || 0), 0); return `<tr><td>${SECN[c.sec]}</td><td>${esc(c.name)}</td><td class="num">${c.items.length}</td><td class="num">${o + g ? Math.round(o * 100 / (o + g)) + "%" : "–"}</td><td class="num">${c.items.filter(i => i.star).length}</td><td>${rvLabel(c)}</td></tr>`; }).join("")}</tbody></table></div>`;
+  $("#main").innerHTML = h;
+}
+
+/* ── 설정 ── */
+const KEY_HELP = "https://luvbong.tistory.com/837";  /* 「화면 끄고 듣기 — Azure 무료 음성 키 넣는 법」 글 주소가 정해지면 바꿈 */
+function azVoiceSel() { return `<div class="lab" style="margin-top:10px">한국어 목소리</div><select class="inp" data-s="azKo">${AZV.ko.map(([k, t]) => `<option value="${k}" ${SET.azKo === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+    <div class="lab" style="margin-top:10px">영어 목소리</div><select class="inp" data-s="azEn">${AZV.en.map(([k, t]) => `<option value="${k}" ${SET.azEn === k ? "selected" : ""}>${t}</option>`).join("")}</select>`; }
+const AZV = { ko: [["ko-KR-SunHiNeural", "선희(여)"], ["ko-KR-InJoonNeural", "인준(남)"], ["ko-KR-JiMinNeural", "지민(여)"], ["ko-KR-BongJinNeural", "봉진(남)"], ["ko-KR-YuJinNeural", "유진(여)"]],
+  en: [["en-US-JennyNeural", "Jenny · 미국(여)"], ["en-US-GuyNeural", "Guy · 미국(남)"], ["en-US-AriaNeural", "Aria · 미국(여)"], ["en-US-DavisNeural", "Davis · 미국(남)"], ["en-GB-SoniaNeural", "Sonia · 영국(여)"], ["en-GB-RyanNeural", "Ryan · 영국(남)"], ["en-AU-NatashaNeural", "Natasha · 호주(여)"]] };
+async function drawSet() {
+  const s = SYNC ? SYNC.state() : {}, on = !!SET.gdOn;
+  const st = !on ? ["", "연결 안 됨"] : s.busy ? ["", "동기화 중"] : s.live ? ["ok", "연결됨"] : ["", "쉬는 중"];
+  const vk = VOICES.filter(v => /^ko/i.test(v.lang)), ve = VOICES.filter(v => /^en/i.test(v.lang));
+  const mk = todayS().slice(0, 7);
+  let h = `<div class="vh"><div><h2>설정</h2><p>영어 노트 v${APP_VER}</p></div></div><div class="setg">`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.head)}음성</div><div class="seg" data-k="engine" style="margin-bottom:10px"><button data-v="device" class="${SET.engine === "device" ? "on" : ""}">기기 음성</button><button data-v="azkey" class="${SET.engine === "azkey" ? "on" : ""}">내 Azure 키</button>${SERVER_OK ? `<button data-v="azure" class="${SET.engine === "azure" ? "on" : ""}">내 음성 서버</button>` : ""}</div>`;
+  if (SET.engine === "device") {
+    h += `<p>휴대폰 · PC에 들어 있는 음성이에요. 인터넷 없이 바로 되지만 <b>화면을 켜 두어야</b> 들려요.</p>
+    <div class="lab">한국어 목소리</div><select class="inp" data-s="vKo"><option value="">자동</option>${vk.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vKo === v.voiceURI ? "selected" : ""}>${esc(v.name)}</option>`).join("")}</select>
+    <div class="lab" style="margin-top:10px">영어 목소리</div><select class="inp" data-s="vEn"><option value="">자동</option>${ve.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vEn === v.voiceURI ? "selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select>
+    <div class="row" style="margin-top:10px"><button class="btn sm" data-a="vtest" data-v="ko">한국어 들어 보기</button><button class="btn sm" data-a="vtest" data-v="en">영어 들어 보기</button></div>
+    <label class="tg" style="margin-top:8px"><input type="checkbox" data-t="keep" ${SET.keep ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>
+    <p class="hint">기기 음성은 화면이 꺼지면 휴대폰이 소리를 막아요. 그래서 화면이 꺼지면 그 문장에서 멈추고, 다시 켜면 ▶로 이어 들을 수 있어요. 화면을 끄고 들으려면 「내 Azure 키」를 쓰세요.</p>`;
+  } else if (SET.engine === "azkey") {
+    const n = await idbCount(), RG = [["koreacentral", "한국 중부 (koreacentral)"], ["japaneast", "일본 동부 (japaneast)"], ["eastasia", "동아시아 (eastasia)"], ["southeastasia", "동남아시아 (southeastasia)"], ["eastus", "미국 동부 (eastus)"], ["westus2", "미국 서부 2 (westus2)"], ["westeurope", "서유럽 (westeurope)"]];
+    h += `<p>마이크로소프트 Azure의 고품질 음성을 <b>내 무료 키</b>로 바로 받아요. 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 재생되고, 한 번 받은 음성은 이 기기에 저장해 다시 써요.</p>
+    <div class="lab">Azure 음성 키 <a href="${KEY_HELP}" target="_blank" rel="noopener">키 받는 방법 ↗</a></div><input class="inp" data-s="azMyKey" type="password" value="${esc(SET.azMyKey)}" placeholder="Azure 「키 및 엔드포인트」의 키 1" autocomplete="off" spellcheck="false">
+    <div class="lab" style="margin-top:10px">지역 (키를 만든 곳)</div><select class="inp" data-s="azRegion">${RG.map(([k, t]) => `<option value="${k}" ${SET.azRegion === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+    ${azVoiceSel()}
+    <div class="lab" style="margin-top:10px">한 달 한도 (넘으면 멈춤)</div><select class="inp" data-s="azCap">${[100000, 200000, 300000, 450000].map(v => `<option value="${v}" ${+SET.azCap === v ? "selected" : ""}>${v.toLocaleString()}자${v === 450000 ? " (무료 50만 자 안쪽 · 추천)" : ""}</option>`).join("")}</select>
+    <div class="row" style="margin-top:10px"><button class="btn sm" data-a="aztest">${svg(IC.key)}연결 · 음성 확인</button><button class="btn sm" data-a="azclr">저장한 음성 지우기</button>${SET.azMyKey ? `<button class="btn sm red" data-a="azkeyclr">키 지우기</button>` : ""}</div>
+    <p class="hint">이번 달 ${(SET.azChars[mk] || 0).toLocaleString()}자 사용 · 저장한 음성 ${n.toLocaleString()}개 (한글은 2자로 셈)<br>· 키는 <b>이 기기에만</b> 저장돼요 — 구글 드라이브 · 백업 파일에는 들어가지 않아요. 공용 휴대폰 · PC에서는 쓰지 마세요.<br>· 이 방식을 쓰면 문장이 마이크로소프트 Azure로 보내져 음성이 돼요.<br>· 무료(F0)는 한 달 50만 자까지예요. 넘으면 그달은 멈추고 돈은 나가지 않아요(키를 만들 때 「Free F0」를 골랐을 때).</p>`;
+  } else {
+    const n = await idbCount();
+    h += `<p>Azure 음성을 <b>내 서버(EC2)</b>를 거쳐 받아요. 챕터 하나를 한 파일로 만들어 <b>화면을 꺼도</b> 재생돼요. 한 번 받은 문장은 이 기기에 저장해 두고 다시 써요(바뀐 문장만 새로 받음).</p>
+    <div class="lab">음성 서버 주소</div><input class="inp" data-s="azUrl" value="${esc(SET.azUrl)}" placeholder="https://내서버주소" spellcheck="false" inputmode="url">
+    <div class="lab" style="margin-top:10px">앱 암호(서버에 정한 것)</div><input class="inp" data-s="azKey" type="password" value="${esc(SET.azKey)}" placeholder="서버 설정의 APP_KEY" autocomplete="off">
+    ${azVoiceSel()}
+    <div class="row" style="margin-top:10px"><button class="btn sm" data-a="aztest">연결 · 음성 확인</button><button class="btn sm" data-a="azclr">저장한 음성 지우기</button></div>
+    <p class="hint">저장한 문장 음성 ${n.toLocaleString()}개 · 이번 달 이 기기에서 새로 받은 글자 약 ${(SET.azChars[mk] || 0).toLocaleString()}자 (한글은 2자로 셈 · Azure 무료 F0 = 한 달 50만 자)<br>내 서버(EC2 · ttsproxy)를 거쳐 받아요 — Azure 키는 서버에만 있어요.</p>`;
+  }
+  h += `</div>`;
+  const miss = baseChapters().filter(b => !D.chapters.some(c => c.id === b.id)).length;
+  h += `<div class="sc"><div class="sh2">${svg(IC.book)}기본 자료</div><p>Blog J가 넣어 둔 실전 표현이에요 — 회화 ${BASE_TALK.length}챕터(상황별) · 단어 ${BASE_WORD.length}챕터(분야별), 챕터마다 20개. 고치거나 지워도 되고, 지운 챕터는 여기서 다시 넣을 수 있어요(고친 챕터는 그대로 둠).</p>${miss ? `<button class="btn go" data-a="baseadd">${svg(IC.plus)}지운 기본 챕터 ${miss}개 다시 넣기</button>` : `<p class="hint" style="margin:0">기본 챕터가 모두 들어 있어요.</p>`}</div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록을 내 구글 드라이브 「영어노트」 폴더에 저장해요. PC에서 문장을 넣고 휴대폰에서 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
+  if (!MOB()) h += `<div class="sc"><div class="sh2">${svg(IC.phone)}휴대폰에서도 쓰기</div><div class="qrw"><div class="qr">${QR_SVG}</div><p>휴대폰 카메라로 찍으면 설치 화면이 열려요. 휴대폰에서도 <b>같은 구글 계정</b>으로 드라이브를 연결하면 PC에서 넣은 문장이 그대로 들어와요.</p></div></div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.dl)}백업</div><p>모든 챕터 · 기록을 파일 하나로 받아 두고 되살릴 수 있어요.${SET.bkAt ? `<br><span class="num">마지막 백업 ${ymdw(ymdT(SET.bkAt))} ${hm(SET.bkAt)}</span>` : ""}</p><div class="row"><button class="btn" data-a="bk" data-v="make">${svg(IC.dl)}백업 만들기</button><button class="btn" data-a="bk" data-v="restore">${svg(IC.upl)}되살리기</button></div></div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.phone)}앱으로 설치</div><p>${INST.standalone ? "지금 설치한 앱으로 쓰고 있어요." : "홈 화면 · 바탕 화면에 아이콘으로 두고 바로 열 수 있어요."}</p>${INST.standalone ? "" : `<button class="btn go" data-a="inst">${svg(IC.phone)}설치하기</button>`}</div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.help)}알아 두세요</div><p>· 앱이 닫혀 있을 때는 복습 알림을 보내지 못해요 — 열 때 「오늘 복습할 챕터」를 보여 드려요.<br>· 기기 음성은 화면이 꺼지면 멈출 수 있어요(휴대폰이 앱을 재움). 운전 · 걷기 중에는 「내 Azure 키」를 쓰세요.<br>· 기본 회화 · 단어는 Blog J가 직접 쓴 문장이에요. 같은 뜻을 다르게 말하는 방법도 많아요.<br>· 내 목소리 녹음 · 비교는 다음 버전에 넣을 예정이에요.</p><p style="font-size:12.5px">${BUILD}</p></div>`;
+  if (U.scr !== "set") return; $("#main").innerHTML = h + `</div>`;
+}
+
+/* ── 단어장 인쇄 (A4 · 뜻 가리기 / 단어 가리기) ── */
+function openPrint(id) {
+  const c = chById(id); if (!c) return; const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
+  sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>단어장 인쇄 — ${esc(c.name)}</b><button class="btn sm" data-a="close">닫기</button></div>
+  <div class="lab">가리기</div><div class="seg" id="prHide"><button data-v="none" class="on">모두 보이기</button><button data-v="mean">뜻 가리기</button><button data-v="word">단어 가리기</button></div>
+  <label class="tg" style="margin-top:10px"><input type="checkbox" id="prEx" checked><span>예문 넣기</span></label>
+  <p class="hint">가린 칸은 빈칸으로 나와요 — 직접 써 보고 접어서 확인해요. A4 · 실제 크기(100%)로 인쇄하세요.</p>
+  <button class="btn go full" data-a="printgo" data-id="${c.id}">${svg(IC.print)}인쇄하기</button></div>`;
+  $("#prHide").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $$("#prHide button").forEach(x => x.classList.toggle("on", x === b)); });
+}
+function printWords(id) {
+  const c = chById(id), hide = ($("#prHide .on") || {}).dataset.v || "none", ex = $("#prEx") && $("#prEx").checked;
+  let p = $("#prt"); if (!p) { p = document.createElement("div"); p.id = "prt"; document.body.appendChild(p); }
+  p.innerHTML = `<h1>${esc(c.name)}</h1><p class="prs">영어 노트 · ${ymdw(todayS())} · ${c.items.length}단어</p><table><thead><tr><th>#</th><th>단어</th><th>뜻</th>${ex ? "<th>예문</th>" : ""}</tr></thead><tbody>${c.items.map((it, i) => `<tr><td>${i + 1}</td><td class="w">${hide === "word" ? "" : esc(it.en)}</td><td>${hide === "mean" ? "" : esc(it.ko)}</td>${ex ? `<td class="e">${[[it.ex, it.exk], [it.ex2, it.exk2]].filter(x => x[0]).map(([e, k]) => `${esc(e)}${k ? `<br><small>${esc(k)}</small>` : ""}`).join("<br>")}</td>` : ""}</tr>`).join("")}</tbody></table><p class="prf">Blog J · 영어 노트</p>`;
+  $("#sheet").hidden = true; document.body.classList.add("printing");
+  const done = () => { document.body.classList.remove("printing"); removeEventListener("afterprint", done); };
+  addEventListener("afterprint", done); setTimeout(() => { window.print(); setTimeout(done, 1500); }, 60);
+}
+
+/* ── 백업 · 합치기 ── */
+function exportObj() { return { app: "bj-eng", v: 1, at: Date.now(), chapters: D.chapters, log: D.log, gone: D.gone }; }
+function mergeIn(o) {
+  if (!o || o.app !== "bj-eng") throw new Error("영어 노트 자료가 아니에요");
+  let n = 0; const gone = Object.assign({}, D.gone);
+  Object.entries(o.gone || {}).forEach(([id, ts]) => { if (!gone[id] || ts > gone[id]) gone[id] = ts; });
+  const m = new Map(D.chapters.map(c => [c.id, c]));
+  (o.chapters || []).forEach(c => { const a = m.get(c.id); if (!a || (c.at || 0) > (a.at || 0)) { m.set(c.id, c); n++; } });
+  D.chapters = [...m.values()].filter(c => !(gone[c.id] && gone[c.id] >= (c.at || 0)));
+  Object.entries(o.log || {}).forEach(([k, l]) => { const a = D.log[k]; if (!a) D.log[k] = l; else ["ms", "n", "ok", "ng"].forEach(f => a[f] = Math.max(a[f] || 0, l[f] || 0)); });
+  D.gone = gone; ls.set("data", D); return n;
+}
+function dl(b, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); }
+function backupMake() {
+  const b = new Blob([JSON.stringify(exportObj(), null, 1)], { type: "application/json" }), name = `영어노트_백업_${todayS()}.json`, f = new File([b], name, { type: "application/json" });
+  (async () => { if (MOB() && navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f] }); } catch (er) { if (er.name === "AbortError") return; } } else dl(b, name);
+    SET.bkAt = Date.now(); saveSet(); toast("백업 파일을 만들었어요"); render(); })();
+}
+function backupPick() { const ip = document.createElement("input"); ip.type = "file"; ip.accept = ".json,application/json"; ip.onchange = async () => { const f = ip.files[0]; if (!f) return; try { const n = mergeIn(JSON.parse(await f.text())); touch(); toast(`되살렸어요 — 챕터 ${n}개 반영`); go("home"); } catch (er) { toast("되살리지 못했어요 — " + er.message); } }; ip.click(); }
+
+/* ── 구글 드라이브 ── */
+const GD_CLIENT_ID = "1095236828916-e34rv7f2fn8am0d1shbtg50l5h6dohbb.apps.googleusercontent.com", GD_SCOPE = "https://www.googleapis.com/auth/drive.file", GDF = "영어노트", GDJ = "영어노트.json";
+const GD = { fid: null, busy: false, toastNext: false };
+const gdHttp = () => location.protocol === "https:" || location.hostname === "localhost";
+async function gdApi(url, opt = {}) {
+  const t = await SYNC.token(false);
+  const r = await fetch(url.startsWith("http") ? url : "https://www.googleapis.com/drive/v3/" + url, { ...opt, headers: { ...(opt.headers || {}), Authorization: "Bearer " + t } });
+  if (r.status === 401) { SYNC.invalidate(); throw Object.assign(new Error("401"), { status: 401 }); }
+  if (!r.ok) { let m = r.status + ""; try { const j = await r.json(); m = (j.error && j.error.message) || m; } catch (e) {} throw new Error("드라이브 응답 오류: " + m); }
+  return r;
+}
+const gq = s => encodeURIComponent(s);
+async function gdFolder() {
+  if (GD.fid) return GD.fid;
+  const r = await (await gdApi(`files?q=${gq(`name='${GDF}' and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id,name)&spaces=drive`)).json();
+  if (r.files && r.files.length) return GD.fid = r.files[0].id;
+  const c = await (await gdApi("files?fields=id", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: GDF, mimeType: "application/vnd.google-apps.folder" }) })).json();
+  return GD.fid = c.id;
+}
+async function gdFile() { const fid = await gdFolder(); const r = await (await gdApi(`files?q=${gq(`'${fid}' in parents and name='${GDJ}' and trashed=false`)}&fields=files(id,modifiedTime)`)).json(); return r.files && r.files[0] || null; }
+async function gdSync(opt = {}) {
+  if (GD.busy) return; GD.busy = true; paintSync();
+  try {
+    const f = await gdFile(); let n = 0;
+    if (f) { const o = await (await gdApi(`files/${f.id}?alt=media`)).json(); n = mergeIn(o); }
+    const fd = new FormData(); fd.append("metadata", new Blob([JSON.stringify(f ? {} : { name: GDJ, parents: [await gdFolder()] })], { type: "application/json" })); fd.append("file", new Blob([JSON.stringify(exportObj())], { type: "application/json" }));
+    await gdApi(`https://www.googleapis.com/upload/drive/v3/files${f ? "/" + f.id : ""}?uploadType=multipart&fields=id,modifiedTime`, { method: f ? "PATCH" : "POST", body: fd });
+    if (!SET.gdEmail) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user) SET.gdEmail = a.user.emailAddress; } catch (er) {} }
+    SET.gdOn = true; SET.gdLast = Date.now(); saveSet();
+    if (opt.toast || GD.toastNext) toast(n ? `동기화했어요 — 챕터 ${n}개 받음` : "동기화했어요"); GD.toastNext = false;
+    if (n && $("#sheet").hidden && U.scr !== "play" && U.scr !== "edit") render();
+  } catch (e) { GD.busy = false; paintSync(); if (GD.toastNext) { GD.toastNext = false; if (!(e.status === 401 || e.code === "NEED_GESTURE")) toast("구글 드라이브: " + e.message); } throw e; }
+  GD.busy = false; paintSync();
+}
+/* 휴대폰 설치 앱: 같은 화면에서 구글로 갔다가 돌아옴
+   ※ 구글 클라우드 콘솔 → OAuth 클라이언트 → 「승인된 리디렉션 URI」에 https://pegasus0710-arch.github.io/jesa_tools/eng/ 등록 필요 */
+const GD_RE = () => MOB() && INST.standalone;
+function knownEmail() { try { const o = JSON.parse(localStorage.getItem("bj-gd-token") || "null"); if (o && o.m) return o.m; } catch (e) {} return ""; }
+function gdRedirect() {
+  if (!navigator.onLine) return toast("인터넷에 연결된 뒤 다시 눌러 주세요");
+  if (P.playing) stopAll();
+  const st = (SERVER_OK ? "j" : "g") + Math.random().toString(36).slice(2, 12); try { localStorage.setItem(LSK + "oauth", st); } catch (e) {}
+  const q = new URLSearchParams({ client_id: GD_CLIENT_ID, redirect_uri: location.origin + location.pathname.replace(/(index|jay)\.html$/, ""), response_type: "token", scope: GD_SCOPE, include_granted_scopes: "true", state: st });
+  const em = SET.gdEmail || knownEmail(); if (em) q.set("login_hint", em); if (!SET.gdOn) q.set("prompt", "consent");
+  toast("구글로 넘어가요 — 허용하면 이 화면으로 돌아와요");
+  setTimeout(() => location.assign("https://accounts.google.com/o/oauth2/v2/auth?" + q), 300);
+}
+function gdBack() {
+  const h = location.hash; if (!/access_token=|error=/.test(h)) return false;
+  const p = new URLSearchParams(h.slice(1)); let st0 = ""; try { st0 = localStorage.getItem(LSK + "oauth") || ""; localStorage.removeItem(LSK + "oauth"); } catch (e) {}
+  history.replaceState(null, "", location.pathname + location.search);
+  if (!st0 || p.get("state") !== st0) return false;
+  if (p.get("error")) { setTimeout(() => toast(p.get("error") === "access_denied" ? "구글 연결을 취소했어요" : "구글 연결을 못 했어요 — " + p.get("error")), 400); return false; }
+  try { localStorage.setItem("bj-gd-token", JSON.stringify({ t: p.get("access_token"), e: Date.now() + (+p.get("expires_in") || 3600) * 1000, m: SET.gdEmail || "" })); } catch (e) {}
+  SET.gdOn = true; saveSet(); GD.toastNext = true; U.scr = "set";
+  if (st0[0] === "j" && !SERVER_OK) { location.replace("jay.html"); return false; }   /* 제이 전용 파일에서 연결했으면 그쪽으로 돌아가기 */
+  return true;
+}
+async function gdAction(el) {
+  if (!gdHttp()) return toast("구글 드라이브는 인터넷 주소(https)에서 열었을 때만 돼요");
+  if (el.dataset.v === "sync") { GD.toastNext = true; if (GD_RE() && !SYNC.live() && !SYNC.restore()) return gdRedirect(); try { await SYNC.token(true); } catch (er) { return toast(er.message || "구글 연결에 실패했어요"); } return SYNC.run("manual"); }
+  if (GD_RE()) return gdRedirect();
+  try { await SYNC.token(true); } catch (er) { return toast(er && er.message ? "구글 연결 — " + er.message : "구글 연결을 못 했어요"); }
+  SET.gdOn = true; saveSet(); GD.toastNext = true; await SYNC.run("connect"); render();
+}
+function paintSync() {
+  const s = SYNC ? SYNC.state() : null; const dot = $("#gdot"); if (dot && s) { dot.className = "gdot " + (!s.on ? "" : s.busy ? "busy" : s.live ? "ok" : ""); dot.title = !s.on ? "구글 드라이브 연결 안 됨" : s.busy ? "동기화 중" : s.live ? "구글 드라이브 연결됨" : "구글 드라이브 쉬는 중"; }
+  let b = $("#syband"); const need = s && s.on && !s.live && (s.needGesture || s.pending) && U.scr !== "play";
+  if (!need) { if (b) b.remove(); } else { if (!b) { b = document.createElement("div"); b.id = "syband"; document.body.appendChild(b); } b.innerHTML = `<span>구글 드라이브 쉬는 중${s.pending ? " · 올릴 것 있음" : ""}</span><button type="button" ${GD_RE() ? 'data-a="gd" data-v="connect"' : 'data-bjs-band="gd"'}>다시 연결</button>`; }
+}
+let SYNC = null;
+
+/* ── 설치 ── */
+const INST = { ev: null, standalone: matchMedia("(display-mode: standalone)").matches || navigator.standalone === true };
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); INST.ev = e; });
+addEventListener("appinstalled", () => { INST.standalone = true; toast("설치했어요 — 홈 화면의 아이콘으로 여세요"); });
+function instGo() { if (INST.ev) { INST.ev.prompt(); INST.ev.userChoice.finally(() => { INST.ev = null; }); return; } openInstall(); }
+function openInstall() {
+  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua), sam = /SamsungBrowser/.test(ua), and = /Android/.test(ua);
+  const steps = ios ? ["사파리 아래쪽 「공유」 단추를 누르세요", "「홈 화면에 추가」를 누르세요", "오른쪽 위 「추가」"]
+    : sam ? ["오른쪽 아래 「≡」 메뉴", "「현재 페이지 추가」 → 「홈 화면」", "「추가」"]
+    : and ? ["오른쪽 위 「⋮」 메뉴", "「앱 설치」 또는 「홈 화면에 추가」", "「설치」"]
+    : ["주소창 오른쪽의 설치 아이콘을 누르세요", "없으면 「⋮」 → 「저장 및 공유」 → 「앱 설치」", "「설치」"];
+  const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
+  sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>앱으로 설치하기</b><button class="btn sm" data-a="close">닫기</button></div>
+  <div class="iapp"><img src="icon-192.png" alt="" width="56" height="56"><div><b>영어 노트</b><span>Blog J · 가입 없이</span></div></div>
+  ${INST.ev ? `<button class="btn go full" data-a="inst">${svg(IC.phone)}지금 설치하기</button>` : ""}
+  <ol class="isteps">${steps.map(s => `<li>${s}</li>`).join("")}</ol></div>`;
+}
+if ("serviceWorker" in navigator && gdHttp()) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+
+/* ── 누름 처리 ── */
+document.addEventListener("click", async e => {
+  const nv = e.target.closest("[data-nav]"); if (nv) { go(nv.dataset.nav); return; }
+  const sg = e.target.closest(".seg[data-k] button"); if (sg) {
+    const k = sg.parentElement.dataset.k, v = sg.dataset.v; SET[k] = /^-?[\d.]+$/.test(v) && k !== "think" ? +v : v; saveSet();
+    if (k === "engine") { stopAll(); P.built = null; drawSet(); return; }
+    if (U.scr === "play") { const was = P.playing; if (was) stopAll(); P.mode = modeOf(P.ch); P.built = null; drawPlay(); if (was) playPause(true); } else render();
+    return;
+  }
+  const el = e.target.closest("[data-a]"); if (!el) return; const a = el.dataset.a;
+  if (a === "close" || a === "exitno") { $("#sheet").hidden = true; $("#sheet").dataset.exit = ""; return; }
+  if (a === "exityes") { EXITING = true; stopAll(); $("#sheet").hidden = true; logTick(); try { history.go(-2); } catch (er) {} setTimeout(() => { try { window.close(); } catch (er) {} EXITING = false; }, 400); return; }
+  if (a === "sec") { U.sec = el.dataset.v; ls.set("sec", U.sec); U.sel.clear(); drawHome(); return; }
+  if (a === "newch") { const W = U.sec === "word"; const c = { id: uid(), sec: U.sec, name: `${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(x => x.sec === U.sec).length + 1}`, at: Date.now(), items: [W ? { id: uid(), ko: "", en: "", ex: "", exk: "", ex2: "", exk2: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }], rv: null }; D.chapters.push(c); touch(c); U.edit = c.id; go("edit"); return; }
+  if (a === "print") { if (U.scr === "edit") saveEdit(); return openPrint(el.dataset.id); }
+  if (a === "printgo") return printWords(el.dataset.id);
+  if (a === "baseadd") { const n = ensureBase(true); touch(); toast(`기본 챕터 ${n}개를 다시 넣었어요`); drawSet(); return; }
+  if (a === "azkeyclr") { if (!window.confirm("이 기기에 넣은 Azure 키를 지울까요?")) return; SET.azMyKey = ""; saveSet(); drawSet(); toast("키를 지웠어요"); return; }
+  if (a === "paste") return openPaste(el.dataset.id || "");
+  if (a === "pasteok") {
+    const W = !!el.dataset.w;
+    const items = W ? parseWords($("#pTxt").value).map(x => ({ id: uid(), ...x, star: false, ok: 0, ng: 0 })) : parsePaste($("#pTxt").value).map(([ko, en]) => ({ id: uid(), ko, en, star: false, ok: 0, ng: 0 }));
+    if (!items.length) return toast(W ? "알아본 단어가 없어요 — 단어와 뜻을 탭 · 「 | 」 · 「 - 」로 나눠 주세요" : "알아본 문장이 없어요 — 한글 · 영어를 탭이나 「 | 」로 나눠 주세요");
+    let c = el.dataset.id ? D.chapters.find(x => x.id === el.dataset.id) : null;
+    if (c) { if (U.scr === "edit") saveEdit(); c.items = c.items.filter(i => i.ko || i.en).concat(items); }
+    else { c = { id: uid(), sec: W ? "word" : "talk", name: ($("#pName").value || "").trim() || `챕터 ${D.chapters.length + 1}`, at: Date.now(), items, rv: null }; D.chapters.push(c); }
+    touch(c); $("#sheet").hidden = true; toast(`${items.length}${W ? "단어" : "문장"} 넣었어요`); U.edit = c.id; go("edit"); return;
+  }
+  if (a === "edit") { U.edit = el.dataset.id; go("edit"); return; }
+  /* 카드를 누르면 늘 듣기 화면(11-13 제이 — 편집은 연필 단추로만). 지금 듣던 챕터면 그대로 이어서 */
+  if (a === "open") { const id = el.dataset.id; if (isCur(id) && P.list.length === 1) { go("play"); return; } const was = P.playing; setList([id]); if (was) playPause(true); return; }
+  if (a === "sel") { const id = el.dataset.id; U.sel.has(id) ? U.sel.delete(id) : U.sel.add(id); drawHome(); return; }
+  if (a === "selclr") { U.sel.clear(); drawHome(); return; }
+  if (a === "playsel") { const ids = [...D.chapters.map(c => c.id), STAR.talk, STAR.word].filter(id => U.sel.has(id)); U.sel.clear(); setList(ids); return; }
+  if (a === "play1") { if (U.scr === "edit") saveEdit(); if (isCur(el.dataset.id) && P.started && P.list.length === 1 && U.scr === "home") return playPause(); setList([el.dataset.id]); return; }
+  if (a === "playrv") { setList(dueList().map(c => c.id)); return; }
+  if (a === "addit") { saveEdit(); const c = chById(U.edit), W = c.sec === "word"; c.items.push(W ? { id: uid(), ko: "", en: "", ex: "", exk: "", ex2: "", exk2: "", star: false, ok: 0, ng: 0 } : { id: uid(), ko: "", en: "", star: false, ok: 0, ng: 0 }); touch(c); drawEdit(); const ins = $$(W ? "#its .wd2" : "#its .ko2"); ins[ins.length - 1].focus(); return; }
+  if (a === "delit") { saveEdit(); const c = chById(U.edit); c.items = c.items.filter(i => i.id !== el.dataset.id); touch(c); drawEdit(); return; }
+  if (a === "star") { if (U.scr === "edit") saveEdit(); toggleStar(el.dataset.id); if (U.scr === "edit") drawEdit(); return; }
+  if (a === "delch") { const c = chById(U.edit); if (!window.confirm(`「${c.name}」 챕터를 지울까요? (${c.items.length}${unitOf(c)})${c.base ? "\n기본 챕터는 설정 → 기본 자료에서 다시 넣을 수 있어요." : ""}`)) return; D.chapters = D.chapters.filter(x => x.id !== c.id); D.gone[c.id] = Date.now(); touch(); if (P.ch && P.ch.id === c.id) { stopAll(); P.ch = null; P.list = []; } go("home"); toast("지웠어요"); return; }
+  if (a === "pp") return playPause();
+  if (a === "next") return jump(1);
+  if (a === "prev") return jump(-1);
+  if (a === "goq") { const i = +el.dataset.i; if (isAz() && P.built) { jump(i - P.qi); } else { const was = P.playing; stopAll(); P.qi = i; P.phase = ""; paintPlay(); if (was) runDevice(); } return; }
+  if (a === "engset") { go("set"); setTimeout(() => { const sg = $(".seg[data-k=engine]"); if (sg) sg.scrollIntoView({ block: "center" }); }, 250); return; }
+  if (a === "starhelp") { toast(`듣기 화면의 ☆를 누르거나 시험에서 틀리면 여기 모여요`); return; }
+  if (a === "starcur") { const it = curIt(); if (it) { toggleStar(it.id); paintPlay(); toast(findItem(it.id)[1] && findItem(it.id)[1].star ? `☆ 어려운 ${unitOf(P.ch)}에 넣었어요` : "☆ 뺐어요"); } return; }
+  if (a === "judge") return judge(el.dataset.v === "1");
+  if (a === "cancel") { B.cancel = true; return; }
+  if (a === "vtest") { const ko = el.dataset.v === "ko"; P.tok++; sayDevice(ko ? "안녕하세요. 오늘도 영어 연습을 시작해 볼까요?" : "Hello. Shall we start practicing English today?", ko ? "ko" : "en", 1, P.tok); return; }
+  if (a === "aztest") { saveSetInputs(); try { const buf = await azGet("Hello. This is a voice test.", "en", 1, true); const ab = await decode(buf); const au = new Audio(URL.createObjectURL(new Blob([buf], { type: "audio/mpeg" }))); au.play(); toast(`연결됐어요 — ${ab.duration.toFixed(1)}초 음성`); } catch (er) { toast(er.message); } return; }
+  if (a === "azclr") { if (!window.confirm("이 기기에 저장한 문장 음성을 모두 지울까요?\n(다음에 들을 때 다시 받아요)")) return; await idbClear(); P.built = null; drawSet(); toast("지웠어요"); return; }
+  if (a === "gd") return gdAction(el);
+  if (a === "gdoff") { SET.gdOn = false; saveSet(); SYNC.invalidate(); render(); toast("연결을 끊었어요 — 드라이브의 자료는 그대로예요"); return; }
+  if (a === "bk") return el.dataset.v === "make" ? backupMake() : backupPick();
+  if (a === "inst") return instGo();
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.dataset.t) { SET[t.dataset.t] = t.checked; saveSet(); if (U.scr === "play") { const was = P.playing; if (["faster", "shuffle", "spell", "wex"].includes(t.dataset.t)) { if (was) stopAll(); if (t.dataset.t === "shuffle" && P.ch) loadCh(P.li); P.built = null; drawPlay(); if (was) playPause(true); } else paintPlay(); } return; }
+  if (t.dataset.s) { SET[t.dataset.s] = t.dataset.s === "azCap" ? +t.value : t.value.trim(); saveSet(); P.built = null; if (t.dataset.s === "azMyKey" && U.scr === "set") drawSet(); return; }
+  if (U.scr === "edit" && (t.dataset.f || t.id === "chName")) saveEdit();
+});
+function saveSetInputs() { $$("[data-s]").forEach(i => { SET[i.dataset.s] = i.dataset.s === "azCap" ? +i.value : i.value.trim(); }); saveSet(); }
+function saveEdit() {
+  const c = chById(U.edit); if (!c || c.virtual) return;
+  let ch = false; const nm = $("#chName"); if (nm && nm.value.trim() && nm.value.trim() !== c.name) { c.name = nm.value.trim(); ch = true; }
+  $$("#its .it").forEach(r => { const it = c.items.find(i => i.id === r.dataset.id); if (!it) return; ["ko", "en", "ex", "exk", "ex2", "exk2"].forEach(f => { const ip = r.querySelector(`[data-f="${f}"]`); if (!ip) return; const v = ip.value.trim(); if (v !== (it[f] || "")) { it[f] = v; ch = true; } }); });
+  if (ch) { touch(c); if (P.ch && P.ch.id === c.id) P.built = null; }
+}
+addEventListener("keydown", e => { if (U.scr === "play" && e.code === "Space" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); playPause(); } });
+addEventListener("pagehide", () => { if (U.scr === "edit") saveEdit(); logTick(); });
+
+/* ── 시작 ── */
+SYNC = BJSync.create({ app: "eng", clientId: GD_CLIENT_ID, scope: GD_SCOPE, isOn: () => !!SET.gdOn && gdHttp(), email: () => SET.gdEmail || knownEmail(),
+  sync: why => gdSync({ toast: why === "connect" || why === "manual" }),
+  remoteStamp: async () => { const f = await gdFile(); return f ? f.modifiedTime : null; },
+  paint: () => paintSync(), band: false, noSilent: () => GD_RE() });
+const q0 = new URLSearchParams(location.search);
+const gdBackOk = gdBack();
+if (q0.get("install") === "1" && !INST.standalone) setTimeout(openInstall, 600);
+render(); navInit(); SYNC.start(); paintSync();
+if (gdBackOk) setTimeout(() => { if (U.scr === "set") drawSet(); }, 1500);
+
+</script>
+</body></html>

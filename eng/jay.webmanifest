@@ -1,0 +1,30 @@
+{
+ "id": "/jesa_tools/eng/jay",
+ "name": "영어 노트(제이) — Blog J",
+ "short_name": "영어 노트 J",
+ "description": "실전 영어 회화 · 단어를 듣고 말하며 반복하는 학습 앱 — 화면을 꺼도 들을 수 있어요",
+ "start_url": "./jay.html",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#FAF6EE",
+ "theme_color": "#0B3D4A",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

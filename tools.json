@@ -62,7 +62,7 @@
      "q": "chukmun&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jesa.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jesa.png?v=1114"
   },
   {
    "name": "PDF 편집 도구",
@@ -85,7 +85,7 @@
      "q": "pdf&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/pdf.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/pdf.png?v=1114"
   },
   {
    "name": "이미지 도구",
@@ -108,7 +108,7 @@
      "q": "image&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/image.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/image.png?v=1114"
   },
   {
    "name": "차트 만들기",
@@ -129,7 +129,7 @@
      "q": "chart&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/chart.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/chart.png?v=1114"
   },
   {
    "name": "자기소개서 쓰기",
@@ -145,7 +145,7 @@
    "rank": 3,
    "open": "2026-10-24T09:00:00+09:00",
    "ver": "1.0",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jaso.png",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/jaso.png?v=1114",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/jaso/"
   },
   {
@@ -162,7 +162,7 @@
    "rank": 2,
    "open": "2026-10-22T09:00:00+09:00",
    "ver": "1.0",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/quote.png",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/quote.png?v=1114",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/quote/"
   },
   {
@@ -179,7 +179,7 @@
    "rank": 7,
    "open": "2026-09-19T09:00:00+09:00",
    "ver": "1.1",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/budget.png",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/budget.png?v=1114",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/budget/"
   },
   {
@@ -195,7 +195,7 @@
    "link": "https://luvbong.tistory.com/726",
    "open": "2026-09-19T09:00:00+09:00",
    "ver": "1.1",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/trading.png",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/trading.png?v=1114",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/trading/"
   },
   {
@@ -217,7 +217,7 @@
      "q": "yearend&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/yearend.png",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/yearend.png?v=1114",
    "rank": 8
   },
   {
@@ -234,7 +234,7 @@
    "open": "2026-10-29T09:00:00+09:00",
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/recipe/",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/recipe/icon-192.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/recipe/icon-192.png?v=1114"
   },
   {
    "name": "김치 양념 계산기",
@@ -255,7 +255,7 @@
      "q": "kimchi&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/kimchi.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/kimchi.png?v=1114"
   },
   {
    "name": "라벨 출력기",
@@ -279,7 +279,7 @@
      "q": "label&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/label.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/label.png?v=1114"
   },
   {
    "name": "달력 만들기",
@@ -300,7 +300,7 @@
      "q": "calendar&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/calendar.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/calendar.png?v=1114"
   },
   {
    "name": "다이어리 속지 만들기",
@@ -321,7 +321,7 @@
      "q": "planner&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/planner.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/planner.png?v=1114"
   },
   {
    "name": "파일 변환",
@@ -342,7 +342,7 @@
      "q": "convert&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/convert.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/convert.png?v=1114"
   },
   {
    "name": "무료 아이콘",
@@ -363,7 +363,7 @@
      "q": "icon&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/icon.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/icon.png?v=1114"
   },
   {
    "name": "무료 양식",
@@ -384,7 +384,7 @@
      "q": "form&tab=all"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/form.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/form.png?v=1114"
   },
   {
    "name": "쓰기 연습장",
@@ -413,7 +413,7 @@
      "q": "write&tab=en"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/write.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/write.png?v=1114"
   },
   {
    "name": "여행 노트",
@@ -429,7 +429,7 @@
    "app": "https://pegasus0710-arch.github.io/jesa_tools/trip/",
    "ver": "1.0",
    "open": "2026-11-09T21:27:00+09:00",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/trip/icon-192.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/trip/icon-192.png?v=1114"
   },
   {
    "name": "스크랩 노트",
@@ -445,7 +445,7 @@
    "app": "https://pegasus0710-arch.github.io/jesa_tools/scrap/",
    "ver": "1.0",
    "open": "2026-11-14T09:00:00+09:00",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/scrap/icon-192.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/scrap/icon-192.png?v=1114"
   },
   {
    "name": "일기 노트",
@@ -461,7 +461,7 @@
    "open": "2026-11-20T09:00:00+09:00",
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/diary/",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/diary/icon-192.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/diary/icon-192.png?v=1114"
   },
   {
    "name": "문자 · 인사말",
@@ -477,7 +477,7 @@
    "open": "2026-11-23T09:00:00+09:00",
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/msg/",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/msg/icon-192.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/msg/icon-192.png?v=1114"
   },
   {
    "name": "사진 뷰어",
@@ -493,7 +493,7 @@
    "app": "https://pegasus0710-arch.github.io/jesa_tools/photo/",
    "ver": "1.0",
    "open": "2026-11-17T09:00:00+09:00",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/photo/icon-192.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/photo/icon-192.png?v=1114"
   },
   {
    "name": "이미지 편집기",
@@ -507,7 +507,7 @@
    "short": "여러 장 한 번에 · 필터 · 콜라주",
    "link": "https://luvbong.tistory.com/798",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/icon-192.png",
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/photo-editor/icon-192.png?v=1114",
    "ver": "2.0",
    "open": "2026-11-18T09:00:00+09:00"
   },
@@ -525,7 +525,7 @@
    "open": "2026-10-31T17:00:00+09:00",
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/kit/",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/kit/icon-192.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/kit/icon-192.png?v=1114"
   },
   {
    "name": "단축키 사전",
@@ -541,7 +541,7 @@
    "open": "2026-11-15T20:00:00+09:00",
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/shortcut/",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/shortcut.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/shortcut.png?v=1114"
   },
   {
    "name": "상장 만들기",
@@ -562,7 +562,7 @@
      "q": "award"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/award.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/award.png?v=1114"
   },
   {
    "name": "영어 노트",
@@ -578,7 +578,7 @@
    "open": "2026-11-22T20:00:00+09:00",
    "ver": "1.0",
    "app": "https://pegasus0710-arch.github.io/jesa_tools/eng/",
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/eng.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/eng.png?v=1114"
   },
   {
    "name": "달력 배경화면 만들기",
@@ -599,7 +599,7 @@
      "q": "wallcal"
     }
    ],
-   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/wallcal.png"
+   "img": "https://pegasus0710-arch.github.io/jesa_tools/icons/apps/wallcal.png?v=1114"
   }
  ],
  "soon": [
@@ -964,7 +964,7 @@
   "d": "설치하면 도구 목록이 한 창에 — 새 도구도 저절로 추가",
   "install": "https://pegasus0710-arch.github.io/jesa_tools/kit/?install=1",
   "link": "https://luvbong.tistory.com/803",
-  "img": "https://pegasus0710-arch.github.io/jesa_tools/kit/icon-192.png"
+  "img": "https://pegasus0710-arch.github.io/jesa_tools/kit/icon-192.png?v=1114"
  },
  "home": {
   "_설명": "스킨 대문 분류 줄(11-14 카테고리 정리 반영). season을 빼면 스킨 기본(시제 · 묘사 준비)을 씀",

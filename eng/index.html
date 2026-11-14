@@ -527,7 +527,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-14(토) 01:16";
+const APP_VER = "1.0", BUILD = "2026-11-14(토) 02:45";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -588,7 +588,7 @@ function ensureBase(force) {
 }
 ensureBase(false); ls.set("data", D);
 const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, exReps: 1, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
-  engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true };
+  engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true, setAt: 0 };
 /* 「내 음성 서버」는 제이 전용 파일(jay.html)에서만 — 공개판(index.html)에서는 숨김.
    챕터 · 기록 · 다른 설정은 둘이 같이 쓰고, 음성 고르기(engine · 서버 주소 · 앱 암호)만 jay.html이 따로 기억("setj") */
 const SERVER_OK = /*SERVER_OK*/false, SRVK = ["engine", "azUrl", "azKey"];
@@ -599,6 +599,16 @@ const saveSet = () => {
   ls.set("setj", Object.fromEntries(SRVK.map(k => [k, SET[k]])));
   const b = Object.assign({}, SET), o = ls.get("set", {}); if (b.engine === "azure") b.engine = o.engine && o.engine !== "azure" ? o.engine : (SET.azMyKey ? "azkey" : "device"); ls.set("set", b);
 };
+/* 설정도 구글 드라이브로(11-14 제이: 휴대폰에서 설정을 다시 넣기 어려움) — 사용자가 바꾼 시각(setAt)이 늦은 쪽이 이김 · 기기마다 다른 것(목소리 · 연결 상태)은 안 보냄 */
+const SET_LOCAL = ["vKo", "vEn", "gdOn", "gdEmail", "gdLast", "bkAt", "azChars", "setAt"].concat(SERVER_OK ? [] : ["azUrl", "azKey"]);
+function setTouched() { SET.setAt = Date.now(); saveSet(); if (SYNC) SYNC.markDirty(); }
+function setOut() { const o = {}; Object.keys(SET0).concat(["engine"]).forEach(k => { if (!SET_LOCAL.includes(k)) o[k] = SET[k]; }); if (!SERVER_OK && o.engine === "azure") delete o.engine; return o; }
+function setIn(o, at, chars) {
+  let ch = false;
+  if (chars) Object.entries(chars).forEach(([m, n]) => { if ((+n || 0) > (SET.azChars[m] || 0)) { SET.azChars[m] = +n; ch = true; } });   /* 이번 달 쓴 글자 수는 큰 쪽(두 기기 합이 아니라 같은 키 기준) */
+  if (o && at && at > (SET.setAt || 0)) { Object.entries(o).forEach(([k, v]) => { if (SET_LOCAL.includes(k)) return; if (k === "engine" && v === "azure" && !SERVER_OK) return; SET[k] = v; }); SET.setAt = at; ch = true; }
+  if (ch) saveSet(); return ch;
+}
 function touch(ch) { if (ch) ch.at = Date.now(); ls.set("data", D); if (SYNC) SYNC.markDirty(); }
 const STAR = { talk: "__star_talk", word: "__star_word" };
 function starCh(sec) { const items = []; D.chapters.forEach(c => { if (c.sec === sec) c.items.forEach(it => { if (it.star) items.push(it); }); }); return { id: STAR[sec], sec, name: sec === "word" ? "☆ 어려운 단어 모음" : "☆ 어려운 문장 모음", items, virtual: true }; }
@@ -905,6 +915,7 @@ const IDB = { db: null };
 function idb() { if (IDB.db) return Promise.resolve(IDB.db); return new Promise((res, rej) => { const r = indexedDB.open("bj-eng-tts", 1); r.onupgradeneeded = () => r.result.createObjectStore("a"); r.onsuccess = () => res(IDB.db = r.result); r.onerror = () => rej(r.error); }); }
 async function idbGet(k) { const db = await idb(); return new Promise(res => { const r = db.transaction("a").objectStore("a").get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }); }
 async function idbPut(k, v) { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").put(v, k); t.oncomplete = () => res(); t.onerror = () => res(); }); }
+async function idbKeys() { try { const db = await idb(); return await new Promise(res => { const r = db.transaction("a").objectStore("a").getAllKeys(); r.onsuccess = () => res(r.result || []); r.onerror = () => res([]); }); } catch (e) { return []; } }
 async function idbCount() { try { const db = await idb(); return await new Promise(res => { const r = db.transaction("a").objectStore("a").count(); r.onsuccess = () => res(r.result); r.onerror = () => res(0); }); } catch (e) { return 0; } }
 async function idbClear() { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").clear(); t.oncomplete = () => res(); }); }
 const rateQ = r => Math.round(r * 100) / 100;
@@ -916,6 +927,7 @@ async function azSlot() { for (;;) { const now = Date.now(); while (AZQ.length &
 async function azGet(text, lang, rate, fresh) {
   const voice = lang === "ko" ? SET.azKo : SET.azEn, r = rateQ(rate), k = voice + "|" + r + "|" + text;
   const hit = fresh ? null : await idbGet(k); if (hit) return hit;
+  if (!fresh) { const got = await audFromDrive(k); if (got) return got; }   /* 다른 기기에서 이미 만든 음성 — 한도 안 씀 */
   const mk = todayS().slice(0, 7), cost = text.length + (text.match(/[가-힣]/g) || []).length;
   const mine = SET.engine === "azkey";
   if (mine && (SET.azChars[mk] || 0) + cost > (+SET.azCap || 450000)) throw new Error(`이번 달 한도(${(+SET.azCap).toLocaleString()}자)를 넘었어요 — 설정에서 늘리거나 다음 달에 써 주세요`);
@@ -944,7 +956,7 @@ async function azGet(text, lang, rate, fresh) {
   }
   const buf = await res.arrayBuffer();
   SET.azChars[mk] = (SET.azChars[mk] || 0) + cost; saveSet();
-  await idbPut(k, buf); return buf;
+  await idbPut(k, buf); audUpQ(k); return buf;
 }
 const SR = 24000;
 async function decode(buf) { const oc = new OfflineAudioContext(1, 1, SR); return await oc.decodeAudioData(buf.slice(0)); }
@@ -972,7 +984,7 @@ async function runAzure(fromQi) {
   const au = $("#au"); const tok = ++P.tok;
   if (!P.built || P.built.sig !== sigOf(P.queue, P.mode)) {
     $("#busy").hidden = false; B.cancel = false; AZP = ""; $("#busyT").textContent = "음성 만드는 중…"; $("#busyB").style.width = "0";
-    if (SET.engine === "azkey" || SET.engine === "azure") { const seen = new Set(); let nn = 0; for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const vv = st.lang === "ko" ? SET.azKo : SET.azEn, kk = vv + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!(await idbGet(kk))) nn++; } } if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
+    if (SET.engine === "azkey" || SET.engine === "azure") { const seen = new Set(); let nn = 0; for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const vv = st.lang === "ko" ? SET.azKo : SET.azEn, kk = vv + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!(await idbGet(kk)) && !(AUD.map && AUD.map.has(await audName(kk)))) nn++; } } if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
     try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { AZP = `음성 만드는 중 ${k} / ${n}`; $("#busyT").textContent = AZP; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
     catch (e) { $("#busy").hidden = true; P.playing = false; paintPlay(); if (e.message !== "멈췄어요") toast(e.message + " — ▶를 다시 누르면 받은 데서부터 이어서 만들어요"); return; }
     $("#busy").hidden = true;
@@ -1179,7 +1191,7 @@ async function drawSet() {
   h += `</div>`;
   const miss = baseChapters().filter(b => !D.chapters.some(c => c.id === b.id)).length;
   h += `<div class="sc"><div class="sh2">${svg(IC.book)}기본 자료</div><p>Blog J가 넣어 둔 실전 표현이에요 — 회화 ${BASE_TALK.length}챕터(상황별) · 단어 ${BASE_WORD.length}챕터(분야별), 챕터마다 20개. 고치거나 지워도 되고, 지운 챕터는 여기서 다시 넣을 수 있어요(고친 챕터는 그대로 둠).</p>${miss ? `<button class="btn go" data-a="baseadd">${svg(IC.plus)}지운 기본 챕터 ${miss}개 다시 넣기</button>` : `<p class="hint" style="margin:0">기본 챕터가 모두 들어 있어요.</p>`}</div>`;
-  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록을 내 구글 드라이브 「영어노트」 폴더에 저장해요. PC에서 문장을 넣고 휴대폰에서 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록 · <b>설정(음성 · Azure 키 포함)</b> · <b>만들어 둔 고품질 음성</b>을 내 구글 드라이브 「영어노트」 폴더에 저장해요. PC에서 만든 음성은 휴대폰에서 다시 만들지 않고 받아 써서 한도를 두 번 쓰지 않아요. 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
   if (!MOB()) h += `<div class="sc"><div class="sh2">${svg(IC.phone)}휴대폰에서도 쓰기</div><div class="qrw"><div class="qr">${QR_SVG}</div><p>휴대폰 카메라로 찍으면 설치 화면이 열려요. 휴대폰에서도 <b>같은 구글 계정</b>으로 드라이브를 연결하면 PC에서 넣은 문장이 그대로 들어와요.</p></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.dl)}백업</div><p>모든 챕터 · 기록을 파일 하나로 받아 두고 되살릴 수 있어요.${SET.bkAt ? `<br><span class="num">마지막 백업 ${ymdw(ymdT(SET.bkAt))} ${hm(SET.bkAt)}</span>` : ""}</p><div class="row"><button class="btn" data-a="bk" data-v="make">${svg(IC.dl)}백업 만들기</button><button class="btn" data-a="bk" data-v="restore">${svg(IC.upl)}되살리기</button></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.phone)}앱으로 설치</div><p>${INST.standalone ? "지금 설치한 앱으로 쓰고 있어요." : "홈 화면 · 바탕 화면에 아이콘으로 두고 바로 열 수 있어요."}</p>${INST.standalone ? "" : `<button class="btn go" data-a="inst">${svg(IC.phone)}설치하기</button>`}</div>`;
@@ -1207,7 +1219,7 @@ function printWords(id) {
 }
 
 /* ── 백업 · 합치기 ── */
-function exportObj() { return { app: "bj-eng", v: 1, at: Date.now(), chapters: D.chapters, log: D.log, gone: D.gone }; }
+function exportObj() { return { app: "bj-eng", v: 1, at: Date.now(), chapters: D.chapters, log: D.log, gone: D.gone, set: setOut(), setAt: SET.setAt || 0, azChars: SET.azChars }; }
 function mergeIn(o) {
   if (!o || o.app !== "bj-eng") throw new Error("영어 노트 자료가 아니에요");
   let n = 0; const gone = Object.assign({}, D.gone);
@@ -1216,7 +1228,9 @@ function mergeIn(o) {
   (o.chapters || []).forEach(c => { const a = m.get(c.id); if (!a || (c.at || 0) > (a.at || 0)) { m.set(c.id, c); n++; } });
   D.chapters = [...m.values()].filter(c => !(gone[c.id] && gone[c.id] >= (c.at || 0)));
   Object.entries(o.log || {}).forEach(([k, l]) => { const a = D.log[k]; if (!a) D.log[k] = l; else ["ms", "n", "ok", "ng"].forEach(f => a[f] = Math.max(a[f] || 0, l[f] || 0)); });
-  D.gone = gone; ls.set("data", D); return n;
+  D.gone = gone; ls.set("data", D);
+  if (setIn(o.set, o.setAt, o.azChars) && o.setAt && o.setAt === SET.setAt) GD.setGot = true;
+  return n;
 }
 function dl(b, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); }
 function backupMake() {
@@ -1255,10 +1269,52 @@ async function gdSync(opt = {}) {
     await gdApi(`https://www.googleapis.com/upload/drive/v3/files${f ? "/" + f.id : ""}?uploadType=multipart&fields=id,modifiedTime`, { method: f ? "PATCH" : "POST", body: fd });
     if (!SET.gdEmail) { try { const a = await (await gdApi("about?fields=user(emailAddress)")).json(); if (a && a.user) SET.gdEmail = a.user.emailAddress; } catch (er) {} }
     SET.gdOn = true; SET.gdLast = Date.now(); saveSet();
-    if (opt.toast || GD.toastNext) toast(n ? `동기화했어요 — 챕터 ${n}개 받음` : "동기화했어요"); GD.toastNext = false;
+    const sg = GD.setGot; GD.setGot = false; if (sg) { P.built = null; if (U.scr === "set") setTimeout(() => drawSet(), 50); }
+    if (opt.toast || GD.toastNext) toast((n ? `동기화했어요 — 챕터 ${n}개 받음` : "동기화했어요") + (sg ? " · 설정도 받았어요" : "")); GD.toastNext = false;
+    setTimeout(audSyncAll, 1500);
     if (n && $("#sheet").hidden && U.scr !== "play" && U.scr !== "edit") render();
   } catch (e) { GD.busy = false; paintSync(); if (GD.toastNext) { GD.toastNext = false; if (!(e.status === 401 || e.code === "NEED_GESTURE")) toast("구글 드라이브: " + e.message); } throw e; }
   GD.busy = false; paintSync();
+}
+/* 고품질 음성도 드라이브에(11-14 제이: PC에서 만든 음성을 휴대폰에서 또 만들면 한도를 두 번 씀)
+   「영어노트/음성」 폴더에 문장마다 파일 하나(이름 = 목소리 · 빠르기 · 문장의 해시) — 없을 때만 Azure로 만들고, 만들면 올려 둠 */
+const AUD = { fid: null, map: null, listing: null, q: [], upBusy: false };
+async function audName(k) { const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(k)); return [...new Uint8Array(h)].slice(0, 16).map(b => b.toString(16).padStart(2, "0")).join("") + ".mp3"; }
+const audOn = () => !!SET.gdOn && gdHttp() && !!SYNC;
+async function audFolder() {
+  if (AUD.fid) return AUD.fid; const p = await gdFolder();
+  const r = await (await gdApi(`files?q=${gq(`'${p}' in parents and name='음성' and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id)`)).json();
+  if (r.files && r.files.length) return AUD.fid = r.files[0].id;
+  const c = await (await gdApi("files?fields=id", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "음성", mimeType: "application/vnd.google-apps.folder", parents: [p] }) })).json();
+  return AUD.fid = c.id;
+}
+function audList() {   /* 드라이브에 있는 음성 목록(이름 → id) — 한 번 읽어 둠 */
+  if (AUD.map) return Promise.resolve(AUD.map); if (AUD.listing) return AUD.listing;
+  AUD.listing = (async () => { const m = new Map(), f = await audFolder(); let tk = "";
+    do { const r = await (await gdApi(`files?q=${gq(`'${f}' in parents and trashed=false`)}&fields=nextPageToken,files(id,name)&pageSize=1000${tk ? "&pageToken=" + tk : ""}`)).json(); (r.files || []).forEach(x => m.set(x.name, x.id)); tk = r.nextPageToken || ""; } while (tk);
+    return AUD.map = m; })().finally(() => { AUD.listing = null; });
+  return AUD.listing;
+}
+async function audFromDrive(k) {
+  if (!audOn()) return null;
+  try { const m = await audList(), id = m.get(await audName(k)); if (!id) return null;
+    const buf = await (await gdApi(`files/${id}?alt=media`)).arrayBuffer(); if (!buf || buf.byteLength < 200) return null;
+    await idbPut(k, buf); AUD.got = (AUD.got || 0) + 1; return buf;
+  } catch (e) { return null; }
+}
+function audUpQ(k) { if (!SET.gdOn) return; AUD.q.push(k); audPump(); }
+async function audPump() {
+  if (AUD.upBusy || !audOn()) return; AUD.upBusy = true;
+  try { const m = await audList(), f = await audFolder();
+    while (AUD.q.length) { const k = AUD.q.shift(), nm = await audName(k); if (m.has(nm)) continue; const buf = await idbGet(k); if (!buf) continue;
+      const fd = new FormData(); fd.append("metadata", new Blob([JSON.stringify({ name: nm, parents: [f] })], { type: "application/json" })); fd.append("file", new Blob([buf], { type: "audio/mpeg" }));
+      try { const r = await (await gdApi("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", { method: "POST", body: fd })).json(); if (r.id) m.set(nm, r.id); } catch (e) { if (e.status === 401) break; }
+      await sleep(150); }
+  } catch (e) {}
+  AUD.upBusy = false;
+}
+async function audSyncAll() {   /* 동기화 때: 이 기기에만 있는 음성을 드라이브에 올림(예전에 만든 것까지) */
+  if (!audOn()) return; try { const keys = await idbKeys(); const m = await audList(); for (const k of keys) { if (typeof k !== "string") continue; if (!m.has(await audName(k))) AUD.q.push(k); } audPump(); } catch (e) {}
 }
 /* 휴대폰 설치 앱: 같은 화면에서 구글로 갔다가 돌아옴
    ※ 구글 클라우드 콘솔 → OAuth 클라이언트 → 「승인된 리디렉션 URI」에 https://pegasus0710-arch.github.io/jesa_tools/eng/ 등록 필요 */
@@ -1321,7 +1377,7 @@ if ("serviceWorker" in navigator && gdHttp()) addEventListener("load", () => nav
 document.addEventListener("click", async e => {
   const nv = e.target.closest("[data-nav]"); if (nv) { go(nv.dataset.nav); return; }
   const sg = e.target.closest(".seg[data-k] button"); if (sg) {
-    const k = sg.parentElement.dataset.k, v = sg.dataset.v; SET[k] = /^-?[\d.]+$/.test(v) && k !== "think" ? +v : v; saveSet();
+    const k = sg.parentElement.dataset.k, v = sg.dataset.v; SET[k] = /^-?[\d.]+$/.test(v) && k !== "think" ? +v : v; setTouched();
     if (k === "engine") { stopAll(); P.built = null; drawSet(); return; }
     if (U.scr === "play") { const was = P.playing; if (was) stopAll(); P.mode = modeOf(P.ch); P.built = null; drawPlay(); if (was) playPause(true); } else render();
     return;
@@ -1334,7 +1390,7 @@ document.addEventListener("click", async e => {
   if (a === "print") { if (U.scr === "edit") saveEdit(); return openPrint(el.dataset.id); }
   if (a === "printgo") return printWords(el.dataset.id);
   if (a === "baseadd") { const n = ensureBase(true); touch(); toast(`기본 챕터 ${n}개를 다시 넣었어요`); drawSet(); return; }
-  if (a === "azkeyclr") { if (!window.confirm("이 기기에 넣은 Azure 키를 지울까요?")) return; SET.azMyKey = ""; saveSet(); drawSet(); toast("키를 지웠어요"); return; }
+  if (a === "azkeyclr") { if (!window.confirm("이 기기에 넣은 Azure 키를 지울까요?")) return; SET.azMyKey = ""; setTouched(); drawSet(); toast("키를 지웠어요"); return; }
   if (a === "paste") return openPaste(el.dataset.id || "");
   if (a === "pasteok") {
     const W = !!el.dataset.w;
@@ -1377,11 +1433,11 @@ document.addEventListener("click", async e => {
 });
 document.addEventListener("change", e => {
   const t = e.target;
-  if (t.dataset.t) { SET[t.dataset.t] = t.checked; saveSet(); if (U.scr === "play") { const was = P.playing; if (["faster", "shuffle", "spell", "wex"].includes(t.dataset.t)) { if (was) stopAll(); if (t.dataset.t === "shuffle" && P.ch) loadCh(P.li); P.built = null; drawPlay(); if (was) playPause(true); } else paintPlay(); } return; }
-  if (t.dataset.s) { SET[t.dataset.s] = t.dataset.s === "azCap" ? +t.value : t.value.trim(); saveSet(); P.built = null; if (t.dataset.s === "azMyKey" && U.scr === "set") drawSet(); return; }
+  if (t.dataset.t) { SET[t.dataset.t] = t.checked; setTouched(); if (U.scr === "play") { const was = P.playing; if (["faster", "shuffle", "spell", "wex"].includes(t.dataset.t)) { if (was) stopAll(); if (t.dataset.t === "shuffle" && P.ch) loadCh(P.li); P.built = null; drawPlay(); if (was) playPause(true); } else paintPlay(); } return; }
+  if (t.dataset.s) { SET[t.dataset.s] = t.dataset.s === "azCap" ? +t.value : t.value.trim(); setTouched(); P.built = null; if (t.dataset.s === "azMyKey" && U.scr === "set") drawSet(); return; }
   if (U.scr === "edit" && (t.dataset.f || t.id === "chName")) saveEdit();
 });
-function saveSetInputs() { $$("[data-s]").forEach(i => { SET[i.dataset.s] = i.dataset.s === "azCap" ? +i.value : i.value.trim(); }); saveSet(); }
+function saveSetInputs() { $$("[data-s]").forEach(i => { SET[i.dataset.s] = i.dataset.s === "azCap" ? +i.value : i.value.trim(); }); setTouched(); }
 function saveEdit() {
   const c = chById(U.edit); if (!c || c.virtual) return;
   let ch = false; const nm = $("#chName"); if (nm && nm.value.trim() && nm.value.trim() !== c.name) { c.name = nm.value.trim(); ch = true; }

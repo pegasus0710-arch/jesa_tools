@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="only light"><meta name="theme-color" content="#0B3D4A">
 <title>달력 배경화면 만들기 | Blog J</title>
-<meta name="description" content="다음 달 달력이 들어간 배경화면을 PC · 노트북 · 휴대폰 해상도에 맞춰 바로 만들기 — 공휴일 · 음력 · 24절기 · 날짜 메모, 그림 29가지 또는 내 사진 (업로드 없음)">
+<meta name="description" content="다음 달 달력이 들어간 배경화면을 PC · 노트북 · 휴대폰 해상도에 맞춰 바로 만들기 — 공휴일 · 음력 · 24절기 · 날짜 메모, 그림 41가지(한국 전통 선그림 포함) 또는 내 사진 (업로드 없음)">
 <link rel="icon" href="icons/apps/wallcal.png" type="image/png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Nanum+Pen+Script&family=Jua&display=swap">
@@ -508,13 +508,426 @@ function addThemes(D, X) {
 }
 
   addThemes(D,{W,H,R,r2,ridge,grain,lin,glow,set});
+  if (typeof addKorea === 'function') addKorea(D,{W,H,R,r2,ridge,grain,lin,glow,set,doc:document});
   seed = 7; if (!D[T]) T = "sea";
   const body = D[T]();
   return { svg: `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" font-family="SUIT, sans-serif">${body}</svg>`, mode: MODE, vars: VARS };
 }
+/* ═══ 한국 전통 선그림 (11-14) — 한옥 처마 · 기와 마을 · 창호 · 단청 · 조각보 · 수묵 산수 · 금강산 · 초가 · 돌담 · 궁궐 · 구름 문양 · 십장생
+   Blog J가 코드로 직접 그린 선그림(남의 그림 · AI 이미지 없음). 옛 그림(인왕제색도 · 금강전도)은 구도만 빌려 새로 그린 재해석 */
+function addKorea(D, X) {
+  const { W, H, R, r2, grain, set, doc } = X;
+  const L = Math.min(W, H), u = L / 1080, port = H > W;
+  const paper = (v) => { doc.body.className = 'paper'; set(v); };
+  const glass = (v) => { doc.body.className = 'glass'; set(v); };
+  const dark = (v) => { doc.body.className = 'dark'; set(v); };
+  const INK = '#2b2723';
+  const KP = (acc, kfg, ink) => ({ ink: ink || '#2a2622', acc, kbg: '#fffdf8', kfg, ksh: '#cfc3b0', kln: 'rgba(59,50,40,.2)', pbg: 'rgba(253,250,244,.9)', pline: 'rgba(107,90,70,.2)' });
+  const hanji = (base, fib, id) => `<rect width="${W}" height="${H}" fill="${base}"/><filter id="${id || 'hk'}"><feTurbulence type="fractalNoise" baseFrequency=".012 .06" numOctaves="3" seed="9"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .46  0 0 0 0 .4  0 0 0 ${fib} 0"/></filter><rect width="${W}" height="${H}" filter="url(#${id || 'hk'})"/>`;
+  const sk = (d, w, c, o, x) => `<path d="${d}" fill="none" stroke="${c || INK}" stroke-width="${r2(w)}" stroke-linecap="round" stroke-linejoin="round"${o != null && o !== 1 ? ` opacity="${o}"` : ''}${x || ''}/>`;
+  const P = (pts) => 'M' + pts.map(p => r2(p[0]) + ' ' + r2(p[1])).join('L');
+  const seal = (x, y, t, s) => { s = s || 1; return `<rect x="${r2(x)}" y="${r2(y)}" width="${r2(34 * s)}" height="${r2(34 * s)}" rx="${r2(3 * s)}" fill="#b0342a"/><text x="${r2(x + 17 * s)}" y="${r2(y + 23.5 * s)}" text-anchor="middle" font-size="${r2(15 * s)}" font-weight="800" fill="#f7e9e2">${t}</text>`; };
+  const bez = (p0, p1, p2, p3, t) => { const m = 1 - t; return [m * m * m * p0[0] + 3 * m * m * t * p1[0] + 3 * m * t * t * p2[0] + t * t * t * p3[0], m * m * m * p0[1] + 3 * m * m * t * p1[1] + 3 * m * t * t * p2[1] + t * t * t * p3[1]]; };
+  const qb = (a, c, b, t) => { const m = 1 - t; return [m * m * a[0] + 2 * m * t * c[0] + t * t * b[0], m * m * a[1] + 2 * m * t * c[1] + t * t * b[1]]; };
+  /* 먹 붓 줄기 — 굵기가 변하는 면 */
+  const brush = (pts, w0, w1, c, o) => { let A = [], B = []; for (let i = 0; i < pts.length; i++) { const [x, y] = pts[i], [nx, ny] = pts[Math.min(i + 1, pts.length - 1)], [px, py] = pts[Math.max(i - 1, 0)]; let dx = nx - px, dy = ny - py; const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l; const w = (w0 + (w1 - w0) * i / (pts.length - 1)) / 2; A.push([x - dy * w, y + dx * w]); B.push([x + dy * w, y - dx * w]); } return `<path d="${P(A.concat(B.reverse()))}Z" fill="${c}"${o != null ? ` opacity="${o}"` : ''}/>`; };
+  /* 단청 색 */
+  const DC = { grn: '#3f7f6c', grnL: '#7fb3a0', blu: '#2d4f8b', bluL: '#6f8fc4', red: '#c4452d', redL: '#e08a6e', yel: '#e2b13c', wht: '#f7f2e6', ink: '#262320', pnk: '#e3a79a' };
+
+  /* ── 1 한옥 처마 — 처마 끝 · 막새 · 단청 서까래 · 풍경 · 달 ── */
+  D.k_cheoma = () => { paper(KP('#3f7f6c', '#2f6352'));
+    let s = hanji('#f2ece1', .18);
+    const Y = (f) => f * L;
+    /* 달 · 먼 산 */
+    const mx = port ? W * .62 : W * .30, my = port ? H * .56 : H * .64, mr = Y(.1);
+    s += `<circle cx="${r2(mx)}" cy="${r2(my)}" r="${r2(mr * 1.9)}" fill="#fbf3dc" opacity=".55"/><circle cx="${r2(mx)}" cy="${r2(my)}" r="${r2(mr)}" fill="#fbf5e4" stroke="${INK}" stroke-width="${r2(1.6 * u)}" opacity=".9"/>`;
+    for (let k = 0; k < 2; k++) { const by = H * (.84 + k * .07), f = 1.1 + k * .9, ph = 1.7 + k * 2.3; let pts = []; for (let x = -20; x <= W + 20; x += W / 120) pts.push([x, by - H * (.07 - k * .025) * (Math.sin(x / W * f * 6.28 + ph) * .5 + Math.sin(x / W * f * 2.9 * 6.28 + ph * 1.4) * .3 + Math.abs(Math.sin(x / W * f * 7.3 * 6.28 + ph)) * .2)]); s += `<path d="${P(pts)}L${r2(pts[pts.length - 1][0])} ${H}L-20 ${H}Z" fill="${k ? '#e4dccd' : '#ebe4d6'}"/>` + sk(P(pts), (1.8 - k * .2) * u, INK, .45 + k * .2); }
+    /* 처마선 */
+    const p0 = [W * .02, Y(.06)], p1 = [W * .09, Y(.31)], p2 = [W * .42, Y(.42)], p3 = [W * 1.08, Y(.41)];
+    const E = (t) => bez(p0, p1, p2, p3, t);
+    const N = 64; let ed = [];
+    for (let i = 0; i <= N; i++) ed.push(E(i / N));
+    /* 지붕 면(처마선 위) 채우기 */
+    s += `<path d="${P(ed)}L${W + 40} -40L-40 -40Z" fill="#e6dccb"/>`;
+    /* 기왓골 — 처마선에서 위로, 모서리 쪽은 부채꼴로 */
+    const rows = Math.round(W / (34 * u));
+    for (let i = 0; i <= rows; i++) {
+      const t = i / rows, [x, y] = E(t);
+      const ang = -Math.PI / 2 - Math.pow(1 - t, 2) * .38;        /* 모서리일수록 왼쪽으로 기움 */
+      const len = Y(.7); const tx = x + Math.cos(ang) * len, ty = y + Math.sin(ang) * len;
+      const ox = Math.cos(ang + Math.PI / 2) * 7 * u, oy = Math.sin(ang + Math.PI / 2) * 7 * u;
+      s += sk(`M${r2(x - ox)} ${r2(y - oy)}L${r2(tx - ox)} ${r2(ty - oy)}`, 1.5 * u, INK, .75) + sk(`M${r2(x + ox)} ${r2(y + oy)}L${r2(tx + ox)} ${r2(ty + oy)}`, 1.5 * u, INK, .75);
+      for (let j = 1; j < 9; j++) { const f = j * 40 * u; const cx = x + Math.cos(ang) * f, cy = y + Math.sin(ang) * f; s += sk(`M${r2(cx - ox)} ${r2(cy - oy)}Q${r2(cx + Math.cos(ang) * 5 * u)} ${r2(cy + Math.sin(ang) * 5 * u)} ${r2(cx + ox)} ${r2(cy + oy)}`, 1.2 * u, INK, .5); }
+      /* 수막새 */
+      const r = 11 * u * (.75 + t * .35);
+      s += `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r)}" fill="#efe6d6" stroke="${INK}" stroke-width="${r2(1.5 * u)}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r * .55)}" fill="none" stroke="${INK}" stroke-width="${r2(1 * u)}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r * .16)}" fill="${INK}"/>`;
+    }
+    s += sk(P(ed), 2.6 * u, INK);
+    /* 부연(네모) · 서까래(동그라미) — 단청 */
+    const off = (t, d) => { const a = E(Math.max(0, t - .002)), b = E(Math.min(1, t + .002)); let dx = b[0] - a[0], dy = b[1] - a[1]; const l = Math.hypot(dx, dy) || 1; const [x, y] = E(t); return [x - dy / l * d, y + dx / l * d]; };
+    const sb = []; for (let i = 0; i <= N; i++) sb.push(off(i / N, 30 * u));
+    s += `<path d="${P(ed)}L${P(sb.slice().reverse()).slice(1)}Z" fill="#d8ccb6"/>` + sk(P(sb), 1.6 * u, INK, .8);
+    const nb = Math.round(W / (46 * u));
+    for (let i = 1; i < nb; i++) { const t = Math.pow(i / nb, 1.1), [x, y] = off(t, 46 * u), a = 13 * u * (.8 + t * .3);
+      s += `<rect x="${r2(x - a)}" y="${r2(y - a)}" width="${r2(a * 2)}" height="${r2(a * 2)}" rx="${r2(2 * u)}" fill="${DC.grn}" stroke="${INK}" stroke-width="${r2(1.3 * u)}"/><rect x="${r2(x - a * .55)}" y="${r2(y - a * .55)}" width="${r2(a * 1.1)}" height="${r2(a * 1.1)}" fill="${DC.wht}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(a * .32)}" fill="${DC.red}"/>`; }
+    for (let i = 1; i < nb; i++) { const t = Math.pow((i + .5) / nb, 1.1), [x, y] = off(t, 92 * u), r = 17 * u * (.8 + t * .3);
+      s += `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r)}" fill="${DC.blu}" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r * .7)}" fill="${DC.wht}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r * .48)}" fill="${DC.red}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r * .2)}" fill="${DC.yel}"/>`; }
+    /* 풍경 — 처마 끝에 매단 종 · 물고기 */
+    const fx = p0[0] + W * .06 + (port ? W * .04 : 0), fy0 = off(.04, 70 * u)[1], fy = fy0 + Y(.13);
+    s += sk(`M${r2(fx)} ${r2(fy0)}L${r2(fx)} ${r2(fy)}`, 1.6 * u);
+    const bw = 22 * u, bh = 34 * u;
+    s += `<path d="M${r2(fx - bw * .45)} ${r2(fy)}Q${r2(fx)} ${r2(fy - 10 * u)} ${r2(fx + bw * .45)} ${r2(fy)}L${r2(fx + bw)} ${r2(fy + bh)}Q${r2(fx)} ${r2(fy + bh + 7 * u)} ${r2(fx - bw)} ${r2(fy + bh)}Z" fill="#b9a27a" stroke="${INK}" stroke-width="${r2(1.6 * u)}"/>`;
+    s += sk(`M${r2(fx - bw * .8)} ${r2(fy + bh * .62)}Q${r2(fx)} ${r2(fy + bh * .52)} ${r2(fx + bw * .8)} ${r2(fy + bh * .62)}`, 1.1 * u);
+    const fz = fy + bh + 26 * u; s += sk(`M${r2(fx)} ${r2(fy + bh)}L${r2(fx)} ${r2(fz)}`, 1.2 * u);
+    s += `<path d="M${r2(fx)} ${r2(fz)}c${r2(16 * u)} ${r2(8 * u)} ${r2(16 * u)} ${r2(34 * u)} 0 ${r2(46 * u)}c${r2(-16 * u)} ${r2(-12 * u)} ${r2(-16 * u)} ${r2(-38 * u)} 0 ${r2(-46 * u)}Z" fill="#c9b48c" stroke="${INK}" stroke-width="${r2(1.5 * u)}"/><path d="M${r2(fx)} ${r2(fz + 46 * u)}l${r2(-10 * u)} ${r2(12 * u)}h${r2(20 * u)}Z" fill="#c9b48c" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/><circle cx="${r2(fx)}" cy="${r2(fz + 12 * u)}" r="${r2(2.6 * u)}" fill="${INK}"/>`;
+    s += seal(port ? W * .08 : W * .05, H * .9 - 40 * u, '風', u * 1.1);
+    return s + grain(.045); };
+
+  /* ── 2 기와지붕 마을 — 겹겹 기와 · 먼 산 (북촌 느낌) ── */
+  D.k_giwa = () => { paper(KP('#5a6e7a', '#3f525d'));
+    let s = hanji('#f1ede4', .16);
+    /* 먼 산 두 겹(선) */
+    const mt = (base, amp, f, ph, w, o, fill) => { let pts = []; for (let x = -20; x <= W + 20; x += W / 90) pts.push([x, base - amp * (Math.sin(x / W * f * 6.28 + ph) * .55 + Math.sin(x / W * f * 2.7 * 6.28 + ph * 1.3) * .3 + Math.abs(Math.sin(x / W * f * 6.1 * 6.28 + ph)) * .15)]); return (fill ? `<path d="${P(pts)}L${W + 20} ${H}L-20 ${H}Z" fill="${fill}"/>` : '') + sk(P(pts), w, INK, o); };
+    s += mt(H * .42, H * .16, .9, 1.3, 1.8 * u, .45, '#ece6da') + mt(H * .5, H * .1, 1.6, 4.1, 2 * u, .6, '#e9e2d4');
+    s += `<circle cx="${r2(port ? W * .72 : W * .7)}" cy="${r2(H * .18)}" r="${r2(36 * u)}" fill="none" stroke="${INK}" stroke-width="${r2(1.5 * u)}" opacity=".7"/>`;
+    /* 지붕 하나: 용마루 · 내림마루 · 처마 · 기왓골 · 벽 */
+    const roof = (cx, ry, w, h, wall) => {
+      const hw = w / 2, rl = cx - hw * .6, rr = cx + hw * .6, lift = h * .42;
+      const el = [cx - hw, ry + h - lift], er = [cx + hw, ry + h - lift];
+      const eave = (t) => bez(el, [cx - hw * .72, ry + h + h * .06], [cx + hw * .72, ry + h + h * .06], er, t);
+      let o = '';
+      if (wall) { const wy = ry + h, wh = h * .95, wl = cx - hw * .78, wr = cx + hw * .78;
+        o += `<rect x="${r2(wl)}" y="${r2(wy)}" width="${r2(wr - wl)}" height="${r2(wh)}" fill="#f7f3ea" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/>`;
+        const n = Math.max(3, Math.round((wr - wl) / (h * .9)));
+        for (let i = 0; i <= n; i++) { const x = wl + (wr - wl) * i / n; o += `<rect x="${r2(x - 5 * u)}" y="${r2(wy)}" width="${r2(10 * u)}" height="${r2(wh)}" fill="#8a6a4a" stroke="${INK}" stroke-width="${r2(1 * u)}"/>`; }
+        o += `<rect x="${r2(wl)}" y="${r2(wy + wh * .82)}" width="${r2(wr - wl)}" height="${r2(wh * .18)}" fill="#cfc4b0" stroke="${INK}" stroke-width="${r2(1.2 * u)}"/>`;
+        for (let i = 0; i < n; i++) { if (i % 2) continue; const x0 = wl + (wr - wl) * i / n + 12 * u, x1 = wl + (wr - wl) * (i + 1) / n - 12 * u, y0 = wy + wh * .14, y1 = wy + wh * .7; o += `<rect x="${r2(x0)}" y="${r2(y0)}" width="${r2(x1 - x0)}" height="${r2(y1 - y0)}" fill="#f3e6c6" stroke="${INK}" stroke-width="${r2(1.1 * u)}"/>`; for (let k = 1; k < 6; k++) { const x = x0 + (x1 - x0) * k / 6; o += sk(`M${r2(x)} ${r2(y0)}V${r2(y1)}`, .9 * u, INK, .7); } for (const f of [.3, .7]) o += sk(`M${r2(x0)} ${r2(y0 + (y1 - y0) * f)}H${r2(x1)}`, .9 * u, INK, .7); }
+      }
+      let ep = []; for (let i = 0; i <= 30; i++) ep.push(eave(i / 30));
+      const top = `M${r2(rl)} ${r2(ry)}L${r2(rr)} ${r2(ry)}Q${r2(rr + hw * .12)} ${r2(ry + h * .62)} ${r2(er[0])} ${r2(er[1])}${P(ep.slice().reverse()).replace('M', 'L')}Q${r2(rl - hw * .12)} ${r2(ry + h * .62)} ${r2(rl)} ${r2(ry)}Z`;
+      const cid = 'kr' + Math.round(cx) + '_' + Math.round(ry);
+      o += `<clipPath id="${cid}"><path d="${top}"/></clipPath><path d="${top}" fill="#d9d2c4"/><g clip-path="url(#${cid})">`;
+      const n = Math.max(6, Math.round(w / (17 * u)));
+      for (let i = 1; i < n; i++) { const t = i / n, [x, y] = eave(t), xt = cx + (x - cx) * .78; o += sk(`M${r2(xt)} ${r2(ry + 4 * u)}L${r2(x)} ${r2(y)}`, 1.15 * u, INK, .7); }
+      o += '</g>';
+      o += sk(P(ep), 2.2 * u) + sk(`M${r2(rl)} ${r2(ry)}Q${r2(rl - hw * .12)} ${r2(ry + h * .62)} ${r2(el[0])} ${r2(el[1])}M${r2(rr)} ${r2(ry)}Q${r2(rr + hw * .12)} ${r2(ry + h * .62)} ${r2(er[0])} ${r2(er[1])}`, 1.8 * u);
+      /* 용마루 — 끝이 들림 */
+      const rh = Math.max(6 * u, h * .09);
+      o += `<path d="M${r2(rl - 10 * u)} ${r2(ry - rh * 1.6)}Q${r2(rl + 6 * u)} ${r2(ry)} ${r2(rl + 20 * u)} ${r2(ry - rh * .3)}L${r2(rr - 20 * u)} ${r2(ry - rh * .3)}Q${r2(rr - 6 * u)} ${r2(ry)} ${r2(rr + 10 * u)} ${r2(ry - rh * 1.6)}L${r2(rr + 4 * u)} ${r2(ry + rh * .3)}L${r2(rl - 4 * u)} ${r2(ry + rh * .3)}Z" fill="#cfc6b6" stroke="${INK}" stroke-width="${r2(1.6 * u)}"/>`;
+      return o;
+    };
+    /* 뒤에서 앞으로 */
+    const rowsDef = port
+      ? [[.56, 110, 4, false], [.64, 150, 3, false], [.72, 200, 2.2, true]]
+      : [[.52, 70, 7, false], [.59, 100, 5, false], [.67, 135, 3.4, false], [.75, 170, 2.4, true]];
+    rowsDef.forEach(([yf, hh, cnt, wall], ri) => { const h = hh * u, w = W / cnt * 1.05; for (let i = -1; i <= cnt; i++) { const cx = (i + (ri % 2 ? .5 : 0) + .5) * W / cnt + (R() - .5) * W / cnt * .15; s += roof(cx, H * yf + (R() - .5) * h * .2, w * (.85 + R() * .2), h, wall); } });
+    s += seal(W * .05, H * .06, '村', u * 1.1);
+    return s + grain(.045); };
+
+  /* ── 3 창호 문살 — 띠살문 · 아자살 · 빗살 교창, 한지 너머 등불 ── */
+  D.k_changho = () => { paper(KP('#8a5a2c', '#6e4520'));
+    const WD = '#6b4a2e';
+    let s = `<defs><radialGradient id="kglow" cx="${port ? .5 : .28}" cy=".5" r="${port ? .7 : .55}"><stop offset="0" stop-color="#fbe3b0"/><stop offset=".55" stop-color="#f4dcb6"/><stop offset="1" stop-color="#e9dcc6"/></radialGradient></defs><rect width="${W}" height="${H}" fill="url(#kglow)"/>` + hanji('none', .16).replace(`fill="none"`, 'fill="none"');
+    const x0 = port ? W * .06 : W * .04, x1 = port ? W * .94 : W * .54, y0 = H * .06, y1 = H * .94, fw = 26 * u;
+    /* 바깥 틀 · 가운데 기둥 */
+    s += `<rect x="${r2(x0)}" y="${r2(y0)}" width="${r2(x1 - x0)}" height="${r2(y1 - y0)}" fill="none" stroke="${WD}" stroke-width="${r2(fw)}"/>`;
+    const tY = y0 + (y1 - y0) * .2;                 /* 교창(위 빗살) 아래 선 */
+    s += sk(`M${r2(x0)} ${r2(tY)}H${r2(x1)}`, fw * .7, WD);
+    const mid = (x0 + x1) / 2; s += sk(`M${r2(mid)} ${r2(tY)}V${r2(y1)}`, fw * .6, WD);
+    /* 빗살 교창 */
+    const lat = (ax, ay, bx, by, step, w) => { let o = `<clipPath id="kc${r2(ax)}"><rect x="${r2(ax)}" y="${r2(ay)}" width="${r2(bx - ax)}" height="${r2(by - ay)}"/></clipPath><g clip-path="url(#kc${r2(ax)})">`; const span = (bx - ax) + (by - ay); for (let d = -span; d < span; d += step) { o += sk(`M${r2(ax + d)} ${r2(ay)}L${r2(ax + d + (by - ay))} ${r2(by)}`, w, WD) + sk(`M${r2(ax + d)} ${r2(by)}L${r2(ax + d + (by - ay))} ${r2(ay)}`, w, WD); } return o + '</g>'; };
+    s += lat(x0 + fw / 2, y0 + fw / 2, x1 - fw / 2, tY - fw * .35, 34 * u, 4 * u);
+    /* 왼쪽 문 = 띠살 */
+    const lx0 = x0 + fw / 2, lx1 = mid - fw * .3, ly0 = tY + fw * .35, ly1 = y1 - fw / 2;
+    for (let x = lx0 + 16 * u; x < lx1 - 4 * u; x += 16 * u) s += sk(`M${r2(x)} ${r2(ly0)}V${r2(ly1)}`, 3.6 * u, WD);
+    [[.06, 4], [.47, 4], [.9, 4]].forEach(([f, n]) => { const yb = ly0 + (ly1 - ly0) * f; for (let k = 0; k < n; k++) s += sk(`M${r2(lx0)} ${r2(yb + k * 14 * u)}H${r2(lx1)}`, 3.6 * u, WD); });
+    /* 오른쪽 문 = 아(亞)자살 */
+    const rx0 = mid + fw * .3, rx1 = x1 - fw / 2, ry0 = ly0, ry1 = ly1;
+    const g = 46 * u; s += `<clipPath id="kca"><rect x="${r2(rx0)}" y="${r2(ry0)}" width="${r2(rx1 - rx0)}" height="${r2(ry1 - ry0)}"/></clipPath><g clip-path="url(#kca)">`;
+    for (let y = ry0; y < ry1 + g; y += g * 2) for (let x = rx0; x < rx1 + g; x += g * 2) {
+      const a = g * .5, b = g * .18;
+      s += sk(`M${r2(x)} ${r2(y)}h${r2(g * 2)}M${r2(x)} ${r2(y)}v${r2(g * 2)}`, 3.6 * u, WD);
+      s += sk(`M${r2(x + g - a)} ${r2(y + g - b)}h${r2(a - b)}v${r2(-(a - b))}h${r2(b * 2)}v${r2(a - b)}h${r2(a - b)}v${r2(b * 2)}h${r2(-(a - b))}v${r2(a - b)}h${r2(-b * 2)}v${r2(-(a - b))}h${r2(-(a - b))}Z`, 3.2 * u, WD);
+    }
+    s += '</g>';
+    /* 문고리 · 그림자 */
+    [[lx1 - 26 * u], [rx0 + 26 * u]].forEach(([x]) => { const y = (ly0 + ly1) / 2; s += `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(15 * u)}" fill="none" stroke="#3b3027" stroke-width="${r2(3.4 * u)}"/><circle cx="${r2(x)}" cy="${r2(y - 15 * u)}" r="${r2(5 * u)}" fill="#3b3027"/>`; });
+    if (!port) { /* 오른쪽 벽: 회벽 · 기둥 */
+      s += `<rect x="${r2(x1 + fw * .5)}" y="0" width="${r2(W - x1)}" height="${H}" fill="#efe8db"/>` + `<rect x="${r2(x1 + fw * .5)}" y="0" width="${r2(30 * u)}" height="${H}" fill="#8a6a4a"/>` + sk(`M${r2(x1 + fw * .5 + 30 * u)} 0V${H}`, 1.4 * u, INK, .5);
+      s += `<rect x="0" y="${r2(H * .965)}" width="${W}" height="${r2(H * .04)}" fill="#7a5b3c"/>`;
+    }
+    s += seal(port ? W * .82 : W * .9, H * .9 - 30 * u, '窓', u * 1.1);
+    return s + grain(.05); };
+
+  /* ── 4 단청 문양 — 들보의 머리초(꽃) · 휘(물결 띠) ── */
+  D.k_dancheong = () => { paper(KP('#3f7f6c', '#2f6352'));
+    let s = hanji('#f0ebe0', .14);
+    const flower = (x, y, r) => { let o = '';
+      const petals = (n, rr, rw, c, rot) => { let q = ''; for (let i = 0; i < n; i++) { const a = (i / n) * 360 + rot; q += `<ellipse cx="0" cy="${r2(-rr)}" rx="${r2(rw)}" ry="${r2(rr * .62)}" transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(a)})" fill="${c}" stroke="${DC.ink}" stroke-width="${r2(1.4 * u)}"/>`; } return q; };
+      o += `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r)}" fill="${DC.wht}" stroke="${DC.ink}" stroke-width="${r2(1.8 * u)}"/>`;
+      o += petals(8, r * .62, r * .26, DC.blu, 22.5) + petals(8, r * .6, r * .2, DC.bluL, 22.5);
+      o += petals(8, r * .5, r * .22, DC.red, 0) + petals(8, r * .46, r * .14, DC.redL, 0);
+      o += `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r * .24)}" fill="${DC.yel}" stroke="${DC.ink}" stroke-width="${r2(1.4 * u)}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(r * .1)}" fill="${DC.red}"/>`;
+      return o; };
+    /* 휘 — 겹 반달 띠 */
+    const hwi = (x, y0, y1, dir, n) => { let o = ''; const C = [DC.grnL, DC.wht, DC.grn, DC.wht, DC.bluL, DC.wht, DC.blu]; const h = (y1 - y0); for (let k = 0; k < C.length; k++) { const w = h * .12 * (C.length - k) / C.length; for (let i = 0; i < n; i++) { const cy = y0 + h * (i + .5) / n, rr = h / n / 2; o += `<path d="M${r2(x)} ${r2(cy - rr)}a${r2(w * 2 + rr * .3)} ${r2(rr)} 0 0 ${dir > 0 ? 1 : 0} 0 ${r2(rr * 2)}" fill="none" stroke="${C[k]}" stroke-width="${r2(Math.max(3, w * .55))}"/>`; } x += dir * w * .45; } return o; };
+    const beam = (bx0, bx1, by, bh, cnt) => { let o = `<rect x="${r2(bx0)}" y="${r2(by)}" width="${r2(bx1 - bx0)}" height="${r2(bh)}" fill="${DC.grn}"/>`;
+      o += `<rect x="${r2(bx0)}" y="${r2(by)}" width="${r2(bx1 - bx0)}" height="${r2(bh * .07)}" fill="${DC.ink}"/><rect x="${r2(bx0)}" y="${r2(by + bh * .07)}" width="${r2(bx1 - bx0)}" height="${r2(bh * .04)}" fill="${DC.wht}"/><rect x="${r2(bx0)}" y="${r2(by + bh * .89)}" width="${r2(bx1 - bx0)}" height="${r2(bh * .04)}" fill="${DC.wht}"/><rect x="${r2(bx0)}" y="${r2(by + bh * .93)}" width="${r2(bx1 - bx0)}" height="${r2(bh * .07)}" fill="${DC.ink}"/>`;
+      const iy0 = by + bh * .14, iy1 = by + bh * .86, r = (iy1 - iy0) * .36;
+      for (let i = 0; i < cnt; i++) { const cx = bx0 + (bx1 - bx0) * (i + .5) / cnt;
+        o += `<rect x="${r2(cx - r * 1.9)}" y="${r2(iy0)}" width="${r2(r * 3.8)}" height="${r2(iy1 - iy0)}" fill="${DC.blu}" opacity=".18"/>`;
+        o += hwi(cx - r * 1.25, iy0, iy1, -1, 2) + hwi(cx + r * 1.25, iy0, iy1, 1, 2) + flower(cx, (iy0 + iy1) / 2, r);
+        /* 사이 금문(작은 네모 띠) */
+        if (i < cnt - 1) { const gx0 = cx + r * 2.4, gx1 = bx0 + (bx1 - bx0) * (i + 1.5) / cnt - r * 2.4; for (let x = gx0; x < gx1; x += 22 * u) o += `<rect x="${r2(x)}" y="${r2((iy0 + iy1) / 2 - 7 * u)}" width="${r2(14 * u)}" height="${r2(14 * u)}" transform="rotate(45 ${r2(x + 7 * u)} ${r2((iy0 + iy1) / 2)})" fill="${(Math.round((x - gx0) / (22 * u)) % 2) ? DC.yel : DC.red}" stroke="${DC.ink}" stroke-width="${r2(1 * u)}"/>`; }
+      }
+      return o; };
+    if (port) { s += beam(-10, W + 10, H * .1, L * .32, 2) + beam(-10, W + 10, H * .78, L * .26, 2); }
+    else { s += beam(-10, W + 10, H * .07, H * .27, 4) + beam(-10, W * .58, H * .62, H * .23, 2); }
+    s += seal(port ? W * .08 : W * .05, port ? H * .6 : H * .9 - 30 * u, '彩', u * 1.1);
+    return s + grain(.04); };
+
+  /* ── 5 조각보 — 모시 조각을 이은 깨끼 바느질 ── */
+  D.k_bojagi = () => { paper(KP('#7a5a8a', '#5c4369'));
+    let s = `<rect width="${W}" height="${H}" fill="#efe7d8"/>`;
+    const C = ['#e9dcc4', '#c3d6cf', '#e6bfb4', '#dccd86', '#aebddb', '#f2eadb', '#9ebfa7', '#d39486', '#7f9cc0', '#e8d09a', '#c6abc9', '#f0dcc8', '#3f5f8f', '#b8473a'];
+    const rects = []; const min = L * .07;
+    const split = (x, y, w, h, d) => { if ((w < min * 2 && h < min * 2) || d > 7 || (d > 2 && R() < .18)) { rects.push([x, y, w, h]); return; }
+      const v = w / h > 1.25 ? true : w / h < .8 ? false : R() < .5; const f = .3 + R() * .4;
+      if (v && w >= min * 2) { split(x, y, w * f, h, d + 1); split(x + w * f, y, w * (1 - f), h, d + 1); } else if (!v && h >= min * 2) { split(x, y, w, h * f, d + 1); split(x, y + h * f, w, h * (1 - f), d + 1); } else rects.push([x, y, w, h]); };
+    split(-4, -4, W + 8, H + 8, 0);
+    let last = -1;
+    rects.forEach(([x, y, w, h]) => { let c; do { c = Math.floor(R() * C.length); if (c >= 12 && R() < .65) c = Math.floor(R() * 12); } while (c === last); last = c; s += `<rect x="${r2(x)}" y="${r2(y)}" width="${r2(w)}" height="${r2(h)}" fill="${C[c]}" opacity=".92"/>`; });
+    rects.forEach(([x, y, w, h]) => { s += `<rect x="${r2(x)}" y="${r2(y)}" width="${r2(w)}" height="${r2(h)}" fill="none" stroke="#fbf7ef" stroke-width="${r2(5 * u)}"/><rect x="${r2(x + 4 * u)}" y="${r2(y + 4 * u)}" width="${r2(Math.max(0, w - 8 * u))}" height="${r2(Math.max(0, h - 8 * u))}" fill="none" stroke="#8a7a62" stroke-width="${r2(1 * u)}" stroke-dasharray="${r2(5 * u)} ${r2(4 * u)}" opacity=".55"/>`; });
+    /* 모시 결 */
+    s += `<filter id="kmo"><feTurbulence type="fractalNoise" baseFrequency=".9 .02" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .16 0"/></filter><rect width="${W}" height="${H}" filter="url(#kmo)"/>`;
+    return s + grain(.04); };
+
+  /* 흐린 띠(운무) */
+  const mist = (id, items) => `<filter id="${id}" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="${r2(18 * u)}"/></filter><g filter="url(#${id})">${items.map(([x, y, rx, ry, o]) => `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(rx)}" ry="${r2(ry)}" fill="#f6f2ea" opacity="${o || .95}"/>`).join('')}</g>`;
+  /* 소나무 한 그루(작게) — 줄기 붓 + 솔잎 덩어리 */
+  const pine = (x, y, hgt, c) => { let o = brush([[x, y], [x - hgt * .05, y - hgt * .4], [x + hgt * .04, y - hgt * .75], [x, y - hgt]], hgt * .07, hgt * .025, c || '#3b332c');
+    for (let k = 0; k < 4; k++) { const ty = y - hgt * (.45 + k * .17), tw = hgt * (.36 - k * .06), tx = x + (k % 2 ? 1 : -1) * hgt * .08; o += brush([[tx - tw, ty + hgt * .03], [tx - tw * .3, ty - hgt * .03], [tx + tw * .4, ty - hgt * .025], [tx + tw, ty + hgt * .03]], hgt * .14, hgt * .05, c || '#2f3a30', .88); }
+    return o; };
+
+  /* ── 6 수묵 산수 — 비 갠 인왕산 (인왕제색도 구도를 빌린 재해석) ── */
+  D.k_sansu = () => { paper(KP('#4a4640', '#33302b'));
+    let s = hanji('#f0ebe1', .2);
+    const cx = port ? W * .5 : W * .28, top = port ? H * .2 : H * .1, bw = port ? W * .52 : W * .26, base = port ? H * .62 : H * .66;
+    /* 뒤 산(옅은 먹) — 양 끝이 화면 아래로 내려감 */
+    const wash = (x0, x1, ytop, f, ph, c, o) => { let pts = []; for (let i = 0; i <= 90; i++) { const t = i / 90, x = x0 + (x1 - x0) * t; pts.push([x, H + 4 - (H + 4 - ytop) * Math.pow(Math.sin(Math.PI * t), .7) * (.86 + .14 * Math.sin(t * f * 6.28 + ph))]); } return `<path d="${P(pts)}Z" fill="${c}" opacity="${o}"/>` + sk(P(pts), 2 * u, '#4a443d', o * .8); };
+    s += wash(-W * .15, port ? W * 1.15 : W * .8, top + (base - top) * .45, 2.3, 1, '#b9b2a6', .45);
+    /* 주봉 — 왼쪽은 완만, 오른쪽 위가 둥글게 솟은 바위 덩어리 */
+    let pk = []; const x0 = cx - bw * 1.25, x1 = cx + bw * 1.05;
+    for (let i = 0; i <= 70; i++) { const t = i / 70, tt = Math.pow(t, .78); const f = Math.pow(Math.sin(Math.PI * tt), .6) * (.94 + .06 * Math.sin(t * 23 + 1)); pk.push([x0 + (x1 - x0) * t, base + H * .2 - (base + H * .2 - top) * f]); }
+    pk.push([x1, base + H * .2]); pk.push([x0, base + H * .2]);
+    s += `<defs><linearGradient id="kpk" gradientUnits="userSpaceOnUse" x1="0" y1="${r2(top)}" x2="0" y2="${r2(base + H * .2)}"><stop offset="0" stop-color="#2f2b27"/><stop offset=".55" stop-color="#4c4640"/><stop offset=".85" stop-color="#9a9286"/><stop offset="1" stop-color="#cfc8bb"/></linearGradient><clipPath id="kpc"><path d="${P(pk)}Z"/></clipPath></defs><path d="${P(pk)}Z" fill="url(#kpk)"/>`;
+    /* 내리긋는 먹 줄기(적묵) */
+    s += `<g clip-path="url(#kpc)">`;
+    for (let i = 0; i < 46; i++) { const x = x0 + (i + R() * .6) * (x1 - x0) / 46, y0 = top + (base - top) * R() * .35, len = (base - top) * (.35 + R() * .5); s += brush([[x, y0], [x + (R() - .5) * 20 * u, y0 + len * .5], [x + (R() - .5) * 26 * u, y0 + len]], (10 + R() * 18) * u, 2 * u, R() < .3 ? '#1d1a17' : '#5d564d', .5 + R() * .35); }
+    for (let i = 0; i < 9; i++) { const x = cx - bw * .8 + R() * bw * 1.6, y = top + (base - top) * (.25 + R() * .45); s += brush([[x, y], [x + (R() - .5) * 30 * u, y + 40 * u], [x + (R() - .5) * 30 * u, y + 110 * u]], 6 * u, 1 * u, '#e9e3d6', .55); }
+    s += '</g>' + sk(P(pk.slice(0, 71)), 3 * u, '#1d1a17', .9);
+    /* 아래 언덕 · 소나무 숲 */
+    s += mist('kms0', [[cx, base, bw * 1.6, 34 * u, .95]]) + wash(-W * .1, port ? W * 1.1 : W * .66, base + H * .02, 3.1, 2, '#8d867b', .6);
+    const pn = port ? 14 : 18; for (let i = 0; i < pn; i++) { const x = (port ? W * .05 : W * .02) + i * (port ? W * .07 : W * .032) + (R() - .5) * 20 * u, y = base + H * (.16 + R() * .1); s += pine(x, y, (60 + R() * 50) * u); }
+    /* 기와집 한 채 */
+    const hx = port ? W * .72 : W * .46, hy = base + H * .16;
+    s += `<path d="M${r2(hx - 70 * u)} ${r2(hy)}Q${r2(hx)} ${r2(hy + 10 * u)} ${r2(hx + 70 * u)} ${r2(hy)}L${r2(hx + 48 * u)} ${r2(hy - 26 * u)}L${r2(hx - 48 * u)} ${r2(hy - 26 * u)}Z" fill="#3b3631"/><rect x="${r2(hx - 50 * u)}" y="${r2(hy + 2 * u)}" width="${r2(100 * u)}" height="${r2(26 * u)}" fill="#e8e1d3" stroke="#3b3631" stroke-width="${r2(1.4 * u)}"/>`;
+    s += mist('kms', [[cx - bw * .3, top + (base - top) * .62, bw * 1.1, 22 * u, .85], [cx + bw * .5, base + H * .1, bw * 1.1, 26 * u, .9], [cx - bw * .7, base + H * .2, bw, 20 * u, .8]]);
+    s += seal(port ? W * .82 : W * .62, port ? H * .1 : H * .12, '仁', u * 1.1);
+    return s + grain(.05); };
+
+  /* ── 7 금강산 — 뾰족 봉우리 일만이천 (금강전도 구도를 빌린 재해석) ── */
+  D.k_geumgang = () => { paper(KP('#4f6a5c', '#3a5145'));
+    let s = hanji('#f1ece2', .18);
+    const cx = port ? W * .5 : W * .27, cy = port ? H * .42 : H * .52, rx = port ? W * .46 : W * .24, ry = port ? H * .3 : H * .44;
+    /* 둥근 테 — 흙산(왼쪽 · 아래)은 먹점 */
+    s += `<ellipse cx="${r2(cx)}" cy="${r2(cy)}" rx="${r2(rx * 1.04)}" ry="${r2(ry * 1.03)}" fill="#e7e1d4"/>`;
+    let rim = ''; for (let i = 0; i < 420; i++) { const a = Math.PI * (.55 + R() * 1.05), rr = .86 + R() * .17; const x = cx + Math.cos(a) * rx * rr, y = cy + Math.sin(a) * ry * rr * .98; rim += `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2((5 + R() * 6) * u)}" ry="${r2((2.6 + R() * 2.4) * u)}" fill="${R() < .5 ? '#4f6a5c' : '#2f3a33'}" opacity="${r2(.5 + R() * .4)}"/>`; }
+    s += rim;
+    /* 바위 봉우리들 — 뒤(위)에서 앞(아래)으로 */
+    const peaks = []; for (let i = 0; i < (port ? 70 : 90); i++) { const a = R() * Math.PI * 2, d = Math.sqrt(R()) * .82; const x = cx + Math.cos(a) * rx * d * .9, yb = cy + Math.sin(a) * ry * d * .75 + ry * .12; peaks.push([x, yb, (90 + R() * 150) * u * (1.1 - d * .4), (16 + R() * 18) * u]); }
+    peaks.sort((a, b) => a[1] - b[1]);
+    peaks.forEach(([x, yb, h, w]) => { const tx = x + (R() - .5) * w * .5, ty = yb - h; const l1 = [x - w, yb], r1 = [x + w, yb];
+      const sideL = [l1, [x - w * .7 + (R() - .5) * 6 * u, yb - h * .45], [tx - w * .2, ty + h * .12], [tx, ty]], sideR = [[tx, ty], [tx + w * .25, ty + h * .15], [x + w * .65 + (R() - .5) * 6 * u, yb - h * .5], r1];
+      s += `<path d="${P(sideL.concat(sideR))}Z" fill="#f7f4ec" stroke="#3a352f" stroke-width="${r2(1.5 * u)}"/>`;
+      for (let k = 1; k < 4; k++) { const f = k / 4; s += sk(`M${r2(tx + (x - w + w * 2 * f - tx) * .25)} ${r2(ty + h * .18)}L${r2(x - w + w * 2 * f)} ${r2(yb - 2 * u)}`, 1 * u, '#5a534a', .55); }
+    });
+    /* 맨 앞 계곡 물줄기 · 소나무 몇 그루 */
+    s += sk(`M${r2(cx - rx * .1)} ${r2(cy + ry * .95)}Q${r2(cx + rx * .05)} ${r2(cy + ry * .5)} ${r2(cx - rx * .05)} ${r2(cy + ry * .15)}`, 3 * u, '#7a9aa8', .7);
+    for (let i = 0; i < 7; i++) { const a = Math.PI * (.62 + i * .12), x = cx + Math.cos(a) * rx * .9, y = cy + Math.sin(a) * ry * .9; s += pine(x, y, (46 + R() * 30) * u, '#2f3a33'); }
+    s += seal(port ? W * .82 : W * .56, port ? H * .08 : H * .1, '金', u * 1.1);
+    return s + grain(.05); };
+
+  /* ── 8 초가집 · 장독대 — 둥근 초가지붕 · 박 · 옹기 ── */
+  D.k_choga = () => { paper(KP('#9a6a2c', '#7a5220'));
+    let s = hanji('#f3ecdf', .18);
+    const gx = port ? W * .06 : W * .04, gy = port ? H * .66 : H * .8, k = port ? W / 900 : 1.32;
+    s += `<circle cx="${r2(port ? W * .74 : W * .44)}" cy="${r2(port ? H * .2 : H * .2)}" r="${r2(44 * u)}" fill="#fbf2d8" stroke="${INK}" stroke-width="${r2(1.5 * u)}"/>`;
+    /* 뒷산 */
+    let mpts = []; for (let x = -20; x <= W + 20; x += W / 80) mpts.push([x, gy - H * .2 - H * .1 * Math.sin(x / W * 4 + .5) - H * .04 * Math.sin(x / W * 11)]); s += `<path d="${P(mpts)}L${W + 20} ${H}L-20 ${H}Z" fill="#e6dfd0"/>` + sk(P(mpts), 1.6 * u, INK, .5);
+    /* 땅 */
+    s += `<rect x="0" y="${r2(gy)}" width="${W}" height="${r2(H - gy)}" fill="#ece3d1"/>` + sk(`M0 ${r2(gy)}H${W}`, 1.6 * u, INK, .6);
+    /* 집 */
+    const hw = 330 * u * k, hx = gx + hw * .55 + 20 * u, wt = gy - 150 * u * k;
+    s += `<rect x="${r2(hx - hw * .42)}" y="${r2(wt)}" width="${r2(hw * .84)}" height="${r2(gy - wt)}" fill="#d8c3a0" stroke="${INK}" stroke-width="${r2(1.6 * u)}"/>`;
+    [-.42, -.14, .14, .42].forEach(f => s += `<rect x="${r2(hx + hw * f - 6 * u)}" y="${r2(wt)}" width="${r2(12 * u)}" height="${r2(gy - wt)}" fill="#7a5a3c" stroke="${INK}" stroke-width="${r2(1 * u)}"/>`);
+    const dw = hw * .2, dx = hx - dw / 2; s += `<rect x="${r2(dx)}" y="${r2(wt + 26 * u)}" width="${r2(dw)}" height="${r2(gy - wt - 34 * u)}" fill="#f4e8cc" stroke="${INK}" stroke-width="${r2(1.3 * u)}"/>`; for (let i = 1; i < 4; i++) s += sk(`M${r2(dx + dw * i / 4)} ${r2(wt + 26 * u)}V${r2(gy - 8 * u)}`, 1 * u, INK, .6);
+    s += `<rect x="${r2(hx - hw * .5)}" y="${r2(gy - 12 * u)}" width="${r2(hw)}" height="${r2(14 * u)}" fill="#bfb3a0" stroke="${INK}" stroke-width="${r2(1.2 * u)}"/>`;
+    /* 초가지붕 — 둥근 짚 덩어리 · 새끼줄 */
+    const rt = wt - 120 * u * k, rl = hx - hw * .62, rr = hx + hw * .62, re = wt + 16 * u;
+    const roof = `M${r2(rl)} ${r2(re)}C${r2(rl - 10 * u)} ${r2(rt + 40 * u)} ${r2(hx - hw * .3)} ${r2(rt)} ${r2(hx)} ${r2(rt)}C${r2(hx + hw * .3)} ${r2(rt)} ${r2(rr + 10 * u)} ${r2(rt + 40 * u)} ${r2(rr)} ${r2(re)}Q${r2(hx)} ${r2(re + 14 * u)} ${r2(rl)} ${r2(re)}Z`;
+    s += `<clipPath id="kch"><path d="${roof}"/></clipPath><path d="${roof}" fill="#d9b978"/><g clip-path="url(#kch)">`;
+    for (let i = 0; i < 70; i++) { const x = rl + (rr - rl) * R(), y = rt + (re - rt) * R(); s += sk(`M${r2(x)} ${r2(y)}l${r2((R() - .5) * 8 * u)} ${r2(14 * u + R() * 10 * u)}`, 1.1 * u, '#9a7a3c', .7); }
+    for (let i = 1; i < 9; i++) { const f = i / 9; s += sk(`M${r2(rl + (rr - rl) * f)} ${r2(re + 6 * u)}Q${r2(hx + (rl + (rr - rl) * f - hx) * .4)} ${r2(rt - 10 * u)} ${r2(hx + (rl + (rr - rl) * f - hx) * .1)} ${r2(rt - 20 * u)}`, 1.3 * u, '#7a5a2a', .8); }
+    for (let i = 1; i < 4; i++) { const yy = rt + (re - rt) * i / 4; s += sk(`M${r2(rl - 10 * u)} ${r2(yy + 10 * u)}Q${r2(hx)} ${r2(yy - 18 * u)} ${r2(rr + 10 * u)} ${r2(yy + 10 * u)}`, 1.3 * u, '#7a5a2a', .8); }
+    s += '</g>' + `<path d="${roof}" fill="none" stroke="${INK}" stroke-width="${r2(2 * u)}"/>`;
+    /* 박 두 덩이 · 넝쿨 */
+    [[hx - hw * .18, rt + 18 * u, 22], [hx + hw * .2, rt + 26 * u, 17]].forEach(([x, y, r]) => s += `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(r * u)}" ry="${r2(r * .85 * u)}" fill="#f8f4e8" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/>`);
+    s += sk(`M${r2(hx - hw * .45)} ${r2(rt + 50 * u)}C${r2(hx - hw * .3)} ${r2(rt + 10 * u)} ${r2(hx)} ${r2(rt + 40 * u)} ${r2(hx + hw * .32)} ${r2(rt + 16 * u)}`, 1.2 * u, '#4f6a3c', .9);
+    /* 장독대 */
+    const jx = hx + hw * .62, jy = gy + 10 * u;
+    s += `<path d="M${r2(jx - 10 * u)} ${r2(jy)}h${r2(270 * u * k)}l${r2(-14 * u)} ${r2(-24 * u)}h${r2(-242 * u * k)}Z" fill="#cfc6b6" stroke="${INK}" stroke-width="${r2(1.3 * u)}"/>`;
+    const jar = (x, y, w, h, lid) => { const o = `<path d="M${r2(x - w * .28)} ${r2(y - h)}C${r2(x - w * .7)} ${r2(y - h * .8)} ${r2(x - w * .62)} ${r2(y - h * .12)} ${r2(x - w * .3)} ${r2(y)}H${r2(x + w * .3)}C${r2(x + w * .62)} ${r2(y - h * .12)} ${r2(x + w * .7)} ${r2(y - h * .8)} ${r2(x + w * .28)} ${r2(y - h)}Z" fill="#6b4a33" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/>` + sk(`M${r2(x - w * .5)} ${r2(y - h * .55)}Q${r2(x)} ${r2(y - h * .5)} ${r2(x + w * .5)} ${r2(y - h * .55)}`, 1.1 * u, '#c9a87a', .8);
+      return o + (lid ? `<ellipse cx="${r2(x)}" cy="${r2(y - h)}" rx="${r2(w * .36)}" ry="${r2(h * .08)}" fill="#5a3d2a" stroke="${INK}" stroke-width="${r2(1.2 * u)}"/><circle cx="${r2(x)}" cy="${r2(y - h - h * .08)}" r="${r2(w * .06)}" fill="#5a3d2a"/>` : ''); };
+    [[30, 120, 110], [100, 90, 80], [160, 70, 62], [210, 54, 48], [70, 60, 52]].forEach(([ox, w, h], i) => s += jar(jx + ox * u * k, jy - (i === 4 ? 18 * u : 22 * u), w * u * k, h * u * k, true));
+    /* 싸리 울타리 */
+    const fx0 = jx + 300 * u * k, fx1 = port ? W * .98 : W * .6; for (let x = fx0; x < fx1; x += 11 * u) s += sk(`M${r2(x)} ${r2(gy + 6 * u)}l${r2((R() - .5) * 4 * u)} ${r2(-70 * u - R() * 10 * u)}`, 2 * u, '#7a5a3c', .85);
+    s += sk(`M${r2(fx0)} ${r2(gy - 30 * u)}H${r2(fx1)}M${r2(fx0)} ${r2(gy - 52 * u)}H${r2(fx1)}`, 2.4 * u, '#5a412b', .9);
+    s += seal(port ? W * .82 : W * .62, port ? H * .1 : H * .1, '家', u * 1.1);
+    return s + grain(.045); };
+
+  /* ── 9 돌담길 · 감나무 — 기와 얹은 돌담 · 주황 감 ── */
+  D.k_doldam = () => { paper(KP('#b8541f', '#94420f'));
+    let s = hanji('#f4ecdd', .18);
+    /* 감나무 */
+    const tx = port ? W * .5 : W * .24, ty = port ? H * .62 : H * .64, th = port ? H * .42 : H * .56;
+    const br = (pts, w0, w1) => brush(pts, w0 * u, w1 * u, '#3d3129');
+    s += br([[tx, ty + 40 * u], [tx - 10 * u, ty - th * .3], [tx + 14 * u, ty - th * .55], [tx - 6 * u, ty - th * .8]], 44, 14);
+    const bs = [[[tx - 6 * u, ty - th * .35], [tx - th * .25, ty - th * .55], [tx - th * .42, ty - th * .6]], [[tx + 8 * u, ty - th * .5], [tx + th * .22, ty - th * .7], [tx + th * .4, ty - th * .74]], [[tx, ty - th * .72], [tx - th * .18, ty - th * .92], [tx - th * .3, ty - th * 1.0]], [[tx + 4 * u, ty - th * .2], [tx + th * .3, ty - th * .3], [tx + th * .5, ty - th * .28]], [[tx - 4 * u, ty - th * .62], [tx + th * .12, ty - th * .95]]];
+    bs.forEach(b => s += br(b, 16, 3));
+    const fruits = []; bs.forEach(b => { for (let i = 0; i < 7; i++) { const t = .3 + R() * .7, a = b[0], c = b[b.length - 1]; fruits.push([a[0] + (c[0] - a[0]) * t + (R() - .5) * 60 * u, a[1] + (c[1] - a[1]) * t + (R() - .2) * 50 * u]); } });
+    fruits.forEach(([x, y]) => { s += sk(`M${r2(x)} ${r2(y - 22 * u)}L${r2(x)} ${r2(y - 12 * u)}`, 1.4 * u, '#3d3129'); s += `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(13 * u)}" fill="#e8702a" stroke="#8a3b12" stroke-width="${r2(1.3 * u)}"/><path d="M${r2(x - 8 * u)} ${r2(y - 12 * u)}l${r2(8 * u)} ${r2(4 * u)}l${r2(8 * u)} ${r2(-4 * u)}" fill="none" stroke="#4f5a2c" stroke-width="${r2(2.2 * u)}"/>`; });
+    for (let i = 0; i < 26; i++) { const x = tx + (R() - .5) * th * .9, y = ty - th * (.2 + R() * .8); s += `<path d="M0 0 C 8 -10, 22 -10, 30 0 C 22 8, 8 8, 0 0Z" transform="translate(${r2(x)} ${r2(y)}) rotate(${r2(R() * 360)}) scale(${r2(u * (.8 + R() * .5))})" fill="${['#c9862f', '#a8541c', '#8a8a3c'][i % 3]}" opacity=".85"/>`; }
+    /* 돌담 — 앞쪽 가로로 */
+    const wy = port ? H * .66 : H * .64, wh = port ? H * .16 : H * .24, wx1 = port ? W + 10 : W * .72;
+    s += `<rect x="-10" y="${r2(wy)}" width="${r2(wx1 + 10)}" height="${r2(wh)}" fill="#d8cfbf"/>`;
+    let y = wy + 6 * u, row = 0; while (y < wy + wh - 8 * u) { const rh = (26 + R() * 18) * u; let x = -10 - (row % 2) * 20 * u; while (x < wx1) { const w = (40 + R() * 46) * u; const pad = 3 * u; const p = [[x + pad, y + pad + R() * 4 * u], [x + w - pad, y + pad + R() * 4 * u], [x + w - pad - R() * 4 * u, y + rh - pad], [x + pad + R() * 4 * u, y + rh - pad]]; s += `<path d="M${r2(p[0][0])} ${r2(p[0][1])}Q${r2((p[0][0] + p[1][0]) / 2)} ${r2(p[0][1] - 5 * u)} ${r2(p[1][0])} ${r2(p[1][1])}Q${r2(p[1][0] + 5 * u)} ${r2((p[1][1] + p[2][1]) / 2)} ${r2(p[2][0])} ${r2(p[2][1])}Q${r2((p[2][0] + p[3][0]) / 2)} ${r2(p[2][1] + 5 * u)} ${r2(p[3][0])} ${r2(p[3][1])}Q${r2(p[3][0] - 5 * u)} ${r2((p[3][1] + p[0][1]) / 2)} ${r2(p[0][0])} ${r2(p[0][1])}Z" fill="${['#e9e2d4', '#ded5c4', '#d2c8b5', '#e4dccb'][Math.floor(R() * 4)]}" stroke="#5a5046" stroke-width="${r2(1.4 * u)}"/>`; x += w; } y += rh; row++; }
+    /* 담 위 기와 */
+    const cy = wy - 4 * u; s += `<path d="M-10 ${r2(cy + 6 * u)}L${r2(wx1 + 14 * u)} ${r2(cy + 6 * u)}L${r2(wx1)} ${r2(cy - 26 * u)}L-10 ${r2(cy - 26 * u)}Z" fill="#cbc3b3" stroke="${INK}" stroke-width="${r2(1.6 * u)}"/>`;
+    for (let x = -4; x < wx1; x += 15 * u) s += sk(`M${r2(x)} ${r2(cy - 24 * u)}L${r2(x + 3 * u)} ${r2(cy + 5 * u)}`, 1.1 * u, INK, .65);
+    s += `<rect x="-10" y="${r2(cy - 34 * u)}" width="${r2(wx1 + 6 * u)}" height="${r2(9 * u)}" fill="#bdb4a3" stroke="${INK}" stroke-width="${r2(1.3 * u)}"/>`;
+    /* 길 */
+    s += `<rect x="-10" y="${r2(wy + wh)}" width="${W + 20}" height="${r2(H)}" fill="#e9dfcc"/>` + sk(`M-10 ${r2(wy + wh)}H${W + 10}`, 1.4 * u, INK, .5);
+    for (let i = 0; i < 14; i++) { const x = R() * wx1, yy = wy + wh + R() * (H - wy - wh); s += `<path d="M0 0 C 8 -10, 22 -10, 30 0 C 22 8, 8 8, 0 0Z" transform="translate(${r2(x)} ${r2(yy)}) rotate(${r2(R() * 360)}) scale(${r2(u)})" fill="${['#c9862f', '#a8541c'][i % 2]}" opacity=".8"/>`; }
+    s += seal(port ? W * .82 : W * .05, port ? H * .1 : H * .08, '秋', u * 1.1);
+    return s + grain(.045); };
+
+
+  /* ── 10 궁궐 전각 — 팔작지붕 · 붉은 기둥 · 단청 · 월대 ── */
+  D.k_palace = () => { paper(KP('#a0402c', '#7f2f1f'));
+    let s = hanji('#f1ece2', .16);
+    const cx = port ? W * .5 : W * .3, bw = port ? W * .86 : W * .46, gy = port ? H * .66 : H * .8, k = bw / 880;
+    /* 뒷산(북악) */
+    let mp = []; for (let x = -20; x <= W + 20; x += W / 90) { const t = (x - cx) / (W * .5); mp.push([x, gy - H * .3 - H * .22 * Math.exp(-t * t * 2.2) - H * .03 * Math.sin(x / W * 13)]); }
+    s += `<path d="${P(mp)}L${W + 20} ${H}L-20 ${H}Z" fill="#e7e1d5"/>` + sk(P(mp), 1.8 * u, INK, .5);
+    for (let i = 0; i < 26; i++) { const x = R() * W, y = gy - H * .14 + R() * H * .1; s += pine(x, y, (40 + R() * 30) * u, '#5d6b5a'); }
+    /* 월대(돌 기단) · 계단 */
+    const sb = gy, st = gy - 70 * k * u * 1.2, sw = bw * .6;
+    s += `<rect x="${r2(cx - sw)}" y="${r2(st)}" width="${r2(sw * 2)}" height="${r2(sb - st)}" fill="#ddd6c8" stroke="${INK}" stroke-width="${r2(1.6 * u)}"/>`;
+    for (let x = cx - sw; x < cx + sw; x += 60 * k * u) s += sk(`M${r2(x)} ${r2(st)}V${r2(sb)}`, 1 * u, INK, .4);
+    s += sk(`M${r2(cx - sw)} ${r2((st + sb) / 2)}H${r2(cx + sw)}`, 1 * u, INK, .4);
+    const stw = 90 * k * u; for (let i = 0; i < 6; i++) { const y = st + (sb - st) * i / 6; s += sk(`M${r2(cx - stw)} ${r2(y)}H${r2(cx + stw)}`, 1.2 * u, INK, .7); } s += `<rect x="${r2(cx - stw)}" y="${r2(st)}" width="${r2(stw * 2)}" height="${r2(sb - st)}" fill="none" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/>`;
+    /* 몸채 — 기둥 · 창호 */
+    const bt = st - 210 * k * u, bwid = bw * .44, nc = 6;
+    s += `<rect x="${r2(cx - bwid)}" y="${r2(bt)}" width="${r2(bwid * 2)}" height="${r2(st - bt)}" fill="#efe3c9" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/>`;
+    for (let i = 0; i < nc - 1; i++) { const x0 = cx - bwid + bwid * 2 * i / (nc - 1) + 14 * k * u, x1 = cx - bwid + bwid * 2 * (i + 1) / (nc - 1) - 14 * k * u, y0 = bt + 40 * k * u, y1 = st - 10 * u;
+      for (let x = x0; x <= x1 + 1; x += (x1 - x0) / 6) s += sk(`M${r2(x)} ${r2(y0)}V${r2(y1)}`, 1.6 * u, '#7a3a26', .85);
+      for (let y = y0; y <= y1 + 1; y += (y1 - y0) / 9) s += sk(`M${r2(x0)} ${r2(y)}H${r2(x1)}`, 1.2 * u, '#7a3a26', .6); }
+    for (let i = 0; i < nc; i++) { const x = cx - bwid + bwid * 2 * i / (nc - 1); s += `<rect x="${r2(x - 11 * k * u)}" y="${r2(bt)}" width="${r2(22 * k * u)}" height="${r2(st - bt)}" fill="#a83a26" stroke="${INK}" stroke-width="${r2(1.3 * u)}"/>`; }
+    /* 창방 단청 띠 */
+    s += `<rect x="${r2(cx - bwid - 20 * k * u)}" y="${r2(bt - 26 * k * u)}" width="${r2(bwid * 2 + 40 * k * u)}" height="${r2(30 * k * u)}" fill="${DC.grn}" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/>`;
+    for (let i = 0; i < nc; i++) { const x = cx - bwid + bwid * 2 * i / (nc - 1), y = bt - 11 * k * u; s += `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(10 * k * u)}" fill="${DC.red}" stroke="${DC.wht}" stroke-width="${r2(2.4 * u)}"/><circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(3.5 * k * u)}" fill="${DC.yel}"/>`; }
+    /* 공포 — 작은 블록 줄 */
+    for (let x = cx - bwid - 10 * k * u; x < cx + bwid + 10 * k * u; x += 24 * k * u) s += `<rect x="${r2(x)}" y="${r2(bt - 48 * k * u)}" width="${r2(16 * k * u)}" height="${r2(22 * k * u)}" fill="${DC.blu}" stroke="${INK}" stroke-width="${r2(1 * u)}"/>`;
+    /* 팔작지붕 */
+    const ey = bt - 46 * k * u, ew = bwid * 1.32, lift = 56 * k * u, rt = ey - 230 * k * u, rw = bwid * .78;
+    const eave = (t) => bez([cx - ew, ey - lift], [cx - ew * .62, ey + 14 * k * u], [cx + ew * .62, ey + 14 * k * u], [cx + ew, ey - lift], t);
+    let ep = []; for (let i = 0; i <= 40; i++) ep.push(eave(i / 40));
+    const gbl = rt + 70 * k * u;   /* 합각 아래 */
+    const roof = `M${r2(cx - rw)} ${r2(rt)}L${r2(cx + rw)} ${r2(rt)}Q${r2(cx + rw + 40 * k * u)} ${r2(gbl + 30 * k * u)} ${r2(cx + ew)} ${r2(ey - lift)}${P(ep.slice().reverse()).replace('M', 'L')}Q${r2(cx - rw - 40 * k * u)} ${r2(gbl + 30 * k * u)} ${r2(cx - rw)} ${r2(rt)}Z`;
+    s += `<clipPath id="kpl"><path d="${roof}"/></clipPath><path d="${roof}" fill="#d6cfc1"/><g clip-path="url(#kpl)">`;
+    for (let i = 1; i < 60; i++) { const t = i / 60, [x, y] = eave(t), xt = cx + (x - cx) * .55; s += sk(`M${r2(xt)} ${r2(rt)}L${r2(x)} ${r2(y)}`, 1.2 * u, INK, .65); }
+    s += '</g>' + sk(P(ep), 2.6 * u);
+    /* 용마루 · 취두 */
+    s += `<path d="M${r2(cx - rw - 14 * u)} ${r2(rt - 30 * k * u)}Q${r2(cx - rw + 4 * u)} ${r2(rt + 2 * u)} ${r2(cx - rw + 26 * u)} ${r2(rt - 8 * k * u)}L${r2(cx + rw - 26 * u)} ${r2(rt - 8 * k * u)}Q${r2(cx + rw - 4 * u)} ${r2(rt + 2 * u)} ${r2(cx + rw + 14 * u)} ${r2(rt - 30 * k * u)}L${r2(cx + rw + 6 * u)} ${r2(rt + 8 * u)}L${r2(cx - rw - 6 * u)} ${r2(rt + 8 * u)}Z" fill="#bdb4a4" stroke="${INK}" stroke-width="${r2(1.8 * u)}"/>`;
+    /* 내림마루 · 잡상 */
+    for (const f of [-1, 1]) { const h0 = [cx + f * rw, rt + 4 * u], hc = [cx + f * (rw + 40 * k * u), gbl + 30 * k * u], h1 = [cx + f * ew, ey - lift];
+      s += sk(`M${r2(h0[0])} ${r2(h0[1])}Q${r2(hc[0])} ${r2(hc[1])} ${r2(h1[0])} ${r2(h1[1])}`, 5 * k * u, '#bdb4a4') + sk(`M${r2(h0[0])} ${r2(h0[1])}Q${r2(hc[0])} ${r2(hc[1])} ${r2(h1[0])} ${r2(h1[1])}`, 1.4 * u);
+      for (let i = 0; i < 5; i++) { const [x, y] = qb(h0, hc, h1, .55 + i * .07); s += `<path d="M${r2(x - 4 * k * u)} ${r2(y - 2 * u)}q${r2(1 * u)} ${r2(-12 * k * u)} ${r2(5 * k * u)} ${r2(-13 * k * u)}q${r2(5 * k * u)} ${r2(1 * u)} ${r2(4 * k * u)} ${r2(13 * k * u)}Z" fill="#8a8274"/>`; } }
+    s += `<rect x="0" y="${r2(gy)}" width="${W}" height="${r2(H - gy)}" fill="#e9e1d1"/>` + sk(`M0 ${r2(gy)}H${W}`, 1.4 * u, INK, .55);
+    for (let x = 20 * u; x < W; x += 90 * u) s += sk(`M${r2(x)} ${r2(gy)}L${r2(x + (x - cx) * .25)} ${r2(H)}`, 1 * u, INK, .18);
+    s += seal(port ? W * .82 : W * .62, port ? H * .08 : H * .1, '宮', u * 1.1);
+    return s + grain(.045); };
+
+  /* ── 11 구름 · 물결 문양 — 전통 구름무늬(운문)와 물결 ── */
+  D.k_gureum = () => { paper(KP('#2d5f8a', '#22496b'));
+    let s = hanji('#f2ede3', .14);
+    const cloud = (x, y, sc, c, flip) => { const f = flip ? -1 : 1, q = (a, b) => `${r2(x + a * sc * f)} ${r2(y + b * sc)}`;
+      /* 큰 소용돌이 + 작은 소용돌이 + 꼬리 */
+      const d = `M${q(-60, 10)}C${q(-60, -30)} ${q(-10, -40)} ${q(0, -12)}C${q(8, -40)} ${q(52, -42)} ${q(58, -10)}C${q(80, -18)} ${q(100, 4)} ${q(84, 22)}C${q(70, 38)} ${q(30, 30)} ${q(20, 20)}C${q(10, 34)} ${q(-30, 40)} ${q(-46, 26)}C${q(-80, 34)} ${q(-120, 30)} ${q(-150, 40)}C${q(-120, 20)} ${q(-80, 22)} ${q(-60, 10)}Z`;
+      let o = `<path d="${d}" fill="${c}" opacity=".18"/><path d="${d}" fill="none" stroke="${c}" stroke-width="${r2(3 * u)}" stroke-linejoin="round"/>`;
+      const sp = (cx0, cy0, r0) => { let pts = []; for (let i = 0; i <= 40; i++) { const a = i / 40 * Math.PI * 3.2, rr = r0 * (1 - i / 48); pts.push([x + (cx0 + Math.cos(a) * rr) * sc * f, y + (cy0 + Math.sin(a) * rr) * sc]); } return sk(P(pts), 2.6 * u, c); };
+      return o + sp(-28, -6, 22) + sp(28, -14, 20) + sp(70, 6, 12); };
+    const C = ['#2d5f8a', '#b0442f', '#3f7f6c'];
+    const cols = port ? 3 : 5, rows = port ? 6 : 4;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { if (!port && c >= 3 && r < 3) continue; const x = (c + .5 + (r % 2) * .5) * W / cols, y = (r + .4) * H * .72 / rows + H * .04; s += cloud(x, y, u * (.9 + R() * .3), C[(r + c) % 3], (r + c) % 2); }
+    /* 아래 물결 */
+    for (let k = 0; k < 7; k++) { const y0 = H * (.8 + k * .03); let pts = []; for (let x = -20; x <= W + 20; x += 8 * u) { const ph = x / (70 * u) + k * .9; pts.push([x, y0 + Math.sin(ph) * 10 * u + Math.sin(ph * 2.1) * 3 * u]); } s += sk(P(pts), (2.6 - k * .15) * u, k % 2 ? '#2d5f8a' : '#3f7f6c', .85); }
+    for (let i = 0; i < 9; i++) { const x = (i + .5) * W / 9, y = H * .79; let pts = []; for (let j = 0; j <= 24; j++) { const a = Math.PI * (1 + j / 24 * 1.6), rr = 26 * u * (1 - j / 40); pts.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr]); } s += sk(P(pts), 2.4 * u, '#2d5f8a', .9); }
+    return s + grain(.04); };
+
+  /* ── 12 십장생 — 해 · 구름 · 산 · 소나무 · 학 · 물 · 불로초 (민화 느낌) ── */
+  D.k_sipjang = () => { paper(KP('#2f6f62', '#235448'));
+    let s = hanji('#f3ecdc', .16);
+    const sx = port ? W * .78 : W * .1, sy = port ? H * .1 : H * .16, sr = 54 * u;
+    s += `<circle cx="${r2(sx)}" cy="${r2(sy)}" r="${r2(sr)}" fill="#d0452e" stroke="${INK}" stroke-width="${r2(1.6 * u)}"/>`;
+    /* 청록 바위산 */
+    const peak = (x, yb, w, h, c1, c2) => { const d = `M${r2(x - w)} ${r2(yb)}C${r2(x - w * .8)} ${r2(yb - h * .5)} ${r2(x - w * .5)} ${r2(yb - h * .8)} ${r2(x - w * .15)} ${r2(yb - h)}C${r2(x + w * .1)} ${r2(yb - h * 1.04)} ${r2(x + w * .45)} ${r2(yb - h * .7)} ${r2(x + w * .6)} ${r2(yb - h * .45)}C${r2(x + w * .8)} ${r2(yb - h * .2)} ${r2(x + w * .9)} ${r2(yb - h * .1)} ${r2(x + w)} ${r2(yb)}Z`;
+      let o = `<path d="${d}" fill="${c1}" stroke="${INK}" stroke-width="${r2(1.8 * u)}"/>`;
+      for (let i = 1; i < 5; i++) { const f = i / 5; o += sk(`M${r2(x - w * .15 + (R() - .5) * 10 * u)} ${r2(yb - h * (1 - f * .3))}Q${r2(x - w * (.4 - f * .6))} ${r2(yb - h * .5)} ${r2(x - w * .9 + w * 1.8 * f)} ${r2(yb)}`, 1.2 * u, c2, .9); }
+      o += `<path d="M${r2(x - w * .15)} ${r2(yb - h)}C${r2(x + w * .1)} ${r2(yb - h * 1.04)} ${r2(x + w * .45)} ${r2(yb - h * .7)} ${r2(x + w * .6)} ${r2(yb - h * .45)}L${r2(x + w * .2)} ${r2(yb - h * .55)}Z" fill="#f3ecdc" opacity=".35"/>`;
+      return o; };
+    const by = port ? H * .62 : H * .74;
+    if (port) { s += peak(W * .3, by, W * .32, H * .26, '#5d9c88', '#2f6f62') + peak(W * .72, by, W * .3, H * .2, '#6f8fc4', '#2d4f8b'); }
+    else { s += peak(W * .2, by, W * .14, H * .5, '#5d9c88', '#2f6f62') + peak(W * .38, by, W * .1, H * .34, '#6f8fc4', '#2d4f8b') + peak(W * .06, by, W * .08, H * .3, '#7fb3a0', '#3f7f6c'); }
+    /* 구름 띠 */
+    const cl = (x, y, w) => { let o = '', d = `M${r2(x - w)} ${r2(y)}`; for (let i = 0; i < 5; i++) { const a = x - w + w * 2 * i / 5, b = x - w + w * 2 * (i + 1) / 5; d += `C${r2(a)} ${r2(y - 34 * u)} ${r2(b)} ${r2(y - 34 * u)} ${r2(b)} ${r2(y)}`; } d += `Q${r2(x)} ${r2(y + 26 * u)} ${r2(x - w)} ${r2(y)}Z`; o += `<path d="${d}" fill="#fbf8f0" stroke="${INK}" stroke-width="${r2(1.6 * u)}"/>`; for (let i = 0; i < 5; i++) { const a = x - w + w * 2 * (i + .5) / 5; o += sk(`M${r2(a - 10 * u)} ${r2(y - 8 * u)}q${r2(10 * u)} ${r2(-14 * u)} ${r2(18 * u)} ${r2(-2 * u)}`, 1.4 * u, '#8fa9c4'); } return o; };
+    s += port ? cl(W * .35, H * .28, W * .28) + cl(W * .7, H * .42, W * .22) : cl(W * .26, H * .3, W * .12) + cl(W * .46, H * .5, W * .08) + cl(W * .1, H * .56, W * .07);
+    /* 소나무(굵게) */
+    const px = port ? W * .12 : W * .5, py = port ? H * .66 : H * .78;
+    s += brush([[px, py], [px + 20 * u, py - 120 * u], [px - 10 * u, py - 230 * u], [px + 30 * u, py - 320 * u]], 34 * u, 12 * u, '#5a4030');
+    for (const [dx, dy, w] of [[30, -320, 120], [-60, -250, 100], [70, -200, 110], [-30, -150, 80]]) { const x = px + dx * u, y = py + dy * u; s += `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(w * u)}" ry="${r2(w * .3 * u)}" fill="#2f6f62" stroke="${INK}" stroke-width="${r2(1.4 * u)}"/>`; for (let i = 0; i < 9; i++) s += sk(`M${r2(x - w * .8 * u + i * w * .2 * u)} ${r2(y + 8 * u)}l${r2(4 * u)} ${r2(-18 * u)}`, 1.1 * u, '#bfe0c8', .8); }
+    /* 학 — 단순한 나는 모양 */
+    const crane = (x, y, sc, f) => { const q = (a, b) => `${r2(x + a * sc * f)} ${r2(y + b * sc)}`, sw = r2(1.4 * u);
+      let o = `<path d="M${q(-10, 0)}C${q(-30, -40)} ${q(-80, -90)} ${q(-150, -100)}C${q(-110, -60)} ${q(-70, -20)} ${q(-20, 10)}Z" fill="#fff" stroke="${INK}" stroke-width="${sw}"/>`;
+      o += `<path d="M${q(-150, -100)}C${q(-128, -82)} ${q(-112, -70)} ${q(-98, -58)}L${q(-110, -86)}Z" fill="${INK}"/>`;
+      o += `<path d="M${q(10, 0)}C${q(20, -50)} ${q(60, -96)} ${q(120, -118)}C${q(90, -70)} ${q(50, -24)} ${q(24, 12)}Z" fill="#fff" stroke="${INK}" stroke-width="${sw}"/><path d="M${q(120, -118)}C${q(104, -96)} ${q(92, -80)} ${q(80, -66)}L${q(96, -100)}Z" fill="${INK}"/>`;
+      o += `<path d="M${q(-46, 6)}C${q(-20, -8)} ${q(30, -8)} ${q(50, 2)}C${q(30, 16)} ${q(-20, 16)} ${q(-46, 6)}Z" fill="#fff" stroke="${INK}" stroke-width="${sw}"/>`;
+      o += `<path d="M${q(48, 2)}C${q(70, -2)} ${q(86, -8)} ${q(100, -10)}" fill="none" stroke="${INK}" stroke-width="${r2(4 * sc)}" stroke-linecap="round"/><path d="M${q(100, -10)}l${r2(18 * sc * f)} ${r2(2 * sc)}" stroke="#7a6a4a" stroke-width="${r2(2.4 * sc)}"/><circle cx="${r2(x + 99 * sc * f)}" cy="${r2(y - 13 * sc)}" r="${r2(3.6 * sc)}" fill="#c4452d"/>`;
+      o += `<path d="M${q(-40, 8)}L${q(-96, 18)}M${q(-38, 10)}L${q(-94, 26)}" stroke="${INK}" stroke-width="${r2(2 * sc)}" stroke-linecap="round"/><path d="M${q(-50, 4)}l${r2(-14 * sc * f)} ${r2(-4 * sc)}l${r2(4 * sc * f)} ${r2(10 * sc)}Z" fill="${INK}"/>`;
+      return o; };
+    s += port ? crane(W * .62, H * .2, u * 1.1, 1) + crane(W * .32, H * .16, u * .8, 1) : crane(W * .34, H * .2, u * 1.2, 1) + crane(W * .5, H * .3, u * .85, 1);
+    /* 물결 · 불로초 */
+    const wy = by; s += `<rect x="0" y="${r2(wy)}" width="${W}" height="${r2(H - wy)}" fill="#dfe8e2"/>`;
+    for (let k = 0; k < 6; k++) { const y0 = wy + 14 * u + k * (H - wy) / 6; let pts = []; for (let x = -20; x <= W + 20; x += 8 * u) { const ph = x / (46 * u) + k; pts.push([x, y0 + Math.sin(ph) * 8 * u]); } s += sk(P(pts), 2 * u, '#2d4f8b', .7); }
+    const mush = (x, y, sc) => `<path d="M${r2(x)} ${r2(y)}q${r2(-4 * sc)} ${r2(-30 * sc)} ${r2(6 * sc)} ${r2(-46 * sc)}" stroke="#7a4a2a" stroke-width="${r2(5 * sc)}" fill="none"/><path d="M${r2(x - 24 * sc)} ${r2(y - 44 * sc)}Q${r2(x + 6 * sc)} ${r2(y - 80 * sc)} ${r2(x + 36 * sc)} ${r2(y - 44 * sc)}Q${r2(x + 6 * sc)} ${r2(y - 52 * sc)} ${r2(x - 24 * sc)} ${r2(y - 44 * sc)}Z" fill="#c4452d" stroke="${INK}" stroke-width="${r2(1.4 * sc)}"/>`;
+    s += mush(port ? W * .82 : W * .58, wy + 4 * u, u * 1.1) + mush(port ? W * .9 : W * .62, wy + 4 * u, u * .8);
+    return s + grain(.045); };
+
+}
 </script>
 <script>/* 달력 배경화면 만들기 v1.0 — Blog J (블로그 실행형 · 그림은 이 기기에서만 만들어요) */
-const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-13(금) 21:54 판";
+const TOOL = "wallcal", APP_VER = "1.0", BUILD = "2026-11-14(토) 03:21 판";
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const LSK = "bj-wallcal1";
 const $ = s => document.querySelector(s);
@@ -535,16 +948,18 @@ function solarToLunar(date) { let y = date.getFullYear(); let L = lunarMonths(y)
 
 /* ── 그림 목록 ── */
 const SC = {
+  k_sipjang: ["십장생", "한국"], k_giwa: ["기와지붕 마을", "한국"], k_cheoma: ["한옥 처마 · 달", "한국"], k_palace: ["궁궐 전각", "한국"], k_dancheong: ["단청 문양", "한국"], k_changho: ["창호 문살", "한국"],
+  k_choga: ["초가집 · 장독대", "한국"], k_doldam: ["돌담길 · 감나무", "한국"], k_sansu: ["수묵 산수 · 인왕산", "한국"], k_geumgang: ["금강산 일만이천봉", "한국"], k_gureum: ["구름 · 물결 문양", "한국"], k_bojagi: ["조각보", "한국"],
   snowpeak: ["새벽 설산", "겨울"], nightforest: ["눈 내리는 숲", "겨울"], pine: ["겨울 소나무", "한국"], city: ["겨울 밤 도시", "도시"], desk_winter: ["겨울 편지", "책상"], aurora: ["오로라 별밤", "하늘"],
   sakura: ["벚꽃 가지", "봄"], plum: ["봄 매화", "한국"], alley: ["봄 골목", "도시"], arches: ["봄 파스텔 도형", "도형"], desk_spring: ["봄 책상", "책상"], dawn: ["새벽 하늘", "하늘"],
   sea: ["모래 · 바다 · 하늘", "여름"], coast: ["여름 해안 도로", "도시"], bamboo: ["여름 대나무", "한국"], cloud: ["한낮 구름", "하늘"], bauhaus: ["여름 원색 도형", "도형"], desk_summer: ["여름 원고지", "책상"],
   maple: ["단풍 산", "가을"], avenue: ["가을 가로수길", "도시"], chrysan: ["가을 국화", "한국"], papercut: ["가을 종이 공예", "도형"], desk_autumn: ["가을 책과 차", "책상"], sunset: ["노을", "하늘"],
   moonjar: ["한지 · 달항아리", "한국"], contour: ["등고선 금선", "도형"], marble: ["대리석 · 금", "도형"], grid: ["모래 · 바다 모눈", "도형"], stage: ["겨울 무대 조명", "도형"]
 };
-const SEASON = { 12: ["nightforest", "city", "pine", "desk_winter", "snowpeak", "stage"], 1: ["snowpeak", "pine", "moonjar", "nightforest", "desk_winter", "aurora"], 2: ["plum", "snowpeak", "moonjar", "desk_winter", "aurora", "marble"],
+const SEASON = { 12: ["nightforest", "city", "pine", "desk_winter", "snowpeak", "stage"], 1: ["k_sipjang", "k_giwa", "snowpeak", "pine", "moonjar", "nightforest", "desk_winter", "aurora"], 2: ["k_sipjang", "plum", "k_palace", "snowpeak", "moonjar", "desk_winter", "aurora", "marble"],
   3: ["plum", "sakura", "dawn", "arches", "desk_spring", "alley"], 4: ["sakura", "alley", "arches", "desk_spring", "dawn", "plum"], 5: ["alley", "arches", "dawn", "cloud", "desk_spring", "sakura"],
   6: ["sea", "cloud", "bamboo", "coast", "bauhaus", "desk_summer"], 7: ["sea", "coast", "bamboo", "bauhaus", "cloud", "desk_summer"], 8: ["coast", "sea", "sunset", "bamboo", "desk_summer", "cloud"],
-  9: ["sunset", "chrysan", "avenue", "maple", "papercut", "desk_autumn"], 10: ["maple", "avenue", "chrysan", "papercut", "desk_autumn", "sunset"], 11: ["avenue", "maple", "chrysan", "desk_autumn", "papercut", "contour"] };
+  9: ["k_cheoma", "sunset", "chrysan", "k_choga", "avenue", "maple", "papercut", "desk_autumn"], 10: ["maple", "k_doldam", "avenue", "chrysan", "k_cheoma", "papercut", "desk_autumn", "sunset"], 11: ["avenue", "k_doldam", "maple", "chrysan", "desk_autumn", "papercut", "contour"] };
 const CATS = [["추천", "이달 어울림"], ["겨울"], ["봄"], ["여름"], ["가을"], ["한국"], ["하늘"], ["도시"], ["도형"], ["책상"], ["단색"], ["내 사진"]];
 const SOLID = [["#0B3D4A", "깊은 바다"], ["#14202B", "먹"], ["#2B3A55", "남색 밤"], ["#5A4A6E", "보랏빛"], ["#F3EEE3", "모래"], ["#E9EEF2", "구름"], ["#DCE8E0", "연두"], ["#F4DCD3", "살구"]];
 const RES = [

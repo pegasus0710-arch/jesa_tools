@@ -755,6 +755,9 @@ function parsePaste(txt) {
   for (const s of L) {
     let p = null;
     const s1 = s.replace(/^[*•·▪◦‣\-–]\s+/, "").replace(/^\d+[.)]\s*/, "");
+    /* 11-15 제이: 💡 · ※ 같은 덧붙임 줄, 「I'd like to ~ (~하고 싶어요)」 같은 틀 제목 줄은 건너뜀 */
+    if (/^[^\p{L}\p{N}"'“‘(]/u.test(s1)) { pend = null; continue; }
+    if (/~/.test(s1) && hasKo(s1) && /[A-Za-z]/.test(s1)) { pend = null; continue; }
     if (/\s*(?:→|->|=>|⇒|➜|➔)\s*/.test(s1)) { let [x, y] = s1.split(/\s*(?:→|->|=>|⇒|➜|➔)\s*/).map(v => v.trim()); if (x && y) { if (!hasKo(x) && hasKo(y)) [x, y] = [y, x]; out.push([x, y]); } pend = null; continue; }
     const m = s1.match(/^(.+?)\s*[(（]([^()（）]+)[)）]\s*$/);
     if (m && hasKo(m[1]) !== hasKo(m[2]) && /[A-Za-z]/.test(m[1] + m[2])) { let [x, y] = [m[1].trim(), m[2].trim()]; if (!hasKo(x)) [x, y] = [y, x]; out.push([x, y]); pend = null; continue; }
@@ -762,6 +765,10 @@ function parsePaste(txt) {
     else if (/\s\|\s|\s\/\/\s/.test(s)) p = s.split(/\s\|\s|\s\/\/\s/).map(x => x.trim());
     if (p && p.length >= 2) { let [a, b] = p; if (!hasKo(a) && hasKo(b)) [a, b] = [b, a]; out.push([a.replace(/^\d+[.)]\s*/, ""), b]); pend = null; continue; }
     const t = s1;
+    /* 11-15 제이: 한 줄에 「영어 문장 한글 뜻」 · 「한글 뜻 영어 문장」(구분 기호 없이 띄어쓰기만) */
+    const isSent = e => e.split(/\s+/).length >= 2 || /[.?!]$/.test(e);
+    if (/^[A-Za-z"'“‘(]/.test(t) && hasKo(t)) { const i = t.search(/[가-힣]/), en = t.slice(0, i).trim(), ko = t.slice(i).trim(); if (/[A-Za-z]/.test(en) && isSent(en) && ko) { out.push([ko, en]); pend = null; continue; } }
+    if (/^[가-힣]/.test(t) && /[A-Za-z]/.test(t)) { const i = t.search(/\s[A-Z"'“‘]/); if (i > 0) { const ko = t.slice(0, i).trim(), en = t.slice(i).trim(); if (!hasKo(en) && isSent(en)) { out.push([ko, en]); pend = null; continue; } } }
     if (hasKo(t)) { pend = t; } else if (pend) { out.push([pend, t]); pend = null; }
   }
   return out;
@@ -796,7 +803,7 @@ function openPaste(chId) {
   const c0 = chId ? D.chapters.find(x => x.id === chId) : null, W = (c0 ? c0.sec : U.sec) === "word", un = W ? "단어" : "문장";
   sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true"><div class="edh"><b>${chId ? un + " 붙여넣기" : `붙여넣어 새 ${SECN[W ? "word" : "talk"]} 챕터 만들기`}</b><button class="btn sm" data-a="close">닫기</button></div>
   ${chId ? "" : `<div class="lab">챕터 이름</div><input class="inp" id="pName" value="${W ? "단어" : "회화"} 챕터 ${D.chapters.filter(c => c.sec === (W ? "word" : "talk")).length + 1}" maxlength="40" style="margin-bottom:12px">`}
-  <div class="lab">${W ? "「1. take a look (한번 보다)」 줄 아래에 「* 예문 → 뜻」을 있는 만큼(1개든 4개든 그대로 들어가요) — 엑셀 칸(단어 · 뜻 · 예문 · 예문 뜻 · 예문 · 예문 뜻…)을 복사해 붙여도 돼요" : "한 줄에 한 문장 — 「* 영어 → 한글」 · 「영어 (한글)」 · 엑셀 두 칸(한글 · 영어) · 한글 줄과 영어 줄 번갈아, 모두 돼요"}</div>
+  <div class="lab">${W ? "「1. take a look (한번 보다)」 줄 아래에 「* 예문 → 뜻」을 있는 만큼(1개든 4개든 그대로 들어가요) — 엑셀 칸(단어 · 뜻 · 예문 · 예문 뜻 · 예문 · 예문 뜻…)을 복사해 붙여도 돼요" : "한 줄에 한 문장 — 「* 영어 → 한글」 · 「영어 (한글)」 · 「영어 문장 한글 뜻」 · 엑셀 두 칸(한글 · 영어) · 한글 줄과 영어 줄 번갈아, 모두 돼요"}</div>
   <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "1. take a look (한번 보다)&#10;* Can you take a look at this? → 이것 좀 봐 줄래요?&#10;* Let me take a look. → 제가 한번 볼게요.&#10;&#10;또는  figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다" : "카페에서&#10;* Can I get an iced Americano? → 아이스 아메리카노 하나 주세요.&#10;* For here or to go? → 드시고 가세요, 가져가세요?&#10;&#10;또는  오늘 시간 있어요?&#9;Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
   <p class="hint" id="pCnt">0${un}</p><button class="btn go full" data-a="pasteok" data-id="${chId || ""}" data-w="${W ? 1 : ""}">${svg(IC.check)}넣기</button></div>`;
   $("#pTxt").addEventListener("input", () => { if (W) { const r = parseWords($("#pTxt").value), ne = r.reduce((k, w) => k + exOf(w).length, 0); $("#pCnt").textContent = r.length + "단어" + (ne ? ` · 예문 ${ne}개` : "") + " 알아봤어요"; } else $("#pCnt").textContent = parsePaste($("#pTxt").value).length + un + " 알아봤어요"; });

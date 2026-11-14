@@ -786,6 +786,10 @@ function parseWords(txt) {
   txt.replace(/\r/g, "").split("\n").map(s => s.trim()).filter(Boolean).forEach(s0 => {
     // 예문 줄: 「* 영어 → 한글」 · 「- 영어 → 한글」 · 「→」가 있고 앞에 번호가 없는 문장
     if (cur && (BUL.test(s0) || (ARW.test(s0) && !/^\d+[.)]/.test(s0)))) { addEx(cur, splitEx(s0.replace(BUL, ""))); return; }
+    // 11-15 제이: 💡 · ※ 같은 덧붙임 줄은 건너뜀
+    if (/^[^\p{L}\p{N}"'“‘(]/u.test(s0)) return;
+    // 11-15 제이: 「1. I'd like to ~ (~하고 싶어요)」 아래 번호 없는 「영어 문장 한글 뜻」 줄 = 그 틀의 예문
+    if (cur && cur.num && !/^\d+[.)]/.test(s0) && /^[A-Za-z"'“‘(]/.test(s0) && /[가-힣]/.test(s0)) { const i = s0.search(/[가-힣]/), e = s0.slice(0, i).trim(), k = s0.slice(i).trim(); if (/[A-Za-z]/.test(e) && (e.split(/\s+/).length >= 3 || /[.?!]$/.test(e))) { addEx(cur, [e, k]); return; } }
     // 11-15 제이: 「OUT — 밖으로 (41~75)」 같은 묶음 제목 줄은 건너뜀
     if (/\s[—–]\s/.test(s0) && !/^\d+[.)]/.test(s0) && !ARW.test(s0)) { cur = null; return; }
     const s = s0.replace(/^\d+[.)]\s*/, "").replace(BUL, "");
@@ -801,9 +805,15 @@ function parseWords(txt) {
       w = { en: a, ko: b, exs };
     }
     if (!/[A-Za-z]/.test(w.en)) { cur = null; return; }
-    out.push(w); cur = w;
+    w.num = /^\d+[.)]/.test(s0); out.push(w); cur = w;
   });
-  return out.map(w => setEx(w, w.exs));
+  return out.map(w => { delete w.num; return setEx(w, w.exs); });
+}
+/* 11-15 제이: 회화 — 「1. I'd like to ~ (~하고 싶어요)」 같은 틀 제목마다 챕터를 나눔 */
+function pasteGroups(txt, name0) {
+  const G = [{ name: name0, t: [] }];
+  txt.replace(/\r/g, "").split("\n").forEach(s => { const s1 = s.trim().replace(/^[*•·▪◦‣\-–]\s+/, "").replace(/^\d+[.)]\s*/, ""); if (/~/.test(s1) && /[가-힣]/.test(s1) && /[A-Za-z]/.test(s1)) G.push({ name: s1.slice(0, 40), t: [] }); else G[G.length - 1].t.push(s); });
+  return G.map(g => ({ name: g.name, items: parsePaste(g.t.join("\n")) })).filter(g => g.items.length);
 }
 function openPaste(chId) {
   const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
@@ -813,7 +823,7 @@ function openPaste(chId) {
   <div class="lab">${W ? "「1. take a look (한번 보다)」 줄 아래에 「* 예문 → 뜻」을 있는 만큼(1개든 4개든 그대로 들어가요) — 엑셀 칸(단어 · 뜻 · 예문 · 예문 뜻 · 예문 · 예문 뜻…)을 복사해 붙여도 돼요" : "한 줄에 한 문장 — 「* 영어 → 한글」 · 「영어 (한글)」 · 「영어 문장 한글 뜻」 · 엑셀 두 칸(한글 · 영어) · 한글 줄과 영어 줄 번갈아, 모두 돼요"}</div>
   <textarea class="inp" id="pTxt" rows="9" placeholder="${W ? "1. take a look (한번 보다)&#10;* Can you take a look at this? → 이것 좀 봐 줄래요?&#10;* Let me take a look. → 제가 한번 볼게요.&#10;&#10;또는  figure out&#9;알아내다&#9;I can't figure it out.&#9;잘 모르겠어.&#10;또는  figure out | 알아내다" : "카페에서&#10;* Can I get an iced Americano? → 아이스 아메리카노 하나 주세요.&#10;* For here or to go? → 드시고 가세요, 가져가세요?&#10;&#10;또는  오늘 시간 있어요?&#9;Do you have time today?&#10;또는 한글 줄 · 영어 줄을 번갈아"}"></textarea>
   <p class="hint" id="pCnt">0${un}</p><button class="btn go full" data-a="pasteok" data-id="${chId || ""}" data-w="${W ? 1 : ""}">${svg(IC.check)}넣기</button></div>`;
-  $("#pTxt").addEventListener("input", () => { if (W) { const r = parseWords($("#pTxt").value), ne = r.reduce((k, w) => k + exOf(w).length, 0); $("#pCnt").textContent = r.length + "단어" + (ne ? ` · 예문 ${ne}개` : "") + " 알아봤어요"; } else $("#pCnt").textContent = parsePaste($("#pTxt").value).length + un + " 알아봤어요"; });
+  $("#pTxt").addEventListener("input", () => { if (W) { const r = parseWords($("#pTxt").value), ne = r.reduce((k, w) => k + exOf(w).length, 0); $("#pCnt").textContent = r.length + "단어" + (ne ? ` · 예문 ${ne}개` : "") + " 알아봤어요"; } else { const n = parsePaste($("#pTxt").value).length, g = chId ? 1 : pasteGroups($("#pTxt").value, "").length; $("#pCnt").textContent = n + un + " 알아봤어요" + (g > 1 ? ` · 틀 제목마다 챕터 ${g}개로 나눠요` : ""); } });
   setTimeout(() => $("#pTxt").focus(), 100);
 }
 
@@ -1419,7 +1429,9 @@ document.addEventListener("click", async e => {
     if (!items.length) return toast(W ? "알아본 단어가 없어요 — 단어와 뜻을 탭 · 「 | 」 · 「 - 」로 나눠 주세요" : "알아본 문장이 없어요 — 한글 · 영어를 탭이나 「 | 」로 나눠 주세요");
     let c = el.dataset.id ? D.chapters.find(x => x.id === el.dataset.id) : null;
     if (c) { if (U.scr === "edit") saveEdit(); c.items = c.items.filter(i => i.ko || i.en).concat(items); }
-    else { c = { id: uid(), sec: W ? "word" : "talk", name: ($("#pName").value || "").trim() || `챕터 ${D.chapters.length + 1}`, at: Date.now(), items, rv: null }; D.chapters.push(c); }
+    else { const nm = ($("#pName").value || "").trim() || `챕터 ${D.chapters.length + 1}`, gs = W ? [] : pasteGroups($("#pTxt").value, nm);
+      if (gs.length > 1) { gs.forEach((g, k) => { const cc = { id: uid(), sec: "talk", name: g.name, at: Date.now() + k, items: g.items.map(([ko, en]) => ({ id: uid(), ko, en, star: false, ok: 0, ng: 0 })), rv: null }; D.chapters.push(cc); touch(cc); }); $("#sheet").hidden = true; toast(`${items.length}문장 · 챕터 ${gs.length}개 만들었어요`); go("home"); return; }
+      c = { id: uid(), sec: W ? "word" : "talk", name: nm, at: Date.now(), items, rv: null }; D.chapters.push(c); }
     touch(c); $("#sheet").hidden = true; toast(`${items.length}${W ? "단어" : "문장"} 넣었어요`); U.edit = c.id; go("edit"); return;
   }
   if (a === "edit") { U.edit = el.dataset.id; go("edit"); return; }

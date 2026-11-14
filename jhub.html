@@ -58,6 +58,7 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .ip{font-size:12.5px;color:var(--sub);font-weight:700;min-width:26px;text-align:right}
 .it .tdo{width:7px;height:7px;border-radius:50%;background:var(--sun);flex-shrink:0}
 .gh.fav{color:#b4532a}
+.gh .gc{width:11px;height:11px;border-radius:3px;flex-shrink:0;box-shadow:inset 0 0 0 1.5px #0B3D4A}
 .fs{width:26px;height:26px;display:grid;place-items:center;border-radius:7px;flex-shrink:0;color:#a7b0b9}
 .fs svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linejoin:round}
 .fs:hover{background:rgba(20,32,43,.08);color:#e07a4f}
@@ -341,6 +342,11 @@ const APPS = [
 ];
 
 const SEC = [["dev", "개발 중 · 샘플"], ["app", "설치형 앱"], ["web", "블로그 실행형 웹 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]];
+/* 2026-11-14 제이: 즐겨찾기 · 개발 중 아래는 블로그 카테고리(메뉴 순서)로 — 색은 썸네일 C 분류 색 */
+const CATS = [["c-rite", "제사·의례", "#E8B04B", "jibang chukmun"], ["c-money", "돈 관리·계산", "#F2A7A0", "budget trading yearend"], ["c-doc", "PDF·문서 도구", "#9CC3F0", "pdf chart shortcut"], ["c-photo", "사진·이미지 도구", "#F4B6D2", "image photo photoed convert icon"], ["c-work", "업무 양식·취업", "#EADB7C", "quote form jaso"], ["c-learn", "학습 자료", "#C3B1EC", "write eng"], ["c-print", "달력·인쇄", "#A9D98E", "label calendar planner wallcal award"], ["c-life", "생활 기록 앱", "#8EDBC8", "recipe kimchi scrap trip diary msg"], ["c-guide", "도구 사용 안내", "#E6EDF0", "kit"]];
+const CMAP = {}; CATS.forEach(c => c[3].split(" ").forEach(id => CMAP[id] = c[0]));
+const GROUPS = [["dev", "개발 중 · 샘플"]].concat(CATS.map(c => [c[0], c[1], c[2]]), [["c-etc", "기타 무료 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]]);
+const inGroup = (a, g) => g.startsWith("c-") ? (a.g === "app" || a.g === "web") && (CMAP[a.id] || "c-etc") === g : a.g === g;
 const TYPE = { dev: "개발 중", app: "설치형", web: "블로그 실행형", idea: "아이디어", etc: "블로그 · 관리" };
 const WK = "일월화수목금토", pad = n => String(n).padStart(2, "0");
 const ymdw = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}(${WK[d.getDay()]})`;
@@ -368,12 +374,12 @@ const icon = (a, big) => a.ic ? `<img class="${big ? "big" : "ii"}" src="${esc(U
 const hay = a => [a.n, a.v, a.desc, a.note, a.plan, (a.todo || []).join(" "), (a.feat || []).join(" "), (a.posts || []).map(n => n + " " + (POSTS[n] ? POSTS[n][0] : "")).join(" "), (a.links || []).concat(a.old || []).map(l => l[0]).join(" ")].join(" ").toLowerCase();
 function drawSide() {
   const q = document.getElementById("q").value.trim().toLowerCase(); let h = "";
-  for (const [g, name] of [["fav", "★ 즐겨찾기"]].concat(SEC)) {
-    const items = g === "fav" ? fav.map(id => APPS.find(a => a.id === id)).filter(a => a && (!q || hay(a).includes(q))) : APPS.filter(a => a.g === g && (!q || hay(a).includes(q)));
+  for (const [g, name, col] of [["fav", "★ 즐겨찾기"]].concat(GROUPS)) {
+    const items = g === "fav" ? fav.map(id => APPS.find(a => a.id === id)).filter(a => a && (!q || hay(a).includes(q))) : APPS.filter(a => inGroup(a, g) && (!q || hay(a).includes(q)));
     if (g === "fav" && !items.length && !q) { h += `<div class="grp"><div class="gh fav" style="cursor:default">★ 즐겨찾기<span class="cn" style="font-weight:600">앱 옆 ☆를 누르면 여기에</span></div></div>`; continue; }
     if (!items.length) continue;
     const isShut = !q && shut.includes(g);
-    h += `<div class="grp${isShut ? " shut" : ""}"><button class="gh ${g}" data-g="${g}"><svg class="ar" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>${name}<span class="cn">${items.length}</span></button><div class="gl">`;
+    h += `<div class="grp${isShut ? " shut" : ""}"><button class="gh ${g}" data-g="${g}"><svg class="ar" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>${col ? `<span class="gc" style="background:${col}"></span>` : ""}${name}<span class="cn">${items.length}</span></button><div class="gl">`;
     for (const a of items) h += `<button class="it${a.id === cur ? " on" : ""}" data-id="${a.id}">${icon(a)}<span class="in">${esc(a.n)}</span>${a.v ? `<span class="iv">${esc(a.v)}</span>` : ""}${(a.todo || []).length ? '<span class="tdo" title="아직 안 쓴 글"></span>' : ""}<span class="ip num">${(a.posts || []).length || ""}</span><span class="fs${isFav(a.id) ? " on" : ""}" data-fav="${a.id}" role="button" aria-label="즐겨찾기">${STAR}</span></button>`;
     h += `</div></div>`;
   }

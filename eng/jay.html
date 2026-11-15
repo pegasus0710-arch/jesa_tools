@@ -95,7 +95,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .tst{display:flex;gap:8px;justify-content:center;margin-top:10px}
 .tst button{height:46px;padding:0 20px;border-radius:12px;font-weight:900;font-size:15px;background:#fff;box-shadow:var(--up)}
 .tst .ok{color:#1f7a4a}.tst .ng{color:var(--red)}
-.opt{display:flex;flex-direction:column;gap:12px} .opth{font-size:15px;font-weight:900;color:var(--ink);margin:-2px 2px 0} .og{border-radius:12px;box-shadow:0 0 0 1px var(--hair);overflow:hidden;background:#fff} .ogh{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--seal);border-bottom:1px solid var(--hair)} .ogh i{width:21px;height:21px;border-radius:50%;background:var(--sea);color:#fff;font-style:normal;font-size:12px;font-weight:900;display:grid;place-items:center;flex-shrink:0;font-variant-numeric:tabular-nums} .ogh b{font-size:14.5px;font-weight:900;color:var(--sea2)} .ogh small{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--sub)} .ogb{padding:0 12px} .ogi{padding:11px 0} .ogb .ogi+.ogi,.ogb .ogi+div,.ogb div+.ogi,.ogoff .ogi{border-top:1px dashed var(--hair)} .ogi .lab{margin-bottom:7px;color:var(--ink);font-size:13.5px} .ogi .lab small{font-size:12.5px;font-weight:700;color:var(--sub)} label.tg.ogi{padding:12px 0} .ogoff{opacity:.45;pointer-events:none} 
+.opt{display:flex;flex-direction:column;gap:12px} .audst{margin-top:12px;padding-top:12px;border-top:1px dashed var(--hair)} .audst .lab small{font-weight:700;color:var(--sub);text-align:right} .opth{font-size:15px;font-weight:900;color:var(--ink);margin:-2px 2px 0} .og{border-radius:12px;box-shadow:0 0 0 1px var(--hair);overflow:hidden;background:#fff} .ogh{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--seal);border-bottom:1px solid var(--hair)} .ogh i{width:21px;height:21px;border-radius:50%;background:var(--sea);color:#fff;font-style:normal;font-size:12px;font-weight:900;display:grid;place-items:center;flex-shrink:0;font-variant-numeric:tabular-nums} .ogh b{font-size:14.5px;font-weight:900;color:var(--sea2)} .ogh small{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--sub)} .ogb{padding:0 12px} .ogi{padding:11px 0} .ogb .ogi+.ogi,.ogb .ogi+div,.ogb div+.ogi,.ogoff .ogi{border-top:1px dashed var(--hair)} .ogi .lab{margin-bottom:7px;color:var(--ink);font-size:13.5px} .ogi .lab small{font-size:12.5px;font-weight:700;color:var(--sub)} label.tg.ogi{padding:12px 0} .ogoff{opacity:.45;pointer-events:none} 
 .lab{font-size:13px;font-weight:800;color:var(--sub);margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
 .seg{display:flex;background:var(--in);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
 .seg button{flex:1 0 auto;height:34px;padding:0 9px;border-radius:8px;font-size:13.5px;font-weight:700;color:var(--sub)}
@@ -533,7 +533,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-15(일) 21:35";
+const APP_VER = "1.0", BUILD = "2026-11-15(일) 21:50";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -1240,12 +1240,12 @@ async function drawSet() {
   h += `</div>`;
   const miss = baseChapters().filter(b => !D.chapters.some(c => c.id === b.id)).length;
   h += `<div class="sc"><div class="sh2">${svg(IC.book)}기본 자료</div><p>Blog J가 넣어 둔 실전 표현이에요 — 회화 ${BASE_TALK.length}챕터(상황별) · 단어 ${BASE_WORD.length}챕터(분야별), 챕터마다 20개 안팎(구동사 200개는 11챕터 · 예문 2개씩). 고치거나 지워도 되고, 지운 챕터는 여기서 다시 넣을 수 있어요(고친 챕터는 그대로 둠).</p>${miss ? `<button class="btn go" data-a="baseadd">${svg(IC.plus)}지운 기본 챕터 ${miss}개 다시 넣기</button>` : `<p class="hint" style="margin:0">기본 챕터가 모두 들어 있어요.</p>`}</div>`;
-  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록 · <b>설정(음성 · Azure 키 포함)</b> · <b>만들어 둔 고품질 음성</b>을 내 구글 드라이브 「영어노트」 폴더에 저장해요. PC에서 만든 음성은 휴대폰에서 다시 만들지 않고 받아 써서 한도를 두 번 쓰지 않아요. 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div></div>`;
+  h += `<div class="sc"><div class="sh2">${svg(IC.drive)}구글 드라이브 동기화<span class="stc ${st[0]}">${st[1]}</span></div><p>챕터 · 문장 · ☆ · 공부 기록 · <b>설정(음성 · Azure 키 포함)</b> · <b>만들어 둔 고품질 음성</b>을 내 구글 드라이브 「영어노트」 폴더에 저장해요. PC에서 만든 음성은 휴대폰에서 다시 만들지 않고 받아 써서 한도를 두 번 쓰지 않아요. 같은 구글 계정으로 연결하면 그대로 보여요.${on && SET.gdEmail ? `<br><span class="num">계정 ${esc(SET.gdEmail)}${SET.gdLast ? " · 마지막 " + ymdw(ymdT(SET.gdLast)) + " " + hm(SET.gdLast) : ""}</span>` : ""}${s.err ? `<br><span style="color:var(--red)">${esc(s.err)}</span>` : ""}</p><div class="row">${on ? `<button class="btn go" data-a="gd" data-v="sync">${svg(IC.drive)}지금 동기화</button><button class="btn" data-a="gdoff">연결 끊기</button>` : `<button class="btn go" data-a="gd" data-v="connect">${svg(IC.drive)}구글 드라이브 연결</button>`}</div>${on && isAz() ? `<div class="audst"><div class="lab"><span>고음질 음성</span><small id="audSt">확인 중…</small></div><button class="btn sm" data-a="audfix">${svg(IC.drive)}고음질 음성 지금 맞추기</button><p class="hint">이 기기에서 만든 음성은 드라이브에 올리고, 다른 기기가 만든 음성은 이 기기로 받아요.</p></div>` : ""}</div>`;
   if (!MOB()) h += `<div class="sc"><div class="sh2">${svg(IC.phone)}휴대폰에서도 쓰기</div><div class="qrw"><div class="qr">${QR_SVG}</div><p>휴대폰 카메라로 찍으면 설치 화면이 열려요. 휴대폰에서도 <b>같은 구글 계정</b>으로 드라이브를 연결하면 PC에서 넣은 문장이 그대로 들어와요.</p></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.dl)}백업</div><p>모든 챕터 · 기록을 파일 하나로 받아 두고 되살릴 수 있어요.${SET.bkAt ? `<br><span class="num">마지막 백업 ${ymdw(ymdT(SET.bkAt))} ${hm(SET.bkAt)}</span>` : ""}</p><div class="row"><button class="btn" data-a="bk" data-v="make">${svg(IC.dl)}백업 만들기</button><button class="btn" data-a="bk" data-v="restore">${svg(IC.upl)}되살리기</button></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.phone)}앱으로 설치</div><p>${INST.standalone ? "지금 설치한 앱으로 쓰고 있어요." : "홈 화면 · 바탕 화면에 아이콘으로 두고 바로 열 수 있어요."}</p>${INST.standalone ? "" : `<button class="btn go" data-a="inst">${svg(IC.phone)}설치하기</button>`}</div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.help)}알아 두세요</div><p>· 앱이 닫혀 있을 때는 복습 알림을 보내지 못해요 — 열 때 「오늘 복습할 챕터」를 보여 드려요.<br>· 기기 음성은 화면이 꺼지면 멈출 수 있어요(휴대폰이 앱을 재움). 운전 · 걷기 중에는 「내 Azure 키」를 쓰세요.<br>· 기본 회화 · 단어는 Blog J가 직접 쓴 문장이에요. 같은 뜻을 다르게 말하는 방법도 많아요.<br>· 내 목소리 녹음 · 비교는 다음 버전에 넣을 예정이에요.</p><p style="font-size:12.5px">${BUILD}</p></div>`;
-  if (U.scr !== "set") return; $("#main").innerHTML = h + `</div>`;
+  if (U.scr !== "set") return; $("#main").innerHTML = h + `</div>`; audStat();
 }
 
 /* ── 단어장 인쇄 (A4 · 뜻 가리기 / 단어 가리기) ── */
@@ -1359,7 +1359,7 @@ async function audPump() {
   try { const m = await audList(), f = await audFolder();
     while (AUD.q.length) { const k = AUD.q.shift(), nm = await audName(k); if (m.has(nm)) continue; const buf = await idbGet(k); if (!buf) continue;
       const fd = new FormData(); fd.append("metadata", new Blob([JSON.stringify({ name: nm, parents: [f] })], { type: "application/json" })); fd.append("file", new Blob([buf], { type: "audio/mpeg" }));
-      try { const r = await (await gdApi("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", { method: "POST", body: fd })).json(); if (r.id) m.set(nm, r.id); } catch (e) { AUD.q.unshift(k); break; }   /* 못 올린 것은 줄에 되돌려 둠 — 다음 동기화 · ▶ 때 다시 */
+      try { const r = await (await gdApi("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", { method: "POST", body: fd })).json(); if (r.id) { m.set(nm, r.id); AUD.upN = (AUD.upN || 0) + 1; AUD.err = ""; } } catch (e) { AUD.q.unshift(k); AUD.err = e.code === "NEED_GESTURE" || e.status === 401 ? "구글 드라이브 연결이 쉬는 중" : (e.message || "올리기 실패"); break; }   /* 못 올린 것은 줄에 되돌려 둠 — 다음 동기화 · ▶ 때 다시 */
       await sleep(150); }
   } catch (e) {}
   AUD.upBusy = false;
@@ -1369,6 +1369,22 @@ async function audSyncAll() {   /* 동기화 때: 이 기기에만 있는 음성
 }
 /* 11-15 제이: PC에서 만든 고음질이 동기화해도 휴대폰에 안 넘어옴 — 동기화 때 드라이브에만 있는 음성(챕터에 쓰는 것)을 이 기기로 받아 둠
    (전에는 ▶를 눌러야 그때 받았고, 챕터 카드 「고품질 ○%」는 이 기기 저장소만 셌음) */
+async function audStat() {   /* 설정 화면: 이 기기 · 드라이브 · 올릴 것 */
+  const el = $("#audSt"); if (!el) return;
+  try { const keys = (await idbKeys()).filter(k => typeof k === "string"); let m = null; try { m = await audList(0); } catch (e) {}
+    let up = 0; if (m) for (const k of keys) if (!m.has(await audName(k))) up++;
+    el.textContent = `이 기기 ${keys.length}개 · 드라이브 ${m ? m.size + "개" : "읽지 못함(연결 쉬는 중)"}${m ? ` · 올릴 것 ${up}개` : ""}${AUD.err ? " · " + AUD.err : ""}`;
+  } catch (e) { el.textContent = "확인하지 못했어요"; }
+}
+async function audFix() {
+  const el = $("#audSt"); if (el) el.textContent = "맞추는 중…";
+  if (!SYNC.live() && !SYNC.restore()) { if (GD_RE()) return gdRedirect(); try { await SYNC.token(true); } catch (e) { toast("구글 드라이브에 연결하지 못했어요"); return audStat(); } }
+  AUD.upN = 0; AUD.got = 0; AUD.err = "";
+  try { const keys = (await idbKeys()).filter(k => typeof k === "string"); const m = await audList(0); for (const k of keys) if (!m.has(await audName(k)) && !AUD.q.includes(k)) AUD.q.push(k);
+    while (AUD.upBusy) await sleep(300); await audPump(); await audPullAll();
+  } catch (e) { AUD.err = e.message || "실패"; }
+  toast(AUD.err ? "고음질 음성 — " + AUD.err : `고음질 음성 맞춤 — 올림 ${AUD.upN || 0}개 · 받음 ${AUD.got || 0}개`); audStat();
+}
 async function audPullAll() {
   if (AUD.pulling || !audOn() || !isAz()) return; AUD.pulling = true;
   try { const m = await audList(); paintReady(); const need = [], seen = new Set();
@@ -1494,6 +1510,7 @@ document.addEventListener("click", async e => {
   if (a === "judge") return judge(el.dataset.v === "1");
   if (a === "cancel") { B.cancel = true; return; }
   if (a === "vtest") { const ko = el.dataset.v === "ko"; P.tok++; sayDevice(ko ? "안녕하세요. 오늘도 영어 연습을 시작해 볼까요?" : "Hello. Shall we start practicing English today?", ko ? "ko" : "en", 1, P.tok); return; }
+  if (a === "audfix") { audFix(); return; }
   if (a === "gdskip") { $("#sheet").hidden = true; P.gdSkip = true; P.playing = true; paintPlay(); runAzure(); return; }
   if (a === "aztest") { saveSetInputs(); try { const buf = await azGet("Hello. This is a voice test.", "en", 1, true); const ab = await decode(buf); const au = new Audio(URL.createObjectURL(new Blob([buf], { type: "audio/mpeg" }))); au.play(); toast(`연결됐어요 — ${ab.duration.toFixed(1)}초 음성`); } catch (er) { toast(er.message); } return; }
   if (a === "azclr") { if (!window.confirm("이 기기에 저장한 문장 음성을 모두 지울까요?\n(다음에 들을 때 다시 받아요)")) return; await idbClear(); P.built = null; drawSet(); toast("지웠어요"); return; }

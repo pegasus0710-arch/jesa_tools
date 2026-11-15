@@ -95,7 +95,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .tst{display:flex;gap:8px;justify-content:center;margin-top:10px}
 .tst button{height:46px;padding:0 20px;border-radius:12px;font-weight:900;font-size:15px;background:#fff;box-shadow:var(--up)}
 .tst .ok{color:#1f7a4a}.tst .ng{color:var(--red)}
-.opt{display:flex;flex-direction:column;gap:12px}
+.opt{display:flex;flex-direction:column;gap:12px} .opth{font-size:15px;font-weight:900;color:var(--ink);margin:-2px 2px 0} .og{border-radius:12px;box-shadow:0 0 0 1px var(--hair);overflow:hidden;background:#fff} .ogh{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--seal);border-bottom:1px solid var(--hair)} .ogh i{width:21px;height:21px;border-radius:50%;background:var(--sea);color:#fff;font-style:normal;font-size:12px;font-weight:900;display:grid;place-items:center;flex-shrink:0;font-variant-numeric:tabular-nums} .ogh b{font-size:14.5px;font-weight:900;color:var(--sea2)} .ogh small{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--sub)} .ogb{padding:0 12px} .ogi{padding:11px 0} .ogb .ogi+.ogi,.ogb .ogi+div,.ogb div+.ogi,.ogoff .ogi{border-top:1px dashed var(--hair)} .ogi .lab{margin-bottom:7px;color:var(--ink);font-size:13.5px} .ogi .lab small{font-size:12.5px;font-weight:700;color:var(--sub)} label.tg.ogi{padding:12px 0} .ogoff{opacity:.45;pointer-events:none} 
 .lab{font-size:13px;font-weight:800;color:var(--sub);margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
 .seg{display:flex;background:var(--in);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
 .seg button{flex:1 0 auto;height:34px;padding:0 9px;border-radius:8px;font-size:13.5px;font-weight:700;color:var(--sub)}
@@ -533,7 +533,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-15(일) 20:50";
+const APP_VER = "1.0", BUILD = "2026-11-15(일) 21:05";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -593,7 +593,7 @@ function ensureBase(force) {
   return n;
 }
 ensureBase(false); ls.set("data", D);
-const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, exReps: 1, azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
+const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, exReps: 1, exFirst: "en", azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
   engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true, setAt: 0 };
 /* 「내 음성 서버」는 제이 전용 파일(jay.html)에서만 — 공개판(index.html)에서는 숨김.
    챕터 · 기록 · 다른 설정은 둘이 같이 쓰고, 음성 고르기(engine · 서버 주소 · 앱 암호)만 jay.html이 따로 기억("setj") */
@@ -846,7 +846,9 @@ function stepsFor(it, mode) {
   else if (mode[0] === "w") {
     const sayW = (r, ph) => S.push({ t: "say", lang: "en", text: it.en, rate: sp * r, ph }), sayM = () => S.push({ t: "say", lang: "ko", text: it.ko, rate: sp, ph: "mean" });
     const reps = gap => R.forEach((r, i) => { sayW(r, "r" + (i + 1)); S.push(gap ? { t: "gap", ms: gap, ph: "r" + (i + 1) } : { t: "gap", auto: 1, ph: "r" + (i + 1) }); });
-    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex) exOf(it).map(x => [x.e, x.k]).forEach(([e, k], j) => { if (!e) return; if (j) S.push({ t: "gap", ms: 700, ph: "exk" }); const xn = Math.max(1, Math.min(3, +SET.exReps || 1)); for (let x = 0; x < xn; x++) { S.push({ t: "say", lang: "en", text: e, rate: sp, ph: "ex" }); S.push(x < xn - 1 ? { t: "gap", auto: 1, ph: "ex" } : { t: "gap", ms: 500, ph: "ex" }); } if (k) S.push({ t: "say", lang: "ko", text: k, rate: sp, ph: "exk" }); }); };
+    const tail = () => { const sp2 = spellOf(it.en); if (SET.spell && sp2) S.push({ t: "say", lang: "en", text: sp2, rate: sp * 0.9, ph: "spell" }, { t: "gap", ms: 600, ph: "spell" }); if (SET.wex) exOf(it).map(x => [x.e, x.k]).forEach(([e, k], j) => { if (!e) return; if (j) S.push({ t: "gap", ms: 700, ph: "exk" }); const xn = Math.max(1, Math.min(3, +SET.exReps || 1)); const koF = SET.exFirst === "ko" && k;   /* 11-15 제이: 예문을 한글 먼저(→ 생각 시간 → 영어) 또는 영어 먼저 */
+      if (koF) S.push({ t: "say", lang: "ko", text: k, rate: sp, ph: "exk" }, { t: "gap", ms: thinkMs(e, "en"), ph: "think" });
+      for (let x = 0; x < xn; x++) { S.push({ t: "say", lang: "en", text: e, rate: sp, ph: "ex" }); S.push(x < xn - 1 ? { t: "gap", auto: 1, ph: "ex" } : { t: "gap", ms: koF ? 900 : 500, ph: "ex" }); } if (k && !koF) S.push({ t: "say", lang: "ko", text: k, rate: sp, ph: "exk" }); }); };
     if (mode === "we2k") { sayW(1, "word"); S.push({ t: "gap", ms: thinkMs(it.ko, "ko"), ph: "think" }); sayM(); S.push({ t: "gap", ms: 500, ph: "mean" }); reps(0); tail(); }
     else if (mode === "wk2e") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); reps(0); tail(); }
     else if (mode === "wtest") { sayM(); S.push({ t: "gap", ms: thinkMs(it.en, "en"), ph: "think" }); sayW(1, "r1"); S.push({ t: "gap", ms: 2200, ph: "judge" }); }
@@ -1009,7 +1011,7 @@ async function buildChapter(c, queue, mode, onp, cancel) {
   W(0, "RIFF"); hd.setUint32(4, 36 + pcm.length * 2, true); W(8, "WAVE"); W(12, "fmt "); hd.setUint32(16, 16, true); hd.setUint16(20, 1, true); hd.setUint16(22, 1, true); hd.setUint32(24, SR, true); hd.setUint32(28, SR * 2, true); hd.setUint16(32, 2, true); hd.setUint16(34, 16, true); W(36, "data"); hd.setUint32(40, pcm.length * 2, true);
   return { url: URL.createObjectURL(new Blob([hd, pcm], { type: "audio/wav" })), marks, dur: total / SR, sig: sigOf(queue, mode) };
 }
-const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.exReps, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + exOf(i).map(x => x.e + "~" + x.k).join("^")).join("|")].join("#");
+const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.exReps, SET.exFirst, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + exOf(i).map(x => x.e + "~" + x.k).join("^")).join("|")].join("#");
 const B = { cancel: false };
 async function runAzure(fromQi) {
   const au = $("#au"); const tok = ++P.tok;
@@ -1101,17 +1103,18 @@ function drawPlay() {
   const c = P.ch, W = !!(c && c.sec === "word"), un = W ? "단어" : "문장";
   let h = `<div class="pv"><div><div class="stagep" id="stg"></div><div class="ctl"><button data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button><button class="big" data-a="pp" id="ppb" aria-label="재생"></button><button data-a="next" aria-label="다음 문장">${svg(IC.next)}</button><button class="st" data-a="starcur" id="stb" aria-label="어려운 문장">${svg(IC.star)}</button></div><div class="tst" id="tst"></div>`;
   h += `<div class="card qlist"><div class="lab"><span>${c ? esc(c.name) : "챕터 없음"}${P.list.length > 1 ? ` · ${P.li + 1}/${P.list.length}번째 챕터` : ""}</span><span>${SET.shuffle ? "섞어서" : "차례대로"}</span></div><div id="ql"></div></div></div>`;
-  h += `<div class="opt card"><div><div class="lab">연습 방법 · ${W ? "단어" : "회화"}</div>${W ? `<div class="seg" data-k="wmode">${WMODES.map(([k, t]) => `<button data-v="${k}" class="${SET.wmode === k ? "on" : ""}">${t}</button>`).join("")}</div>` : `<div class="seg" data-k="mode">${MODES.map(([k, t]) => `<button data-v="${k}" class="${SET.mode === k ? "on" : ""}">${t}</button>`).join("")}</div>`}</div>
-    <div><div class="lab">${W ? "단어 따라 말하기" : "영어 반복"}</div><div class="seg" data-k="reps">${[1, 2, 3].map(n => `<button data-v="${n}" class="${SET.reps === n ? "on" : ""}">${n}번</button>`).join("")}</div></div>
-    <div><div class="lab">생각 시간</div><div class="seg" data-k="think">${[["auto", "자동"], ["3", "3초"], ["5", "5초"], ["8", "8초"]].map(([k, t]) => `<button data-v="${k}" class="${String(SET.think) === k ? "on" : ""}">${t}</button>`).join("")}</div>${SET.think === "auto" ? `<div class="seg" data-k="thinkF" style="margin-top:6px">${[[0.7, "짧게"], [1, "보통"], [1.4, "넉넉히"]].map(([k, t]) => `<button data-v="${k}" class="${SET.thinkF === k ? "on" : ""}">${t}</button>`).join("")}</div>` : ""}</div>
-    <div><div class="lab">말 빠르기</div><div class="seg" data-k="speed">${[[0.8, "느리게"], [0.9, "조금 느리게"], [1, "보통"], [1.1, "빠르게"]].map(([k, t]) => `<button data-v="${k}" class="${SET.speed === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
-    <div><div class="lab">다 들으면</div><div class="seg" data-k="loop">${[["off", "멈춤"], ["chapter", "이 챕터 반복"], ["list", "목록 반복"]].map(([k, t]) => `<button data-v="${k}" class="${SET.loop === k ? "on" : ""}">${t}</button>`).join("")}</div></div>
-    <label class="tg"><input type="checkbox" data-t="faster" ${SET.faster ? "checked" : ""}><span>반복할수록 조금씩 빠르게</span></label>
-    ${W ? `<label class="tg"><input type="checkbox" data-t="spell" ${SET.spell ? "checked" : ""}><span>철자 불러 주기 (F, I, G…)</span></label><label class="tg"><input type="checkbox" data-t="wex" ${SET.wex ? "checked" : ""}><span>예문도 듣기</span></label><div style="margin-top:6px"><div class="lab">예문 반복 (예문마다)</div><div class="seg" data-k="exReps">${[1, 2, 3].map(n => `<button data-v="${n}" class="${(+SET.exReps || 1) === n ? "on" : ""}">${n}번</button>`).join("")}</div></div>` : ""}
-    <label class="tg"><input type="checkbox" data-t="shuffle" ${SET.shuffle ? "checked" : ""}><span>${un} 섞기</span></label>
-    <label class="tg"><input type="checkbox" data-t="reveal" ${SET.reveal ? "checked" : ""}><span>${W ? "답(뜻 · 단어)은 들릴 때 보이기" : "영어는 들릴 때 보이기(먼저 가리기)"}</span></label>
-    <label class="tg"><input type="checkbox" data-t="autoStar" ${SET.autoStar ? "checked" : ""}><span>시험에서 ${W ? "모르는 단어" : "틀린 문장"}는 ☆로</span></label>
-    ${engineNote()}</div></div>`;
+  const seg = (k, opts, cur) => `<div class="seg" data-k="${k}">${opts.map(([v, t]) => `<button data-v="${v}" class="${String(cur) === String(v) ? "on" : ""}">${t}</button>`).join("")}</div>`;
+  const row = (lab, body, sub) => `<div class="ogi"><div class="lab"><span>${lab}</span>${sub ? `<small>${sub}</small>` : ""}</div>${body}</div>`;
+  const tg = (k, t) => `<label class="tg ogi"><input type="checkbox" data-t="${k}" ${SET[k] ? "checked" : ""}><span>${t}</span></label>`;
+  const grp = (n, t, d, body) => `<section class="og"><div class="ogh"><i>${n}</i><b>${t}</b>${d ? `<small>${d}</small>` : ""}</div><div class="ogb">${body}</div></section>`;
+  /* 11-15 제이: 옵션 항목이 한 덩어리로 붙어 보임 → 묶음(번호 · 제목 상자)으로 나눔 */
+  h += `<div class="opt card"><div class="opth">듣기 옵션</div>`
+    + grp(1, "연습 방법", W ? "단어장" : "회화", W ? seg("wmode", WMODES, SET.wmode) : seg("mode", MODES, SET.mode))
+    + grp(2, "반복", "", row(W ? "단어 따라 말하기" : "영어 반복", seg("reps", [[1, "1번"], [2, "2번"], [3, "3번"]], SET.reps)) + tg("faster", "반복할수록 조금씩 빠르게"))
+    + grp(3, "생각 시간 · 말 빠르기", "", row("생각 시간", seg("think", [["auto", "자동"], ["3", "3초"], ["5", "5초"], ["8", "8초"]], SET.think) + (SET.think === "auto" ? `<div style="margin-top:6px">${seg("thinkF", [[0.7, "짧게"], [1, "보통"], [1.4, "넉넉히"]], SET.thinkF)}</div>` : ""), SET.think === "auto" ? "문장 길이에 맞춰" : "") + row("말 빠르기", seg("speed", [[0.8, "느리게"], [0.9, "조금 느리게"], [1, "보통"], [1.1, "빠르게"]], SET.speed)))
+    + (W ? grp(4, "철자 · 예문", "", tg("spell", "철자 불러 주기 (F, I, G…)") + tg("wex", "예문도 듣기") + `<div class="${SET.wex ? "" : "ogoff"}">` + row("예문 순서", seg("exFirst", [["en", "영어 먼저 → 한글"], ["ko", "한글 먼저 → 영어"]], SET.exFirst || "en"), (SET.exFirst || "en") === "ko" ? "한글 듣고 영어로 말해 보기" : "") + row("예문 반복", seg("exReps", [[1, "1번"], [2, "2번"], [3, "3번"]], +SET.exReps || 1), "예문마다") + `</div>`) : "")
+    + grp(W ? 5 : 4, "순서 · 화면", "", row("다 들으면", seg("loop", [["off", "멈춤"], ["chapter", "이 챕터 반복"], ["list", "목록 반복"]], SET.loop)) + tg("shuffle", `${un} 섞기`) + tg("reveal", W ? "답(뜻 · 단어)은 들릴 때 보이기" : "영어는 들릴 때 보이기(먼저 가리기)") + tg("autoStar", `시험에서 ${W ? "모르는 단어" : "틀린 문장"}는 ☆로`))
+    + `${engineNote()}</div></div>`;
   $("#main").innerHTML = h; paintPlay();
 }
 function engineNote() {

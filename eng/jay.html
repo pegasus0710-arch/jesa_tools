@@ -533,7 +533,7 @@ function baseChapters() {
    음성: ① 기기 음성(화면 켜 둠) ② 내 Azure 키(이 기기에만 · 챕터 한 파일 → 화면 꺼도) ③ 내 음성 서버(EC2) */
 "use strict";
 const QR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='164' height='164' class='segno'><path transform='scale(4)' class='qrline' stroke='#14202b' d='M4 4.5h7m2 0h1m1 0h1m2 0h1m1 0h2m1 0h5m2 0h7m-33 1h1m5 0h1m4 0h2m2 0h1m1 0h1m2 0h1m5 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h4m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h5m4 0h1m8 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m5 0h1m3 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m3 0h2m2 0h1m2 0h2m-23 1h1m1 0h5m6 0h3m1 0h1m1 0h1m2 0h2m2 0h5m-30 1h2m5 0h1m4 0h1m2 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h1m1 0h3m1 0h2m1 0h1m1 0h1m5 0h1m1 0h2m-30 1h4m1 0h1m2 0h1m2 0h1m1 0h2m3 0h3m1 0h2m2 0h4m-32 1h1m3 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-32 1h1m1 0h3m3 0h1m2 0h1m6 0h3m1 0h1m1 0h1m3 0h1m1 0h2m-32 1h1m2 0h3m4 0h1m1 0h6m1 0h1m4 0h2m1 0h2m1 0h1m-32 1h2m1 0h1m4 0h2m2 0h2m1 0h2m2 0h5m1 0h3m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h5m1 0h2m1 0h1m3 0h3m1 0h2m3 0h1m-33 1h2m5 0h3m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h3m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h3m4 0h2m2 0h4m1 0h2m-29 1h1m4 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h6m1 0h1m-33 1h2m4 0h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h2m1 0h2m-33 1h4m3 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m1 0h2m7 0h1m1 0h1m-32 1h1m9 0h1m2 0h4m1 0h4m1 0h1m5 0h2m-31 1h1m2 0h4m1 0h1m2 0h4m2 0h4m2 0h6m2 0h2m-25 1h4m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m8 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m-31 1h1m5 0h1m1 0h1m3 0h1m3 0h1m4 0h1m1 0h2m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h8m1 0h1m4 0h1m1 0h6m-30 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h4m1 0h1m1 0h3m2 0h1m2 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h2m-28 1h1m5 0h1m2 0h2m1 0h1m1 0h3m1 0h5m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h3m3 0h1m2 0h1m2 0h2m2 0h1m3 0h1'/></svg>";
-const APP_VER = "1.0", BUILD = "2026-11-15(일) 21:05";
+const APP_VER = "1.0", BUILD = "2026-11-15(일) 21:20";
 const LSK = "bj-eng-";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -989,6 +989,7 @@ async function azGet(text, lang, rate, fresh) {
   }
   const buf = await res.arrayBuffer();
   SET.azChars[mk] = (SET.azChars[mk] || 0) + cost; saveSet();
+  AUD.made = (AUD.made || 0) + 1;
   await idbPut(k, buf); audUpQ(k); return buf;
 }
 const SR = 24000;
@@ -1016,9 +1017,16 @@ const B = { cancel: false };
 async function runAzure(fromQi) {
   const au = $("#au"); const tok = ++P.tok;
   if (!P.built || P.built.sig !== sigOf(P.queue, P.mode)) {
+    /* 11-15 제이: PC에서 만든 음성을 휴대폰이 또 만듦 — 드라이브 토큰(1시간)이 끝나 있으면 드라이브를 못 읽고 조용히 Azure로 새로 만들었음.
+       ▶ 누름으로 다시 연결(PC) · 휴대폰 설치 앱은 물어봄(다시 연결 = 구글 화면으로 갔다 옴) */
+    if ((SET.engine === "azkey" || SET.engine === "azure") && audOn() && !P.gdSkip && !SYNC.live() && !SYNC.restore()) {
+      if (GD_RE()) { P.playing = false; paintPlay(); gdAsk(); return; }
+      try { await SYNC.token(true); setTimeout(audSyncAll, 3000); } catch (e) { toast("구글 드라이브에 다시 연결하지 못했어요 — 없는 음성은 이 기기에서 만들어요"); }
+    }
+    AUD.got = 0; AUD.made = 0;
     $("#busy").hidden = false; B.cancel = false; AZP = ""; $("#busyT").textContent = "음성 만드는 중…"; $("#busyB").style.width = "0";
     if (SET.engine === "azkey" || SET.engine === "azure") { if (audOn()) { $("#busyT").textContent = "다른 기기에서 만든 음성 확인 중…"; try { await audList(0); } catch (e) {} } const seen = new Set(); let nn = 0; for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const vv = st.lang === "ko" ? SET.azKo : SET.azEn, kk = vv + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!(await idbGet(kk)) && !(AUD.map && AUD.map.has(await audName(kk)))) nn++; } } if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
-    try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { AZP = `음성 만드는 중 ${k} / ${n}`; $("#busyT").textContent = AZP; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
+    try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { AZP = `음성 준비 중 ${k} / ${n}` + (AUD.got || AUD.made ? ` · 드라이브에서 받음 ${AUD.got || 0} · 새로 만듦 ${AUD.made || 0}` : ""); $("#busyT").textContent = AZP; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
     catch (e) { $("#busy").hidden = true; P.playing = false; paintPlay(); if (e.message !== "멈췄어요") toast(e.message + " — ▶를 다시 누르면 받은 데서부터 이어서 만들어요"); return; }
     $("#busy").hidden = true;
     if (tok !== P.tok) return;
@@ -1116,6 +1124,13 @@ function drawPlay() {
     + grp(W ? 5 : 4, "순서 · 화면", "", row("다 들으면", seg("loop", [["off", "멈춤"], ["chapter", "이 챕터 반복"], ["list", "목록 반복"]], SET.loop)) + tg("shuffle", `${un} 섞기`) + tg("reveal", W ? "답(뜻 · 단어)은 들릴 때 보이기" : "영어는 들릴 때 보이기(먼저 가리기)") + tg("autoStar", `시험에서 ${W ? "모르는 단어" : "틀린 문장"}는 ☆로`))
     + `${engineNote()}</div></div>`;
   $("#main").innerHTML = h; paintPlay();
+}
+function gdAsk() {   /* 휴대폰 설치 앱: 드라이브 연결이 쉬는 중일 때 ▶ */
+  const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = "";
+  sh.innerHTML = `<div class="shbox"><div class="edh"><b>구글 드라이브 연결이 쉬는 중이에요</b><button class="x" data-a="close" aria-label="닫기">${svg(IC.x)}</button></div>
+    <p class="hint" style="margin-top:0">이대로 들으면 <b>다른 기기(PC)에서 이미 만든 고음질 음성</b>을 받지 못하고 이 휴대폰에서 다시 만들어요(Azure 한도를 또 씀).</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px"><button class="btn go full" data-a="gd" data-v="connect">다시 연결하고 받기</button><button class="btn full" data-a="gdskip">그냥 이 기기에서 만들기</button></div>
+    <p class="hint">「다시 연결」은 구글 화면으로 갔다가 이 화면으로 돌아와요. 돌아온 뒤 ▶를 다시 눌러 주세요.</p></div>`;
 }
 function engineNote() {
   if (SET.engine === "azkey") return `<div class="engine az"><b>고품질 음성(내 Azure 키)</b> — 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 계속 들려요. 잠금 화면 · 블루투스 이어폰 · 자동차의 다음/이전 단추로 넘겨요.</div>`;
@@ -1344,7 +1359,7 @@ async function audPump() {
   try { const m = await audList(), f = await audFolder();
     while (AUD.q.length) { const k = AUD.q.shift(), nm = await audName(k); if (m.has(nm)) continue; const buf = await idbGet(k); if (!buf) continue;
       const fd = new FormData(); fd.append("metadata", new Blob([JSON.stringify({ name: nm, parents: [f] })], { type: "application/json" })); fd.append("file", new Blob([buf], { type: "audio/mpeg" }));
-      try { const r = await (await gdApi("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", { method: "POST", body: fd })).json(); if (r.id) m.set(nm, r.id); } catch (e) { if (e.status === 401) break; }
+      try { const r = await (await gdApi("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", { method: "POST", body: fd })).json(); if (r.id) m.set(nm, r.id); } catch (e) { AUD.q.unshift(k); break; }   /* 못 올린 것은 줄에 되돌려 둠 — 다음 동기화 · ▶ 때 다시 */
       await sleep(150); }
   } catch (e) {}
   AUD.upBusy = false;
@@ -1466,6 +1481,7 @@ document.addEventListener("click", async e => {
   if (a === "judge") return judge(el.dataset.v === "1");
   if (a === "cancel") { B.cancel = true; return; }
   if (a === "vtest") { const ko = el.dataset.v === "ko"; P.tok++; sayDevice(ko ? "안녕하세요. 오늘도 영어 연습을 시작해 볼까요?" : "Hello. Shall we start practicing English today?", ko ? "ko" : "en", 1, P.tok); return; }
+  if (a === "gdskip") { $("#sheet").hidden = true; P.gdSkip = true; P.playing = true; paintPlay(); runAzure(); return; }
   if (a === "aztest") { saveSetInputs(); try { const buf = await azGet("Hello. This is a voice test.", "en", 1, true); const ab = await decode(buf); const au = new Audio(URL.createObjectURL(new Blob([buf], { type: "audio/mpeg" }))); au.play(); toast(`연결됐어요 — ${ab.duration.toFixed(1)}초 음성`); } catch (er) { toast(er.message); } return; }
   if (a === "azclr") { if (!window.confirm("이 기기에 저장한 문장 음성을 모두 지울까요?\n(다음에 들을 때 다시 받아요)")) return; await idbClear(); P.built = null; drawSet(); toast("지웠어요"); return; }
   if (a === "gd") return gdAction(el);

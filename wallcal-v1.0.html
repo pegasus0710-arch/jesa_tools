@@ -1043,6 +1043,19 @@ function panelBox(ctx, src, T, x, y, w, h, u) {
 }
 function txt(ctx, s, x, y, size, weight, color, align, font) { ctx.font = `${weight} ${size}px ${font || FONTS[S.font][0]}`; ctx.fillStyle = color; ctx.textAlign = align || "left"; ctx.textBaseline = "alphabetic"; ctx.fillText(s, x, y); }
 function fitTxt(ctx, s, max, size, weight, font) { ctx.font = `${weight} ${size}px ${font || FONTS[S.font][0]}`; while (s.length > 1 && ctx.measureText(s).width > max) s = s.slice(0, -1); return s; }
+/* 날짜 아래 글(메모 · 공휴일) — 11-15 제이: 「OO생일」이 3글자로 잘림 → 칸에 맞게 글씨를 줄이고, 그래도 길면 두 줄로 */
+function labFit(ctx, s, cx, y, max, fs, wt, col) {
+  const F = FONTS[S.font][0], wOf = (t, z) => { ctx.font = `${wt} ${z}px ${F}`; return ctx.measureText(t).width; };
+  let z = fs * .5; const w1 = wOf(s, z);
+  if (w1 > max) z = Math.max(fs * .3, z * max / w1 * .97);
+  if (z >= fs * .4 || s.length <= 4) { txt(ctx, fitTxt(ctx, s, max, z, wt), cx, y, z, wt, col, "center"); return; }
+  /* 두 줄: 띄어쓰기에서, 없으면 가운데에서 나눔 */
+  let k = -1, best = 1e9; for (let i = 1; i < s.length; i++) if (s[i] === " " && Math.abs(i - s.length / 2) < best) { best = Math.abs(i - s.length / 2); k = i; }
+  const a = k > 0 ? s.slice(0, k).trim() : s.slice(0, Math.ceil(s.length / 2)), b = k > 0 ? s.slice(k + 1).trim() : s.slice(Math.ceil(s.length / 2));
+  let z2 = fs * .44; const ww = Math.max(wOf(a, z2), wOf(b, z2)); if (ww > max) z2 = Math.max(fs * .3, z2 * max / ww * .97);
+  txt(ctx, fitTxt(ctx, a, max, z2, wt), cx, y - z2 * .32, z2, wt, col, "center");
+  txt(ctx, fitTxt(ctx, b, max, z2, wt), cx, y + z2 * .78, z2, wt, col, "center");
+}
 /* 한 달 칸 — big: 큰 판 / 작게 */
 function monthGrid(ctx, T, y0, x, y, w, Y, M, opt) {
   const u = opt.u, fs = opt.fs, first = new Date(Y, M - 1, 1), nd = new Date(Y, M, 0).getDate(), off = (first.getDay() - S.wk + 7) % 7, rows = Math.ceil((off + nd) / 7);
@@ -1065,10 +1078,10 @@ function monthGrid(ctx, T, y0, x, y, w, Y, M, opt) {
   for (let d = 1; d <= nd; d++) {
     const i = off + d - 1, r = Math.floor(i / 7), c = i % 7, dt = new Date(Y, M - 1, d), wd = dt.getDay(), inf = dayInfo(dt);
     const cx = x + cw * c + cw / 2, cy = yy + r * rh + dh * .9, red = wd === 0 || inf.hol, col = red ? T.sun : wd === 6 ? T.sat : T.ink;
-    if (inf.memo && opt.labels) { ctx.save(); ctx.globalAlpha = T.dark ? .22 : .14; ctx.fillStyle = T.acc; rr(ctx, cx - cw * .44, yy + r * rh - fs * .05, cw * .88, rh - fs * .3, fs * .35); ctx.fill(); ctx.restore(); }
+    if (inf.memo && opt.labels) { ctx.save(); ctx.globalAlpha = T.dark ? .22 : .14; ctx.fillStyle = T.acc; rr(ctx, cx - cw * .46, yy + r * rh - fs * .05, cw * .92, rh - fs * .12, fs * .35); ctx.fill(); ctx.restore(); }
     txt(ctx, String(d), cx, cy, fs * (opt.big ? 1.05 : 1), opt.big ? 750 : 700, col, "center");
     if (inf.son) { ctx.fillStyle = T.acc; ctx.beginPath(); ctx.arc(cx + fs * .78, cy - fs * .78, fs * .13, 0, 7); ctx.fill(); }
-    if (opt.labels) { const lab = inf.memo || inf.hol || inf.trad || inf.term || inf.lun; if (lab) { const lc = inf.memo ? T.acc : inf.hol ? T.sun : T.sub; const s = fitTxt(ctx, lab, cw * .96, fs * .5, inf.memo || inf.hol ? 800 : 600); txt(ctx, s, cx, cy + lh + fs * .12, fs * .5, inf.memo || inf.hol ? 800 : 600, lc, "center"); } }
+    if (opt.labels) { const lab = inf.memo || inf.hol || inf.trad || inf.term || inf.lun; if (lab) { const lc = inf.memo ? T.acc : inf.hol ? T.sun : T.sub, wt = inf.memo || inf.hol ? 800 : 600; labFit(ctx, lab, cx, cy + lh + fs * .12, cw * .96, fs, wt, lc); } }
   }
   return yy + rows * rh - y;
 }

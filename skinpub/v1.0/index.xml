@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skin>
+  <information>
+    <name>Blog J</name>
+    <version>1.0</version>
+    <description><![CDATA[Blog J 스킨 — 따라오는 차례 · 제목 번호 · 장 나누기 · 반응형. 무료로 쓰고 고쳐 쓸 수 있으며, 맨 아래 「Skin by Blog J」 표시는 지우지 않아야 합니다. 그대로 다시 나눠 주거나 팔 수 없습니다.]]></description>
+    <license><![CDATA[무료 사용 · 고쳐 쓰기 가능 / 다시 배포 · 판매 금지 / 크레딧 유지]]></license>
+  </information>
+  <author>
+    <name><![CDATA[Blog J]]></name>
+    <homepage>https://luvbong.tistory.com/</homepage>
+    <email></email>
+  </author>
+  <default>
+    <recentEntries>5</recentEntries>
+    <recentComments>5</recentComments>
+    <recentTrackbacks>5</recentTrackbacks>
+    <itemsOnGuestbook>10</itemsOnGuestbook>
+    <tagsInCloud>30</tagsInCloud>
+    <sortInCloud>3</sortInCloud>
+    <expandComment>0</expandComment>
+    <lengthOfRecentNotice>30</lengthOfRecentNotice>
+    <lengthOfRecentEntry>30</lengthOfRecentEntry>
+    <lengthOfRecentComment>30</lengthOfRecentComment>
+    <lengthOfRecentTrackback>30</lengthOfRecentTrackback>
+    <lengthOfLink>30</lengthOfLink>
+    <entriesOnPage>10</entriesOnPage>
+    <entriesOnList>10</entriesOnList>
+    <contentWidth>1080</contentWidth>
+  </default>
+  <variables>
+    <variablegroup name="기본">
+      <variable>
+        <name>bj-logo-text</name>
+        <label><![CDATA[로고 글자]]></label>
+        <description><![CDATA[로고 네모 안 글자(한두 글자). 로고 그림을 올리면 그림이 나옵니다.]]></description>
+        <type>STRING</type>
+        <default><![CDATA[J]]></default>
+      </variable>
+      <variable>
+        <name>bj-logo-img</name>
+        <label><![CDATA[로고 그림]]></label>
+        <description><![CDATA[높이 36px로 보입니다. 비우면 로고 글자]]></description>
+        <type>IMAGE</type>
+      </variable>
+      <variable>
+        <name>bj-logo-sub</name>
+        <label><![CDATA[로고 아래 한 줄]]></label>
+        <description><![CDATA[블로그 제목 아래 작은 글씨. 비우면 숨김]]></description>
+        <type>STRING</type>
+      </variable>
+    </variablegroup>
+    <variablegroup name="모양">
+      <variable>
+        <name>bj-palette</name>
+        <label><![CDATA[색 묶음]]></label>
+        <description><![CDATA[]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "sea", "label": "모래 · 바다", "value": "sea"}, {"name": "forest", "label": "숲", "value": "forest"}, {"name": "navy", "label": "남색", "value": "navy"}, {"name": "ink", "label": "먹(흑백)", "value": "ink"}, {"name": "blossom", "label": "벚꽃", "value": "blossom"}]]]></option>
+        <default><![CDATA[sea]]></default>
+      </variable>
+      <variable>
+        <name>bj-font</name>
+        <label><![CDATA[글꼴]]></label>
+        <description><![CDATA[]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "pretendard", "label": "프리텐다드", "value": "pretendard"}, {"name": "nanumgothic", "label": "나눔고딕", "value": "nanumgothic"}, {"name": "gowun", "label": "고운돋움", "value": "gowun"}, {"name": "myeongjo", "label": "나눔명조", "value": "myeongjo"}]]]></option>
+        <default><![CDATA[pretendard]]></default>
+      </variable>
+      <variable>
+        <name>bj-width</name>
+        <label><![CDATA[본문 너비]]></label>
+        <description><![CDATA[]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "narrow", "label": "좁게", "value": "narrow"}, {"name": "normal", "label": "보통", "value": "normal"}, {"name": "wide", "label": "넓게", "value": "wide"}, {"name": "xwide", "label": "아주 넓게", "value": "xwide"}]]]></option>
+        <default><![CDATA[normal]]></default>
+      </variable>
+      <variable>
+        <name>bj-sidebar</name>
+        <label><![CDATA[사이드바 위치]]></label>
+        <description><![CDATA[휴대폰에서는 어느 것을 골라도 아래로 갑니다]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "right", "label": "오른쪽", "value": "right"}, {"name": "left", "label": "왼쪽", "value": "left"}, {"name": "bottom", "label": "아래", "value": "bottom"}, {"name": "none", "label": "없음", "value": "none"}]]]></option>
+        <default><![CDATA[right]]></default>
+      </variable>
+    </variablegroup>
+    <variablegroup name="글 화면">
+      <variable>
+        <name>bj-toc</name>
+        <label><![CDATA[따라오는 차례]]></label>
+        <description><![CDATA[제목1이 2개 이상인 글]]></description>
+        <type>BOOL</type>
+        <default><![CDATA[true]]></default>
+      </variable>
+      <variable>
+        <name>bj-num</name>
+        <label><![CDATA[제목 번호(02 / 05 · 01)]]></label>
+        <description><![CDATA[]]></description>
+        <type>BOOL</type>
+        <default><![CDATA[true]]></default>
+      </variable>
+      <variable>
+        <name>bj-sheets</name>
+        <label><![CDATA[제목1마다 종이 한 장으로 나누기]]></label>
+        <description><![CDATA[]]></description>
+        <type>BOOL</type>
+        <default><![CDATA[true]]></default>
+      </variable>
+    </variablegroup>
+    <variablegroup name="윗띠">
+      <variable>
+        <name>bj-band-text</name>
+        <label><![CDATA[윗띠 이름]]></label>
+        <description><![CDATA[머리 위 가는 띠의 앞 글자(예: 안내). 비우면 띠 전체를 숨김]]></description>
+        <type>STRING</type>
+      </variable>
+      <variable>
+        <name>bj-band-l1-text</name>
+        <label><![CDATA[링크 1 글자]]></label>
+        <description><![CDATA[]]></description>
+        <type>STRING</type>
+      </variable>
+      <variable>
+        <name>bj-band-l1-url</name>
+        <label><![CDATA[링크 1 주소]]></label>
+        <description><![CDATA[]]></description>
+        <type>STRING</type>
+      </variable>
+      <variable>
+        <name>bj-band-l2-text</name>
+        <label><![CDATA[링크 2 글자]]></label>
+        <description><![CDATA[]]></description>
+        <type>STRING</type>
+      </variable>
+      <variable>
+        <name>bj-band-l2-url</name>
+        <label><![CDATA[링크 2 주소]]></label>
+        <description><![CDATA[]]></description>
+        <type>STRING</type>
+      </variable>
+    </variablegroup>
+  </variables>
+</skin>

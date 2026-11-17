@@ -27,7 +27,40 @@
     <entriesOnPage>10</entriesOnPage>
     <entriesOnList>10</entriesOnList>
     <contentWidth>1080</contentWidth>
+    <cover><![CDATA[[{"name": "featured", "title": "", "dataType": "RECENT", "data": {"category": "ALL", "size": 5}}, {"name": "grid", "title": "최신 글", "dataType": "RECENT", "data": {"category": "ALL", "size": 6}}]]]></cover>
   </default>
+  <cover>
+    <item>
+      <name>featured</name>
+      <label><![CDATA[큰 글 + 목록]]></label>
+      <description><![CDATA[첫 글을 크게, 나머지는 옆에 목록으로]]></description>
+    </item>
+    <item>
+      <name>list</name>
+      <label><![CDATA[사진 목록]]></label>
+      <description><![CDATA[왼쪽 사진 + 제목 · 요약]]></description>
+    </item>
+    <item>
+      <name>grid</name>
+      <label><![CDATA[카드 3칸]]></label>
+      <description><![CDATA[사진 카드 격자]]></description>
+    </item>
+    <item>
+      <name>gallery</name>
+      <label><![CDATA[사진 갤러리]]></label>
+      <description><![CDATA[사진만 크게, 제목은 사진 위에]]></description>
+    </item>
+    <item>
+      <name>titles</name>
+      <label><![CDATA[제목 목록]]></label>
+      <description><![CDATA[제목 · 날짜만 가볍게]]></description>
+    </item>
+    <item>
+      <name>banner</name>
+      <label><![CDATA[배너(직접 입력)]]></label>
+      <description><![CDATA[「직접 입력」으로 그림 · 문구 · 링크를 넣는 큰 띠]]></description>
+    </item>
+  </cover>
   <variables>
     <variablegroup name="기본">
       <variable>
@@ -56,8 +89,15 @@
         <label><![CDATA[색 묶음]]></label>
         <description><![CDATA[]]></description>
         <type>SELECT</type>
-        <option><![CDATA[[{"name": "sea", "label": "모래 · 바다", "value": "sea"}, {"name": "forest", "label": "숲", "value": "forest"}, {"name": "navy", "label": "남색", "value": "navy"}, {"name": "ink", "label": "먹(흑백)", "value": "ink"}, {"name": "blossom", "label": "벚꽃", "value": "blossom"}]]]></option>
+        <option><![CDATA[[{"name": "sea", "label": "모래 · 바다", "value": "sea"}, {"name": "forest", "label": "숲", "value": "forest"}, {"name": "navy", "label": "남색", "value": "navy"}, {"name": "ink", "label": "먹(흑백)", "value": "ink"}, {"name": "blossom", "label": "벚꽃", "value": "blossom"}, {"name": "custom", "label": "직접 고르기(아래 색)", "value": "custom"}]]]></option>
         <default><![CDATA[sea]]></default>
+      </variable>
+      <variable>
+        <name>bj-color</name>
+        <label><![CDATA[주 색(색 묶음 「직접 고르기」일 때)]]></label>
+        <description><![CDATA[단추 · 링크 · 강조에 쓰는 색. 진한 색 · 옅은 색은 이 색에서 저절로 만듭니다]]></description>
+        <type>COLOR</type>
+        <default><![CDATA[#0e7c86]]></default>
       </variable>
       <variable>
         <name>bj-font</name>
@@ -74,6 +114,14 @@
         <type>SELECT</type>
         <option><![CDATA[[{"name": "narrow", "label": "좁게", "value": "narrow"}, {"name": "normal", "label": "보통", "value": "normal"}, {"name": "wide", "label": "넓게", "value": "wide"}, {"name": "xwide", "label": "아주 넓게", "value": "xwide"}]]]></option>
         <default><![CDATA[normal]]></default>
+      </variable>
+      <variable>
+        <name>bj-list</name>
+        <label><![CDATA[글 목록 모양]]></label>
+        <description><![CDATA[카테고리 · 검색 · 태그 목록]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "thumb", "label": "사진 목록", "value": "thumb"}, {"name": "card", "label": "카드", "value": "card"}, {"name": "title", "label": "제목 목록", "value": "title"}, {"name": "magazine", "label": "잡지(번호 + 오른쪽 사진)", "value": "magazine"}]]]></option>
+        <default><![CDATA[thumb]]></default>
       </variable>
       <variable>
         <name>bj-sidebar</name>
@@ -111,6 +159,28 @@
         <label><![CDATA[종이에 타공 노트 무늬(구멍 · 여백선 · 쪽 번호)]]></label>
         <description><![CDATA[장 나누기를 켰을 때만]]></description>
         <type>BOOL</type>
+      </variable>
+    </variablegroup>
+    <variablegroup name="바닥">
+      <variable>
+        <name>bj-foot-logo</name>
+        <label><![CDATA[바닥 로고]]></label>
+        <description><![CDATA[]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "none", "label": "없음", "value": "none"}, {"name": "same", "label": "머리 로고와 같게", "value": "same"}, {"name": "own", "label": "바닥용 그림(아래)", "value": "own"}]]]></option>
+        <default><![CDATA[none]]></default>
+      </variable>
+      <variable>
+        <name>bj-foot-logo-img</name>
+        <label><![CDATA[바닥용 로고 그림]]></label>
+        <description><![CDATA[바닥이 어두운 색이라 흰 글씨 로고를 따로 올릴 때]]></description>
+        <type>IMAGE</type>
+      </variable>
+      <variable>
+        <name>bj-foot-text</name>
+        <label><![CDATA[바닥 문구]]></label>
+        <description><![CDATA[예: 문의는 방명록으로. 비우면 숨김]]></description>
+        <type>STRING</type>
       </variable>
     </variablegroup>
     <variablegroup name="윗띠">

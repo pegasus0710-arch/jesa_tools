@@ -25,11 +25,12 @@ w=[##_var_bj-width_##]
 side=[##_var_bj-sidebar_##]
 <s_if_var_bj-num>num=1</s_if_var_bj-num>
 <s_if_var_bj-sheets>sheets=1</s_if_var_bj-sheets>
+<s_if_var_bj-punch>punch=1</s_if_var_bj-punch>
 </script>
-<script>(function(){var t=(document.getElementById('bjcfg')||{}).textContent||'',C={pal:'sea',font:'pretendard',w:'normal',side:'right',num:0,sheets:0};
+<script>(function(){var t=(document.getElementById('bjcfg')||{}).textContent||'',C={pal:'sea',font:'pretendard',w:'normal',side:'right',num:0,sheets:0,punch:0};
 t.split('\n').forEach(function(l){var m=l.match(/^\s*([a-z]+)=(.*)$/);if(m&&m[2].trim()&&m[2].indexOf('[##')<0)C[m[1]]=m[2].trim();});
-C.num=C.num==1;C.sheets=C.sheets==1;window.BJC=C;var d=document.documentElement;
-d.classList.add('bjp-'+C.pal,'bjf-'+C.font,'bjw-'+C.w,'bjs-'+C.side);
+C.num=C.num==1;C.sheets=C.sheets==1;C.punch=C.punch==1;window.BJC=C;var d=document.documentElement;
+d.classList.add('bjp-'+C.pal,'bjf-'+C.font,'bjw-'+C.w,'bjs-'+C.side);if(C.punch)d.classList.add('bj-punch');
 var F={nanumgothic:'Nanum+Gothic:wght@400;700;800',gowun:'Gowun+Dodum',myeongjo:'Nanum+Myeongjo:wght@400;700;800'}[C.font];
 if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+F+'&display=swap';document.head.appendChild(l);}})();</script>
 <!-- ══════════ Blog J SKIN v2.0 · 글 본문 3.0 + 따라오는 차례 (2026-10-18) ══════════ -->
@@ -41,7 +42,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
     <nav class="bj-nav" aria-label="블로그 메뉴">[##_blog_menu_##]</nav>
     <s_search>
     <div class="bj-search"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-      <input type="text" name="[##_search_name_##]" value="[##_search_text_##]" onkeypress="if (event.keyCode == 13) { [##_search_onclick_submit_##] }" placeholder="글 · 도구 찾기" aria-label="블로그 검색">
+      <input type="text" name="[##_search_name_##]" value="[##_search_text_##]" onkeypress="if (event.keyCode == 13) { [##_search_onclick_submit_##] }" placeholder="글 찾기" aria-label="블로그 검색">
     </div>
     </s_search>
   </div>
@@ -117,7 +118,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
         <s_permalink_article_rep>
         <article class="bj-post">
           <header class="bj-phead"><a class="bj-pill" href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a><h1>[##_article_rep_title_##]</h1><p class="bj-meta"><span>[##_article_rep_author_##]</span><span>[##_article_rep_date_##]</span></p></header>
-          <div class="bj-protect"><svg class="i" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B3D4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><p>보호된 글입니다. 비밀번호를 입력해 주세요.</p>
+          <div class="bj-protect"><svg class="i" width="26" height="26" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><p>보호된 글입니다. 비밀번호를 입력해 주세요.</p>
             <div><input type="password" maxlength="16" id="[##_article_password_##]" name="[##_article_password_##]" onkeydown="if (event.keyCode == 13)[##_article_dissolve_##]" aria-label="비밀번호"><button type="button" onclick="[##_article_dissolve_##]">확인</button></div></div>
         </article>
         </s_permalink_article_rep>
@@ -139,7 +140,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
           
           <s_tag_label><p class="bj-ptags"><svg class="i" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5F6B7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8.5h.01"/></svg>[##_tag_label_rep_##]</p></s_tag_label>
           <s_article_related>
-          <section class="bj-rel"><h2><svg class="i" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><a href="[##_article_rep_category_link_##]">'[##_article_rep_category_##]'</a> 다른 글</h2><div class="bj-rel-g">
+          <section class="bj-rel"><h2><svg class="i" width="17" height="17" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><a href="[##_article_rep_category_link_##]">'[##_article_rep_category_##]'</a> 다른 글</h2><div class="bj-rel-g">
             <s_article_related_rep><a class="bj-rel-i" href="[##_article_related_rep_link_##]"><s_article_related_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C320x180/?fname=[##_article_related_rep_thumbnail_link_##]" alt="" loading="lazy"></s_article_related_rep_thumbnail><b>[##_article_related_rep_title_##]</b><span>[##_article_related_rep_date_##]</span></a></s_article_related_rep>
           </div></section>
           </s_article_related>
@@ -157,47 +158,47 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
 
     <aside class="bj-side" aria-label="사이드바">
       <s_sidebar><s_sidebar_element><!-- 오른쪽 사이드바 --></s_sidebar_element></s_sidebar>
-      <div class="bj-card bj-sidetools" id="bjSideTools" hidden><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>인기 도구<small>이번 주</small></h3><ol class="bj-poprank"></ol><a class="bj-sideall" href="/pages/tools">무료 도구 전체 보기 ›</a></div>
+      <div class="bj-card bj-sidetools" id="bjSideTools" hidden><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>인기 도구<small>이번 주</small></h3><ol class="bj-poprank"></ol><a class="bj-sideall" href="/pages/tools">무료 도구 전체 보기 ›</a></div>
       <s_sidebar>
         <s_sidebar_element><!-- 공지사항 -->
-          <s_rct_notice><div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L21.5 20h-19z"/><path d="M12 10v4.5M12 17.5h.01"/></svg>공지사항</h3><ul class="bj-ul"><s_rct_notice_rep><li><a href="[##_notice_rep_link_##]">[##_notice_rep_title_##]</a></li></s_rct_notice_rep></ul></div></s_rct_notice>
+          <s_rct_notice><div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L21.5 20h-19z"/><path d="M12 10v4.5M12 17.5h.01"/></svg>공지사항</h3><ul class="bj-ul"><s_rct_notice_rep><li><a href="[##_notice_rep_link_##]">[##_notice_rep_title_##]</a></li></s_rct_notice_rep></ul></div></s_rct_notice>
         </s_sidebar_element>
         <s_sidebar_element><!-- 카테고리 -->
-          <div class="bj-card bj-cat"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>카테고리</h3>[##_category_list_##]</div>
+          <div class="bj-card bj-cat"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>카테고리</h3>[##_category_list_##]</div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 인기 글 -->
-          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>많이 본 글</h3><ol class="bj-rank"><s_rctps_popular_rep><li><a href="[##_rctps_rep_link_##]">[##_rctps_rep_title_##]</a></li></s_rctps_popular_rep></ol></div>
+          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>많이 본 글</h3><ol class="bj-rank"><s_rctps_popular_rep><li><a href="[##_rctps_rep_link_##]">[##_rctps_rep_title_##]</a></li></s_rctps_popular_rep></ol></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 최근 글 -->
-          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>최근 글</h3><ul class="bj-recent"><s_rctps_rep><li><a href="[##_rctps_rep_link_##]"><s_rctps_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C120x68/?fname=[##_rctps_rep_thumbnail_##]" alt="" loading="lazy"></s_rctps_rep_thumbnail><span>[##_rctps_rep_title_##]</span></a></li></s_rctps_rep></ul></div>
+          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>최근 글</h3><ul class="bj-recent"><s_rctps_rep><li><a href="[##_rctps_rep_link_##]"><s_rctps_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C120x68/?fname=[##_rctps_rep_thumbnail_##]" alt="" loading="lazy"></s_rctps_rep_thumbnail><span>[##_rctps_rep_title_##]</span></a></li></s_rctps_rep></ul></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 태그 -->
-          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8.5h.01"/></svg>태그</h3><div class="bj-tags"><s_random_tags><a href="[##_tag_link_##]" class="[##_tag_class_##]">[##_tag_name_##]</a></s_random_tags></div></div>
+          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8.5h.01"/></svg>태그</h3><div class="bj-tags"><s_random_tags><a href="[##_tag_link_##]" class="[##_tag_class_##]">[##_tag_name_##]</a></s_random_tags></div></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 최근 댓글 -->
-          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/></svg>최근 댓글</h3><ul class="bj-ul"><s_rctrp_rep><li><a href="[##_rctrp_rep_link_##]">[##_rctrp_rep_desc_##]</a><em>[##_rctrp_rep_name_##]</em></li></s_rctrp_rep></ul></div>
+          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/></svg>최근 댓글</h3><ul class="bj-ul"><s_rctrp_rep><li><a href="[##_rctrp_rep_link_##]">[##_rctrp_rep_desc_##]</a><em>[##_rctrp_rep_name_##]</em></li></s_rctrp_rep></ul></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 보관함 -->
-          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>보관함</h3><ul class="bj-ul"><s_archive_rep><li><a href="[##_archive_rep_link_##]">[##_archive_rep_date_##]</a><em>[##_archive_rep_count_##]</em></li></s_archive_rep></ul></div>
+          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>보관함</h3><ul class="bj-ul"><s_archive_rep><li><a href="[##_archive_rep_link_##]">[##_archive_rep_date_##]</a><em>[##_archive_rep_count_##]</em></li></s_archive_rep></ul></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 달력 -->
-          <div class="bj-card bj-cal"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>달력</h3>[##_calendar_##]</div>
+          <div class="bj-card bj-cal"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>달력</h3>[##_calendar_##]</div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 링크 -->
-          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>링크</h3><ul class="bj-ul"><s_link_rep><li><a href="[##_link_url_##]" target="_blank" rel="noopener">[##_link_site_##]</a></li></s_link_rep></ul></div>
+          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>링크</h3><ul class="bj-ul"><s_link_rep><li><a href="[##_link_url_##]" target="_blank" rel="noopener">[##_link_site_##]</a></li></s_link_rep></ul></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 관리자 메뉴 -->
           <div class="bj-card bj-owner"><a href="[##_owner_url_##]/newpost/" target="_blank" rel="noopener">글쓰기</a><a href="[##_owner_url_##]" target="_blank" rel="noopener">관리</a></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 방문자 수 -->
-          <div class="bj-card bj-count"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg>방문자</h3><p><span>전체</span><b>[##_count_total_##]</b></p><p><span>오늘</span><b>[##_count_today_##]</b></p><p><span>어제</span><b>[##_count_yesterday_##]</b></p></div>
+          <div class="bj-card bj-count"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg>방문자</h3><p><span>전체</span><b>[##_count_total_##]</b></p><p><span>오늘</span><b>[##_count_today_##]</b></p><p><span>어제</span><b>[##_count_yesterday_##]</b></p></div>
         </s_sidebar_element>
       </s_sidebar>
     </aside>
   </div>
 </div>
 
-<footer class="bj-ft"><div class="bj-wrap bj-ft-in"><a class="bj-logo bj-logo-w" href="[##_blog_link_##]"><s_if_var_bj-logo-img><img class="bj-logo-img" src="[##_var_bj-logo-img_##]" alt=""></s_if_var_bj-logo-img><s_not_var_bj-logo-img><span class="bj-mark">[##_var_bj-logo-text_##]<i></i></span></s_not_var_bj-logo-img><span class="bj-logo-t">[##_title_##]</span></a><a class="bj-ft-set" href="[##_owner_url_##]" title="블로그 관리 (로그인)" aria-label="블로그 관리"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a><p>생활 속 불편을 직접 정리하고, 직접 만들어 해결하는 블로그</p><p class="bj-copy">Copyright © [##_title_##] · <a class="bj-credit" href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Skin by Blog J</a></p></div></footer>
+<footer class="bj-ft"><div class="bj-wrap bj-ft-in"><a class="bj-logo bj-logo-w" href="[##_blog_link_##]"><s_if_var_bj-logo-img><img class="bj-logo-img" src="[##_var_bj-logo-img_##]" alt=""></s_if_var_bj-logo-img><s_not_var_bj-logo-img><span class="bj-mark">[##_var_bj-logo-text_##]<i></i></span></s_not_var_bj-logo-img><span class="bj-logo-t">[##_title_##]</span></a><a class="bj-ft-set" href="[##_owner_url_##]" title="블로그 관리 (로그인)" aria-label="블로그 관리"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a><p>[##_desc_##]</p><p class="bj-copy">Copyright © [##_title_##] · <a class="bj-credit" href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Skin by Blog J</a></p></div></footer>
 
 <script>
 /* ══════════ Blog J SKIN 스크립트 ══════════ */

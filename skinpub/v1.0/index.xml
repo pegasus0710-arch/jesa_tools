@@ -132,7 +132,7 @@
         <label><![CDATA[글 목록 모양]]></label>
         <description><![CDATA[카테고리 · 검색 · 태그 목록]]></description>
         <type>SELECT</type>
-        <option><![CDATA[[{"name": "thumb", "label": "사진 목록", "value": "thumb"}, {"name": "card", "label": "카드", "value": "card"}, {"name": "title", "label": "제목 목록", "value": "title"}, {"name": "magazine", "label": "잡지(번호 + 오른쪽 사진)", "value": "magazine"}]]]></option>
+        <option><![CDATA[[{"name": "thumb", "label": "사진 목록", "value": "thumb"}, {"name": "card", "label": "카드", "value": "card"}, {"name": "title", "label": "제목 목록", "value": "title"}, {"name": "zine", "label": "잡지(큰 사진 글 + 격자)", "value": "zine"}, {"name": "magazine", "label": "번호 목록(01 · 02 + 오른쪽 사진)", "value": "magazine"}]]]></option>
         <default><![CDATA[thumb]]></default>
       </variable>
       <variable>

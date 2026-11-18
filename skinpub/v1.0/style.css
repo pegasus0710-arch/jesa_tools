@@ -1,5 +1,5 @@
 @charset "utf-8";
-/* Blog J 스킨 v1.0 — 무료 사용 · 고쳐 쓰기 가능 / 다시 배포 · 판매 금지 / 맨 아래 「Skin by Blog J」 유지 */
+/* Blog J 모래바다 v1.0 — 무료 사용 · 고쳐 쓰기 가능 / 다시 배포 · 판매 금지 / 맨 아래 「Skin by Blog J」 유지 */
 
 :root {
   --paper: var(--bjc-sand); --ink: #14202B; --ink2: #4A5563; --ink3: #5F6B7A; --line: var(--bjc-sandl); --line2: var(--bjc-sandl);
@@ -1460,7 +1460,7 @@ body.bj-home .bj-list { margin-top: 34px; }html.bjl-magazine body.bj-home #bjIte
 /* 11-15 제이: 대문 「새로 올린 글」 — 쪽 번호 빼고 오른쪽에 「전체 보기 ›」(분류 전체보기 목록으로) */
 .bj-lt-all { display: none; }html.bj-oldhome #tt-body-index .bj-lhead { align-items: center; }html.bj-oldhome #tt-body-index .bj-lt-all { display: inline-block; margin-left: auto; flex-shrink: 0; }html.bj-oldhome #tt-body-index .bj-pg { display: none; }
 
-/* ══════════ Blog J 스킨 v1.0 — 설정 칸(스킨 편집 › 설정) ══════════ */
+/* ══════════ Blog J 모래바다 v1.0 — 설정 칸(스킨 편집 › 설정) ══════════ */
 :root { --bjc-main: #0e7c86; --bjc-main2: #0a5c66; --bjc-deep: #0b3d4a; --bjc-deep2: #082f39; --bjc-deep3: #13505e; --bjc-ondark: #7cc4c8; --bjc-ondark2: #9fc3c8; --bjc-light: #e6f4f5; --bjc-sand: #faf6ee; --bjc-sand2: #f3ebdc; --bjc-sandl: #e8dcc4; --bjc-sand3: #efe6d4; --bjc-sandd: #c9b08a; --bjc-glow: #e07a4f; }
 html.bjp-forest { --bjc-main: #2f6b3f; --bjc-main2: #24532f; --bjc-deep: #1f3a2a; --bjc-deep2: #152a1e; --bjc-deep3: #2a4d38; --bjc-ondark: #a9d4b3; --bjc-ondark2: #b9d6bf; --bjc-light: #eaf3ec; --bjc-sand: #f7f6ef; --bjc-sand2: #eeecdf; --bjc-sandl: #dfdcc8; --bjc-sand3: #e9e6d6; --bjc-sandd: #b9b08a; --bjc-glow: #d98a3a; }
 html.bjp-navy { --bjc-main: #2b4c7e; --bjc-main2: #203a62; --bjc-deep: #1b2a44; --bjc-deep2: #121d31; --bjc-deep3: #26395a; --bjc-ondark: #a9c1e6; --bjc-ondark2: #b8c9e3; --bjc-light: #eaf0f8; --bjc-sand: #f6f7f9; --bjc-sand2: #eceff4; --bjc-sandl: #d9dee8; --bjc-sand3: #e6e9f0; --bjc-sandd: #a7b0c2; --bjc-glow: #e0874f; }

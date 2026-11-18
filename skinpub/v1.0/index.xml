@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <skin>
   <information>
-    <name>Blog J</name>
+    <name>Blog J 모래바다</name>
     <version>1.0</version>
-    <description><![CDATA[Blog J 스킨 — 따라오는 차례 · 제목 번호 · 장 나누기 · 반응형. 무료로 쓰고 고쳐 쓸 수 있으며, 맨 아래 「Skin by Blog J」 표시는 지우지 않아야 합니다. 그대로 다시 나눠 주거나 팔 수 없습니다.]]></description>
+    <description><![CDATA[Blog J 모래바다 — 따라오는 차례 · 제목 번호 · 장 나누기 · 반응형. 무료로 쓰고 고쳐 쓸 수 있으며, 맨 아래 「Skin by Blog J」 표시는 지우지 않아야 합니다. 그대로 다시 나눠 주거나 팔 수 없습니다.]]></description>
     <license><![CDATA[무료 사용 · 고쳐 쓰기 가능 / 다시 배포 · 판매 금지 / 크레딧 유지]]></license>
   </information>
   <author>
@@ -46,6 +46,7 @@
       <showValue>1</showValue>
     </tree>
     <contentWidth>1080</contentWidth>
+    <liststyle>auto</liststyle>
     <cover><![CDATA[[{"name": "featured", "title": "", "dataType": "RECENT", "data": {"category": "ALL", "size": 5}}, {"name": "grid", "title": "최신 글", "dataType": "RECENT", "data": {"category": "ALL", "size": 6}}]]]></cover>
   </default>
   <cover>
@@ -80,6 +81,32 @@
       <description><![CDATA[「직접 입력」으로 그림 · 문구 · 링크를 넣는 큰 띠]]></description>
     </item>
   </cover>
+  <liststyle>
+    <item>
+      <label><![CDATA[스킨 설정대로]]></label>
+      <value>auto</value>
+    </item>
+    <item>
+      <label><![CDATA[사진 목록]]></label>
+      <value>thumb</value>
+    </item>
+    <item>
+      <label><![CDATA[카드]]></label>
+      <value>card</value>
+    </item>
+    <item>
+      <label><![CDATA[제목 목록]]></label>
+      <value>title</value>
+    </item>
+    <item>
+      <label><![CDATA[잡지]]></label>
+      <value>zine</value>
+    </item>
+    <item>
+      <label><![CDATA[번호 목록]]></label>
+      <value>magazine</value>
+    </item>
+  </liststyle>
   <variables>
     <variablegroup name="기본">
       <variable>

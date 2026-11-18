@@ -138,9 +138,9 @@
       <variable>
         <name>bj-sidebar</name>
         <label><![CDATA[사이드바 위치]]></label>
-        <description><![CDATA[휴대폰에서는 어느 것을 골라도 아래로 갑니다]]></description>
+        <description><![CDATA[아래 = 사이드바 전체가 바닥 색 띠 안으로. 몇 개만 보내려면 꾸미기 › 사이드바에서 「바닥」 칸으로 옮기세요. 오른쪽 · 왼쪽은 휴대폰에서 본문 아래로 갑니다]]></description>
         <type>SELECT</type>
-        <option><![CDATA[[{"name": "right", "label": "오른쪽", "value": "right"}, {"name": "left", "label": "왼쪽", "value": "left"}, {"name": "bottom", "label": "아래", "value": "bottom"}, {"name": "none", "label": "없음", "value": "none"}]]]></option>
+        <option><![CDATA[[{"name": "right", "label": "오른쪽", "value": "right"}, {"name": "left", "label": "왼쪽", "value": "left"}, {"name": "bottom", "label": "아래(바닥 색 띠 안)", "value": "bottom"}, {"name": "none", "label": "없음", "value": "none"}]]]></option>
         <default><![CDATA[right]]></default>
       </variable>
     </variablegroup>

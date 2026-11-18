@@ -36,7 +36,7 @@ C.num=C.num==1;C.sheets=C.sheets==1;C.punch=C.punch==1;window.BJC=C;var d=docume
 d.classList.add('bjp-'+C.pal,'bjf-'+C.font,'bjw-'+C.w,'bjs-'+C.side);if(C.punch)d.classList.add('bj-punch');d.classList.add('bjl-'+C.list,'bjfl-'+C.fl);if(C.pal==='custom'&&/^#[0-9a-fA-F]{6}$/.test(C.color)){var hx=C.color,n=parseInt(hx.slice(1),16),R=n>>16,G=n>>8&255,B=n&255,mx=function(t,a){return 'rgb('+[R,G,B].map(function(v){return Math.round(v+(t-v)*a)}).join(',')+')'};[['main',hx],['main2',mx(0,.22)],['deep',mx(0,.55)],['deep2',mx(0,.68)],['deep3',mx(0,.45)],['ondark',mx(255,.6)],['ondark2',mx(255,.68)],['light',mx(255,.9)]].forEach(function(p){d.style.setProperty('--bjc-'+p[0],p[1])});}
 var F={nanumgothic:'Nanum+Gothic:wght@400;700;800',gowun:'Gowun+Dodum',myeongjo:'Nanum+Myeongjo:wght@400;700;800'}[C.font];
 if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+F+'&display=swap';document.head.appendChild(l);}})();</script>
-<!-- ══════════ Blog J SKIN v2.0 · 글 본문 3.0 + 따라오는 차례 (2026-10-18) ══════════ -->
+<!-- ══════════ Blog J 스킨 v1.0 ══════════ -->
 <s_if_var_bj-band-text><div class="bj-util"><div class="bj-wrap bj-util-in"><b>[##_var_bj-band-text_##]</b><s_if_var_bj-band-l1-text><a href="[##_var_bj-band-l1-url_##]">[##_var_bj-band-l1-text_##]</a></s_if_var_bj-band-l1-text><s_if_var_bj-band-l2-text><a href="[##_var_bj-band-l2-url_##]">[##_var_bj-band-l2-text_##]</a></s_if_var_bj-band-l2-text><i class="bj-usp"></i><a href="/guestbook">방명록</a></div></div></s_if_var_bj-band-text>
 <header class="bj-hd">
   <div class="bj-wrap bj-hd-in">
@@ -60,7 +60,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
   <div class="bj-cols">
     <main class="bj-main" id="bjMain">
 
-      <s_cover_group><div class="bj-cvg"><s_cover_rep><s_cover name='featured'><section class="bj-cv bj-cvs-featured"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='list'><section class="bj-cv bj-cvs-thumb"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='grid'><section class="bj-cv bj-cvs-card"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='gallery'><section class="bj-cv bj-cvs-gallery"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='titles'><section class="bj-cv bj-cvs-title"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='banner'><section class="bj-cv bj-cvs-banner"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover></s_cover_rep></div></s_cover_group>
+      <s_cover_group><h1 class="bj-sr">[##_title_##]</h1><div class="bj-cvg"><s_cover_rep><s_cover name='featured'><section class="bj-cv bj-cvs-featured"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='list'><section class="bj-cv bj-cvs-thumb"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='grid'><section class="bj-cv bj-cvs-card"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='gallery'><section class="bj-cv bj-cvs-gallery"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='titles'><section class="bj-cv bj-cvs-title"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='banner'><section class="bj-cv bj-cvs-banner"><header class="bj-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="bj-cvm" href="[##_cover_url_##]">더 보기 ›</a></s_cover_url></header><div class="bj-items"><s_cover_item><s_cover_item_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><a class="bj-pill" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p><p class="bj-m">[##_cover_item_simple_date_##]</p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="bj-item"><a class="bj-th" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x360/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail></a><div class="bj-tx"><h3 class="bj-cvt"><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="bj-sum"><a href="[##_cover_item_url_##]">[##_cover_item_summary_##]</a></p></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover></s_cover_rep></div></s_cover_group>
       <s_list>
       <section class="bj-list" data-style="[##_list_style_##]">
         <header class="bj-lhead">
@@ -73,7 +73,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
         <div class="bj-items" id="bjItems">
           <s_list_rep>
           <article class="bj-item">
-            <a class="bj-th" href="[##_list_rep_link_##]"><s_list_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C480x270/?fname=[##_list_rep_thumbnail_##]" alt="" loading="lazy"></s_list_rep_thumbnail></a>
+            <a class="bj-th" href="[##_list_rep_link_##]"><s_list_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C480x270/?fname=[##_list_rep_thumbnail_##]" alt="[##_list_rep_title_##]" loading="lazy"></s_list_rep_thumbnail></a>
             <div class="bj-tx">
               <a class="bj-pill" href="[##_list_rep_category_link_##]">[##_list_rep_category_##]</a>
               <h2><a href="[##_list_rep_link_##]">[##_list_rep_title_##]</a></h2>
@@ -143,11 +143,11 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
           <s_sidebar><s_sidebar_element><!-- 본문 하단 --></s_sidebar_element></s_sidebar>
           
           <s_tag_label><p class="bj-ptags"><svg class="i" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5F6B7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8.5h.01"/></svg>[##_tag_label_rep_##]</p></s_tag_label>
-          <s_article_related>
+          <s_if_var_bj-related><s_article_related>
           <section class="bj-rel"><h2><svg class="i" width="17" height="17" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><a href="[##_article_rep_category_link_##]">'[##_article_rep_category_##]'</a> 다른 글</h2><div class="bj-rel-g">
-            <s_article_related_rep><a class="bj-rel-i" href="[##_article_related_rep_link_##]"><s_article_related_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C320x180/?fname=[##_article_related_rep_thumbnail_link_##]" alt="" loading="lazy"></s_article_related_rep_thumbnail><b>[##_article_related_rep_title_##]</b><span>[##_article_related_rep_date_##]</span></a></s_article_related_rep>
+            <s_article_related_rep><a class="bj-rel-i" href="[##_article_related_rep_link_##]"><s_article_related_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C320x180/?fname=[##_article_related_rep_thumbnail_link_##]" alt="[##_article_related_rep_title_##]" loading="lazy"></s_article_related_rep_thumbnail><b>[##_article_related_rep_title_##]</b><span>[##_article_related_rep_date_##]</span></a></s_article_related_rep>
           </div></section>
-          </s_article_related>
+          </s_article_related></s_if_var_bj-related>
           
           <s_rp><section class="bj-cm">[##_comment_group_##]</section></s_rp>
           <s_ad_div><p class="bj-admin"><a href="[##_s_ad_m_link_##]">수정</a><a href="#" onclick="[##_s_ad_m_onclick_##]">수정(새 창)</a><span>[##_s_ad_s1_label_##]</span><a href="#" onclick="[##_s_ad_s2_onclick_##]">[##_s_ad_s2_label_##]</a><a href="#" onclick="[##_s_ad_d_onclick_##]">삭제</a></p></s_ad_div>
@@ -162,7 +162,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
 
     <aside class="bj-side" aria-label="사이드바">
       <s_sidebar><s_sidebar_element><!-- 오른쪽 사이드바 --></s_sidebar_element></s_sidebar>
-      <div class="bj-card bj-sidetools" id="bjSideTools" hidden><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>인기 도구<small>이번 주</small></h3><ol class="bj-poprank"></ol><a class="bj-sideall" href="/pages/tools">무료 도구 전체 보기 ›</a></div>
+      
       <s_sidebar>
         <s_sidebar_element><!-- 공지사항 -->
           <s_rct_notice><div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L21.5 20h-19z"/><path d="M12 10v4.5M12 17.5h.01"/></svg>공지사항</h3><ul class="bj-ul"><s_rct_notice_rep><li><a href="[##_notice_rep_link_##]">[##_notice_rep_title_##]</a></li></s_rct_notice_rep></ul></div></s_rct_notice>
@@ -174,7 +174,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
           <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>많이 본 글</h3><ol class="bj-rank"><s_rctps_popular_rep><li><a href="[##_rctps_rep_link_##]">[##_rctps_rep_title_##]</a></li></s_rctps_popular_rep></ol></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 최근 글 -->
-          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>최근 글</h3><ul class="bj-recent"><s_rctps_rep><li><a href="[##_rctps_rep_link_##]"><s_rctps_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C120x68/?fname=[##_rctps_rep_thumbnail_##]" alt="" loading="lazy"></s_rctps_rep_thumbnail><span>[##_rctps_rep_title_##]</span></a></li></s_rctps_rep></ul></div>
+          <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>최근 글</h3><ul class="bj-recent"><s_rctps_rep><li><a href="[##_rctps_rep_link_##]"><s_rctps_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C120x68/?fname=[##_rctps_rep_thumbnail_##]" alt="[##_rctps_rep_title_##]" loading="lazy"></s_rctps_rep_thumbnail><span>[##_rctps_rep_title_##]</span></a></li></s_rctps_rep></ul></div>
         </s_sidebar_element>
         <s_sidebar_element><!-- 태그 -->
           <div class="bj-card"><h3><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--bjc-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8.5h.01"/></svg>태그</h3><div class="bj-tags"><s_random_tags><a href="[##_tag_link_##]" class="[##_tag_class_##]">[##_tag_name_##]</a></s_random_tags></div></div>
@@ -205,15 +205,14 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
 <footer class="bj-ft"><div class="bj-wrap bj-ft-in"><a class="bj-logo bj-ft-logo bj-ft-same" href="[##_blog_link_##]"><s_if_var_bj-logo-img><img class="bj-logo-img" src="[##_var_bj-logo-img_##]" alt=""></s_if_var_bj-logo-img><span class="bj-logo-t">[##_title_##]</span></a><s_if_var_bj-foot-logo-img><a class="bj-ft-logo bj-ft-own" href="[##_blog_link_##]"><img class="bj-ft-img" src="[##_var_bj-foot-logo-img_##]" alt="[##_title_##]"></a></s_if_var_bj-foot-logo-img><s_if_var_bj-foot-text><p class="bj-ft-txt">[##_var_bj-foot-text_##]</p></s_if_var_bj-foot-text><p class="bj-copy"><a class="bj-credit" href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Skin by Blog J</a></p></div></footer>
 
 <script>
-/* ══════════ Blog J SKIN 스크립트 ══════════ */
+/* ══════════ Blog J 스킨 v1.0 스크립트 ══════════ */
 (function () {
   var ICONS = {"cloud": "<path d=\"M7 18.5h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.6 4.5 4.5 0 0 0 7 18.5z\"/>", "grid": "<rect x=\"3.5\" y=\"3.5\" width=\"7.5\" height=\"7.5\" rx=\"1.5\"/><rect x=\"13\" y=\"3.5\" width=\"7.5\" height=\"7.5\" rx=\"1.5\"/><rect x=\"3.5\" y=\"13\" width=\"7.5\" height=\"7.5\" rx=\"1.5\"/><rect x=\"13\" y=\"13\" width=\"7.5\" height=\"7.5\" rx=\"1.5\"/>", "doc": "<path d=\"M7 3h7l4 4v14H7z\"/><path d=\"M14 3v4h4\"/><path d=\"M10 12h5M10 16h5\"/>", "image": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2.5\"/><circle cx=\"8.5\" cy=\"9.5\" r=\"1.8\"/><path d=\"M21 16l-5-5-9 9\"/>", "pencil": "<path d=\"M4 20l4.2-1 11-11a2.1 2.1 0 0 0-3-3l-11 11z\"/><path d=\"M14.5 6.5l3 3\"/>", "printer": "<path d=\"M7 9V3h10v6\"/><rect x=\"3\" y=\"9\" width=\"18\" height=\"8\" rx=\"2\"/><rect x=\"7\" y=\"14\" width=\"10\" height=\"7\" rx=\"1\"/>", "table": "<path d=\"M3 10h18\"/><path d=\"M5 10v10M19 10v10\"/><path d=\"M8 10V7h8v3\"/>", "wallet": "<rect x=\"3\" y=\"6\" width=\"18\" height=\"14\" rx=\"2.5\"/><path d=\"M3 10h18\"/><path d=\"M16 15h2\"/>", "chart": "<path d=\"M4 20V4\"/><path d=\"M4 20h16\"/><path d=\"M8 16v-5M12 16V8M16 16v-3\"/>", "gear": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8\"/>", "phone": "<rect x=\"6.5\" y=\"2.5\" width=\"11\" height=\"19\" rx=\"2.5\"/><path d=\"M10.5 18.5h3\"/>", "search": "<circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"M20 20l-4-4\"/>", "list": "<path d=\"M9 6h11M9 12h11M9 18h11\"/><path d=\"M4 6h.01M4 12h.01M4 18h.01\"/>", "tag": "<path d=\"M3 12V4h8l10 10-8 8z\"/><path d=\"M7.5 8.5h.01\"/>", "chevR": "<path d=\"M9 5l7 7-7 7\"/>", "eye": "<path d=\"M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>", "shield": "<path d=\"M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z\"/><path d=\"M8.5 12l2.5 2.5 4.5-5\"/>", "folder": "<path d=\"M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/>", "leaf": "<path d=\"M5 19C5 10 11 5 20 4c-1 9-6 15-15 15z\"/><path d=\"M5 19l9-9\"/>", "calendar": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"M8 3v4M16 3v4\"/>", "users": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0\"/><path d=\"M16 4.6a3.5 3.5 0 0 1 0 6.8\"/><path d=\"M18 14.2a6.5 6.5 0 0 1 3.5 5.8\"/>", "alert": "<path d=\"M12 3.5L21.5 20h-19z\"/><path d=\"M12 10v4.5M12 17.5h.01\"/>", "stamp": "<path d=\"M8 13V9a4 4 0 1 1 8 0v4\"/><path d=\"M4 13h16v4H4z\"/><path d=\"M6 21h12\"/>", "idcard": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><circle cx=\"9\" cy=\"11\" r=\"2.2\"/><path d=\"M5.5 16.5c.8-1.7 2-2.5 3.5-2.5s2.7.8 3.5 2.5\"/><path d=\"M14 10h4M14 13h4\"/>", "trend": "<path d=\"M3 17l6-6 4 4 8-8\"/><path d=\"M15 7h6v6\"/>", "external": "<path d=\"M14 4h6v6\"/><path d=\"M20 4l-9 9\"/><path d=\"M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5\"/>", "x": "<path d=\"M6 6l12 12M18 6L6 18\"/>", "menu": "<path d=\"M4 7h16M4 12h16M4 17h16\"/>", "pen": "<path d=\"M4 20h4L19 9l-4-4L4 16z\"/><path d=\"M13 7l4 4\"/>", "receipt": "<path d=\"M6 3h12v18l-3-2-3 2-3-2-3 2z\"/><path d=\"M9 8h6M9 12h6M9 16h3\"/>", "recipe": "<path d=\"M6 3v8a3 3 0 0 0 6 0V3\"/><path d=\"M9 3v18\"/><path d=\"M17 3c-2 2-2 6 0 8v10\"/>", "bookmark": "<path d=\"M6 3h12v18l-6-4-6 4z\"/>", "pin": "<path d=\"M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z\"/><circle cx=\"12\" cy=\"10\" r=\"2\"/>", "camera": "<path d=\"M3 8h4l2-3h6l2 3h4v12H3z\"/><circle cx=\"12\" cy=\"13.5\" r=\"3.5\"/>"};
   var ic = function (n, s, c, w) { return '<svg width="' + (s || 18) + '" height="' + (s || 18) + '" viewBox="0 0 24 24" fill="none" stroke="' + (c || 'currentColor') + '" stroke-width="' + (w || 2) + '" stroke-linecap="round" stroke-linejoin="round">' + (ICONS[n] || ICONS.doc) + '</svg>'; };
-  var tIc = function (t, s, c, w) { return ic(t && t.icon, s, c, w) + (t && t.img ? '<img class="bj-timg" src="' + esc(t.img) + '" alt="" loading="lazy" onerror="this.remove()">' : ''); };   /* 앱 아이콘 그림(tools.json img) — 없거나 못 읽으면 선 아이콘 */
-  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
-  var CAT = { 의례: ['#B83D06', '#f8e8de'], 디지털: ['#195455', '#e2eeec'], 문서: ['#1F5F8B', '#e3ecf4'], 서류: ['#6A2C5A', '#f1e6ee'], 학습: ['#195455', '#e2eeec'], 재무: ['#0A1931', '#e5e8ee'], 건강: ['#195455', '#e2eeec'], 해결: ['#0B3D4A', '#e9eaf0'] };   /* 10-31 제이: 앱 아이콘 분야색(common/appicon.py)과 같게 */
+    var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var CAT = {};   /* 10-31 제이: 앱 아이콘 분야색(common/appicon.py)과 같게 */
   /* 카테고리 이름 → 색 (목록·글의 분류 꼬리표) */
-  var CATWORDS = [['업무', '서류'], ['양식', '서류'], ['취업', '서류'], ['안내', '해결'], ['생활', '디지털'], ['인쇄', '디지털'], ['제사', '의례'], ['의례', '의례'], ['지방', '의례'], ['문서', '문서'], ['이미지', '문서'], ['PDF', '문서'], ['학습', '학습'], ['돈', '재무'], ['경제', '재무'], ['계산', '재무'], ['건강', '건강'], ['PC', '해결'], ['Windows', '해결'], ['앱', '해결'], ['기기', '해결'], ['디지털', '해결']];
+  var CATWORDS = [];
   function catOf(name) { for (var i = 0; i < CATWORDS.length; i++) if (String(name).indexOf(CATWORDS[i][0]) >= 0) return CAT[CATWORDS[i][1]]; return null; }
   var bjPill = window.bjPill = function (p) { var full = p.textContent.trim(); if (full.indexOf('/') > 0) { p.title = full; p.textContent = full.split('/').pop(); } var c = catOf(full); if (c && !p.classList.contains('bj-pill-notice')) { p.style.color = c[0]; p.style.background = c[1]; } }; document.querySelectorAll('.bj-pill').forEach(bjPill);   /* 11-07: 대문 쪽 넘기기에서도 씀 */
   var body = document.body, id = body.id || '';
@@ -400,7 +399,7 @@ if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fo
     /* 글 본문 상자. 앞에서부터 찾아서 처음 맞는 것을 씀 */
     content: ['.bj-post .bj-content', '#bjContent', '#jeContent', '.tt_article_useless_p_margin', '.article-view', '.entry-content', '.contents_style'],
     /* 사진 보기 창 위쪽에 보여줄 글 제목 */
-    title: ['.bj-phead h1', '.je-band h1', '.title-article', '.entry-title', '.hgroup h1', 'h1'],
+    title: ['.bj-phead h1', '.bjx-band h1', '.title-article', '.entry-title', '.hgroup h1', 'h1'],
     /* 원본 보기 새 창의 제목 뒤에 붙는 이름 */
     name: document.title.split(/\s[|·:-]\s/).pop() || ''
   };
@@ -455,30 +454,30 @@ var EXCL = 'ins, iframe, .revenue_unit_wrap, [data-tistory-react-app], .containe
     return items;
   }
   function buildGrid(block) {
-    if (block.getAttribute('data-je-grid')) return;
+    if (block.getAttribute('data-bjx-grid')) return;
     var items = itemsOfSlide(block); if (items.length < 2) return;
-    block.setAttribute('data-je-grid', '1');
+    block.setAttribute('data-bjx-grid', '1');
     var shown = items.length > GRID_MAX ? GRID_MAX - 1 : items.length;
-    var g = document.createElement('div'); g.className = 'je-gal' + (items.length === 2 ? ' je-gal-2' : '');
+    var g = document.createElement('div'); g.className = 'bjx-gal' + (items.length === 2 ? ' bjx-gal-2' : '');
     var html = '';
-    for (var i = 0; i < shown; i++) html += '<button type="button" class="je-gal-i" data-i="' + i + '" aria-label="사진 ' + (i + 1) + ' 크게 보기"><img src="' + esc(thumbOf(items[i].src)) + '" alt="' + esc(items[i].cap) + '" loading="lazy"><span class="je-zico">' + ZOOM_ICO + '</span></button>';
-    if (items.length > shown) html += '<button type="button" class="je-gal-i je-gal-more" data-i="' + shown + '" data-grid="1" aria-label="사진 ' + items.length + '장 모아 보기"><img src="' + esc(thumbOf(items[shown].src)) + '" alt="" loading="lazy"><span>+' + (items.length - shown) + '장</span></button>';
-    g.innerHTML = html + '<p class="je-gal-cap"><span>●</span>사진 ' + items.length + '장 · 눌러서 크게 보기</p>';
+    for (var i = 0; i < shown; i++) html += '<button type="button" class="bjx-gal-i" data-i="' + i + '" aria-label="사진 ' + (i + 1) + ' 크게 보기"><img src="' + esc(thumbOf(items[i].src)) + '" alt="' + esc(items[i].cap) + '" loading="lazy"><span class="bjx-zico">' + ZOOM_ICO + '</span></button>';
+    if (items.length > shown) html += '<button type="button" class="bjx-gal-i bjx-gal-more" data-i="' + shown + '" data-grid="1" aria-label="사진 ' + items.length + '장 모아 보기"><img src="' + esc(thumbOf(items[shown].src)) + '" alt="" loading="lazy"><span>+' + (items.length - shown) + '장</span></button>';
+    g.innerHTML = html + '<p class="bjx-gal-cap"><span>●</span>사진 ' + items.length + '장 · 눌러서 크게 보기</p>';
     g._items = items;
     block.parentNode.insertBefore(g, block);
-    block.classList.add('je-gal-src');
+    block.classList.add('bjx-gal-src');
   }
   /* 크게 볼 수 있는 사진 오른쪽 위에 돋보기 표시 */
   var ZOOM_ICO = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2M11 8.5v5M8.5 11h5"/></svg>';
   function badge(content) {
     content.querySelectorAll('img').forEach(function (img) {
-      if (img.closest('.je-gal, .je-gal-src, .je-zbox') || img.closest(EXCL)) return;
+      if (img.closest('.bjx-gal, .bjx-gal-src, .bjx-zbox') || img.closest(EXCL)) return;
       var a = img.closest('a[href]'); if (a && !/\.(jpe?g|png|gif|webp)(\?|$)|kakaocdn|daumcdn/i.test(a.getAttribute('href'))) return;
       var w = img.getAttribute('width'), r = img.getBoundingClientRect();
       if ((w && parseInt(w, 10) < 120) || (r.width && r.width < 120)) return;
-      var box = document.createElement('span'); box.className = 'je-zbox';
+      var box = document.createElement('span'); box.className = 'bjx-zbox';
       img.parentNode.insertBefore(box, img); box.appendChild(img);
-      var ic = document.createElement('span'); ic.className = 'je-zico'; ic.innerHTML = ZOOM_ICO; box.appendChild(ic);
+      var ic = document.createElement('span'); ic.className = 'bjx-zico'; ic.innerHTML = ZOOM_ICO; box.appendChild(ic);
       var tiny = function () { if (img.naturalWidth && img.naturalWidth < 120) ic.remove(); };
       if (img.complete) tiny(); else img.addEventListener('load', tiny);
     });
@@ -496,9 +495,9 @@ var EXCL = 'ins, iframe, .revenue_unit_wrap, [data-tistory-react-app], .containe
   /* 사진 목록 (본문 순서대로: 격자 사진 + 일반 사진) */
   function collect(content) {
     var list = [];
-    content.querySelectorAll('.je-gal, img').forEach(function (el) {
-      if (el.classList && el.classList.contains('je-gal')) { (el._items || []).forEach(function (it, k) { list.push({ src: it.src, cap: it.cap, gal: el, k: k }); }); return; }
-      if (el.closest('.je-gal, .je-gal-src') || el.closest(EXCL)) return;
+    content.querySelectorAll('.bjx-gal, img').forEach(function (el) {
+      if (el.classList && el.classList.contains('bjx-gal')) { (el._items || []).forEach(function (it, k) { list.push({ src: it.src, cap: it.cap, gal: el, k: k }); }); return; }
+      if (el.closest('.bjx-gal, .bjx-gal-src') || el.closest(EXCL)) return;
       var r = el.getBoundingClientRect(); if (r.width && r.width < 80) return;
       var a = el.closest('a[href]'); if (a && !/\.(jpe?g|png|gif|webp)(\?|$)|kakaocdn|daumcdn/i.test(a.getAttribute('href'))) return;
       list.push({ src: origOf(el), cap: capOf(el), img: el });
@@ -512,28 +511,28 @@ var EXCL = 'ins, iframe, .revenue_unit_wrap, [data-tistory-react-app], .containe
   function ensure() {
     if (V) return V;
     V = document.createElement('div');
-    V.className = 'je-v'; V.setAttribute('role', 'dialog'); V.setAttribute('aria-modal', 'true'); V.setAttribute('aria-label', '사진 크게 보기'); V.hidden = true;
+    V.className = 'bjx-v'; V.setAttribute('role', 'dialog'); V.setAttribute('aria-modal', 'true'); V.setAttribute('aria-label', '사진 크게 보기'); V.hidden = true;
     V.innerHTML =
-      '<aside class="je-v-side" aria-label="사진 모아 보기"><div class="je-v-side-hd"><span class="je-v-side-n"></span><button type="button" class="je-v-side-fold" aria-label="모아 보기 접기">‹ 접기</button></div><div class="je-v-side-list"></div></aside>' +
-      '<div class="je-v-main">' +
-      '<div class="je-v-top"><div class="je-v-info"><button type="button" class="je-v-btn je-v-side-open" aria-label="모아 보기 펼치기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>모아 보기</span></button><span class="je-v-count"></span><span class="je-v-title">' + esc(title.trim()) + '</span></div>' +
-      '<div class="je-v-act"><a class="je-v-btn je-v-orig" target="_blank" rel="noopener"><span>원본 보기 ↗</span></a>' +
-      '<button type="button" class="je-v-x" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>' +
-      '<div class="je-v-stage"><figure class="je-v-fig"><img class="je-v-img" alt=""><figcaption class="je-v-cap"></figcaption></figure></div>' +
-      '<button type="button" class="je-v-nav je-v-prev" aria-label="이전 사진"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>' +
-      '<button type="button" class="je-v-nav je-v-next" aria-label="다음 사진"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
-      '<p class="je-v-hint"><span class="je-v-hint-pc">← → 넘기기 · ESC 닫기</span><span class="je-v-hint-m">옆으로 밀어 넘기기 · 내려서 닫기</span></p>' +
-      '<div class="je-v-strip"><div class="je-v-strip-list"></div><button type="button" class="je-v-btn je-v-gridbtn" aria-label="모아 보기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>모아 보기</span></button></div>' +
+      '<aside class="bjx-v-side" aria-label="사진 모아 보기"><div class="bjx-v-side-hd"><span class="bjx-v-side-n"></span><button type="button" class="bjx-v-side-fold" aria-label="모아 보기 접기">‹ 접기</button></div><div class="bjx-v-side-list"></div></aside>' +
+      '<div class="bjx-v-main">' +
+      '<div class="bjx-v-top"><div class="bjx-v-info"><button type="button" class="bjx-v-btn bjx-v-side-open" aria-label="모아 보기 펼치기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>모아 보기</span></button><span class="bjx-v-count"></span><span class="bjx-v-title">' + esc(title.trim()) + '</span></div>' +
+      '<div class="bjx-v-act"><a class="bjx-v-btn bjx-v-orig" target="_blank" rel="noopener"><span>원본 보기 ↗</span></a>' +
+      '<button type="button" class="bjx-v-x" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>' +
+      '<div class="bjx-v-stage"><figure class="bjx-v-fig"><img class="bjx-v-img" alt=""><figcaption class="bjx-v-cap"></figcaption></figure></div>' +
+      '<button type="button" class="bjx-v-nav bjx-v-prev" aria-label="이전 사진"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>' +
+      '<button type="button" class="bjx-v-nav bjx-v-next" aria-label="다음 사진"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
+      '<p class="bjx-v-hint"><span class="bjx-v-hint-pc">← → 넘기기 · ESC 닫기</span><span class="bjx-v-hint-m">옆으로 밀어 넘기기 · 내려서 닫기</span></p>' +
+      '<div class="bjx-v-strip"><div class="bjx-v-strip-list"></div><button type="button" class="bjx-v-btn bjx-v-gridbtn" aria-label="모아 보기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>모아 보기</span></button></div>' +
       '</div>' +
-      '<div class="je-v-grid" hidden><div class="je-v-grid-in"></div></div>';
+      '<div class="bjx-v-grid" hidden><div class="bjx-v-grid-in"></div></div>';
     document.body.appendChild(V);
-    V.querySelector('.je-v-x').addEventListener('click', close);
-    V.querySelector('.je-v-prev').addEventListener('click', function () { go(cur - 1); });
-    V.querySelector('.je-v-next').addEventListener('click', function () { go(cur + 1); });
-    V.querySelector('.je-v-gridbtn').addEventListener('click', function () { showGrid(V.querySelector('.je-v-grid').hidden); });
-    V.querySelector('.je-v-stage').addEventListener('click', function (e) { if (e.target === e.currentTarget) close(); });
+    V.querySelector('.bjx-v-x').addEventListener('click', close);
+    V.querySelector('.bjx-v-prev').addEventListener('click', function () { go(cur - 1); });
+    V.querySelector('.bjx-v-next').addEventListener('click', function () { go(cur + 1); });
+    V.querySelector('.bjx-v-gridbtn').addEventListener('click', function () { showGrid(V.querySelector('.bjx-v-grid').hidden); });
+    V.querySelector('.bjx-v-stage').addEventListener('click', function (e) { if (e.target === e.currentTarget) close(); });
     /* 원본 보기: 닫기 버튼이 있는 새 창으로 열기 (창 닫기로 원래 글로 돌아옴) */
-    V.querySelector('.je-v-orig').addEventListener('click', function (e) {
+    V.querySelector('.bjx-v-orig').addEventListener('click', function (e) {
       var src = this.href, cap = (list[cur] && list[cur].cap) || '';
       var w = null; try { w = window.open('', '_blank'); } catch (er) {}
       if (!w) return; /* 팝업이 막히면 기본 동작(사진 주소 새 창) */
@@ -556,18 +555,18 @@ var EXCL = 'ins, iframe, .revenue_unit_wrap, [data-tistory-react-app], .containe
       w.document.open(); w.document.write(page); w.document.close();
     });
     var pick = function (e) { var b = e.target.closest('button[data-i]'); if (b) go(parseInt(b.getAttribute('data-i'), 10)); };
-    V.querySelector('.je-v-side-list').addEventListener('click', pick);
-    V.querySelector('.je-v-strip-list').addEventListener('click', pick);
-    var fold = function (on) { V.classList.toggle('je-v-folded', on); try { localStorage.setItem('je-v-fold', on ? '1' : ''); } catch (e) {} };
-    V.querySelector('.je-v-side-fold').addEventListener('click', function () { fold(true); V.querySelector('.je-v-side-open').focus(); });
-    V.querySelector('.je-v-side-open').addEventListener('click', function () { fold(false); });
-    try { if (localStorage.getItem('je-v-fold')) V.classList.add('je-v-folded'); } catch (e) {}
-    V.querySelector('.je-v-grid-in').addEventListener('click', function (e) { var b = e.target.closest('button[data-i]'); if (b) { go(parseInt(b.getAttribute('data-i'), 10)); showGrid(false); } });
+    V.querySelector('.bjx-v-side-list').addEventListener('click', pick);
+    V.querySelector('.bjx-v-strip-list').addEventListener('click', pick);
+    var fold = function (on) { V.classList.toggle('bjx-v-folded', on); try { localStorage.setItem('bjx-v-fold', on ? '1' : ''); } catch (e) {} };
+    V.querySelector('.bjx-v-side-fold').addEventListener('click', function () { fold(true); V.querySelector('.bjx-v-side-open').focus(); });
+    V.querySelector('.bjx-v-side-open').addEventListener('click', function () { fold(false); });
+    try { if (localStorage.getItem('bjx-v-fold')) V.classList.add('bjx-v-folded'); } catch (e) {}
+    V.querySelector('.bjx-v-grid-in').addEventListener('click', function (e) { var b = e.target.closest('button[data-i]'); if (b) { go(parseInt(b.getAttribute('data-i'), 10)); showGrid(false); } });
     /* 밀어 넘기기 · 내려서 닫기 (두 손가락 확대 중엔 무시) */
     var sx = 0, sy = 0, multi = false;
     V.addEventListener('touchstart', function (e) { multi = e.touches.length > 1; sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
     V.addEventListener('touchend', function (e) {
-      if (multi || !V.querySelector('.je-v-grid').hidden || (window.visualViewport && window.visualViewport.scale > 1.05)) return;
+      if (multi || !V.querySelector('.bjx-v-grid').hidden || (window.visualViewport && window.visualViewport.scale > 1.05)) return;
       var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) go(cur + (dx < 0 ? 1 : -1));
       else if (dy > 90 && Math.abs(dy) > Math.abs(dx) * 1.3) close();
@@ -575,31 +574,31 @@ var EXCL = 'ins, iframe, .revenue_unit_wrap, [data-tistory-react-app], .containe
     return V;
   }
   function showGrid(on) {
-    var gw = V.querySelector('.je-v-grid');
+    var gw = V.querySelector('.bjx-v-grid');
     if (on) {
-      gw.querySelector('.je-v-grid-in').innerHTML = list.map(function (x, i) { return '<button type="button" data-i="' + i + '" class="' + (i === cur ? 'je-on' : '') + '" aria-label="사진 ' + (i + 1) + '"><img src="' + esc(thumbOf(x.src)) + '" alt="" loading="lazy"></button>'; }).join('');
-      gw.hidden = false; V.classList.add('je-v-gridmode');
-      var onb = gw.querySelector('.je-on'); if (onb) { onb.focus(); onb.scrollIntoView({ block: 'center' }); }
-    } else { gw.hidden = true; V.classList.remove('je-v-gridmode'); }
-    V.querySelector('.je-v-gridbtn').setAttribute('aria-pressed', on ? 'true' : 'false');
+      gw.querySelector('.bjx-v-grid-in').innerHTML = list.map(function (x, i) { return '<button type="button" data-i="' + i + '" class="' + (i === cur ? 'bjx-on' : '') + '" aria-label="사진 ' + (i + 1) + '"><img src="' + esc(thumbOf(x.src)) + '" alt="" loading="lazy"></button>'; }).join('');
+      gw.hidden = false; V.classList.add('bjx-v-gridmode');
+      var onb = gw.querySelector('.bjx-on'); if (onb) { onb.focus(); onb.scrollIntoView({ block: 'center' }); }
+    } else { gw.hidden = true; V.classList.remove('bjx-v-gridmode'); }
+    V.querySelector('.bjx-v-gridbtn').setAttribute('aria-pressed', on ? 'true' : 'false');
   }
   function go(i) {
     if (!list.length) return;
     cur = (i + list.length) % list.length;
-    var x = list[cur], img = V.querySelector('.je-v-img');
-    img.classList.add('je-v-loading'); img.onload = function () { img.classList.remove('je-v-loading'); };
+    var x = list[cur], img = V.querySelector('.bjx-v-img');
+    img.classList.add('bjx-v-loading'); img.onload = function () { img.classList.remove('bjx-v-loading'); };
     img.src = x.src; img.alt = x.cap || '';
     var cp = (x.cap || '').replace(/^\s*●\s*/, '');
-    V.querySelector('.je-v-cap').innerHTML = cp ? '<span>●</span>' + esc(cp) : '';
-    V.querySelector('.je-v-count').innerHTML = '<b>' + (cur + 1) + '</b> / ' + list.length;
-    V.querySelector('.je-v-orig').href = x.src;
+    V.querySelector('.bjx-v-cap').innerHTML = cp ? '<span>●</span>' + esc(cp) : '';
+    V.querySelector('.bjx-v-count').innerHTML = '<b>' + (cur + 1) + '</b> / ' + list.length;
+    V.querySelector('.bjx-v-orig').href = x.src;
     var multi = list.length > 1;
-    V.querySelector('.je-v-prev').hidden = V.querySelector('.je-v-next').hidden = !multi;
-    V.classList.toggle('je-v-many', list.length > 3);
-    [].forEach.call(V.querySelectorAll('.je-v-side-list button, .je-v-strip-list button'), function (b) {
-      var on = parseInt(b.getAttribute('data-i'), 10) === cur; b.classList.toggle('je-on', on); b.setAttribute('aria-current', on ? 'true' : 'false');
+    V.querySelector('.bjx-v-prev').hidden = V.querySelector('.bjx-v-next').hidden = !multi;
+    V.classList.toggle('bjx-v-many', list.length > 3);
+    [].forEach.call(V.querySelectorAll('.bjx-v-side-list button, .bjx-v-strip-list button'), function (b) {
+      var on = parseInt(b.getAttribute('data-i'), 10) === cur; b.classList.toggle('bjx-on', on); b.setAttribute('aria-current', on ? 'true' : 'false');
       if (on && b.offsetParent) { var box = b.parentNode; var r = b.getBoundingClientRect(), br = box.getBoundingClientRect();
-        if (box.classList.contains('je-v-side-list')) { if (r.top < br.top + 24 || r.bottom > br.bottom - 24) box.scrollTop += r.top - br.top - (br.height - r.height) / 2; }
+        if (box.classList.contains('bjx-v-side-list')) { if (r.top < br.top + 24 || r.bottom > br.bottom - 24) box.scrollTop += r.top - br.top - (br.height - r.height) / 2; }
         else if (r.left < br.left + 24 || r.right > br.right - 24) box.scrollLeft += r.left - br.left - (br.width - r.width) / 2; }
     });
     [cur + 1, cur - 1].forEach(function (k) { var n = list[(k + list.length) % list.length]; if (n) { var p = new Image(); p.src = n.src; } });
@@ -607,25 +606,25 @@ var EXCL = 'ins, iframe, .revenue_unit_wrap, [data-tistory-react-app], .containe
   function open(i, grid, content) {
     ensure(); list = collect(content); if (!list.length) return false;
     var th = list.map(function (x, i) { return '<button type="button" data-i="' + i + '" aria-label="사진 ' + (i + 1) + '"><img src="' + esc(thumbOf(x.src)) + '" alt="" loading="lazy"></button>'; }).join('');
-    V.querySelector('.je-v-side-list').innerHTML = th; V.querySelector('.je-v-strip-list').innerHTML = th;
-    V.querySelector('.je-v-side-n').innerHTML = '사진 <b>' + list.length + '</b>장';
+    V.querySelector('.bjx-v-side-list').innerHTML = th; V.querySelector('.bjx-v-strip-list').innerHTML = th;
+    V.querySelector('.bjx-v-side-n').innerHTML = '사진 <b>' + list.length + '</b>장';
     lastFocus = document.activeElement;
-    V.hidden = false; document.documentElement.classList.add('je-v-lock');
-    var wide = window.matchMedia && window.matchMedia('(min-width: 1100px) and (hover: hover)').matches && list.length > 3 && !V.classList.contains('je-v-folded');
+    V.hidden = false; document.documentElement.classList.add('bjx-v-lock');
+    var wide = window.matchMedia && window.matchMedia('(min-width: 1100px) and (hover: hover)').matches && list.length > 3 && !V.classList.contains('bjx-v-folded');
     go(i); showGrid(!!grid && !wide);
-    setTimeout(function () { if (!grid) V.querySelector('.je-v-x').focus(); }, 30);
+    setTimeout(function () { if (!grid) V.querySelector('.bjx-v-x').focus(); }, 30);
     return true;
   }
   function close() {
     if (!V || V.hidden) return;
-    V.hidden = true; showGrid(false); document.documentElement.classList.remove('je-v-lock');
+    V.hidden = true; showGrid(false); document.documentElement.classList.remove('bjx-v-lock');
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   document.addEventListener('keydown', function (e) {
     if (!V || V.hidden) return;
-    if (e.key === 'Escape') { if (!V.querySelector('.je-v-grid').hidden) showGrid(false); else close(); }
-    else if (e.key === 'ArrowRight' && V.querySelector('.je-v-grid').hidden) go(cur + 1);
-    else if (e.key === 'ArrowLeft' && V.querySelector('.je-v-grid').hidden) go(cur - 1);
+    if (e.key === 'Escape') { if (!V.querySelector('.bjx-v-grid').hidden) showGrid(false); else close(); }
+    else if (e.key === 'ArrowRight' && V.querySelector('.bjx-v-grid').hidden) go(cur + 1);
+    else if (e.key === 'ArrowLeft' && V.querySelector('.bjx-v-grid').hidden) go(cur - 1);
     else if (e.key === 'Tab') { /* 창 안에서만 포커스 이동 */
       var f = [].filter.call(V.querySelectorAll('button, a[href]'), function (b) { return !b.hidden && b.offsetParent !== null; });
       if (!f.length) return; var a = f[0], z = f[f.length - 1];
@@ -638,21 +637,28 @@ var EXCL = 'ins, iframe, .revenue_unit_wrap, [data-tistory-react-app], .containe
   window.addEventListener('click', function (e) {
     var tg = e.target; if (!tg || !tg.closest) return;
     var content = rootOf(tg); if (!content) return;
-    var gb = tg.closest('.je-gal-i');
-    var zb = tg.closest('.je-zbox'); var img = gb ? null : (tg.tagName === 'IMG' ? tg : (zb ? zb.querySelector('img') : null));
+    var gb = tg.closest('.bjx-gal-i');
+    var zb = tg.closest('.bjx-zbox'); var img = gb ? null : (tg.tagName === 'IMG' ? tg : (zb ? zb.querySelector('img') : null));
     if (!gb && !img) return;
     var all = collect(content), idx = -1;
-    if (gb) { var g = gb.closest('.je-gal'), k = parseInt(gb.getAttribute('data-i'), 10); all.forEach(function (x, i) { if (idx < 0 && x.gal === g && x.k === k) idx = i; }); }
+    if (gb) { var g = gb.closest('.bjx-gal'), k = parseInt(gb.getAttribute('data-i'), 10); all.forEach(function (x, i) { if (idx < 0 && x.gal === g && x.k === k) idx = i; }); }
     else { all.forEach(function (x, i) { if (idx < 0 && x.img === img) idx = i; }); }
     if (idx < 0) return;
     e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
     open(idx, gb && gb.hasAttribute('data-grid'), content);
   }, true);
-  roots.forEach(function (content) { content.classList.add('je-zoomable'); });
+  roots.forEach(function (content) { content.classList.add('bjx-zoomable'); });
 })();
 
 </script>
 
+<script>(function(){
+document.querySelectorAll('.bj-cvh h2').forEach(function(x){if(!x.textContent.trim())x.remove();});
+document.querySelectorAll('img').forEach(function(im){var s=im.getAttribute('src')||'';if(/fname=$/.test(s)){var t=im.closest('.bj-th');if(t)t.classList.add('bj-noimg');im.remove();}});
+var L=document.querySelector('.bj-list');
+if(L&&!L.querySelector('.bj-item')){var d=document.createElement('div');d.className='bj-empty';var q=/^\/search\//.test(location.pathname);
+d.innerHTML='<p><b>'+(q?'검색 결과가 없습니다.':'아직 글이 없습니다.')+'</b></p><p>'+(q?'다른 낱말로 찾아보거나 ':'')+'<a href="/category">전체 글 보기 ›</a></p>';(L.querySelector('.bj-items')||L).appendChild(d);}
+})();</script>
 </s_t3>
 
 <script>

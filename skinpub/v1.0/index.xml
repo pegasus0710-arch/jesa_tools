@@ -26,6 +26,25 @@
     <lengthOfLink>30</lengthOfLink>
     <entriesOnPage>10</entriesOnPage>
     <entriesOnList>10</entriesOnList>
+    <expandTrackback>0</expandTrackback>
+    <showListOnCategory>1</showListOnCategory>
+    <showListOnArchive>1</showListOnArchive>
+    <commentMessage>
+      <none>댓글이 없습니다.</none>
+      <single>댓글 &lt;span class="cnt"&gt;하나&lt;/span&gt;</single>
+    </commentMessage>
+    <trackbackMessage>
+      <none>받은 트랙백이 없습니다.</none>
+      <single>트랙백 &lt;span class="cnt"&gt;하나&lt;/span&gt;</single>
+    </trackbackMessage>
+    <tree>
+      <color>14202b</color>
+      <bgColor>faf6ee</bgColor>
+      <activeColor>0e7c86</activeColor>
+      <activeBgColor>e6f4f5</activeBgColor>
+      <labelLength>27</labelLength>
+      <showValue>1</showValue>
+    </tree>
     <contentWidth>1080</contentWidth>
     <cover><![CDATA[[{"name": "featured", "title": "", "dataType": "RECENT", "data": {"category": "ALL", "size": 5}}, {"name": "grid", "title": "최신 글", "dataType": "RECENT", "data": {"category": "ALL", "size": 6}}]]]></cover>
   </default>
@@ -146,6 +165,13 @@
         <description><![CDATA[]]></description>
         <type>BOOL</type>
         <default><![CDATA[true]]></default>
+      </variable>
+      <variable>
+        <name>bj-related</name>
+        <label><![CDATA[글 아래 「같은 분류 다른 글」(스킨)]]></label>
+        <description><![CDATA[티스토리 플러그인 「카테고리 글 더 보기」를 쓰면 끄세요(두 번 나옴)]]></description>
+        <type>BOOL</type>
+        <default><![CDATA[false]]></default>
       </variable>
       <variable>
         <name>bj-punch</name>

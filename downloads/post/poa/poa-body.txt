@@ -1,0 +1,77 @@
+<p data-ke-size="size16">[[TH]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위임장 양식은 아래 실행 카드에서 A4 한 장으로 바로 인쇄하거나 한글 · 워드 · 엑셀 · PDF로 받을 수 있습니다.<br />위임장 쓰는 법과 작성 예시, 정해진 서식이 따로 있는 곳까지 정리했습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위임장은 내 일을 다른 사람이 대신 처리하도록 권한을 맡긴다는 것을 적은 문서입니다.<br />보통 다섯 단계면 다 씁니다.</p>
+<ol style="padding-left:1.4em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="decimal"><li>제출처에 정해진 위임장 양식이 있는지 먼저 묻기</li><li>없으면 이 양식을 인쇄하거나 파일로 받기</li><li>위임받는 사람 · 제출처 · 위임 사항 · 기간 적기</li><li>날짜를 적고 위임하는 사람이 직접 서명(또는 도장)</li><li>신분증 등 함께 낼 서류를 챙겨 대리인에게 주기</li></ol>
+<div style="border-radius:16px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:22px 24px 22px;margin:8px 0 10px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0 0 14px;color:#1f2125;"><b>위임장 양식 한눈에 보기</b></p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:4px;"><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">양식</span><br /><span style="color:#1f2125;font-size:16px;"><b>A4 한 장 · 빈 양식</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">받는 형식</span><br /><span style="color:#1f2125;font-size:16px;"><b>인쇄 · PDF · 한글 · 워드 · 엑셀</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">가장 중요한 칸</span><br /><span style="color:#1f2125;font-size:16px;"><b>위임 사항(무엇을 · 몇 통)</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">따로 서식</span><br /><span style="color:#1f2125;font-size:16px;"><b>인감증명서 · 주민센터 · 은행</b></span></p></div></div></div>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">확인 기준: 2026-11-18(수) · 참고: Blog J 무료 양식 도구(위임장), 인감증명법 시행령 별지 제13호서식 유의사항<br />제출처마다 요구하는 양식 · 서류가 다를 수 있으니 내기 전에 확인하세요.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>위임장 양식 무료 다운로드 — 인쇄 · 한글 · 워드</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 실행 카드로 열기</b></h3>
+<p data-ke-size="size16">실행 카드를 누르면 새 창에서 위임장이 고른 상태로 열립니다.<br /><b>넣는 것</b>은 없고(빈 양식), <b>나오는 것</b>은 A4 세로 한 장 위임장, <b>저장</b>은 바로 인쇄 · PDF · 한글 · 워드 · 엑셀 · 이미지 가운데 고르면 됩니다.</p>
+<iframe src="https://pegasus0710-arch.github.io/jesa_tools/launch.html?tool=form&amp;tab=work&amp;f=power-of-attorney" width="100%" height="340" scrolling="no" frameborder="0" style="border:0;display:block;width:100%;max-width:100%;margin:18px 0 26px;" title="프로그램 실행"></iframe>
+<h3 data-ke-size="size23"><b>2. 양식 고르기</b></h3>
+<p data-ke-size="size16">다른 양식을 보다가 왔다면 왼쪽 「인사 서류」 → 「위임장」을 누릅니다. 오른쪽 미리보기에 A4 모양이 바로 나옵니다.</p>
+<p data-ke-size="size16">[[I1|무료 양식 도구에서 위임장 고르는 화면]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 인쇄하거나 파일로 받기</b></h3>
+<p data-ke-size="size16">손으로 써서 낼 때는 「바로 인쇄 · PDF로 저장」을 누르고, 인쇄 창에서 배율을 「실제 크기(100%)」로 둡니다.<br />컴퓨터로 칸을 채우려면 한글 · 워드 · 엑셀 파일로 받아 입력한 뒤 인쇄하세요.</p>
+<p data-ke-size="size16">[[I2|위임장 인쇄와 파일 받기 단추]]</p>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">빈 양식이라 입력하는 정보가 없고, 아무것도 서버로 보내지 않습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>위임장 쓰는 법 — 작성 예시</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 칸마다 무엇을 쓰나요?</b></h3>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">칸</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">쓰는 것</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">예시(설명용 가상)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">위임받는 사람</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">대신 처리할 사람의 성명 · 생년월일 · 주소 · 연락처 · 관계</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">김○○ · 자녀</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">제출처</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">위임장을 낼 곳</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">○○대학교 학생지원팀</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">위임 사항</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">무엇을 · 몇 통 · 신청인지 수령인지</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">본인(이○○)의 재학증명서 1통 발급 신청 및 수령</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">위임 기간</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">짧게 — 일이 끝나는 날까지</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">2026-12-01(화) ~ 2026-12-31(목)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">위임하는 사람</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">본인의 성명 · 생년월일 · 주소 · 연락처 + 직접 서명</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">이○○ (서명)</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 위임 사항은 어떻게 적어야 하나요?</b></h3>
+<p data-ke-size="size16">창구는 관계보다 <b>맡긴 일의 범위</b>를 봅니다. 서류 이름 · 통수 · 「신청 및 수령」처럼 할 일을 구체적으로 적으세요.<br />「모든 권한을 위임함」처럼 넓게 적으면 오히려 받아 주지 않는 곳이 많습니다.</p>
+<ul style="padding-left:1.3em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="disc"><li>좋은 예: 「본인의 ○○ 증명서 1통 발급 신청 및 수령」</li><li>좋은 예: 「○○ 계약서 원본 1부 수령」</li><li>피할 예: 「모든 업무 일체」 · 「부동산에 관한 모든 권한」</li></ul>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 다 쓴 뒤 확인할 것</b></h3>
+<ul style="padding-left:1.3em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="disc"><li>위임하는 사람이 직접 서명했는지(대신 서명 금지)</li><li>빈 칸은 줄을 그어 두기(나중에 내용이 덧붙지 않게)</li><li>날짜 · 기간이 맞는지</li><li>신분증 등 함께 낼 서류를 제출처에 물어봤는지</li></ul>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>인감증명서 위임장은 따로 — 정해진 서식이 있는 곳</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 이 양식을 쓰면 안 되는 곳</b></h3>
+<p data-ke-size="size16">법령이나 기관이 위임장 서식을 따로 정해 둔 곳은 그 서식을 써야 합니다. 이 양식은 자유 양식을 받는 곳(회사 · 학교 · 물품 수령 등)에 맞습니다.</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">내는 곳</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">쓰는 위임장</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">알아 둘 것</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">인감증명서 대리 발급</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">인감증명서 발급 위임장(인감증명법 시행령 별지 제13호서식)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">위임자 자필 · 서명 또는 날인 · 위임자와 대리인 신분증 · 위임일부터 6개월 · 용도는 구체적으로</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">주민센터 등 · 초본 대리 발급</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">주민센터에 있는 법령 서식 위임장</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">자녀라는 관계만으로는 안 되고 위임장이 필요 — 창구에 미리 확인</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">은행</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">은행마다 정한 위임장</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">인감증명서 등 요구 서류가 은행 · 업무마다 다름</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">아파트 · 조합 총회</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">관리사무소 · 조합이 나눠 주는 위임장</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">관리규약 · 정관에 정한 방식을 따름</td></tr></tbody></table></div>
+<div style="border-radius:14px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><b>인감증명서는 꼭 정해진 서식으로</b><br />인감증명서 발급 위임장은 유의사항에 「위임자 자필로 작성」하라고 되어 있고, 용도란에 「부동산 매매용」처럼 구체적으로 적어야 합니다. 포괄적으로 적거나 남의 서명 · 도장을 쓰면 처벌받을 수 있습니다.</p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>위임장 양식에서 자주 묻는 것</b></h3>
+<p data-ke-size="size16"><b>Q. 위임장에 도장을 꼭 찍어야 하나요?</b></p>
+<p data-ke-size="size16">이 양식은 「서명 또는 인」입니다. 서명만 받는 곳이 많지만, 인감도장 · 인감증명서를 요구하는 곳도 있으니 제출처에 확인하세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 위임장을 컴퓨터로 써도 되나요?</b></p>
+<p data-ke-size="size16">한글 · 워드 · 엑셀로 받아 입력해도 됩니다. 다만 서명은 위임하는 사람이 직접 하세요. 인감증명서 발급 위임장처럼 자필로 쓰게 한 서식은 손으로 씁니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 위임장 유효기간은 얼마인가요?</b></p>
+<p data-ke-size="size16">일반 위임장은 적어 둔 위임 기간까지입니다. 인감증명서 발급 위임장은 위임일부터 6개월입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 신분증 사본도 같이 내야 하나요?</b></p>
+<p data-ke-size="size16">대부분 위임하는 사람과 대리인의 신분증을 함께 확인합니다. 원본인지 사본인지는 제출처마다 다르니 미리 물어보세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 가족만 대리인이 될 수 있나요?</b></p>
+<p data-ke-size="size16">위임장에 관계를 적지만, 가족이 아니어도 위임할 수 있는 곳이 많습니다. 반대로 가족이어도 위임장이 있어야 하는 곳이 많습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 부모님이 판단이 어려우신데 대신 써도 되나요?</b></p>
+<p data-ke-size="size16">위임은 본인이 스스로 맡기는 것이라 대신 써서 서명하면 안 됩니다. 이런 경우는 성년후견 같은 제도를 알아보세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>무료 양식 · 서류</b></h3>
+<div style="background:#ece6da;border-radius:18px;padding:18px;margin:4px 0 10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;box-sizing:border-box;"><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">문서 · 이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/804" target="_blank" rel="noopener"><b>이력서 · 사직서 양식 67가지</b></a></span><br /><span style="font-size:14px;color:#5b5547;">가입 없이 바로 인쇄 · 한글 · 워드</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">문서 · 이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/815" target="_blank" rel="noopener"><b>거래명세서 양식 무료</b></a></span><br /><span style="font-size:14px;color:#5b5547;">견적서에서 바로 만들기</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">생활 계산·인쇄</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/835" target="_blank" rel="noopener"><b>상장 만들기 무료</b></a></span><br /><span style="font-size:14px;color:#5b5547;">여러 명 한 번에 인쇄</span></p></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위임장을 내려는 곳에서 다른 양식을 요구했다면 어디였는지 댓글로 알려 주세요. 이 글에 보태겠습니다.</p>

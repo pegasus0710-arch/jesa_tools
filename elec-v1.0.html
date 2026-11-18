@@ -227,6 +227,11 @@ button{cursor:pointer;border:0;background:none}
 .tbz:first-child{border-radius:7px 0 0 7px}.tbz.t2{background:#f3dfb8}.tbz.t3{background:#f0c3b3;border-radius:0 7px 7px 0}
 .tbm{position:absolute;top:-5px;width:4px;height:32px;margin-left:-2px;background:#E07A4F;border-radius:2px;box-shadow:0 0 0 2px #fff}
 .tbl{position:relative;height:16px;font-size:11px;color:var(--sub2)}.tbl span{position:absolute;transform:translateX(-50%)}.tbl span:first-child{left:0;transform:none}
+.amt-eq{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;margin:2px 0 2px;font-size:17px;font-weight:800;color:var(--sub)}
+.amt-eq span{display:flex;flex-direction:column;line-height:1.2}.amt-eq small{font-size:11.5px;font-weight:700;color:var(--sub2)}.amt-eq .add{color:#B4532A;background:#FFF4EE;border-radius:8px;padding:3px 8px}
+.amt-eq i{font-style:normal;font-size:20px;color:var(--sub2);padding-bottom:2px}
+.amt-s .up{color:#B4532A}
+.tbm0{position:absolute;top:-2px;width:3px;height:26px;margin-left:-1.5px;background:#5F6B7A;opacity:.55;border-radius:2px}
 .cmp{margin-top:12px;padding:10px 12px;border-radius:10px;background:#FFF4EE;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .cmp span{font-size:12.5px;color:var(--sub);display:block}.cmp b{font-size:18px}.cmp .up{color:#B4532A;font-weight:800;font-variant-numeric:tabular-nums}
 .aps{display:flex;flex-direction:column;gap:8px;margin:10px 0 6px}
@@ -439,35 +444,40 @@ function stepApp() {
   ${limBox("더하는 양", [["가전 합계", "W × 시간 × 일 ÷ 1,000", won(addK()) + "kWh"], ["이번 달 사용량", "1단계에서 넣은 값", won(useK()) + "kWh"], ["합친 사용량", "", won(useK() + addK()) + "kWh"]], "")}`;
 }
 const DV = (k, v, gd) => `<b class="num" data-dk="${k}" data-v="${Math.round(v)}" data-gd="${gd || "down"}">${won(v)}</b>`;
-function tierBar(r) {
+function tierBar(r, r0) {
   const [b1, b2] = r.bounds, max = Math.max(b2 + 100, Math.ceil(r.kwh / 100) * 100 + 50), pc = v => Math.min(100, v / max * 100);
-  return `<div class="tb"><div class="tbz" style="width:${pc(b1)}%"><span>1단계</span></div><div class="tbz t2" style="width:${pc(b2) - pc(b1)}%"><span>2단계</span></div><div class="tbz t3" style="width:${100 - pc(b2)}%"><span>3단계</span></div><i class="tbm" style="left:${pc(r.kwh)}%"></i></div>
+  return `<div class="tb"><div class="tbz" style="width:${pc(b1)}%"><span>1단계</span></div><div class="tbz t2" style="width:${pc(b2) - pc(b1)}%"><span>2단계</span></div><div class="tbz t3" style="width:${100 - pc(b2)}%"><span>3단계</span></div>${r0 ? `<i class="tbm0" style="left:${pc(r0.kwh)}%" title="가전 빼고"></i>` : ""}<i class="tbm" style="left:${pc(r.kwh)}%"></i></div>
   <div class="tbl"><span>0</span><span style="left:${pc(b1)}%">${b1}</span><span style="left:${pc(b2)}%">${b2}</span></div>`;
 }
 function resultCard(r, r2) {
-  const head = !hasUse() ? `<div class="amt-b zero num">0<small>원</small></div><div class="amt-s">1단계에서 사용량을 넣으면 바로 계산돼요</div>`
-    : `<div class="amt-b num" data-dk="tot" data-v="${r.total}" data-gd="down">${won(r.total)}<small>원</small></div><div class="amt-s">${S.month}월 ${won(r.kwh)}kWh · ${r.tier}단계${r.toNext ? ` · ${r.tier + 1}단계까지 <b class="num">${won(r.toNext)}kWh</b> 남음` : ""}</div>`;
-  return `<div class="big"><div class="printhead">전기요금 계산기 · ${r.rate.name} · Blog J</div><div class="k2">청구 예상 금액</div>${head}
-  ${hasUse() ? tierBar(r) : ""}
-  <div class="flow"><div class="fb"><span>기본요금</span>${DV("b", r.base)}</div><div class="op">+</div><div class="fb"><span>전력량요금</span>${DV("e", r.energy)}</div><div class="op">+</div><div class="fb"><span>기후 · 연료비</span>${DV("cf", r.clim + r.fuel)}</div><div class="op">+</div><div class="fb"><span>부가세 · 기금</span>${DV("vf", r.vat + r.fund)}</div></div>
-  ${r2 ? `<div class="cmp"><div><span>가전 ${won(addK())}kWh 더 쓰면</span><b class="num">${won(r2.total)}원</b></div><div class="up">+${won(r2.total - r.total)}원${r2.tier > r.tier ? ` · ${r2.tier}단계로` : ""}</div></div>` : ""}</div>`;
+  const R = r2 || r;
+  let head;
+  if (!hasUse()) head = `<div class="amt-b zero num">0<small>원</small></div><div class="amt-s">1단계에서 사용량을 넣으면 바로 계산돼요</div>`;
+  else if (r2) head = `<div class="amt-eq num"><span><small>지금 사용량</small>${won(r.total)}원</span><i>+</i><span class="add"><small>가전 더하기</small>${won(r2.total - r.total)}원</span><i>=</i></div>
+    <div class="amt-b num" data-dk="tot" data-v="${r2.total}" data-gd="down">${won(r2.total)}<small>원</small></div>
+    <div class="amt-s">${S.month}월 ${won(r.kwh)} + 가전 ${won(r2.kwh - r.kwh)} = <b class="num">${won(r2.kwh)}kWh</b> · ${r2.tier}단계${r2.tier > r.tier ? ` <b class="up">(${r.tier}단계 → ${r2.tier}단계)</b>` : ""}${r2.toNext ? ` · ${r2.tier + 1}단계까지 ${won(r2.toNext)}kWh 남음` : ""}</div>`;
+  else head = `<div class="amt-b num" data-dk="tot" data-v="${r.total}" data-gd="down">${won(r.total)}<small>원</small></div><div class="amt-s">${S.month}월 ${won(r.kwh)}kWh · ${r.tier}단계${r.toNext ? ` · ${r.tier + 1}단계까지 <b class="num">${won(r.toNext)}kWh</b> 남음` : ""}</div>`;
+  return `<div class="big"><div class="printhead">전기요금 계산기 · ${R.rate.name} · Blog J</div><div class="k2">${r2 ? "가전까지 더한 청구 예상 금액" : "청구 예상 금액"}</div>${head}
+  ${hasUse() ? tierBar(R, r2 ? r : null) : ""}
+  <div class="flow"><div class="fb"><span>기본요금</span>${DV("b", R.base)}</div><div class="op">+</div><div class="fb"><span>전력량요금</span>${DV("e", R.energy)}</div><div class="op">+</div><div class="fb"><span>기후 · 연료비</span>${DV("cf", R.clim + R.fuel)}</div><div class="op">+</div><div class="fb"><span>부가세 · 기금</span>${DV("vf", R.vat + R.fund)}</div></div></div>`;
 }
 function detailCard(r) {
   const L = (a, v, cls) => `<div class="row${cls ? " " + cls : ""}"><span>${a}</span><b class="num">${won(v)}</b></div>`;
-  return `<div class="card"><h3>요금 내역</h3>${L("기본요금 (" + r.tier + "단계)", r.base)}${L("전력량요금", r.energy)}${L("기후환경요금 (" + ELEC.CLIM.toFixed(1) + "원 × kWh)", r.clim)}${L("연료비조정요금 (+" + ELEC.FUEL.toFixed(1) + "원 × kWh)", r.fuel)}${L("전기요금계", r.sub, "t")}${L("부가가치세 (10%)", r.vat)}${L("전력산업기반기금 (2.7%)", r.fund)}${L("청구 예상(10원 미만 버림)", r.total, "t")}</div>`;
+  return `<div class="card"><h3>요금 내역${r.kwh > useK() ? " <small>(가전 포함 " + won(r.kwh) + "kWh)</small>" : ""}</h3>${L("기본요금 (" + r.tier + "단계)", r.base)}${L("전력량요금", r.energy)}${L("기후환경요금 (" + ELEC.CLIM.toFixed(1) + "원 × kWh)", r.clim)}${L("연료비조정요금 (+" + ELEC.FUEL.toFixed(1) + "원 × kWh)", r.fuel)}${L("전기요금계", r.sub, "t")}${L("부가가치세 (10%)", r.vat)}${L("전력산업기반기금 (2.7%)", r.fund)}${L("청구 예상(10원 미만 버림)", r.total, "t")}</div>`;
 }
 const STEPS_K = [100, 200, 250, 300, 350, 400, 450, 500, 600, 700];
 function bandCard() {
-  const my = hasUse() ? useK() : 0; let list = STEPS_K.slice(); if (my && !list.includes(my)) list = list.concat(my).sort((a, b) => a - b);
+  const my = hasUse() ? Math.round(useK() + addK()) : 0; let list = STEPS_K.slice(); if (my && !list.includes(my)) list = list.concat(my).sort((a, b) => a - b);
   return `<div class="card"><h3>사용량별 요금 · ${S.month}월</h3><p class="hint" style="margin:-2px 0 6px">${ELEC.R[S.volt].name} · 지금 고른 달 그대로</p>
   <div class="bt"><div class="bh"><span>사용량</span><span>청구 예상</span><span>단계</span></div>${list.map(k => { const r = calcFor(k); return `<div class="br${k === my ? " me" : ""}"><span>${won(k)}kWh</span><b class="num">${won(r.total)}</b><span>${r.tier}단계</span></div>`; }).join("")}</div></div>`;
 }
 function noteCard() { return `<p class="note">한전 주택용 요금표(2026-11 확인 · 2026년 4분기 동결, 연료비조정 +5원)로 계산한 참고 금액이에요. 검침일 · 여러 달에 걸친 날짜 나눔 · 복지 · 대가족 할인 · TV 수신료는 넣지 않아 실제 고지서와 다를 수 있어요.</p>`; }
-function stepRes(r, r2) {
+function stepRes(r0, r2) {
+  const r = r2 || r0;
   const L = (a, b, cls) => `<div class="row${cls ? " " + cls : ""}"><span>${a}</span><b class="num">${b}</b></div>`, p = r.rate.price;
-  return `<div class="yt-k">3 / 3 단계</div><h2>결과 · 계산 과정</h2><p class="yt-lead">고지서와 같은 순서로 보여 드려요.</p>
+  return `<div class="yt-k">3 / 3 단계</div><h2>결과 · 계산 과정</h2><p class="yt-lead">${r2 ? "가전까지 더한 사용량으로, " : ""}고지서와 같은 순서로 보여 드려요.</p>
   <div class="res-tbl">
-  ${L(`사용량 <small class="hint">(${S.month}월 · ${r.rate.name})</small>`, won(r.kwh) + "kWh")}
+  ${r2 ? L(`사용량 <small class="hint">(${S.month}월 ${won(r0.kwh)} + 가전 ${won(r2.kwh - r0.kwh)})</small>`, won(r.kwh) + "kWh") : L(`사용량 <small class="hint">(${S.month}월 · ${r.rate.name})</small>`, won(r.kwh) + "kWh")}
   ${L(`기본요금 <small class="hint">(${r.tier}단계)</small>`, won(r.base), "s")}
   ${L(`1단계 <small class="hint">(${won(r.parts[0])}kWh × ${num1(p[0])}원)</small>`, won(r.parts[0] * p[0]), "s")}
   ${r.parts[1] ? L(`2단계 <small class="hint">(${won(r.parts[1])}kWh × ${num1(p[1])}원)</small>`, won(r.parts[1] * p[1]), "s") : ""}
@@ -477,8 +487,8 @@ function stepRes(r, r2) {
   ${L(`연료비조정요금 <small class="hint">(${won(r.kwh)}kWh × 5.0원)</small>`, won(r.fuel), "s")}
   ${L("전기요금계(원 미만 버림)", won(r.sub), "t")}
   ${L("부가가치세 10%(원 미만 반올림)", won(r.vat), "s")}${L("전력산업기반기금 2.7%(10원 미만 버림)", won(r.fund), "s")}
-  ${L("청구 예상 금액(10원 미만 버림)", won(r.total) + "원", "t")}
-  ${r2 ? L(`가전 ${won(addK())}kWh 더 쓰면`, won(r2.total) + "원 (+" + won(r2.total - r.total) + ")", "t") : ""}
+  ${L(r2 ? "가전 포함 청구 예상(10원 미만 버림)" : "청구 예상 금액(10원 미만 버림)", won(r.total) + "원", "t")}
+  ${r2 ? L(`지금 사용량만 ${won(r0.kwh)}kWh`, won(r0.total) + "원", "s") + L("가전 더해서 늘어나는 금액", "+" + won(r2.total - r0.total) + "원", "s") : ""}
   </div>
   ${r.volt === "high" && (ELEC.isSummer(S.month) || ELEC.isWinter(S.month)) && r.kwh > 1000 ? `<div class="box" style="margin-top:14px">고압 슈퍼유저(1,000kWh 넘는 만큼) 단가는 넣지 않았어요. 1,000kWh가 넘으면 한전ON에서 확인해 주세요.</div>` : ""}
   ${limBox("계산에 쓴 기준", [
@@ -494,7 +504,7 @@ function stepRes(r, r2) {
 /* ── 그리기 ── */
 function both() { const r = calcFor(useK()); const r2 = S.apps.length && addK() > 0 && hasUse() ? calcFor(useK() + addK()) : null; return [r, r2]; }
 function stepHtml(r, r2) { return [stepUse, stepApp, () => stepRes(r, r2)][S.step](); }
-function sideHtml(r, r2) { return `${resultCard(r, r2)}<div class="grid2">${detailCard(r)}${bandCard()}</div>${noteCard()}`; }
+function sideHtml(r, r2) { return `${resultCard(r, r2)}<div class="grid2">${detailCard(r2 || r)}${bandCard()}</div>${noteCard()}`; }
 function render() {
   const [r, r2] = both(), isRes = S.step === 2;
   const rul = STEPS.map(([k, n], i) => `<button class="${i < S.step ? "done" : i === S.step ? "on" : ""}" data-go="${i}"><b></b>${n}</button>`).join("");
@@ -504,7 +514,7 @@ function render() {
   <div class="yt-mrul">${mrul}</div>
   <div class="yt-main"><section class="yt-panel" id="panel">${stepHtml(r, r2)}${nav}</section>
   <aside class="yt-res${isRes ? "" : " side"}" id="res">${sideHtml(r, r2)}</aside></div>
-  <div class="yt-mbar"><div><span>${hasUse() ? "청구 예상" : "사용량을 넣어요"}</span><b class="num" id="mb">${won(r.total)}원</b></div><button class="bk rs" data-reset aria-label="초기화">초기화</button>${S.step ? `<button class="bk" data-prev style="margin-left:0">‹</button>` : ""}${isRes ? `<button class="go" data-print>인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
+  <div class="yt-mbar"><div><span>${hasUse() ? (r2 ? "가전 포함 청구 예상" : "청구 예상") : "사용량을 넣어요"}</span><b class="num" id="mb">${won((r2 || r).total)}원</b></div><button class="bk rs" data-reset aria-label="초기화">초기화</button>${S.step ? `<button class="bk" data-prev style="margin-left:0">‹</button>` : ""}${isRes ? `<button class="go" data-print>인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
   <p class="yt-foot">참고용 계산 · 실제 고지서와 다를 수 있어요 · 입력한 값은 이 기기 브라우저에만 저장되고 어디로도 보내지 않아요 · 전기요금 계산기 v${APP_VER}(${BUILD} 판) · 만든 곳 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a></p>`;
   showDeltas();
 }
@@ -515,7 +525,7 @@ function refreshResult() {
   const mh = document.querySelector("[data-mh]"); if (mh) mh.innerHTML = meterHint();
   S.apps.forEach((a, i) => { const e = document.querySelector(`[data-ak="${i}"]`); if (e) e.textContent = num1(appK(a)) + "kWh"; });
   const res = $("#res"); if (res) res.innerHTML = sideHtml(r, r2);
-  const mb = $("#mb"); if (mb) { mb.textContent = won(r.total) + "원"; const sp = mb.previousElementSibling; if (sp) sp.textContent = hasUse() ? "청구 예상" : "사용량을 넣어요"; }
+  const mb = $("#mb"); if (mb) { mb.textContent = won((r2 || r).total) + "원"; const sp = mb.previousElementSibling; if (sp) sp.textContent = hasUse() ? (r2 ? "가전 포함 청구 예상" : "청구 예상") : "사용량을 넣어요"; }
   showDeltas();
 }
 function go(i, push) {

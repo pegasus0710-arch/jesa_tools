@@ -1,0 +1,87 @@
+<p data-ke-size="size16">[[TH]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">웨이브 PC버전은 따로 설치하는 프로그램 없이 크롬 · 엣지에서 wavve.com에 접속해 보면 됩니다.<br />「페이지를 앱으로 설치」를 쓰면 바탕화면 아이콘으로 앱처럼 열 수 있고, 가짜 설치 파일도 피할 수 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">웨이브 PC버전은 윈도우용 설치 파일이 아니라 웹 브라우저에서 바로 재생하는 방식입니다.<br />앱처럼 쓰는 방법까지 다섯 단계면 끝납니다.</p>
+<ol style="padding-left:1.4em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="decimal"><li>크롬 또는 엣지를 최신 버전으로</li><li>주소창에 wavve.com 입력 → 로그인</li><li>보고 싶은 콘텐츠 재생(전체 화면 · 자막은 플레이어 오른쪽 아래)</li><li>앱처럼 쓰려면 크롬 ⋮ → 전송, 저장, 공유 → 「페이지를 앱으로 설치」</li><li>바탕화면 · 시작 메뉴의 웨이브 아이콘으로 열기</li></ol>
+<div style="border-radius:16px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:22px 24px 22px;margin:8px 0 10px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0 0 14px;color:#1f2125;"><b>웨이브 PC버전 한눈에 보기</b></p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:4px;"><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">설치 프로그램</span><br /><span style="color:#1f2125;font-size:16px;"><b>필요 없음(웹으로 재생)</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">앱처럼 쓰기</span><br /><span style="color:#1f2125;font-size:16px;"><b>크롬 · 엣지 「앱으로 설치」</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">조심할 것</span><br /><span style="color:#1f2125;font-size:16px;"><b>「PC 다운로드」 설치 파일</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">화질 · 끊김</span><br /><span style="color:#1f2125;font-size:16px;"><b>브라우저 · 확장 프로그램 확인</b></span></p></div></div></div>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">확인 기준: 2026-11-18(수) · 참고: 윈도우 11 크롬 · 엣지 메뉴, wavve.com 웹 재생<br />브라우저 버전 · 회사 PC 정책에 따라 메뉴 이름이나 위치가 조금 다를 수 있습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>웨이브 PC버전 — 설치 없이 브라우저로 보는 법</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 크롬 · 엣지로 wavve.com 접속</b></h3>
+<p data-ke-size="size16">크롬이나 마이크로소프트 엣지를 열고 주소창에 <b>wavve.com</b>을 입력해 로그인하면 바로 볼 수 있습니다.<br />오래된 브라우저는 재생 오류 · 낮은 화질의 원인이 되니 최신 버전으로 업데이트해 두세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 전체 화면 · 자막</b></h3>
+<p data-ke-size="size16">재생 화면 오른쪽 아래의 전체 화면 단추, 설정(톱니바퀴)에서 자막을 켜고 언어를 고릅니다. 콘텐츠에 따라 자막이 없을 수 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>웨이브 PC 앱처럼 쓰는 법 — 바탕화면 아이콘 만들기</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 크롬: 「페이지를 앱으로 설치」</b></h3>
+<p data-ke-size="size16">wavve.com을 연 상태에서 오른쪽 위 <b>⋮ → 전송, 저장, 공유 → 「페이지를 앱으로 설치…」</b>를 누르고 「설치」를 누릅니다.<br />주소창 오른쪽에 컴퓨터 모양 아이콘(앱 설치)이 보이면 그것을 눌러도 됩니다.<br />같은 메뉴의 「바로가기 만들기…」는 크롬 탭으로 열리는 바로가기만 만듭니다.</p>
+<p data-ke-size="size16">[[I3|크롬 메뉴의 전송 저장 공유와 바로가기 만들기]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 엣지: 「이 사이트를 앱으로 설치」</b></h3>
+<p data-ke-size="size16">엣지에서 wavve.com을 연 뒤 오른쪽 위 <b>⋯ → 앱 → 「이 사이트를 앱으로 설치」</b>를 누릅니다. 시작 메뉴 · 작업 표시줄에 고정할 수 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 지울 때는</b></h3>
+<p data-ke-size="size16">앱으로 열린 창 위쪽 메뉴의 「제거」, 또는 윈도우 설정 › 앱 › 설치된 앱에서 다른 프로그램처럼 지웁니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>웨이브 PC 다운로드 파일은 받아도 되나요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 이런 설치 파일은 받지 마세요</b></h3>
+<p data-ke-size="size16">「웨이브 PC 다운로드」로 검색하면 설치 파일을 내려받게 하는 페이지가 섞여 나옵니다. 웨이브 공식 사이트가 아닌 곳의 설치 파일은 받지 않는 것이 안전합니다.</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">검색에 나오는 것</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">무엇인가</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">권장</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">「웨이브 PC버전 다운로드」 exe 파일</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">공식이 아닌 사이트의 설치 파일</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">받지 않기</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">앱플레이어(안드로이드 앱 실행기)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">PC에서 휴대폰 앱을 돌리는 프로그램</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">무겁고, 재생이 막히거나 화질이 낮을 수 있음</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">예전 푹(pooq) PC 주소</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">지금은 쓰지 않는 옛 주소</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">wavve.com으로 접속</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">크롬 · 엣지 「앱으로 설치」</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">브라우저가 만드는 앱 창</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">이 방법 권장</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>웨이브 PC 화질 · 재생 문제 해결</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 먼저 확인할 세 가지</b></h3>
+<ul style="padding-left:1.3em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="disc"><li>브라우저를 최신 버전으로(자동 업데이트 켜기)</li><li>광고 차단 확장 프로그램을 잠시 끄고 재생</li><li>로그인 · 결제 창이 안 뜨면 팝업 차단 해제</li></ul>
+<p data-ke-size="size16">크롬은 설정 › 개인 정보 보호 및 보안 › 사이트 설정 › 팝업 및 리디렉션에서 wavve.com을 「허용」에 넣습니다.</p>
+<p data-ke-size="size16">[[I2|크롬 사이트 설정의 팝업 허용 화면]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 화질이 낮거나 자꾸 멈출 때</b></h3>
+<p data-ke-size="size16">PC 화질 · 버퍼링은 브라우저 하드웨어 가속 · 네트워크 · 요금제 화질 영향이 큽니다. 자세한 점검 순서는 <a href="https://luvbong.tistory.com/818" target="_blank" rel="noopener">웨이브 · 디즈니+ PC 화질 · 버퍼링</a>에 정리했습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>디즈니 플러스 pc · 넷플릭스 pc 다운로드도 같은 방법인가요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. OTT별 PC에서 보는 법</b></h3>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">서비스</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">PC에서 보는 법</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">자세히</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">웨이브</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">wavve.com + 앱으로 설치</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">이 글</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">디즈니 플러스 pc</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">disneyplus.com(마이크로소프트 스토어 앱도 있음)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;"><a href="https://luvbong.tistory.com/698" target="_blank" rel="noopener">디즈니+ PC로 보기</a></td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">넷플릭스 pc 다운로드</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">마이크로소프트 스토어 공식 앱 또는 브라우저</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;"><a href="https://luvbong.tistory.com/676" target="_blank" rel="noopener">넷플릭스 PC 다운로드 · 설치</a> · <a href="https://luvbong.tistory.com/697" target="_blank" rel="noopener">넷플릭스 PC 앱 총정리</a></td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">유튜브 pc버전</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">youtube.com + 앱으로 설치</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;"><a href="https://luvbong.tistory.com/414" target="_blank" rel="noopener">유튜브 PC 앱 설치</a></td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">삼성 TV 플러스 pc</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">웹에서 무료 채널</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;"><a href="https://luvbong.tistory.com/386" target="_blank" rel="noopener">삼성 TV 플러스 PC</a></td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>웨이브 PC버전에서 자주 묻는 것</b></h3>
+<p data-ke-size="size16"><b>Q. 웨이브 PC 앱이 따로 있나요?</b></p>
+<p data-ke-size="size16">윈도우용 설치 프로그램 없이 브라우저(wavve.com)로 봅니다. 크롬 · 엣지의 「앱으로 설치」로 앱처럼 쓸 수 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 웨이브 PC 다운로드 받아서 오프라인으로 볼 수 있나요?</b></p>
+<p data-ke-size="size16">오프라인 저장은 휴대폰 · 태블릿 앱 기능입니다. PC 브라우저에서는 인터넷에 연결된 상태로 재생합니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 「페이지를 앱으로 설치」가 메뉴에 없어요.</b></p>
+<p data-ke-size="size16">크롬을 최신 버전으로 올리고, 「바로가기 만들기…」로 대신해도 됩니다. 회사 PC는 관리자 정책으로 막혀 있을 수 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. PC에서 웨이브가 재생이 안 돼요.</b></p>
+<p data-ke-size="size16">광고 차단 확장 프로그램을 끄고, 팝업을 허용하고, 브라우저를 최신으로 업데이트해 보세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 앱플레이어로 웨이브 앱을 써도 되나요?</b></p>
+<p data-ke-size="size16">동작은 할 수 있지만 무겁고 재생이 막히거나 화질이 낮을 수 있습니다. 브라우저 방법이 가장 가볍습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>PC로 OTT 보기</b></h3>
+<div style="background:#ece6da;border-radius:18px;padding:18px;margin:4px 0 10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;box-sizing:border-box;"><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">소프트웨어·앱</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/818" target="_blank" rel="noopener"><b>웨이브 · 디즈니+ PC 화질 · 버퍼링</b></a></span><br /><span style="font-size:14px;color:#5b5547;">넷플릭스 4K와 같은 원리</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">소프트웨어·앱</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/698" target="_blank" rel="noopener"><b>디즈니 플러스 PC로 보기</b></a></span><br /><span style="font-size:14px;color:#5b5547;">앱 설치 없이 전체 화면</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">소프트웨어·앱</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/676" target="_blank" rel="noopener"><b>넷플릭스 PC 다운로드 · 설치</b></a></span><br /><span style="font-size:14px;color:#5b5547;">공식 앱과 브라우저 차이</span></p></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">설치 파일을 이미 받으셨다면 어떤 이름이었는지 댓글로 남겨 주세요. 확인해서 알려 드리겠습니다.</p>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14px;">2026-11-18(수) 고침: 웨이브 PC버전 · 앱처럼 쓰기 · 가짜 다운로드 구별 · OTT별 표 · 자주 묻는 질문으로 전체 보강</span></p>

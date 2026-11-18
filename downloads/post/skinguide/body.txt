@@ -1,0 +1,116 @@
+<p data-ke-size="size16">[[TH]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">티스토리 스킨 적용 방법을 실제 관리 화면 순서대로 정리했습니다.<br />받은 스킨 파일을 「스킨 등록」으로 올려 적용하고, 스킨 편집 · 홈 커버 · 사이드바 · 휴대폰 화면까지 맞추는 순서입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">무료 스킨을 받아 놓고 어디에 올리는지, 올린 뒤 홈은 왜 그냥 글 목록으로 나오는지 헷갈리는 분이 많습니다.<br />이 글의 순서는 Blog J 스킨뿐 아니라 티스토리에 직접 올리는 스킨이면 대부분 똑같이 쓸 수 있습니다. 사진은 시험 블로그의 실제 화면(2026-11 기준)입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border-radius:16px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:22px 24px 22px;margin:8px 0 10px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0 0 14px;color:#1f2125;"><b>티스토리 스킨 적용 한눈에 보기</b></p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:4px;"><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">준비할 것</span><br /><span style="color:#1f2125;font-size:16px;"><b>압축을 푼 스킨 파일</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">올리는 곳</span><br /><span style="color:#1f2125;font-size:16px;"><b>꾸미기 › 스킨 변경</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">꾸미는 곳</span><br /><span style="color:#1f2125;font-size:16px;"><b>스킨 편집 · 사이드바</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">휴대폰</span><br /><span style="color:#1f2125;font-size:16px;"><b>모바일웹 자동 연결 끄기</b></span></p></div></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>티스토리 스킨 적용 방법 — 스킨 등록부터 적용까지</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 스킨 받기 · 압축 풀기</b></h3>
+<p data-ke-size="size16">스킨은 보통 zip 파일로 받습니다. zip을 마우스 오른쪽 단추로 누르고 「모두 압축 풀기」(윈도우)로 폴더로 풉니다.<br />티스토리에는 zip이 아니라 압축을 푼 파일들을 올립니다.</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">파일</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">하는 일</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">skin.html</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">화면 틀 — 꼭 필요</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">style.css</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">색 · 글꼴 · 배치 — 꼭 필요</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">index.xml</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">스킨 이름 · 설정 칸 · 홈 칸 모양 — 꼭 필요</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">preview 그림</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">스킨 목록에 보이는 미리보기(없어도 작동)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">images 폴더</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">스킨에 따라 있음 — 들어 있으면 함께 올림</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 「스킨 등록」에서 파일 모두 올리기</b></h3>
+<p data-ke-size="size16">블로그 관리 › 꾸미기 › 스킨 변경으로 들어가 오른쪽 위 「스킨 등록 +」를 누릅니다.</p>
+<p data-ke-size="size16">[[G1]]</p>
+<p data-ke-size="size16">「추가」를 누르고 압축을 푼 폴더에서 파일을 모두 고릅니다(Ctrl + A).<br />skin.html · style.css · index.xml이 파일 목록에 다 들어와야 합니다.</p>
+<p data-ke-size="size16">[[G2]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 「저장」 → 스킨 이름 넣고 「확인」</b></h3>
+<p data-ke-size="size16">미리보기에 스킨 그림이 보이면 「저장」을 누릅니다.</p>
+<p data-ke-size="size16">[[G3]]</p>
+<p data-ke-size="size16">스킨 이름을 넣고 「확인」을 누르면 스킨 보관함에 저장됩니다. 이름은 나중에 알아보기 쉽게 버전까지 적어 두면 좋습니다.</p>
+<p data-ke-size="size16">[[G4]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>4. 스킨 보관함에서 「적용」</b></h3>
+<p data-ke-size="size16">스킨 변경 › 「스킨 보관함」에서 스킨 그림에 마우스를 올리고 「적용」을 누릅니다. 확인 창이 뜨면 「확인」.</p>
+<p data-ke-size="size16">[[G5]]</p>
+<p data-ke-size="size16">맨 위 「현재 적용된 스킨」에 이름이 바뀌어 있으면 끝입니다. 블로그를 열어 Ctrl + F5로 새로 고쳐 보세요.</p>
+<p data-ke-size="size16">[[G6]]</p>
+<div style="border-radius:14px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><b>스킨을 다시 등록하면 설정이 처음으로 돌아갑니다</b><br />같은 스킨의 새 버전이라도 다시 등록해 적용하면 스킨 편집 설정 · 홈 화면 설정(커버) · 사이드바 모듈 배치가 모두 처음 값으로 돌아갑니다.<br />새 버전을 올리기 전에 지금 설정 화면을 캡처해 두었다가 다시 맞춰 주세요.</p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>티스토리 스킨 변경 후 스킨 편집 — 설정 · 홈 커버 꾸미기</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 스킨 편집 화면 보는 법</b></h3>
+<p data-ke-size="size16">꾸미기 › 「스킨 편집」을 누르면 새 창이 열립니다. 왼쪽은 미리보기, 오른쪽은 스킨이 주는 설정 칸입니다.</p>
+<p data-ke-size="size16">[[G7]]</p>
+<p data-ke-size="size16">왼쪽 위에서 홈 · 글 · 카테고리 화면을, 가운데 아이콘으로 PC · 태블릿 · 휴대폰 크기를 고릅니다.<br />설정을 바꾸고 「미리보기」로 확인한 뒤, 오른쪽 위 <b>「적용」</b>을 눌러야 실제 블로그에 반영됩니다.<br />「html 편집」은 코드를 직접 고치는 곳이라, 설정 칸만 쓸 때는 열 필요가 없습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 홈 화면을 「커버」로 꾸미기</b></h3>
+<p data-ke-size="size16">처음 적용하면 홈은 「최신 글」 목록입니다. 스킨이 커버를 지원하면 홈 설정을 <b>「커버」</b>로 바꿔 분류별 묶음을 여러 칸으로 쌓을 수 있습니다.</p>
+<p data-ke-size="size16">[[G8]]</p>
+<p data-ke-size="size16">「커버 아이템 추가」로 칸을 넣고, 칸마다 모양 · 제목 · 카테고리 · 글 수를 고릅니다.</p>
+<p data-ke-size="size16">[[G9]]</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">칸 설정</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">뜻</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">커버 아이템</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">칸 모양. 고를 수 있는 모양은 스킨마다 다릅니다</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">타이틀</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">칸 위 제목. 비우면 제목 없이</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">콘텐츠</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">「최신 글」 = 그 분류 글을 자동으로 / 「직접 입력」 = 그림 · 문구 · 링크</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">카테고리 · 글 수</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">어느 분류의 글을 몇 개 보여 줄지</td></tr></tbody></table></div>
+<p data-ke-size="size16">칸 왼쪽 손잡이를 끌면 순서가 바뀝니다. 「미리보기」로 확인하고 「적용」을 누르면 홈이 칸 화면으로 바뀝니다.</p>
+<p data-ke-size="size16">[[G10]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 카테고리마다 목록 모양 다르게</b></h3>
+<p data-ke-size="size16">스킨이 「목록 스타일」을 지원하면 카테고리마다 다른 목록 모양을 고를 수 있습니다. 블로그 관리 › 카테고리 관리에서 카테고리에 마우스를 올리고 「관리」를 누릅니다.</p>
+<p data-ke-size="size16">[[G11]]</p>
+<p data-ke-size="size16">「목록 스타일」에서 모양을 고르고 「확인」 → 아래 「변경사항 저장」. 이 칸이 없으면 그 스킨은 카테고리별 모양을 지원하지 않는 것입니다.</p>
+<p data-ke-size="size16">[[G12]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>티스토리 사이드바 설정 · 휴대폰 화면</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 사이드바 모듈 넣고 빼기</b></h3>
+<p data-ke-size="size16">블로그 관리 › 꾸미기 › 「사이드바」에서 카테고리 · 인기 글 · 최근 댓글 같은 모듈을 칸에 넣고 뺍니다.</p>
+<p data-ke-size="size16">[[G13]]</p>
+<p data-ke-size="size16">왼쪽 목록의 「+」로 넣고, 모듈을 끌어 다른 칸으로 옮깁니다. 칸의 수와 각 칸이 화면 어디에 나오는지는 스킨이 정합니다.<br />다 옮기면 아래 「변경사항 저장」을 누릅니다.</p>
+<p data-ke-size="size16">[[G14]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 휴대폰에서도 같은 스킨으로</b></h3>
+<p data-ke-size="size16">꾸미기 › 「모바일」에서 「티스토리 모바일웹 자동 연결」을 <b>「사용하지 않습니다」</b>로 두면 휴대폰에서도 내가 고른 스킨(반응형) 화면이 나옵니다.<br />「사용합니다」면 휴대폰은 티스토리 기본 모바일 화면으로 바뀝니다.</p>
+<p data-ke-size="size16">[[G15]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>광고 · 검색 등록은 스킨 대신 플러그인으로</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>스킨 html에 코드를 넣기 전에 확인할 것</b></h3>
+<p data-ke-size="size16">애드센스 · 서치콘솔 · 사이트 확인 같은 기능은 티스토리가 기본으로 줍니다. 스킨을 바꿔도 그대로 이어지는 쪽이 편합니다.</p>
+<p data-ke-size="size16">[[G16]]</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">하고 싶은 것</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">티스토리에서 하는 곳</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">구글 애드센스 광고</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">블로그 관리 › 수익 › 애드센스 연동</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">구글 서치콘솔 등록</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「구글 서치콘솔」</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">네이버 · 다음 사이트 확인</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「메타 태그 등록」</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">방문 통계(구글)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「구글 애널리틱스」</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">같은 분류 다른 글</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「카테고리 글 더 보기」</td></tr></tbody></table></div>
+<div style="border-radius:14px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><b>같은 코드를 두 번 넣지 마세요</b><br />플러그인과 html 편집 양쪽에 같은 코드를 넣으면 광고 · 통계가 두 번 들어갑니다. 한 곳에만 넣어 주세요.</p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>스킨 적용할 때 자주 묻는 것</b></h3>
+<p data-ke-size="size16"><b>Q. 적용했는데 블로그 화면이 그대로예요.</b></p>
+<p data-ke-size="size16">브라우저에 예전 화면이 남아 있는 경우입니다. Ctrl + F5(맥은 Cmd + Shift + R)로 새로 고치고, 스킨 편집에서 「적용」을 눌렀는지도 확인하세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 스킨 등록에서 「저장」이 눌리지 않아요.</b></p>
+<p data-ke-size="size16">skin.html · style.css · index.xml 세 파일이 파일 목록에 모두 있어야 합니다. zip을 그대로 올리지 말고 압축을 푼 파일을 고르세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 홈이 그냥 글 목록으로 나와요.</b></p>
+<p data-ke-size="size16">처음 적용하면 홈 설정이 「최신 글」입니다. 스킨 편집 › 홈 설정에서 「커버」를 누르고 「적용」하세요. 커버를 지원하지 않는 스킨도 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 설정해 둔 홈 칸 · 사이드바가 사라졌어요.</b></p>
+<p data-ke-size="size16">스킨을 다시 등록해 적용하면 처음 값으로 돌아갑니다. 다시 맞춰 주세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 스킨 이름 뒤에 「(사용자 수정)」이 붙어요.</b></p>
+<p data-ke-size="size16">직접 올린 스킨을 적용하면 이렇게 보일 수 있습니다. 쓰는 데 문제는 없습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 휴대폰에서만 다른 모양이 나와요.</b></p>
+<p data-ke-size="size16">꾸미기 › 모바일의 자동 연결을 「사용하지 않습니다」로 바꾸세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border-radius:14px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><b>사진으로 한 번에 보기</b><br />이 글의 내용을 인쇄하기 좋은 PDF로도 정리했습니다. <a href="https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-skin-manual-common.pdf" target="_blank" rel="noopener"><b>티스토리 스킨 설치 · 기본 설정 — 공통편(PDF)</b></a></p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>스킨을 고를 때 · 블로그 꾸밀 때</b></h3>
+<div style="background:#ece6da;border-radius:18px;padding:18px;margin:4px 0 10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;box-sizing:border-box;"><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">Blog J 무료 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/862" target="_blank" rel="noopener"><b>티스토리 무료 스킨 Blog J 모래바다</b></a></span><br /><span style="font-size:14px;color:#5b5547;">반응형 · 목록 5가지 · 홈 칸 6가지</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">문서 · 이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/812" target="_blank" rel="noopener"><b>무료 아이콘 다운로드</b></a></span><br /><span style="font-size:14px;color:#5b5547;">선 아이콘 140개 · 출처 표시 없이</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">문서 · 이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/798" target="_blank" rel="noopener"><b>사진 편집 프로그램 무료</b></a></span><br /><span style="font-size:14px;color:#5b5547;">여러 장 자르기 · 수평 · 콜라주</span></p></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">스킨을 적용하다 막히는 곳이 있으면 어느 화면에서 멈췄는지 댓글로 남겨 주세요.<br />확인해서 이 글에 보태겠습니다.</p>

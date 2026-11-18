@@ -1,0 +1,77 @@
+<p data-ke-size="size16">[[TH]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">윈도우 11 작업 표시줄 색상 변경은 설정 › 개인 설정 › 색에서 「시작 및 작업 표시줄에 테마 컬러 표시」를 켜면 됩니다.<br />이 칸이 회색으로 눌리지 않으면 기본 Windows 모드를 「다크」로 바꾸면 켜집니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">작업 표시줄 색상은 윈도우가 쓰는 「테마 컬러(강조색)」를 시작 메뉴 · 작업 표시줄에도 칠하는 기능입니다.<br />순서는 네 단계면 끝납니다.</p>
+<ol style="padding-left:1.4em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="decimal"><li>설정(Windows 키 + I) › 개인 설정 › 색</li><li>모드 선택 → 「사용자 지정」, 기본 Windows 모드 → 「다크」</li><li>「시작 및 작업 표시줄에 테마 컬러 표시」 켜기</li><li>테마 컬러에서 원하는 색 고르기</li></ol>
+<div style="border-radius:16px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:22px 24px 22px;margin:8px 0 10px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0 0 14px;color:#1f2125;"><b>윈도우 11 작업 표시줄 색상 한눈에 보기</b></p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:4px;"><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">설정 위치</span><br /><span style="color:#1f2125;font-size:16px;"><b>개인 설정 › 색</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">회색일 때</span><br /><span style="color:#1f2125;font-size:16px;"><b>기본 Windows 모드 = 다크</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">색 고르기</span><br /><span style="color:#1f2125;font-size:16px;"><b>테마 컬러 · 사용자 지정 색</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">안 바뀔 때</span><br /><span style="color:#1f2125;font-size:16px;"><b>정품 인증 · 대비 테마 확인</b></span></p></div></div></div>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">확인 기준: 2026-11-18(수) · 참고: 윈도우 11 설정 › 개인 설정 › 색 실제 화면<br />기기 · 윈도우 버전 · 회사 PC 정책에 따라 메뉴 이름이나 위치가 조금 다를 수 있습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>윈도우 11 작업 표시줄 색상 변경하는 방법</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 설정 › 개인 설정 › 색으로 이동</b></h3>
+<p data-ke-size="size16">Windows 키 + I로 설정을 열고 왼쪽 「개인 설정」 → 「색」을 누릅니다.</p>
+<p data-ke-size="size16">[[I1|설정 개인 설정의 색 메뉴]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 「시작 및 작업 표시줄에 테마 컬러 표시」 켜기</b></h3>
+<p data-ke-size="size16">아래로 내려 「시작 및 작업 표시줄에 테마 컬러 표시」를 켜고, 위쪽 「테마 컬러」에서 색을 고릅니다.<br />목록에 원하는 색이 없으면 「사용자 지정 색」의 「색 보기」에서 직접 고를 수 있습니다.</p>
+<p data-ke-size="size16">[[I4|시작 및 작업 표시줄에 테마 컬러 표시 켜기]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 바뀐 모습 확인</b></h3>
+<p data-ke-size="size16">작업 표시줄과 시작 메뉴가 고른 색으로 바뀝니다.<br />「제목 표시줄 및 창 테두리에 테마 컬러 표시」도 켜면 창 테두리까지 같은 색이 됩니다.</p>
+<p data-ke-size="size16">[[I5|빨간색으로 바뀐 작업 표시줄과 시작 메뉴]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>작업 표시줄 색상이 회색으로 비활성화될 때</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 왜 회색으로 눌리지 않나요?</b></h3>
+<p data-ke-size="size16">윈도우 11은 <b>기본 Windows 모드가 「라이트」일 때 작업 표시줄에 색을 칠할 수 없게</b> 막아 둡니다. 그래서 칸이 회색으로 보입니다.</p>
+<p data-ke-size="size16">[[I2|회색으로 비활성화된 테마 컬러 표시 칸]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 모드를 「사용자 지정」 · 기본 Windows 모드를 「다크」로</b></h3>
+<p data-ke-size="size16">같은 「색」 화면 위쪽에서 「모드 선택」을 「사용자 지정」으로 바꾸고, 「기본 Windows 모드 선택」을 「다크」로 고릅니다.<br />「기본 앱 모드 선택」은 라이트로 두어도 됩니다(앱 화면은 밝게, 작업 표시줄만 색).</p>
+<p data-ke-size="size16">[[I3|모드 선택 사용자 지정과 기본 Windows 모드 다크]]</p>
+<p data-ke-size="size16">그러면 「시작 및 작업 표시줄에 테마 컬러 표시」가 켜지는 상태가 됩니다. 위 1장의 2단계대로 켜고 색을 고르세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">모드 선택</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">작업 표시줄 색 칠하기</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">라이트</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">안 됨(회색)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">다크</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">됨</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">사용자 지정 + 기본 Windows 모드 다크</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">됨(앱은 라이트로 둘 수 있음)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">사용자 지정 + 기본 Windows 모드 라이트</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">안 됨(회색)</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>그래도 작업 표시줄 색상이 안 바뀔 때</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 확인할 것 네 가지</b></h3>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">상황</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">해결</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">「Windows를 개인 설정하려면 정품 인증하세요」 문구</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">정품 인증 전에는 개인 설정이 잠김 → 설정 › 시스템 › 정품 인증</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">대비 테마(고대비)를 켬</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">설정 › 접근성 › 대비 테마 → 「없음」</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">테마 컬러가 「자동」</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">배경 화면 색을 따라감 → 「수동」으로 바꾸고 색 고르기</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">회사 · 학교 PC</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">관리자 정책으로 막혀 있을 수 있음 → 관리자 문의</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 윈도우 10도 같은 방법인가요?</b></h3>
+<p data-ke-size="size16">윈도우 10도 설정 › 개인 설정 › 색에서 「다음 표면에 테마 컬러 표시 › 시작, 작업 표시줄 및 알림 센터」를 켜면 됩니다. 이 칸도 기본 Windows 모드가 다크일 때만 켜집니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>작업 표시줄 색상 바꿀 때 자주 묻는 것</b></h3>
+<p data-ke-size="size16"><b>Q. 작업 표시줄 색상 변경이 회색으로 안 눌려요.</b></p>
+<p data-ke-size="size16">기본 Windows 모드가 라이트라서 그렇습니다. 모드 선택 → 사용자 지정, 기본 Windows 모드 → 다크로 바꾸세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 작업 표시줄만 검은색으로 하고 싶어요.</b></p>
+<p data-ke-size="size16">기본 Windows 모드를 다크로 두고 「시작 및 작업 표시줄에 테마 컬러 표시」를 끄면 작업 표시줄이 짙은 색으로 남습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 작업 표시줄을 투명하게 할 수 있나요?</b></p>
+<p data-ke-size="size16">설정 › 개인 설정 › 색의 「투명 효과」를 켜면 작업 표시줄이 살짝 비쳐 보입니다. 완전한 투명은 기본 설정으로는 안 됩니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 색이 저절로 바뀌어요.</b></p>
+<p data-ke-size="size16">테마 컬러가 「자동」이면 배경 화면 색을 따라갑니다. 「수동」으로 바꾸세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 정품 인증 안 된 윈도우에서도 바꿀 수 있나요?</b></p>
+<p data-ke-size="size16">정품 인증 전에는 개인 설정 메뉴가 잠겨 있어 바꿀 수 없습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>윈도우 11 설정 더 보기</b></h3>
+<div style="background:#ece6da;border-radius:18px;padding:18px;margin:4px 0 10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;box-sizing:border-box;"><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">Windows 11 설정</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/721" target="_blank" rel="noopener"><b>윈도우 11 방해 금지 모드</b></a></span><br /><span style="font-size:14px;color:#5b5547;">게임 · 작업 중 알림 끄기</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">Windows 11 설정</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/539" target="_blank" rel="noopener"><b>윈도우 11 스크린샷 자동 저장 끄기</b></a></span><br /><span style="font-size:14px;color:#5b5547;">캡처 도구 자동 저장 해제</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">Windows 11 설정</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/572" target="_blank" rel="noopener"><b>윈도우 11 날씨 위젯 끄기</b></a></span><br /><span style="font-size:14px;color:#5b5547;">작업 표시줄 날씨 · 뉴스 숨기기</span></p></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">색을 바꿨는데도 그대로라면 어떤 화면에서 막혔는지 댓글로 남겨 주세요.</p>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14px;">2026-11-18(수) 고침: 회색으로 막히는 이유 · 모드별 표 · 안 바뀔 때 · 윈도우 10 · 자주 묻는 질문 추가</span></p>

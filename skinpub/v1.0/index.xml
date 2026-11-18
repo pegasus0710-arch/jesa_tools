@@ -64,16 +64,9 @@
   <variables>
     <variablegroup name="기본">
       <variable>
-        <name>bj-logo-text</name>
-        <label><![CDATA[로고 글자]]></label>
-        <description><![CDATA[로고 네모 안 글자(한두 글자). 로고 그림을 올리면 그림이 나옵니다.]]></description>
-        <type>STRING</type>
-        <default><![CDATA[J]]></default>
-      </variable>
-      <variable>
         <name>bj-logo-img</name>
         <label><![CDATA[로고 그림]]></label>
-        <description><![CDATA[높이 36px로 보입니다. 비우면 로고 글자]]></description>
+        <description><![CDATA[제목 앞에 높이 36px로 보입니다. 비우면 블로그 제목만]]></description>
         <type>IMAGE</type>
       </variable>
       <variable>

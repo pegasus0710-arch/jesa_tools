@@ -1,0 +1,97 @@
+<p data-ke-size="size16">[[TH]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">티스토리 무료 스킨 「Blog J 모래바다」를 다운로드해 바로 쓸 수 있게 공개합니다.<br />반응형이고, 사이드바 위치 · 글 목록 모양 · 홈 꾸미기를 코드 없이 스킨 편집 설정 칸에서 고릅니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Blog J를 꾸미면서 다듬어 온 화면을 누구나 쓸 수 있게 따로 정리했습니다. 글을 오래 읽어도 편한 화면, 그리고 html을 고치지 않고 설정만 눌러서 내 블로그에 맞추는 것을 목표로 만들었습니다.<br />광고 · 통계 코드는 넣지 않았습니다. 그런 기능은 티스토리 기본 기능(수익 · 플러그인)으로 켜면 됩니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border-radius:16px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:22px 24px 22px;margin:8px 0 10px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0 0 14px;color:#1f2125;"><b>Blog J 모래바다 한눈에 보기</b></p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:4px;"><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">화면</span><br /><span style="color:#1f2125;font-size:16px;"><b>반응형 · PC · 태블릿 · 휴대폰</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">글 화면</span><br /><span style="color:#1f2125;font-size:16px;"><b>따라오는 차례 · 제목 번호</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">고르는 것</span><br /><span style="color:#1f2125;font-size:16px;"><b>색 6 · 글꼴 4 · 너비 4 · 사이드바 4</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">목록 · 홈</span><br /><span style="color:#1f2125;font-size:16px;"><b>목록 5가지 · 홈 칸 6가지</b></span></p></div></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>Blog J 모래바다 — 이런 스킨입니다</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 홈 — 분류별 묶음을 칸으로 쌓기</b></h3>
+<p data-ke-size="size16">티스토리 「홈 화면 설정 → 커버」를 쓰면 홈에 칸을 여러 개 쌓을 수 있습니다.<br />칸마다 모양(큰 글 + 목록 · 사진 목록 · 카드 3칸 · 사진 갤러리 · 제목 목록 · 배너)과 카테고리 · 글 수를 고릅니다.</p>
+<p data-ke-size="size16">[[G1]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 글 목록 5가지 — 카테고리마다 다르게</b></h3>
+<p data-ke-size="size16">카테고리를 눌렀을 때의 목록은 사진 목록 · 카드 · 제목 목록 · 잡지 · 번호 목록 중에서 고릅니다.<br />티스토리 카테고리 관리의 「목록 스타일」에서 카테고리마다 따로 고를 수도 있습니다. 예를 들어 여행 카테고리만 큰 사진의 「잡지」로, 공지는 「제목 목록」으로 둘 수 있습니다.</p>
+<p data-ke-size="size16">[[G2]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 글 화면 — 따라오는 차례 · 제목 번호 · 장 나누기</b></h3>
+<p data-ke-size="size16">제목1 · 제목2로 차례를 자동으로 만들고, 읽는 곳을 따라 표시합니다. 화면 옆에 자리가 없으면 왼쪽 아래 「차례」 단추로 바뀝니다.<br />제목1 위에는 「02 / 05」처럼 지금 몇 번째 장인지 나오고, 제목1마다 종이 한 장처럼 나눠 보여 줍니다. 셋 다 설정에서 끌 수 있습니다.</p>
+<p data-ke-size="size16">[[G3]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>4. 바닥 칸 — 원하는 사이드바만 맨 아래로</b></h3>
+<p data-ke-size="size16">꾸미기 › 사이드바에 「바닥」 칸(사이드바5)이 있습니다. 인기 글 · 최근 글 · 최근 댓글처럼 원하는 모듈만 이 칸으로 옮기면 맨 아래 색 띠 안에 나란히 나옵니다.<br />사이드바 위치를 「아래」로 고르면 사이드바 전체가 이 띠 안으로 들어가 본문은 넓게 보입니다.</p>
+<p data-ke-size="size16">[[G6]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<div data-bj-band="launch" style="background:#20263a;border-radius:16px;padding:6px 20px 16px;margin:8px 0 24px;box-sizing:border-box;"><h2 data-ke-size="size26" style="color:#aeb5cb;"><span style="color:#ffffff;"><b>Blog J 모래바다 다운로드</b></span></h2><p data-ke-size="size16">&nbsp;</p><p data-ke-size="size16"><span style="color:#e4e8f2;">무료입니다. zip 하나에 스킨 파일 3개 · 미리보기 그림 4개 · 「읽어 주세요.txt」가 들어 있습니다. 설치 순서와 설정은 아래 설명서 2부에 사진으로 정리했습니다.</span></p><div style="margin:16px 0 8px;"><div style="background:#f1ebe1;border-radius:16px;padding:18px 20px 16px;box-shadow:0 10px 24px rgba(10,12,20,.35);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:12.5px;color:#195455;"><b>티스토리 스킨 · 다운로드 · 무료</b></span><br /><span style="font-size:21px;color:#1f2125;"><b>Blog J 모래바다 v1.0</b></span></p><p data-ke-size="size16" style="margin:12px 0 4px;text-align:center;"><a style="display:block;background:#e08a3e;color:#ffffff;border-radius:12px;padding:13px 10px;text-decoration:none;" href="https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-moraebada-v1.0.zip" target="_blank" rel="noopener"><b>무료 다운로드 (Blog J 모래바다 v1.0 · zip)</b></a></p><p data-ke-size="size16" style="margin:6px 0 12px;font-size:13.5px;color:#6f6857;text-align:center;">Blog J가 직접 만든 파일 · 광고 · 설치 프로그램 없음</p><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="flex:1;min-width:150px;border-radius:10px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:10px 12px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.5;"><span style="font-size:12.5px;color:#6f6857;"><b>1단계</b></span><br /><span style="color:#1f2125;font-size:15px;"><b>zip 받기</b></span><br /><span style="font-size:13.5px;color:#5b5547;">위 단추 → 다운로드 폴더</span></p></div><div style="flex:1;min-width:150px;border-radius:10px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:10px 12px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.5;"><span style="font-size:12.5px;color:#6f6857;"><b>2단계</b></span><br /><span style="color:#1f2125;font-size:15px;"><b>압축 풀기</b></span><br /><span style="font-size:13.5px;color:#5b5547;">마우스 오른쪽 → 「압축 풀기」</span></p></div><div style="flex:1;min-width:150px;border-radius:10px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:10px 12px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.5;"><span style="font-size:12.5px;color:#6f6857;"><b>3단계</b></span><br /><span style="color:#1f2125;font-size:15px;"><b>스킨 등록</b></span><br /><span style="font-size:13.5px;color:#5b5547;">꾸미기 › 스킨 변경 › 스킨 등록</span></p></div></div></div></div><p data-ke-size="size16"><span style="color:#e4e8f2;">설명서(PDF): <a style="color:#ffffff;" href="https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-skin-manual-common.pdf" target="_blank" rel="noopener"><b>티스토리 스킨 설치 · 기본 설정 — 공통편</b></a> · <a style="color:#ffffff;" href="https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-moraebada-manual.pdf" target="_blank" rel="noopener"><b>Blog J 모래바다 설정 안내</b></a></span></p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>티스토리 스킨 적용 방법 — 4단계</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 「스킨 등록」에서 파일 모두 올리기</b></h3>
+<p data-ke-size="size16">블로그 관리 › 꾸미기 › 스킨 변경 › 오른쪽 「스킨 등록 +」를 누릅니다.<br />「추가」로 압축을 푼 폴더의 파일을 모두 고르면(Ctrl + A) 목록에 skin.html · style.css · index.xml · 미리보기 그림이 들어옵니다.</p>
+<p data-ke-size="size16">[[G7]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 「저장」 → 이름 넣고 「확인」</b></h3>
+<p data-ke-size="size16">「저장」을 누르고 스킨 이름(예: Blog J 모래바다)을 넣은 뒤 「확인」을 누르면 스킨 보관함에 저장됩니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 스킨 보관함에서 「적용」</b></h3>
+<p data-ke-size="size16">스킨 변경 › 「스킨 보관함」에서 스킨 그림에 마우스를 올리고 「적용」을 누릅니다. 확인 창이 뜨면 「확인」.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>4. 휴대폰 화면 맞추기</b></h3>
+<p data-ke-size="size16">꾸미기 › 모바일의 「티스토리 모바일웹 자동 연결」을 「사용하지 않습니다」로 두면 휴대폰에서도 이 스킨(반응형) 화면이 나옵니다.</p>
+<div style="border-radius:14px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><b>새 버전을 다시 올릴 때</b><br />같은 스킨이라도 다시 등록해 적용하면 스킨 편집 설정 · 홈 화면 설정(커버) · 사이드바 배치가 처음으로 돌아갑니다.<br />바꾸기 전에 지금 화면을 캡처해 두었다가 다시 맞춰 주세요.</p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>티스토리 스킨 설정 — 스킨 편집에서 고르는 것</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 스킨 편집 설정 칸</b></h3>
+<p data-ke-size="size16">꾸미기 › 스킨 편집 오른쪽, 「기본 설정」 아래에 이 스킨의 칸이 있습니다. 바꾼 뒤 오른쪽 위 「적용」을 눌러야 블로그에 반영됩니다.</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">칸</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">고르는 값</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">색 묶음</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">모래 · 바다(처음) · 숲 · 남색 · 먹(흑백) · 벚꽃 · 직접 고르기(주 색 1개)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">글꼴</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">프리텐다드(처음) · 나눔고딕 · 고운돋움 · 나눔명조</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">본문 너비</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">좁게 · 보통(처음) · 넓게 · 아주 넓게</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">글 목록 모양</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">사진 목록(처음) · 카드 · 제목 목록 · 잡지 · 번호 목록</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">사이드바 위치</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">오른쪽(처음) · 왼쪽 · 아래(바닥 색 띠 안) · 없음</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">글 화면</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">따라오는 차례 · 제목 번호 · 장 나누기 · 같은 분류 다른 글 · 타공 노트 무늬</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">바닥 · 윗띠</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">바닥 로고 · 바닥 문구 · 맨 위 안내 띠 · 링크 2개</td></tr></tbody></table></div>
+<p data-ke-size="size16">[[G4]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 카테고리마다 목록 모양 고르기</b></h3>
+<p data-ke-size="size16">블로그 관리 › 카테고리 관리에서 카테고리에 마우스를 올리고 「관리」를 누르면 「목록 스타일」 칸이 있습니다.<br />「스킨 설정대로」면 위 「글 목록 모양」을 따르고, 다른 값을 고르면 그 카테고리만 그 모양으로 나옵니다.</p>
+<p data-ke-size="size16">[[G5]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>알아 두세요</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>사용 조건과 이 스킨에 넣지 않은 것</b></h3>
+<div style="border-radius:14px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><b>사용 조건</b><br />개인 · 회사 블로그 모두 무료로 쓰셔도 되고, 색 · 글꼴 · 배치를 고쳐 쓰셔도 됩니다.<br />그대로 또는 조금 고쳐서 다시 나눠 주거나 파는 것은 안 됩니다. 맨 아래 「Skin by Blog J」 글자는 지우지 말아 주세요.</p></div>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">하고 싶은 것</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">티스토리에서 하는 곳</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">애드센스 광고</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">블로그 관리 › 수익</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">구글 서치콘솔 등록</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「구글 서치콘솔」</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">네이버 · 다음 사이트 확인</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「메타 태그 등록」</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">방문 통계</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「구글 애널리틱스」</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">같은 분류 다른 글</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">플러그인 「카테고리 글 더 보기」 또는 스킨 설정 — 둘 중 하나만</td></tr></tbody></table></div>
+<p data-ke-size="size16">어두운 화면(다크 모드)은 아직 지원하지 않습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>설치 · 설정할 때 자주 묻는 것</b></h3>
+<p data-ke-size="size16"><b>Q. 적용했는데 화면이 그대로예요.</b></p>
+<p data-ke-size="size16">브라우저에 예전 화면이 남아 있는 경우입니다. Ctrl + F5로 새로 고치고, 스킨 편집에서 「적용」을 눌렀는지 확인하세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 「저장」이 눌리지 않아요.</b></p>
+<p data-ke-size="size16">skin.html · style.css · index.xml 세 파일이 목록에 모두 있어야 합니다. 압축을 풀고 파일을 골랐는지 확인하세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 홈이 그냥 글 목록으로 나와요.</b></p>
+<p data-ke-size="size16">처음 적용하면 홈 설정이 「최신 글」입니다. 스킨 편집 › 홈 설정에서 「커버」를 누르고 「적용」하면 칸 화면이 나옵니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 스킨 이름 뒤에 「(사용자 수정)」이 붙어요.</b></p>
+<p data-ke-size="size16">직접 올린 스킨을 적용하면 이렇게 보일 수 있습니다. 쓰는 데 문제는 없습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>블로그 꾸밀 때 쓰는 Blog J 무료 도구</b></h3>
+<div style="background:#ece6da;border-radius:18px;padding:18px;margin:4px 0 10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;box-sizing:border-box;"><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">PDF · 문서 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/812" target="_blank" rel="noopener"><b>무료 아이콘 다운로드</b></a></span><br /><span style="font-size:14px;color:#5b5547;">선 아이콘 140개 · 출처 표시 없이</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">사진 · 이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/798" target="_blank" rel="noopener"><b>사진 편집 프로그램 무료</b></a></span><br /><span style="font-size:14px;color:#5b5547;">여러 장 자르기 · 수평 · 콜라주</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">사진 · 이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/811" target="_blank" rel="noopener"><b>얼굴 모자이크 무료</b></a></span><br /><span style="font-size:14px;color:#5b5547;">사진 속 얼굴 · 번호판 가리기</span></p></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">스킨을 써 보시고 불편한 점이나 더 있었으면 하는 설정이 있으면 댓글로 남겨 주세요.<br />다음 버전에 반영하겠습니다.</p>

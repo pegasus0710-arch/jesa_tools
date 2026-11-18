@@ -711,6 +711,13 @@ body.pc .allp .ar.sr2 .am{color:var(--ink2)}
 .ubox .t{flex:1;min-width:0}.ubox small{display:block;font-size:12px;color:var(--ink3);font-weight:700}
 .ubox a{display:block;color:var(--navy);font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sec h4 .lk{margin-left:auto}
+.md{white-space:normal}.md p{margin:0 0 .6em}.md p:last-child{margin-bottom:0}.md .mdh{margin:.9em 0 .4em;line-height:1.35;color:var(--ink,#14202B)}.md h3.mdh{font-size:17px}.md h4.mdh{font-size:15.5px}.md h5.mdh,.md h6.mdh{font-size:14.5px}.md .mdh:first-child{margin-top:0}
+.md ul,.md ol{margin:.2em 0 .7em;padding-left:1.4em}.md li{margin:.15em 0}.md li.mdtask{list-style:none;margin-left:-1.2em}.md .mdck{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border:1.5px solid var(--ink3,#5f6b7a);border-radius:4px;margin-right:7px;font-size:11px;vertical-align:-2px;color:#fff}.md li.mdtask.on .mdck{background:#0C737D;border-color:#0C737D}.md li.mdtask.on{color:var(--ink3,#5f6b7a);text-decoration:line-through}
+.md blockquote{margin:.4em 0 .8em;padding:2px 0 2px 12px;border-left:3px solid #CDD3DC;color:var(--ink3,#5f6b7a)}.md .mdco{margin:.4em 0 .8em;padding:9px 12px;border-radius:10px;background:#EEF6F7;border-left:3px solid #0C737D}.md .mdco>b{display:block;margin-bottom:3px}.md .mdco-warning,.md .mdco-caution{background:#FFF4EE;border-color:#E07A4F}.md .mdco-danger,.md .mdco-bug{background:#fbecea;border-color:#C23A2B}
+.md code{background:#F3EEE3;border-radius:5px;padding:1px 5px;font-size:.92em}.md .mdpre{background:#F3EEE3;border-radius:10px;padding:10px 12px;overflow:auto;white-space:pre;font-size:13px;margin:.4em 0 .8em}.md .mdpre code{background:none;padding:0}
+.md mark{background:#fff2a8;padding:0 2px}.md .mdw{color:#2B5FA0;font-weight:700}.md .mdtag{color:#2B5FA0;background:#EEF6F7;border-radius:6px;padding:0 5px;font-size:.92em}
+.md a{color:#2B5FA0;word-break:break-all}.md .mdimg{max-width:100%;border-radius:8px;display:block;margin:.4em 0}.md hr{border:0;border-top:1px solid #CDD3DC;margin:.9em 0}
+.md .mdtbl{overflow-x:auto;margin:.4em 0 .8em}.md table{border-collapse:collapse;font-size:13.5px;min-width:60%}.md th,.md td{border:1px solid #CDD3DC;padding:5px 8px;text-align:left;vertical-align:top}.md th{background:#F3EEE3}.md .mdprop{font-size:12.5px;color:var(--ink3,#5f6b7a);margin:0 0 .8em;border-collapse:collapse;min-width:0}.md .mdprop td{border:0;border-bottom:1px solid #CDD3DC;padding:3px 10px 3px 0}
 .memo.txt{background:#fffdf8;border-radius:12px;padding:12px 14px;box-shadow:var(--in);max-height:420px;overflow:auto}
 .dinfo{font-size:12.5px;color:var(--ink3);margin-top:16px}
 a.btn{text-decoration:none;color:inherit}a.btn.go{color:#fff}
@@ -1172,13 +1179,152 @@ const ytThumb = id => `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefaul
 function openUrl(r) { if (!r.url) return ""; const y = ytParse(r.url); if (y && r.start > 0) return `https://www.youtube.com/watch?v=${encodeURIComponent(y.id)}&t=${r.start}s`; return r.url; }
 async function ytTitle(u) { /* 유튜브 제목 — oEmbed(웹 주소에서만 됨). 안 되면 조용히 빈 값 */
   if (!/^https?:$/.test(location.protocol)) return ""; try { const ac = new AbortController(); setTimeout(() => ac.abort(), 5000); const r = await fetch("https://www.youtube.com/oembed?format=json&url=" + encodeURIComponent(u), { signal: ac.signal }); if (!r.ok) return ""; const j = await r.json(); return String(j.title || "").slice(0, 200); } catch (e) { return ""; } }
+/* ───────── 11-18 글 서식: 옵시디언(마크다운) 그대로 + 웹 · 유튜브에서 복사한 서식 살리기 ─────────
+   저장은 마크다운 글자 그대로(옵시디언에 다시 붙여도 같은 모양) · 보기 화면에서만 서식으로 그림 */
+const MD = (() => {
+  const E = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const safeUrl = u => { u = String(u || "").trim(); return /^(https?:|mailto:)/i.test(u) ? u : ""; };
+
+  /* ── 복사한 웹 서식(HTML) → 마크다운 ── */
+  function absUrl(h, base) {
+    h = String(h || "").trim(); if (!h || /^(javascript|data|vbscript):/i.test(h)) return "";
+    const rd = h.match(/^(?:https?:\/\/(?:www\.)?youtube\.com)?\/redirect\?(.*)$/i);
+    if (rd) { try { const q = new URLSearchParams(rd[1]).get("q"); if (q && /^https?:/i.test(q)) return q; } catch (e) {} }
+    if (/^https?:\/\//i.test(h) || /^mailto:/i.test(h)) return h;
+    if (/^\/\//.test(h)) return "https:" + h;
+    if (h[0] === "/") { const b = base || (/^\/(watch|shorts|@|hashtag|channel|playlist|results)/.test(h) ? "https://www.youtube.com" : ""); return b ? b.replace(/\/+$/, "") + h : ""; }
+    return "";
+  }
+  function fromHtml(html) {
+    let doc; try { doc = new DOMParser().parseFromString(String(html || ""), "text/html"); } catch (e) { return ""; }
+    const base = (() => { const m = String(html).match(/SourceURL:(https?:\/\/[^\s]+)/i); if (m) try { return new URL(m[1]).origin; } catch (e) {} return ""; })();
+    doc.querySelectorAll("script,style,noscript,template,head,meta,link,svg,button,input,select,textarea,iframe,object").forEach(n => n.remove());
+    const inlineOf = (node) => kids(node, true).replace(/\s+/g, " ");
+    function wrap(t, m) { const s = t.match(/^\s*/)[0], e = t.match(/\s*$/)[0], c = t.trim(); return c ? s + m + c + m + e : t; }
+    function kids(node, inline) { let o = ""; node.childNodes.forEach(c => { o += conv(c, inline); }); return o; }
+    function cellText(c) { return inlineOf(c).trim().replace(/\|/g, "\\|") || " "; }
+    function table(t) {
+      const rows = [...t.querySelectorAll("tr")].map(r => [...r.children].filter(c => /^(TD|TH)$/.test(c.tagName)).map(cellText)).filter(r => r.length);
+      if (!rows.length) return ""; const n = Math.max(...rows.map(r => r.length)); rows.forEach(r => { while (r.length < n) r.push(" "); });
+      return "\n\n| " + rows[0].join(" | ") + " |\n|" + " --- |".repeat(n) + "\n" + rows.slice(1).map(r => "| " + r.join(" | ") + " |").join("\n") + "\n\n";
+    }
+    function list(el, depth) {
+      const ol = el.tagName === "OL"; let i = +(el.getAttribute("start") || 1), out = "";
+      [...el.children].forEach(li => { if (li.tagName !== "LI") return;
+        let sub = "", body = "";
+        li.childNodes.forEach(c => { if (c.nodeType === 1 && /^(UL|OL)$/.test(c.tagName)) sub += list(c, depth + 1); else body += conv(c, true); });
+        const cb = li.querySelector(':scope > input[type=checkbox]'); let mark = ol ? (i++) + ". " : "- ";
+        if (cb) mark += cb.checked ? "[x] " : "[ ] ";
+        out += "  ".repeat(depth) + mark + body.replace(/\s+/g, " ").trim() + "\n" + sub; });
+      return depth ? out : "\n" + out + "\n";
+    }
+    function conv(n, inline) {
+      if (n.nodeType === 3) { const t = n.nodeValue.replace(/ /g, " "); if (!t.trim()) return " "; return t.replace(/[\r\n\t]+/g, " ").replace(/ {2,}/g, " "); }
+      if (n.nodeType !== 1) return "";
+      const tg = n.tagName, st = (n.getAttribute("style") || "").toLowerCase();
+      if (st.includes("display:none") || st.includes("display: none")) return "";
+      switch (tg) {
+        case "BR": return "\n";
+        case "HR": return "\n\n---\n\n";
+        case "H1": case "H2": case "H3": case "H4": case "H5": case "H6": { const t = inlineOf(n).trim(); return t ? "\n\n" + "#".repeat(+tg[1]) + " " + t + "\n\n" : ""; }
+        case "P": case "DIV": case "SECTION": case "ARTICLE": case "HEADER": case "FOOTER": case "MAIN": case "FIGURE": case "YT-FORMATTED-STRING": case "YT-ATTRIBUTED-STRING": { const t = kids(n, inline); return inline ? t : "\n" + t.trim() + "\n"; }
+        case "SPAN": case "FONT": case "LABEL": case "SMALL": case "SUP": case "SUB": case "U": case "ABBR": case "TIME": case "CITE": case "Q": {
+          let t = kids(n, true); if (/font-weight:\s*(bold|[6-9]00)/.test(st)) t = wrap(t, "**"); if (/font-style:\s*italic/.test(st)) t = wrap(t, "*"); return t; }
+        case "B": case "STRONG": return wrap(kids(n, true), "**");
+        case "I": case "EM": return wrap(kids(n, true), "*");
+        case "S": case "DEL": case "STRIKE": return wrap(kids(n, true), "~~");
+        case "MARK": return wrap(kids(n, true), "==");
+        case "CODE": { if (n.parentNode && n.parentNode.tagName === "PRE") return n.textContent; const t = n.textContent; return t ? "`" + t.replace(/`/g, "'") + "`" : ""; }
+        case "PRE": return "\n\n```\n" + n.textContent.replace(/\n+$/, "") + "\n```\n\n";
+        case "BLOCKQUOTE": { const t = kids(n, false).trim().replace(/\n{3,}/g, "\n\n"); return "\n\n" + t.split("\n").map(l => "> " + l).join("\n") + "\n\n"; }
+        case "UL": case "OL": return list(n, 0);
+        case "LI": return "\n- " + inlineOf(n).trim() + "\n";
+        case "TABLE": return table(n);
+        case "IMG": { const u = absUrl(n.getAttribute("src"), base); if (!u || /^data:/.test(u)) return ""; return "![" + (n.getAttribute("alt") || "").replace(/[\[\]]/g, "") + "](" + u + ")"; }
+        case "A": { const t = kids(n, true).replace(/\s+/g, " ").trim(), u = absUrl(n.getAttribute("href"), base);
+          if (!t) return ""; if (!u) return t; if (t === u || t === u.replace(/^https?:\/\//, "")) return u; return "[" + t.replace(/[\[\]]/g, "") + "](" + u + ")"; }
+        default: return kids(n, inline);
+      }
+    }
+    let md = kids(doc.body || doc, false);
+    md = md.replace(/[ \t]+\n/g, "\n").replace(/\n +(?! |(?:[-*+]|\d+\.) )/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+    return md;
+  }
+  /* HTML이 「서식 있는 글」인지(주소 한 줄 · 평범한 글은 그냥 글로) */
+  function richHtml(html, plain) {
+    if (!html) return false; if (/^\s*https?:\/\/\S+\s*$/.test(plain || "")) return false;
+    return /<(h[1-6]|b|strong|em|i|a\s|ul|ol|li|table|blockquote|pre|code|br|p|div|img|mark|s|del)\b/i.test(html);
+  }
+  /* 붙여넣기 하나로 정리: 옵시디언에서 온 마크다운은 그대로, 웹 서식은 마크다운으로 */
+  function fromClipboard(html, plain) {
+    plain = String(plain || "");
+    if (looksMd(plain)) return plain.replace(/\r\n?/g, "\n");
+    if (richHtml(html, plain)) { const m = fromHtml(html); if (m.trim()) return m; }
+    return plain.replace(/\r\n?/g, "\n");
+  }
+  const looksMd = t => /(^|\n)\s*(#{1,6} |[-*+] \[[ xX]\] |> \[!|```)|\[\[[^\]]+\]\]|\*\*[^*\n]+\*\*|(^|\n)\|.+\|\s*\n\|\s*:?-{3}/.test(t);
+
+  /* ── 마크다운 → 보기 화면(안전하게) ── */
+  function inline(t) {
+    const code = []; t = String(t).replace(/`([^`\n]+)`/g, (a, b) => { code.push(b); return "\u0000" + (code.length - 1) + "\u0000"; });
+    t = E(t);
+    t = t.replace(/!\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g, (a, b) => `<span class="mdw">${b}</span>`);
+    t = t.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (a, alt, u) => { u = safeUrl(u.replace(/&amp;/g, "&")); return u ? `<img class="mdimg" src="${E(u)}" alt="${alt}" loading="lazy" referrerpolicy="no-referrer">` : alt; });
+    t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (a, x, u) => { u = safeUrl(u.replace(/&amp;/g, "&")); return u ? `<a href="${E(u)}" target="_blank" rel="noopener">${x}</a>` : x; });
+    t = t.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '<span class="mdw" title="$1">$2</span>').replace(/\[\[([^\]]+)\]\]/g, '<span class="mdw">$1</span>');
+    t = t.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, (a, p, u) => `${p}<a href="${u}" target="_blank" rel="noopener">${u.length > 60 ? u.slice(0, 57) + "…" : u}</a>`);
+    t = t.replace(/\*\*([^*]+?)\*\*/g, "<b>$1</b>").replace(/__([^_]+?)__/g, "<b>$1</b>");
+    t = t.replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<i>$2</i>").replace(/(^|[^_\w])_([^_\s][^_]*?)_(?!\w)/g, "$1<i>$2</i>");
+    t = t.replace(/~~([^~]+?)~~/g, "<s>$1</s>").replace(/==([^=]+?)==/g, "<mark>$1</mark>");
+    t = t.replace(/(^|\s)#([A-Za-z가-힣0-9_\/-]{1,30})(?=\s|$)/g, '$1<span class="mdtag">#$2</span>');
+    t = t.replace(/\u0000(\d+)\u0000/g, (a, i) => `<code>${E(code[+i])}</code>`);
+    return t;
+  }
+  function render(src) {
+    let s = String(src || "").replace(/\r\n?/g, "\n"), out = [], props = "";
+    const fm = s.match(/^---\n([\s\S]*?)\n---\n?/);
+    if (fm) { props = fm[1].split("\n").filter(l => /^[^:#\s][^:]*:/.test(l)).map(l => { const i = l.indexOf(":"); return `<tr><td>${E(l.slice(0, i).trim())}</td><td>${inline(l.slice(i + 1).trim().replace(/^["']|["']$/g, ""))}</td></tr>`; }).join(""); s = s.slice(fm[0].length); }
+    const L = s.split("\n"); let i = 0;
+    const isTbl = (a, b) => /^\s*\|.*\|\s*$/.test(a || "") && /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$/.test(b || "");
+    while (i < L.length) {
+      const l = L[i];
+      if (/^```/.test(l)) { const buf = []; i++; while (i < L.length && !/^```/.test(L[i])) buf.push(L[i++]); i++; out.push(`<pre class="mdpre"><code>${E(buf.join("\n"))}</code></pre>`); continue; }
+      if (!l.trim()) { i++; continue; }
+      let m;
+      if ((m = l.match(/^(#{1,6})\s+(.*)$/))) { const n = Math.min(6, m[1].length + 2); out.push(`<h${n} class="mdh">${inline(m[2])}</h${n}>`); i++; continue; }
+      if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)) { out.push("<hr>"); i++; continue; }
+      if (/^\s*>/.test(l)) { const buf = []; while (i < L.length && /^\s*>/.test(L[i])) buf.push(L[i++].replace(/^\s*>\s?/, ""));
+        const c = buf[0] && buf[0].match(/^\[!(\w+)\][+-]?\s*(.*)$/);
+        if (c) { out.push(`<div class="mdco mdco-${E(c[1].toLowerCase())}"><b>${inline(c[2] || c[1])}</b>${buf.length > 1 ? render(buf.slice(1).join("\n")) : ""}</div>`); }
+        else out.push(`<blockquote>${render(buf.join("\n"))}</blockquote>`); continue; }
+      if (isTbl(l, L[i + 1])) { const row = r => r.trim().replace(/^\||\|$/g, "").split(/(?<!\\)\|/).map(c => inline(c.trim().replace(/\\\|/g, "|")));
+        const h = row(l); i += 2; const body = []; while (i < L.length && /^\s*\|.*\|\s*$/.test(L[i])) body.push(row(L[i++]));
+        out.push(`<div class="mdtbl"><table><tr>${h.map(c => `<th>${c}</th>`).join("")}</tr>${body.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</table></div>`); continue; }
+      if (/^\s*([-*+]|\d+[.)])\s+/.test(l)) { const items = []; while (i < L.length && /^\s*([-*+]|\d+[.)])\s+/.test(L[i])) { const mm = L[i].match(/^(\s*)([-*+]|\d+[.)])\s+(.*)$/); items.push([Math.floor(mm[1].replace(/\t/g, "  ").length / 2), /\d/.test(mm[2]), mm[3]]); i++; }
+        let h = "", stack = [];
+        items.forEach(([d, ol, t]) => { while (stack.length > d + 1) h += `</li></${stack.pop()}>`; if (stack.length === d + 1) h += "</li>"; while (stack.length < d + 1) { const tg = ol ? "ol" : "ul"; h += `<${tg}>`; stack.push(tg); }
+          const tk = t.match(/^\[([ xX])\]\s+(.*)$/); h += tk ? `<li class="mdtask${tk[1] !== " " ? " on" : ""}"><span class="mdck">${tk[1] !== " " ? "✓" : ""}</span>${inline(tk[2])}` : `<li>${inline(t)}`; });
+        while (stack.length) h += `</li></${stack.pop()}>`; out.push(h); continue; }
+      const buf = []; while (i < L.length && L[i].trim() && !/^(#{1,6}\s|```|\s*>|\s*([-*+]|\d+[.)])\s+)/.test(L[i]) && !isTbl(L[i], L[i + 1]) && !/^\s*([-*_])(\s*\1){2,}\s*$/.test(L[i])) buf.push(L[i++]);
+      out.push(`<p>${buf.map(inline).join("<br>")}</p>`);
+    }
+    return (props ? `<table class="mdprop">${props}</table>` : "") + out.join("");
+  }
+  /* 목록 미리보기용: 서식 기호 빼고 글자만 */
+  function plain(src) {
+    return String(src || "").replace(/^---\n[\s\S]*?\n---\n?/, "").replace(/```[\s\S]*?```/g, " ").replace(/!\[[^\]]*\]\([^)]*\)/g, " ").replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/!?\[\[([^\]|]+)\|?([^\]]*)\]\]/g, (a, b, c) => c || b).replace(/^\s{0,3}(#{1,6}|>|[-*+]|\d+[.)])\s*(\[[ xX]\]\s*)?(\[![a-z]+\]\s*)?/gim, "").replace(/(\*\*|__|~~|==|`)/g, "").replace(/\|/g, " ");
+  }
+  return { fromHtml, fromClipboard, render, plain, looksMd };
+})();
+
 /* 종류: yt · link · text · photo · memo */
 function kindOf(r) { if (r.url && ytParse(r.url)) return "yt"; if (r.url) return "link"; if ((r.text || "").trim()) return "text"; if ((r.photos || []).length) return "photo"; return "memo"; }
 const KNAME = { yt: "유튜브", link: "링크", text: "글", photo: "사진", memo: "메모" };
 const KIC = { yt: "play", link: "link", text: "doc", photo: "img", memo: "note" };
 const PAL = ["#2f5d9e", "#3a6b8f", "#2f7d6d", "#5a6f9a", "#b5523b", "#6b5d8f", "#8a5a2b", "#2d7a8c", "#24508a", "#a3473b", "#3f6b4a", "#6a4f8f"];
 const colorOf = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return PAL[h % PAL.length]; };
-const titleOf = r => (r.title || "").trim() || ((r.text || "").trim().split("\n")[0].slice(0, 60)) || (r.url ? (ytParse(r.url) ? "유튜브 영상" : host(r.url)) : "") || ((r.memo || "").trim().split("\n")[0].slice(0, 60)) || "제목 없음";
+const titleOf = r => (r.title || "").trim() || (MD.plain(r.text || "").split("\n").map(x => x.trim()).filter(Boolean)[0] || "").slice(0, 60) || (r.url ? (ytParse(r.url) ? "유튜브 영상" : host(r.url)) : "") || ((r.memo || "").trim().split("\n")[0].slice(0, 60)) || "제목 없음";
 const okIco = v => typeof v === "string" && /^data:image\/(png|x-icon|vnd\.microsoft\.icon|gif|jpeg|svg\+xml|webp);base64,[A-Za-z0-9+/=]+$/.test(v) && v.length < 20000;
 /* 썸네일: 유튜브 썸네일 · 첫 사진 · 사이트 아이콘 글자 타일 · 글 조각 */
 function thumbOf(r) { const y = r.url && ytParse(r.url); if (y) return { u: ytThumb(y.id), yt: true }; const p = (r.photos || []).find(x => PURL[x.id]); if (p) return { u: PURL[p.id].t, f: PURL[p.id].f }; return null; }
@@ -1331,7 +1477,7 @@ function aRow(r) {
   const A = S.al, on = A.sel && A.picked[r.id], k = kindOf(r);
   const attr = A.sel ? `data-asel="${r.id}" role="checkbox" aria-checked="${on ? "true" : "false"}"` : `data-r="${r.id}"`;
   return `<div class="ar sr2 ${on ? "on" : ""}" ${attr} tabindex="0">${A.sel ? `<span class="ack">${on ? IC.ok : ""}</span>` : ""}${rowThumb(r)}
-    <span class="an"><b>${A.sel ? "" : favB(r)}${esc(titleOf(r))}</b><small>${r.url ? esc(host(r.url)) : esc(((r.text || r.memo || "").replace(/\s+/g, " ")).slice(0, 60))}</small></span>
+    <span class="an"><b>${A.sel ? "" : favB(r)}${esc(titleOf(r))}</b><small>${r.url ? esc(host(r.url)) : esc((MD.plain(r.text || r.memo || "").replace(/\s+/g, " ")).trim().slice(0, 60))}</small></span>
     <span class="ab">${KNAME[k]}</span><span class="ai">${esc(catLabel(r))}</span><span class="am">${r.st === "later" ? "나중에 볼 것" : r.st === "done" ? "봤음" : "-"}</span><span class="ac num">${fmtD(r.created) || "-"}</span>
     <small class="amob">${KNAME[k]} · ${esc(catLabel(r))}${r.st ? " · " + (r.st === "later" ? "나중에 볼 것" : "봤음") : ""} · ${fmtD(r.created)}</small>${!A.sel ? openB(r) : ""}</div>`;
 }
@@ -1398,8 +1544,8 @@ function detailHtml(r) {
     <div class="meta"><span class="cat">${esc(catLabel(r))}</span><span class="kd">${IC[KIC[k]].replace('class="i"', 'class="i ki"')}${KNAME[k]}</span>${(r.tags || []).map(t => `<span class="tag">#${esc(t)}</span>`).join("")}</div>
     <div class="vt mini stsel"><button class="${r.st === "later" ? "on" : ""}" data-setst="later">${IC.later}나중에 볼 것</button><button class="${r.st === "done" ? "on" : ""}" data-setst="done">${IC.seen}봤음</button></div>
     ${r.url ? `<div class="ubox"><div class="t"><small>주소${y ? " · 유튜브" : ""}</small><a href="${esc(openUrl(r))}" target="_blank" rel="noopener" data-opened="${r.id}">${esc(r.url)}</a></div><button class="btn sm" data-copyurl1>${IC.copy} 복사</button></div>` : ""}
-    ${(r.text || "").trim() ? `<div class="sec"><h4>글 <small>${r.text.length.toLocaleString("ko-KR")}자</small><button class="lk" data-copytext>복사</button></h4><p class="memo txt">${esc(r.text)}</p></div>` : ""}
-    ${(r.memo || "").trim() ? `<div class="sec"><h4>${k === "memo" ? "메모" : "내 메모"}</h4><p class="memo">${esc(r.memo)}</p></div>` : ""}
+    ${(r.text || "").trim() ? `<div class="sec"><h4>글 <small>${r.text.length.toLocaleString("ko-KR")}자</small><button class="lk" data-copytext>복사</button></h4><div class="memo txt md">${MD.render(r.text)}</div></div>` : ""}
+    ${(r.memo || "").trim() ? `<div class="sec"><h4>${k === "memo" ? "메모" : "내 메모"}</h4><div class="memo md">${MD.render(r.memo)}</div></div>` : ""}
     <div class="dinfo num">담은 날 ${fmtD(r.created)}${r.edited ? ` · 고친 날 ${fmtD(r.edited)}` : ""}${r.opened ? ` · ${r.opened}번 열어 봄(마지막 ${fmtD(r.lastOpen)})` : ""}</div>`;
 }
 function scrDetail() {
@@ -1423,7 +1569,7 @@ function scrEdit() {
   const urlBox = (opt) => `<label class="f">${opt ? "출처 주소 <span class=\"lt\">— 선택</span>" : "주소"}</label><div class="urlrow"><input class="inp" data-ef="url" id="eurl" value="${esc(e.url)}" placeholder="https://… (유튜브 · 블로그 · 쇼핑몰 주소)" inputmode="url" autocomplete="off"><button class="btn sm" data-pasteurl>${IC.paste} 붙여넣기</button></div>`;
   let main = "";
   if (m === "link") main = urlBox(false) + `<div id="eprev">${linkPrev(e)}</div>`;
-  else if (m === "text") main = `<label class="f">글 <span class="lt">— 복사한 글을 붙여 넣어요</span></label><textarea class="inp" rows="8" data-ef="text" id="etext" placeholder="책 · 기사 · 블로그에서 복사한 글">${esc(e.text)}</textarea><div class="row2"><button class="btn sm" data-pastetext>${IC.paste} 복사한 글 붙여넣기</button></div>` + urlBox(true);
+  else if (m === "text") main = `<label class="f">글 <span class="lt">— 복사한 글을 붙여 넣어요 · 웹 · 유튜브 서식과 옵시디언 마크다운(# 제목 · **굵게** · - [ ] 할 일)을 그대로 살려요</span></label><textarea class="inp" rows="8" data-ef="text" id="etext" placeholder="책 · 기사 · 블로그에서 복사한 글">${esc(e.text)}</textarea><div class="row2"><button class="btn sm" data-pastetext>${IC.paste} 복사한 글 붙여넣기</button></div>` + urlBox(true);
   else if (m === "photo") main = `<div class="phadd"><label class="btn nv">${IC.cam} 사진 올리기<input type="file" accept="image/*" multiple hidden data-addph></label><button class="btn" data-phpaste>${IC.copy} 복사한 사진 붙여넣기</button></div>
     <p class="hint">${DEV === "pc" ? "캡처한 화면을 이 화면에서 <b>Ctrl + V</b>로 붙여도 돼요. " : ""}여러 장 한꺼번에 골라도 돼요. 사진은 크기를 줄여 저장해요.</p>
     ${ps.length ? `<div class="phl">${ps.map(p => `<div class="pi"><img src="${PURL[p.id].t}" alt="" data-epv="${p.id}"><button class="pdx" data-pdel="${p.id}" aria-label="사진 지우기">${IC.x}</button></div>`).join("")}</div>` : ""}` + urlBox(true);
@@ -2271,7 +2417,7 @@ document.addEventListener("click", async e => {
     if (d.est2) { E.st = E.st === d.est2 ? "" : d.est2; E._dirty = true; return render(); }
     if (d.tdel) { E.tags.splice(+d.tdel, 1); E._dirty = true; tagSync(); const ti = $("#tagin"); if (ti) ti.focus(); return; }
     if (d.pasteurl != null) { try { const t = await navigator.clipboard.readText(); const u = findUrl(t) || t.trim(); if (!u) return toast("복사한 주소가 없어요."); E.url = u; E._dirty = true; const i = $("#eurl"); if (i) i.value = u; if (!findUrl(t) && !fixUrl(t)) return toast("복사한 글에 주소가 없어요."); const rest = t.replace(findUrl(t), "").trim(); if (rest && !E.title.trim() && rest.length <= 160) { E.title = rest; const ti = $("#etitle"); if (ti) ti.value = rest; } onUrl(true); } catch (er) { toast("붙여넣기가 막혀 있어요. 주소 칸을 누르고 길게 눌러(Ctrl + V) 붙여 넣으세요."); const i = $("#eurl"); i && i.focus(); } return; }
-    if (d.pastetext != null) { try { const t = await navigator.clipboard.readText(); if (!t.trim()) return toast("복사한 글이 없어요."); E.text = E.text ? E.text + "\n" + t : t; E._dirty = true; const i = $("#etext"); if (i) i.value = E.text; } catch (er) { toast("붙여넣기가 막혀 있어요. 글 칸을 누르고 Ctrl + V(길게 눌러 붙여넣기)."); const i = $("#etext"); i && i.focus(); } return; }
+    if (d.pastetext != null) { try { const t = await readClipText(); if (!t.trim()) return toast("복사한 글이 없어요."); E.text = E.text ? E.text + "\n" + t : t; E._dirty = true; const i = $("#etext"); if (i) i.value = E.text; } catch (er) { toast("붙여넣기가 막혀 있어요. 글 칸을 누르고 Ctrl + V(길게 눌러 붙여넣기)."); const i = $("#etext"); i && i.focus(); } return; }
     if (d.pdel) { E.photos = E.photos.filter(x => x.id !== d.pdel); if ((E._added || []).includes(d.pdel)) await delPhoto(d.pdel); else (E._removed = E._removed || []).push(d.pdel); E._dirty = true; return render(); }
     if (d.rdel != null) { if (confirm(`「${titleOf(E)}」을(를) 지울까요?${E.photos.length ? " 사진도 함께 지워져요." : ""}`)) { await delItem(E.id); S.edit = null; hist.length = 0; S.rid = null; S.scr = "list"; render(true); toast("지웠어요."); } return; }
   }
@@ -2361,6 +2507,13 @@ document.addEventListener("focusout", e => { const t = e.target; if (t.id === "t
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window._bip = e; render(); });
 window.addEventListener("beforeunload", e => { if (S.edit && S.edit._dirty) { e.preventDefault(); e.returnValue = ""; } });
 
+/* 11-18: 단추로 붙여넣을 때도 웹 서식(HTML)이 있으면 마크다운으로 */
+async function readClipText() {
+  if (navigator.clipboard && navigator.clipboard.read) { try { const items = await navigator.clipboard.read(); let html = "", pl = "";
+    for (const it of items) { if (it.types.includes("text/html")) html = await (await it.getType("text/html")).text(); if (it.types.includes("text/plain")) pl = await (await it.getType("text/plain")).text(); }
+    if (html || pl) return MD.fromClipboard(html, pl); } catch (e) {} }
+  return await navigator.clipboard.readText();
+}
 /* 붙여넣기: 담기 화면(사진 칸) · 목록 화면(Ctrl+V = 바로 담기) */
 async function pastePhotos(blobs) {
   const E = S.edit; if (!E || !blobs.length) return false; const busy = $("#busy"); busy && busy.classList.add("on");
@@ -2371,10 +2524,14 @@ document.addEventListener("paste", async e => {
   const cd = e.clipboardData; if (!cd || S.sheet) return;
   const fs = [...(cd.items || [])].filter(i => i.kind === "file" && /^image\//.test(i.type)).map(i => i.getAsFile()).filter(Boolean);
   const inField = e.target.closest && e.target.closest("input,textarea");
-  if (S.scr === "edit" && S.edit) { if (fs.length) { e.preventDefault(); await pastePhotos(fs); } return; }
+  if (S.scr === "edit" && S.edit) { if (fs.length) { e.preventDefault(); await pastePhotos(fs); return; }
+    const ta = e.target.closest && e.target.closest('textarea[data-ef="text"],textarea[data-ef="memo"]');
+    if (ta) { const html = cd.getData("text/html"), pl = cd.getData("text/plain"); const md = MD.fromClipboard(html, pl);
+      if (md && md !== pl.replace(/\r\n?/g, "\n")) { e.preventDefault(); ta.setRangeText(md, ta.selectionStart, ta.selectionEnd, "end"); ta.dispatchEvent(new Event("input", { bubbles: true })); toast("복사한 글의 서식(제목 · 굵게 · 목록 · 링크)을 살려 붙였어요."); } }
+    return; }
   if (inField || S.scr !== "list" && S.scr !== "detail") return;
   if (fs.length) { e.preventDefault(); S.edit = newItem("photo"); S.edit._added = []; go("edit"); await pastePhotos(fs); return; }
-  const t = cd.getData("text/plain"); if (!t || !t.trim()) return; e.preventDefault(); const it = fromShared("", t, ""); if (it) startEdit(it);
+  const t0 = cd.getData("text/plain"); if (!t0 || !t0.trim()) return; e.preventDefault(); const t = MD.fromClipboard(cd.getData("text/html"), t0); const rich = t.includes("\n") && (t !== t0.replace(/\r\n?/g, "\n").trim() || MD.looksMd(t0)); const it = rich ? newItem("text", { text: t }) : fromShared("", t, ""); if (it) startEdit(it);
 });
 document.addEventListener("click", async e => {
   if (!e.target.closest("[data-phpaste]")) return;

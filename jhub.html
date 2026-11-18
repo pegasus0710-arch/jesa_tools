@@ -259,6 +259,10 @@ const APPS = [
    feat: ["총급여 · 공제 항목 입력", "환급 · 추가 납부 예상", "카드 25% 문턱", "연금저축 · IRP", "부양가족"],
    info: [["유형", "블로그 실행형"]], links: [["열기", "yearend-v1.0.html?tab=all"]],
    todo: ["11/21 맞벌이 몰아주기", "11/25 월세 세액공제", "11/29 의료비 세액공제", "12/2 고향사랑기부", "12/6 2026 바뀐 것", "1월 중순 간소화 체크리스트"] },
+ { g: "web", id: "salary", n: "연봉 실수령액 계산기", v: "v1.0", ic: "icons/apps/salary.png", open: "2026-12-22T09:00", post: 860, posts: [860, 861],
+   desc: "연봉(또는 월급) · 비과세 · 가족 수로 4대보험 · 소득세 · 지방세를 뺀 한 달 실수령액 — 2026 · 2027년 요율.",
+   feat: ["연봉 · 월급으로 넣기", "간이세액표 그대로", "2027년 국민연금 5%", "연봉별 실수령액 표", "계산 과정 · 인쇄"],
+   info: [["유형", "블로그 실행형"]], links: [["열기", "salary-v1.0.html?tab=all"]] },
  { g: "web", id: "elec", n: "전기요금 계산기", v: "v1.0", ic: "icons/apps/elec.png", open: "2026-12-04T09:00",
    desc: "주택용 누진제 사용량별 청구 예상 금액 + 전기히터 · 장판 같은 가전을 더 쓰면 얼마 오르는지.",
    feat: ["사용량 · 계량기 숫자", "7 · 8월 여름 구간 자동", "저압 · 고압", "누진 막대 · 다음 단계까지", "가전 더하기", "계산 과정 · 인쇄"],
@@ -348,7 +352,7 @@ const APPS = [
 
 const SEC = [["dev", "개발 중 · 샘플"], ["app", "설치형 앱"], ["web", "블로그 실행형 웹 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]];
 /* 2026-11-14 제이: 즐겨찾기 · 개발 중 아래는 블로그 카테고리(메뉴 순서)로 — 색은 썸네일 C 분류 색 */
-const CATS = [["c-rite", "제사·의례", "#E8B04B", "jibang chukmun"], ["c-money", "돈 관리·계산", "#F2A7A0", "budget trading yearend elec"], ["c-doc", "PDF·문서 도구", "#9CC3F0", "pdf chart shortcut"], ["c-photo", "사진·이미지 도구", "#F4B6D2", "image photo photoed convert icon"], ["c-work", "업무 양식·취업", "#EADB7C", "quote form jaso"], ["c-learn", "학습 자료", "#C3B1EC", "write eng"], ["c-print", "달력·인쇄", "#A9D98E", "label calendar planner wallcal award"], ["c-life", "생활 기록 앱", "#8EDBC8", "recipe kimchi scrap trip diary msg"], ["c-guide", "도구 사용 안내", "#E6EDF0", "kit"]];
+const CATS = [["c-rite", "제사·의례", "#E8B04B", "jibang chukmun"], ["c-money", "돈 관리·계산", "#F2A7A0", "budget trading yearend salary elec"], ["c-doc", "PDF·문서 도구", "#9CC3F0", "pdf chart shortcut"], ["c-photo", "사진·이미지 도구", "#F4B6D2", "image photo photoed convert icon"], ["c-work", "업무 양식·취업", "#EADB7C", "quote form jaso"], ["c-learn", "학습 자료", "#C3B1EC", "write eng"], ["c-print", "달력·인쇄", "#A9D98E", "label calendar planner wallcal award"], ["c-life", "생활 기록 앱", "#8EDBC8", "recipe kimchi scrap trip diary msg"], ["c-guide", "도구 사용 안내", "#E6EDF0", "kit"]];
 const CMAP = {}; CATS.forEach(c => c[3].split(" ").forEach(id => CMAP[id] = c[0]));
 const GROUPS = [["dev", "개발 중 · 샘플"]].concat(CATS.map(c => [c[0], c[1], c[2]]), [["c-etc", "기타 무료 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]]);
 const inGroup = (a, g) => g.startsWith("c-") ? (a.g === "app" || a.g === "web") && (CMAP[a.id] || "c-etc") === g : a.g === g;

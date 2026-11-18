@@ -259,6 +259,11 @@ const APPS = [
    feat: ["총급여 · 공제 항목 입력", "환급 · 추가 납부 예상", "카드 25% 문턱", "연금저축 · IRP", "부양가족"],
    info: [["유형", "블로그 실행형"]], links: [["열기", "yearend-v1.0.html?tab=all"]],
    todo: ["11/21 맞벌이 몰아주기", "11/25 월세 세액공제", "11/29 의료비 세액공제", "12/2 고향사랑기부", "12/6 2026 바뀐 것", "1월 중순 간소화 체크리스트"] },
+ { g: "web", id: "elec", n: "전기요금 계산기", v: "v1.0", ic: "icons/apps/elec.png", open: "2026-12-04T09:00",
+   desc: "주택용 누진제 사용량별 청구 예상 금액 + 전기히터 · 장판 같은 가전을 더 쓰면 얼마 오르는지.",
+   feat: ["사용량 · 계량기 숫자", "7 · 8월 여름 구간 자동", "저압 · 고압", "누진 막대 · 다음 단계까지", "가전 더하기", "계산 과정 · 인쇄"],
+   info: [["유형", "블로그 실행형"], ["요금", "2026년 4분기(동결) · 연료비 +5원 · 기금 2.7%"]], links: [["열기", "elec-v1.0.html?tab=all"]],
+   todo: ["대표 글 작성 · 예약(12/4 09:00 목표)", "tools.json 카드 + news", "요금 바뀌면(분기 발표) 단가 고치기"] },
  { g: "web", id: "wallcal", n: "달력 배경화면 만들기", v: "v1.0", ic: "icons/apps/wallcal.png", open: "2026-11-21T20:00", post: 838, posts: [838],
    desc: "PC · 노트북 · 휴대폰 해상도에 맞춰 달력 배경화면을 만드는 도구. 배경 29종 또는 내 사진, 모니터 2대도.",
    feat: ["배경 41(11-14 한국 전통 선그림 12) + 내 사진", "달력 4모양", "듀얼 모니터(거울 이어 붙이기)", "휴대폰 잠금화면 크기"],
@@ -282,7 +287,7 @@ const APPS = [
  { g: "web", id: "icon", n: "무료 아이콘", v: "v1.0", ic: "icons/apps/icon.png", open: "2026-11-11T09:00", post: 812, posts: [812],
    desc: "Blog J가 직접 그린 선 아이콘 140개 · 색 스티커 178개를 PNG · SVG로 받는 곳.", info: [["유형", "블로그 실행형"]], links: [["열기", "icon-v1.0.html"]] },
  { g: "web", id: "form", n: "무료 양식", v: "v1.0", ic: "icons/apps/form.png", open: "2026-11-08T20:00", post: 804, posts: [804],
-   desc: "이력서 · 사직서 등 빈 양식 67가지를 고쳐서 인쇄 · 저장하는 곳.", info: [["유형", "블로그 실행형(온라인 전용)"]], links: [["열기", "form-v1.0.html"]] },
+   desc: "이력서 · 사직서 등 빈 양식 68가지를 고쳐서 인쇄 · 저장하는 곳.", info: [["유형", "블로그 실행형(온라인 전용)"]], links: [["열기", "form-v1.0.html"], ["위임장", "form-v1.0.html?f=power-of-attorney"], ["방학 생활계획표(11-18)", "form-v1.0.html?f=vacation-plan"]] },
  { g: "web", id: "kimchi", n: "김치 양념 계산기", v: "v1.0", ic: "icons/apps/kimchi.png", open: "2026-11-08T09:00", post: 805, posts: [805],
    desc: "절임배추 무게만 넣으면 김치 18가지 양념 비율을 계산.", info: [["유형", "블로그 실행형"]], links: [["열기", "kimchi-v1.0.html"]] },
  { g: "web", id: "label", n: "라벨 출력기", v: "v2.0", ic: "icons/apps/label.png", open: "2026-10-16T09:00", post: 769, posts: [769, 770, 771, 772, 806],
@@ -293,8 +298,8 @@ const APPS = [
    old: [["v1.0 웹", "label.html"], ["v2.0 다운로드판 (zip)", "downloads/label-printer-v2.0.zip"], ["v1.0 다운로드판 (zip)", "downloads/label-printer-v1.0.zip"], ["주소 검색 시험", "juso-test.html"]] },
  { g: "web", id: "pdf", n: "PDF 편집 도구", v: "v1.0", ic: "icons/apps/pdf.png", open: "2026-10-19T22:00", post: 745, posts: [745, 756, 757, 758, 759, 760, 761, 762, 763, 764, 766, 767],
    desc: "설치 없이 PDF 합치기 · 나누기 · 용량 줄이기 · 서명 · 워터마크 등 12가지 기능.",
-   feat: ["합치기 · 나누기 · 추출", "JPG ↔ PDF", "용량 줄이기", "삭제 · 회전", "개인정보 가리기 · 서명", "쪽 번호 · 워터마크"],
-   info: [["유형", "블로그 실행형(12화면)"]], docs: [["PDF 설명서", "pages/pdf"]], links: [["열기", "pdf.html"]] },
+   feat: ["합치기 · 나누기 · 추출", "JPG ↔ PDF", "용량 줄이기", "삭제 · 회전", "개인정보 가리기 · 서명", "쪽 번호 · 워터마크", "암호 걸기 · 풀기(11-18)"],
+   info: [["유형", "블로그 실행형(12화면 + 암호)"]], docs: [["PDF 설명서", "pages/pdf"]], links: [["열기", "pdf.html"], ["암호 설정 · 해제", "pdf.html?tab=lock"]] },
  { g: "web", id: "image", n: "이미지 도구", v: "v1.0", ic: "icons/apps/image.png", open: "2026-10-01T09:00", post: 732, posts: [732, 733, 734, 735, 736, 737, 738, 811],
    desc: "사진 용량 줄이기 · 증명사진 · 형식 변환 · 크기 · 자르기 · 워터마크를 여러 장 한 번에.",
    info: [["유형", "블로그 실행형 + 다운로드판"], ["v2.0", "image-v2.0.html 비공개 — 811 얼굴 모자이크 공개(11/26) 때 함께 확인"]], docs: [["이미지 설명서", "pages/image-tool"]],
@@ -343,7 +348,7 @@ const APPS = [
 
 const SEC = [["dev", "개발 중 · 샘플"], ["app", "설치형 앱"], ["web", "블로그 실행형 웹 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]];
 /* 2026-11-14 제이: 즐겨찾기 · 개발 중 아래는 블로그 카테고리(메뉴 순서)로 — 색은 썸네일 C 분류 색 */
-const CATS = [["c-rite", "제사·의례", "#E8B04B", "jibang chukmun"], ["c-money", "돈 관리·계산", "#F2A7A0", "budget trading yearend"], ["c-doc", "PDF·문서 도구", "#9CC3F0", "pdf chart shortcut"], ["c-photo", "사진·이미지 도구", "#F4B6D2", "image photo photoed convert icon"], ["c-work", "업무 양식·취업", "#EADB7C", "quote form jaso"], ["c-learn", "학습 자료", "#C3B1EC", "write eng"], ["c-print", "달력·인쇄", "#A9D98E", "label calendar planner wallcal award"], ["c-life", "생활 기록 앱", "#8EDBC8", "recipe kimchi scrap trip diary msg"], ["c-guide", "도구 사용 안내", "#E6EDF0", "kit"]];
+const CATS = [["c-rite", "제사·의례", "#E8B04B", "jibang chukmun"], ["c-money", "돈 관리·계산", "#F2A7A0", "budget trading yearend elec"], ["c-doc", "PDF·문서 도구", "#9CC3F0", "pdf chart shortcut"], ["c-photo", "사진·이미지 도구", "#F4B6D2", "image photo photoed convert icon"], ["c-work", "업무 양식·취업", "#EADB7C", "quote form jaso"], ["c-learn", "학습 자료", "#C3B1EC", "write eng"], ["c-print", "달력·인쇄", "#A9D98E", "label calendar planner wallcal award"], ["c-life", "생활 기록 앱", "#8EDBC8", "recipe kimchi scrap trip diary msg"], ["c-guide", "도구 사용 안내", "#E6EDF0", "kit"]];
 const CMAP = {}; CATS.forEach(c => c[3].split(" ").forEach(id => CMAP[id] = c[0]));
 const GROUPS = [["dev", "개발 중 · 샘플"]].concat(CATS.map(c => [c[0], c[1], c[2]]), [["c-etc", "기타 무료 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]]);
 const inGroup = (a, g) => g.startsWith("c-") ? (a.g === "app" || a.g === "web") && (CMAP[a.id] || "c-etc") === g : a.g === g;

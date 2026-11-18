@@ -1,0 +1,594 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#0b3d4a">
+<title>전기요금 계산기 | Blog J</title>
+<meta name="description" content="전기요금 계산기 — 주택용 누진제 사용량별 청구 예상 금액, 기본요금 · 전력량요금 · 기후환경 · 연료비 · 부가세 · 전력기금까지, 전기히터 · 전기장판을 더 쓰면 얼마 오르는지">
+<link rel="icon" href="icons/apps/elec.png" type="image/png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+<style>:root{--paper:#faf6ee;--panel:#ffffff;--card:#ffffff;--tint:#f3eee3;--ink:#14202b;--sub:#5f6b7a;--sub2:#5f6b7a;--n:#0c737d;--nh:#061024;--nl:#e2e6ee;--or:#e07a4f;--red:#c23a2b;--blue:#1f4f9a;--hair:rgba(20,32,43,0.18);--hair2:rgba(20,32,43,0.33);--up:0 0 0 1px rgba(20,32,43,0.105),0 1px 2px rgba(20,32,43,0.075),0 10px 28px -12px rgba(20,32,43,0.27);--in:inset 0 1px 2px rgba(20,32,43,0.21);color-scheme:only light}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:SUIT,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.num,input.amt{font-variant-numeric:tabular-nums}
+#root{min-height:100vh}
+.yt-head{height:64px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--hair);background:var(--paper);position:sticky;top:0;z-index:20}
+.yt-ic{width:38px;height:38px;border-radius:10px;background:var(--n);position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.yt-ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.yt-ic i{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border-radius:50%;background:var(--or);border:2px solid var(--paper)}
+.yt-head h1{font-size:19px;font-weight:800;white-space:nowrap}
+.yt-head small{font-size:13px;color:var(--sub2)}
+.yt-yr{font-size:13px;font-weight:700;color:var(--n);background:var(--nl);border-radius:8px;padding:5px 10px;white-space:nowrap}
+.yt-rul{margin-left:auto;display:flex;width:min(560px,46vw)}
+.yt-rul button{flex:1;text-align:center;font-size:12.5px;color:var(--sub2);position:relative;padding-top:16px;white-space:nowrap}
+.yt-rul button:before{content:"";position:absolute;top:5px;left:0;right:0;height:3px;background:var(--hair2)}
+.yt-rul button.done:before,.yt-rul button.on:before{background:var(--or)}
+.yt-rul button.on:before{right:50%}
+.yt-rul button b{position:absolute;top:0;left:50%;margin-left:-6px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:2px solid var(--hair2)}
+.yt-rul button.done b,.yt-rul button.on b{background:var(--or);border-color:var(--or)}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,0.18)}
+.yt-rul button.on{color:var(--ink);font-weight:800}
+.yt-main{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr);gap:22px;padding:22px 24px 40px;max-width:1500px;margin:0 auto}
+.yt-panel{background:var(--panel);border-radius:16px;box-shadow:var(--up);padding:22px 24px;display:flex;flex-direction:column;min-height:640px;align-self:start}
+.yt-k{font-size:13px;color:var(--sub2);font-weight:700}
+.yt-panel h2{font-size:24px;font-weight:800;margin:4px 0}
+.yt-lead{font-size:14.5px;color:var(--sub);margin-bottom:16px}
+.yt-sec{font-size:15.5px;font-weight:800;margin:18px 0 10px;padding-top:14px;border-top:1px solid var(--hair);display:flex;align-items:center;gap:8px}
+.yt-sec:first-of-type{border:0;padding-top:0;margin-top:4px}
+.f{margin-bottom:14px;min-width:0}
+.f>label,.f>.lb{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14.5px;font-weight:800;margin-bottom:6px}
+.f>label,.f>.lb{flex-wrap:wrap;white-space:nowrap}
+.f>label span,.f>.lb span{font-weight:500;color:var(--sub2);font-size:13px;text-align:right;white-space:normal;margin-left:auto}
+.in{height:48px;border-radius:12px;background:#fff;box-shadow:var(--in),0 0 0 1px var(--hair2);display:flex;align-items:center;padding:0 14px;gap:6px}
+.in:focus-within{box-shadow:0 0 0 2px var(--n)}
+.in input{border:0;outline:0;background:none;width:100%;min-width:0;font-size:18px;font-weight:700;text-align:right}
+.in input::placeholder{color:#b7ae9e;font-weight:600}
+.in em{font-style:normal;font-size:15px;color:var(--sub2);font-weight:600;flex-shrink:0}
+.in select{border:0;outline:0;background:none;width:100%;font-size:16px;font-weight:700}
+.hint{font-size:13px;color:var(--sub2);margin-top:5px}
+.hint b{color:var(--n)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border-radius:10px;padding:9px 13px;font-size:14px;font-weight:700;background:var(--card);box-shadow:var(--up)}
+.chip.on{background:var(--n);color:#fff}
+.box{background:var(--tint);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--sub);box-shadow:var(--in);margin:4px 0 12px}
+.box b{color:var(--ink)}
+.kid{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;box-shadow:var(--up);padding:8px 10px 8px 12px;margin-bottom:8px}
+.kid .in{height:40px;width:130px;flex-shrink:0}
+.kid .in input{font-size:16px}
+.kid .ag{font-size:14px;color:var(--sub);white-space:nowrap}
+.kid .tg{margin-left:auto;font-size:12.5px;font-weight:800;border-radius:7px;padding:3px 8px;background:var(--nl);color:var(--n);white-space:nowrap}
+.kid .tg.x{background:var(--tint);color:var(--sub2)}
+.kid .del{width:32px;height:32px;border-radius:8px;color:var(--sub2);font-size:20px;line-height:1;flex-shrink:0}
+.kid .del:hover{background:var(--tint)}
+.addb{width:100%;height:44px;border-radius:12px;background:var(--card);box-shadow:var(--up);color:var(--n);font-weight:800;margin-bottom:12px}
+.edu{display:grid;grid-template-columns:150px 1fr 32px;gap:8px;align-items:center;margin-bottom:8px}
+.edu .in{height:44px}
+.more{width:100%;text-align:left;font-weight:800;font-size:14.5px;color:var(--n);padding:10px 0;display:flex;align-items:center;gap:6px}
+.more i{font-style:normal;transition:transform .15s}
+.more.op i{transform:rotate(90deg)}
+.yt-nav{margin-top:auto;padding-top:18px;display:flex;gap:10px}
+.btn{height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;padding:0 20px;background:var(--card);box-shadow:var(--up);white-space:nowrap}
+.btn:hover{box-shadow:0 0 0 2px var(--n)}
+.btn:active{transform:translateY(1px)}
+.btn.pr{background:var(--n);color:#fff;flex:1}
+.btn.pr:hover{background:var(--nh);box-shadow:none}
+.btn.sm{height:40px;font-size:14px;padding:0 14px}
+.yt-res{display:flex;flex-direction:column;gap:16px;min-width:0;position:sticky;top:86px;align-self:start}
+.big{background:var(--card);border-radius:16px;box-shadow:var(--up);padding:22px 26px}
+.big .k2{font-size:14px;font-weight:800;color:var(--sub)}
+.amt-b{font-size:clamp(34px,4.2vw,52px);font-weight:900;letter-spacing:-1.5px;color:var(--blue);margin:2px 0;line-height:1.15;word-break:keep-all}
+.amt-b.pay{color:var(--red)}
+.amt-b.zero{color:var(--ink)}
+.amt-b small{font-size:.46em;font-weight:800;margin-left:4px;letter-spacing:-.3px}
+.amt-s{font-size:14px;color:var(--sub2)}
+.flow{display:flex;gap:8px;align-items:stretch;margin-top:16px}
+.fb{flex:1;background:var(--panel);border-radius:12px;padding:10px 12px;box-shadow:var(--in);min-width:0}
+.fb span{display:block;font-size:12.5px;color:var(--sub2);font-weight:700}
+.fb b{font-size:clamp(15px,1.4vw,19px);font-weight:800}
+.op{display:flex;align-items:center;font-size:18px;color:var(--sub2);font-weight:800}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--up);padding:18px 20px;min-width:0}
+.card h3{font-size:16px;font-weight:800;margin-bottom:8px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;padding:7px 0;border-bottom:1px solid var(--hair)}
+.row:last-child{border:0}
+.row b{font-weight:800;white-space:nowrap}
+.row.z{color:var(--sub2)}
+.row.t{font-weight:800;border-top:2px solid var(--ink);border-bottom:0;margin-top:4px;padding-top:9px}
+.row.s{padding-left:14px;font-size:13.5px;color:var(--sub)}
+.tip{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
+.tip:last-child{border:0}
+.tip .d{width:34px;height:34px;border-radius:9px;background:var(--nl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tip .d svg{width:19px;height:19px;stroke:var(--n);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tip p{font-size:14px;line-height:1.4;flex:1;min-width:0}
+.tip p small{color:var(--sub2);font-size:12.5px}
+.tip b.g{color:var(--blue);font-size:16px;white-space:nowrap}
+.tip.info b.g{color:var(--sub2);font-size:13px;font-weight:700}
+.note{font-size:12.5px;color:var(--sub2);margin-top:10px}
+.cardbar{height:12px;border-radius:6px;background:var(--tint);box-shadow:var(--in);position:relative;overflow:hidden;margin:6px 0 4px}
+.cardbar i{position:absolute;left:0;top:0;bottom:0;background:var(--n);border-radius:6px}
+.cardbar s{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--or)}
+.yt-mbar{display:none}
+.yt-foot{text-align:center;font-size:12.5px;color:var(--sub2);padding:0 16px 30px}
+.yt-foot a{color:var(--n);font-weight:700}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--n);color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.box.notice{background:#fff7e8;box-shadow:0 0 0 1px rgba(224,122,79,0.35);color:var(--ink)}
+.box.notice b{color:var(--ink)}
+.btn.rs{color:var(--sub);font-size:14.5px;padding:0 14px}
+.btn.rs:hover{color:var(--red);box-shadow:0 0 0 2px var(--red)}
+.yt-mbar .bk.rs{font-size:12.5px;padding:11px 9px;color:#eaf4f5}
+/* 바뀐 값 표시 */
+.dlt{display:inline-block!important;font-size:12px!important;font-weight:800;letter-spacing:0;line-height:1.3;padding:1px 6px;border-radius:6px;margin-left:6px;vertical-align:middle;white-space:nowrap;animation:dpop .45s ease-out;font-variant-numeric:tabular-nums}
+.dlt.g{color:#17703f;background:#e1f2e6}
+.dlt.b{color:#b8321f;background:#fbe4df}
+.dlt.out{opacity:0;transition:opacity .4s}
+.amt-b .dlt{font-size:14px!important;padding:3px 9px;margin-left:10px;vertical-align:.5em}
+.fb .dlt{margin:3px 0 0;display:table!important}
+.yt-mbar .dlt{font-size:11.5px!important;margin-left:4px}
+@keyframes dpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}
+/* 기준 · 한도 표 */
+.lim{margin-top:18px;background:var(--card);border-radius:12px;box-shadow:var(--up);padding:12px 14px 10px}
+.lim h4{font-size:14.5px;font-weight:800;display:flex;gap:7px;align-items:center;margin-bottom:4px}
+.lim h4 svg{width:17px;height:17px;stroke:var(--n);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.lim table{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.45}
+.lim td{padding:7px 0;border-top:1px solid var(--hair);vertical-align:top}
+.lim td:first-child{font-weight:800;width:24%;padding-right:10px;word-break:keep-all}
+.lim td:nth-child(2){color:var(--sub);word-break:keep-all}
+.lim td.me{text-align:right;font-weight:800;color:var(--n);padding-left:10px;width:28%;word-break:keep-all;font-variant-numeric:tabular-nums}
+.lim .nt{font-size:12.5px;color:var(--sub2);margin-top:6px;line-height:1.5}
+.lim .nt b{color:var(--ink)}
+@media (max-width:520px){.lim table,.lim tbody,.lim tr,.lim td{display:block;width:auto!important}.lim tr{border-top:1px solid var(--hair);padding:7px 0}.lim td{border:0;padding:1px 0}.lim td.me{text-align:left;padding:2px 0 0}.lim td.me:empty{display:none}}
+/* 결과 단계 */
+.res-tbl .row span{min-width:0}
+@media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+@media (max-width:899px){
+  .yt-head{height:56px;padding:0 16px}
+  .yt-head small,.yt-head .yt-yr{display:none}
+  .yt-head h1{font-size:17px}
+  .yt-rul{display:none}
+  .yt-mrul{display:flex;gap:4px;padding:10px 16px 0}
+  .yt-mrul i{flex:1;height:4px;border-radius:2px;background:var(--hair2)}
+  .yt-mrul i.d{background:var(--or)}
+  .yt-main{grid-template-columns:1fr;padding:12px 12px 110px;gap:14px}
+  .yt-panel{padding:18px 16px;min-height:0}
+  .yt-panel h2{font-size:21px}
+  .yt-res{position:static}
+  .yt-res.side{display:none}
+  .yt-nav{display:none}
+  .yt-mbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--n);color:#fff;padding:10px 14px calc(12px + env(safe-area-inset-bottom));align-items:center;gap:8px;z-index:30}
+  .yt-mbar span{font-size:12.5px;color:#eaf4f5;display:block}
+  .yt-mbar b{font-size:22px;font-weight:900;white-space:nowrap}
+  .yt-mbar .bk{margin-left:auto;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:11px 12px;font-weight:800;font-size:14px}
+  .yt-mbar .go{background:#fff;color:var(--n);border-radius:12px;padding:11px 16px;font-weight:800;font-size:15px;white-space:nowrap}
+  .flow{flex-wrap:wrap}.flow .op{display:none}.fb{flex:1 1 40%}
+  .edu{grid-template-columns:118px 1fr 32px}
+  .kid .in{width:112px}
+}
+@media (min-width:900px){.yt-mrul{display:none}}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .yt-head,.yt-panel,.yt-mbar,.yt-mrul,.yt-foot,.noprint,.toast{display:none!important}
+  .yt-main{display:block;padding:0}
+  .yt-res{position:static;display:flex!important}
+  .big,.card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  .printhead{display:block!important;font-size:18px;font-weight:800;margin-bottom:8px}
+}
+.printhead{display:none}
+/* 블로그 경유 잠금 — 막힘 화면 */
+.bj-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#faf6ee;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.bj-gate-in{max-width:520px;text-align:center;background:#fff;border:1px solid #e7e5dc;border-radius:20px;padding:36px 30px;box-shadow:0 10px 30px rgba(12,115,125,0.08)}
+.bj-gate-mark{width:64px;height:64px;border-radius:18px;background:#0c737d;color:#fff;font:italic 800 34px/64px Georgia,serif;margin:0 auto 18px;position:relative}
+.bj-gate-mark i{position:absolute;right:9px;bottom:10px;width:11px;height:11px;border-radius:50%;background:#e07a4f}
+.bj-gate h1{font-size:21px;color:#20241f;margin:0 0 12px;letter-spacing:-.3px}
+.bj-gate p{font-size:15px;color:#5c6259;line-height:1.7;margin:0}
+.bj-gate b{color:#20241f}
+.bj-gate-btn{display:inline-block;margin:22px 0 16px;background:#e07a4f;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;padding:13px 26px;font-size:15.5px}
+.bj-gate-s{font-size:12.5px!important;color:#5f6b7a!important}
+.bj-gate-s a{color:#0c737d;font-weight:700}
+</style><style id="bjsea">/* ── Blog J 모래 · 바다 · 하늘 · 구름 (2026-11-10) — 공통 머리띠 색 ── */
+:root{--sea-band:#0b3d4a;--sea-band-t:#ffffff;--sea-band-s:#cfe3e6;--sea:#0c737d;--sunset:#e07a4f}
+/* 연말정산 · 상장 — 머리띠 */
+.yt-head{background:var(--sea-band)!important;border-bottom:0!important}
+.yt-head h1{color:#fff!important}
+.yt-head small{color:var(--sea-band-s)!important}
+.yt-head .yt-yr{background:rgba(255,255,255,.13)!important;color:#fff!important}
+.yt-head .yt-ic{box-shadow:0 0 0 1.5px rgba(255,255,255,.22)}
+.yt-head .yt-ic i{border-color:var(--sea-band)!important}
+.yt-rul button{color:var(--sea-band-s)!important}
+.yt-rul button.on{color:#fff!important}
+.yt-rul button:before{background:rgba(255,255,255,.22)!important}
+.yt-rul button b{background:var(--sea-band)!important;border-color:rgba(255,255,255,.4)!important}
+.yt-rul button.done:before,.yt-rul button.on:before{background:var(--sunset)!important}
+.yt-rul button.done b,.yt-rul button.on b{background:var(--sunset)!important;border-color:var(--sunset)!important}
+.yt-rul button.on b{box-shadow:0 0 0 4px rgba(224,122,79,.25)!important}
+.yt-mbar{background:var(--sea-band)!important}
+.yt-mbar span{color:var(--sea-band-s)!important}
+.yt-mbar .bk{color:#fff!important}
+.yt-mbar .bk.rs{color:var(--sea-band-s)!important}
+</style><style id="bjsal">/* 연봉 실수령액 계산기 전용 */
+.sh{font-size:15px;font-weight:800;margin:18px 0 8px}
+.bt{font-size:13.5px}
+.bt .bh,.bt .br{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:8px;padding:6px 4px;border-bottom:1px solid var(--hair)}
+.bt .bh{font-size:12.5px;color:var(--sub2);font-weight:700}
+.bt .br span:last-child,.bt .bh span:last-child{text-align:right;color:var(--sub)}
+.bt .br b{text-align:right;font-weight:800}
+.bt .bh span:nth-child(2){text-align:right}
+.bt .br.me{background:var(--nl);border-radius:8px;border-bottom-color:transparent}
+.bt .br.me span:first-child{font-weight:800}
+.bt .br:last-child{border-bottom:0}
+</style><style id="bjelec">/* 전기요금 계산기 전용 */
+.chips.mon{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.chips.mon .chip{padding-left:0;padding-right:0;justify-content:center}
+.tb{position:relative;display:flex;height:22px;border-radius:7px;overflow:visible;margin:12px 0 2px;background:#EEF6F7}
+.tbz{background:#cfe6e2;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#0B3D4A;min-width:0;overflow:hidden;white-space:nowrap}
+.tbz:first-child{border-radius:7px 0 0 7px}.tbz.t2{background:#f3dfb8}.tbz.t3{background:#f0c3b3;border-radius:0 7px 7px 0}
+.tbm{position:absolute;top:-5px;width:4px;height:32px;margin-left:-2px;background:#E07A4F;border-radius:2px;box-shadow:0 0 0 2px #fff}
+.tbl{position:relative;height:16px;font-size:11px;color:var(--sub2)}.tbl span{position:absolute;transform:translateX(-50%)}.tbl span:first-child{left:0;transform:none}
+.cmp{margin-top:12px;padding:10px 12px;border-radius:10px;background:#FFF4EE;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.cmp span{font-size:12.5px;color:var(--sub);display:block}.cmp b{font-size:18px}.cmp .up{color:#B4532A;font-weight:800;font-variant-numeric:tabular-nums}
+.aps{display:flex;flex-direction:column;gap:8px;margin:10px 0 6px}
+.ap{border:1px solid var(--hair);border-radius:12px;padding:10px;background:#fff}
+.apn{display:flex;gap:8px;align-items:center;margin-bottom:8px}.apn input{flex:1;min-width:0;border:0;border-bottom:1px solid var(--hair);font:inherit;font-weight:800;padding:4px 2px;background:transparent}
+.apn .x{border:1px solid var(--hair);background:#fff;border-radius:8px;padding:4px 10px;font-size:12.5px;color:var(--sub)}
+.apg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:end}
+.apg label{font-size:12px;color:var(--sub2);display:flex;flex-direction:column;gap:3px;min-width:0}
+.apg label span{display:flex;align-items:center;gap:4px;background:#F3EEE3;border-radius:8px;padding:6px 8px;color:var(--sub);white-space:nowrap}
+.apg input{flex:1;width:100%;min-width:0;border:0;background:transparent;font:inherit;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.apg b{font-size:13.5px;white-space:nowrap;padding-bottom:7px}
+@media (max-width:420px){.apg{grid-template-columns:repeat(3,minmax(0,1fr))}.apg b{grid-column:1/-1;padding:0}}
+</style></head><body><div id="root"></div>
+<script>/* ══════════ Blog J 블로그 경유 잠금 + 새 창으로 열기 (공통) ══════════
+   허용: ① luvbong.tistory.com 글 속 프로그램 창(iframe)  ② 그 창이 "새 창으로 열기"로 연 창
+   그 밖(주소 복사·공유 링크·즐겨찾기·직접 입력·다른 사이트에 퍼가기)은 막고 해당 글로 안내.
+   서버 없는 브라우저 안 확인이라 일반 사용자의 건너뛰기를 막는 수준(의도적 우회는 못 막음). */
+const BJ_BLOG = "https://luvbong.tistory.com";
+const BJ_GATE = (() => {
+  const S = "bjgate:";                       /* 새 창 안에서만 유지되는 확인 표시(sessionStorage) */
+  const tokens = new Map();                  /* 글 속 도구가 발급한 일회용 확인값 */
+  const approved = new Set();                /* 확인을 마친 새 창 — 이 창에만 작업을 넘겨줌 */
+  let provider = null, handoff = null;       /* 넘겨줄 작업을 만드는 함수 / 새 창이 받은 작업 */
+  const inFrame = window.parent !== window;
+  const dev = (location.protocol === "file:" || location.hostname === "localhost") && new URLSearchParams(location.search).get("bjdev") === "1";
+  const fromBlog = () => { try { const a = location.ancestorOrigins; if (a && a.length) return a[a.length - 1] === BJ_BLOG; } catch (e) {}
+    return (document.referrer || "").startsWith(BJ_BLOG + "/"); };
+  let embedOK = false;
+
+  /* 글 속 도구: 새 창이 보내는 확인 요청에 답함 */
+  window.addEventListener("message", e => {
+    const d = e.data; if (!d || d.bjgate !== "verify" || e.origin !== location.origin) return;
+    const t = tokens.get(d.t); tokens.delete(d.t);
+    const ok = embedOK && t && Date.now() - t.at < 30000 && e.source === t.win;
+    if (ok) approved.add(e.source);
+    try { e.source.postMessage({ bjgate: ok ? "ok" : "no", t: d.t }, location.origin); } catch (err) {}
+  });
+  window.addEventListener("message", e => {   /* 새 창이 작업을 달라고 할 때 (확인된 창에만) */
+    const d = e.data; if (!d || d.bjhand !== "req" || e.origin !== location.origin || !approved.has(e.source)) return;
+    approved.delete(e.source);
+    let data = null; try { data = provider ? provider() : null; } catch (err) {}
+    try { e.source.postMessage({ bjhand: "data", data }, location.origin); } catch (err) {}
+  });
+
+  /* 새 창으로 열기 (글 속 도구에서만) */
+  function openWindow(key, params, file) {
+    const t = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const q = new URLSearchParams(params || {}); q.delete("embed"); q.set("bjt", t);
+    const path = file ? location.pathname.replace(/[^/]*$/, file) : location.pathname;
+    const url = path + "?" + q.toString();
+    const w = window.open(url, "bj_" + key + "_" + (q.get("tab") || "all"), "popup,width=1320,height=920");
+    if (!w) return false;
+    tokens.set(t, { at: Date.now(), win: w });
+    return true;
+  }
+
+  /* 막힘 화면 */
+  async function blocked(key, tab, why) {
+    const post = BJ_BLOG + "/";     /* 막힘 화면은 늘 블로그 첫 화면으로 (글마다 주소를 적을 필요 없음) */
+    const root = document.getElementById("root");
+    root.innerHTML = `<div class="bj-gate"><div class="bj-gate-in">
+      <div class="bj-gate-mark">J<i></i></div>
+      <h1>Blog J 블로그 글에서 열어 주세요</h1>
+      <p>이 도구는 <b>Blog J 블로그 글</b>을 통해서만 쓸 수 있어요.<br>글 안의 도구에서 <b>새 창으로 열기</b>를 누르면 광고 없이 도구만 크게 띄워 쓸 수 있습니다.</p>
+      <a class="bj-gate-btn" href="${post}" target="_top" rel="noopener">Blog J 이동하기 ›</a>
+      <p class="bj-gate-s">${why === "frame" ? "다른 사이트에 넣은 도구는 열리지 않아요." : "주소를 직접 입력하거나, 즐겨찾기·공유받은 링크로는 열리지 않아요."} · 설치·가입 없는 무료 도구 모음 <a href="${BJ_BLOG}/" target="_top" rel="noopener">Blog J</a></p>
+    </div></div>`;
+    document.title = "Blog J 블로그 글에서 열어 주세요";
+    return false;
+  }
+
+  /* 시작할 때 확인: true면 도구를 띄움 */
+  async function check(key, tab, opts) {
+    if (dev || (() => { try { return localStorage.getItem("bj-owner") === "1"; } catch (e) { return false; } })()) { embedOK = inFrame && (dev || fromBlog()); return true; }   /* 11-10: 주인 시험 모드 — 테스트 허브(jhub.html)에서 이 기기에 켠 경우만 */
+    /* 예전 글 호환: 블로그 글의 링크를 눌러 들어온 경우 허용 (프로그램 창 → 실행 카드로 바꾸기 전까지만) */
+    if (!inFrame && opts && opts.legacyReferrer && (document.referrer || "").startsWith(BJ_BLOG + "/")) return true;
+    if (inFrame) { embedOK = fromBlog(); return embedOK ? true : blocked(key, tab, "frame"); }
+    try { const v = sessionStorage.getItem(S + key);
+      if (v) { if (v !== "1" && v !== (tab || "all")) { const q = new URLSearchParams(location.search); q.set("tab", v); location.replace(location.pathname + "?" + q.toString()); return false; } return true; } } catch (e) {}
+    const q = new URLSearchParams(location.search), t = q.get("bjt");
+    if (t && window.opener) {
+      const ok = await new Promise(res => {
+        const on = e => { if (e.origin === location.origin && e.data && e.data.t === t && (e.data.bjgate === "ok" || e.data.bjgate === "no")) { window.removeEventListener("message", on); res(e.data.bjgate === "ok"); } };
+        window.addEventListener("message", on);
+        try { window.opener.postMessage({ bjgate: "verify", t }, location.origin); } catch (e) { res(false); }
+        setTimeout(() => { window.removeEventListener("message", on); res(false); }, 3000);
+      });
+      if (ok) { try { sessionStorage.setItem(S + key, tab || "all"); } catch (e) {}
+        const op = window.opener;
+        handoff = await new Promise(res => {
+          const on = e => { if (e.origin === location.origin && e.source === op && e.data && e.data.bjhand === "data") { window.removeEventListener("message", on); res(e.data.data || null); } };
+          window.addEventListener("message", on);
+          try { op.postMessage({ bjhand: "req" }, location.origin); } catch (e) { res(null); }
+          setTimeout(() => { window.removeEventListener("message", on); res(null); }, 4000);
+        });
+        q.delete("bjt"); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q.toString() : ""));
+        try { window.opener = null; } catch (e) {}
+        return true; }
+    }
+    return blocked(key, tab, "direct");
+  }
+  return { check, openWindow, embedded: () => { embedOK = inFrame && (dev || fromBlog()); return embedOK; }, inFrame: () => inFrame, setProvider: fn => { provider = fn; }, takeHandoff: () => { const h = handoff; handoff = null; return h; } };
+})();</script>
+
+<script>/* 전기요금 계산 엔진 — Blog J (2026-11-18)
+   주택용 전력(저압 · 고압) 누진 3단계 — 한전 전기요금표(2026-11 확인: 2026년 4분기 동결)
+   저압: 200kWh까지 120.0원 · 201~400kWh 214.6원 · 400kWh 초과 307.3원 / 기본요금 910 · 1,600 · 7,300원
+   고압: 105.0 · 174.0 · 242.3원 / 기본요금 730 · 1,260 · 6,060원
+   7 · 8월(하계)은 단계 경계 300 · 450kWh, 하계 · 동계(12 · 1 · 2월) 1,000kWh 초과분은 슈퍼유저 단가(저압 736.2원)
+   + 기후환경요금 9.0원/kWh · 연료비조정요금 +5.0원/kWh
+   전기요금계(원 미만 버림) → 부가가치세 10%(원 미만 반올림) · 전력산업기반기금 2.7%(10원 미만 버림) → 청구 금액(10원 미만 버림) */
+const ELEC = (() => {
+  const R = {
+    low:  { name: "주택용 저압", price: [120.0, 214.6, 307.3], base: [910, 1600, 7300], superP: 736.2 },
+    high: { name: "주택용 고압", price: [105.0, 174.0, 242.3], base: [730, 1260, 6060], superP: null }
+  };
+  const CLIM = 9.0, FUEL = 5.0, VAT = 0.1, FUND = 0.027;
+  const isSummer = m => m === 7 || m === 8, isWinter = m => m === 12 || m === 1 || m === 2;
+  const bounds = m => isSummer(m) ? [300, 450] : [200, 400];
+  function calc(o) {
+    const kwh = Math.max(0, Math.round(+o.kwh || 0)), m = +o.month || 1, r = R[o.volt === "high" ? "high" : "low"], [b1, b2] = bounds(m);
+    const parts = [Math.min(kwh, b1), Math.max(0, Math.min(kwh, b2) - b1), Math.max(0, kwh - b2)];
+    let superK = 0;
+    if (r.superP && (isSummer(m) || isWinter(m)) && kwh > 1000) { superK = kwh - 1000; parts[2] -= superK; }
+    const tier = kwh > b2 ? 3 : kwh > b1 ? 2 : 1;
+    const energyRaw = parts[0] * r.price[0] + parts[1] * r.price[1] + parts[2] * r.price[2] + superK * (r.superP || 0);
+    const base = kwh ? r.base[tier - 1] : r.base[0];
+    const energy = Math.floor(energyRaw + 1e-9), clim = Math.floor(kwh * CLIM + 1e-9), fuel = Math.floor(kwh * FUEL + 1e-9);
+    const sub = base + energy + clim + fuel;
+    const vat = Math.round(sub * VAT), fund = Math.floor(sub * FUND / 10 + 1e-9) * 10;
+    const total = Math.floor((sub + vat + fund) / 10) * 10;
+    const toNext = tier === 1 ? b1 - kwh + 1 : tier === 2 ? b2 - kwh + 1 : 0;
+    return { kwh, month: m, volt: o.volt === "high" ? "high" : "low", rate: r, bounds: [b1, b2], parts, superK, tier, base, energy, clim, fuel, sub, vat, fund, total, toNext, summer: isSummer(m), winter: isWinter(m) };
+  }
+  return { calc, R, CLIM, FUEL, VAT, FUND, bounds, isSummer, isWinter };
+})();
+</script>
+<script>/* ══════════ 전기요금 계산기 v1.0 — 화면 (Blog J, 2026-11-18) ══════════ */
+const TOOL = "elec", APP_VER = "1.0";
+const BUILD = "2026-11-18(수)";
+const EMBED = new URLSearchParams(location.search).get("embed") === "1";
+const LSK = "bj-elec1";
+const STEPS = [["use", "사용량"], ["app", "가전 더하기"], ["res", "결과"]];
+const $ = s => document.querySelector(s);
+const won = n => (Math.round(+n || 0)).toLocaleString("ko-KR");
+const num1 = n => (Math.round((+n || 0) * 10) / 10).toLocaleString("ko-KR");
+const IC = {
+  calc: '<svg viewBox="0 0 24 24"><path d="M13 2.5 5.5 13.5h6l-1 8 8-11.5h-6z"/></svg>',
+  info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>'
+};
+const nowMonth = () => { const d = new Date(Date.now() + 9 * 3600e3); return d.getUTCMonth() + 1; };
+const PRESET = [
+  ["전기히터 · 온풍기", 2000, 4, 30], ["라디에이터", 1500, 5, 30], ["전기난로", 1000, 4, 30],
+  ["전기장판 · 온수매트", 200, 8, 30], ["에어컨(냉방)", 1200, 6, 30], ["제습기", 300, 6, 30]
+];
+
+/* ── 입력 상태 (이 기기 브라우저에만) ── */
+const BLANK = () => ({ step: 0, mode: "kwh", kwh: 0, prev: 0, cur: 0, month: nowMonth(), volt: "low", apps: [] });
+let S = (() => { try { const v = JSON.parse(localStorage.getItem(LSK) || "null"); return v ? Object.assign(BLANK(), v) : BLANK(); } catch (e) { return BLANK(); } })();
+let saveT = null;
+function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LSK, JSON.stringify(S)); } catch (e) {} }, 300); }
+
+/* ── 계산 ── */
+const useK = () => S.mode === "meter" ? Math.max(0, (S.cur || 0) - (S.prev || 0)) : (S.kwh || 0);
+const appK = a => (+a.w || 0) * (+a.h || 0) * (+a.d || 0) / 1000;
+const addK = () => S.apps.reduce((t, a) => t + appK(a), 0);
+const hasUse = () => useK() > 0;
+const calcFor = k => ELEC.calc({ kwh: k, month: S.month, volt: S.volt });
+
+/* ── 입력 칸 ── */
+function numIn(key, label, opt) {
+  opt = opt || {}; const v = S[key];
+  return `<div class="f"><label for="f_${key}">${label}${opt.sub ? `<span>${opt.sub}</span>` : ""}</label><div class="in"><input id="f_${key}" class="amt" inputmode="numeric" autocomplete="off" data-m="${key}" value="${v ? won(v) : ""}" placeholder="${opt.ph || "0"}"><em>${opt.unit || "kWh"}</em></div>${opt.hint ? `<div class="hint"${opt.live ? " data-live" : ""}>${opt.hint}</div>` : ""}</div>`;
+}
+function chip(key, val, text) { const on = S[key] === val; return `<button class="chip${on ? " on" : ""}" data-ch="${key}" data-v='${JSON.stringify(val)}' aria-pressed="${on}">${text}</button>`; }
+function limBox(title, rows, note) {
+  return `<div class="lim"><h4>${IC.info}${title}</h4><table>${rows.filter(Boolean).map(([a, b, c]) => `<tr><td>${a}</td><td>${b}</td><td class="me">${c || ""}</td></tr>`).join("")}</table>${note ? `<p class="nt">${note}</p>` : ""}</div>`;
+}
+const meterHint = () => S.mode === "meter" ? (S.cur && S.prev && S.cur < S.prev ? `<b style="color:#C23A2B">이번 달 숫자가 지난달보다 작아요</b> — 두 칸을 확인해 주세요` : hasUse() ? `이번 달 사용량 <b class="num">${won(useK())}kWh</b>(이번 달 − 지난달)` : "고지서 「당월 지침」 · 「전월 지침」 숫자") : "";
+
+function stepUse() {
+  const r = calcFor(useK()), [b1, b2] = ELEC.bounds(S.month);
+  return `<div class="yt-k">1 / 3 단계</div><h2>이번 달 사용량</h2><p class="yt-lead">고지서나 한전ON 앱에 나온 사용량(kWh)을 넣어요. 계량기 숫자 두 개로 넣어도 돼요.</p>
+  <div class="chips" style="margin-bottom:10px">${chip("mode", "kwh", "사용량(kWh)으로")}${chip("mode", "meter", "계량기 숫자로")}</div>
+  ${S.mode === "meter"
+    ? `<div class="two">${numIn("prev", "지난달 지침", { sub: "전월" })}${numIn("cur", "이번 달 지침", { sub: "당월" })}</div><div class="hint" data-mh>${meterHint()}</div>`
+    : numIn("kwh", "사용량", { sub: "한 달", hint: "4인 가구 평균은 한 달 300~350kWh 안팎이에요(계절 · 집마다 다름)" })}
+  <h3 class="sh">몇 월 사용분인가요?</h3>
+  <div class="chips mon">${Array.from({ length: 12 }, (_, i) => chip("month", i + 1, (i + 1) + "월")).join("")}</div>
+  <div class="hint">7 · 8월은 단계 경계가 300 · 450kWh로 올라가요(여름 완화).</div>
+  <h3 class="sh">계약 종류</h3>
+  <div class="chips">${chip("volt", "low", "주택용 저압")}${chip("volt", "high", "주택용 고압")}</div>
+  <div class="hint">단독주택 · 빌라는 대부분 저압, 아파트는 고압인 곳이 많아요. 고지서 「계약종별」에 적혀 있어요.</div>
+  ${limBox("누진 단계 · " + S.month + "월 기준", [
+    ["1단계", `${b1}kWh까지 · ${num1(r.rate.price[0])}원`, r.tier === 1 && hasUse() ? "지금 여기" : ""],
+    ["2단계", `${b1 + 1}~${b2}kWh · ${num1(r.rate.price[1])}원`, r.tier === 2 ? "지금 여기" : ""],
+    ["3단계", `${b2}kWh 넘게 · ${num1(r.rate.price[2])}원`, r.tier === 3 ? "지금 여기" : ""],
+    r.rate.superP && (ELEC.isSummer(S.month) || ELEC.isWinter(S.month)) ? ["슈퍼유저", `1,000kWh 넘는 만큼 · ${num1(r.rate.superP)}원`, r.superK ? won(r.superK) + "kWh" : ""] : null
+  ], "기본요금은 그달 전체 사용량이 들어간 단계 하나만 붙어요. 전력량요금은 단계마다 나눠 계산해요.")}`;
+}
+function appRow(a, i) {
+  return `<div class="ap"><div class="apn"><input aria-label="가전 이름" data-a="${i}" data-k="n" value="${String(a.n).replace(/"/g, "&quot;")}"><button class="x" data-del="${i}" aria-label="빼기">빼기</button></div>
+  <div class="apg"><label>소비전력<span><input inputmode="numeric" data-a="${i}" data-k="w" value="${a.w || ""}">W</span></label><label>하루<span><input inputmode="decimal" data-a="${i}" data-k="h" value="${a.h || ""}">시간</span></label><label>한 달<span><input inputmode="numeric" data-a="${i}" data-k="d" value="${a.d || ""}">일</span></label><b class="num" data-ak="${i}">${num1(appK(a))}kWh</b></div></div>`;
+}
+function stepApp() {
+  return `<div class="yt-k">2 / 3 단계</div><h2>가전을 더 쓰면?</h2><p class="yt-lead">겨울에 전기히터 · 전기장판을 더 켜면 얼마나 오를지 미리 봐요. 안 쓰면 이 단계는 건너뛰어도 돼요.</p>
+  <div class="chips">${PRESET.map((p, i) => `<button class="chip" data-add="${i}">+ ${p[0]}</button>`).join("")}<button class="chip" data-add="-1">+ 직접 넣기</button></div>
+  <div class="aps">${S.apps.length ? S.apps.map(appRow).join("") : `<div class="box">위에서 가전을 고르면 여기에 한 줄씩 생겨요.</div>`}</div>
+  <div class="hint">소비전력(W)은 제품 뒤 · 아래 라벨이나 설명서에 있어요. 위 값은 흔한 제품 예시라 내 제품 숫자로 고치면 더 정확해요. 온도 조절로 꺼졌다 켜졌다 하는 제품은 실제로 더 적게 써요.</div>
+  ${limBox("더하는 양", [["가전 합계", "W × 시간 × 일 ÷ 1,000", won(addK()) + "kWh"], ["이번 달 사용량", "1단계에서 넣은 값", won(useK()) + "kWh"], ["합친 사용량", "", won(useK() + addK()) + "kWh"]], "")}`;
+}
+const DV = (k, v, gd) => `<b class="num" data-dk="${k}" data-v="${Math.round(v)}" data-gd="${gd || "down"}">${won(v)}</b>`;
+function tierBar(r) {
+  const [b1, b2] = r.bounds, max = Math.max(b2 + 100, Math.ceil(r.kwh / 100) * 100 + 50), pc = v => Math.min(100, v / max * 100);
+  return `<div class="tb"><div class="tbz" style="width:${pc(b1)}%"><span>1단계</span></div><div class="tbz t2" style="width:${pc(b2) - pc(b1)}%"><span>2단계</span></div><div class="tbz t3" style="width:${100 - pc(b2)}%"><span>3단계</span></div><i class="tbm" style="left:${pc(r.kwh)}%"></i></div>
+  <div class="tbl"><span>0</span><span style="left:${pc(b1)}%">${b1}</span><span style="left:${pc(b2)}%">${b2}</span></div>`;
+}
+function resultCard(r, r2) {
+  const head = !hasUse() ? `<div class="amt-b zero num">0<small>원</small></div><div class="amt-s">1단계에서 사용량을 넣으면 바로 계산돼요</div>`
+    : `<div class="amt-b num" data-dk="tot" data-v="${r.total}" data-gd="down">${won(r.total)}<small>원</small></div><div class="amt-s">${S.month}월 ${won(r.kwh)}kWh · ${r.tier}단계${r.toNext ? ` · ${r.tier + 1}단계까지 <b class="num">${won(r.toNext)}kWh</b> 남음` : ""}</div>`;
+  return `<div class="big"><div class="printhead">전기요금 계산기 · ${r.rate.name} · Blog J</div><div class="k2">청구 예상 금액</div>${head}
+  ${hasUse() ? tierBar(r) : ""}
+  <div class="flow"><div class="fb"><span>기본요금</span>${DV("b", r.base)}</div><div class="op">+</div><div class="fb"><span>전력량요금</span>${DV("e", r.energy)}</div><div class="op">+</div><div class="fb"><span>기후 · 연료비</span>${DV("cf", r.clim + r.fuel)}</div><div class="op">+</div><div class="fb"><span>부가세 · 기금</span>${DV("vf", r.vat + r.fund)}</div></div>
+  ${r2 ? `<div class="cmp"><div><span>가전 ${won(addK())}kWh 더 쓰면</span><b class="num">${won(r2.total)}원</b></div><div class="up">+${won(r2.total - r.total)}원${r2.tier > r.tier ? ` · ${r2.tier}단계로` : ""}</div></div>` : ""}</div>`;
+}
+function detailCard(r) {
+  const L = (a, v, cls) => `<div class="row${cls ? " " + cls : ""}"><span>${a}</span><b class="num">${won(v)}</b></div>`;
+  return `<div class="card"><h3>요금 내역</h3>${L("기본요금 (" + r.tier + "단계)", r.base)}${L("전력량요금", r.energy)}${L("기후환경요금 (" + ELEC.CLIM.toFixed(1) + "원 × kWh)", r.clim)}${L("연료비조정요금 (+" + ELEC.FUEL.toFixed(1) + "원 × kWh)", r.fuel)}${L("전기요금계", r.sub, "t")}${L("부가가치세 (10%)", r.vat)}${L("전력산업기반기금 (2.7%)", r.fund)}${L("청구 예상(10원 미만 버림)", r.total, "t")}</div>`;
+}
+const STEPS_K = [100, 200, 250, 300, 350, 400, 450, 500, 600, 700];
+function bandCard() {
+  const my = hasUse() ? useK() : 0; let list = STEPS_K.slice(); if (my && !list.includes(my)) list = list.concat(my).sort((a, b) => a - b);
+  return `<div class="card"><h3>사용량별 요금 · ${S.month}월</h3><p class="hint" style="margin:-2px 0 6px">${ELEC.R[S.volt].name} · 지금 고른 달 그대로</p>
+  <div class="bt"><div class="bh"><span>사용량</span><span>청구 예상</span><span>단계</span></div>${list.map(k => { const r = calcFor(k); return `<div class="br${k === my ? " me" : ""}"><span>${won(k)}kWh</span><b class="num">${won(r.total)}</b><span>${r.tier}단계</span></div>`; }).join("")}</div></div>`;
+}
+function noteCard() { return `<p class="note">한전 주택용 요금표(2026-11 확인 · 2026년 4분기 동결, 연료비조정 +5원)로 계산한 참고 금액이에요. 검침일 · 여러 달에 걸친 날짜 나눔 · 복지 · 대가족 할인 · TV 수신료는 넣지 않아 실제 고지서와 다를 수 있어요.</p>`; }
+function stepRes(r, r2) {
+  const L = (a, b, cls) => `<div class="row${cls ? " " + cls : ""}"><span>${a}</span><b class="num">${b}</b></div>`, p = r.rate.price;
+  return `<div class="yt-k">3 / 3 단계</div><h2>결과 · 계산 과정</h2><p class="yt-lead">고지서와 같은 순서로 보여 드려요.</p>
+  <div class="res-tbl">
+  ${L(`사용량 <small class="hint">(${S.month}월 · ${r.rate.name})</small>`, won(r.kwh) + "kWh")}
+  ${L(`기본요금 <small class="hint">(${r.tier}단계)</small>`, won(r.base), "s")}
+  ${L(`1단계 <small class="hint">(${won(r.parts[0])}kWh × ${num1(p[0])}원)</small>`, won(r.parts[0] * p[0]), "s")}
+  ${r.parts[1] ? L(`2단계 <small class="hint">(${won(r.parts[1])}kWh × ${num1(p[1])}원)</small>`, won(r.parts[1] * p[1]), "s") : ""}
+  ${r.parts[2] ? L(`3단계 <small class="hint">(${won(r.parts[2])}kWh × ${num1(p[2])}원)</small>`, won(r.parts[2] * p[2]), "s") : ""}
+  ${r.superK ? L(`슈퍼유저 <small class="hint">(${won(r.superK)}kWh × ${num1(r.rate.superP)}원)</small>`, won(r.superK * r.rate.superP), "s") : ""}
+  ${L(`기후환경요금 <small class="hint">(${won(r.kwh)}kWh × 9.0원)</small>`, won(r.clim), "s")}
+  ${L(`연료비조정요금 <small class="hint">(${won(r.kwh)}kWh × 5.0원)</small>`, won(r.fuel), "s")}
+  ${L("전기요금계(원 미만 버림)", won(r.sub), "t")}
+  ${L("부가가치세 10%(원 미만 반올림)", won(r.vat), "s")}${L("전력산업기반기금 2.7%(10원 미만 버림)", won(r.fund), "s")}
+  ${L("청구 예상 금액(10원 미만 버림)", won(r.total) + "원", "t")}
+  ${r2 ? L(`가전 ${won(addK())}kWh 더 쓰면`, won(r2.total) + "원 (+" + won(r2.total - r.total) + ")", "t") : ""}
+  </div>
+  ${r.volt === "high" && (ELEC.isSummer(S.month) || ELEC.isWinter(S.month)) && r.kwh > 1000 ? `<div class="box" style="margin-top:14px">고압 슈퍼유저(1,000kWh 넘는 만큼) 단가는 넣지 않았어요. 1,000kWh가 넘으면 한전ON에서 확인해 주세요.</div>` : ""}
+  ${limBox("계산에 쓴 기준", [
+    ["전력량요금", `${r.rate.name} ${num1(p[0])} · ${num1(p[1])} · ${num1(p[2])}원/kWh`, ""],
+    ["기본요금", `${won(r.rate.base[0])} · ${won(r.rate.base[1])} · ${won(r.rate.base[2])}원`, ""],
+    ["단계 경계", "7 · 8월 300 · 450kWh / 그 밖의 달 200 · 400kWh", ""],
+    ["기후 · 연료비", "기후환경 9.0원 + 연료비조정 5.0원(2026년 4분기)", ""],
+    ["부가세 · 기금", "부가가치세 10% · 전력산업기반기금 2.7%(2025-07부터)", ""]
+  ], "요금이 바뀌면(보통 분기마다 발표) 이 계산기도 고쳐요.")}
+  <div class="chips noprint" style="margin-top:4px"><button class="btn sm" data-print>인쇄 · PDF로 저장</button><button class="btn sm" data-reset>처음부터 다시</button></div>`;
+}
+
+/* ── 그리기 ── */
+function both() { const r = calcFor(useK()); const r2 = S.apps.length && addK() > 0 && hasUse() ? calcFor(useK() + addK()) : null; return [r, r2]; }
+function stepHtml(r, r2) { return [stepUse, stepApp, () => stepRes(r, r2)][S.step](); }
+function sideHtml(r, r2) { return `${resultCard(r, r2)}<div class="grid2">${detailCard(r)}${bandCard()}</div>${noteCard()}`; }
+function render() {
+  const [r, r2] = both(), isRes = S.step === 2;
+  const rul = STEPS.map(([k, n], i) => `<button class="${i < S.step ? "done" : i === S.step ? "on" : ""}" data-go="${i}"><b></b>${n}</button>`).join("");
+  const mrul = STEPS.map((x, i) => `<i class="${i <= S.step ? "d" : ""}"></i>`).join("");
+  const nav = `<div class="yt-nav"><button class="btn rs" data-reset title="입력한 값을 모두 지워요">초기화</button>${S.step ? `<button class="btn" data-prev>‹ 이전</button>` : ""}${isRes ? `<button class="btn pr" data-go="0">처음 단계로</button>` : `<button class="btn pr" data-next>다음: ${STEPS[S.step + 1][1]} ›</button>`}</div>`;
+  $("#root").innerHTML = `<header class="yt-head"><div class="yt-ic">${IC.calc}<i></i></div><h1>전기요금 계산기</h1><small>Blog J</small><span class="yt-yr">주택용 누진제 · 2026년 4분기</span><nav class="yt-rul" aria-label="단계">${rul}</nav></header>
+  <div class="yt-mrul">${mrul}</div>
+  <div class="yt-main"><section class="yt-panel" id="panel">${stepHtml(r, r2)}${nav}</section>
+  <aside class="yt-res${isRes ? "" : " side"}" id="res">${sideHtml(r, r2)}</aside></div>
+  <div class="yt-mbar"><div><span>${hasUse() ? "청구 예상" : "사용량을 넣어요"}</span><b class="num" id="mb">${won(r.total)}원</b></div><button class="bk rs" data-reset aria-label="초기화">초기화</button>${S.step ? `<button class="bk" data-prev style="margin-left:0">‹</button>` : ""}${isRes ? `<button class="go" data-print>인쇄</button>` : `<button class="go" data-next>다음 ›</button>`}</div>
+  <p class="yt-foot">참고용 계산 · 실제 고지서와 다를 수 있어요 · 입력한 값은 이 기기 브라우저에만 저장되고 어디로도 보내지 않아요 · 전기요금 계산기 v${APP_VER}(${BUILD} 판) · 만든 곳 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a></p>`;
+  showDeltas();
+}
+/* 입력할 때는 결과 쪽만 다시 그림(입력 칸 · 스크롤 그대로) */
+function refreshResult() {
+  const [r, r2] = both();
+  const lm = document.querySelector("#panel .lim"); if (lm && S.step < 2) { const tmp = document.createElement("div"); tmp.innerHTML = [stepUse, stepApp][S.step](); const n = tmp.querySelector(".lim"); if (n) lm.outerHTML = n.outerHTML; }
+  const mh = document.querySelector("[data-mh]"); if (mh) mh.innerHTML = meterHint();
+  S.apps.forEach((a, i) => { const e = document.querySelector(`[data-ak="${i}"]`); if (e) e.textContent = num1(appK(a)) + "kWh"; });
+  const res = $("#res"); if (res) res.innerHTML = sideHtml(r, r2);
+  const mb = $("#mb"); if (mb) { mb.textContent = won(r.total) + "원"; const sp = mb.previousElementSibling; if (sp) sp.textContent = hasUse() ? "청구 예상" : "사용량을 넣어요"; }
+  showDeltas();
+}
+function go(i, push) {
+  S.step = Math.max(0, Math.min(2, i)); save(); render(); window.scrollTo(0, 0);
+  if (push !== false) try { history.pushState({ yt: S.step }, "", location.href); } catch (e) {}
+}
+window.addEventListener("popstate", e => { const st = e.state && typeof e.state.yt === "number" ? e.state.yt : 0; S.step = st; save(); render(); window.scrollTo(0, 0); });
+/* 숫자 칸: 치는 대로 천 단위 쉼표 · 커서 위치 유지 */
+function fmtNum(el) {
+  const raw = el.value, pos = el.selectionStart || 0, digitsBefore = raw.slice(0, pos).replace(/\D/g, "").length;
+  const d = raw.replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 7); el.value = d ? (+d).toLocaleString("ko-KR") : "";
+  let p = 0, seen = 0; while (p < el.value.length && seen < digitsBefore) { if (/\d/.test(el.value[p])) seen++; p++; }
+  try { el.setSelectionRange(p, p); } catch (e) {} return d ? +d : 0;
+}
+/* 다시 그릴 때 창 · 칸의 스크롤 자리 지키기 */
+function keep(fn) { const y = window.scrollY; fn(); window.scrollTo(0, y); }
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.m) { S[t.dataset.m] = fmtNum(t); save(); refreshResult(); return; }
+  if (t.dataset.a != null) { const a = S.apps[+t.dataset.a]; if (!a) return; const k = t.dataset.k;
+    if (k === "n") a.n = t.value.slice(0, 20);
+    else { let v = t.value.replace(k === "h" ? /[^\d.]/g : /\D/g, ""); if (k === "h") { v = v.replace(/(\..*)\./g, "$1"); if (+v > 24) v = "24"; } if (k === "d" && +v > 31) v = "31"; if (k === "w" && v.length > 5) v = v.slice(0, 5); t.value = v; a[k] = +v || 0; }
+    save(); refreshResult(); }
+});
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT") { const ins = [...document.querySelectorAll("#panel input")]; const i = ins.indexOf(e.target); if (i >= 0 && i < ins.length - 1) ins[i + 1].focus(); else e.target.blur(); } });
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.go != null) return go(+b.dataset.go);
+  if (b.hasAttribute("data-next")) return go(S.step + 1);
+  if (b.hasAttribute("data-prev")) return history.state && typeof history.state.yt === "number" && history.state.yt === S.step && S.step > 0 ? history.back() : go(S.step - 1);
+  if (b.dataset.ch) { S[b.dataset.ch] = JSON.parse(b.dataset.v); if (b.dataset.ch === "mode" && S.mode === "meter" && !S.cur && S.kwh) { S.prev = 0; } save(); return keep(render); }
+  if (b.dataset.add != null) { const i = +b.dataset.add, p = PRESET[i]; S.apps.push(p ? { n: p[0], w: p[1], h: p[2], d: p[3] } : { n: "내 가전", w: 0, h: 0, d: 30 }); save(); keep(render); if (!p) { const ins = document.querySelectorAll(`[data-a="${S.apps.length - 1}"][data-k="w"]`); if (ins[0]) ins[0].focus(); } return; }
+  if (b.dataset.del != null) { S.apps.splice(+b.dataset.del, 1); save(); return keep(render); }
+  if (b.hasAttribute("data-print")) { if (S.step !== 2) go(2); setTimeout(() => window.print(), 120); return; }
+  if (b.hasAttribute("data-reset")) { if (!confirmReset()) return; S = BLANK(); try { localStorage.removeItem(LSK); } catch (er) {} go(0); toast("입력한 값을 모두 지웠어요"); }
+});
+let rsT = 0;
+function confirmReset() { const n = Date.now(); if (n - rsT < 4000) return true; rsT = n; toast("한 번 더 누르면 입력한 값을 모두 지워요"); return false; }
+function toast(t) { const o = document.querySelector(".toast"); if (o) o.remove(); const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
+
+/* ── 바뀐 곳 표시 ── */
+let BASE = null, baseT = 0;
+function snap() { const m = {}; document.querySelectorAll("[data-dk]").forEach(e => { m[e.dataset.dk] = +e.dataset.v; }); return m; }
+function startBase() { clearTimeout(baseT); if (!BASE) BASE = snap(); }
+function endBase(ms) { clearTimeout(baseT); baseT = setTimeout(() => { BASE = null; document.querySelectorAll(".dlt").forEach(x => { x.classList.add("out"); setTimeout(() => x.remove(), 400); }); }, ms); }
+function showDeltas() {
+  if (!BASE) return;
+  document.querySelectorAll("[data-dk]").forEach(el => {
+    const k = el.dataset.dk, d = +el.dataset.v - (k in BASE ? BASE[k] : 0); const old = el.querySelector(".dlt"); if (old) old.remove();
+    if (Math.abs(d) < 1 || !(k in BASE) || !BASE[k]) return;
+    const good = (d > 0) === (el.dataset.gd !== "down");
+    el.insertAdjacentHTML("beforeend", `<span class="dlt ${good ? "g" : "b"}">${(d > 0 ? "+" : "−") + won(Math.abs(d))}</span>`);
+  });
+}
+document.addEventListener("focusin", e => { if (e.target.closest && e.target.closest("#panel") && e.target.matches("input")) { BASE = null; startBase(); } });
+document.addEventListener("focusout", e => { if (e.target.closest && e.target.closest("#panel") && e.target.matches("input")) endBase(5000); });
+
+/* 시작 — 블로그 경유 잠금(대표 글 공개 시각부터) */
+const GATE_ON = Date.now() >= Date.parse("2026-12-04T09:00:00+09:00");   /* 대표 글 공개 시각 */
+(async () => {
+  const T = new URLSearchParams(location.search).get("tab") || "all";
+  if (GATE_ON && !(await BJ_GATE.check(TOOL, T))) return;
+  try { history.replaceState({ yt: S.step }, "", location.href); } catch (e) {}
+  render();
+})();
+
+/* 블로그 글 속(iframe)에서만: 내용 높이를 블로그에 알림 */
+(function () { if (!EMBED || window.parent === window) return;
+  let last = 0, t = null;
+  function send() { const r = document.getElementById("root"); if (!r) return; const h = Math.ceil(r.getBoundingClientRect().height) + 8; if (Math.abs(h - last) < 4) return; last = h; try { window.parent.postMessage({ blogj: "height", h }, "https://luvbong.tistory.com"); } catch (e) {} }
+  function soon() { clearTimeout(t); t = setTimeout(send, 60); }
+  if (window.ResizeObserver) new ResizeObserver(soon).observe(document.getElementById("root"));
+  window.addEventListener("load", send); setTimeout(send, 300);
+})();
+</script>
+</body></html>

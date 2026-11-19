@@ -1048,6 +1048,7 @@ document.addEventListener("click", e => {
   if (d.add != null) { S.cart.push(curOpt()); save(); S.view = "cart"; render(); toast(`${KR(S.k).name}을 장보기에 담았어요 — 다른 김치도 고를 수 있어요.`); return; }
   if (d.rm != null) { S.cart.splice(+d.rm, 1); save(); render(); return; }
   if (d.print != null) { window.print(); return; }
+  if ((d.png != null || d.copy != null) && !$("#sheet .sh-t")) { toast("장보기에 담은 김치가 없어요. 4단계에서 「이 김치 장보기에 담기」를 먼저 눌러 주세요."); return; }
   if (d.png != null) { savePng(); return; }
   if (d.copy != null) { const t = sheetText(); (navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("글로 복사했어요. 카톡 · 메모에 붙여 넣으세요."), () => { const a = document.createElement("textarea"); a.value = t; a.style.position = "fixed"; a.style.opacity = "0"; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); toast("글로 복사했어요."); } catch (e) { toast("복사하지 못했어요."); } a.remove(); }); return; }
 });

@@ -330,6 +330,9 @@ html.pw-photo-text:not(.pw-sidebar-right) #tt-body-page,html:not(.pw-sidebar-rig
 /* ── 사이드바 오른쪽: 큰 화면은 틀을 넓히고, 그보다 좁으면 사진을 글 폭에 맞춤(어중간한 차이 없애기) ── */
 @media (min-width:1500px){.pw-sidebar-right{--wrap:1440px}}
 @media (max-width:1499px){.pw-hasside.pw-photo-wide .pw-content>*{max-width:var(--read)!important}}
+/* 사이드바 오른쪽 + 사진을 글 폭으로: 틀을 「글 760 + 간격 48 + 사이드바 300」에 딱 맞춰 사이가 벌어지지 않게 */
+html.pw-sidebar-right.pw-photo-text{--wrap:calc(var(--read) + 388px)}
+@media (max-width:1499px){html.pw-sidebar-right.pw-photo-wide{--wrap:calc(var(--read) + 388px)}}
 
 /* ── 반응형 ── */
 @media (max-width:1100px){

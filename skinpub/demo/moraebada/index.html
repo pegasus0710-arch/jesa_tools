@@ -18,8 +18,8 @@ a{color:inherit}
 .brand{display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none}
 .logo{width:30px;height:30px;border-radius:8px;background:var(--sea);color:#fff;display:grid;place-items:center;font-weight:800;font-style:italic;position:relative;flex-shrink:0}
 .logo::after{content:"";position:absolute;right:-2px;bottom:-2px;width:8px;height:8px;border-radius:50%;background:var(--dot);border:2px solid #fff}
-.brand b{font-size:15px;white-space:nowrap}
-.brand small{display:block;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+.brand .home{display:inline-flex;align-items:center;gap:4px;height:38px;padding:0 12px 0 8px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:700;white-space:nowrap}
+.brand:hover .home{border-color:var(--sea);color:var(--sea)}
 .tabs{display:flex;gap:4px;flex:1 1 auto;justify-content:center;min-width:0}
 .tabs button,.dev button{height:38px;padding:0 14px;border:1px solid transparent;background:transparent;border-radius:8px;cursor:pointer;white-space:nowrap;color:var(--ink2)}
 .tabs button:hover,.dev button:hover{background:var(--panel)}
@@ -35,6 +35,7 @@ a{color:inherit}
 .main{flex:1 1 auto;display:flex;min-height:0}
 .panel{width:320px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:16px 18px 28px}
 .panel h2{margin:0 0 4px;font-size:16px}
+.pname{margin:0 0 4px;font-size:13px;font-weight:700;color:var(--sea)}
 .panel .lead{margin:0 0 14px;color:var(--ink2);line-height:1.55}
 .grp{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
 .grp h3{margin:0 0 10px;font-size:12.5px;letter-spacing:.06em;color:var(--ink2)}
@@ -61,6 +62,7 @@ a{color:inherit}
 .stage{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;background:var(--stage)}
 .cap{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;padding:8px 16px;font-size:13px;color:var(--ink2);border-bottom:1px solid var(--line);background:#efe9dd}
 .cap b{color:var(--ink)}
+.cap .sk{font-size:15px;color:var(--sea);padding-right:12px;margin-right:2px;border-right:1px solid var(--line)}
 .cap .warn{margin-left:auto}
 .view{flex:1 1 auto;position:relative;overflow:hidden}
 .vp{position:absolute;top:0;left:0;transform-origin:0 0;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
@@ -71,7 +73,6 @@ a{color:inherit}
 .sheet-bg{display:none}
 @media (max-width:900px){
   .top{padding:8px 12px;gap:8px}
-  .brand small{display:none}
   .tabs{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto}
   .tabs button{height:36px;padding:0 12px}
   .dev,.tbtn{display:none}
@@ -91,7 +92,7 @@ a{color:inherit}
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">J</span><span><b id="skinName"></b><small>스킨 체험하기 · 다른 스킨 보기</small></span></a>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">J</span><span class="home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>스킨 모음</span></a>
   <nav class="tabs" id="tabs" aria-label="화면 고르기"></nav>
   <div class="dev" role="group" aria-label="화면 폭"><button type="button" data-dev="wide" title="1920px — 큰 모니터(따라오는 차례 · 넓은 화면 기능까지)">큰 모니터</button><button type="button" data-dev="pc" title="1366px — 노트북">노트북</button><button type="button" data-dev="phone" title="390px">휴대폰</button></div>
   <button type="button" class="tbtn" id="foldBtn" aria-pressed="false">설정 접기</button>
@@ -103,7 +104,7 @@ a{color:inherit}
   <aside class="panel" id="panel" aria-label="스킨 설정" data-ks="panel">
     <span class="grab" aria-hidden="true"></span>
     <button type="button" class="closebtn" id="closeBtn">닫기</button>
-    <h2>스킨 편집 설정</h2>
+    <p class="pname" id="skinName2"></p><h2>스킨 편집 설정</h2>
     <p class="lead">티스토리 「꾸미기 › 스킨 편집」 오른쪽 칸과 같은 이름입니다. 누르면 옆 화면이 바로 바뀝니다.</p>
     <div id="fields"></div>
     <div class="tools"><button type="button" id="reset">처음 값으로</button><button type="button" id="copy">이 설정 주소 복사</button></div>
@@ -111,7 +112,7 @@ a{color:inherit}
   </aside>
   <div class="sheet-bg" id="sheetBg"></div>
   <section class="stage" aria-label="스킨 미리보기">
-    <p class="cap"><span>지금 화면: <b id="capT"></b></span><span id="capD"></span><span class="warn">체험 화면 — 댓글 · 검색은 실제 블로그에서 동작</span></p>
+    <p class="cap"><b class="sk" id="skinName"></b><span>지금 화면: <b id="capT"></b></span><span id="capD"></span><span class="warn">체험 화면 — 댓글 · 검색은 실제 블로그에서 동작</span></p>
     <div class="view" id="view"><div class="vp" id="vp"><iframe id="fr" title="스킨 미리보기 화면"></iframe></div></div>
   </section>
 </div>
@@ -129,7 +130,7 @@ var q=new URLSearchParams(location.search);
 var qp=q.get('page');if(qp&&!/\.html$/.test(qp))qp+='.html';if(qp&&C.pages.some(function(p){return p.file===qp;}))page=qp;
 if(/^(phone|pc|wide)$/.test(q.get('dev')||''))dev=q.get('dev');
 F.forEach(function(f){if(q.has(f.key))S[f.key]=q.get(f.key);});
-$('#skinName').textContent=C.name;
+$('#skinName').textContent=C.name;$('#skinName2').textContent=C.name;
 var cta=$('#cta');cta.href=C.get;cta.textContent=C.getlabel;
 $('#others').innerHTML=C.others.map(function(o){return '다른 스킨: <a href="../'+o.slug+'/">'+o.name+'</a>';}).join(' · ');
 

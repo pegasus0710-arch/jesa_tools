@@ -1592,6 +1592,9 @@ html.bjfl-same .bj-ft-same .bj-logo-t small { display: none; }
 .bj-th.bj-noimg, .bj-th:not(:has(img)) { display: none !important; }
 .bj-cv .bj-item:has(.bj-th.bj-noimg), .bj-cv .bj-item:not(:has(.bj-th img)) { grid-template-columns: 1fr !important; }
 .bj-recent img[src$='fname='] { display: none !important; }
+.bjrt-hide .bj-recent img { display: none !important; }
+.bjrt-hide .bj-recent li { padding: 7px 0 7px 14px; position: relative; }
+.bjrt-hide .bj-recent li::before { content: ''; position: absolute; left: 2px; top: 1.05em; width: 5px; height: 5px; border-radius: 50%; background: var(--bjc-main); opacity: .55; }
 .bj-empty { padding: 48px 20px; text-align: center; color: var(--t2, #5F6B7A); border: 1px dashed var(--bjc-sandl); border-radius: 14px; margin: 18px 0; }
 .bj-empty p { margin: 6px 0; } .bj-empty b { color: var(--t1, #14202B); font-size: 17px; } .bj-empty a { color: var(--bjc-main); font-weight: 700; }
 

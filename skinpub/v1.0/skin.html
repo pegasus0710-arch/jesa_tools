@@ -26,14 +26,15 @@ side=[##_var_bj-sidebar_##]
 list=[##_var_bj-list_##]
 color=[##_var_bj-color_##]
 fl=[##_var_bj-foot-logo_##]
+rt=[##_var_bj-recent-thumb_##]
 <s_if_var_bj-num>num=1</s_if_var_bj-num>
 <s_if_var_bj-sheets>sheets=1</s_if_var_bj-sheets>
 <s_if_var_bj-punch>punch=1</s_if_var_bj-punch>
 </script>
-<script>(function(){var t=(document.getElementById('bjcfg')||{}).textContent||'',C={pal:'sea',font:'pretendard',w:'normal',side:'right',list:'thumb',color:'',fl:'none',num:0,sheets:0,punch:0};
+<script>(function(){var t=(document.getElementById('bjcfg')||{}).textContent||'',C={pal:'sea',font:'pretendard',w:'normal',side:'right',list:'thumb',color:'',fl:'none',rt:'show',num:0,sheets:0,punch:0};
 t.split('\n').forEach(function(l){var m=l.match(/^\s*([a-z]+)=(.*)$/);if(m&&m[2].trim()&&m[2].indexOf('[##')<0)C[m[1]]=m[2].trim();});
 C.num=C.num==1;C.sheets=C.sheets==1;C.punch=C.punch==1;window.BJC=C;var d=document.documentElement;
-d.classList.add('bjp-'+C.pal,'bjf-'+C.font,'bjw-'+C.w,'bjs-'+C.side);if(C.punch)d.classList.add('bj-punch');d.classList.add('bjl-'+C.list,'bjfl-'+C.fl);if(C.pal==='custom'&&/^#[0-9a-fA-F]{6}$/.test(C.color)){var hx=C.color,n=parseInt(hx.slice(1),16),R=n>>16,G=n>>8&255,B=n&255,mx=function(t,a){return 'rgb('+[R,G,B].map(function(v){return Math.round(v+(t-v)*a)}).join(',')+')'};[['main',hx],['main2',mx(0,.22)],['deep',mx(0,.55)],['deep2',mx(0,.68)],['deep3',mx(0,.45)],['ondark',mx(255,.6)],['ondark2',mx(255,.68)],['light',mx(255,.9)]].forEach(function(p){d.style.setProperty('--bjc-'+p[0],p[1])});}
+d.classList.add('bjp-'+C.pal,'bjf-'+C.font,'bjw-'+C.w,'bjs-'+C.side);if(C.punch)d.classList.add('bj-punch');d.classList.add('bjl-'+C.list,'bjfl-'+C.fl);if(C.rt==='hide')d.classList.add('bjrt-hide');if(C.pal==='custom'&&/^#[0-9a-fA-F]{6}$/.test(C.color)){var hx=C.color,n=parseInt(hx.slice(1),16),R=n>>16,G=n>>8&255,B=n&255,mx=function(t,a){return 'rgb('+[R,G,B].map(function(v){return Math.round(v+(t-v)*a)}).join(',')+')'};[['main',hx],['main2',mx(0,.22)],['deep',mx(0,.55)],['deep2',mx(0,.68)],['deep3',mx(0,.45)],['ondark',mx(255,.6)],['ondark2',mx(255,.68)],['light',mx(255,.9)]].forEach(function(p){d.style.setProperty('--bjc-'+p[0],p[1])});}
 var F={nanumgothic:'Nanum+Gothic:wght@400;700;800',gowun:'Gowun+Dodum',myeongjo:'Nanum+Myeongjo:wght@400;700;800'}[C.font];
 if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+F+'&display=swap';document.head.appendChild(l);}})();</script>
 <!-- ══════════ Blog J 모래바다 v1.0 ══════════ -->

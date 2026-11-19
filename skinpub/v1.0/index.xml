@@ -163,6 +163,14 @@
         <default><![CDATA[thumb]]></default>
       </variable>
       <variable>
+        <name>bj-recent-thumb</name>
+        <label><![CDATA[최근 글 사진]]></label>
+        <description><![CDATA[사이드바(바닥 칸 포함) 「최근 글」 목록 앞 작은 사진]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "show", "label": "보이기", "value": "show"}, {"name": "hide", "label": "숨기기(제목만)", "value": "hide"}]]]></option>
+        <default><![CDATA[show]]></default>
+      </variable>
+      <variable>
         <name>bj-sidebar</name>
         <label><![CDATA[사이드바 위치]]></label>
         <description><![CDATA[아래 = 사이드바 전체가 바닥 색 띠 안으로. 몇 개만 보내려면 꾸미기 › 사이드바에서 「바닥」 칸으로 옮기세요. 오른쪽 · 왼쪽은 휴대폰에서 본문 아래로 갑니다]]></description>

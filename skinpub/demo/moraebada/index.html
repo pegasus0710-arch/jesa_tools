@@ -56,6 +56,7 @@ a{color:inherit}
 .fld.chg .lb::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--dot);margin-left:6px;vertical-align:middle}
 .rs{flex-shrink:0;border:0;background:none;color:var(--sea);font-size:12.5px;padding:2px 0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .fld .ds{display:block;color:var(--ink2);font-size:12.5px;line-height:1.5;margin-top:7px}
+.fld .ds b{color:var(--ink);font-weight:700}
 .fld .ds em{font-style:normal;color:#8a8273;white-space:nowrap}
 .seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
 .seg button{min-height:38px;padding:4px 8px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer;line-height:1.3;text-align:center}
@@ -138,16 +139,21 @@ a{color:inherit}
 <div class="toast" id="toast" role="status"></div>
 <script>
 (function(){
-var C={"slug": "moraebada", "name": "Blog J 모래바다", "sub": "읽는 글 중심 · 따라오는 차례 · 제목 번호 · 홈 꾸미기", "get": "https://luvbong.tistory.com/862", "getlabel": "다운로드 글 보기", "pages": [{"file": "home.html", "label": "홈", "desc": "홈 화면 설정: 큰 글 + 목록 · 카드 3칸"}, {"file": "home2.html", "label": "홈 다른 구성", "desc": "홈 화면 설정: 사진 갤러리 · 사진 목록 · 제목 목록"}, {"file": "list.html", "label": "글 목록", "desc": "카테고리 · 검색 · 태그 목록 화면"}, {"file": "post.html", "label": "게시글", "desc": "사진 · 글 · 표가 들어간 게시글 화면"}], "groups": [{"name": "모양", "items": [{"var": "bj-palette", "key": "pal", "kind": "val", "type": "SELECT", "label": "색 묶음", "desc": "", "default": "sea", "options": [["sea", "모래 · 바다"], ["forest", "숲"], ["navy", "남색"], ["ink", "먹(흑백)"], ["blossom", "벚꽃"], ["custom", "직접 고르기(아래 색)"]]}, {"var": "bj-color", "key": "color", "kind": "val", "type": "COLOR", "label": "주 색(색 묶음 「직접 고르기」일 때)", "desc": "단추 · 링크 · 강조에 쓰는 색. 진한 색 · 옅은 색은 이 색에서 저절로 만듭니다", "default": "#0e7c86"}, {"var": "bj-font", "key": "font", "kind": "val", "type": "SELECT", "label": "글꼴", "desc": "", "default": "pretendard", "options": [["pretendard", "프리텐다드"], ["nanumgothic", "나눔고딕"], ["gowun", "고운돋움"], ["myeongjo", "나눔명조"]]}, {"var": "bj-width", "key": "w", "kind": "val", "type": "SELECT", "label": "본문 너비", "desc": "", "default": "normal", "options": [["narrow", "좁게"], ["normal", "보통"], ["wide", "넓게"], ["xwide", "아주 넓게"]]}, {"var": "bj-list", "key": "list", "kind": "val", "type": "SELECT", "label": "글 목록 모양", "desc": "카테고리 · 검색 · 태그 목록", "default": "thumb", "options": [["thumb", "사진 목록"], ["card", "카드"], ["title", "제목 목록"], ["zine", "잡지(큰 사진 글 + 격자)"], ["magazine", "번호 목록(01 · 02 + 오른쪽 사진)"]]}, {"var": "bj-side-list", "key": "sl", "kind": "val", "type": "SELECT", "label": "목록 모양(최근 글 · 많이 본 글 · 최근 댓글)", "desc": "사이드바 · 바닥 칸의 세 목록을 같은 모양으로", "default": "thumb", "options": [["thumb", "사진 + 제목"], ["num", "번호 + 제목"], ["dot", "점 + 제목"]]}, {"var": "bj-head-color", "key": "hd", "kind": "val", "type": "SELECT", "label": "머리 색", "desc": "맨 위 블로그 제목 · 메뉴 · 검색 칸의 바탕", "default": "light", "options": [["light", "밝게(본문 바탕과 같게)"], ["dark", "바닥과 같은 진한 색"]]}, {"var": "bj-sidebar", "key": "side", "kind": "val", "type": "SELECT", "label": "사이드바 위치", "desc": "아래 = 사이드바 전체가 바닥 색 띠 안으로. 몇 개만 보내려면 꾸미기 › 사이드바에서 「바닥」 칸으로 옮기세요. 오른쪽 · 왼쪽은 휴대폰에서 본문 아래로 갑니다", "default": "right", "options": [["right", "오른쪽"], ["left", "왼쪽"], ["bottom", "아래(바닥 색 띠 안)"], ["none", "없음"]]}]}, {"name": "글 화면", "items": [{"var": "bj-num", "key": "num", "kind": "bool", "type": "BOOL", "label": "제목 번호(02 / 05 · 01)", "desc": "", "default": "true"}, {"var": "bj-sheets", "key": "sheets", "kind": "bool", "type": "BOOL", "label": "제목1마다 종이 한 장으로 나누기", "desc": "", "default": "true"}, {"var": "bj-punch", "key": "punch", "kind": "bool", "type": "BOOL", "label": "종이에 타공 노트 무늬(구멍 · 여백선 · 쪽 번호)", "desc": "장 나누기를 켰을 때만", "default": ""}]}, {"name": "바닥", "items": [{"var": "bj-foot-logo", "key": "fl", "kind": "val", "type": "SELECT", "label": "바닥 로고", "desc": "", "default": "none", "options": [["none", "없음"], ["same", "머리 로고와 같게"], ["own", "바닥용 그림(아래)"]]}]}], "others": []};
+var C={"slug": "moraebada", "name": "Blog J 모래바다", "sub": "읽는 글 중심 · 따라오는 차례 · 제목 번호 · 홈 꾸미기", "get": "https://luvbong.tistory.com/862", "getlabel": "다운로드 글 보기", "pages": [{"file": "home.html", "label": "홈", "desc": ""}, {"file": "list.html", "label": "글 목록", "desc": "카테고리 · 검색 · 태그 목록 화면"}, {"file": "post.html", "label": "게시글", "desc": "사진 · 글 · 표가 들어간 게시글 화면"}], "groups": [{"name": "모양", "items": [{"var": "bj-palette", "key": "pal", "kind": "val", "type": "SELECT", "label": "색 묶음", "desc": "", "default": "sea", "options": [["sea", "모래 · 바다"], ["forest", "숲"], ["navy", "남색"], ["ink", "먹(흑백)"], ["blossom", "벚꽃"], ["custom", "직접 고르기(아래 색)"]]}, {"var": "bj-color", "key": "color", "kind": "val", "type": "COLOR", "label": "주 색(색 묶음 「직접 고르기」일 때)", "desc": "단추 · 링크 · 강조에 쓰는 색. 진한 색 · 옅은 색은 이 색에서 저절로 만듭니다", "default": "#0e7c86"}, {"var": "bj-font", "key": "font", "kind": "val", "type": "SELECT", "label": "글꼴", "desc": "", "default": "pretendard", "options": [["pretendard", "프리텐다드"], ["nanumgothic", "나눔고딕"], ["gowun", "고운돋움"], ["myeongjo", "나눔명조"]]}, {"var": "bj-width", "key": "w", "kind": "val", "type": "SELECT", "label": "본문 너비", "desc": "", "default": "normal", "options": [["narrow", "좁게"], ["normal", "보통"], ["wide", "넓게"], ["xwide", "아주 넓게"]]}, {"var": "bj-list", "key": "list", "kind": "val", "type": "SELECT", "label": "글 목록 모양", "desc": "카테고리 · 검색 · 태그 목록", "default": "thumb", "options": [["thumb", "사진 목록"], ["card", "카드"], ["title", "제목 목록"], ["zine", "잡지(큰 사진 글 + 격자)"], ["magazine", "번호 목록(01 · 02 + 오른쪽 사진)"]]}, {"var": "bj-side-list", "key": "sl", "kind": "val", "type": "SELECT", "label": "목록 모양(최근 글 · 많이 본 글 · 최근 댓글)", "desc": "사이드바 · 바닥 칸의 세 목록을 같은 모양으로", "default": "thumb", "options": [["thumb", "사진 + 제목"], ["num", "번호 + 제목"], ["dot", "점 + 제목"]]}, {"var": "bj-head-color", "key": "hd", "kind": "val", "type": "SELECT", "label": "머리 색", "desc": "맨 위 블로그 제목 · 메뉴 · 검색 칸의 바탕", "default": "light", "options": [["light", "밝게(본문 바탕과 같게)"], ["dark", "바닥과 같은 진한 색"]]}, {"var": "bj-sidebar", "key": "side", "kind": "val", "type": "SELECT", "label": "사이드바 위치", "desc": "아래 = 사이드바 전체가 바닥 색 띠 안으로. 몇 개만 보내려면 꾸미기 › 사이드바에서 「바닥」 칸으로 옮기세요. 오른쪽 · 왼쪽은 휴대폰에서 본문 아래로 갑니다", "default": "right", "options": [["right", "오른쪽"], ["left", "왼쪽"], ["bottom", "아래(바닥 색 띠 안)"], ["none", "없음"]]}]}, {"name": "글 화면", "items": [{"var": "bj-num", "key": "num", "kind": "bool", "type": "BOOL", "label": "제목 번호(02 / 05 · 01)", "desc": "", "default": "true"}, {"var": "bj-sheets", "key": "sheets", "kind": "bool", "type": "BOOL", "label": "제목1마다 종이 한 장으로 나누기", "desc": "", "default": "true"}, {"var": "bj-punch", "key": "punch", "kind": "bool", "type": "BOOL", "label": "종이에 타공 노트 무늬(구멍 · 여백선 · 쪽 번호)", "desc": "장 나누기를 켰을 때만", "default": ""}]}, {"name": "바닥", "items": [{"var": "bj-foot-logo", "key": "fl", "kind": "val", "type": "SELECT", "label": "바닥 로고", "desc": "", "default": "none", "options": [["none", "없음"], ["same", "머리 로고와 같게"], ["own", "바닥용 그림(아래)"]]}]}], "home": {"top": "큰 글 + 목록", "bodies": [["grid", "카드 3칸"], ["list", "사진 목록"], ["gallery", "사진 갤러리"], ["titles", "제목 목록"]]}, "others": []};
 var $=function(s){return document.querySelector(s);},doc=document;
 var F=[];C.groups.forEach(function(g){g.items.forEach(function(it){F.push(it);});});
 var S={},page=C.pages[0].file,dev='wide';
+var H={top:'1',body:C.home.bodies[0][0]};
+function homeFile(){return (H.top==='1'&&H.body===C.home.bodies[0][0])?'home.html':'home-'+H.top+'-'+H.body+'.html';}
+function realFile(){return page==='home.html'?homeFile():page;}
+function homeDesc(){var bl=(C.home.bodies.filter(function(x){return x[0]===H.body;})[0]||['',''])[1];return '홈 화면 설정: '+(H.top==='1'?C.home.top+' + ':'')+bl;}
 function defaults(){F.forEach(function(f){S[f.key]=f.default||'';});}
 defaults();
 /* 주소에서 읽기 */
 var q=new URLSearchParams(location.search);
 var qp=q.get('page');if(qp&&!/\.html$/.test(qp))qp+='.html';if(qp&&C.pages.some(function(p){return p.file===qp;}))page=qp;
 if(/^(phone|pc|wide)$/.test(q.get('dev')||''))dev=q.get('dev');
+if(q.get('hometop')==='0')H.top='0';if(C.home.bodies.some(function(x){return x[0]===q.get('homebody');}))H.body=q.get('homebody');
 F.forEach(function(f){if(q.has(f.key))S[f.key]=q.get(f.key);});
 $('#skinName').textContent=C.name;$('#skinName2').textContent=C.name;
 var cta=$('#cta');cta.href=C.get;cta.textContent=C.getlabel;
@@ -162,8 +168,8 @@ var tabs=$('#tabs');
 C.pages.forEach(function(p){var b=doc.createElement('button');b.type='button';b.textContent=p.label;b.setAttribute('data-f',p.file);b.title=p.desc;
   b.addEventListener('click',function(){go(p.file);});tabs.appendChild(b);});
 function markTab(){[].forEach.call(tabs.children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-f')===page?'true':'false');});
-  var p=C.pages.filter(function(x){return x.file===page;})[0]||{label:page,desc:''};$('#capT').textContent=p.label;$('#capD').textContent=p.desc;}
-function syncURL(){var u=new URLSearchParams();if(page!==C.pages[0].file)u.set('page',page);if(dev!=='wide')u.set('dev',dev);
+  var p=C.pages.filter(function(x){return x.file===page;})[0]||{label:page,desc:''};$('#capT').textContent=p.label;$('#capD').textContent=page==='home.html'?homeDesc():p.desc;}
+function syncURL(){var u=new URLSearchParams();if(page!==C.pages[0].file)u.set('page',page);if(dev!=='wide')u.set('dev',dev);if(H.top!=='1')u.set('hometop','0');if(H.body!==C.home.bodies[0][0])u.set('homebody',H.body);
   F.forEach(function(f){if((S[f.key]||'')!==(f.default||''))u.set(f.key,S[f.key]);});var s=u.toString();
   try{history.replaceState(null,'',location.pathname+(s?'?'+s:''));}catch(e){}}
 
@@ -177,9 +183,24 @@ C.groups.forEach(function(g){g.items.forEach(function(f){f.from=g.name;var id=nu
   G[id||'layout'].items.push(f);});});
 var openId=null;try{openId=sessionStorage.getItem('bjDemoGrp:'+C.slug);}catch(e){}
 var GL=TOPIC.map(function(t){return G[t[0]];}).filter(function(g){return g.items.length;});
-if(!GL.some(function(g){return g.id===openId;}))openId=GL[0].id;
+if(openId!=='home'&&!GL.some(function(g){return g.id===openId;}))openId='home';
 function openGrp(id){openId=openId===id?null:id;try{sessionStorage.setItem('bjDemoGrp:'+C.slug,openId||'');}catch(e){}paintGrp();}
-GL.forEach(function(g){var sec=doc.createElement('section');sec.className='grp';sec.setAttribute('data-g',g.id);
+GL.unshift({id:'home',name:'홈 구성',items:[],custom:true});
+(function(){var sec=doc.createElement('section');sec.className='grp';sec.setAttribute('data-g','home');
+  sec.innerHTML='<h3><button type="button" class="gh" aria-controls="gb-home"><span class="gn">홈 구성</span><span class="gc">2개</span><span class="gd" hidden></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3>'+
+   '<div class="gb" id="gb-home"><div class="fld" data-hf="top"><div class="ft"><span class="lb" id="lb-hometop"></span></div><button type="button" class="sw" role="switch" aria-labelledby="lb-hometop" id="hTop"><span class="st"></span><i aria-hidden="true"></i></button><span class="ds">홈 맨 위에 놓는 칸</span></div>'+
+   '<div class="fld" data-hf="body"><div class="ft"><span class="lb" id="lb-homebody">아래 칸 모양</span></div><div class="seg" role="group" aria-labelledby="lb-homebody" id="hBody"></div>'+
+   '<span class="ds">홈은 스킨 편집이 아니라 <b>꾸미기 › 스킨 편집 › 「홈 화면 설정」</b>에서 칸을 추가하며 모양을 고릅니다. 칸은 여러 개 쌓을 수 있고, 칸마다 카테고리 · 글 개수 · 제목을 따로 정합니다.</span></div></div>';
+  box.appendChild(sec);$('#lb-hometop').textContent='「'+C.home.top+'」 칸';
+  sec.querySelector('.gh').addEventListener('click',function(){openGrp('home');});
+  C.home.bodies.forEach(function(x){var b=doc.createElement('button');b.type='button';b.textContent=x[1];b.setAttribute('data-v',x[0]);b.addEventListener('click',function(){setHome('body',x[0]);});$('#hBody').appendChild(b);});
+  $('#hTop').addEventListener('click',function(){setHome('top',H.top==='1'?'0':'1');});})();
+function setHome(k,v){H[k]=v;page='home.html';paint();markTab();syncURL();load(false);}
+function paintHome(){var t=$('#hTop');t.setAttribute('aria-checked',H.top==='1'?'true':'false');t.querySelector('.st').textContent=H.top==='1'?'켜짐':'꺼짐';
+  [].forEach.call($('#hBody').children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-v')===H.body?'true':'false');});
+  var n=(H.top!=='1'?1:0)+(H.body!==C.home.bodies[0][0]?1:0),gd=box.querySelector('[data-g="home"] .gd');gd.hidden=!n;gd.textContent='바꿈 '+n;
+  box.querySelector('[data-hf="top"]').classList.toggle('chg',H.top!=='1');box.querySelector('[data-hf="body"]').classList.toggle('chg',H.body!==C.home.bodies[0][0]);}
+GL.forEach(function(g){if(g.custom)return;var sec=doc.createElement('section');sec.className='grp';sec.setAttribute('data-g',g.id);
   var h=doc.createElement('h3'),hb=doc.createElement('button');hb.type='button';hb.className='gh';hb.setAttribute('aria-controls','gb-'+g.id);
   hb.innerHTML='<span class="gn"></span><span class="gc"></span><span class="gd" hidden>바꿈</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
   hb.querySelector('.gn').textContent=g.name;hb.querySelector('.gc').textContent=g.items.length+'개';hb.addEventListener('click',function(){openGrp(g.id);});h.appendChild(hb);sec.appendChild(h);
@@ -202,7 +223,7 @@ GL.forEach(function(g){var sec=doc.createElement('section');sec.className='grp';
     body.appendChild(d);});
   sec.appendChild(body);box.appendChild(sec);});
 function paintGrp(){GL.forEach(function(g){var sec=box.querySelector('[data-g="'+g.id+'"]'),on=g.id===openId;sec.classList.toggle('open',on);sec.querySelector('.gh').setAttribute('aria-expanded',on?'true':'false');sec.querySelector('.gb').hidden=!on;
-  var n=g.items.filter(function(f){return (S[f.key]||'')!==(f.default||'');}).length,gd=sec.querySelector('.gd');gd.hidden=!n;gd.textContent='바꿈 '+n;});}
+  if(g.custom)return;var n=g.items.filter(function(f){return (S[f.key]||'')!==(f.default||'');}).length,gd=sec.querySelector('.gd');gd.hidden=!n;gd.textContent='바꿈 '+n;});paintHome();}
 function paint(){F.forEach(function(f){var c=box.querySelector('[data-k="'+f.key+'"]');if(!c)return;var v=S[f.key]||'';
   if(c.classList.contains('seg'))[].forEach.call(c.children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-v')===v?'true':'false');});
   else if(c.tagName==='SELECT')c.value=v;else if(c.classList.contains('sw')){c.setAttribute('aria-checked',v==='true'?'true':'false');c.querySelector('.st').textContent=v==='true'?'켜짐':'꺼짐';}
@@ -220,17 +241,18 @@ function fit(){var W=view.clientWidth,Hh=view.clientHeight;view.classList.toggle
   var PW=dev==='pc'?1366:1920,s2=Math.min(1,W/PW);vp.style.cssText='width:'+PW+'px;height:'+Math.ceil(Hh/s2)+'px;transform:translate('+Math.max(0,Math.round((W-PW*s2)/2))+'px,0) scale('+s2+')';}
 window.addEventListener('resize',fit);
 function load(keep){try{keepY=keep&&fr.contentWindow?fr.contentWindow.scrollY:null;}catch(e){keepY=null;}
-  window.__bjDemoCfg=cfg();var src='pages/'+page;
+  window.__bjDemoCfg=cfg();var src='pages/'+realFile();
   if(keep&&fr.getAttribute('src')===src){try{fr.contentWindow.location.reload();return;}catch(e){}}
   fr.setAttribute('src',src);}
 fr.addEventListener('load',function(){try{var w=fr.contentWindow,f=w.location.pathname.split('/').pop();
+  if(/^home/.test(f)){if(f==='home.html'&&homeFile()!=='home.html'){page='home.html';markTab();syncURL();fr.setAttribute('src','pages/'+homeFile());return;}f='home.html';}
   if(f&&f!==page&&C.pages.some(function(p){return p.file===f;})){page=f;markTab();syncURL();}
   if(keepY){w.scrollTo(0,keepY);keepY=null;}}catch(e){}});
 function go(f){page=f;markTab();syncURL();load(false);}
 function set(k,v){S[k]=v;paint();syncURL();load(true);}
 [].forEach.call(doc.querySelectorAll('.dev button'),function(b){b.addEventListener('click',function(){dev=b.getAttribute('data-dev');markDev();syncURL();fit();});});
 function markDev(){[].forEach.call(doc.querySelectorAll('.dev button'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-dev')===dev?'true':'false');});}
-$('#reset').addEventListener('click',function(){defaults();paint();syncURL();load(true);toast('처음 값으로 돌렸어요');});
+$('#reset').addEventListener('click',function(){defaults();H.top='1';H.body=C.home.bodies[0][0];paint();markTab();syncURL();load(true);toast('처음 값으로 돌렸어요');});
 $('#copy').addEventListener('click',function(){var u=location.href;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){toast('주소를 복사했어요');},function(){prompt('이 주소를 복사하세요',u);});});
 var tm;function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tm);tm=setTimeout(function(){e.classList.remove('on');},1800);}
 

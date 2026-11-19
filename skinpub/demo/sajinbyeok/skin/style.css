@@ -316,6 +316,17 @@ button{font:inherit;color:inherit}
 }
 .pw-align-center .pw-ft-in{flex-direction:column;justify-content:center;text-align:center;gap:6px}
 .pw-align-center .pw-ft-txt{flex:0 0 auto}
+/* ── 틀 맞추기: 머리 · 본문 · 바닥의 좌우 끝을 같은 선에 ── */
+/* 사진을 글과 같은 폭으로 쓰면 글 화면 전체 틀(머리 · 바닥 포함)을 글 폭에 맞춤 */
+html.pw-photo-text:not(.pw-sidebar-right) #tt-body-page,html:not(.pw-sidebar-right) #tt-body-guestbook,html:not(.pw-sidebar-right) #tt-body-tag{--wrap:calc(var(--read) + 40px)}
+/* 사이드바 오른쪽: 글 칸을 머리 왼쪽 끝에 붙임 */
+@media (min-width:1101px){
+  .pw-hasside .pw-phead,.pw-hasside .pw-content,.pw-hasside .pw-strip,.pw-hasside .pw-ptags,.pw-hasside .pw-cm,.pw-hasside .pw-admin,.pw-hasside .pw-box,.pw-hasside .pw-protect{margin-left:0;margin-right:0}
+  .pw-hasside.pw-photo-wide .pw-content>*{margin-left:0;margin-right:0}
+  .pw-hasside .pw-phead{text-align:left}
+  .pw-hasside .pw-meta,.pw-hasside .pw-ptags{justify-content:flex-start}
+  .pw-hasside .pw-strip{justify-content:flex-start}
+}
 /* ── 사이드바 오른쪽: 큰 화면은 틀을 넓히고, 그보다 좁으면 사진을 글 폭에 맞춤(어중간한 차이 없애기) ── */
 @media (min-width:1500px){.pw-sidebar-right{--wrap:1440px}}
 @media (max-width:1499px){.pw-hasside.pw-photo-wide .pw-content>*{max-width:var(--read)!important}}

@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[##_page_title_##]</title>
+<link rel="alternate" type="application/rss+xml" title="[##_title_##]" href="[##_rss_url_##]">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body id="[##_body_id_##]">
+<s_t3>
+<script type="text/plain" id="pwcfg">
+palette=[##_var_pw-palette_##]
+color=[##_var_pw-color_##]
+font=[##_var_pw-font_##]
+cols=[##_var_pw-cols_##]
+gap=[##_var_pw-gap_##]
+radius=[##_var_pw-radius_##]
+sidebar=[##_var_pw-sidebar_##]
+list=[##_var_pw-list_##]
+caption=[##_var_pw-caption_##]
+photo=[##_var_pw-photo_##]
+hero=[##_var_pw-hero_##]
+<s_if_var_pw-viewbtn>viewbtn=1</s_if_var_pw-viewbtn>
+<s_if_var_pw-lightbox>lightbox=1</s_if_var_pw-lightbox>
+<s_if_var_pw-strip>strip=1</s_if_var_pw-strip>
+</script>
+<script>(function(){var t=(document.getElementById('pwcfg')||{}).textContent||'',C={palette:'white',color:'',font:'pretendard',cols:'4',gap:'normal',radius:'none',sidebar:'bottom',list:'wall',caption:'below',photo:'wide',hero:'tall',viewbtn:'',lightbox:'',strip:''};
+t.split('\n').forEach(function(l){var i=l.indexOf('=');if(i<1)return;var k=l.slice(0,i).trim(),v=l.slice(i+1).trim();if(v&&v.indexOf('[##')<0)C[k]=v;});
+var d=document.documentElement,A={palette:/^(white|paper|dark|black)$/,font:/^(pretendard|nanumgothic|gowun|myeongjo)$/,gap:/^(tight|normal|wide)$/,radius:/^(none|soft|round)$/,sidebar:/^(bottom|right|none)$/,list:/^(wall|square|big|date)$/,caption:/^(below|hover|none)$/,photo:/^(text|wide)$/,hero:/^(tall|short)$/};
+for(var k in A){if(!A[k].test(C[k]))C[k]=({palette:'white',font:'pretendard',gap:'normal',radius:'none',sidebar:'bottom',list:'wall',caption:'below',photo:'wide',hero:'tall'})[k];d.classList.add('pw-'+k+'-'+C[k]);}
+var n=/^[2-5]$/.test(C.cols)?+C.cols:4;d.style.setProperty('--pw-cols',n);d.style.setProperty('--pw-cols-t',Math.min(n,3));
+if(/^#[0-9a-f]{6}$/i.test(C.color))d.style.setProperty('--acc',C.color);
+['viewbtn','lightbox','strip'].forEach(function(k){if(C[k])d.classList.add('pw-f-'+k);});
+d.setAttribute('data-pw-list',C.list);
+var F={nanumgothic:'Nanum+Gothic:wght@400;700;800',gowun:'Gowun+Dodum',myeongjo:'Nanum+Myeongjo:wght@400;700;800'}[C.font];
+if(F){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+F+'&display=swap';document.head.appendChild(l);}})();</script>
+<a class="pw-skip" href="#pwMain">본문으로 건너뛰기</a>
+<header class="pw-hd">
+  <div class="pw-wrap pw-hd-in">
+    <button class="pw-menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false"><svg class="pw-i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="pw-logo" href="[##_blog_link_##]"><s_if_var_pw-logo-img><img class="pw-logo-img" src="[##_var_pw-logo-img_##]" alt=""></s_if_var_pw-logo-img><span class="pw-logo-t"><span>[##_title_##]</span><s_if_var_pw-logo-sub><small>[##_var_pw-logo-sub_##]</small></s_if_var_pw-logo-sub></span></a>
+    <nav class="pw-nav" aria-label="블로그 메뉴">[##_blog_menu_##]</nav>
+    <s_search>
+    <div class="pw-search"><svg class="pw-i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input type="text" name="[##_search_name_##]" value="[##_search_text_##]" onkeypress="if (event.keyCode == 13) { [##_search_onclick_submit_##] }" placeholder="사진 찾기" aria-label="블로그 검색">
+    </div>
+    </s_search>
+  </div>
+</header>
+<div class="pw-drawer-bg"></div>
+
+<div class="pw-wrap pw-body">
+  <main class="pw-main" id="pwMain">
+
+    <s_cover_group><h1 class="pw-sr">[##_title_##]</h1><div class="pw-cvg"><s_cover_rep><s_cover name='hero'><section class="pw-cv pw-cv-hero" aria-label="대표 사진"><div class="pw-items"><s_cover_item><s_cover_item_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/R1600x0/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="pw-m"><span class="pw-d">[##_cover_item_simple_date_##]</span><a class="pw-cat" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a></p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/R1600x0/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3></div></article></s_cover_item_not_article_info></s_cover_item></div><button type="button" class="pw-hb pw-hb-p" aria-label="이전 사진">‹</button><button type="button" class="pw-hb pw-hb-n" aria-label="다음 사진">›</button><div class="pw-hdots" role="group" aria-label="사진 고르기"></div></section></s_cover><s_cover name='wall'><section class="pw-cv pw-cv-wall"><header class="pw-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="pw-more" href="[##_cover_url_##]">더 보기</a></s_cover_url></header><div class="pw-items pw-v-wall"><s_cover_item><s_cover_item_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/R640x0/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="pw-m"><span class="pw-d">[##_cover_item_simple_date_##]</span><a class="pw-cat" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a></p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/R640x0/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='square'><section class="pw-cv pw-cv-square"><header class="pw-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="pw-more" href="[##_cover_url_##]">더 보기</a></s_cover_url></header><div class="pw-items pw-v-square"><s_cover_item><s_cover_item_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C560x560/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="pw-m"><span class="pw-d">[##_cover_item_simple_date_##]</span><a class="pw-cat" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a></p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C560x560/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='strip'><section class="pw-cv pw-cv-strip"><header class="pw-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="pw-more" href="[##_cover_url_##]">더 보기</a></s_cover_url></header><div class="pw-items pw-v-strip"><s_cover_item><s_cover_item_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x480/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="pw-m"><span class="pw-d">[##_cover_item_simple_date_##]</span><a class="pw-cat" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a></p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C640x480/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover><s_cover name='titles'><section class="pw-cv pw-cv-titles"><header class="pw-cvh"><h2>[##_cover_title_##]</h2><s_cover_url><a class="pw-more" href="[##_cover_url_##]">더 보기</a></s_cover_url></header><div class="pw-items pw-v-titles"><s_cover_item><s_cover_item_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C160x160/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3><p class="pw-m"><span class="pw-d">[##_cover_item_simple_date_##]</span><a class="pw-cat" href="[##_cover_item_category_url_##]">[##_cover_item_category_##]</a></p></div></article></s_cover_item_article_info><s_cover_item_not_article_info><article class="pw-item"><a class="pw-ph" href="[##_cover_item_url_##]"><s_cover_item_thumbnail><img src="//i1.daumcdn.net/thumb/C160x160/?fname=[##_cover_item_thumbnail_##]" alt="[##_cover_item_title_##]" loading="lazy"></s_cover_item_thumbnail><span class="pw-noph">[##_cover_item_title_##]</span></a><div class="pw-tx"><h3><a href="[##_cover_item_url_##]">[##_cover_item_title_##]</a></h3></div></article></s_cover_item_not_article_info></s_cover_item></div></section></s_cover></s_cover_rep></div></s_cover_group>
+
+    <s_list>
+    <section class="pw-list" data-style="[##_list_style_##]">
+      <header class="pw-lhead">
+        <div><h1 class="pw-lt">[##_list_conform_##]</h1><p class="pw-lc">글 <b>[##_list_count_##]</b>편</p></div>
+        <div class="pw-vbtn" role="group" aria-label="보기 방식"><button type="button" data-v="wall">벽돌</button><button type="button" data-v="square">정사각</button><button type="button" data-v="big">크게</button><button type="button" data-v="date">날짜별</button></div>
+      </header>
+      [##_revenue_list_upper_##]
+      <div class="pw-items" id="pwItems">
+        <s_list_rep>
+        <article class="pw-item">
+          <a class="pw-ph" href="[##_list_rep_link_##]"><s_list_rep_thumbnail><img src="//i1.daumcdn.net/thumb/R640x0/?fname=[##_list_rep_thumbnail_##]" alt="[##_list_rep_title_##]" loading="lazy"></s_list_rep_thumbnail><span class="pw-noph">[##_list_rep_title_##]</span></a>
+          <div class="pw-tx"><h2><a href="[##_list_rep_link_##]">[##_list_rep_title_##]</a></h2><p class="pw-m"><span class="pw-d">[##_list_rep_regdate_##]</span><a class="pw-cat" href="[##_list_rep_category_link_##]">[##_list_rep_category_##]</a></p></div>
+        </article>
+        </s_list_rep>
+      </div>
+      <p class="pw-empty" hidden>찾는 글이 없습니다. 다른 낱말로 찾아보세요.</p>
+      [##_revenue_list_lower_##]
+    </section>
+    </s_list>
+
+    <s_tag>
+    <section class="pw-box"><h1 class="pw-pt">태그</h1><div class="pw-tags pw-tags-big">
+      <s_tag_rep><a href="[##_tag_link_##]" class="[##_tag_class_##]">[##_tag_name_##]</a></s_tag_rep>
+    </div></section>
+    </s_tag>
+
+    <s_guest>
+    <section class="pw-box"><h1 class="pw-pt">방명록</h1>[##_guestbook_group_##]</section>
+    </s_guest>
+
+    <s_notice_rep>
+      <s_index_article_rep>
+      <article class="pw-notice"><span class="pw-badge">공지</span><a href="[##_notice_rep_link_##]">[##_notice_rep_title_##]</a><span class="pw-d">[##_notice_rep_date_##]</span></article>
+      </s_index_article_rep>
+      <s_permalink_article_rep>
+      <article class="pw-post">
+        <header class="pw-phead"><span class="pw-badge">공지</span><h1>[##_notice_rep_title_##]</h1><p class="pw-meta"><span class="pw-d">[##_notice_rep_date_##]</span><span>[##_notice_rep_author_##]</span></p></header>
+        <div class="pw-content tt_article_useless_p_margin contents_style">[##_notice_rep_desc_##]</div>
+      </article>
+      </s_permalink_article_rep>
+    </s_notice_rep>
+
+    <s_page_rep>
+      <s_permalink_article_rep>
+      <article class="pw-post">
+        <header class="pw-phead"><h1>[##_article_rep_title_##]</h1></header>
+        <div class="pw-content tt_article_useless_p_margin contents_style">[##_article_rep_desc_##]</div>
+      </article>
+      </s_permalink_article_rep>
+    </s_page_rep>
+
+    <s_article_protected>
+      <s_permalink_article_rep>
+      <article class="pw-post">
+        <header class="pw-phead"><a class="pw-cat" href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a><h1>[##_article_rep_title_##]</h1><p class="pw-meta"><span class="pw-d">[##_article_rep_date_##]</span></p></header>
+        <div class="pw-protect"><svg class="pw-i" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><p>보호된 글입니다. 비밀번호를 넣어 주세요.</p>
+          <div><input type="password" maxlength="16" id="[##_article_password_##]" name="[##_article_password_##]" onkeydown="if (event.keyCode == 13)[##_article_dissolve_##]" aria-label="비밀번호"><button type="button" onclick="[##_article_dissolve_##]">확인</button></div></div>
+      </article>
+      </s_permalink_article_rep>
+    </s_article_protected>
+
+    <div class="pw-posts">
+    <s_article_rep>
+      <s_index_article_rep>
+      <article class="pw-item">
+        <a class="pw-ph" href="[##_article_rep_link_##]"><s_article_rep_thumbnail><img src="[##_article_rep_thumbnail_url_##]" alt="[##_article_rep_title_##]" loading="lazy"></s_article_rep_thumbnail><span class="pw-noph">[##_article_rep_title_##]</span></a>
+        <div class="pw-tx"><h2><a href="[##_article_rep_link_##]">[##_article_rep_title_##]</a></h2><p class="pw-m"><span class="pw-d">[##_article_rep_simple_date_##]</span><a class="pw-cat" href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a></p></div>
+      </article>
+      </s_index_article_rep>
+      <s_permalink_article_rep>
+      <article class="pw-post" id="pwPost">
+        <header class="pw-phead">
+          <a class="pw-cat" href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a>
+          <h1>[##_article_rep_title_##]<s_ad_div><a class="pw-edit" href="[##_s_ad_m_link_##]" aria-label="이 글 고치기"><svg class="pw-i" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></a></s_ad_div></h1>
+          <p class="pw-meta"><span class="pw-d">[##_article_rep_date_##]</span><span>[##_article_rep_author_##]</span><span class="pw-cnt" hidden><svg class="pw-i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span></span></span></p>
+        </header>
+        <nav class="pw-strip" aria-label="이 글의 사진" hidden></nav>
+        <s_sidebar><s_sidebar_element><!-- 본문 상단 --></s_sidebar_element></s_sidebar>
+        <div class="pw-content tt_article_useless_p_margin contents_style" id="pwContent">[##_article_rep_desc_##]</div>
+        <s_sidebar><s_sidebar_element><!-- 본문 하단 --></s_sidebar_element></s_sidebar>
+        <s_tag_label><p class="pw-ptags">[##_tag_label_rep_##]</p></s_tag_label>
+        <s_if_var_pw-related><s_article_related>
+        <section class="pw-rel"><h2><a href="[##_article_rep_category_link_##]">[##_article_rep_category_##]</a>의 다른 사진</h2><div class="pw-rel-g">
+          <s_article_related_rep><a class="pw-rel-i" href="[##_article_related_rep_link_##]"><span class="pw-rel-ph"><s_article_related_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C480x480/?fname=[##_article_related_rep_thumbnail_link_##]" alt="" loading="lazy"></s_article_related_rep_thumbnail></span><b>[##_article_related_rep_title_##]</b><span class="pw-d">[##_article_related_rep_date_##]</span></a></s_article_related_rep>
+        </div></section>
+        </s_article_related></s_if_var_pw-related>
+        <s_rp><section class="pw-cm">[##_comment_group_##]</section></s_rp>
+        <s_ad_div><p class="pw-admin"><a href="[##_s_ad_m_link_##]">수정</a><span>[##_s_ad_s1_label_##]</span><a href="#" onclick="[##_s_ad_s2_onclick_##]">[##_s_ad_s2_label_##]</a><a href="#" onclick="[##_s_ad_d_onclick_##]">삭제</a></p></s_ad_div>
+      </article>
+      </s_permalink_article_rep>
+    </s_article_rep>
+    </div>
+
+    <s_paging>
+    <nav class="pw-pg" aria-label="쪽 이동"><a [##_prev_page_##] class="pw-pg-p" aria-label="이전 쪽">‹</a><s_paging_rep><a [##_paging_rep_link_##] class="pw-pg-n">[##_paging_rep_link_num_##]</a></s_paging_rep><a [##_next_page_##] class="pw-pg-p" aria-label="다음 쪽">›</a></nav>
+    </s_paging>
+  </main>
+
+  <aside class="pw-side" aria-label="사이드바">
+    <s_sidebar><s_sidebar_element><!-- 오른쪽 사이드바 --></s_sidebar_element></s_sidebar>
+
+      <s_sidebar>
+        <s_sidebar_element><!-- 공지사항 -->
+          <s_rct_notice><div class="pw-card"><h3>공지사항</h3><ul class="pw-ul"><s_rct_notice_rep><li><a href="[##_notice_rep_link_##]">[##_notice_rep_title_##]</a></li></s_rct_notice_rep></ul></div></s_rct_notice>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 카테고리 -->
+          <div class="pw-card pw-catbox"><h3>카테고리</h3>[##_category_list_##]</div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 인기 글 -->
+          <div class="pw-card"><h3>많이 본 사진</h3><ol class="pw-mini"><s_rctps_popular_rep><li><a href="[##_rctps_rep_link_##]"><span class="pw-mth"><s_rctps_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C160x160/?fname=[##_rctps_rep_thumbnail_##]" alt="" loading="lazy"></s_rctps_rep_thumbnail></span><span class="pw-mtx">[##_rctps_rep_title_##]</span></a></li></s_rctps_popular_rep></ol></div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 최근 글 -->
+          <div class="pw-card"><h3>최근 사진</h3><ul class="pw-mini"><s_rctps_rep><li><a href="[##_rctps_rep_link_##]"><span class="pw-mth"><s_rctps_rep_thumbnail><img src="//i1.daumcdn.net/thumb/C160x160/?fname=[##_rctps_rep_thumbnail_##]" alt="" loading="lazy"></s_rctps_rep_thumbnail></span><span class="pw-mtx">[##_rctps_rep_title_##]</span></a></li></s_rctps_rep></ul></div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 태그 -->
+          <div class="pw-card"><h3>태그</h3><div class="pw-tags"><s_random_tags><a href="[##_tag_link_##]" class="[##_tag_class_##]">[##_tag_name_##]</a></s_random_tags></div></div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 최근 댓글 -->
+          <div class="pw-card"><h3>최근 댓글</h3><ul class="pw-ul pw-rc"><s_rctrp_rep><li><a href="[##_rctrp_rep_link_##]">[##_rctrp_rep_desc_##]</a><em>[##_rctrp_rep_name_##]</em></li></s_rctrp_rep></ul></div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 보관함 -->
+          <div class="pw-card"><h3>보관함</h3><ul class="pw-ul"><s_archive_rep><li><a href="[##_archive_rep_link_##]">[##_archive_rep_date_##]</a><em>[##_archive_rep_count_##]</em></li></s_archive_rep></ul></div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 달력 -->
+          <div class="pw-card pw-cal"><h3>달력</h3>[##_calendar_##]</div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 링크 -->
+          <div class="pw-card"><h3>링크</h3><ul class="pw-ul"><s_link_rep><li><a href="[##_link_url_##]" target="_blank" rel="noopener">[##_link_site_##]</a></li></s_link_rep></ul></div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 방문자 수 -->
+          <div class="pw-card pw-count"><h3>방문자</h3><p><span>전체</span><b>[##_count_total_##]</b></p><p><span>오늘</span><b>[##_count_today_##]</b></p><p><span>어제</span><b>[##_count_yesterday_##]</b></p></div>
+        </s_sidebar_element>
+        <s_sidebar_element><!-- 관리자 메뉴 -->
+          <div class="pw-card pw-owner"><a href="[##_owner_url_##]/newpost/" target="_blank" rel="noopener">글쓰기</a><a href="[##_owner_url_##]" target="_blank" rel="noopener">관리</a></div>
+        </s_sidebar_element>
+      </s_sidebar>
+  </aside>
+</div>
+
+<footer class="pw-ft">
+  <div class="pw-wrap pw-ftside"><s_sidebar><s_sidebar_element><!-- 바닥 --></s_sidebar_element></s_sidebar></div>
+  <div class="pw-wrap pw-ft-in">
+    <a class="pw-ft-t" href="[##_blog_link_##]">[##_title_##]</a>
+    <s_if_var_pw-foot-text><p class="pw-ft-txt">[##_var_pw-foot-text_##]</p></s_if_var_pw-foot-text>
+    <p class="pw-copy"><a class="pw-credit" href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Skin by Blog J</a></p>
+  </div>
+</footer>
+<script>
+(function(){
+var d=document.documentElement,doc=document;
+function $(s,r){return (r||doc).querySelector(s);}
+function $$(s,r){return [].slice.call((r||doc).querySelectorAll(s));}
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){return null;}}
+
+/* 1. 메뉴(휴대폰) */
+var mb=$('.pw-menu-btn');
+function menu(open){d.classList.toggle('pw-menu-open',open);if(mb)mb.setAttribute('aria-expanded',open?'true':'false');}
+if(mb)mb.addEventListener('click',function(){menu(!d.classList.contains('pw-menu-open'));});
+var bg=$('.pw-drawer-bg');if(bg)bg.addEventListener('click',function(){menu(false);});
+
+/* 2. 날짜 = 2026-01-01(목) */
+var W='일월화수목금토';
+$$('.pw-d').forEach(function(e){var m=(e.textContent||'').match(/(\d{4})\D{1,3}(\d{1,2})\D{1,3}(\d{1,2})/);if(!m)return;
+  var y=+m[1],mo=+m[2],da=+m[3],dt=new Date(y,mo-1,da);if(isNaN(dt))return;
+  var s=y+'-'+('0'+mo).slice(-2)+'-'+('0'+da).slice(-2);e.setAttribute('data-ym',s.slice(0,7));e.textContent=s+'('+W[dt.getDay()]+')';});
+
+/* 3. 빈 제목 칸 */
+$$('.pw-cvh h2').forEach(function(h){if(!h.textContent.trim())h.parentNode.classList.add('pw-cvh-empty');});
+
+/* 4. 글 목록 보기 방식: 방문자가 고른 것 > 카테고리 목록 스타일 > 스킨 설정 */
+var list=$('.pw-list'),items=$('#pwItems');
+function setView(v,save){
+  if(!items)return;
+  ['wall','square','big','date'].forEach(function(k){items.classList.remove('pw-v-'+k);});
+  items.classList.add('pw-v-'+v);
+  $$('.pw-vbtn button').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-v')===v?'true':'false');});
+  $$('img',items).forEach(function(i){var s=i.getAttribute('src')||'';
+    if(v==='big')i.setAttribute('src',s.replace(/\/thumb\/R640x0\//,'/thumb/R1280x0/'));});
+  $$('.pw-month',items).forEach(function(h){h.remove();});
+  if(v==='date'){var last='';$$('.pw-item',items).forEach(function(it){var e=$('.pw-d',it),ym=e&&e.getAttribute('data-ym');
+    if(ym&&ym!==last){var h=doc.createElement('h2');h.className='pw-month';h.textContent=ym;items.insertBefore(h,it);last=ym;}});}
+  if(save)store('pwView',v);
+}
+if(list&&items){
+  var V=/^(wall|square|big|date)$/,v=d.getAttribute('data-pw-list')||'wall',cs=list.getAttribute('data-style')||'';
+  if(V.test(cs))v=cs;
+  var sv=d.classList.contains('pw-f-viewbtn')&&store('pwView');if(sv&&V.test(sv))v=sv;
+  setView(v,false);
+  $$('.pw-vbtn button').forEach(function(b){b.addEventListener('click',function(){setView(b.getAttribute('data-v'),true);});});
+  if(!$('.pw-item',items)){var em=$('.pw-empty',list);if(em)em.hidden=false;}
+}
+
+/* 5. 홈(커버 없이 최신 글) = 벽돌 */
+var posts=$('.pw-posts');
+if(posts&&$(':scope > .pw-item',posts))posts.classList.add('pw-items','pw-v-wall');
+
+/* 6. 대표 사진 칸: 한 장씩 + 넘기기 */
+$$('.pw-cv-hero').forEach(function(h){
+  var its=$$('.pw-item',h),dots=$('.pw-hdots',h),i=0,tm=null;
+  if(!its.length){h.remove();return;}
+  if(its.length<2){h.classList.add('pw-hero-one');}
+  its.forEach(function(it,k){var im=$('img',it);if(im){im.setAttribute('loading',k?'lazy':'eager');}
+    if(dots&&its.length>1){var b=doc.createElement('button');b.type='button';b.setAttribute('aria-label',(k+1)+'번째 사진');b.addEventListener('click',function(){go(k);});dots.appendChild(b);}});
+  function go(k){i=(k+its.length)%its.length;its.forEach(function(it,n){it.classList.toggle('pw-on',n===i);it.setAttribute('aria-hidden',n===i?'false':'true');});
+    $$('button',dots).forEach(function(b,n){b.setAttribute('aria-pressed',n===i?'true':'false');});}
+  go(0);
+  var p=$('.pw-hb-p',h),n=$('.pw-hb-n',h);
+  if(p)p.addEventListener('click',function(){go(i-1);});if(n)n.addEventListener('click',function(){go(i+1);});
+  var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function play(){if(rm||its.length<2)return;stop();tm=setInterval(function(){go(i+1);},6000);}
+  function stop(){if(tm)clearInterval(tm);tm=null;}
+  h.addEventListener('mouseenter',stop);h.addEventListener('mouseleave',play);
+  h.addEventListener('focusin',stop);h.addEventListener('focusout',play);
+  var sx=0;h.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;stop();},{passive:true});
+  h.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)go(i+(dx<0?1:-1));},{passive:true});
+  play();
+});
+
+/* 7. 글: 사진 모으기 · 사진 수 · 사진 줄 · 크게 보기 */
+var ct=$('#pwContent');
+function bigSrc(im){
+  var ss=im.getAttribute('srcset')||'',best='',bw=0;
+  ss.split(',').forEach(function(p){var a=p.trim().split(/\s+/),w=parseInt(a[1],10)||0;if(a[0]&&w>bw){bw=w;best=a[0];}});
+  var s=best||im.currentSrc||im.getAttribute('src')||'';
+  return s.replace(/\/thumb\/R\d+x\d*\//,'/thumb/R1920x0/');
+}
+if(ct){
+  var P=$$('img',ct).filter(function(im){
+    if(im.closest('a[href]')&&!im.closest('[data-lightbox]'))return false;
+    var w=parseInt(im.getAttribute('width')||im.getAttribute('data-origin-width')||'0',10);
+    if(w&&w<120)return false;
+    return !/emoticon|emoji|static\/admin/.test(im.getAttribute('src')||'');
+  });
+  var cnt=$('.pw-cnt');
+  if(cnt&&P.length){cnt.hidden=false;$('span',cnt).textContent='사진 '+P.length+'장';}
+  var st=$('.pw-strip');
+  if(st&&P.length>1&&d.classList.contains('pw-f-strip')){
+    P.forEach(function(im,k){var b=doc.createElement('button');b.type='button';b.setAttribute('aria-label',(k+1)+'번째 사진 크게 보기');
+      var t=doc.createElement('img');t.src=im.getAttribute('src');t.alt='';t.loading='lazy';b.appendChild(t);
+      b.addEventListener('click',function(){if(d.classList.contains('pw-f-lightbox'))open(k);else im.scrollIntoView({behavior:'smooth',block:'center'});});
+      st.appendChild(b);});
+    st.hidden=false;
+  }
+  /* 크게 보기 */
+  var lb=null,cur=0,pushed=false,lastFocus=null;
+  function cap(im){var f=im.closest('figure'),c=f&&$('figcaption',f);return c?c.textContent.trim():(im.getAttribute('alt')||'');}
+  function build(){
+    lb=doc.createElement('div');lb.className='pw-lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','사진 크게 보기');
+    lb.innerHTML='<div class="pw-lb-top"><span class="pw-lb-n"></span><button type="button" class="pw-lb-x" aria-label="닫기">✕</button></div>'+
+      '<div class="pw-lb-stage"><img alt=""></div><p class="pw-lb-cap"></p>'+
+      '<button type="button" class="pw-lb-p" aria-label="이전 사진">‹</button><button type="button" class="pw-lb-nx" aria-label="다음 사진">›</button>';
+    doc.body.appendChild(lb);
+    $('.pw-lb-x',lb).addEventListener('click',close);
+    $('.pw-lb-p',lb).addEventListener('click',function(){show(cur-1);});
+    $('.pw-lb-nx',lb).addEventListener('click',function(){show(cur+1);});
+    $('.pw-lb-stage',lb).addEventListener('click',function(e){if(e.target===e.currentTarget)close();});
+    var sx=0,sy=0;lb.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+    lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+      if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(cur+(dx<0?1:-1));else if(dy>90)close();},{passive:true});
+  }
+  function show(k){cur=(k+P.length)%P.length;var im=P[cur];$('.pw-lb-stage img',lb).src=bigSrc(im);$('.pw-lb-stage img',lb).alt=im.getAttribute('alt')||'';
+    $('.pw-lb-n',lb).textContent=(cur+1)+' / '+P.length;var c=cap(im),cp=$('.pw-lb-cap',lb);cp.textContent=c;cp.hidden=!c;
+    lb.classList.toggle('pw-lb-single',P.length<2);}
+  function open(k){if(!lb)build();lastFocus=doc.activeElement;show(k);lb.classList.add('pw-on');d.classList.add('pw-lb-open');
+    try{history.pushState({pwlb:1},'');pushed=true;}catch(e){pushed=false;}
+    $('.pw-lb-x',lb).focus();}
+  function hide(){if(!lb)return;lb.classList.remove('pw-on');d.classList.remove('pw-lb-open');if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+  function close(){if(pushed){pushed=false;history.back();}else hide();}
+  window.addEventListener('popstate',function(){if(lb&&lb.classList.contains('pw-on')){pushed=false;hide();}});
+  doc.addEventListener('keydown',function(e){if(!lb||!lb.classList.contains('pw-on'))return;
+    if(e.key==='Escape')close();else if(e.key==='ArrowLeft')show(cur-1);else if(e.key==='ArrowRight')show(cur+1);
+    else if(e.key==='Tab'){var f=$$('button',lb).filter(function(b){return b.offsetParent;});if(!f.length)return;var a=f[0],z=f[f.length-1];
+      if(e.shiftKey&&doc.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&doc.activeElement===z){e.preventDefault();a.focus();}}});
+  if(d.classList.contains('pw-f-lightbox')&&P.length){
+    P.forEach(function(im){im.classList.add('pw-zoom');});
+    ct.addEventListener('click',function(e){var im=e.target.closest&&e.target.closest('img');var k=P.indexOf(im);if(k<0)return;
+      e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();open(k);},true);
+  }
+}
+
+/* 8. 사이드바 → 바닥 */
+var ft=$('.pw-ftside'),side=$('.pw-side');
+if(side&&d.classList.contains('pw-sidebar-bottom')&&ft){$$('.pw-card',side).forEach(function(c){ft.appendChild(c);});}
+if(side&&!$('.pw-card',side))side.remove();
+if(ft){if(!$('.pw-card',ft))ft.remove();else d.classList.add('pw-hasftside');}
+if(side&&doc.body.id!=='tt-body-index'&&d.classList.contains('pw-sidebar-right'))d.classList.add('pw-hasside');
+
+/* 9. 맨 위 머리: 내리면 그림자 */
+var hd=$('.pw-hd');if(hd){var on=false;window.addEventListener('scroll',function(){var s=window.scrollY>8;if(s!==on){on=s;hd.classList.toggle('pw-scrolled',s);}},{passive:true});}
+d.classList.add('pw-ready');
+})();
+
+</script>
+</s_t3>
+</body>
+</html>

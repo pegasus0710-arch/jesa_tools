@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Blog J 티스토리 스킨 체험 | Blog J</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--ink:#1f2125;--ink2:#5b5547;--line:#e2dacb;--sand:#f0e8db;--sea:#195455;--dot:#f56d03}
+*{box-sizing:border-box}
+body{margin:0;background:var(--sand);color:var(--ink);font-family:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic",sans-serif;word-break:keep-all}
+.wrap{max-width:1120px;margin:0 auto;padding:40px 20px 56px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--sea);color:#fff;display:grid;place-items:center;font-weight:800;font-style:italic;position:relative}
+.logo::after{content:"";position:absolute;right:-2px;bottom:-2px;width:9px;height:9px;border-radius:50%;background:var(--dot);border:2px solid var(--sand)}
+h1{font-size:clamp(26px,4vw,36px);margin:22px 0 8px;letter-spacing:-.02em}
+.lead{margin:0 0 30px;color:var(--ink2);font-size:16px;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
+.card{background:#fbf8f3;border-radius:14px;overflow:hidden;box-shadow:0 1px 0 #d9cfbe,0 10px 24px rgba(80,60,30,.08);display:flex;flex-direction:column}
+.card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#e6dfd2}
+.card .tx{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h2{margin:0;font-size:20px}
+.card p{margin:0;color:var(--ink2);line-height:1.6}
+.btns{display:flex;gap:8px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
+.btns a{height:44px;padding:0 18px;border-radius:9px;display:inline-flex;align-items:center;text-decoration:none;font-weight:700}
+.try{background:var(--sea);color:#fff}
+.get{border:1px solid var(--line);background:#fff;color:var(--ink)}
+.try:hover{background:#0f3d3e}.get:hover{border-color:var(--ink2)}
+.note{margin-top:34px;font-size:13.5px;color:var(--ink2);line-height:1.8}
+.note a{color:var(--sea)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><span class="logo" aria-hidden="true">J</span>Blog J</div>
+  <h1>티스토리 무료 스킨 체험하기</h1>
+  <p class="lead">받기 전에 직접 눌러 보세요. 색 · 글꼴 · 목록 모양 · 사이드바를 바꾸면 화면이 바로 바뀌고, PC · 휴대폰 화면도 볼 수 있습니다.</p>
+  <div class="grid" id="grid"></div>
+  <p class="note">체험 화면은 진짜 스킨 파일(skin.html · style.css)에 샘플 글을 채워 만든 것입니다. 댓글 · 검색 · 방명록은 실제 티스토리 블로그에서 동작합니다.<br>샘플 사진: <a href="https://j-everyday.tistory.com/" target="_blank" rel="noopener">j-everyday 블로그</a> · 스킨 적용 방법은 <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a>에서 안내합니다.</p>
+</div>
+<script>
+(function(){var C=[{"slug": "sajinbyeok", "name": "Blog J 사진벽", "sub": "사진 블로그용 · 벽돌 · 정사각 · 날짜별 목록 · 사진 크게 보기", "get": "https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-sajinbyeok-v1.0.zip", "getlabel": "스킨 받기(zip)", "preview": "sajinbyeok/preview.jpg"}, {"slug": "moraebada", "name": "Blog J 모래바다", "sub": "읽는 글 중심 · 따라오는 차례 · 제목 번호 · 홈 꾸미기", "get": "https://luvbong.tistory.com/862", "getlabel": "다운로드 글 보기", "preview": "moraebada/preview.jpg"}],g=document.getElementById('grid');
+C.forEach(function(c){var a=document.createElement('article');a.className='card';
+ a.innerHTML='<img alt="" loading="lazy"><div class="tx"><h2></h2><p></p><div class="btns"><a class="try">체험하기</a><a class="get" target="_blank" rel="noopener"></a></div></div>';
+ a.querySelector('img').src=c.preview;a.querySelector('img').alt=c.name+' 미리보기';a.querySelector('h2').textContent=c.name;a.querySelector('p').textContent=c.sub;
+ a.querySelector('.try').href=c.slug+'/';var gt=a.querySelector('.get');gt.href=c.get;gt.textContent=c.getlabel;g.appendChild(a);});})();
+</script>
+</body>
+</html>

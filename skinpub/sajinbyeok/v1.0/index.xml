@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skin>
+  <information>
+    <name>Blog J 사진벽</name>
+    <version>1.0</version>
+    <description><![CDATA[Blog J 사진벽 — 사진 블로그용 반응형 스킨. 벽돌 · 정사각 · 크게 · 날짜별 목록, 사진 크게 보기, 어두운 전시실 색. 무료로 쓰고 고쳐 쓸 수 있으며, 맨 아래 「Skin by Blog J」 표시는 지우지 않아야 합니다. 그대로 다시 나눠 주거나 팔 수 없습니다.]]></description>
+    <license><![CDATA[무료 사용 · 고쳐 쓰기 가능 / 다시 배포 · 판매 금지 / 크레딧 유지]]></license>
+  </information>
+  <author>
+    <name><![CDATA[Blog J]]></name>
+    <homepage>https://luvbong.tistory.com/</homepage>
+    <email></email>
+  </author>
+  <default>
+    <recentEntries>6</recentEntries>
+    <recentComments>5</recentComments>
+    <recentTrackbacks>5</recentTrackbacks>
+    <itemsOnGuestbook>10</itemsOnGuestbook>
+    <tagsInCloud>30</tagsInCloud>
+    <sortInCloud>3</sortInCloud>
+    <expandComment>0</expandComment>
+    <lengthOfRecentNotice>30</lengthOfRecentNotice>
+    <lengthOfRecentEntry>30</lengthOfRecentEntry>
+    <lengthOfRecentComment>30</lengthOfRecentComment>
+    <lengthOfRecentTrackback>30</lengthOfRecentTrackback>
+    <lengthOfLink>30</lengthOfLink>
+    <entriesOnPage>12</entriesOnPage>
+    <entriesOnList>24</entriesOnList>
+    <expandTrackback>0</expandTrackback>
+    <showListOnCategory>1</showListOnCategory>
+    <showListOnArchive>1</showListOnArchive>
+    <commentMessage>
+      <none>댓글이 없습니다.</none>
+      <single>댓글 &lt;span class="cnt"&gt;하나&lt;/span&gt;</single>
+    </commentMessage>
+    <trackbackMessage>
+      <none>받은 트랙백이 없습니다.</none>
+      <single>트랙백 &lt;span class="cnt"&gt;하나&lt;/span&gt;</single>
+    </trackbackMessage>
+    <tree>
+      <color>1d1d1f</color>
+      <bgColor>ffffff</bgColor>
+      <activeColor>0a5c8a</activeColor>
+      <activeBgColor>eef4f8</activeBgColor>
+      <labelLength>27</labelLength>
+      <showValue>1</showValue>
+    </tree>
+    <contentWidth>1200</contentWidth>
+    <liststyle>auto</liststyle>
+    <cover><![CDATA[[{"name": "hero", "title": "", "dataType": "RECENT", "data": {"category": "ALL", "size": 5}}, {"name": "wall", "title": "최근 사진", "dataType": "RECENT", "data": {"category": "ALL", "size": 12}}]]]></cover>
+  </default>
+  <cover>
+    <item><name>hero</name><label><![CDATA[대표 사진]]></label><description><![CDATA[사진 1장을 크게 + 넘기기 단추(글 3~6개 권장)]]></description></item>
+    <item><name>wall</name><label><![CDATA[벽돌]]></label><description><![CDATA[사진 비율 그대로 빈틈없이 쌓기]]></description></item>
+    <item><name>square</name><label><![CDATA[정사각]]></label><description><![CDATA[같은 크기 정사각 격자]]></description></item>
+    <item><name>strip</name><label><![CDATA[가로 줄]]></label><description><![CDATA[옆으로 넘겨 보는 한 줄]]></description></item>
+    <item><name>titles</name><label><![CDATA[제목 목록]]></label><description><![CDATA[작은 사진 + 제목 · 날짜]]></description></item>
+  </cover>
+  <liststyle>
+    <item><label><![CDATA[스킨 설정대로]]></label><value>auto</value></item>
+    <item><label><![CDATA[벽돌]]></label><value>wall</value></item>
+    <item><label><![CDATA[정사각]]></label><value>square</value></item>
+    <item><label><![CDATA[크게 한 장씩]]></label><value>big</value></item>
+    <item><label><![CDATA[날짜별 묶음]]></label><value>date</value></item>
+  </liststyle>
+  <variables>
+    <variablegroup name="기본">
+      <variable><name>pw-logo-img</name><label><![CDATA[로고 그림]]></label><description><![CDATA[제목 앞에 높이 32px로 보입니다. 비우면 블로그 제목만]]></description><type>IMAGE</type></variable>
+      <variable><name>pw-logo-sub</name><label><![CDATA[로고 아래 한 줄]]></label><description><![CDATA[블로그 제목 아래 작은 글씨. 비우면 숨김]]></description><type>STRING</type></variable>
+    </variablegroup>
+    <variablegroup name="모양">
+      <variable><name>pw-palette</name><label><![CDATA[색 묶음]]></label><description><![CDATA[어두운 전시실 · 먹은 사진이 가장 돋보이는 어두운 바탕]]></description><type>SELECT</type><option><![CDATA[[{"name": "white", "label": "흰 벽", "value": "white"}, {"name": "paper", "label": "종이(따뜻한 미색)", "value": "paper"}, {"name": "dark", "label": "어두운 전시실", "value": "dark"}, {"name": "black", "label": "먹(검정)", "value": "black"}]]]></option><default><![CDATA[white]]></default></variable>
+      <variable><name>pw-color</name><label><![CDATA[강조 색]]></label><description><![CDATA[링크 · 고른 단추 색. 어두운 바탕에서는 저절로 밝게 씁니다]]></description><type>COLOR</type><default><![CDATA[#0a5c8a]]></default></variable>
+      <variable><name>pw-font</name><label><![CDATA[글꼴]]></label><description><![CDATA[]]></description><type>SELECT</type><option><![CDATA[[{"name": "pretendard", "label": "프리텐다드", "value": "pretendard"}, {"name": "nanumgothic", "label": "나눔고딕", "value": "nanumgothic"}, {"name": "gowun", "label": "고운돋움", "value": "gowun"}, {"name": "myeongjo", "label": "나눔명조", "value": "myeongjo"}]]]></option><default><![CDATA[pretendard]]></default></variable>
+      <variable><name>pw-cols</name><label><![CDATA[벽돌 칸 수(넓은 화면)]]></label><description><![CDATA[휴대폰은 2칸, 태블릿은 3칸 이하로 저절로 줄어듭니다]]></description><type>SELECT</type><option><![CDATA[[{"name": "2", "label": "2칸", "value": "2"}, {"name": "3", "label": "3칸", "value": "3"}, {"name": "4", "label": "4칸", "value": "4"}, {"name": "5", "label": "5칸", "value": "5"}]]]></option><default><![CDATA[4]]></default></variable>
+      <variable><name>pw-gap</name><label><![CDATA[사진 사이 간격]]></label><description><![CDATA[]]></description><type>SELECT</type><option><![CDATA[[{"name": "tight", "label": "좁게", "value": "tight"}, {"name": "normal", "label": "보통", "value": "normal"}, {"name": "wide", "label": "넓게", "value": "wide"}]]]></option><default><![CDATA[normal]]></default></variable>
+      <variable><name>pw-radius</name><label><![CDATA[사진 모서리]]></label><description><![CDATA[]]></description><type>SELECT</type><option><![CDATA[[{"name": "none", "label": "각지게", "value": "none"}, {"name": "soft", "label": "살짝 둥글게", "value": "soft"}, {"name": "round", "label": "둥글게", "value": "round"}]]]></option><default><![CDATA[none]]></default></variable>
+      <variable><name>pw-sidebar</name><label><![CDATA[사이드바 위치]]></label><description><![CDATA[사진 블로그는 「아래」를 권합니다(사진이 넓게 보임)]]></description><type>SELECT</type><option><![CDATA[[{"name": "bottom", "label": "아래(바닥 띠 안)", "value": "bottom"}, {"name": "right", "label": "오른쪽(글 · 목록 화면)", "value": "right"}, {"name": "none", "label": "없음", "value": "none"}]]]></option><default><![CDATA[bottom]]></default></variable>
+    </variablegroup>
+    <variablegroup name="글 목록">
+      <variable><name>pw-list</name><label><![CDATA[처음 보기 방식]]></label><description><![CDATA[카테고리 · 검색 · 태그 목록. 카테고리마다 다르게 하려면 카테고리 관리 › 목록 스타일]]></description><type>SELECT</type><option><![CDATA[[{"name": "wall", "label": "벽돌(사진 비율 그대로)", "value": "wall"}, {"name": "square", "label": "정사각", "value": "square"}, {"name": "big", "label": "크게 한 장씩", "value": "big"}, {"name": "date", "label": "날짜별 묶음", "value": "date"}]]]></option><default><![CDATA[wall]]></default></variable>
+      <variable><name>pw-caption</name><label><![CDATA[제목 보이기]]></label><description><![CDATA[]]></description><type>SELECT</type><option><![CDATA[[{"name": "below", "label": "사진 아래", "value": "below"}, {"name": "hover", "label": "마우스를 올리면 사진 위에", "value": "hover"}, {"name": "none", "label": "사진만", "value": "none"}]]]></option><default><![CDATA[below]]></default></variable>
+      <variable><name>pw-viewbtn</name><label><![CDATA[「벽돌 · 정사각 · 크게 · 날짜별」 단추]]></label><description><![CDATA[방문자가 보기 방식을 바꿀 수 있게(그 사람 브라우저에만 기억)]]></description><type>BOOL</type><default><![CDATA[true]]></default></variable>
+    </variablegroup>
+    <variablegroup name="글 화면">
+      <variable><name>pw-photo</name><label><![CDATA[본문 사진 너비]]></label><description><![CDATA[넓게 = 글은 읽기 좋은 폭, 사진은 화면 폭까지]]></description><type>SELECT</type><option><![CDATA[[{"name": "wide", "label": "넓게", "value": "wide"}, {"name": "text", "label": "글과 같은 폭", "value": "text"}]]]></option><default><![CDATA[wide]]></default></variable>
+      <variable><name>pw-lightbox</name><label><![CDATA[사진 크게 보기(누르면 검은 화면 · 넘기기)]]></label><description><![CDATA[끄면 티스토리 기본 확대 보기를 씁니다]]></description><type>BOOL</type><default><![CDATA[true]]></default></variable>
+      <variable><name>pw-strip</name><label><![CDATA[글 머리 아래 사진 줄]]></label><description><![CDATA[사진이 2장 이상인 글에서 작은 사진 줄 — 누르면 그 사진부터 크게]]></description><type>BOOL</type><default><![CDATA[true]]></default></variable>
+      <variable><name>pw-related</name><label><![CDATA[글 아래 「같은 분류 다른 사진」]]></label><description><![CDATA[티스토리 플러그인 「카테고리 글 더 보기」를 쓰면 끄세요(두 번 나옴)]]></description><type>BOOL</type><default><![CDATA[true]]></default></variable>
+    </variablegroup>
+    <variablegroup name="홈">
+      <variable><name>pw-hero</name><label><![CDATA[대표 사진 칸 높이]]></label><description><![CDATA[홈 화면 설정 › 「대표 사진」 칸]]></description><type>SELECT</type><option><![CDATA[[{"name": "tall", "label": "높게", "value": "tall"}, {"name": "short", "label": "낮게", "value": "short"}]]]></option><default><![CDATA[tall]]></default></variable>
+    </variablegroup>
+    <variablegroup name="바닥">
+      <variable><name>pw-foot-text</name><label><![CDATA[바닥 문구]]></label><description><![CDATA[예: 사진 무단 사용 금지. 비우면 숨김]]></description><type>STRING</type></variable>
+    </variablegroup>
+  </variables>
+</skin>

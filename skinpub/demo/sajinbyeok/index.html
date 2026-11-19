@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Blog J 사진벽 체험하기 | Blog J</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--ink:#1f2125;--ink2:#5b5547;--line:#e2dacb;--panel:#faf7f2;--sand:#f0e8db;--sea:#195455;--sea-l:#e3eeee;--dot:#f56d03;--stage:#e6dfd2}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic",sans-serif;color:var(--ink);background:var(--sand);display:flex;flex-direction:column;overflow:hidden;font-size:14px;word-break:keep-all}
+button,select,input{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--sea);outline-offset:2px}
+.top{display:flex;align-items:center;gap:12px 18px;padding:0 16px;min-height:58px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap;position:relative;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--sea);color:#fff;display:grid;place-items:center;font-weight:800;font-style:italic;position:relative;flex-shrink:0}
+.logo::after{content:"";position:absolute;right:-2px;bottom:-2px;width:8px;height:8px;border-radius:50%;background:var(--dot);border:2px solid #fff}
+.brand b{font-size:15px;white-space:nowrap}
+.brand small{display:block;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+.tabs{display:flex;gap:4px;flex:1 1 auto;justify-content:center;min-width:0}
+.tabs button,.dev button{height:38px;padding:0 14px;border:1px solid transparent;background:transparent;border-radius:8px;cursor:pointer;white-space:nowrap;color:var(--ink2)}
+.tabs button:hover,.dev button:hover{background:var(--panel)}
+.tabs button[aria-pressed="true"],.dev button[aria-pressed="true"]{background:var(--sea-l);border-color:var(--sea);color:var(--sea);font-weight:700}
+.dev{display:flex;gap:4px}
+.cta{height:40px;padding:0 16px;border-radius:8px;background:var(--sea);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;white-space:nowrap}
+.cta:hover{background:#0f3d3e}
+.setbtn{display:none}
+.main{flex:1 1 auto;display:flex;min-height:0}
+.panel{width:320px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:16px 18px 28px}
+.panel h2{margin:0 0 4px;font-size:16px}
+.panel .lead{margin:0 0 14px;color:var(--ink2);line-height:1.55}
+.grp{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.grp h3{margin:0 0 10px;font-size:12.5px;letter-spacing:.06em;color:var(--ink2)}
+.fld{margin:0 0 14px}
+.fld .lb{display:block;font-weight:700;margin-bottom:6px;line-height:1.4}
+.fld .ds{display:block;color:var(--ink2);font-size:12.5px;line-height:1.5;margin-top:5px}
+.seg{display:flex;flex-wrap:wrap;gap:5px}
+.seg button{min-height:36px;padding:4px 11px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer;line-height:1.3}
+.seg button:hover{border-color:var(--ink2)}
+.seg button[aria-pressed="true"]{border:2px solid var(--sea);color:var(--sea);font-weight:700;padding:3px 10px;background:var(--sea-l)}
+.fld select{width:100%;height:40px;border:1px solid var(--line);border-radius:7px;background:#fff;padding:0 10px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:40px;border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 12px;cursor:pointer;text-align:left}
+.sw i{flex-shrink:0;width:40px;height:24px;border-radius:12px;background:#cfc7b8;position:relative;transition:background .15s}
+.sw i::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.sw[aria-checked="true"] i{background:var(--sea)}
+.sw[aria-checked="true"] i::after{left:19px}
+.color{display:flex;align-items:center;gap:10px}
+.color input{width:48px;height:36px;border:1px solid var(--line);border-radius:7px;padding:2px;background:#fff}
+.tools{display:flex;gap:6px;margin-top:20px;flex-wrap:wrap}
+.tools button{height:38px;padding:0 12px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
+.tools button:hover{border-color:var(--ink2)}
+.foot{margin-top:22px;font-size:12.5px;color:var(--ink2);line-height:1.7}
+.foot a{color:var(--sea)}
+.stage{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;background:var(--stage)}
+.cap{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;padding:8px 16px;font-size:13px;color:var(--ink2);border-bottom:1px solid var(--line);background:#efe9dd}
+.cap b{color:var(--ink)}
+.cap .warn{margin-left:auto}
+.view{flex:1 1 auto;position:relative;overflow:hidden}
+.vp{position:absolute;top:0;left:0;transform-origin:0 0;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.vp iframe{display:block;width:100%;height:100%;border:0}
+.phone .vp{border-radius:28px;overflow:hidden;box-shadow:0 0 0 10px #1f2125,0 18px 40px rgba(0,0,0,.25)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.toast.on{opacity:1}
+.sheet-bg{display:none}
+@media (max-width:900px){
+  .top{padding:8px 12px;gap:8px}
+  .brand small{display:none}
+  .tabs{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto}
+  .tabs button{height:36px;padding:0 12px}
+  .dev{display:none}
+  .setbtn{display:inline-flex;height:40px;padding:0 14px;border:1px solid var(--sea);color:var(--sea);background:#fff;border-radius:8px;align-items:center;font-weight:700;margin-left:auto;cursor:pointer}
+  .cta{padding:0 12px}
+  .cap .warn{display:none}
+  .panel{position:fixed;left:0;right:0;bottom:0;width:auto;max-height:78vh;border-right:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0;z-index:30;transform:translateY(105%);transition:transform .25s;box-shadow:0 -10px 30px rgba(0,0,0,.18)}
+  .panel .grab{display:block;width:44px;height:5px;border-radius:3px;background:#cfc7b8;margin:-4px auto 12px}
+  .sheet .panel{transform:none}
+  .sheet .sheet-bg{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:25}
+  .closebtn{display:inline-flex!important}
+}
+.grab{display:none}
+.closebtn{display:none;float:right;height:36px;padding:0 12px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">J</span><span><b id="skinName"></b><small>스킨 체험하기 · 다른 스킨 보기</small></span></a>
+  <nav class="tabs" id="tabs" aria-label="화면 고르기"></nav>
+  <div class="dev" role="group" aria-label="화면 폭"><button type="button" data-dev="pc">PC</button><button type="button" data-dev="phone">휴대폰</button></div>
+  <button type="button" class="setbtn" id="setBtn" aria-controls="panel" aria-expanded="false">설정 바꾸기</button>
+  <a class="cta" id="cta" target="_blank" rel="noopener"></a>
+</header>
+<div class="main">
+  <aside class="panel" id="panel" aria-label="스킨 설정" data-ks="panel">
+    <span class="grab" aria-hidden="true"></span>
+    <button type="button" class="closebtn" id="closeBtn">닫기</button>
+    <h2>스킨 편집 설정</h2>
+    <p class="lead">티스토리 「꾸미기 › 스킨 편집」 오른쪽 칸과 같은 이름입니다. 누르면 옆 화면이 바로 바뀝니다.</p>
+    <div id="fields"></div>
+    <div class="tools"><button type="button" id="reset">처음 값으로</button><button type="button" id="copy">이 설정 주소 복사</button></div>
+    <p class="foot">체험 화면입니다. 댓글 · 검색 · 방명록은 실제 티스토리 블로그에서 동작합니다.<br>샘플 사진: <a href="https://j-everyday.tistory.com/" target="_blank" rel="noopener">j-everyday 블로그</a><br><span id="others"></span></p>
+  </aside>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <section class="stage" aria-label="스킨 미리보기">
+    <p class="cap"><span>지금 화면: <b id="capT"></b></span><span id="capD"></span><span class="warn">체험 화면 — 댓글 · 검색은 실제 블로그에서 동작</span></p>
+    <div class="view" id="view"><div class="vp" id="vp"><iframe id="fr" title="스킨 미리보기 화면"></iframe></div></div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+var C={"slug": "sajinbyeok", "name": "Blog J 사진벽", "sub": "사진 블로그용 · 벽돌 · 정사각 · 날짜별 목록 · 사진 크게 보기", "get": "https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-sajinbyeok-v1.0.zip", "getlabel": "스킨 받기(zip)", "pages": [{"file": "home.html", "label": "홈", "desc": "홈 화면 설정: 대표 사진 + 벽돌"}, {"file": "home2.html", "label": "홈 다른 구성", "desc": "홈 화면 설정: 정사각 + 가로 줄 + 제목 목록"}, {"file": "list.html", "label": "글 목록", "desc": "카테고리 · 검색 · 태그 목록 화면"}, {"file": "post.html", "label": "게시글", "desc": "사진 · 글 · 표가 들어간 게시글 화면"}], "groups": [{"name": "모양", "items": [{"var": "pw-palette", "key": "palette", "kind": "val", "type": "SELECT", "label": "색 묶음", "desc": "어두운 전시실 · 먹은 사진이 가장 돋보이는 어두운 바탕", "default": "white", "options": [["white", "흰 벽"], ["paper", "종이(따뜻한 미색)"], ["dark", "어두운 전시실"], ["black", "먹(검정)"]]}, {"var": "pw-color", "key": "color", "kind": "val", "type": "COLOR", "label": "강조 색", "desc": "링크 · 고른 단추 색. 어두운 바탕에서는 저절로 밝게 씁니다", "default": "#0a5c8a"}, {"var": "pw-font", "key": "font", "kind": "val", "type": "SELECT", "label": "글꼴", "desc": "", "default": "pretendard", "options": [["pretendard", "프리텐다드"], ["nanumgothic", "나눔고딕"], ["gowun", "고운돋움"], ["myeongjo", "나눔명조"]]}, {"var": "pw-cols", "key": "cols", "kind": "val", "type": "SELECT", "label": "벽돌 칸 수(넓은 화면)", "desc": "휴대폰은 2칸, 태블릿은 3칸 이하로 저절로 줄어듭니다", "default": "4", "options": [["2", "2칸"], ["3", "3칸"], ["4", "4칸"], ["5", "5칸"]]}, {"var": "pw-gap", "key": "gap", "kind": "val", "type": "SELECT", "label": "사진 사이 간격", "desc": "", "default": "normal", "options": [["tight", "좁게"], ["normal", "보통"], ["wide", "넓게"]]}, {"var": "pw-radius", "key": "radius", "kind": "val", "type": "SELECT", "label": "사진 모서리", "desc": "", "default": "none", "options": [["none", "각지게"], ["soft", "살짝 둥글게"], ["round", "둥글게"]]}, {"var": "pw-sidebar", "key": "sidebar", "kind": "val", "type": "SELECT", "label": "사이드바 위치", "desc": "사진 블로그는 「아래」를 권합니다(사진이 넓게 보임)", "default": "bottom", "options": [["bottom", "아래(바닥 띠 안)"], ["right", "오른쪽(글 · 목록 화면)"], ["none", "없음"]]}]}, {"name": "글 목록", "items": [{"var": "pw-list", "key": "list", "kind": "val", "type": "SELECT", "label": "처음 보기 방식", "desc": "카테고리 · 검색 · 태그 목록. 카테고리마다 다르게 하려면 카테고리 관리 › 목록 스타일", "default": "wall", "options": [["wall", "벽돌(사진 비율 그대로)"], ["square", "정사각"], ["big", "크게 한 장씩"], ["date", "날짜별 묶음"]]}, {"var": "pw-caption", "key": "caption", "kind": "val", "type": "SELECT", "label": "제목 보이기", "desc": "", "default": "below", "options": [["below", "사진 아래"], ["hover", "마우스를 올리면 사진 위에"], ["none", "사진만"]]}, {"var": "pw-viewbtn", "key": "viewbtn", "kind": "bool", "type": "BOOL", "label": "「벽돌 · 정사각 · 크게 · 날짜별」 단추", "desc": "방문자가 보기 방식을 바꿀 수 있게(그 사람 브라우저에만 기억)", "default": "true"}]}, {"name": "글 화면", "items": [{"var": "pw-photo", "key": "photo", "kind": "val", "type": "SELECT", "label": "본문 사진 너비", "desc": "넓게 = 글은 읽기 좋은 폭, 사진은 화면 폭까지", "default": "wide", "options": [["wide", "넓게"], ["text", "글과 같은 폭"]]}, {"var": "pw-lightbox", "key": "lightbox", "kind": "bool", "type": "BOOL", "label": "사진 크게 보기(누르면 검은 화면 · 넘기기)", "desc": "끄면 티스토리 기본 확대 보기를 씁니다", "default": "true"}, {"var": "pw-strip", "key": "strip", "kind": "bool", "type": "BOOL", "label": "글 머리 아래 사진 줄", "desc": "사진이 2장 이상인 글에서 작은 사진 줄 — 누르면 그 사진부터 크게", "default": "true"}]}, {"name": "홈", "items": [{"var": "pw-hero", "key": "hero", "kind": "val", "type": "SELECT", "label": "대표 사진 칸 높이", "desc": "홈 화면 설정 › 「대표 사진」 칸", "default": "tall", "options": [["tall", "높게"], ["short", "낮게"]]}]}], "others": [{"slug": "moraebada", "name": "Blog J 모래바다"}]};
+var $=function(s){return document.querySelector(s);},doc=document;
+var F=[];C.groups.forEach(function(g){g.items.forEach(function(it){F.push(it);});});
+var S={},page=C.pages[0].file,dev='pc';
+function defaults(){F.forEach(function(f){S[f.key]=f.default||'';});}
+defaults();
+/* 주소에서 읽기 */
+var q=new URLSearchParams(location.search);
+var qp=q.get('page');if(qp&&!/\.html$/.test(qp))qp+='.html';if(qp&&C.pages.some(function(p){return p.file===qp;}))page=qp;
+if(q.get('dev')==='phone')dev='phone';
+F.forEach(function(f){if(q.has(f.key))S[f.key]=q.get(f.key);});
+$('#skinName').textContent=C.name;
+var cta=$('#cta');cta.href=C.get;cta.textContent=C.getlabel;
+$('#others').innerHTML=C.others.map(function(o){return '다른 스킨: <a href="../'+o.slug+'/">'+o.name+'</a>';}).join(' · ');
+
+/* 설정 → 화면에 넘길 값 */
+function cfg(){var o={};F.forEach(function(f){var v=S[f.key];o[f.key]=f.kind==='bool'?(v==='true'?'1':''):v;});return o;}
+window.__bjDemoCfg=cfg();
+
+/* 화면 고르기 단추 */
+var tabs=$('#tabs');
+C.pages.forEach(function(p){var b=doc.createElement('button');b.type='button';b.textContent=p.label;b.setAttribute('data-f',p.file);b.title=p.desc;
+  b.addEventListener('click',function(){go(p.file);});tabs.appendChild(b);});
+function markTab(){[].forEach.call(tabs.children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-f')===page?'true':'false');});
+  var p=C.pages.filter(function(x){return x.file===page;})[0]||{label:page,desc:''};$('#capT').textContent=p.label;$('#capD').textContent=p.desc;}
+function syncURL(){var u=new URLSearchParams();if(page!==C.pages[0].file)u.set('page',page);if(dev!=='pc')u.set('dev',dev);
+  F.forEach(function(f){if((S[f.key]||'')!==(f.default||''))u.set(f.key,S[f.key]);});var s=u.toString();
+  try{history.replaceState(null,'',location.pathname+(s?'?'+s:''));}catch(e){}}
+
+/* 설정 칸 만들기 (index.xml에서 읽은 것) */
+var box=$('#fields');
+C.groups.forEach(function(g){var sec=doc.createElement('div');sec.className='grp';var h=doc.createElement('h3');h.textContent=g.name;sec.appendChild(h);
+  g.items.forEach(function(f){var d=doc.createElement('div');d.className='fld';var lb=doc.createElement('span');lb.className='lb';lb.textContent=f.label;lb.id='lb-'+f.key;
+    var ctl;
+    if(f.type==='SELECT'&&f.options.length<=5){ctl=doc.createElement('div');ctl.className='seg';ctl.setAttribute('role','group');ctl.setAttribute('aria-labelledby',lb.id);
+      f.options.forEach(function(o){var b=doc.createElement('button');b.type='button';b.textContent=o[1];b.setAttribute('data-v',o[0]);b.addEventListener('click',function(){set(f.key,o[0]);});ctl.appendChild(b);});
+      d.appendChild(lb);}
+    else if(f.type==='SELECT'){ctl=doc.createElement('select');ctl.setAttribute('aria-labelledby',lb.id);
+      f.options.forEach(function(o){var op=doc.createElement('option');op.value=o[0];op.textContent=o[1];ctl.appendChild(op);});ctl.addEventListener('change',function(){set(f.key,ctl.value);});d.appendChild(lb);}
+    else if(f.type==='BOOL'){ctl=doc.createElement('button');ctl.type='button';ctl.className='sw';ctl.setAttribute('role','switch');ctl.innerHTML='<span></span><i aria-hidden="true"></i>';ctl.firstChild.textContent=f.label;
+      ctl.addEventListener('click',function(){set(f.key,S[f.key]==='true'?'':'true');});}
+    else {ctl=doc.createElement('label');ctl.className='color';var inp=doc.createElement('input');inp.type='color';inp.addEventListener('change',function(){set(f.key,inp.value);});ctl.appendChild(inp);
+      var t=doc.createElement('span');t.textContent=f.label;ctl.appendChild(t);}
+    ctl.setAttribute('data-k',f.key);d.appendChild(ctl);
+    if(f.desc){var ds=doc.createElement('span');ds.className='ds';ds.textContent=f.desc;d.appendChild(ds);}
+    sec.appendChild(d);});
+  box.appendChild(sec);});
+function paint(){F.forEach(function(f){var c=box.querySelector('[data-k="'+f.key+'"]');if(!c)return;var v=S[f.key]||'';
+  if(c.classList.contains('seg'))[].forEach.call(c.children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-v')===v?'true':'false');});
+  else if(c.tagName==='SELECT')c.value=v;else if(c.classList.contains('sw'))c.setAttribute('aria-checked',v==='true'?'true':'false');
+  else {var i=c.querySelector('input');if(/^#[0-9a-f]{6}$/i.test(v))i.value=v;}});}
+paint();
+
+/* 미리보기 틀 */
+var fr=$('#fr'),vp=$('#vp'),view=$('#view'),keepY=null;
+function narrow(){return matchMedia('(max-width:900px)').matches;}
+function fit(){var W=view.clientWidth,Hh=view.clientHeight;view.classList.toggle('phone',dev==='phone'&&!narrow());
+  if(narrow()){vp.style.cssText='width:'+W+'px;height:'+Hh+'px;transform:none';return;}
+  if(dev==='phone'){var h=Math.min(844,Hh-48),s=h<640?(Hh-48)/740:1;h=Math.round(Math.min(844,(Hh-48)/s));
+    vp.style.cssText='width:390px;height:'+h+'px;transform:translate('+Math.round((W-390*s)/2)+'px,24px) scale('+s+')';return;}
+  var s2=Math.min(1,W/1280);vp.style.cssText='width:1280px;height:'+Math.ceil(Hh/s2)+'px;transform:translate('+Math.max(0,Math.round((W-1280)/2))+'px,0) scale('+s2+')';}
+window.addEventListener('resize',fit);
+function load(keep){try{keepY=keep&&fr.contentWindow?fr.contentWindow.scrollY:null;}catch(e){keepY=null;}
+  window.__bjDemoCfg=cfg();var src='pages/'+page;
+  if(keep&&fr.getAttribute('src')===src){try{fr.contentWindow.location.reload();return;}catch(e){}}
+  fr.setAttribute('src',src);}
+fr.addEventListener('load',function(){try{var w=fr.contentWindow,f=w.location.pathname.split('/').pop();
+  if(f&&f!==page&&C.pages.some(function(p){return p.file===f;})){page=f;markTab();syncURL();}
+  if(keepY){w.scrollTo(0,keepY);keepY=null;}}catch(e){}});
+function go(f){page=f;markTab();syncURL();load(false);}
+function set(k,v){S[k]=v;paint();syncURL();load(true);}
+[].forEach.call(doc.querySelectorAll('.dev button'),function(b){b.addEventListener('click',function(){dev=b.getAttribute('data-dev');markDev();syncURL();fit();});});
+function markDev(){[].forEach.call(doc.querySelectorAll('.dev button'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-dev')===dev?'true':'false');});}
+$('#reset').addEventListener('click',function(){defaults();paint();syncURL();load(true);toast('처음 값으로 돌렸어요');});
+$('#copy').addEventListener('click',function(){var u=location.href;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){toast('주소를 복사했어요');},function(){prompt('이 주소를 복사하세요',u);});});
+var tm;function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tm);tm=setTimeout(function(){e.classList.remove('on');},1800);}
+
+/* 휴대폰: 설정 시트 (뒤로 가기 = 시트만 닫기) */
+var body=doc.body,pushed=false;
+function sheet(on){body.classList.toggle('sheet',on);$('#setBtn').setAttribute('aria-expanded',on?'true':'false');
+  if(on){try{history.pushState({bjsheet:1},'');pushed=true;}catch(e){}$('#closeBtn').focus();}}
+function closeSheet(){if(!body.classList.contains('sheet'))return;if(pushed){pushed=false;history.back();}else sheet(false);}
+$('#setBtn').addEventListener('click',function(){sheet(true);});
+$('#closeBtn').addEventListener('click',closeSheet);$('#sheetBg').addEventListener('click',closeSheet);
+window.addEventListener('popstate',function(){if(body.classList.contains('sheet')){pushed=false;sheet(false);}});
+doc.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
+
+markTab();markDev();fit();load(false);
+})();
+</script>
+</body>
+</html>

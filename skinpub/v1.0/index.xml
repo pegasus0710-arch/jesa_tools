@@ -163,12 +163,20 @@
         <default><![CDATA[thumb]]></default>
       </variable>
       <variable>
-        <name>bj-recent-thumb</name>
-        <label><![CDATA[최근 글 사진]]></label>
-        <description><![CDATA[사이드바(바닥 칸 포함) 「최근 글」 목록 앞 작은 사진]]></description>
+        <name>bj-side-list</name>
+        <label><![CDATA[목록 모양(최근 글 · 많이 본 글 · 최근 댓글)]]></label>
+        <description><![CDATA[사이드바 · 바닥 칸의 세 목록을 같은 모양으로]]></description>
         <type>SELECT</type>
-        <option><![CDATA[[{"name": "show", "label": "보이기", "value": "show"}, {"name": "hide", "label": "숨기기(제목만)", "value": "hide"}]]]></option>
-        <default><![CDATA[show]]></default>
+        <option><![CDATA[[{"name": "thumb", "label": "사진 + 제목", "value": "thumb"}, {"name": "num", "label": "번호 + 제목", "value": "num"}, {"name": "dot", "label": "점 + 제목", "value": "dot"}]]]></option>
+        <default><![CDATA[thumb]]></default>
+      </variable>
+      <variable>
+        <name>bj-head-color</name>
+        <label><![CDATA[머리 색]]></label>
+        <description><![CDATA[맨 위 블로그 제목 · 메뉴 · 검색 칸의 바탕]]></description>
+        <type>SELECT</type>
+        <option><![CDATA[[{"name": "light", "label": "밝게(본문 바탕과 같게)", "value": "light"}, {"name": "dark", "label": "바닥과 같은 진한 색", "value": "dark"}]]]></option>
+        <default><![CDATA[light]]></default>
       </variable>
       <variable>
         <name>bj-sidebar</name>

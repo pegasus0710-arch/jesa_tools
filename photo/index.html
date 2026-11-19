@@ -2250,11 +2250,11 @@ function App() {
       else if (e.key === "Backspace" && vs.k === "dir" && vs.path) { e.preventDefault(); setVs({ ...vs, path: vs.path.includes("/") ? vs.path.slice(0, vs.path.lastIndexOf("/")) : "" }); }
     }; document.addEventListener("keydown", k); return () => document.removeEventListener("keydown", k); }, [list, fIdx, viewer, phase, view, sel, ask, tagEd, store, vs]);
   const BK = useRef({}); BK.current = { viewer, ask, tagEd, setVs };
-  useEffect(() => { if (phase !== "ready") return; let leaving = false;
+  useEffect(() => { let leaving = false;
     if (!history.state || !history.state.bjv) history.pushState({ bjv: 1 }, "");
     const onPop = async () => { if (leaving) return; history.pushState({ bjv: 1 }, ""); const b = BK.current;
       if (b.ask) { b.ask.done(null); return; } if (b.viewer) { setViewer(false); return; } if (b.tagEd) { setTagEd(null); return; } if (VHS.length) { b.setVs(VHS.pop(), true); return; }
-      const v = await askP({ title: "사진 뷰어를 나갈까요?", icon: "alert", text: "「뒤로」를 눌러 이전 페이지로 가려고 해요. 태그 · 즐겨찾기는 이미 저장돼 있어요.", buttons: [["나가기", "out"], ["계속 보기", null, "p"]] });
+      const v = await askP({ title: "사진 뷰어 앱을 닫을까요?", icon: "alert", text: "「뒤로」를 눌러 이전 페이지로 가려고 해요. 태그 · 즐겨찾기는 이미 저장돼 있어요.", buttons: [["닫기", "out"], ["계속 쓰기", null, "p"]] });
       if (v === "out") { if (history.length < 3) { flash("이 창에는 이전 페이지가 없어요. 창(탭)을 닫으면 나가져요."); return; } leaving = true; window.removeEventListener("popstate", onPop); history.go(-2); } };
     window.addEventListener("popstate", onPop); return () => window.removeEventListener("popstate", onPop); }, [phase]);
 

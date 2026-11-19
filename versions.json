@@ -12,7 +12,9 @@
     "note": "새 화면 · 관계 26가지 · 4단계로 더 쉽게"
   },
   "chukmun": {
-    "latest": "1.0"
+    "latest": "2.0",
+    "post": "https://luvbong.tistory.com/744",
+    "note": "시제 · 묘제 · 산신축 추가 · 4단계로 더 쉽게"
   },
   "pdf": {
     "latest": "1.0"
@@ -51,5 +53,10 @@
   "photo": {
     "latest": "1.0",
     "post": "https://luvbong.tistory.com/794"
+  },
+  "calendar": {
+    "latest": "1.1",
+    "post": "https://luvbong.tistory.com/pages/calendar",
+    "note": "1년 계획 달력 · 탁상달력 위 사진 추가"
   }
 }

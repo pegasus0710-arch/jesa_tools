@@ -101,7 +101,7 @@ label.f{display:block;font-size:12px;color:var(--ink2);margin:10px 0 4px}
 .tb.res tbody tr{transition:background .12s;cursor:default}
 .tb.res tbody tr:hover td{background:var(--accbg)}
 .tb.res tbody tr:hover td:first-child b{color:var(--acc)}
-.foot a{color:var(--ink2);font-weight:700;text-decoration:none;border-bottom:1px solid var(--line2)}.foot a:hover{color:var(--acc);border-color:var(--acc)}
+.foot a{color:var(--ink2);font-weight:700;text-decoration:none;border-bottom:1px solid var(--line2)}.foot .footbtn{font:inherit;color:var(--ink2);font-weight:700;background:none;border:0;border-bottom:1px solid var(--line2);padding:0;cursor:pointer}.foot .footbtn:hover{color:var(--acc);border-color:var(--acc)}.foot a:hover{color:var(--acc);border-color:var(--acc)}
 
 .datrow{align-items:center}.datrow .date-field{flex:0 0 auto;width:220px}.datrow .conv{flex:1;font-size:13px;font-weight:600;color:var(--acc);white-space:nowrap}.datrow .btn{flex:0 0 auto}
 @media(max-width:480px){.datrow{flex-wrap:wrap}.datrow .date-field{width:100%}}
@@ -794,7 +794,7 @@ function App(){
       </div>
     </div>
     <div class="print-only"><${Sheet} sc=${96/25.4} /></div>
-    <div class="foot">${EMBED?html`<a href="#" onClick=${e=>{ e.preventDefault(); const q=new URLSearchParams(location.search); const p={}; ["tab","cat","opt"].forEach(k=>{ if(q.get(k)) p[k]=q.get(k); }); if(!BJ_GATE.openWindow("jibang",p)) alert("새 창이 막혔어요. 주소창 오른쪽의 팝업 차단을 풀어 주세요"); }}>새 창으로 열기 ↗</a> · `:null}Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>
+    <div class="foot">${EMBED?html`<button type="button" class="footbtn" onClick=${e=>{ const q=new URLSearchParams(location.search); const p={}; ["tab","cat","opt"].forEach(k=>{ if(q.get(k)) p[k]=q.get(k); }); if(!BJ_GATE.openWindow("jibang",p)) alert("새 창이 막혔어요. 주소창 오른쪽의 팝업 차단을 풀어 주세요"); }}>새 창으로 열기 ↗</button> · `:null}Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>
   </div>`;
 }
 (async () => { const T = new URLSearchParams(location.search).get("tab") || "print"; if (!(await BJ_GATE.check("jibang", T))) return; render(html`<${App} />`, document.getElementById("root")); })(); </script></body></html>

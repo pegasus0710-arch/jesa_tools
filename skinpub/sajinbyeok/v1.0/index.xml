@@ -79,7 +79,7 @@
     </variablegroup>
     <variablegroup name="글 목록">
       <variable><name>pw-list</name><label><![CDATA[처음 보기 방식]]></label><description><![CDATA[카테고리 · 검색 · 태그 목록. 카테고리마다 다르게 하려면 카테고리 관리 › 목록 스타일]]></description><type>SELECT</type><option><![CDATA[[{"name": "wall", "label": "벽돌(사진 비율 그대로)", "value": "wall"}, {"name": "square", "label": "정사각", "value": "square"}, {"name": "big", "label": "크게 한 장씩", "value": "big"}, {"name": "date", "label": "날짜별 묶음", "value": "date"}]]]></option><default><![CDATA[wall]]></default></variable>
-      <variable><name>pw-caption</name><label><![CDATA[제목 보이기]]></label><description><![CDATA[]]></description><type>SELECT</type><option><![CDATA[[{"name": "below", "label": "사진 아래", "value": "below"}, {"name": "hover", "label": "마우스를 올리면 사진 위에", "value": "hover"}, {"name": "none", "label": "사진만", "value": "none"}]]]></option><default><![CDATA[below]]></default></variable>
+      <variable><name>pw-caption</name><label><![CDATA[제목 보이기]]></label><description><![CDATA[]]></description><type>SELECT</type><option><![CDATA[[{"name": "below", "label": "사진 아래", "value": "below"}, {"name": "inside", "label": "사진 안 아래(반투명 띠)", "value": "inside"}, {"name": "hover", "label": "마우스를 올리면 사진 위에", "value": "hover"}, {"name": "none", "label": "사진만", "value": "none"}]]]></option><default><![CDATA[below]]></default></variable>
       <variable><name>pw-viewbtn</name><label><![CDATA[「벽돌 · 정사각 · 크게 · 날짜별」 단추]]></label><description><![CDATA[방문자가 보기 방식을 바꿀 수 있게(그 사람 브라우저에만 기억)]]></description><type>BOOL</type><default><![CDATA[true]]></default></variable>
     </variablegroup>
     <variablegroup name="글 화면">

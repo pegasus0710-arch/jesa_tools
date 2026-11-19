@@ -28,6 +28,10 @@ a{color:inherit}
 .cta{height:40px;padding:0 16px;border-radius:8px;background:var(--sea);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;white-space:nowrap}
 .cta:hover{background:#0f3d3e}
 .setbtn{display:none}
+.tbtn{height:38px;padding:0 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap}
+.tbtn:hover{border-color:var(--ink2)}
+.tbtn[aria-pressed="true"]{border-color:var(--sea);color:var(--sea);font-weight:700}
+.fold .panel{display:none}
 .main{flex:1 1 auto;display:flex;min-height:0}
 .panel{width:320px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:16px 18px 28px}
 .panel h2{margin:0 0 4px;font-size:16px}
@@ -70,7 +74,7 @@ a{color:inherit}
   .brand small{display:none}
   .tabs{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto}
   .tabs button{height:36px;padding:0 12px}
-  .dev{display:none}
+  .dev,.tbtn{display:none}
   .setbtn{display:inline-flex;height:40px;padding:0 14px;border:1px solid var(--sea);color:var(--sea);background:#fff;border-radius:8px;align-items:center;font-weight:700;margin-left:auto;cursor:pointer}
   .cta{padding:0 12px}
   .cap .warn{display:none}
@@ -89,7 +93,9 @@ a{color:inherit}
 <header class="top">
   <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">J</span><span><b id="skinName"></b><small>스킨 체험하기 · 다른 스킨 보기</small></span></a>
   <nav class="tabs" id="tabs" aria-label="화면 고르기"></nav>
-  <div class="dev" role="group" aria-label="화면 폭"><button type="button" data-dev="pc">PC</button><button type="button" data-dev="phone">휴대폰</button></div>
+  <div class="dev" role="group" aria-label="화면 폭"><button type="button" data-dev="wide" title="1920px — 큰 모니터(따라오는 차례 · 넓은 화면 기능까지)">큰 모니터</button><button type="button" data-dev="pc" title="1366px — 노트북">노트북</button><button type="button" data-dev="phone" title="390px">휴대폰</button></div>
+  <button type="button" class="tbtn" id="foldBtn" aria-pressed="false">설정 접기</button>
+  <button type="button" class="tbtn" id="newWin">새 창으로 크게</button>
   <button type="button" class="setbtn" id="setBtn" aria-controls="panel" aria-expanded="false">설정 바꾸기</button>
   <a class="cta" id="cta" target="_blank" rel="noopener"></a>
 </header>
@@ -112,16 +118,16 @@ a{color:inherit}
 <div class="toast" id="toast" role="status"></div>
 <script>
 (function(){
-var C={"slug": "sajinbyeok", "name": "Blog J 사진벽", "sub": "사진 블로그용 · 벽돌 · 정사각 · 날짜별 목록 · 사진 크게 보기", "get": "https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-sajinbyeok-v1.0.zip", "getlabel": "스킨 받기(zip)", "pages": [{"file": "home.html", "label": "홈", "desc": "홈 화면 설정: 대표 사진 + 벽돌"}, {"file": "home2.html", "label": "홈 다른 구성", "desc": "홈 화면 설정: 정사각 + 가로 줄 + 제목 목록"}, {"file": "list.html", "label": "글 목록", "desc": "카테고리 · 검색 · 태그 목록 화면"}, {"file": "post.html", "label": "게시글", "desc": "사진 · 글 · 표가 들어간 게시글 화면"}], "groups": [{"name": "모양", "items": [{"var": "pw-palette", "key": "palette", "kind": "val", "type": "SELECT", "label": "색 묶음", "desc": "어두운 전시실 · 먹은 사진이 가장 돋보이는 어두운 바탕", "default": "white", "options": [["white", "흰 벽"], ["paper", "종이(따뜻한 미색)"], ["dark", "어두운 전시실"], ["black", "먹(검정)"]]}, {"var": "pw-color", "key": "color", "kind": "val", "type": "COLOR", "label": "강조 색", "desc": "링크 · 고른 단추 색. 어두운 바탕에서는 저절로 밝게 씁니다", "default": "#0a5c8a"}, {"var": "pw-font", "key": "font", "kind": "val", "type": "SELECT", "label": "글꼴", "desc": "", "default": "pretendard", "options": [["pretendard", "프리텐다드"], ["nanumgothic", "나눔고딕"], ["gowun", "고운돋움"], ["myeongjo", "나눔명조"]]}, {"var": "pw-cols", "key": "cols", "kind": "val", "type": "SELECT", "label": "벽돌 칸 수(넓은 화면)", "desc": "휴대폰은 2칸, 태블릿은 3칸 이하로 저절로 줄어듭니다", "default": "4", "options": [["2", "2칸"], ["3", "3칸"], ["4", "4칸"], ["5", "5칸"]]}, {"var": "pw-gap", "key": "gap", "kind": "val", "type": "SELECT", "label": "사진 사이 간격", "desc": "", "default": "normal", "options": [["tight", "좁게"], ["normal", "보통"], ["wide", "넓게"]]}, {"var": "pw-radius", "key": "radius", "kind": "val", "type": "SELECT", "label": "사진 모서리", "desc": "", "default": "none", "options": [["none", "각지게"], ["soft", "살짝 둥글게"], ["round", "둥글게"]]}, {"var": "pw-sidebar", "key": "sidebar", "kind": "val", "type": "SELECT", "label": "사이드바 위치", "desc": "사진 블로그는 「아래」를 권합니다(사진이 넓게 보임)", "default": "bottom", "options": [["bottom", "아래(바닥 띠 안)"], ["right", "오른쪽(글 · 목록 화면)"], ["none", "없음"]]}]}, {"name": "글 목록", "items": [{"var": "pw-list", "key": "list", "kind": "val", "type": "SELECT", "label": "처음 보기 방식", "desc": "카테고리 · 검색 · 태그 목록. 카테고리마다 다르게 하려면 카테고리 관리 › 목록 스타일", "default": "wall", "options": [["wall", "벽돌(사진 비율 그대로)"], ["square", "정사각"], ["big", "크게 한 장씩"], ["date", "날짜별 묶음"]]}, {"var": "pw-caption", "key": "caption", "kind": "val", "type": "SELECT", "label": "제목 보이기", "desc": "", "default": "below", "options": [["below", "사진 아래"], ["hover", "마우스를 올리면 사진 위에"], ["none", "사진만"]]}, {"var": "pw-viewbtn", "key": "viewbtn", "kind": "bool", "type": "BOOL", "label": "「벽돌 · 정사각 · 크게 · 날짜별」 단추", "desc": "방문자가 보기 방식을 바꿀 수 있게(그 사람 브라우저에만 기억)", "default": "true"}]}, {"name": "글 화면", "items": [{"var": "pw-photo", "key": "photo", "kind": "val", "type": "SELECT", "label": "본문 사진 너비", "desc": "넓게 = 글은 읽기 좋은 폭, 사진은 화면 폭까지", "default": "wide", "options": [["wide", "넓게"], ["text", "글과 같은 폭"]]}, {"var": "pw-lightbox", "key": "lightbox", "kind": "bool", "type": "BOOL", "label": "사진 크게 보기(누르면 검은 화면 · 넘기기)", "desc": "끄면 티스토리 기본 확대 보기를 씁니다", "default": "true"}, {"var": "pw-strip", "key": "strip", "kind": "bool", "type": "BOOL", "label": "글 머리 아래 사진 줄", "desc": "사진이 2장 이상인 글에서 작은 사진 줄 — 누르면 그 사진부터 크게", "default": "true"}]}, {"name": "홈", "items": [{"var": "pw-hero", "key": "hero", "kind": "val", "type": "SELECT", "label": "대표 사진 칸 높이", "desc": "홈 화면 설정 › 「대표 사진」 칸", "default": "tall", "options": [["tall", "높게"], ["short", "낮게"]]}]}], "others": [{"slug": "moraebada", "name": "Blog J 모래바다"}]};
+var C={"slug": "sajinbyeok", "name": "Blog J 사진벽", "sub": "사진 블로그용 · 벽돌 · 정사각 · 날짜별 목록 · 사진 크게 보기", "get": "https://pegasus0710-arch.github.io/jesa_tools/downloads/blogj-sajinbyeok-v1.0.zip", "getlabel": "스킨 받기(zip)", "pages": [{"file": "home.html", "label": "홈", "desc": "홈 화면 설정: 대표 사진 + 벽돌"}, {"file": "home2.html", "label": "홈 다른 구성", "desc": "홈 화면 설정: 정사각 + 가로 줄 + 제목 목록"}, {"file": "list.html", "label": "글 목록", "desc": "카테고리 · 검색 · 태그 목록 화면"}, {"file": "post.html", "label": "게시글", "desc": "사진 · 글 · 표가 들어간 게시글 화면"}], "groups": [{"name": "모양", "items": [{"var": "pw-palette", "key": "palette", "kind": "val", "type": "SELECT", "label": "색 묶음", "desc": "어두운 전시실 · 먹은 사진이 가장 돋보이는 어두운 바탕", "default": "white", "options": [["white", "흰 벽"], ["paper", "종이(따뜻한 미색)"], ["dark", "어두운 전시실"], ["black", "먹(검정)"]]}, {"var": "pw-color", "key": "color", "kind": "val", "type": "COLOR", "label": "강조 색", "desc": "링크 · 고른 단추 색. 어두운 바탕에서는 저절로 밝게 씁니다", "default": "#0a5c8a"}, {"var": "pw-font", "key": "font", "kind": "val", "type": "SELECT", "label": "글꼴", "desc": "", "default": "pretendard", "options": [["pretendard", "프리텐다드"], ["nanumgothic", "나눔고딕"], ["gowun", "고운돋움"], ["myeongjo", "나눔명조"]]}, {"var": "pw-cols", "key": "cols", "kind": "val", "type": "SELECT", "label": "벽돌 칸 수(넓은 화면)", "desc": "휴대폰은 2칸, 태블릿은 3칸 이하로 저절로 줄어듭니다", "default": "4", "options": [["2", "2칸"], ["3", "3칸"], ["4", "4칸"], ["5", "5칸"]]}, {"var": "pw-gap", "key": "gap", "kind": "val", "type": "SELECT", "label": "사진 사이 간격", "desc": "", "default": "normal", "options": [["tight", "좁게"], ["normal", "보통"], ["wide", "넓게"]]}, {"var": "pw-radius", "key": "radius", "kind": "val", "type": "SELECT", "label": "사진 모서리", "desc": "", "default": "none", "options": [["none", "각지게"], ["soft", "살짝 둥글게"], ["round", "둥글게"]]}, {"var": "pw-sidebar", "key": "sidebar", "kind": "val", "type": "SELECT", "label": "사이드바 위치", "desc": "사진 블로그는 「아래」를 권합니다(사진이 넓게 보임)", "default": "bottom", "options": [["bottom", "아래(바닥 띠 안)"], ["right", "오른쪽(글 · 목록 화면)"], ["none", "없음"]]}]}, {"name": "글 목록", "items": [{"var": "pw-list", "key": "list", "kind": "val", "type": "SELECT", "label": "처음 보기 방식", "desc": "카테고리 · 검색 · 태그 목록. 카테고리마다 다르게 하려면 카테고리 관리 › 목록 스타일", "default": "wall", "options": [["wall", "벽돌(사진 비율 그대로)"], ["square", "정사각"], ["big", "크게 한 장씩"], ["date", "날짜별 묶음"]]}, {"var": "pw-caption", "key": "caption", "kind": "val", "type": "SELECT", "label": "제목 보이기", "desc": "", "default": "below", "options": [["below", "사진 아래"], ["inside", "사진 안 아래(반투명 띠)"], ["hover", "마우스를 올리면 사진 위에"], ["none", "사진만"]]}, {"var": "pw-viewbtn", "key": "viewbtn", "kind": "bool", "type": "BOOL", "label": "「벽돌 · 정사각 · 크게 · 날짜별」 단추", "desc": "방문자가 보기 방식을 바꿀 수 있게(그 사람 브라우저에만 기억)", "default": "true"}]}, {"name": "글 화면", "items": [{"var": "pw-photo", "key": "photo", "kind": "val", "type": "SELECT", "label": "본문 사진 너비", "desc": "넓게 = 글은 읽기 좋은 폭, 사진은 화면 폭까지", "default": "wide", "options": [["wide", "넓게"], ["text", "글과 같은 폭"]]}, {"var": "pw-lightbox", "key": "lightbox", "kind": "bool", "type": "BOOL", "label": "사진 크게 보기(누르면 검은 화면 · 넘기기)", "desc": "끄면 티스토리 기본 확대 보기를 씁니다", "default": "true"}, {"var": "pw-strip", "key": "strip", "kind": "bool", "type": "BOOL", "label": "글 머리 아래 사진 줄", "desc": "사진이 2장 이상인 글에서 작은 사진 줄 — 누르면 그 사진부터 크게", "default": "true"}]}, {"name": "홈", "items": [{"var": "pw-hero", "key": "hero", "kind": "val", "type": "SELECT", "label": "대표 사진 칸 높이", "desc": "홈 화면 설정 › 「대표 사진」 칸", "default": "tall", "options": [["tall", "높게"], ["short", "낮게"]]}]}], "others": [{"slug": "moraebada", "name": "Blog J 모래바다"}]};
 var $=function(s){return document.querySelector(s);},doc=document;
 var F=[];C.groups.forEach(function(g){g.items.forEach(function(it){F.push(it);});});
-var S={},page=C.pages[0].file,dev='pc';
+var S={},page=C.pages[0].file,dev='wide';
 function defaults(){F.forEach(function(f){S[f.key]=f.default||'';});}
 defaults();
 /* 주소에서 읽기 */
 var q=new URLSearchParams(location.search);
 var qp=q.get('page');if(qp&&!/\.html$/.test(qp))qp+='.html';if(qp&&C.pages.some(function(p){return p.file===qp;}))page=qp;
-if(q.get('dev')==='phone')dev='phone';
+if(/^(phone|pc|wide)$/.test(q.get('dev')||''))dev=q.get('dev');
 F.forEach(function(f){if(q.has(f.key))S[f.key]=q.get(f.key);});
 $('#skinName').textContent=C.name;
 var cta=$('#cta');cta.href=C.get;cta.textContent=C.getlabel;
@@ -137,7 +143,7 @@ C.pages.forEach(function(p){var b=doc.createElement('button');b.type='button';b.
   b.addEventListener('click',function(){go(p.file);});tabs.appendChild(b);});
 function markTab(){[].forEach.call(tabs.children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-f')===page?'true':'false');});
   var p=C.pages.filter(function(x){return x.file===page;})[0]||{label:page,desc:''};$('#capT').textContent=p.label;$('#capD').textContent=p.desc;}
-function syncURL(){var u=new URLSearchParams();if(page!==C.pages[0].file)u.set('page',page);if(dev!=='pc')u.set('dev',dev);
+function syncURL(){var u=new URLSearchParams();if(page!==C.pages[0].file)u.set('page',page);if(dev!=='wide')u.set('dev',dev);
   F.forEach(function(f){if((S[f.key]||'')!==(f.default||''))u.set(f.key,S[f.key]);});var s=u.toString();
   try{history.replaceState(null,'',location.pathname+(s?'?'+s:''));}catch(e){}}
 
@@ -172,7 +178,7 @@ function fit(){var W=view.clientWidth,Hh=view.clientHeight;view.classList.toggle
   if(narrow()){vp.style.cssText='width:'+W+'px;height:'+Hh+'px;transform:none';return;}
   if(dev==='phone'){var h=Math.min(844,Hh-48),s=h<640?(Hh-48)/740:1;h=Math.round(Math.min(844,(Hh-48)/s));
     vp.style.cssText='width:390px;height:'+h+'px;transform:translate('+Math.round((W-390*s)/2)+'px,24px) scale('+s+')';return;}
-  var s2=Math.min(1,W/1280);vp.style.cssText='width:1280px;height:'+Math.ceil(Hh/s2)+'px;transform:translate('+Math.max(0,Math.round((W-1280)/2))+'px,0) scale('+s2+')';}
+  var PW=dev==='pc'?1366:1920,s2=Math.min(1,W/PW);vp.style.cssText='width:'+PW+'px;height:'+Math.ceil(Hh/s2)+'px;transform:translate('+Math.max(0,Math.round((W-PW*s2)/2))+'px,0) scale('+s2+')';}
 window.addEventListener('resize',fit);
 function load(keep){try{keepY=keep&&fr.contentWindow?fr.contentWindow.scrollY:null;}catch(e){keepY=null;}
   window.__bjDemoCfg=cfg();var src='pages/'+page;
@@ -199,6 +205,11 @@ $('#closeBtn').addEventListener('click',closeSheet);$('#sheetBg').addEventListen
 window.addEventListener('popstate',function(){if(body.classList.contains('sheet')){pushed=false;sheet(false);}});
 doc.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 
+/* 설정 접기 · 새 창으로 크게 */
+var fb=$('#foldBtn');function fold(on){body.classList.toggle('fold',on);fb.setAttribute('aria-pressed',on?'true':'false');fb.textContent=on?'설정 펴기':'설정 접기';try{localStorage.setItem('bjDemoFold',on?'1':'');}catch(e){}fit();}
+fb.addEventListener('click',function(){fold(!body.classList.contains('fold'));});
+try{if(localStorage.getItem('bjDemoFold')==='1')fold(true);}catch(e){}
+$('#newWin').addEventListener('click',function(){var o=cfg(),u=new URLSearchParams();for(var k in o)if(o[k]!=='')u.set(k,o[k]);window.open('pages/'+page+'?'+u.toString(),'_blank','noopener');});
 markTab();markDev();fit();load(false);
 })();
 </script>

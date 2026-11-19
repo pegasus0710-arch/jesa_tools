@@ -28,6 +28,10 @@ a{color:inherit}
 .cta{height:40px;padding:0 16px;border-radius:8px;background:var(--sea);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;white-space:nowrap}
 .cta:hover{background:#0f3d3e}
 .setbtn{display:none}
+.tbtn{height:38px;padding:0 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap}
+.tbtn:hover{border-color:var(--ink2)}
+.tbtn[aria-pressed="true"]{border-color:var(--sea);color:var(--sea);font-weight:700}
+.fold .panel{display:none}
 .main{flex:1 1 auto;display:flex;min-height:0}
 .panel{width:320px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:16px 18px 28px}
 .panel h2{margin:0 0 4px;font-size:16px}
@@ -70,7 +74,7 @@ a{color:inherit}
   .brand small{display:none}
   .tabs{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto}
   .tabs button{height:36px;padding:0 12px}
-  .dev{display:none}
+  .dev,.tbtn{display:none}
   .setbtn{display:inline-flex;height:40px;padding:0 14px;border:1px solid var(--sea);color:var(--sea);background:#fff;border-radius:8px;align-items:center;font-weight:700;margin-left:auto;cursor:pointer}
   .cta{padding:0 12px}
   .cap .warn{display:none}
@@ -89,7 +93,9 @@ a{color:inherit}
 <header class="top">
   <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">J</span><span><b id="skinName"></b><small>스킨 체험하기 · 다른 스킨 보기</small></span></a>
   <nav class="tabs" id="tabs" aria-label="화면 고르기"></nav>
-  <div class="dev" role="group" aria-label="화면 폭"><button type="button" data-dev="pc">PC</button><button type="button" data-dev="phone">휴대폰</button></div>
+  <div class="dev" role="group" aria-label="화면 폭"><button type="button" data-dev="wide" title="1920px — 큰 모니터(따라오는 차례 · 넓은 화면 기능까지)">큰 모니터</button><button type="button" data-dev="pc" title="1366px — 노트북">노트북</button><button type="button" data-dev="phone" title="390px">휴대폰</button></div>
+  <button type="button" class="tbtn" id="foldBtn" aria-pressed="false">설정 접기</button>
+  <button type="button" class="tbtn" id="newWin">새 창으로 크게</button>
   <button type="button" class="setbtn" id="setBtn" aria-controls="panel" aria-expanded="false">설정 바꾸기</button>
   <a class="cta" id="cta" target="_blank" rel="noopener"></a>
 </header>
@@ -115,13 +121,13 @@ a{color:inherit}
 var C={"slug": "moraebada", "name": "Blog J 모래바다", "sub": "읽는 글 중심 · 따라오는 차례 · 제목 번호 · 홈 꾸미기", "get": "https://luvbong.tistory.com/862", "getlabel": "다운로드 글 보기", "pages": [{"file": "home.html", "label": "홈", "desc": "홈 화면 설정: 큰 글 + 목록 · 카드 3칸"}, {"file": "home2.html", "label": "홈 다른 구성", "desc": "홈 화면 설정: 사진 갤러리 · 사진 목록 · 제목 목록"}, {"file": "list.html", "label": "글 목록", "desc": "카테고리 · 검색 · 태그 목록 화면"}, {"file": "post.html", "label": "게시글", "desc": "사진 · 글 · 표가 들어간 게시글 화면"}], "groups": [{"name": "모양", "items": [{"var": "bj-palette", "key": "pal", "kind": "val", "type": "SELECT", "label": "색 묶음", "desc": "", "default": "sea", "options": [["sea", "모래 · 바다"], ["forest", "숲"], ["navy", "남색"], ["ink", "먹(흑백)"], ["blossom", "벚꽃"], ["custom", "직접 고르기(아래 색)"]]}, {"var": "bj-color", "key": "color", "kind": "val", "type": "COLOR", "label": "주 색(색 묶음 「직접 고르기」일 때)", "desc": "단추 · 링크 · 강조에 쓰는 색. 진한 색 · 옅은 색은 이 색에서 저절로 만듭니다", "default": "#0e7c86"}, {"var": "bj-font", "key": "font", "kind": "val", "type": "SELECT", "label": "글꼴", "desc": "", "default": "pretendard", "options": [["pretendard", "프리텐다드"], ["nanumgothic", "나눔고딕"], ["gowun", "고운돋움"], ["myeongjo", "나눔명조"]]}, {"var": "bj-width", "key": "w", "kind": "val", "type": "SELECT", "label": "본문 너비", "desc": "", "default": "normal", "options": [["narrow", "좁게"], ["normal", "보통"], ["wide", "넓게"], ["xwide", "아주 넓게"]]}, {"var": "bj-list", "key": "list", "kind": "val", "type": "SELECT", "label": "글 목록 모양", "desc": "카테고리 · 검색 · 태그 목록", "default": "thumb", "options": [["thumb", "사진 목록"], ["card", "카드"], ["title", "제목 목록"], ["zine", "잡지(큰 사진 글 + 격자)"], ["magazine", "번호 목록(01 · 02 + 오른쪽 사진)"]]}, {"var": "bj-side-list", "key": "sl", "kind": "val", "type": "SELECT", "label": "목록 모양(최근 글 · 많이 본 글 · 최근 댓글)", "desc": "사이드바 · 바닥 칸의 세 목록을 같은 모양으로", "default": "thumb", "options": [["thumb", "사진 + 제목"], ["num", "번호 + 제목"], ["dot", "점 + 제목"]]}, {"var": "bj-head-color", "key": "hd", "kind": "val", "type": "SELECT", "label": "머리 색", "desc": "맨 위 블로그 제목 · 메뉴 · 검색 칸의 바탕", "default": "light", "options": [["light", "밝게(본문 바탕과 같게)"], ["dark", "바닥과 같은 진한 색"]]}, {"var": "bj-sidebar", "key": "side", "kind": "val", "type": "SELECT", "label": "사이드바 위치", "desc": "아래 = 사이드바 전체가 바닥 색 띠 안으로. 몇 개만 보내려면 꾸미기 › 사이드바에서 「바닥」 칸으로 옮기세요. 오른쪽 · 왼쪽은 휴대폰에서 본문 아래로 갑니다", "default": "right", "options": [["right", "오른쪽"], ["left", "왼쪽"], ["bottom", "아래(바닥 색 띠 안)"], ["none", "없음"]]}]}, {"name": "글 화면", "items": [{"var": "bj-num", "key": "num", "kind": "bool", "type": "BOOL", "label": "제목 번호(02 / 05 · 01)", "desc": "", "default": "true"}, {"var": "bj-sheets", "key": "sheets", "kind": "bool", "type": "BOOL", "label": "제목1마다 종이 한 장으로 나누기", "desc": "", "default": "true"}, {"var": "bj-punch", "key": "punch", "kind": "bool", "type": "BOOL", "label": "종이에 타공 노트 무늬(구멍 · 여백선 · 쪽 번호)", "desc": "장 나누기를 켰을 때만", "default": ""}]}, {"name": "바닥", "items": [{"var": "bj-foot-logo", "key": "fl", "kind": "val", "type": "SELECT", "label": "바닥 로고", "desc": "", "default": "none", "options": [["none", "없음"], ["same", "머리 로고와 같게"], ["own", "바닥용 그림(아래)"]]}]}], "others": [{"slug": "sajinbyeok", "name": "Blog J 사진벽"}]};
 var $=function(s){return document.querySelector(s);},doc=document;
 var F=[];C.groups.forEach(function(g){g.items.forEach(function(it){F.push(it);});});
-var S={},page=C.pages[0].file,dev='pc';
+var S={},page=C.pages[0].file,dev='wide';
 function defaults(){F.forEach(function(f){S[f.key]=f.default||'';});}
 defaults();
 /* 주소에서 읽기 */
 var q=new URLSearchParams(location.search);
 var qp=q.get('page');if(qp&&!/\.html$/.test(qp))qp+='.html';if(qp&&C.pages.some(function(p){return p.file===qp;}))page=qp;
-if(q.get('dev')==='phone')dev='phone';
+if(/^(phone|pc|wide)$/.test(q.get('dev')||''))dev=q.get('dev');
 F.forEach(function(f){if(q.has(f.key))S[f.key]=q.get(f.key);});
 $('#skinName').textContent=C.name;
 var cta=$('#cta');cta.href=C.get;cta.textContent=C.getlabel;
@@ -137,7 +143,7 @@ C.pages.forEach(function(p){var b=doc.createElement('button');b.type='button';b.
   b.addEventListener('click',function(){go(p.file);});tabs.appendChild(b);});
 function markTab(){[].forEach.call(tabs.children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-f')===page?'true':'false');});
   var p=C.pages.filter(function(x){return x.file===page;})[0]||{label:page,desc:''};$('#capT').textContent=p.label;$('#capD').textContent=p.desc;}
-function syncURL(){var u=new URLSearchParams();if(page!==C.pages[0].file)u.set('page',page);if(dev!=='pc')u.set('dev',dev);
+function syncURL(){var u=new URLSearchParams();if(page!==C.pages[0].file)u.set('page',page);if(dev!=='wide')u.set('dev',dev);
   F.forEach(function(f){if((S[f.key]||'')!==(f.default||''))u.set(f.key,S[f.key]);});var s=u.toString();
   try{history.replaceState(null,'',location.pathname+(s?'?'+s:''));}catch(e){}}
 
@@ -172,7 +178,7 @@ function fit(){var W=view.clientWidth,Hh=view.clientHeight;view.classList.toggle
   if(narrow()){vp.style.cssText='width:'+W+'px;height:'+Hh+'px;transform:none';return;}
   if(dev==='phone'){var h=Math.min(844,Hh-48),s=h<640?(Hh-48)/740:1;h=Math.round(Math.min(844,(Hh-48)/s));
     vp.style.cssText='width:390px;height:'+h+'px;transform:translate('+Math.round((W-390*s)/2)+'px,24px) scale('+s+')';return;}
-  var s2=Math.min(1,W/1280);vp.style.cssText='width:1280px;height:'+Math.ceil(Hh/s2)+'px;transform:translate('+Math.max(0,Math.round((W-1280)/2))+'px,0) scale('+s2+')';}
+  var PW=dev==='pc'?1366:1920,s2=Math.min(1,W/PW);vp.style.cssText='width:'+PW+'px;height:'+Math.ceil(Hh/s2)+'px;transform:translate('+Math.max(0,Math.round((W-PW*s2)/2))+'px,0) scale('+s2+')';}
 window.addEventListener('resize',fit);
 function load(keep){try{keepY=keep&&fr.contentWindow?fr.contentWindow.scrollY:null;}catch(e){keepY=null;}
   window.__bjDemoCfg=cfg();var src='pages/'+page;
@@ -199,6 +205,11 @@ $('#closeBtn').addEventListener('click',closeSheet);$('#sheetBg').addEventListen
 window.addEventListener('popstate',function(){if(body.classList.contains('sheet')){pushed=false;sheet(false);}});
 doc.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 
+/* 설정 접기 · 새 창으로 크게 */
+var fb=$('#foldBtn');function fold(on){body.classList.toggle('fold',on);fb.setAttribute('aria-pressed',on?'true':'false');fb.textContent=on?'설정 펴기':'설정 접기';try{localStorage.setItem('bjDemoFold',on?'1':'');}catch(e){}fit();}
+fb.addEventListener('click',function(){fold(!body.classList.contains('fold'));});
+try{if(localStorage.getItem('bjDemoFold')==='1')fold(true);}catch(e){}
+$('#newWin').addEventListener('click',function(){var o=cfg(),u=new URLSearchParams();for(var k in o)if(o[k]!=='')u.set(k,o[k]);window.open('pages/'+page+'?'+u.toString(),'_blank','noopener');});
 markTab();markDev();fit();load(false);
 })();
 </script>

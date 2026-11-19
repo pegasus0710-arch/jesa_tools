@@ -73,6 +73,18 @@ button{font:inherit;color:inherit}
 .pw-caption-none .pw-list .pw-v-wall .pw-tx,.pw-caption-none .pw-list .pw-v-square .pw-tx,.pw-caption-none .pw-cv-wall .pw-tx,.pw-caption-none .pw-cv-square .pw-tx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (hover:none){.pw-caption-hover .pw-tx{position:static!important;opacity:1!important;background:none!important;color:inherit!important;padding:9px 1px 4px!important}.pw-caption-hover .pw-tx .pw-m{color:var(--fg2)!important}}
 
+
+/* 제목: 사진 안 아래 반투명 띠 */
+.pw-caption-inside :is(.pw-list,.pw-cv-wall,.pw-cv-square,.pw-cv-strip,.pw-posts) .pw-item>.pw-tx{position:absolute;left:8px;right:8px;bottom:8px;padding:9px 12px 10px;background:rgba(12,12,14,.46);-webkit-backdrop-filter:blur(6px) saturate(1.2);backdrop-filter:blur(6px) saturate(1.2);color:#fff;border-radius:calc(var(--rad) * .6);pointer-events:none}
+.pw-caption-inside :is(.pw-list,.pw-cv-wall,.pw-cv-square,.pw-cv-strip,.pw-posts) .pw-item>.pw-tx a{pointer-events:auto;color:#fff}
+.pw-caption-inside :is(.pw-list,.pw-cv-wall,.pw-cv-square,.pw-cv-strip,.pw-posts) .pw-tx h2,.pw-caption-inside :is(.pw-list,.pw-cv-wall,.pw-cv-square,.pw-cv-strip,.pw-posts) .pw-tx h3{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.pw-caption-inside :is(.pw-list,.pw-cv-wall,.pw-cv-square,.pw-cv-strip,.pw-posts) .pw-tx .pw-m,.pw-caption-inside :is(.pw-list,.pw-cv-wall,.pw-cv-square,.pw-cv-strip,.pw-posts) .pw-tx .pw-cat{color:rgba(255,255,255,.86)}
+.pw-caption-inside .pw-v-wall>.pw-item{margin-bottom:var(--gap)}
+.pw-caption-inside .pw-gap-tight .pw-v-wall>.pw-item{margin-bottom:var(--gap)}
+.pw-caption-inside .pw-v-big .pw-item>.pw-tx{left:16px;right:16px;bottom:16px;padding:14px 18px}
+.pw-caption-inside .pw-noph{min-height:200px;align-items:flex-start}
+@media (max-width:760px){.pw-caption-inside :is(.pw-list,.pw-cv-wall,.pw-cv-square,.pw-cv-strip,.pw-posts) .pw-item>.pw-tx{left:5px;right:5px;bottom:5px;padding:7px 9px 8px}.pw-caption-inside .pw-tx .pw-m{display:none}}
+
 /* 벽돌 */
 .pw-v-wall{display:block;columns:var(--pw-cols);column-gap:var(--gap)}
 .pw-v-wall>.pw-item{break-inside:avoid;margin-bottom:calc(var(--gap) + 10px)}

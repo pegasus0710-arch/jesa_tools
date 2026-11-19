@@ -30,7 +30,7 @@ hero=[##_var_pw-hero_##]
 </script>
 <script>(function(){var t=(document.getElementById('pwcfg')||{}).textContent||'',C={palette:'white',color:'',font:'pretendard',cols:'4',gap:'normal',radius:'none',sidebar:'bottom',list:'wall',caption:'below',photo:'wide',hero:'tall',viewbtn:'',lightbox:'',strip:''};
 t.split('\n').forEach(function(l){var i=l.indexOf('=');if(i<1)return;var k=l.slice(0,i).trim(),v=l.slice(i+1).trim();if(v&&v.indexOf('[##')<0)C[k]=v;});
-var d=document.documentElement,A={palette:/^(white|paper|dark|black)$/,font:/^(pretendard|nanumgothic|gowun|myeongjo)$/,gap:/^(tight|normal|wide)$/,radius:/^(none|soft|round)$/,sidebar:/^(bottom|right|none)$/,list:/^(wall|square|big|date)$/,caption:/^(below|hover|none)$/,photo:/^(text|wide)$/,hero:/^(tall|short)$/};
+var d=document.documentElement,A={palette:/^(white|paper|dark|black)$/,font:/^(pretendard|nanumgothic|gowun|myeongjo)$/,gap:/^(tight|normal|wide)$/,radius:/^(none|soft|round)$/,sidebar:/^(bottom|right|none)$/,list:/^(wall|square|big|date)$/,caption:/^(below|hover|none|inside)$/,photo:/^(text|wide)$/,hero:/^(tall|short)$/};
 for(var k in A){if(!A[k].test(C[k]))C[k]=({palette:'white',font:'pretendard',gap:'normal',radius:'none',sidebar:'bottom',list:'wall',caption:'below',photo:'wide',hero:'tall'})[k];d.classList.add('pw-'+k+'-'+C[k]);}
 var n=/^[2-5]$/.test(C.cols)?+C.cols:4;d.style.setProperty('--pw-cols',n);d.style.setProperty('--pw-cols-t',Math.min(n,3));
 if(/^#[0-9a-f]{6}$/i.test(C.color))d.style.setProperty('--acc',C.color);

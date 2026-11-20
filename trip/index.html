@@ -3296,7 +3296,7 @@ function scrPaste() {
     ${P.text ? "" : XLEX({ ta: "#pta", open: false, where: "위 붙여넣기 칸", sum: "엑셀로 정리한 일정은 이렇게 — 머리글에 일차 · 시간 · 일정이 있어야 해요", cols: ["일차", "날짜", "시간", "일정", "장소", "비용(원)"], num: [5], rows: [["1일차", "2026-11-12", "09:00", "김포공항 출발", "김포국제공항", ""], ["1일차", "2026-11-12", "12:30", "점심 · 고기국수", "자매국수 본점", "24,000"], ["2일차", "2026-11-13", "10:00", "성산일출봉", "성산일출봉", "10,000"]], note: "같은 날 일정은 일차를 같게 적어요. 장소 · 비용은 비워도 되고, 비용은 쉼표가 있어도 돼요. 「보내기 · 엑셀 · 인쇄 → 엑셀로 받기」로 받은 표도 그대로 붙여넣을 수 있어요." })}
     ${has ? `<label class="f">지금 있는 일정은</label><div class="vt">${[["add", "뒤에 더하기"], ["rep", "모두 바꾸기"]].map(([k, n]) => `<button class="${(P.mode || "add") === k ? "on" : ""}" data-pmode="${k}">${n}</button>`).join("")}</div>` : ""}
     <div id="pprev">${pastePrev()}</div></div>
-    <div class="btmbar"><button class="btn go" data-pgo ${P.res && P.res.days.some(d => d.items.length || d.title) ? "" : "disabled"}>이대로 넣기</button></div>`;
+    <div class="btmbar"><button class="btn go" data-pastego ${P.res && P.res.days.some(d => d.items.length || d.title) ? "" : "disabled"}>이대로 넣기</button></div>`;
 }
 
 /* ── 지난 일정 확인 ── */
@@ -4155,7 +4155,7 @@ document.addEventListener("click", async e => {
     if (d.pclip != null) { try { const s = await navigator.clipboard.readText(); if (!s.trim()) return toast("복사한 글이 없어요."); P.text = s; P.res = parseTrip(s, { page: true }); return render(); } catch (er) { toast("붙여넣기가 막혀 있어요. 칸을 누르고 Ctrl + V(길게 눌러 붙여넣기)."); const a = $("#pta"); a && a.focus(); return; } }
     if (d.pclear != null) { P.text = ""; P.res = null; return render(); }
     if (d.pmode) { P.mode = d.pmode; return render(); }
-    if (d.pgo != null && P.res) { const r = P.res; if (P.mode === "rep" && t.days.some(x => x.items.length) && !confirm("지금 있는 일정을 모두 지우고 붙여넣은 일정으로 바꿀까요?")) return;
+    if (d.pastego != null && P.res) { const r = P.res; if (P.mode === "rep" && t.days.some(x => x.items.length) && !confirm("지금 있는 일정을 모두 지우고 붙여넣은 일정으로 바꿀까요?")) return;
       ensureDays(t, r.days.length); let n = 0;
       r.days.forEach((rd, k) => { const dd = t.days[k]; if (P.mode === "rep") { dd.items = []; dd.meals = {}; dd.hotel = ""; dd.title = ""; }
         if (rd.title && !dd.title) dd.title = rd.title; if (rd.hotel) dd.hotel = rd.hotel; dd.meals = Object.assign({}, dd.meals, rd.meals || {});
@@ -4209,7 +4209,7 @@ document.addEventListener("input", e => {
   if (el.dataset.epkg != null && E) { E.pkg.price = numIn(el.value); E._dirty = true; const b = el.parentNode.querySelector("b"); if (b) b.textContent = won(E.pkg.price * E.people) + "원"; return; }
   if (el.dataset.ecost != null && E) { E.cost = numIn(el.value); E._dirty = true; const t = TR(), h = $("#cphint"); if (h && t) h.textContent = E.cost ? (E.per ? `${won(E.cost)}원 × ${t.people}명 = ${won(E.cost * t.people)}원` : `${won(E.cost)}원 ÷ ${t.people}명 = 1인 ${won(per10(E.cost, t.people))}원`) : ""; return; }
   if (el.dataset.act) { const [id, k] = el.dataset.act.split(":"), o = (S.chk || {})[id]; if (o) o[k] = k === "cost" ? (el.value.trim() ? numIn(el.value) : null) : el.value; return; }
-  if (el.id === "pta") { const P = S.paste || (S.paste = {}); P.text = el.value; clearTimeout(S._pt); S._pt = setTimeout(() => { P.res = el.value.trim() ? parseTrip(el.value, { page: true }) : null; const pv = $("#pprev"); if (pv) pv.innerHTML = pastePrev(); const g = $(".btmbar [data-pgo]"); if (g) g.disabled = !(P.res && P.res.days.some(x => x.items.length || x.title)); }, 250); }
+  if (el.id === "pta") { const P = S.paste || (S.paste = {}); P.text = el.value; clearTimeout(S._pt); S._pt = setTimeout(() => { P.res = el.value.trim() ? parseTrip(el.value, { page: true }) : null; const pv = $("#pprev"); if (pv) pv.innerHTML = pastePrev(); const g = $(".btmbar [data-pastego]"); if (g) g.disabled = !(P.res && P.res.days.some(x => x.items.length || x.title)); }, 250); }
 });
 document.addEventListener("focusout", e => { const el = e.target; if (el.dataset.ecost != null && S.edit && S.edit.cost) el.value = won(S.edit.cost); if (el.dataset.epkg != null && S.edit && S.edit.pkg.price) el.value = won(S.edit.pkg.price); });
 document.addEventListener("change", async e => {

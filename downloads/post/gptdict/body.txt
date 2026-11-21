@@ -1,0 +1,106 @@
+<p data-ke-size="size16">[[TH]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">챗GPT 받아쓰기는 입력 칸의 「마이크」를 눌러 말하면 그 말을 글자로 바꿔 주는 기능입니다.<br />2026-11-18(수) 업데이트로 10분 녹음 제한이 없어졌고, 무료 계정에서도 됩니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">한국어로 2분 넘게 직접 말해 보니 머뭇거린 말은 대부분 정리해 줬습니다.<br />쓰는 순서는 다섯 단계면 끝납니다.</p>
+<ol style="padding-left:1.4em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="decimal"><li>ChatGPT 앱을 열고 새 채팅에서 「글쓰기」 누르기</li><li>입력 칸 오른쪽 「마이크」 누르기(옆 파란 물결 단추가 아님)</li><li>평소처럼 말하기 — 말하는 동안 물결이 움직임</li><li>■로 멈추면 받아 적은 글이 입력 칸에 들어옴</li><li>틀린 곳을 고친 뒤 ↑로 보내거나 길게 눌러 복사</li></ol>
+<div style="border-radius:16px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:22px 24px 22px;margin:8px 0 10px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0 0 14px;color:#1f2125;"><b>챗GPT 받아쓰기 한눈에 보기</b></p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:4px;"><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">누르는 곳</span><br /><span style="color:#1f2125;font-size:16px;"><b>입력 칸의 「마이크」</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">요금</span><br /><span style="color:#1f2125;font-size:16px;"><b>무료 계정에서 됨</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">녹음 길이</span><br /><span style="color:#1f2125;font-size:16px;"><b>10분 제한 없어짐</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">꼭 확인할 것</span><br /><span style="color:#1f2125;font-size:16px;"><b>숫자 · 기호 · 짧은 말</b></span></p></div></div></div>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">확인 기준: 2026-11-21(토) · 참고: 실제 화면(안드로이드 ChatGPT 앱 · 무료 계정 · 언어 한국어) · <a href="https://digitaltrends.com/computing/chatgpt-now-supports-live-dictation-openai-removes-the-10-minute-recording-limit" target="_blank" rel="noopener">OpenAI 받아쓰기 업데이트 기사(Digital Trends)</a><br />기기 · 앱 버전 · 계정마다 기능이 열리는 시기가 달라 화면이 조금 다를 수 있습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>챗GPT 받아쓰기 사용법 — 「글쓰기」 다음 「마이크」</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 「글쓰기」를 누르고 「마이크」 누르기</b></h3>
+<p data-ke-size="size16">새 채팅 화면에서 「글쓰기」를 누르면 입력 칸 위에 글쓰기 메뉴가 열립니다.<br />그 상태에서 입력 칸 오른쪽의 <b>「마이크」</b>를 누르면 녹음이 시작됩니다.<br />바로 옆 파란 물결 단추는 챗GPT와 말로 대화하는 <b>「음성 대화」</b>라서 받아쓰기와 다릅니다.</p>
+<p data-ke-size="size16">[[I1|글쓰기 메뉴와 입력 칸의 마이크 단추]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 말하고 ■로 멈추기</b></h3>
+<p data-ke-size="size16">녹음이 시작되면 입력 칸이 ✕ · 물결 · ■ · ↑ 막대로 바뀝니다.<br />말소리가 들어오면 물결이 크게 움직이고, ■를 누르면 받아 적은 글이 입력 칸에 들어옵니다.<br />↑를 누르면 멈추면서 바로 보내고, ✕는 녹음을 취소합니다.</p>
+<div style="border-radius:14px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><b>말하는 동안 글자가 바로 뜨지는 않았어요</b><br />OpenAI는 이번 업데이트에서 말하는 동안 글자가 바로 보이는 기능을 계정마다 차례로 열고 있다고 밝혔습니다.<br />이 글을 쓴 휴대폰(안드로이드 · 무료 계정)에서는 말하는 동안 물결만 움직였고, 글자는 ■로 멈춘 뒤 한꺼번에 들어왔습니다.</p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 입력 칸에서 고치고 보내기</b></h3>
+<p data-ke-size="size16">입력 칸의 「↗」를 누르면 큰 창으로 열려 한 줄씩 보며 고칠 수 있습니다.<br />다 고쳤으면 ↑로 보내고, 다른 앱에 쓸 글이라면 보내지 않고 길게 눌러 복사하면 됩니다.</p>
+<p data-ke-size="size16">[[I2|입력 칸에 들어온 받아쓰기 글과 크게 보기 화면]]</p>
+<p data-ke-size="size16">그냥 보내면 챗GPT가 「어떤 방식으로 도와드릴까요?」처럼 할 일을 되묻습니다.<br />말 끝에 「맞춤법만 고쳐서 문단을 나눠 줘」처럼 원하는 일을 같이 말하면 한 번에 끝납니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>챗GPT 음성 입력 정확도 — 한국어로 직접 말해 본 결과</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>더듬은 말도 정리해 주나요?</b></h3>
+<p data-ke-size="size16">대부분 정리해 줍니다.<br />책 한 장을 2분 33초 동안 소리 내어 읽었을 때 「음 · 어」 같은 머뭇거림은 빠지고 문장 부호까지 붙었습니다.<br />다만 같은 말을 두세 번 되풀이한 곳은 일부 그대로 남아서, 보내기 전에 한 번 훑어보는 것이 좋습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 숫자 · 기호 · 짧은 말은 꼭 확인하기</b></h3>
+<p data-ke-size="size16">블로그 글 원고 한 단락을 읽어 받아 적게 해 보니 아래 네 가지가 달라졌습니다.</p>
+<p data-ke-size="size16">[[I3|받아쓰기 결과에서 틀린 곳 네 군데]]</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">말한 것</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">받아 적은 것</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">고치는 법</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">80자</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">팔십자</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">숫자로 바꾸기 — 숫자는 한글로 적히는 일이 많음</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">앞 내용</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">암 내용</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">짧은 낱말은 앞뒤 문장을 보고 확인</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">「~고」 「~하며」로</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">핵코 하며로</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">따옴표로 든 말 · 어미 예시는 직접 쓰기</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">○○ 자리에</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">땡�땡 자리에</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">기호는 말로 넣지 말고 고칠 때 직접</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">문단 나누기</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">한 덩어리</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">고칠 때 줄을 바꾸거나 챗GPT에 「문단 나눠 줘」</td></tr></tbody></table></div>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">위 결과는 한 사람이 한 기기에서 해 본 것입니다. 말하는 속도 · 발음 · 주변 소음에 따라 달라질 수 있습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>챗GPT 받아쓰기 10분 넘게 되나요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 10분 제한은 없어졌어요</b></h3>
+<p data-ke-size="size16">예전 받아쓰기는 한 번에 10분까지만 녹음됐습니다.<br />OpenAI는 2026-11-18(수) 업데이트에서 이 제한을 없앴다고 밝혔고, 새로운 최대 길이는 알리지 않았습니다.<br />이 글에서는 2분 33초 녹음이 끝까지 글자로 바뀌는 것을 확인했습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 긴 녹음은 중간에 끊어 보내기</b></h3>
+<p data-ke-size="size16">회의 메모처럼 길게 말할 때는 5분 안팎에서 한 번 멈춰 글을 확인하고 이어 가는 편이 안전합니다.<br />중간에 인터넷이 끊기거나 실수로 ✕를 눌러도 잃는 양이 적습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>설정 › 음성 — 언어 · 사전 · 받아쓰기 기록</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 언어는 「한국어」로</b></h3>
+<p data-ke-size="size16">ChatGPT 앱 설정 › <b>음성</b>에서 「언어」를 「한국어」로 두면 한국어 받아쓰기가 안정적입니다.<br />같은 화면에 「사전」(자주 틀리는 낱말을 넣어 두는 곳)과 「받아쓰기 기록」이 있습니다.</p>
+<p data-ke-size="size16">[[I4|설정 음성 화면과 받아쓰기 기록]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>받아쓰기 기록은 어디서 보나요?</b></h3>
+<p data-ke-size="size16">설정 › 음성 › 「받아쓰기 기록」에 녹음 시각 · 길이와 받아 적은 글이 남습니다.<br />화면 아래 안내대로 <b>최근 녹음 20개</b>까지만 남으니, 남겨 둘 글은 따로 복사해 두세요.<br />같은 화면의 「백그라운드 대화」는 음성 대화용 설정이라 받아쓰기와는 상관없습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>받아쓰기 · 음성 대화 · 키보드 음성 입력 차이</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 무엇을 써야 할까?</b></h3>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">기능</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">누르는 곳</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">결과</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">챗GPT 받아쓰기</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">입력 칸의 「마이크」</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">내 말이 글자로 입력 칸에 — 고친 뒤 보내기 · 복사</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">음성 대화</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">입력 칸의 파란 물결 단추</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">챗GPT가 말로 대답 — 글로 남길 때는 맞지 않음</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">키보드 음성 입력</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">키보드 왼쪽 아래 마이크(삼성 키보드 등)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">어느 앱에서나 글자로 입력 — 정리는 해 주지 않음</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 휴대폰 · PC 어디서 되나요?</b></h3>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">기기</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">받아쓰기</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">이 글에서</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">안드로이드 앱</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">됨</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">직접 확인(무료 계정 · 한국어)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">아이폰 앱</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">됨(OpenAI 발표)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">확인 안 함</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">웹 · PC 앱</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">됨(OpenAI 발표)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">확인 안 함</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>알아 두세요</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 녹음은 OpenAI로 보내져요</b></h3>
+<ul style="padding-left:1.3em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="disc"><li>받아쓰기는 녹음한 소리를 OpenAI 서버로 보내 글자로 바꿉니다. 남이 들으면 안 되는 내용(주민번호 · 계좌 · 비밀번호)은 말하지 마세요.</li><li>받아 적은 글은 「받아쓰기 기록」에 남습니다(최근 20개).</li><li>OpenAI 안내에 따르면 설정 › 데이터 제어에서 음성 녹음을 모델 개선에 쓰지 않도록 끌 수 있습니다.</li></ul>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>챗GPT 받아쓰기 자주 묻는 것</b></h3>
+<p data-ke-size="size16"><b>Q. 챗GPT 받아쓰기는 무료인가요?</b></p>
+<p data-ke-size="size16">네. 이 글은 무료 계정에서 썼고, OpenAI도 모든 요금제에서 쓸 수 있다고 밝혔습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 말하는 동안 글자가 바로 안 떠요.</b></p>
+<p data-ke-size="size16">계정마다 차례로 열리는 기능이라 아직 안 보일 수 있습니다. 이 경우에도 ■로 멈추면 글은 한꺼번에 들어옵니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 챗GPT 받아쓰기는 몇 분까지 되나요?</b></p>
+<p data-ke-size="size16">10분 제한은 없어졌고 새 최대 길이는 공개되지 않았습니다. 긴 말은 5분 안팎에서 끊어 확인하는 것을 권합니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 숫자가 한글로 적혀요.</b></p>
+<p data-ke-size="size16">「80자」가 「팔십자」로 적히는 식입니다. 보내기 전에 숫자로 고치세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 받아쓰기 기록은 몇 개까지 남나요?</b></p>
+<p data-ke-size="size16">최근 녹음 20개까지입니다. 남겨 둘 글은 복사해 두세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 보냈더니 챗GPT가 무엇을 할지 다시 물어봐요.</b></p>
+<p data-ke-size="size16">받아 적은 글만 보내면 할 일을 되묻습니다. 말 끝에 「맞춤법만 고쳐 줘」처럼 원하는 일을 같이 말하세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>말로 쓴 글을 다듬을 때</b></h3>
+<div style="background:#ece6da;border-radius:18px;padding:18px;margin:4px 0 10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;box-sizing:border-box;"><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">업무 양식·취업</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/817" target="_blank" rel="noopener"><b>자소서 문장 다듬기</b></a></span><br /><span style="font-size:14px;color:#5b5547;">80자 넘는 문장 나누기 · 흔한 표현 바꾸기</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">업무 양식·취업</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/848" target="_blank" rel="noopener"><b>맞춤법 검사기 쓰는 법</b></a></span><br /><span style="font-size:14px;color:#5b5547;">바른한글 · 다음 · 네이버 글자 수</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">업무 양식·취업</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/786" target="_blank" rel="noopener"><b>자기소개서 쓰기 무료 프로그램</b></a></span><br /><span style="font-size:14px;color:#5b5547;">글자수 세기 · 질문에 답하면 초안</span></p></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">받아쓰기 결과가 이 글과 다르게 나오면(아이폰 · PC · 다른 언어) 댓글로 알려 주세요.<br />확인해서 표에 보태겠습니다.</p>

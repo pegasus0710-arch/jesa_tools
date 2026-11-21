@@ -1986,12 +1986,12 @@ const FX = (() => {
       const ur = up(blurPlane(lr.p, lr.w, lr.h, sg), lr.w, lr.h, w, h), ug = up(blurPlane(lg.p, lr.w, lr.h, sg), lr.w, lr.h, w, h), ub = up(blurPlane(lb.p, lr.w, lr.h, sg), lr.w, lr.h, w, h);
       for (let y = 0, i = 0; y < h; y++) { const a = ur(y), c = ug(y), e = ub(y); for (let x = 0; x < w; x++, i++) { r[i] = 1 - (1 - r[i]) * (1 - a[x] * k); g[i] = 1 - (1 - g[i]) * (1 - c[x] * k); b[i] = 1 - (1 - b[i]) * (1 - e[x] * k); } } }
     /* 또렷하게(clarity) · 결(texture): 바탕과의 차이(무늬)만 키움.  바탕이 경계를 지키므로 건물 · 산 능선 옆에 뿌연 띠가 생기지 않음 */
-    if (p.clarity) { const Gd = gbase(im, 20 * sc, .02), k = p.clarity * 1.7;   /* 잡티 크기의 아주 작은 차이는 덜 키움(아래 ad / (ad + .012)) */
+    if (p.clarity) { const Gd = gbase(im, 20 * sc, .02), k = p.clarity * 1.7;   /* 잡티 크기의 아주 작은 차이는 덜 키움(아래 ad² / (ad² + .02²)) */
       for (let y = 0, i = 0; y < h; y++) { const A = Gd.a(y), Bq = Gd.b(y);
-        for (let x = 0; x < w; x++, i++) { const l = r[i] * .299 + g[i] * .587 + b[i] * .114; let d = l - (A[x] * l + Bq[x]); const ad = d < 0 ? -d : d; d *= ad / (ad + .012) * k * (1 - Math.abs(l - .5) * 2); d = d > .1 ? .1 + (d - .1) * .3 : d < -.1 ? -.1 + (d + .1) * .3 : d; r[i] += d; g[i] += d; b[i] += d; } } }
+        for (let x = 0; x < w; x++, i++) { const l = r[i] * .299 + g[i] * .587 + b[i] * .114; let d = l - (A[x] * l + Bq[x]); const ad = d < 0 ? -d : d; d *= ad * ad / (ad * ad + .0004) * k * (1 - Math.abs(l - .5) * 2); d = d > .1 ? .1 + (d - .1) * .3 : d < -.1 ? -.1 + (d + .1) * .3 : d; r[i] += d; g[i] += d; b[i] += d; } } }
     if (p.texture) { const Gd = gbase(im, 5 * sc, .005), k = p.texture * 1.6;
       for (let y = 0, i = 0; y < h; y++) { const A = Gd.a(y), Bq = Gd.b(y);
-        for (let x = 0; x < w; x++, i++) { const l = r[i] * .299 + g[i] * .587 + b[i] * .114; let d = l - (A[x] * l + Bq[x]); const ad = d < 0 ? -d : d; d *= ad / (ad + .01) * k; d = d > .06 ? .06 + (d - .06) * .3 : d < -.06 ? -.06 + (d + .06) * .3 : d; r[i] += d; g[i] += d; b[i] += d; } } }
+        for (let x = 0; x < w; x++, i++) { const l = r[i] * .299 + g[i] * .587 + b[i] * .114; let d = l - (A[x] * l + Bq[x]); const ad = d < 0 ? -d : d; d *= ad * ad / (ad * ad + .00025) * k; d = d > .06 ? .06 + (d - .06) * .3 : d < -.06 ? -.06 + (d + .06) * .3 : d; r[i] += d; g[i] += d; b[i] += d; } } }
     if (p.sharpen) sharpenMasked(im, 1.0, p.sharpen * 1.6, .12);
     if (p.fade) { const f = p.fade; for (let i = 0; i < n; i++) { r[i] = f + r[i] * (1 - f); g[i] = f + g[i] * (1 - f); b[i] = f + b[i] * (1 - f); } }
     if (p.vignette) { const v = p.vignette * .6;
@@ -2063,8 +2063,8 @@ const FX = (() => {
      이미 파란 하늘은 거의 그대로, 뿌연 하늘은 많이, 흐린 날의 하얀 하늘은 억지로 파랗게 칠하지 않음.  영역 밖의 파란 물건(옷 · 간판)은 조금만 */
   function skyBlue(im, S, o) { o = o || {}; const k = o.k === undefined ? 1 : o.k, sc = Math.max(im.w, im.h) / 1400;
     if (S.skyFrac < .04) return bands(im, [{ c: 215, w: 40, s: .4 * k, v: -.05 * k }, { c: 185, w: 25, s: .25 * k }], { skin: .8 });
-    const gate = ss(S.skyBR, .015, .07), add = clamp(.46 / Math.max(S.skyCh, .06) - 1, .22, 1.5) * gate * k, M = skyMask(S, im);
-    if (add > .45) calm(im, M, Math.min(.85, add * .7), sc);
+    const gate = ss(S.skyBR, .015, .07), add = clamp(.5 / Math.max(S.skyCh, .06) - 1, .32, 1.5) * gate * k, M = skyMask(S, im);
+    if (add > .25) calm(im, M, Math.min(.85, add * .8), sc);
     return bands(im, [{ c: 215, w: 45, s: add, v: -(o.dark === undefined ? .1 : o.dark) * gate * k }, { c: 185, w: 25, s: add * .55 }], { mask: M, out: o.out === undefined ? .3 : o.out }); }
   /* 안개 걷기(dark channel prior): 작은 판에서 안개 두께(t)와 안개 빛(A)을 재고, 경계에 맞춰 원래 크기로 늘려 J = (I − A) / t + A.
      안개가 없는 사진은 t가 1에 가까워 거의 그대로.  하늘처럼 안개 빛과 비슷한 곳은 덜 걷어 얼룩 · 잡티를 막음 */
@@ -2080,10 +2080,11 @@ const FX = (() => {
     const d1 = mn(nd), t0 = new Float32Array(n); for (let i = 0; i < n; i++) t0[i] = 1 - .78 * cl(d1[i]);
     const c = gcoef(S.L, t0, lw, lh, Math.max(2, Math.round(Math.max(lw, lh) * .03)), .0006), ta = up(c.a, lw, lh, w, h), tb = up(c.b, lw, lh, w, h), K = .2;
     const med0 = S.p50, Gd = gbase(im, 4 * Math.max(im.w, im.h) / 1400, .0015);   /* 가는 무늬 · 잡티(바탕과의 차이)는 절반만 키워 하늘 · 물의 잡티가 드러나지 않게 */
-    for (let y = 0, i = 0; y < h; y++) { const A = ta(y), Bq = tb(y), Ga = Gd.a(y), Gb = Gd.b(y);
+    const SM = S.skyFrac >= .04 ? skyMask(S, im) : null;   /* 하늘 · 구름은 절반만 걷음 (구름 그늘이 먹구름처럼 어두워지지 않게) */
+    for (let y = 0, i = 0; y < h; y++) { const A = ta(y), Bq = tb(y), Ga = Gd.a(y), Gb = Gd.b(y), Sa = SM ? SM.a(y) : null, Sb = SM ? SM.b(y) : null;
       for (let x = 0; x < w; x++, i++) { const R0 = r[i], G0 = g[i], B0 = b[i], l = R0 * .299 + G0 * .587 + B0 * .114; let t = clamp(A[x] * l + Bq[x], .42, 1);
         const d = Math.max(Math.abs(R0 - Ar), Math.abs(G0 - Ag), Math.abs(B0 - Ab)); if (d < K) t = Math.min(1, t * K / Math.max(d, .02));
-        t = 1 + (t - 1) * k; if (t > .995) continue; const q = 1 / t, dt = (l - (Ga[x] * l + Gb[x])) * (q - 1) * .5;
+        t = 1 + (t - 1) * k * (SM ? 1 - .55 * cl(Sa[x] * l + Sb[x]) : 1); if (t > .995) continue; const q = 1 / t, dt = (l - (Ga[x] * l + Gb[x])) * (q - 1) * .5;
         r[i] = (R0 - Ar) * q + Ar - dt; g[i] = (G0 - Ag) * q + Ag - dt; b[i] = (B0 - Ab) * q + Ab - dt; } }
     soft(im);
     /* 안개를 걷으면 전체가 어두워지므로 가운데 밝기를 절반쯤 되돌림 */
@@ -2211,7 +2212,7 @@ const FILTERS = [
   { id: "none", cat: "", name: "필터 없음", desc: "색은 그대로 두고 크기만 맞춰요" },
   { id: "product", cat: "product", name: "있는 그대로 선명하게", desc: "색은 그대로, 밝기·명암·선명도만 살짝", fn: (im, S) => { FX.lumaCurve(im, 3 * S.kB, 10 * S.kC); return FX.apply(im, { shadows: 4, clarity: .3, texture: .3, sharpen: .35 }); }, keep: 0 },
   { id: "white", cat: "product", name: "화이트 배경 깨끗하게", desc: "흰 배경 위 제품 — 배경은 더 하얗게, 그림자는 그대로", fn: (im, S) => { FX.whiteBg(im, S); const k = 1 - S.wbg; if (k > .02) FX.apply(im, { bright: 10 * k, highlights: 8 * k, sat: -4 * k }); FX.lumaCurve(im, 0, 7 * S.kC); return FX.apply(im, { clarity: .25, texture: .2, sharpen: .35 }); }, keep: 0 },
-  { id: "sky", cat: "scene", name: "맑은 하늘", desc: "뿌연 하늘을 파랗게, 구름은 또렷하게", fn: (im, S) => { FX.apply(im, { highlights: -14, clarity: .6, contrast: 6 * S.kC }); FX.skyBlue(im, S, { k: 1, dark: .13 }); return FX.apply(im, { vib: 18 * S.kV, temp: -4 }); }, keep: .02 },
+  { id: "sky", cat: "scene", name: "맑은 하늘", desc: "뿌연 하늘을 파랗게, 구름은 또렷하게", fn: (im, S) => { FX.apply(im, { highlights: -14, clarity: .6, contrast: 6 * S.kC }); FX.skyBlue(im, S, { k: 1, dark: .15 }); return FX.apply(im, { vib: 18 * S.kV, temp: -4 }); }, keep: .02 },
   { id: "green", cat: "scene", name: "싱그러운 초록", desc: "숲·잔디·산을 생기 있는 초록으로", fn: (im, S) => { FX.bands(im, [{ c: 95, w: 45, s: .45, h: 6, v: .05 }, { c: 60, w: 25, s: .2, h: 8 }], { skin: .9 }); return FX.apply(im, { clarity: .35, contrast: 8 * S.kC, vib: 10 * S.kV, bright: 4 * S.kB }); }, keep: 0 },
   { id: "dusk", cat: "scene", name: "노을 빛", desc: "주황·분홍 하늘을 더 진하게, 따뜻하게", fn: (im, S) => { FX.apply(im, { highlights: -10 }); FX.bands(im, [{ c: 25, w: 35, s: .45 }, { c: 340, w: 35, s: .35 }, { c: 260, w: 35, s: .2 }]); FX.tone(im, [.0, -.01, .03], [.04, .015, -.02]); return FX.apply(im, { contrast: 10 * S.kC, clarity: .3 }); }, keep: 0 },
   { id: "dehaze", cat: "scene", name: "안개 걷기", desc: "흐리고 뿌연 날 사진을 맑고 또렷하게", fn: (im, S) => { FX.dehaze(im, S, 1); return FX.apply(im, { clarity: .45, contrast: 6 * S.kC, vib: 14 * S.kV, temp: -2 }); }, keep: 0 },

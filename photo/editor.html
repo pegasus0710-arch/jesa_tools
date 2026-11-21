@@ -1795,27 +1795,54 @@ function App({ back }) {
     ${!EMBED && html`<div class="foot">Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>`}
   </div>`;
 }
-/* ══════════ v1.1 사진 보정 엔진 — 자동 보정(전문가 순서) + 블로그 필터 ══════════
+/* ══════════ 사진 보정 엔진 r2 (2026-11-21) — 사진을 먼저 읽고 맞춤 + 화질 지키기 ══════════
    순서: ① 화이트밸런스 ② 검은점·흰점(레벨) ③ 노출 ④ 그림자·하이라이트 → 필터 → 사용자 조절 → 마지막 선명하게
-   흐림 반경은 긴 변 1400px 기준값을 사진 크기에 맞춰 늘리거나 줄임 (미리보기·저장 결과가 같아 보이게) */
+   흐림 반경은 긴 변 1400px 기준값을 사진 크기에 맞춰 늘리거나 줄임 (미리보기·저장 결과가 같아 보이게)
+   r2에서 달라진 것
+   · 사진 읽기(scan): 하늘 · 피부 · 흰 배경 · 안개 · 채도 · 명암을 먼저 재서 필터 세기를 사진마다 맞춤 (이미 진한 사진은 덜, 흐린 사진은 더)
+   · 경계를 지키는 흐림(guided filter)으로 또렷하게 · 그림자 · 밝은 부분을 다룸 → 경계에 뿌연 띠(halo)가 생기지 않음
+   · 넘친 밝기는 색을 지키며 눌러 담음(soft) · 채도는 색이 뭉개지기 전에 멈춤 · 색 영역 조절은 회색 잡티를 건드리지 않음
+   · 분류별 전용 처리: 흰 배경 고르게(제품) · 하늘 영역(풍경) · 안개 걷기(dark channel) · 결을 남기는 피부 보정(인물) · 흰 접시 기준 색 맞춤(음식)
+   · 선명하게: 경계 넘침(흰 띠) 제한 / 내보낼 때 아주 작은 디더링으로 하늘 줄무늬 방지 */
 const FX = (() => {
   const cl = v => v < 0 ? 0 : v > 1 ? 1 : v;
+  const ss = (v, a, b) => { v = (v - a) / (b - a); return v <= 0 ? 0 : v >= 1 ? 1 : v * v * (3 - 2 * v); };
+  const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
   function fromCanvas(c) {
     const d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data, n = c.width * c.height;
     const r = new Float32Array(n), g = new Float32Array(n), b = new Float32Array(n);
     for (let i = 0, j = 0; i < n; i++, j += 4) { r[i] = d[j] / 255; g[i] = d[j + 1] / 255; b[i] = d[j + 2] / 255; }
     return { w: c.width, h: c.height, r, g, b };
   }
+  /* 8비트로 내보낼 때 ±0.5단계 안쪽의 고른 잡음을 섞음(디더링) — 하늘 · 비네팅의 계단 무늬를 막고, 손대지 않은 값은 그대로 */
   function toCanvas(im, c) {
     c = c || document.createElement("canvas"); c.width = im.w; c.height = im.h;
     const x = c.getContext("2d"), id = x.createImageData(im.w, im.h), d = id.data, n = im.w * im.h, { r, g, b } = im;
-    for (let i = 0, j = 0; i < n; i++, j += 4) { d[j] = r[i] * 255; d[j + 1] = g[i] * 255; d[j + 2] = b[i] * 255; d[j + 3] = 255; }
+    for (let i = 0, j = 0; i < n; i++, j += 4) {
+      let s = Math.imul(i ^ 0x9e3779b9, 0x85ebca6b); s ^= s >>> 13; s = Math.imul(s, 0xc2b2ae35); s ^= s >>> 16;
+      const q = ((s & 0xffff) + (s >>> 16) - 65536) / 65536 * .49;
+      d[j] = r[i] * 255 + q; d[j + 1] = g[i] * 255 + q; d[j + 2] = b[i] * 255 + q; d[j + 3] = 255; }
     x.putImageData(id, 0, 0); return c;
   }
   const clone = im => ({ w: im.w, h: im.h, r: im.r.slice(), g: im.g.slice(), b: im.b.slice() });
   const clip = im => { const { r, g, b } = im; for (let i = 0; i < r.length; i++) { r[i] = cl(r[i]); g[i] = cl(g[i]); b[i] = cl(b[i]); } };
+  /* 넘친 값 눌러 담기: 1을 넘는 밝기는 잘라 내지 않고 색(색상 · 채도)을 지킨 채 어깨 곡선으로 눌러 담고, 0 아래로 내려간 값은 회색 쪽으로 당김.
+     넘친 곳이 없으면 아무것도 바꾸지 않음 */
+  function soft(im, T) { T = T || .8; const { r, g, b } = im, n = r.length, H = new Uint32Array(65); let over = 0;
+    for (let i = 0; i < n; i++) { let R = r[i], G = g[i], B = b[i]; const mn = R < G ? (R < B ? R : B) : (G < B ? G : B);
+      if (mn < 0) { const L = R * .299 + G * .587 + B * .114; if (L <= 0) { R = G = B = 0; } else { const k = L / (L - mn); R = L + (R - L) * k; G = L + (G - L) * k; B = L + (B - L) * k; } r[i] = R; g[i] = G; b[i] = B; }
+      const mx = R > G ? (R > B ? R : B) : (G > B ? G : B); if (mx > 1) { over++; const q = ((mx - 1) * 100) | 0; H[q > 64 ? 64 : q]++; } }
+    if (!over) return im;
+    let acc = 0, q = 64; const lim = Math.max(2, n * .0002); for (; q > 0; q--) { acc += H[q]; if (acc > lim) break; }
+    const M = 1 + (q + 1) / 100, p = (M - T) / (1 - T), kT = 1 / (M - T);
+    for (let i = 0; i < n; i++) { const R = r[i], G = g[i], B = b[i], mx = R > G ? (R > B ? R : B) : (G > B ? G : B);
+      if (mx > T) { const x = (mx - T) * kT, k = (x >= 1 ? 1 : T + (1 - T) * (1 - Math.pow(1 - x, p))) / mx; r[i] = R * k; g[i] = G * k; b[i] = B * k; } }
+    return im; }
   const lumOf = im => { const { r, g, b } = im, L = new Float32Array(r.length); for (let i = 0; i < r.length; i++) L[i] = r[i] * .299 + g[i] * .587 + b[i] * .114; return L; };
-  const lumC = im => { const { r, g, b } = im, L = new Float32Array(r.length); for (let i = 0; i < r.length; i++) L[i] = cl(r[i]) * .299 + cl(g[i]) * .587 + cl(b[i]) * .114; return L; };
+  /* 피부색 정도(0~1): 붉은 기가 가장 크고 초록이 그다음인, 채도가 중간쯤인 색 */
+  const skinw = (R, G, B) => { if (!(R > G && G >= B) || R < .2) return 0; const d = R - B, s = d / R; if (s < .1 || s > .72) return 0;
+    let wh = (1 - Math.abs((G - B) / d - .37) / .33) * 2; if (wh <= 0) return 0; if (wh > 1) wh = 1;
+    return wh * (s < .18 ? (s - .1) * 12.5 : s > .58 ? (.72 - s) / .14 : 1) * (R < .35 ? (R - .2) / .15 : 1); };
 
   /* 흐림: 작은 반경은 가우시안, 큰 반경은 상자 흐림 3번(가우시안 근사) */
   function gaussPlane(src, w, h, s) {
@@ -1850,45 +1877,136 @@ const FX = (() => {
   const blurIm = (im, s) => ({ w: im.w, h: im.h, r: blurPlane(im.r, im.w, im.h, s), g: blurPlane(im.g, im.w, im.h, s), b: blurPlane(im.b, im.w, im.h, s) });
   const powLUT = e => { const L = new Float32Array(1025); for (let i = 0; i <= 1024; i++) L[i] = Math.pow(i / 1024, e); return L; };
   const lut = (L, v) => { v = cl(v) * 1024; const i = v | 0; return i >= 1024 ? L[1024] : L[i] + (L[i + 1] - L[i]) * (v - i); };
+  /* 명암 곡선(S자): 가운데 기울기 k, 양 끝은 잘리지 않고 부드럽게 눕는다 (예전 직선 방식은 밝은 곳 · 어두운 곳이 잘려 나갔음) */
+  const sLUT = k => { const L = new Float32Array(1025); for (let i = 0; i <= 1024; i++) { const v = i / 1024; L[i] = k > 1 ? (v < .5 ? .5 * Math.pow(2 * v, k) : 1 - .5 * Math.pow(2 * (1 - v), k)) : .5 + (v - .5) * k; } return L; };
 
-  /* 기본 조절 (python 시험본 apply와 같은 순서) */
+  /* ── 작은 판(낮은 해상도)에서 계산하고 원래 크기로 한 줄씩 늘려 쓰기 — 큰 사진에서도 메모리 · 시간을 아낌 ── */
+  function shrink(P, w, h, s) { const lw = Math.ceil(w / s), lh = Math.ceil(h / s), o = new Float32Array(lw * lh);
+    for (let y = 0; y < h; y++) { const q = ((y / s) | 0) * lw, p = y * w; for (let x = 0; x < w; x++) o[q + ((x / s) | 0)] += P[p + x]; }
+    for (let j = 0; j < lh; j++) { const ch = Math.min(h, (j + 1) * s) - j * s; for (let i = 0; i < lw; i++) o[j * lw + i] /= ch * (Math.min(w, (i + 1) * s) - i * s); }
+    return { p: o, w: lw, h: lh }; }
+  function shrinkL(im, s) { const { w, h, r, g, b } = im, lw = Math.ceil(w / s), lh = Math.ceil(h / s), o = new Float32Array(lw * lh);
+    for (let y = 0; y < h; y++) { const q = ((y / s) | 0) * lw, p = y * w; for (let x = 0; x < w; x++) { const i = p + x; o[q + ((x / s) | 0)] += cl(r[i]) * .299 + cl(g[i]) * .587 + cl(b[i]) * .114; } }
+    for (let j = 0; j < lh; j++) { const ch = Math.min(h, (j + 1) * s) - j * s; for (let i = 0; i < lw; i++) o[j * lw + i] /= ch * (Math.min(w, (i + 1) * s) - i * s); }
+    return { p: o, w: lw, h: lh }; }
+  /* 작은 판 → 원래 크기의 한 줄(부드럽게 이어 붙임). row(y)가 돌려주는 줄은 다음 호출 때 다시 쓰이므로 바로 써야 함 */
+  function up(lo, lw, lh, w, h) { const x0 = new Int32Array(w), xf = new Float32Array(w), tmp = new Float32Array(lw + 1), out = new Float32Array(w), kx = lw / w, ky = lh / h;
+    for (let x = 0; x < w; x++) { let f = (x + .5) * kx - .5; f = f < 0 ? 0 : f > lw - 1 ? lw - 1 : f; const i = f | 0; x0[x] = i; xf[x] = f - i; }
+    return y => { let f = (y + .5) * ky - .5; f = f < 0 ? 0 : f > lh - 1 ? lh - 1 : f; const j = f | 0, t = f - j, a = j * lw, c = (j + 1 < lh ? j + 1 : j) * lw;
+      for (let i = 0; i < lw; i++) tmp[i] = lo[a + i] + (lo[c + i] - lo[a + i]) * t; tmp[lw] = tmp[lw - 1];
+      for (let x = 0; x < w; x++) { const i = x0[x]; out[x] = tmp[i] + (tmp[i + 1] - tmp[i]) * xf[x]; } return out; }; }
+  const bmean = (s, w, h, r) => { const t = new Float32Array(w * h), o = new Float32Array(w * h); boxH(s, t, w, h, r); boxV(t, o, w, h, r); return o; };
+  /* 경계를 지키는 흐림(guided filter)의 계수: 길잡이 I(밝기)를 따라 P를 고르게 → 결과 = a·I + b.  평평한 곳은 고르게, 뚜렷한 경계는 그대로 */
+  function gcoef(I, P, w, h, r, eps) { const n = w * h, t = new Float32Array(n), same = I === P;
+    const mI = bmean(I, w, h, r), mP = same ? mI : bmean(P, w, h, r);
+    for (let i = 0; i < n; i++) t[i] = I[i] * I[i]; const mII = bmean(t, w, h, r);
+    let mIP = mII; if (!same) { for (let i = 0; i < n; i++) t[i] = I[i] * P[i]; mIP = bmean(t, w, h, r); }
+    const a = new Float32Array(n), b = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const v = mII[i] - mI[i] * mI[i]; a[i] = (mIP[i] - mI[i] * mP[i]) / (v + eps); b[i] = mP[i] - a[i] * mI[i]; }
+    return { a: bmean(a, w, h, r), b: bmean(b, w, h, r) }; }
+  /* 밝기의 '바탕'(큰 덩어리의 밝기): base = a(x)·L + b(x).  L − base = 무늬 · 결 */
+  function gbase(im, rad, eps) { const { w, h } = im, s = Math.max(1, Math.min(8, Math.floor(rad / 2.4))), lo = shrinkL(im, s);
+    const c = gcoef(lo.p, lo.p, lo.w, lo.h, Math.max(1, Math.round(rad / s)), eps); return { a: up(c.a, lo.w, lo.h, w, h), b: up(c.b, lo.w, lo.h, w, h) }; }
+
+  function pct(L, q) { const H = new Uint32Array(1024); for (let i = 0; i < L.length; i++) H[Math.min(1023, (cl(L[i]) * 1023.999) | 0)]++;
+    const out = q.map(() => 0), tgt = q.map(v => v / 100 * L.length); let acc = 0, k = 0;
+    for (let i = 0; i < 1024 && k < q.length; i++) { acc += H[i]; while (k < q.length && acc >= tgt[k]) { out[k] = (i + .5) / 1024; k++; } }
+    while (k < q.length) out[k++] = 1; return out; }
+  const band = (hh, c, wd) => { const d = Math.abs(((hh - c + 540) % 360) - 180); return d >= wd ? 0 : 1 - d / wd; };
+  const hueOf = (R, G, B, mx, dl) => { let H = mx === R ? ((G - B) / dl) % 6 : mx === G ? (B - R) / dl + 2 : (R - G) / dl + 4; H *= 60; return H < 0 ? H + 360 : H; };
+
+  /* ══ 사진 읽기 ══  긴 변 200px쯤의 작은 판에서 잰다 (미리보기 · 저장이 늘 같은 판단을 하도록).
+     sat 평균 채도 · p5/p50/p95 밝기 · spread 명암 폭 · sky 하늘(넓이 · 파란 정도 · 채도) · skin 피부색 넓이 · wbg 흰 배경(확신 · 밝기) · haze 안개 · wref 흰 기준색 */
+  function scan(im) {
+    const { w, h } = im, s = Math.max(1, Math.ceil(Math.max(w, h) / 200)), A = shrink(im.r, w, h, s), R = A.p, G = shrink(im.g, w, h, s).p, B = shrink(im.b, w, h, s).p, lw = A.w, lh = A.h, n = lw * lh;
+    const L = new Float32Array(n), dk = new Float32Array(n), ws = new Float32Array(n), sk = new Float32Array(n); let sat = 0, skin = 0;
+    for (let i = 0; i < n; i++) { const r = cl(R[i]), g = cl(G[i]), b = cl(B[i]), mx = Math.max(r, g, b), mn = Math.min(r, g, b), ch = mx - mn;
+      L[i] = r * .299 + g * .587 + b * .114; dk[i] = mn; sat += ch; const q = skinw(r, g, b); sk[i] = q; skin += q;
+      const wb = ch > .02 ? band(hueOf(r, g, b, mx, ch), 212, 52) * ss(ch, .03, .09) * ss(mx, .25, .45) : 0, wg = ss(mx, .62, .82) * (1 - ss(ch, .07, .15)) * .85;
+      ws[i] = wb > wg ? wb : wg; }
+    const [p5, p50, p95] = pct(L, [5, 50, 95]);
+    /* 하늘: 하늘색(파랑 또는 밝은 회색)이고 무늬가 잔잔하며, 사진 맨 위에서부터 이어진 곳 */
+    const gr = new Float32Array(n);
+    for (let y = 0; y < lh; y++) for (let x = 0; x < lw; x++) { const i = y * lw + x, gx = L[y * lw + Math.min(lw - 1, x + 1)] - L[y * lw + Math.max(0, x - 1)], gy = L[Math.min(lh - 1, y + 1) * lw + x] - L[Math.max(0, y - 1) * lw + x];
+      gr[i] = Math.abs(gx) + Math.abs(gy); ws[i] *= 1 - ss(gr[i], .05, .16); }
+    const sky = new Float32Array(n), st = new Int32Array(n); let sp = 0;
+    for (let x = 0; x < lw; x++) if (ws[x] > .4) { sky[x] = ws[x]; st[sp++] = x; }
+    while (sp) { const i = st[--sp], x = i % lw, y = (i / lw) | 0;
+      if (x > 0 && !sky[i - 1] && ws[i - 1] > .3) { sky[i - 1] = ws[i - 1]; st[sp++] = i - 1; } if (x < lw - 1 && !sky[i + 1] && ws[i + 1] > .3) { sky[i + 1] = ws[i + 1]; st[sp++] = i + 1; }
+      if (y > 0 && !sky[i - lw] && ws[i - lw] > .3) { sky[i - lw] = ws[i - lw]; st[sp++] = i - lw; } if (y < lh - 1 && !sky[i + lw] && ws[i + lw] > .3) { sky[i + lw] = ws[i + lw]; st[sp++] = i + lw; } }
+    let sm = 0, sbr = 0, sch = 0; for (let i = 0; i < n; i++) { const m = sky[i]; if (!m) continue; sm += m; sbr += m * (B[i] - R[i]); sch += m * (Math.max(R[i], G[i], B[i]) - Math.min(R[i], G[i], B[i])); }
+    /* 흰 배경: 밝고 · 색이 옅고 · 무늬가 없는 곳이 사진 가장자리에서부터 이어진 영역.  가장자리 띠(바깥 8%)의 얼마가 그 영역인지로 확신을 정함 (무늬 있는 식탁 · 벽은 해당 없음) */
+    const bw = Math.max(1, Math.round(Math.min(lw, lh) * .08)), bl = [], ring = i => { const x = i % lw, y = (i / lw) | 0; return x < bw || x >= lw - bw || y < bw || y >= lh - bw; };
+    const cand = (i, th) => L[i] > th && gr[i] < .07 && Math.max(R[i], G[i], B[i]) - Math.min(R[i], G[i], B[i]) < .14;
+    for (let i = 0; i < n; i++) if (ring(i) && cand(i, .5)) bl.push(L[i]);
+    const wL = bl.length ? pct(Float32Array.from(bl), [50])[0] : 1, wth = Math.max(.4, wL - .3), bg = new Float32Array(n); sp = 0;
+    for (let i = 0; i < n; i++) { const x = i % lw, y = (i / lw) | 0; if ((x === 0 || y === 0 || x === lw - 1 || y === lh - 1) && cand(i, wth)) { bg[i] = 1; st[sp++] = i; } }
+    while (sp) { const i = st[--sp], x = i % lw, y = (i / lw) | 0;
+      if (x > 0 && !bg[i - 1] && cand(i - 1, wth)) { bg[i - 1] = 1; st[sp++] = i - 1; } if (x < lw - 1 && !bg[i + 1] && cand(i + 1, wth)) { bg[i + 1] = 1; st[sp++] = i + 1; }
+      if (y > 0 && !bg[i - lw] && cand(i - lw, wth)) { bg[i - lw] = 1; st[sp++] = i - lw; } if (y < lh - 1 && !bg[i + lw] && cand(i + lw, wth)) { bg[i + lw] = 1; st[sp++] = i + lw; } }
+    let bn = 0, bk = 0; for (let i = 0; i < n; i++) if (ring(i)) { bn++; bk += bg[i]; } const wfr = bk / bn;
+    /* 흰 기준색: 밝은 쪽 10% 가운데 색이 옅은 곳의 평균 (흰 접시 · 식탁보 · 종이) */
+    const p90 = pct(L, [90])[0]; let wn = 0, wr = 0, wg2 = 0, wb2 = 0;
+    for (let i = 0; i < n; i++) { if (L[i] < p90 || L[i] < .55) continue; const mx = Math.max(R[i], G[i], B[i]), mn = Math.min(R[i], G[i], B[i]); if ((mx - mn) / mx > .22) continue; wn++; wr += R[i]; wg2 += G[i]; wb2 += B[i]; }
+    const S = { s, lw, lh, R, G, B, L, dk, sk, skyLo: sky, bgLo: bg, sat: sat / n, p5, p50, p95, spread: p95 - p5, skyFrac: sm / n, skyBR: sm ? sbr / sm : 0, skyCh: sm ? sch / sm : 0, skin: skin / n,
+      wbg: ss(wfr, .5, .8), wbgL: wL, haze: pct(dk, [5])[0], wref: wn / n > .012 ? [wr / wn, wg2 / wn, wb2 / wn] : null };
+    /* 필터 세기를 사진에 맞추는 배수: 이미 진한 사진은 채도를 덜, 이미 명암이 센 사진은 명암을 덜, 이미 밝은 사진은 밝기를 덜 */
+    S.kV = clamp(1.3 - S.sat * 2.2, .45, 1.2); S.kC = clamp(1.75 - S.spread * 1.1, .55, 1.25); S.kB = clamp(1 + (.5 - p50) * 2.2, .4, 1.4);
+    return S; }
+  /* 작은 판의 마스크를 원래 크기의 밝기 경계에 맞춰 늘림(guided joint upsampling) → { a(y), b(y) } : m = a·L + b */
+  function maskUp(S, lo, im, r, eps) { const c = gcoef(S.L, blurPlane(lo, S.lw, S.lh, 1), S.lw, S.lh, r || 3, eps || .0015); return { a: up(c.a, S.lw, S.lh, im.w, im.h), b: up(c.b, S.lw, S.lh, im.w, im.h) }; }
+  const skyMask = (S, im) => maskUp(S, S.skyLo, im, 3, .0015);
+
+  /* 기본 조절.  S(사진 읽기 결과)는 없어도 됨 */
   function apply(im, p, sc) {
     sc = sc || Math.max(im.w, im.h) / 1400;
     const { w, h, r, g, b } = im, n = w * h;
     const temp = p.temp || 0, tint = p.tint || 0;
     if (temp || tint) { const kr = 1 + temp * .006, kb = 1 - temp * .006, kg = 1 - tint * .004; for (let i = 0; i < n; i++) { r[i] *= kr; g[i] *= kg; b[i] *= kb; } }
     if (p.bright) { const L = powLUT(1 / (1 + p.bright * .012)); for (let i = 0; i < n; i++) { r[i] = lut(L, r[i]); g[i] = lut(L, g[i]); b[i] = lut(L, b[i]); } }
-    if (p.shadows || p.highlights) { const L = lumC(im), sh = (p.shadows || 0) * .01, hl = (p.highlights || 0) * .01;
-      for (let i = 0; i < n; i++) { const l = L[i];
-        if (sh) { const f = sh * (1 - l) * (1 - l); r[i] += f * (1 - r[i]); g[i] += f * (1 - g[i]); b[i] += f * (1 - b[i]); }
-        if (hl) { const f = hl * l * l; r[i] += f * r[i]; g[i] += f * g[i]; b[i] += f * b[i]; } } }
-    if (p.contrast) { const k = 1 + p.contrast * .01; for (let i = 0; i < n; i++) { r[i] = .5 + (r[i] - .5) * k; g[i] = .5 + (g[i] - .5) * k; b[i] = .5 + (b[i] - .5) * k; } }
-    if (p.sat || p.vib) { const L = lumC(im), ks = 1 + (p.sat || 0) * .01, kv = (p.vib || 0) * .01;
-      for (let i = 0; i < n; i++) { const l = L[i];
-        if (ks !== 1) { r[i] = l + (r[i] - l) * ks; g[i] = l + (g[i] - l) * ks; b[i] = l + (b[i] - l) * ks; }
-        if (kv) { const R = cl(r[i]), G = cl(g[i]), B = cl(b[i]), s = Math.max(R, G, B) - Math.min(R, G, B), f = 1 + kv * (1 - s) * Math.min(1, s * 9);   /* 거의 회색인 곳(흐린 하늘·벽)은 덜 올려 색 얼룩 방지 */
-          r[i] = l + (r[i] - l) * f; g[i] = l + (g[i] - l) * f; b[i] = l + (b[i] - l) * f; } } }
-    clip(im);
-    if (p.soften) { const bl = blurIm(im, 3 * sc), L = lumOf(im), Lb = blurPlane(L, w, h, 1.2 * sc);
-      for (let i = 0; i < n; i++) { const m = cl(1 - Math.abs(L[i] - Lb[i]) * 25) * p.soften; r[i] = r[i] * (1 - m) + bl.r[i] * m; g[i] = g[i] * (1 - m) + bl.g[i] * m; b[i] = b[i] * (1 - m) + bl.b[i] * m; } }
-    if (p.glow) { const bl = blurIm(im, 12 * sc), k = p.glow * .5;
-      for (let i = 0; i < n; i++) { r[i] = 1 - (1 - r[i]) * (1 - bl.r[i] * k); g[i] = 1 - (1 - g[i]) * (1 - bl.g[i] * k); b[i] = 1 - (1 - b[i]) * (1 - bl.b[i] * k); } }
-    if (p.clarity) { const L = lumOf(im), Lb = blurPlane(L, w, h, 20 * sc), k = p.clarity * 1.2;
-      for (let i = 0; i < n; i++) { const mid = 1 - Math.abs(L[i] - .5) * 2, d = (L[i] - Lb[i]) * k * mid; r[i] += d; g[i] += d; b[i] += d; } }
-    if (p.sharpen) sharpen(im, 1.0, p.sharpen * 1.5);
+    /* 그림자 · 밝은 부분: 화소 하나의 밝기가 아니라 그 둘레 '바탕' 밝기로 정함 → 어두운 덩어리는 통째로 열리고 그 안의 무늬(명암)는 그대로.
+       그림자는 곱하기로 올려 색이 뿌옇게 뜨지 않고, 검은점은 거의 그대로 둠 */
+    if (p.shadows || p.highlights) { const sh = (p.shadows || 0) * .01, hl = (p.highlights || 0) * .01, Gd = gbase(im, 18 * sc, .012);
+      for (let y = 0, i = 0; y < h; y++) { const A = Gd.a(y), Bq = Gd.b(y);
+        for (let x = 0; x < w; x++, i++) { const l = cl(r[i]) * .299 + cl(g[i]) * .587 + cl(b[i]) * .114, bl = cl(A[x] * l + Bq[x]); let k = 1;
+          if (sh) { const f = sh * (1 - bl) * (1 - bl), t = bl + f * (1 - bl); k = ((t < 0 ? 0 : t) + .14) / (bl + .14); }
+          if (hl) k *= 1 + hl * bl * bl;
+          r[i] *= k; g[i] *= k; b[i] *= k; } }
+      soft(im); }
+    if (p.contrast) { if (p.contrast > 0) soft(im); const T = sLUT(1 + p.contrast * .011); for (let i = 0; i < n; i++) { r[i] = lut(T, r[i]); g[i] = lut(T, g[i]); b[i] = lut(T, b[i]); } }
+    /* 채도 · 생기: 색이 한계(0 · 1)를 넘어 뭉개지기 전에 멈추고, 생기(vib)는 피부색을 덜 올림 */
+    if (p.sat || p.vib) { const ks = 1 + (p.sat || 0) * .01, kv = (p.vib || 0) * .01;
+      for (let i = 0; i < n; i++) { const R = cl(r[i]), G = cl(g[i]), B = cl(b[i]), l = R * .299 + G * .587 + B * .114, mx = R > G ? (R > B ? R : B) : (G > B ? G : B), mn = R < G ? (R < B ? R : B) : (G < B ? G : B);
+        let f = ks; if (kv) { const s = mx - mn; f *= 1 + kv * (1 - s) * Math.min(1, s * 9) * (kv > 0 ? 1 - .6 * skinw(R, G, B) : 1); }   /* 거의 회색인 곳(흐린 하늘·벽)은 덜 올려 색 얼룩 방지 */
+        if (f > 1) { let fm = 1e9; if (mx > l) fm = (1 - l) / (mx - l); if (mn < l) { const q = l / (l - mn); if (q < fm) fm = q; } if (fm < 1) fm = 1;
+          const k0 = .7 * fm; if (f > k0) { f = k0 + (fm - k0) * (1 - Math.exp(-(f - k0) / (fm - k0 + 1e-6))); if (f < 1) f = 1; } }
+        r[i] = l + (R - l) * f; g[i] = l + (G - l) * f; b[i] = l + (B - l) * f; } }
+    soft(im);
+    if (p.glow) { const s = Math.max(1, Math.round(4 * sc)), k = p.glow * .5, lr = shrink(r, w, h, s), lg = shrink(g, w, h, s), lb = shrink(b, w, h, s), sg = 12 * sc / s;
+      const ur = up(blurPlane(lr.p, lr.w, lr.h, sg), lr.w, lr.h, w, h), ug = up(blurPlane(lg.p, lr.w, lr.h, sg), lr.w, lr.h, w, h), ub = up(blurPlane(lb.p, lr.w, lr.h, sg), lr.w, lr.h, w, h);
+      for (let y = 0, i = 0; y < h; y++) { const a = ur(y), c = ug(y), e = ub(y); for (let x = 0; x < w; x++, i++) { r[i] = 1 - (1 - r[i]) * (1 - a[x] * k); g[i] = 1 - (1 - g[i]) * (1 - c[x] * k); b[i] = 1 - (1 - b[i]) * (1 - e[x] * k); } } }
+    /* 또렷하게(clarity) · 결(texture): 바탕과의 차이(무늬)만 키움.  바탕이 경계를 지키므로 건물 · 산 능선 옆에 뿌연 띠가 생기지 않음 */
+    if (p.clarity) { const Gd = gbase(im, 20 * sc, .02), k = p.clarity * 1.7;   /* 잡티 크기의 아주 작은 차이는 덜 키움(아래 ad / (ad + .012)) */
+      for (let y = 0, i = 0; y < h; y++) { const A = Gd.a(y), Bq = Gd.b(y);
+        for (let x = 0; x < w; x++, i++) { const l = r[i] * .299 + g[i] * .587 + b[i] * .114; let d = l - (A[x] * l + Bq[x]); const ad = d < 0 ? -d : d; d *= ad / (ad + .012) * k * (1 - Math.abs(l - .5) * 2); d = d > .1 ? .1 + (d - .1) * .3 : d < -.1 ? -.1 + (d + .1) * .3 : d; r[i] += d; g[i] += d; b[i] += d; } } }
+    if (p.texture) { const Gd = gbase(im, 5 * sc, .005), k = p.texture * 1.6;
+      for (let y = 0, i = 0; y < h; y++) { const A = Gd.a(y), Bq = Gd.b(y);
+        for (let x = 0; x < w; x++, i++) { const l = r[i] * .299 + g[i] * .587 + b[i] * .114; let d = l - (A[x] * l + Bq[x]); const ad = d < 0 ? -d : d; d *= ad / (ad + .01) * k; d = d > .06 ? .06 + (d - .06) * .3 : d < -.06 ? -.06 + (d + .06) * .3 : d; r[i] += d; g[i] += d; b[i] += d; } } }
+    if (p.sharpen) sharpenMasked(im, 1.0, p.sharpen * 1.6, .12);
     if (p.fade) { const f = p.fade; for (let i = 0; i < n; i++) { r[i] = f + r[i] * (1 - f); g[i] = f + g[i] * (1 - f); b[i] = f + b[i] * (1 - f); } }
     if (p.vignette) { const v = p.vignette * .6;
       for (let y = 0; y < h; y++) { const dy = (y - h / 2) / (h / 2); for (let x = 0; x < w; x++) { const dx = (x - w / 2) / (w / 2), d = dx * dx + dy * dy - .35;
         if (d > 0) { const i = y * w + x, f = 1 - v * Math.min(d, 1); r[i] *= f; g[i] *= f; b[i] *= f; } } } }
-    clip(im); return im;
+    soft(im); return im;
   }
+  /* 밝기만 바꾸는 곡선(색은 그대로): 밝기 L을 곡선에 넣고 세 색을 같은 배수로 → 색상 · 채도가 변하지 않음 (제품 사진의 '있는 그대로') */
+  function lumaCurve(im, bright, contrast) { const { r, g, b } = im, T = new Float32Array(1025), e = 1 / (1 + (bright || 0) * .012), C = sLUT(1 + (contrast || 0) * .011);
+    for (let i = 0; i <= 1024; i++) T[i] = lut(C, Math.pow(i / 1024, e));
+    for (let i = 0; i < r.length; i++) { const l = cl(r[i]) * .299 + cl(g[i]) * .587 + cl(b[i]) * .114; if (l < .004) continue; const k = lut(T, l) / l; r[i] *= k; g[i] *= k; b[i] *= k; }
+    return soft(im); }
   function sharpen(im, s, amt) { const bl = blurIm(im, s), { r, g, b } = im;
     for (let i = 0; i < r.length; i++) { r[i] += (r[i] - bl.r[i]) * amt; g[i] += (g[i] - bl.g[i]) * amt; b[i] += (b[i] - bl.b[i]) * amt; }
     clip(im); return im; }
-  function pct(L, q) { const H = new Uint32Array(1024); for (let i = 0; i < L.length; i++) H[Math.min(1023, (cl(L[i]) * 1023.999) | 0)]++;
-    const out = q.map(() => 0), tgt = q.map(v => v / 100 * L.length); let acc = 0, k = 0;
-    for (let i = 0; i < 1024 && k < q.length; i++) { acc += H[i]; while (k < q.length && acc >= tgt[k]) { out[k] = (i + .5) / 1024; k++; } }
-    while (k < q.length) out[k++] = 1; return out; }
 
   /* 자동 보정 — 사진마다 따로 계산 */
   function auto(im) {
@@ -1900,10 +2018,10 @@ const FX = (() => {
       const strength = Math.min(1, Math.max(.15, 1 - (chs / n - .12) * 6)) * .8;
       const gr = Math.min(1.04, Math.max(.96, 1 + (ag / Math.max(ar, 1e-3) - 1) * strength)), gb = Math.min(1.04, Math.max(.96, 1 + (ag / Math.max(ab, 1e-3) - 1) * strength));
       for (let i = 0; i < n; i++) { r[i] *= gr; b[i] *= gb; } }
-    clip(im); L = lumOf(im);
+    soft(im); L = lumOf(im);
     let [lo, hi] = pct(L, [.3, 99.7]); lo = Math.min(lo, .08); hi = Math.max(hi, .88);
     const k = 1 / (hi - lo); for (let i = 0; i < n; i++) { r[i] = (r[i] - lo) * k; g[i] = (g[i] - lo) * k; b[i] = (b[i] - lo) * k; }
-    clip(im); L = lumOf(im);
+    soft(im, .86); L = lumOf(im);   /* 흰점 위로 넘친 곳은 잘라 내지 않고 눌러 담아 밝은 곳의 결을 지킴 */
     const loRef = pct(L, [.5])[0];   /* 레벨 맞춘 직후의 검은점 — 마지막에 다시 이 자리로 (뿌옇게 뜨지 않게) */
     const med = pct(L, [50])[0], t = Math.min(Math.max(med, .38), .62);
     const ga = Math.min(1.15, Math.max(.8, Math.log(t) / Math.log(Math.max(med, 1e-3))));
@@ -1914,34 +2032,105 @@ const FX = (() => {
     anchor(im, loRef + .03);
     return im;
   }
-  /* 선명(팝): 구름 결 살리기 → 색 영역별 채도(파랑·청록·주황) → 전체 채도·명암 */
-  const band = (hh, c, wd) => { const d = Math.abs(((hh - c + 540) % 360) - 180); return d >= wd ? 0 : 1 - d / wd; };
-  function pop(im) {
-    apply(im, { highlights: -12, shadows: 16 }); apply(im, { clarity: .9 });
-    const { r, g, b } = im;
-    for (let i = 0; i < r.length; i++) {
-      const R = r[i], G = g[i], B = b[i], mx = Math.max(R, G, B), mn = Math.min(R, G, B), dl = mx - mn;
-      if (mx <= 0 || dl <= 0) continue;
-      let H = mx === R ? ((G - B) / dl) % 6 : mx === G ? (B - R) / dl + 2 : (R - G) / dl + 4; H *= 60; if (H < 0) H += 360;
-      let S = dl / mx, V = mx;
-      const bl = band(H, 215, 40), cy = band(H, 180, 30), og = band(H, 32, 28);
-      S = Math.min(1, S * (1 + .95 * bl + .75 * cy + .25 * og)); V = V * (1 - .06 * bl * S); H = (H - 3 * og + 360) % 360;
-      const C = V * S, X = C * (1 - Math.abs((H / 60) % 2 - 1)), m = V - C, hs = (H / 60) | 0;
-      if (hs === 0) { r[i] = C + m; g[i] = X + m; b[i] = m; } else if (hs === 1) { r[i] = X + m; g[i] = C + m; b[i] = m; }
-      else if (hs === 2) { r[i] = m; g[i] = C + m; b[i] = X + m; } else if (hs === 3) { r[i] = m; g[i] = X + m; b[i] = C + m; }
-      else if (hs === 4) { r[i] = X + m; g[i] = m; b[i] = C + m; } else { r[i] = C + m; g[i] = m; b[i] = X + m; }
-    }
-    return apply(im, { vib: 50, sat: 12, contrast: 5, bright: 8, vignette: .22 });
+  /* 색 영역별 조절(HSL): [{c:색상 중심, w:폭, s:채도 배수 더하기, v:밝기 배수 더하기, h:색상 이동}]
+     o.mask(하늘 등 영역) · o.out(영역 밖에서의 세기 0~1) · o.skin(피부색 보호 0~1).  채도는 1에서 잘리지 않게 부드럽게 올리고, 회색에 가까운 잡티는 건드리지 않음 */
+  function bands(im, list, o) { o = o || {}; const { r, g, b, w, h } = im, M = o.mask || null, out = o.out === undefined ? 1 : o.out, skp = o.skin || 0;
+    for (let y = 0, i = 0; y < h; y++) { const A = M ? M.a(y) : null, Bq = M ? M.b(y) : null;
+      for (let x = 0; x < w; x++, i++) {
+        const R = r[i], G = g[i], B = b[i], mx = Math.max(R, G, B), mn = Math.min(R, G, B), dl = mx - mn;
+        if (mx <= 0 || dl <= .008) continue;
+        let H = hueOf(R, G, B, mx, dl), S = dl / mx, V = mx, ks = 0, kv = 0, dh = 0;
+        for (const q of list) { const wq = band(H, q.c, q.w); if (!wq) continue; ks += (q.s || 0) * wq; kv += (q.v || 0) * wq * S; dh += (q.h || 0) * wq; }
+        if (!ks && !kv && !dh) continue;
+        let m = ss(dl, .012, .05);
+        if (M) m *= out + (1 - out) * cl(A[x] * (R * .299 + G * .587 + B * .114) + Bq[x]);
+        if (skp) m *= 1 - skp * skinw(R, G, B);
+        if (m <= .003) continue;
+        const e = 1 + ks * m; S = e > 1 ? 1 - Math.pow(1 - (S > 1 ? 1 : S), e) : S * (e < 0 ? 0 : e); V = Math.min(1, V * (1 + kv * m)); H = (H + dh * m + 360) % 360;
+        const C = V * S, X = C * (1 - Math.abs((H / 60) % 2 - 1)), mm = V - C, hs = (H / 60) | 0;
+        if (hs === 0) { r[i] = C + mm; g[i] = X + mm; b[i] = mm; } else if (hs === 1) { r[i] = X + mm; g[i] = C + mm; b[i] = mm; }
+        else if (hs === 2) { r[i] = mm; g[i] = C + mm; b[i] = X + mm; } else if (hs === 3) { r[i] = mm; g[i] = X + mm; b[i] = C + mm; }
+        else if (hs === 4) { r[i] = X + mm; g[i] = mm; b[i] = C + mm; } else { r[i] = C + mm; g[i] = mm; b[i] = X + mm; } } }
+    return im; }
+  /* 영역 안의 색 잡티 고르기: 하늘처럼 잔잔한 곳의 색(밝기는 그대로)만 둘레 평균으로 → 채도를 크게 올려도 얼룩 · 압축 무늬가 드러나지 않음 */
+  function calm(im, M, k, sc) { const { w, h, r, g, b } = im, s = Math.max(2, Math.round(4 * sc)); if (Math.max(w, h) < 500) return im;
+    const lr = shrink(r, w, h, s), ur = up(blurPlane(lr.p, lr.w, lr.h, 1), lr.w, lr.h, w, h), ug = up(blurPlane(shrink(g, w, h, s).p, lr.w, lr.h, 1), lr.w, lr.h, w, h), ub = up(blurPlane(shrink(b, w, h, s).p, lr.w, lr.h, 1), lr.w, lr.h, w, h);
+    for (let y = 0, i = 0; y < h; y++) { const A = M.a(y), Bq = M.b(y), a = ur(y), c = ug(y), e = ub(y);
+      for (let x = 0; x < w; x++, i++) { const l = r[i] * .299 + g[i] * .587 + b[i] * .114, m = cl(A[x] * l + Bq[x]) * k; if (m <= .01) continue; const ll = a[x] * .299 + c[x] * .587 + e[x] * .114;
+        r[i] += (l + a[x] - ll - r[i]) * m; g[i] += (l + c[x] - ll - g[i]) * m; b[i] += (l + e[x] - ll - b[i]) * m; } }
+    return im; }
+  /* 하늘 파랗게: 하늘 영역을 찾아 그 안에서만, 지금 채도를 재서 '맑은 날 하늘' 채도까지만 올림.
+     이미 파란 하늘은 거의 그대로, 뿌연 하늘은 많이, 흐린 날의 하얀 하늘은 억지로 파랗게 칠하지 않음.  영역 밖의 파란 물건(옷 · 간판)은 조금만 */
+  function skyBlue(im, S, o) { o = o || {}; const k = o.k === undefined ? 1 : o.k, sc = Math.max(im.w, im.h) / 1400;
+    if (S.skyFrac < .04) return bands(im, [{ c: 215, w: 40, s: .4 * k, v: -.05 * k }, { c: 185, w: 25, s: .25 * k }], { skin: .8 });
+    const gate = ss(S.skyBR, .015, .07), add = clamp(.46 / Math.max(S.skyCh, .06) - 1, .22, 1.5) * gate * k, M = skyMask(S, im);
+    if (add > .45) calm(im, M, Math.min(.85, add * .7), sc);
+    return bands(im, [{ c: 215, w: 45, s: add, v: -(o.dark === undefined ? .1 : o.dark) * gate * k }, { c: 185, w: 25, s: add * .55 }], { mask: M, out: o.out === undefined ? .3 : o.out }); }
+  /* 안개 걷기(dark channel prior): 작은 판에서 안개 두께(t)와 안개 빛(A)을 재고, 경계에 맞춰 원래 크기로 늘려 J = (I − A) / t + A.
+     안개가 없는 사진은 t가 1에 가까워 거의 그대로.  하늘처럼 안개 빛과 비슷한 곳은 덜 걷어 얼룩 · 잡티를 막음 */
+  function dehaze(im, S, k) { const { lw, lh, R, G, B, dk } = S, n = lw * lh, { w, h, r, g, b } = im, rr = Math.max(1, Math.round(Math.max(lw, lh) * .01));   /* 좁게 재야 사람 · 건물 둘레에 덜 걷힌 띠가 남지 않음 */
+    const mn = (P) => { const t = new Float32Array(n), o = new Float32Array(n);
+      for (let y = 0; y < lh; y++) for (let x = 0; x < lw; x++) { let m = 9; for (let q = Math.max(0, x - rr); q <= Math.min(lw - 1, x + rr); q++) { const v = P[y * lw + q]; if (v < m) m = v; } t[y * lw + x] = m; }
+      for (let y = 0; y < lh; y++) for (let x = 0; x < lw; x++) { let m = 9; for (let q = Math.max(0, y - rr); q <= Math.min(lh - 1, y + rr); q++) { const v = t[q * lw + x]; if (v < m) m = v; } o[y * lw + x] = m; } return o; };
+    const d0 = mn(dk), th = pct(d0, [99.5])[0]; let an = 0, ar = 0, ag = 0, ab = 0;
+    for (let i = 0; i < n; i++) if (d0[i] >= th - .002) { an++; ar += R[i]; ag += G[i]; ab += B[i]; }
+    if (!an) { an = 1; ar = ag = ab = 1; }
+    const Ar = clamp(ar / an, .55, 1), Ag = clamp(ag / an, .55, 1), Ab = clamp(ab / an, .55, 1), nd = new Float32Array(n);
+    for (let i = 0; i < n; i++) nd[i] = Math.min(R[i] / Ar, G[i] / Ag, B[i] / Ab);
+    const d1 = mn(nd), t0 = new Float32Array(n); for (let i = 0; i < n; i++) t0[i] = 1 - .78 * cl(d1[i]);
+    const c = gcoef(S.L, t0, lw, lh, Math.max(2, Math.round(Math.max(lw, lh) * .03)), .0006), ta = up(c.a, lw, lh, w, h), tb = up(c.b, lw, lh, w, h), K = .2;
+    const med0 = S.p50, Gd = gbase(im, 4 * Math.max(im.w, im.h) / 1400, .0015);   /* 가는 무늬 · 잡티(바탕과의 차이)는 절반만 키워 하늘 · 물의 잡티가 드러나지 않게 */
+    for (let y = 0, i = 0; y < h; y++) { const A = ta(y), Bq = tb(y), Ga = Gd.a(y), Gb = Gd.b(y);
+      for (let x = 0; x < w; x++, i++) { const R0 = r[i], G0 = g[i], B0 = b[i], l = R0 * .299 + G0 * .587 + B0 * .114; let t = clamp(A[x] * l + Bq[x], .42, 1);
+        const d = Math.max(Math.abs(R0 - Ar), Math.abs(G0 - Ag), Math.abs(B0 - Ab)); if (d < K) t = Math.min(1, t * K / Math.max(d, .02));
+        t = 1 + (t - 1) * k; if (t > .995) continue; const q = 1 / t, dt = (l - (Ga[x] * l + Gb[x])) * (q - 1) * .5;
+        r[i] = (R0 - Ar) * q + Ar - dt; g[i] = (G0 - Ag) * q + Ag - dt; b[i] = (B0 - Ab) * q + Ab - dt; } }
+    soft(im);
+    /* 안개를 걷으면 전체가 어두워지므로 가운데 밝기를 절반쯤 되돌림 */
+    const m1 = pct(shrinkL(im, S.s).p, [50])[0]; if (m1 < med0 - .01 && m1 > .02 && m1 < .98) { const ga = Math.log(m1 + (med0 - m1) * .6) / Math.log(m1), T = powLUT(clamp(ga, .7, 1)); for (let i = 0; i < r.length; i++) { r[i] = lut(T, r[i]); g[i] = lut(T, g[i]); b[i] = lut(T, b[i]); } }
+    return im; }
+  /* 흰 배경 고르게(제품 사진): 가장자리가 밝고 색이 옅으면 흰 배경으로 보고, 배경 밝기 · 색을 부드러운 곡면으로 재서 나눔
+     → 구석의 회색 그늘 · 조명의 누런 기운이 사라지고 배경이 고르게 하얘짐.  제품 색도 같은 만큼 바로잡히고, 바닥 그림자는 남음.  흰 배경이 아니면(conf 0) 손대지 않음 */
+  function whiteBg(im, S, k) { const conf = S.wbg * (k === undefined ? 1 : k); if (conf <= .02) return im;
+    const { lw, lh, R, G, B, L } = S, n = lw * lh, { w, h, r, g, b } = im, sg = Math.max(lw, lh) * .1, mk = Float32Array.from(S.bgLo);
+    const field = () => { const bm = blurPlane(mk, lw, lh, sg), f = [R, G, B].map(P => { const t = new Float32Array(n); for (let i = 0; i < n; i++) t[i] = P[i] * mk[i]; return blurPlane(t, lw, lh, sg); });
+      for (let i = 0; i < n; i++) { const q = bm[i]; if (q > .02) { f[0][i] /= q; f[1][i] /= q; f[2][i] /= q; } else { f[0][i] = f[1][i] = f[2][i] = S.wbgL; } } return f; };
+    let F = field();   /* 한 번 더: 곡면보다 뚜렷이 어두운 곳(바닥 그림자)은 배경에서 빼고 다시 잼 → 그림자가 지워지지 않음 */
+    for (let i = 0; i < n; i++) if (mk[i] && L[i] < (F[0][i] * .299 + F[1][i] * .587 + F[2][i] * .114) * .93) mk[i] = 0;
+    F = field(); const T = .975, gn = F.map(P => { const o = new Float32Array(n); for (let i = 0; i < n; i++) o[i] = 1 + (clamp(T / Math.max(P[i], .3), .9, 2) - 1) * conf; return o; });
+    const ur = up(gn[0], lw, lh, w, h), ug = up(gn[1], lw, lh, w, h), ub = up(gn[2], lw, lh, w, h), M = maskUp(S, S.bgLo, im, 2, .001);
+    for (let y = 0, i = 0; y < h; y++) { const a = ur(y), c = ug(y), e = ub(y), A = M.a(y), Bq = M.b(y);
+      for (let x = 0; x < w; x++, i++) { const l0 = r[i] * .299 + g[i] * .587 + b[i] * .114; let R1 = r[i] * a[x], G1 = g[i] * c[x], B1 = b[i] * e[x];
+        const mx = Math.max(R1, G1, B1), mn = Math.min(R1, G1, B1), q = ss(mn, .92, .98) * (1 - ss(mx - mn, .03, .07)) * conf * ss(A[x] * l0 + Bq[x], .35, .75);   /* 배경 영역의 거의 흰 곳만 완전한 흰색으로 (제품의 흰 부분은 그대로) */
+        if (q > 0) { R1 += (1 - R1) * q; G1 += (1 - G1) * q; B1 += (1 - B1) * q; } r[i] = R1; g[i] = G1; b[i] = B1; } }
+    return soft(im, .72); }
+  /* 피부 보정: 피부색인 곳만, 얼룩 · 잡티 크기의 굴곡을 낮추고 가장 가는 결(모공 · 솜털)은 남김 — 눈 · 눈썹 · 머리카락 · 배경은 그대로 (플라스틱 같은 뭉개짐 방지) */
+  function skin(im, S, amt, sc) { sc = sc || Math.max(im.w, im.h) / 1400; if (S.skin < .01) return im;
+    const { w, h, r, g, b } = im, Gd = gbase(im, 8 * sc, .003), gate = up(blurPlane(S.sk, S.lw, S.lh, 2.5), S.lw, S.lh, w, h), L = lumOf(im), Lf = blurPlane(L, w, h, Math.max(.6, 1.1 * sc));
+    for (let y = 0, i = 0; y < h; y++) { const A = Gd.a(y), Bq = Gd.b(y), gt = gate(y);
+      for (let x = 0; x < w; x++, i++) { const m = skinw(cl(r[i]), cl(g[i]), cl(b[i])) * ss(gt[x], .1, .3) * amt; if (m <= .02) continue;
+        const l = L[i], bl = A[x] * l + Bq[x], fine = l - Lf[i], d = (bl + (Lf[i] - bl) * (1 - .8 * m) + fine * (1 - .25 * m)) - l + .02 * m * (1 - l); r[i] += d; g[i] += d; b[i] += d; } }
+    return im; }
+  /* 흰 기준색 맞춤(음식): 흰 접시 · 식탁보에 낀 조명 색을 k만큼 걷어 냄 (밝기는 그대로, ±10% 안에서만) */
+  function whiteRef(im, S, k) { if (!S.wref) return im; const [wr, wg, wb] = S.wref, kr = clamp(1 + (wg / wr - 1) * k, .92, 1.08), kb = clamp(1 + (wg / wb - 1) * k, .9, 1.12);
+    const n0 = wr * .299 + wg * .587 + wb * .114, q = n0 / (wr * kr * .299 + wg * .587 + wb * kb * .114), { r, g, b } = im;
+    for (let i = 0; i < r.length; i++) { r[i] *= kr * q; g[i] *= q; b[i] *= kb * q; } return soft(im); }
+  /* 선명(팝): 구름 결 살리기 → 색 영역별 채도(파랑·청록·주황, 피부색은 보호) → 전체 채도·명암 */
+  function pop(im, S) { S = S || scan(im);
+    apply(im, { highlights: -12, shadows: 16 }); apply(im, { clarity: .8 });
+    if (S.skyFrac >= .04) skyBlue(im, S, { k: .85, dark: .07, out: .55 }); else bands(im, [{ c: 215, w: 40, s: .7, v: -.06 }], { skin: .8 });
+    bands(im, [{ c: 180, w: 30, s: .6 }, { c: 32, w: 28, s: .22, h: -3 }], { skin: .85 });
+    return apply(im, { vib: 46 * S.kV, sat: 10 * S.kV, contrast: 5 * S.kC, bright: 8 * S.kB, vignette: .22 });
   }
   /* 감성(필름): 매트한 톤 + 청록 그림자 + 라벤더 하이라이트 + 또렷하게 */
   function film(im) {
-    const { r, g, b } = im, n = r.length, lo = .075, hi = .86, k = 1.12;
-    for (let i = 0; i < n; i++) { r[i] = lo + cl(.5 + (r[i] - .5) * k) * (hi - lo); g[i] = lo + cl(.5 + (g[i] - .5) * k) * (hi - lo); b[i] = lo + cl(.5 + (b[i] - .5) * k) * (hi - lo); }
+    const { r, g, b } = im, n = r.length, lo = .075, hi = .86, T = sLUT(1.14);
+    for (let i = 0; i < n; i++) { r[i] = lo + lut(T, r[i]) * (hi - lo); g[i] = lo + lut(T, g[i]) * (hi - lo); b[i] = lo + lut(T, b[i]) * (hi - lo); }
     for (let i = 0; i < n; i++) { const L = r[i] * .299 + g[i] * .587 + b[i] * .114, sh = cl(1 - L * 2.2), hl = cl((L - .55) * 2.2);
       r[i] += sh * -.05; g[i] += sh * .012 + hl * .005; b[i] += sh * .025 + hl * .04;
       const gm = cl((g[i] - Math.max(r[i], b[i])) * 4); r[i] -= gm * .025; b[i] += gm * .03;
       const Lb = r[i] * .299 + g[i] * .587 + b[i] * .114; r[i] = Lb + (r[i] - Lb) * .92; g[i] = Lb + (g[i] - Lb) * .92; b[i] = Lb + (b[i] - Lb) * .92; }
-    clip(im); return apply(im, { clarity: .45 });
+    soft(im); return apply(im, { clarity: .4 });
   }
   /* 검은점 고정: 밝게 하면서 들뜬 어두운 부분을 target 자리로 다시 눌러 '쨍함'을 지킴 */
   function blackPt(im) { return pct(lumOf(im), [.5])[0]; }
@@ -1950,26 +2139,11 @@ const FX = (() => {
     const { r, g, b } = im, q = 1 / (1 - lo), f = v => { const t = Math.max(0, Math.min(1, (1 - v) * q)); return v - d * t * t * t; };
     for (let i = 0; i < r.length; i++) { r[i] = f(r[i]); g[i] = f(g[i]); b[i] = f(b[i]); }
     clip(im); return im; }
-  /* 색 영역별 조절(HSL): [{c:색상 중심, w:폭, s:채도 배수 더하기, v:밝기 배수 더하기, h:색상 이동}] */
-  function bands(im, list) { const { r, g, b } = im;
-    for (let i = 0; i < r.length; i++) {
-      const R = r[i], G = g[i], B = b[i], mx = Math.max(R, G, B), mn = Math.min(R, G, B), dl = mx - mn;
-      if (mx <= 0 || dl <= 0) continue;
-      let H = mx === R ? ((G - B) / dl) % 6 : mx === G ? (B - R) / dl + 2 : (R - G) / dl + 4; H *= 60; if (H < 0) H += 360;
-      let S = dl / mx, V = mx, ks = 1, kv = 1, dh = 0;
-      for (const q of list) { const w = band(H, q.c, q.w); if (!w) continue; ks += (q.s || 0) * w; kv += (q.v || 0) * w * S; dh += (q.h || 0) * w; }
-      if (ks === 1 && kv === 1 && !dh) continue;
-      S = Math.min(1, Math.max(0, S * ks)); V = Math.min(1, V * kv); H = (H + dh + 360) % 360;
-      const C = V * S, X = C * (1 - Math.abs((H / 60) % 2 - 1)), m = V - C, hs = (H / 60) | 0;
-      if (hs === 0) { r[i] = C + m; g[i] = X + m; b[i] = m; } else if (hs === 1) { r[i] = X + m; g[i] = C + m; b[i] = m; }
-      else if (hs === 2) { r[i] = m; g[i] = C + m; b[i] = X + m; } else if (hs === 3) { r[i] = m; g[i] = X + m; b[i] = C + m; }
-      else if (hs === 4) { r[i] = X + m; g[i] = m; b[i] = C + m; } else { r[i] = C + m; g[i] = m; b[i] = X + m; } }
-    return im; }
   /* 밝기별 색 입히기: 어두운 곳 sh=[r,g,b], 밝은 곳 hl=[r,g,b] */
   function tone(im, sh, hl) { const { r, g, b } = im;
     for (let i = 0; i < r.length; i++) { const L = r[i] * .299 + g[i] * .587 + b[i] * .114, a = cl(1 - L * 2), c = cl((L - .5) * 2);
       r[i] += a * sh[0] + c * hl[0]; g[i] += a * sh[1] + c * hl[1]; b[i] += a * sh[2] + c * hl[2]; }
-    clip(im); return im; }
+    soft(im); return im; }
   /* 흑백 (빨강·초록·파랑 섞는 비율로 하늘이 너무 하얗지 않게) */
   function mono(im, mix) { const { r, g, b } = im, [a, c, e] = mix || [.36, .52, .12];
     for (let i = 0; i < r.length; i++) { const L = r[i] * a + g[i] * c + b[i] * e; r[i] = g[i] = b[i] = L; } return im; }
@@ -1990,14 +2164,24 @@ const FX = (() => {
     for (let i = 0; i < r.length; i++) { const L = cl(r[i] * .299 + g[i] * .587 + b[i] * .114);
       if (kw) { const f = 1 + kw * L * L * L; r[i] *= f; g[i] *= f; b[i] *= f; }
       if (kb) { const t = (1 - L), a = kb * t * t * t * t; r[i] += a * (1 - r[i]); g[i] += a * (1 - g[i]); b[i] += a * (1 - b[i]); } }
-    clip(im); return im; }
-  /* 노이즈 보호 선명하게: 밝기에만 + 경계(무늬)가 있는 곳에만 → 하늘·벽의 자글자글한 잡티는 키우지 않음 */
-  function sharpenMasked(im, s, amt, protect) {
+    soft(im, .86); return im; }
+  /* 노이즈 보호 선명하게: 밝기에만 + 경계(무늬)가 있는 곳에만 → 하늘·벽의 자글자글한 잡티는 키우지 않음.
+     넘침 제한: 이웃(3×3)의 가장 밝은 · 어두운 값을 조금만 넘게 → 경계 옆의 흰 띠 · 검은 띠(halo)가 생기지 않음.  ease: 피부색은 덜 선명하게(인물 필터) */
+  function sharpenMasked(im, s, amt, protect, ease) {
     const { w, h, r, g, b } = im, k = Math.max(.6, Math.max(w, h) / 1400), L = lumOf(im), Lb = blurPlane(L, w, h, s * k), Lg = blurPlane(L, w, h, 1.5 * k), t0 = (.004 + protect * .03) / k, t1 = t0 * 2.5 + .01 / k;   /* 반경·기준을 사진 크기에 맞춰 미리보기와 저장 결과가 같게 */
-    for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x;
+    const st = Math.max(1, Math.round(k)), y1 = h - st, x1 = w - st, sw = st * w;
+    for (let y = st; y < y1; y++) for (let x = st; x < x1; x++) { const i = y * w + x;
       const gx = Lg[i + 1] - Lg[i - 1], gy = Lg[i + w] - Lg[i - w], e = Math.sqrt(gx * gx + gy * gy);
       let m = (e - t0) / (t1 - t0); if (m <= 0) continue; if (m > 1) m = 1;
-      const d = (L[i] - Lb[i]) * amt * m; r[i] += d; g[i] += d; b[i] += d; }
+      if (ease) m *= 1 - ease * skinw(cl(r[i]), cl(g[i]), cl(b[i]));
+      const l = L[i]; let d = (l - Lb[i]) * amt * m; if (d === 0) continue;
+      let mn = l, mx = l, v;
+      v = L[i - st]; if (v < mn) mn = v; else if (v > mx) mx = v; v = L[i + st]; if (v < mn) mn = v; else if (v > mx) mx = v;
+      v = L[i - sw]; if (v < mn) mn = v; else if (v > mx) mx = v; v = L[i + sw]; if (v < mn) mn = v; else if (v > mx) mx = v;
+      v = L[i - sw - st]; if (v < mn) mn = v; else if (v > mx) mx = v; v = L[i - sw + st]; if (v < mn) mn = v; else if (v > mx) mx = v;
+      v = L[i + sw - st]; if (v < mn) mn = v; else if (v > mx) mx = v; v = L[i + sw + st]; if (v < mn) mn = v; else if (v > mx) mx = v;
+      if (d > 0) { const lim = mx - l + .03; if (d > lim) d = lim + (d - lim) * .2; } else { const lim = l - mn + .03; if (-d > lim) d = -(lim + (-d - lim) * .2); }
+      r[i] += d; g[i] += d; b[i] += d; }
     clip(im); return im; }
   /* 노이즈 줄이기: 경계가 약한(평평한) 곳만 살짝 부드럽게 */
   function denoise(im, k) { const { w, h, r, g, b } = im, sc = Math.max(.6, Math.max(w, h) / 1400), bl = blurIm(im, 1.4 * sc), L = lumOf(im), Lg = blurPlane(L, w, h, 1.2 * sc);
@@ -2010,37 +2194,38 @@ const FX = (() => {
       const k = 1 - .28 * m; for (let x = 0; x < w; x++) { const i = y * w + x, L = r[i] * .299 + g[i] * .587 + b[i] * .114;
         r[i] = L + (r[i] - L) * (1 + .35 * m); g[i] = L + (g[i] - L) * (1 + .35 * m); b[i] = L + (b[i] - L) * (1 + .35 * m);
         r[i] *= k; g[i] *= k; b[i] = b[i] * k + .015 * m; } }
-    clip(im); return im; }
+    soft(im); return im; }
   /* 비네팅 (다른 편집 프로그램처럼): 가운데는 그대로, 바깥으로 갈수록 부드럽게(smoothstep) — amt 1이면 모서리가 거의 검정/흰색 */
   function vig(im, amt, light, mid = .3) { const { r, g, b, w, h } = im, R2 = Math.SQRT2;
     for (let y = 0; y < h; y++) { const dy = (y - h / 2) / (h / 2); for (let x = 0; x < w; x++) { const dx = (x - w / 2) / (w / 2), d = Math.sqrt(dx * dx + dy * dy) / R2;
       if (d <= mid) continue; let t = Math.min(1, (d - mid) / (1 - mid)); t = t * t * (3 - 2 * t); const k = amt * t, i = y * w + x;
       if (light) { r[i] += (1 - r[i]) * k; g[i] += (1 - g[i]) * k; b[i] += (1 - b[i]) * k; } else { const m = 1 - k; r[i] *= m; g[i] *= m; b[i] *= m; } } }
     return im; }
-  return { vig, fromCanvas, toCanvas, clone, apply, auto, pop, film, sharpen, sharpenMasked, denoise, wbk, grad, blackPt, anchor, bands, tone, mono, outfocus };
+  return { vig, fromCanvas, toCanvas, clone, apply, auto, pop, film, sharpen, sharpenMasked, denoise, wbk, grad, blackPt, anchor, bands, tone, mono, outfocus,
+    scan, soft, lumaCurve, skyBlue, dehaze, whiteBg, skin, whiteRef };
 })();
 
-/* 블로그 필터 — 분류마다 2~4개만 (많으면 오히려 헷갈림) */
+/* 블로그 필터 — 분류마다 2~4개만 (많으면 오히려 헷갈림).  fn(사진, 사진 읽기 결과 S): S.kB 밝기 · S.kC 명암 · S.kV 채도 배수로 사진마다 세기를 맞춤 */
 const FCATS = [["product", "제품"], ["scene", "풍경"], ["travel", "여행"], ["food", "음식"], ["people", "인물"], ["season", "계절"], ["special", "특수"]];
 const FILTERS = [
   { id: "none", cat: "", name: "필터 없음", desc: "색은 그대로 두고 크기만 맞춰요" },
-  { id: "product", cat: "product", name: "있는 그대로 선명하게", desc: "색은 그대로, 밝기·명암·선명도만 살짝", p: { bright: 3, contrast: 10, sharpen: .35, clarity: .3, shadows: 4 }, keep: 0 },
-  { id: "white", cat: "product", name: "화이트 배경 깨끗하게", desc: "흰 배경 위 제품 — 배경은 더 하얗게, 그림자는 그대로", fn: im => { FX.apply(im, { bright: 10, contrast: 8, highlights: 8, clarity: .25, sharpen: .35, sat: -4 }); return im; }, keep: 0 },
-  { id: "sky", cat: "scene", name: "맑은 하늘", desc: "뿌연 하늘을 파랗게, 구름은 또렷하게", fn: im => { FX.apply(im, { highlights: -14, clarity: .6, contrast: 6 }); FX.bands(im, [{ c: 215, w: 40, s: .7, v: -.08 }, { c: 185, w: 25, s: .4 }]); return FX.apply(im, { vib: 18, temp: -4 }); }, keep: .02 },
-  { id: "green", cat: "scene", name: "싱그러운 초록", desc: "숲·잔디·산을 생기 있는 초록으로", fn: im => { FX.bands(im, [{ c: 95, w: 45, s: .45, h: 6, v: .05 }, { c: 60, w: 25, s: .2, h: 8 }]); return FX.apply(im, { clarity: .35, contrast: 8, vib: 10, bright: 4 }); }, keep: 0 },
-  { id: "dusk", cat: "scene", name: "노을 빛", desc: "주황·분홍 하늘을 더 진하게, 따뜻하게", fn: im => { FX.bands(im, [{ c: 25, w: 35, s: .45 }, { c: 340, w: 35, s: .35 }, { c: 260, w: 35, s: .2 }]); FX.tone(im, [.0, -.01, .03], [.04, .015, -.02]); return FX.apply(im, { contrast: 10, clarity: .3, highlights: -8 }); }, keep: 0 },
-  { id: "dehaze", cat: "scene", name: "안개 걷기", desc: "흐리고 뿌연 날 사진을 맑고 또렷하게", fn: im => { const lo = FX.blackPt(im); FX.anchor(im, Math.max(0, lo - .08)); return FX.apply(im, { clarity: .75, contrast: 12, vib: 22, highlights: -8, temp: -3 }); }, keep: 0 },
+  { id: "product", cat: "product", name: "있는 그대로 선명하게", desc: "색은 그대로, 밝기·명암·선명도만 살짝", fn: (im, S) => { FX.lumaCurve(im, 3 * S.kB, 10 * S.kC); return FX.apply(im, { shadows: 4, clarity: .3, texture: .3, sharpen: .35 }); }, keep: 0 },
+  { id: "white", cat: "product", name: "화이트 배경 깨끗하게", desc: "흰 배경 위 제품 — 배경은 더 하얗게, 그림자는 그대로", fn: (im, S) => { FX.whiteBg(im, S); const k = 1 - S.wbg; if (k > .02) FX.apply(im, { bright: 10 * k, highlights: 8 * k, sat: -4 * k }); FX.lumaCurve(im, 0, 7 * S.kC); return FX.apply(im, { clarity: .25, texture: .2, sharpen: .35 }); }, keep: 0 },
+  { id: "sky", cat: "scene", name: "맑은 하늘", desc: "뿌연 하늘을 파랗게, 구름은 또렷하게", fn: (im, S) => { FX.apply(im, { highlights: -14, clarity: .6, contrast: 6 * S.kC }); FX.skyBlue(im, S, { k: 1, dark: .13 }); return FX.apply(im, { vib: 18 * S.kV, temp: -4 }); }, keep: .02 },
+  { id: "green", cat: "scene", name: "싱그러운 초록", desc: "숲·잔디·산을 생기 있는 초록으로", fn: (im, S) => { FX.bands(im, [{ c: 95, w: 45, s: .45, h: 6, v: .05 }, { c: 60, w: 25, s: .2, h: 8 }], { skin: .9 }); return FX.apply(im, { clarity: .35, contrast: 8 * S.kC, vib: 10 * S.kV, bright: 4 * S.kB }); }, keep: 0 },
+  { id: "dusk", cat: "scene", name: "노을 빛", desc: "주황·분홍 하늘을 더 진하게, 따뜻하게", fn: (im, S) => { FX.apply(im, { highlights: -10 }); FX.bands(im, [{ c: 25, w: 35, s: .45 }, { c: 340, w: 35, s: .35 }, { c: 260, w: 35, s: .2 }]); FX.tone(im, [.0, -.01, .03], [.04, .015, -.02]); return FX.apply(im, { contrast: 10 * S.kC, clarity: .3 }); }, keep: 0 },
+  { id: "dehaze", cat: "scene", name: "안개 걷기", desc: "흐리고 뿌연 날 사진을 맑고 또렷하게", fn: (im, S) => { FX.dehaze(im, S, 1); return FX.apply(im, { clarity: .45, contrast: 6 * S.kC, vib: 14 * S.kV, temp: -2 }); }, keep: 0 },
   { id: "pop", cat: "travel", name: "선명(팝)", desc: "하늘은 파랗게, 바다는 청록으로, 구름 결까지 또렷하게", fn: "pop", keep: .03 },
   { id: "warm", cat: "travel", name: "따뜻하게", desc: "포근하고 아늑한 여행 사진", p: { temp: 14, sat: 10, vib: 8, contrast: 8, vignette: .25, clarity: .2 }, keep: 0 },
   { id: "film", cat: "travel", name: "감성(필름)", desc: "매트한 톤에 청록 그림자, 차분한 감성", fn: "film" },
-  { id: "tasty", cat: "food", name: "맛있게", desc: "따뜻한 색으로 먹음직스럽게", p: { temp: 8, sat: 12, vib: 12, contrast: 10, bright: 3, clarity: .2, sharpen: .4 }, keep: 0 },
-  { id: "light", cat: "food", name: "밝게", desc: "카페·디저트처럼 밝고 깨끗하게", p: { bright: 15, contrast: 12, temp: 3, vib: 12, highlights: -4, clarity: .25, sharpen: .4 }, keep: 0 },
-  { id: "glow", cat: "people", name: "화사하게", desc: "피부는 부드럽게, 전체는 환하게", p: { bright: 7, temp: 5, contrast: 2, vib: 6, soften: .5, glow: .2 }, keep: .03 },
-  { id: "natural", cat: "people", name: "자연스럽게", desc: "과하지 않게 살짝 정리", p: { bright: 4, contrast: 6, vib: 5, soften: .2 }, keep: 0 },
-  { id: "spring", cat: "season", name: "봄", desc: "벚꽃처럼 화사한 분홍빛, 연두 새싹", fn: im => { FX.apply(im, { bright: 9, contrast: 4, tint: 5, glow: .12 }); FX.bands(im, [{ c: 340, w: 40, s: .35 }, { c: 85, w: 35, s: .25, h: -10 }]); FX.tone(im, [.01, 0, .02], [.025, .005, .02]); return FX.apply(im, { vib: 12 }); }, keep: .03 },
-  { id: "summer", cat: "season", name: "여름", desc: "시원하고 쨍한 청량감", fn: im => { FX.apply(im, { temp: -9, contrast: 12, clarity: .4, bright: 5 }); FX.bands(im, [{ c: 195, w: 45, s: .6 }, { c: 100, w: 40, s: .3 }]); FX.tone(im, [-.02, .01, .03], [0, .01, .01]); return FX.apply(im, { vib: 25 }); }, keep: 0 },
-  { id: "autumn", cat: "season", name: "가을", desc: "황금빛 단풍, 따뜻한 오후 햇살", fn: im => { FX.bands(im, [{ c: 90, w: 45, h: -22, s: .1 }, { c: 30, w: 35, s: .45 }, { c: 5, w: 25, s: .3 }]); FX.tone(im, [.02, 0, -.02], [.04, .02, -.03]); return FX.apply(im, { temp: 10, contrast: 10, clarity: .3, vignette: .2 }); }, keep: 0 },
-  { id: "winter", cat: "season", name: "겨울", desc: "차갑고 맑은 푸른 공기, 하얀 눈", fn: im => { FX.apply(im, { temp: -15, sat: -18, bright: 7, contrast: 8, clarity: .25 }); FX.bands(im, [{ c: 210, w: 45, s: .3 }]); return FX.tone(im, [-.01, 0, .03], [-.01, .005, .025]); }, keep: .02 },
+  { id: "tasty", cat: "food", name: "맛있게", desc: "따뜻한 색으로 먹음직스럽게", fn: (im, S) => { FX.whiteRef(im, S, .5); FX.apply(im, { temp: 6, contrast: 10 * S.kC, bright: 3 * S.kB, clarity: .2, texture: .35 }); FX.bands(im, [{ c: 12, w: 38, s: .22 }, { c: 45, w: 25, s: .16 }, { c: 95, w: 40, s: .2, h: 4 }]); return FX.apply(im, { vib: 10 * S.kV, sharpen: .4 }); }, keep: 0 },
+  { id: "light", cat: "food", name: "밝게", desc: "카페·디저트처럼 밝고 깨끗하게", fn: (im, S) => { FX.whiteRef(im, S, .35); return FX.apply(im, { bright: 14 * S.kB, shadows: 8, highlights: -6, contrast: 11 * S.kC, temp: 3, vib: 12 * S.kV, clarity: .25, texture: .2, sharpen: .4 }); }, keep: 0 },
+  { id: "glow", cat: "people", name: "화사하게", desc: "피부는 부드럽게, 전체는 환하게", fn: (im, S) => { FX.apply(im, { bright: 7 * S.kB, temp: 5, contrast: 2, vib: 6 * S.kV }); FX.skin(im, S, .55); return FX.apply(im, { glow: .2 }); }, keep: .03 },
+  { id: "natural", cat: "people", name: "자연스럽게", desc: "과하지 않게 살짝 정리", fn: (im, S) => { FX.apply(im, { bright: 4 * S.kB, contrast: 6 * S.kC, vib: 5 * S.kV }); return FX.skin(im, S, .3); }, keep: 0 },
+  { id: "spring", cat: "season", name: "봄", desc: "벚꽃처럼 화사한 분홍빛, 연두 새싹", fn: (im, S) => { FX.apply(im, { bright: 9 * S.kB, contrast: 4, tint: 5, glow: .12 }); FX.bands(im, [{ c: 340, w: 40, s: .35 }, { c: 85, w: 35, s: .25, h: -10 }]); FX.tone(im, [.01, 0, .02], [.025, .005, .02]); return FX.apply(im, { vib: 12 * S.kV }); }, keep: .03 },
+  { id: "summer", cat: "season", name: "여름", desc: "시원하고 쨍한 청량감", fn: (im, S) => { FX.apply(im, { temp: -9, contrast: 12 * S.kC, clarity: .4, bright: 5 * S.kB }); FX.bands(im, [{ c: 195, w: 45, s: .6 }, { c: 100, w: 40, s: .3 }], { skin: .8 }); FX.tone(im, [-.02, .01, .03], [0, .01, .01]); return FX.apply(im, { vib: 25 * S.kV }); }, keep: 0 },
+  { id: "autumn", cat: "season", name: "가을", desc: "황금빛 단풍, 따뜻한 오후 햇살", fn: (im, S) => { FX.bands(im, [{ c: 90, w: 45, h: -22, s: .1 }, { c: 30, w: 35, s: .45 }, { c: 5, w: 25, s: .3 }], { skin: .6 }); FX.tone(im, [.02, 0, -.02], [.04, .02, -.03]); return FX.apply(im, { temp: 10, contrast: 10 * S.kC, clarity: .3, vignette: .2 }); }, keep: 0 },
+  { id: "winter", cat: "season", name: "겨울", desc: "차갑고 맑은 푸른 공기, 하얀 눈", fn: (im, S) => { FX.apply(im, { temp: -15, sat: -18, bright: 7 * S.kB, contrast: 8 * S.kC, clarity: .25 }); FX.bands(im, [{ c: 210, w: 45, s: .3 }]); return FX.tone(im, [-.01, 0, .03], [-.01, .005, .025]); }, keep: .02 },
   { id: "bw", cat: "special", name: "흑백", desc: "또렷한 흑백 사진", fn: im => { FX.mono(im); return FX.apply(im, { contrast: 14, clarity: .45 }); }, keep: 0 },
   { id: "vignette", cat: "special", name: "비네팅", desc: "가장자리를 어둡게 — 시선이 가운데로 모여요", fn: im => FX.vig(im, .9, false, .28) },
   { id: "vigwhite", cat: "special", name: "밝은 비네팅", desc: "가장자리를 하얗게 — 화사하고 몽환적으로", fn: im => FX.vig(im, .85, true, .3) },
@@ -2056,8 +2241,9 @@ const pickFx = o => { const r = {}; for (const k of FXKEYS) r[k] = o[k] ?? FXDEF
    → ⑤ 노이즈 줄이기 → ⑥ 효과(하늘 그라데이션·아웃포커스·비네팅) → ⑦ 마지막 선명하게(노이즈 보호) */
 function fxFilter(src, id, strength, bp, inPlace) {
   const f = filterOf(id); if (f.id === "none") return src;
-  const t = FX.clone(src);
-  if (f.fn === "pop") FX.pop(t); else if (f.fn === "film") FX.film(t); else if (typeof f.fn === "function") f.fn(t); else FX.apply(t, f.p);
+  const t = FX.clone(src), S = FX.scan(src);   /* 필터를 걸기 전의 사진을 읽어 세기를 맞춤 */
+  if (f.fn === "pop") FX.pop(t, S); else if (f.fn === "film") FX.film(t); else if (typeof f.fn === "function") f.fn(t, S);
+  else { const p = { ...f.p }; if (p.bright) p.bright *= S.kB; if (p.contrast > 0) p.contrast *= S.kC; if (p.sat > 0) p.sat *= S.kV; if (p.vib > 0) p.vib *= S.kV; FX.apply(t, p); }
   if (f.keep !== undefined) FX.anchor(t, bp + f.keep);   /* 필터가 검은색을 띄우지 않게 (감성 필름은 일부러 띄움) */
   const k = Math.max(0, Math.min(1, strength / 100));
   if (k < 1) for (let i = 0; i < t.r.length; i++) { t.r[i] = src.r[i] + (t.r[i] - src.r[i]) * k; t.g[i] = src.g[i] + (t.g[i] - src.g[i]) * k; t.b[i] = src.b[i] + (t.b[i] - src.b[i]) * k; }
@@ -2079,7 +2265,8 @@ function fxRender(srcCanvas, st, out, focus, stage) {
   if (st.grad) FX.grad(res, st.grad, st.gradc ?? 45);
   if (st.of && st.of !== "off") FX.outfocus(res, { mode: st.of, amount: st.ofa, size: st.ofs, x: focus ? focus.x : .5, y: focus ? focus.y : (st.of === "mini" ? .6 : .5) });
   if (st.vig) FX.vig(res, st.vig / 100 * .95, st.vigc === "light", .3);
-  const sh = (st.sharp ?? 45) / 100; if (sh > 0) FX.sharpenMasked(res, 0.8, sh * 1.25, (st.protect ?? 40) / 100);
+  const people = filterOf(st.filter).cat === "people" || (st.stack || []).some(s => filterOf(s.f).cat === "people");   /* 인물 필터: 피부는 덜 선명하게 (잡티가 다시 도드라지지 않게) */
+  const sh = (st.sharp ?? 45) / 100; if (sh > 0) FX.sharpenMasked(res, 0.8, sh * 1.25, (st.protect ?? 40) / 100, people ? .7 : 0);
   return FX.toCanvas(res, out);
 }
 

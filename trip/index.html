@@ -2861,6 +2861,8 @@ async function importFile(file) { const big = await shrink(file, 2048, 0.86), th
         const t2 = rest.match(/^,?\s*([01]?\d|2[0-3]):?([0-5]\d)\s*,?$/); if (t2) { pendingTime = pad(t2[1], t2[2]); continue; }
         if (!rest || /^[,\-–:]*$/.test(rest)) continue;
         if (/^[-–]/.test(rest)) { rest = rest.replace(/^[-–]\s*/, ""); if (!c.title && !c.items.length) { c.title = rest; continue; } }
+        /* 2026-11-21 고침: 「11.11 수 20:35 인천 출발」처럼 날짜 뒤에 시간이 오면 시간도 읽음 */
+        if (!time) { const t3 = rest.match(/^([01]?\d|2[0-3])\s*[:시]\s*([0-5]\d)\s*분?\s*/); if (t3) { time = pad(t3[1], t3[2]); rest = rest.slice(t3[0].length).replace(/^[\s,:\-~]+/, ""); if (!rest) { pendingTime = time; continue; } } }
         L = rest; }
       if (/^\(?\s*\d{4}\s*(출발|도착)/.test(L) || /\(\d{4}\s*출발\)\s*-\s*\(\d{4}\s*도착\)/.test(L)) { if (last) addMemo(last, L); continue; }
       if (!time && pendingTime) { time = pendingTime; pendingTime = null; }

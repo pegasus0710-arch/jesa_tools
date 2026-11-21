@@ -166,6 +166,8 @@ button{cursor:pointer;border:0;background:none}
   .kid .in{width:112px}
 }
 @media (min-width:900px){.yt-mrul{display:none}}
+/* 2026-11-21 고침: 900~1199px(태블릿 · 작은 노트북)에서 오른쪽 결과 칸이 230px로 좁아져 글자가 세로로 쌓이던 것 */
+@media (min-width:900px) and (max-width:1199px){.yt-main{grid-template-columns:minmax(0,1fr) 300px}.flow{flex-wrap:wrap}.flow .op{display:none}.fb{flex:1 1 40%}}
 @media (max-width:420px){.two{grid-template-columns:1fr}}
 @media print{
   @page{size:A4;margin:12mm}

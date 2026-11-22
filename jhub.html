@@ -183,6 +183,12 @@ const APPS = [
  { g: "dev", id: "health", n: "건강정보", v: "v1.0", ic: "",
    desc: "기능은 완성, 디자인(4.0) 미적용. 임신 주수 · 출산 예정일 탭 아이디어도 여기에.",
    info: [["유형", "미정"], ["상태", "디자인 미적용 · GitHub에 아직 없음"]], links: [], todo: ["디자인 입히기 · 공개 여부 결정"] },
+ { g: "dev", id: "xlnote", n: "엑셀 수식 노트", v: "v1.0 시험판", ic: "xlnote/icon-192.png", open: "",
+   desc: "「하고 싶은 일」로 엑셀 함수를 찾고, 예시 표에서 직접 바꿔 보고, 내 표 칸 주소로 수식을 만들어 복사하는 설치형 앱.",
+   feat: ["함수 57개 · 오류 8가지 · 하고 싶은 일 + 비슷한 말 찾기", "직접 해 보기 — 칸 · 수식을 고치면 바로 계산, 범위는 같은 색 테두리", "내 표에 맞춰 만들기 — 칸 주소 → 수식 · $ 붙이기 · 옛 버전 대신 수식", "내 엑셀 버전(365 · 2021 · 2019 · 2016 · 구글 시트) 맞춤 표시", "수식 풀이 — 긴 수식을 안쪽부터 한 단계씩 + 함정 경고", "내 수식 노트 ★ · 메모 · 저장한 수식 · 묶음 A4 인쇄"],
+   info: [["유형", "설치형(PC · 휴대폰) — 공개 때 설치형 앱 · PDF·문서 도구로"], ["계산 검증", "LibreOffice 24.2와 130칸 비교(언어 차이 외 일치)"]],
+   links: [["열기", "xlnote/"], ["XLOOKUP 바로", "xlnote/?f=xlookup"], ["수식 풀이", "xlnote/?x=1"], ["#N/A", "xlnote/?err=na"], ["설치 화면", "xlnote/?install=1"]],
+   todo: ["제이 시험 → 「진행」 뒤 대표 글 · tools.json · 공개 시각"], note: "2026-11-22 시험판 — 블로그 어디에도 링크 없음" },
 
  /* ── 설치형 앱 ── */
  { g: "app", id: "shortcut", n: "단축키 사전", v: "v1.0", ic: "shortcut/icon-192.png", open: "2026-11-15T20:00", post: 834,
@@ -192,12 +198,6 @@ const APPS = [
    info: [["유형", "설치형(PC 중심)"], ["배경화면 글", "827~832 매주 한 편(11/19~12/24)"]],
    links: [["열기", "shortcut/"], ["배경화면 만들기", "shortcut/?wall=1"], ["설치 화면", "shortcut/?install=1"]],
    todo: ["엣지 단축키 배경화면 · 짝 글(선택)"], note: "11-13 뒤로 가기 · 닫기 확인 · 11-14 엣지 추가(공식 도움말 84행 → 72개, 엣지 전용 12개 표시) · 834 글 제목 · 본문 갱신" },
- { g: "app", id: "xlnote", n: "엑셀 수식 노트", v: "v1.0 시험판", ic: "xlnote/icon-192.png", open: "",
-   desc: "「하고 싶은 일」로 엑셀 함수를 찾고, 예시 표에서 직접 바꿔 보고, 내 표 칸 주소로 수식을 만들어 복사하는 설치형 앱.",
-   feat: ["함수 57개 · 오류 8가지 · 하고 싶은 일 + 비슷한 말 찾기", "직접 해 보기 — 칸 · 수식을 고치면 바로 계산, 범위는 같은 색 테두리", "내 표에 맞춰 만들기 — 칸 주소 → 수식 · $ 붙이기 · 옛 버전 대신 수식", "내 엑셀 버전(365 · 2021 · 2019 · 2016 · 구글 시트) 맞춤 표시", "수식 풀이 — 긴 수식을 안쪽부터 한 단계씩 + 함정 경고", "내 수식 노트 ★ · 메모 · 저장한 수식 · 묶음 A4 인쇄"],
-   info: [["유형", "설치형(PC · 휴대폰)"], ["계산 검증", "LibreOffice 24.2와 130칸 비교(언어 차이 외 일치)"]],
-   links: [["열기", "xlnote/"], ["XLOOKUP 바로", "xlnote/?f=xlookup"], ["수식 풀이", "xlnote/?x=1"], ["#N/A", "xlnote/?err=na"], ["설치 화면", "xlnote/?install=1"]],
-   todo: ["제이 시험 → 「진행」 뒤 대표 글 · tools.json · 공개 시각"], note: "2026-11-22 시험판 — 블로그 어디에도 링크 없음" },
  { g: "app", id: "eng", n: "영어 노트", v: "v1.0", ic: "eng/icon-192.png", open: "2026-11-22T20:00", post: 836, posts: [836, 837, 849, 854, 856],
    desc: "회화 문장 · 단어를 챕터로 만들어 반복해서 듣는 설치형 앱. 내 수준 문장을 직접 넣고, 기기 음성 또는 고품질(Azure) 음성으로 들어요.",
    feat: ["회화 10 · 단어 8 기본 챕터", "여러 줄 붙여넣기(예문 2개)", "한 → 영 말하기 · 예문 반복", "☆ 어려운 문장 · 단어 모음(줄 오른쪽 끝 ☆)", "Azure 1분 20문장 쉬어 가기"],
@@ -426,7 +426,7 @@ const YT_NONE_OK = ["kit", "blog", "skin", "skin2", "itposts"];
 
 const SEC = [["dev", "개발 중 · 샘플"], ["app", "설치형 앱"], ["web", "블로그 실행형 웹 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]];
 /* 2026-11-14 제이: 즐겨찾기 · 개발 중 아래는 블로그 카테고리(메뉴 순서)로 — 색은 썸네일 C 분류 색 */
-const CATS = [["c-rite", "제사·의례", "#E8B04B", "jibang chukmun"], ["c-money", "돈 관리·계산", "#F2A7A0", "budget trading yearend salary elec"], ["c-doc", "PDF·문서 도구", "#9CC3F0", "pdf chart shortcut xlnote"], ["c-photo", "사진·이미지 도구", "#F4B6D2", "image photo photoed convert icon"], ["c-work", "업무 양식·취업", "#EADB7C", "quote form jaso"], ["c-learn", "학습 자료", "#C3B1EC", "write eng"], ["c-print", "달력·인쇄", "#A9D98E", "label calendar planner wallcal award"], ["c-life", "생활 기록 앱", "#8EDBC8", "recipe kimchi scrap trip diary msg"], ["c-guide", "도구 사용 안내", "#E6EDF0", "kit"]];
+const CATS = [["c-rite", "제사·의례", "#E8B04B", "jibang chukmun"], ["c-money", "돈 관리·계산", "#F2A7A0", "budget trading yearend salary elec"], ["c-doc", "PDF·문서 도구", "#9CC3F0", "pdf chart shortcut"], ["c-photo", "사진·이미지 도구", "#F4B6D2", "image photo photoed convert icon"], ["c-work", "업무 양식·취업", "#EADB7C", "quote form jaso"], ["c-learn", "학습 자료", "#C3B1EC", "write eng"], ["c-print", "달력·인쇄", "#A9D98E", "label calendar planner wallcal award"], ["c-life", "생활 기록 앱", "#8EDBC8", "recipe kimchi scrap trip diary msg"], ["c-guide", "도구 사용 안내", "#E6EDF0", "kit"]];
 const CMAP = {}; CATS.forEach(c => c[3].split(" ").forEach(id => CMAP[id] = c[0]));
 const GROUPS = [["dev", "개발 중 · 샘플"]].concat(CATS.map(c => [c[0], c[1], c[2]]), [["c-etc", "기타 무료 도구"], ["idea", "아이디어 · 미개발"], ["etc", "블로그 · 관리"]]);
 const inGroup = (a, g) => g.startsWith("c-") ? (a.g === "app" || a.g === "web") && (CMAP[a.id] || "c-etc") === g : a.g === g;

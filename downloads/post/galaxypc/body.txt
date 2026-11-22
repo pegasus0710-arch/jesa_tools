@@ -1,0 +1,149 @@
+<p data-ke-size="size16">[[TH]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">갤럭시 사진 PC 자동 백업은 구글 퀵쉐어의 새 자동 백업이 아직 갤럭시에 열리지 않아, 지금은 퀵쉐어 · USB · 스마트 스위치 중 상황에 맞게 고르는 것이 가장 확실합니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">퀵쉐어는 가까운 휴대폰 · PC로 파일을 무선으로 보내는 구글 · 삼성 공통 기능입니다.<br />갤럭시 Z Fold8과 윈도우 11 PC로 다섯 가지를 직접 해 보고 걸린 시간까지 쟀습니다.</p>
+<ol style="padding-left:1.4em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="decimal"><li>사진 한두 장을 급하게 → 퀵쉐어로 PC에 보내기(선 없음)</li><li>사진이 많을 때 → USB 케이블로 복사(가장 빠름)</li><li>폴더째 가끔, 선 없이 → 윈도우 11 「파일 탐색기에 휴대폰 표시」</li><li>폰 바꾸기 전 통째로 → 스마트 스위치 PC 백업</li><li>매일 저절로 → 갤럭시는 아직 공식 방법 없음(동기화 앱은 주의)</li></ol>
+<div style="border-radius:16px;background:#f3eee5;box-shadow:inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9);padding:22px 24px 22px;margin:8px 0 10px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0 0 14px;color:#1f2125;"><b>갤럭시 사진 PC 백업 한눈에 보기</b></p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:4px;"><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">한두 장 급할 때</span><br /><span style="color:#1f2125;font-size:16px;"><b>퀵쉐어 보내기</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">사진이 많을 때</span><br /><span style="color:#1f2125;font-size:16px;"><b>USB 케이블 복사</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">폰 통째로 보관</span><br /><span style="color:#1f2125;font-size:16px;"><b>스마트 스위치</b></span></p></div><div style="border-radius:12px;padding:12px 14px;background:#f8f5ef;box-shadow:3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.45;"><span style="font-size:13px;color:#6f6857;">매일 자동</span><br /><span style="color:#1f2125;font-size:16px;"><b>공식 방법 아직 없음</b></span></p></div></div></div>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">확인 기준: 2026-11-22(일) · 참고: 실제 화면(갤럭시 Z Fold8 · Windows 11 · 윈도우용 Quick Share 1.0.2757.0) · <a href="https://www.android.com/intl/ko_kr/quick-share/with-windows-pc/" target="_blank" rel="noopener">Android 「Windows PC에서 Quick Share」</a> · <a href="https://support.microsoft.com/ko-kr/windows/experience/fileexplorer/setting-up-and-using-your-phone-in-file-explorer" target="_blank" rel="noopener">Microsoft 지원</a> · <a href="https://www.samsungsvc.co.kr/solution/38683" target="_blank" rel="noopener">삼성전자서비스</a><br />기기 · 버전 · 설정에 따라 메뉴가 다를 수 있습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>퀵쉐어 자동 백업, 갤럭시에서는 왜 안 보이나요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 새 기능 — 정해 둔 폴더를 PC로 저절로</b></h3>
+<p data-ke-size="size16">구글은 2026년 11월 Google Play 서비스 26.43에 「퀵쉐어로 안드로이드 사진 · 동영상을 윈도우 PC에 자동 백업」하는 기능을 올렸습니다.<br />같은 와이파이 · 같은 구글 계정일 때 새 사진을 PC로 복사해 주는 방식이고, 기기마다 차례로 열리고 있습니다(<a href="https://www.techrepublic.com/article/news-google-android-windows-automatic-photo-backups/" target="_blank" rel="noopener">TechRepublic 2026-11-04</a>).</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 갤럭시는 빠진다는 보도</b></h3>
+<p data-ke-size="size16">해외 IT 매체들은 앱 파일을 분석해 <span style="background-color:#fff3a3;">삼성 갤럭시 폰(이후 삼성 PC도)은 이 자동 백업에서 빠진다</span>고 전했습니다.<br />구글은 이유를 밝히지 않았습니다.<br />실제로 이 글을 쓴 PC의 윈도우용 퀵쉐어(1.0.2757.0) 설정에도 자동 백업 메뉴는 없었습니다.<br />그래서 아래 방법들은 모두 「직접 골라서 옮기는」 방법입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>갤럭시 사진 PC 백업 방법 5가지 비교</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 한 표로 보기</b></h3>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">방법</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">선</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">자동</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">사진을 PC에서 바로 열기</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">이럴 때</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">퀵쉐어 보내기</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">무선</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">골라서</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">예(다운로드 폴더)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">한두 장 급할 때</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">USB 케이블 복사</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">USB</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">골라서</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">예</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">사진이 많을 때</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">파일 탐색기에 휴대폰 표시</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">무선</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">골라서</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">예</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">폴더째 가끔(윈도우 11)</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">스마트 스위치 PC 백업</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">USB</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">직접 실행</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">아니요(복원용 파일)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">폰 바꾸기 전 통째로</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">동기화 앱(Syncthing 계열)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">무선</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">저절로</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">예</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">매일 자동 — 고급 · 주의</td></tr></tbody></table></div>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>퀵쉐어와 USB, 얼마나 차이 나나요?</b></h3>
+<p data-ke-size="size16">같은 캡처 사진 18~19장(약 8.8MB)을 옮겨 보니 차이가 컸습니다.</p>
+<div style="overflow-x:auto;margin:14px 0 22px;border-radius:14px;box-shadow:0 0 0 1px #e2dacb;"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:15px;line-height:1.6;" data-ke-align="alignLeft"><tbody><tr><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">방법</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">옮긴 양</td><td style="padding:9px 12px;background:#f4efe6;font-weight:bold;font-size:14px;color:#5b5547;white-space:nowrap;">걸린 시간</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">퀵쉐어(폰 · PC 같은 와이파이)</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">19장 · 8.8MB</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">7분 59초 + 연결 대기 십여 초</td></tr><tr><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;white-space:nowrap;">USB 케이블 복사</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">18장 · 8.45MB</td><td style="padding:9px 12px;border-top:1px solid #ece6da;vertical-align:middle;">2~3초(너무 빨라 체감)</td></tr></tbody></table></div>
+<p data-ke-size="size16"><span style="color:#6f6857;font-size:14.5px;">한 사람이 한 PC · 한 폰에서 잰 결과입니다. 무선 환경 · 기기에 따라 퀵쉐어 속도는 달라질 수 있습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>퀵쉐어로 갤럭시 사진 PC에 보내기 — 윈도우용 퀵쉐어 설치부터</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 윈도우용 퀵쉐어 받기</b></h3>
+<p data-ke-size="size16">폰에는 퀵쉐어가 이미 들어 있습니다. PC에만 프로그램을 설치하면 됩니다.<br /><a href="https://www.android.com/intl/ko_kr/quick-share/with-windows-pc/" target="_blank" rel="noopener">Android 「Windows PC에서 Quick Share」 페이지</a>에서 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>Quick Share 다운로드</b></span>를 눌러 QuickShareSetup.exe를 설치합니다(64비트 Windows 10 이상).<br /><span style="background-color:#fff3a3;">삼성 PC(갤럭시 북)는 구글판을 지원하지 않아</span> Microsoft Store의 「삼성 Quick Share」를 받으라고 구글이 안내합니다.</p>
+<p data-ke-size="size16">[[I1|윈도우용 퀵쉐어 다운로드 단추]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 처음 실행 — 로그인하고 기기 이름 확인</b></h3>
+<p data-ke-size="size16">처음 열면 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>로그인</b></span> 또는 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>계정 없이 사용</b></span>을 고릅니다.<br />폰과 같은 구글 계정으로 로그인하면 PC에서 폰으로 보낼 때 내 폰이 「내 기기」로 바로 보여 편합니다.<br />기기 프로필(폰에 보일 PC 이름)과 공유 대상을 확인하고 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>계속</b></span>을 누릅니다.</p>
+<p data-ke-size="size16">[[I2|퀵쉐어 로그인과 기기 프로필 설정]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 폰에서 보내기</b></h3>
+<p data-ke-size="size16">폰 화면 위를 두 번 내려 빠른 설정의 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>퀵 셰어</b></span>를 누르고, <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>보내기</b></span> → 「파일 선택」으로 사진을 고릅니다.<br />「주변 기기에 공유」에 PC가 보이면 누르면 됩니다.<br />갤러리에서 사진을 고른 뒤 공유 › 퀵 셰어로 보내도 같습니다.</p>
+<p data-ke-size="size16">[[I3|빠른 설정 퀵 셰어와 주변 기기에 보이는 PC]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>4. PC에서 받기 · 받은 사진 위치</b></h3>
+<p data-ke-size="size16">PC에 「수신 중 → 수신 완료」가 뜨고, 사진은 <b><u>C:\Users\(이름)\Downloads</u></b>(다운로드 폴더)에 들어갑니다.<br />톱니(설정)의 「받은 파일을 다음 위치에 저장」에서 사진 폴더 등으로 바꿀 수 있습니다.<br />「시작 시 자동으로 실행」을 켜 두면 PC를 켤 때부터 받을 준비가 됩니다.</p>
+<p data-ke-size="size16">[[I4|PC 퀵쉐어 수신 화면과 저장 위치 설정]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>퀵쉐어로 많은 사진을 보내면 왜 이렇게 느린가요?</b></h3>
+<p data-ke-size="size16">폰과 PC를 같은 와이파이에 두고 19장(8.8MB)을 보냈는데 7분 59초가 걸렸습니다. 1초에 약 19KB입니다.<br />보내기 전 「연결 중」도 십여 초 걸렸습니다.<br />왜 이만큼 느렸는지는 확인하지 못했고, 기기 · 무선 환경에 따라 다를 수 있습니다.<br />다만 같은 양이 USB로는 2~3초였으니 <span style="background-color:#fff3a3;">사진이 많으면 퀵쉐어보다 USB가 맞습니다.</span><br />케이블 없이 한두 장 급하게 보낼 때는 가장 편합니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>5. PC에서 폰으로도 보낼 수 있어요</b></h3>
+<p data-ke-size="size16">PC 퀵쉐어 창에 파일을 끌어다 놓거나 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>＋ 선택</b></span> → 파일 · 폴더를 고르면 「내 기기」에 내 폰이 보입니다.<br />누르면 폰에 「○○ 님이 보낸 이미지 1개를 받았습니다」가 뜨고 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>열기</b></span>로 바로 볼 수 있습니다.</p>
+<p data-ke-size="size16">[[I5|PC에서 폰으로 보내기와 폰의 받음 알림]]</p>
+<div style="border-radius:14px;background:#fbecea;border:1px solid #f0c9c3;padding:18px 22px;margin:10px 0 16px;box-sizing:border-box;"><p data-ke-size="size16" style="margin:0;line-height:1.75;color:#3f3b33;"><span style="color:#c23a2b;"><b>플레이 스토어에서 「Quick Share」를 따로 받지 마세요</b></span><br />폰의 퀵쉐어는 이미 들어 있는 기능이라 스토어에서 받을 것이 없습니다.<br />스토어에서 「Quick Share」로 찾으면 이름과 아이콘이 비슷한 다른 회사 앱(광고 포함)이 나옵니다.<br />직접 받아 보니 그 앱은 별도 웹사이트로 PC를 연결하게 했고, 폰에서 「Accept」를 누르자 그 사이트에서 폰의 사진 폴더 전체가 보였습니다.<br /><span style="color:#c23a2b;"><b>잘못 받았다면 앱을 제거하세요.</b></span> PC 프로그램은 android.com(구글) 또는 Microsoft Store(삼성)에서만 받으세요.</p></div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>갤럭시 사진 컴퓨터로 옮기기 — USB 케이블로 가장 빠르게</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>케이블을 꽂아도 PC에 폰이 안 보이면?</b></h3>
+<p data-ke-size="size16">처음 꽂으면 폰은 「충전만」 되는 상태라 「USB로 충전 중입니다. 파일을 전송하려면 USB 알림을 눌러 설정을 변경하세요.」라는 안내가 뜹니다.</p>
+<ol style="padding-left:1.4em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="decimal"><li>폰 화면 위를 내려 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>USB 액세서리에 연결됨</b></span> 알림 누르기</li><li>「USB 사용 용도」에서 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>파일 전송/Android Auto</b></span> 고르기</li><li>PC 탐색기 「내 PC」에 폰 이름이 나타남</li></ol>
+<p data-ke-size="size16">[[I6|USB 알림과 파일 전송 고르기]]</p>
+<p data-ke-size="size16">그래도 안 보이면 <span style="color:#c23a2b;"><b>충전 전용 케이블</b></span>인지 확인하세요. 데이터 선이 없는 케이블은 폰을 충전만 합니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. DCIM 폴더에서 골라 복사하기</b></h3>
+<p data-ke-size="size16">탐색기에서 <b><u>내 PC › (폰 이름) › 내장 저장공간 › DCIM</u></b>으로 들어갑니다.<br />카메라로 찍은 사진은 「Camera」, 캡처는 「Screenshots」 폴더에 있습니다.<br />사진을 골라 Ctrl+C → PC 폴더에서 Ctrl+V 하면 끝입니다.</p>
+<p data-ke-size="size16">[[I7|탐색기 DCIM 폴더에서 사진 고르기]]</p>
+<p data-ke-size="size16">18장(8.45MB)이 2~3초 만에 옮겨졌고, 복사한 파일의 수정한 날짜도 찍은 시각 그대로 남았습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>선 없이 폴더째 — 윈도우 11 「파일 탐색기에 휴대폰 표시」</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 설정 한 번이면 탐색기에 폰이 보여요</b></h3>
+<p data-ke-size="size16">윈도우 11에서는 <b><u>설정 › Bluetooth 및 장치 › 모바일 장치 › 장치 관리</u></b>에서 폰을 연결하고 「파일 탐색기에 모바일 장치 표시」를 켜면, 선 없이 탐색기에 폰 폴더가 나타납니다(<a href="https://support.microsoft.com/ko-kr/windows/experience/fileexplorer/setting-up-and-using-your-phone-in-file-explorer" target="_blank" rel="noopener">Microsoft 지원</a>).<br />조건은 윈도우 11 · 안드로이드 11 이상 · 「Windows와 연결」 1.24072.258.0 이상이고, 한 번에 폰 한 대만 보입니다.</p>
+<p data-ke-size="size16">USB처럼 폴더를 열어 복사 · 이동할 수 있습니다.<br /><span style="color:#c23a2b;"><b>여기서 지운 파일은 폰에서도 지워집니다</b></span>(폰의 「휴지통 – 연결된 장치」에 30일 보관).<br /><span style="color:#6f6857;font-size:14.5px;">이 방법은 이 글에서 속도를 재지 않았습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>스마트 스위치 PC 백업 — 폰을 통째로 보관할 때</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 종류를 골라 통째로 백업</b></h3>
+<p data-ke-size="size16">Microsoft Store의 「Samsung Smart Switch」를 설치하고 케이블로 연결하면 <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>백업</b></span> · <span style="background:#ebe7df;border-radius:5px;padding:1px 7px;"><b>복원</b></span>을 고를 수 있습니다.<br />백업 항목은 전화 및 연락처 · 메시지 · 앱 · 홈 화면 · 사진처럼 <span style="background-color:#fff3a3;">종류 단위</span>라서, 사진 몇 장만 골라 받기에는 맞지 않습니다.<br />처음 실행할 때 「USB 드라이버 재설치」가 뜨면 케이블을 뽑고 설치한 뒤 다시 연결합니다.</p>
+<p data-ke-size="size16">[[I8|스마트 스위치 연결 화면과 백업 항목]]</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>스마트 스위치로 백업한 사진은 PC에서 바로 열리나요?</b></h3>
+<p data-ke-size="size16">삼성전자서비스 안내에 따르면 백업한 사진은 <span style="background-color:#fff3a3;">복원용 파일로 저장돼 PC에서 한 장씩 바로 열 수 없습니다</span>(저장 위치 문서 › Samsung › SmartSwitch › backup).<br />PC에서 사진을 보려면 USB 복사나 퀵쉐어로 따로 옮겨야 합니다.<br />스마트 스위치는 폰을 바꾸거나 초기화하기 전에 「폰 전체」를 보관하는 도구로 쓰는 것이 맞습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>매일 자동으로 하고 싶다면 — 동기화 앱의 주의점</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 갤럭시는 아직 공식 자동 백업이 없어요</b></h3>
+<p data-ke-size="size16">폰과 PC를 같은 와이파이에서 자동으로 맞춰 주는 오픈소스 앱(Syncthing 계열)이 있지만, 안드로이드판은 2024년에 원래 앱이 끝나고 다른 개발자판이 관리자가 바뀌는 등 상황이 자주 바뀌었습니다.<br />설치한다면 그날 기준 배포처와 관리 상태를 꼭 확인하세요.<br />자동이 꼭 필요하지 않다면 위의 방법을 한 달에 한 번 하는 편이 안전합니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>폰에서 지우면 PC 사진도 지워지나요?</b></h3>
+<p data-ke-size="size16">동기화로 맞춰 두면 <span style="color:#c23a2b;"><b>폰에서 지운 사진이 PC에서도 지워질 수 있습니다.</b></span><br />동기화는 「같게 맞추기」, 백업은 「따로 한 벌 더 두기」입니다.<br />USB · 퀵쉐어로 PC에 복사해 둔 사진은 폰에서 지워도 PC에 남습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>PC로 옮긴 사진, 찍은 날 · 장소로 정리하기</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 사진 뷰어로 한곳에 모아 보기</b></h3>
+<p data-ke-size="size16">옮긴 사진이 다운로드 폴더 · 여러 폴더에 흩어져 있다면 Blog J의 <a href="https://luvbong.tistory.com/794" target="_blank" rel="noopener"><b>사진 뷰어</b></a>로 폴더째 열어 찍은 날 · 장소 · 태그로 찾을 수 있습니다.<br />설치 · 업로드 없이 PC에서만 열리는 무료 프로그램입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>알아 두세요</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 공식 프로그램만</b></h3>
+<ul style="padding-left:1.3em;margin:6px 0 14px;line-height:1.75;" data-ke-list-type="disc"><li>윈도우용 퀵쉐어는 android.com(구글) 또는 Microsoft Store(삼성 Quick Share)에서만 받으세요.</li><li>폰 화면에 낯선 사이트가 「폰에 연결하려 합니다」라고 물으면 누르지 말고 앱부터 확인하세요.</li><li>퀵쉐어 「받기」 화면이 켜져 있는 동안은 주변 사람도 나에게 파일을 보낼 수 있습니다. 받을 때만 켜 두세요.</li></ul>
+<p data-ke-size="size16">&nbsp;</p>
+<hr contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" style="border:0;border-top:1px solid #e7e5dc;margin:8px 0;" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>갤럭시 사진 PC 백업 자주 묻는 것</b></h3>
+<p data-ke-size="size16"><b>Q. 플레이 스토어에서 Quick Share를 받아야 하나요?</b></p>
+<p data-ke-size="size16">아니요. 폰에는 이미 들어 있습니다. 「Quick Share: File Sharing」처럼 이름이 비슷한 광고 앱은 공식 앱이 아니니 받지 마세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 갤럭시 사진을 PC에 자동으로 백업할 수 있나요?</b></p>
+<p data-ke-size="size16">2026-11-22(일) 기준 갤럭시에는 공식 자동 백업이 없습니다. 구글 퀵쉐어 자동 백업은 갤럭시가 빠진다는 보도가 있고, 확인되면 이 글을 고치겠습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 퀵쉐어로 보낸 사진은 PC 어디에 있나요?</b></p>
+<p data-ke-size="size16">다운로드 폴더입니다. 윈도우용 퀵쉐어 설정의 「받은 파일을 다음 위치에 저장」에서 바꿀 수 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 퀵쉐어가 너무 느려요.</b></p>
+<p data-ke-size="size16">같은 와이파이에서도 19장(8.8MB)에 8분 가까이 걸렸습니다. 사진이 많으면 USB 케이블로 복사하세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 케이블을 꽂아도 PC에서 폰이 안 보여요.</b></p>
+<p data-ke-size="size16">폰 알림의 「USB 액세서리에 연결됨」을 눌러 「파일 전송/Android Auto」로 바꾸세요. 그래도 안 되면 데이터용 케이블인지 확인하세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. PC에서 폰으로도 보낼 수 있나요?</b></p>
+<p data-ke-size="size16">네. PC 퀵쉐어 창에 파일을 끌어다 놓고 「내 기기」의 폰을 누르면 됩니다. 폴더째도 됩니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>Q. 삼성 노트북(갤럭시 북)은요?</b></p>
+<p data-ke-size="size16">구글판 퀵쉐어는 삼성 PC를 지원하지 않습니다. Microsoft Store의 「삼성 Quick Share」를 쓰세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>갤럭시 사진 더 다루기</b></h3>
+<div style="background:#ece6da;border-radius:18px;padding:18px;margin:4px 0 10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;box-sizing:border-box;"><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">사진·이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/794" target="_blank" rel="noopener"><b>사진 뷰어 무료</b></a></span><br /><span style="font-size:14px;color:#5b5547;">PC 사진 폴더를 찍은 날 · 태그로</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">모바일·기기</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/852" target="_blank" rel="noopener"><b>갤럭시 휴지통 위치</b></a></span><br /><span style="font-size:14px;color:#5b5547;">지운 사진 30일 안에 복원</span></p></div><div style="background:#f1ebe1;border-radius:16px;padding:16px 18px;box-shadow:6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9);box-sizing:border-box;min-width:0;"><p data-ke-size="size16" style="margin:0;line-height:1.55;"><span style="font-size:13px;color:#195455;">사진·이미지 도구</span><br /><span style="font-size:16.5px;"><a href="https://luvbong.tistory.com/809" target="_blank" rel="noopener"><b>HEIC JPG 변환 무료</b></a></span><br /><span style="font-size:14px;color:#5b5547;">아이폰 사진 여러 장 한 번에</span></p></div></div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">다른 갤럭시 · PC에서 퀵쉐어 속도가 다르게 나오면 기종과 걸린 시간을 댓글로 알려 주세요.<br />표에 보태겠습니다.</p>

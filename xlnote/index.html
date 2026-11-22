@@ -44,6 +44,9 @@ svg{display:block;flex-shrink:0}
 .pan{background:var(--cloud);border:1px solid var(--line);border-radius:14px;padding:10px}
 .left{position:sticky;top:var(--toph,150px);display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - var(--toph,150px) - 12px)}
 .left .pan{overflow:auto}
+.left .pan.nav{flex-shrink:0;overflow:visible}
+.left .pan.fl{flex:1;min-height:120px}
+.nav button{padding:6px 10px}
 .nav button{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;font-weight:700;font-size:14.5px;width:100%;text-align:left}
 .nav button b{margin-left:auto;font-weight:600;font-size:12.5px;color:var(--sub)}
 .nav button:hover{background:var(--sand2)}
@@ -285,9 +288,13 @@ kbd{font:800 12.5px/1 inherit;border:1px solid var(--line);border-bottom-width:2
  #print .f{font-weight:700;word-break:break-all}
  #print *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
 }
+.msteps{margin:14px 0 6px;padding:0;list-style:none;counter-reset:ms;display:flex;flex-direction:column;gap:8px}
+.msteps li{counter-increment:ms;display:flex;gap:11px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;line-height:1.6}
+.msteps li::before{content:counter(ms);width:26px;height:26px;border-radius:50%;background:var(--sea);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13.5px;flex-shrink:0;margin-top:1px}
+.msteps b.mi{background:var(--sealt);color:var(--sea2);border-radius:6px;padding:1px 6px;font-weight:800;white-space:nowrap}
 </style></head><body>
 <header class="top"><div class="tin">
- <div class="row"><img class="logo" src="icon-192.png" alt="" width="38" height="38"><div class="ttl">엑셀 수식 노트<small>함수 57개 · 오류 8가지 · 하고 싶은 일로 찾기</small></div><span class="sp"></span>
+ <div class="row"><img class="logo" src="icon-192.png" alt="" width="38" height="38"><div class="ttl">엑셀 수식 노트<small>함수 68개 · 메뉴 기능 18개 · 오류 8가지</small></div><span class="sp"></span>
   <button class="ver" id="verb" type="button"></button>
   <button class="hb" id="binst" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="tx">설치</span></button>
   <button class="hb" id="bhelp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 .5c0 1.6-2.5 2-2.5 3.5M12 17.5v.01"/></svg><span class="tx">도움말</span></button></div>
@@ -890,6 +897,59 @@ const XL = (() => {
   def("MOD", a => { const x = num(sc(a[0])), y = num(sc(a[1])); const e = firstErr(x, y); if (e) return e; if (y === 0) return err(ERR.DIV, "0으로 나눈 나머지는 없어요"); return x - y * Math.floor(x / y); });
   def("NUMBERSTRING", a => { const x = num(sc(a[0])), t = num(sc(a[1])); const e = firstErr(x, t); if (e) return e; if (![1, 2, 3].includes(t)) return err(ERR.VALUE, "방식은 1 · 2 · 3"); return numberString(x, t); });
 
+
+  /* ── 11-22 추가: 조건 최대 · 글자 나누기 · 번호 · 단위 맞춤 · OFFSET · 링크 · 행열 바꾸기 · 중간값 · 대출 ── */
+  function ifsAgg(a, kind) {
+    if (a.length < 3 || a.length % 2 === 0) return err(ERR.VALUE, "값 범위, 그리고 (범위, 조건) 짝으로 넣어요");
+    const S = toArr(a[0]); const pairs = []; for (let i = 1; i + 1 < a.length; i += 2) pairs.push([toArr(a[i]), crit(sc(a[i + 1]))]);
+    if (pairs.some(([R]) => R.h !== S.h || R.w !== S.w)) return err(ERR.VALUE, "범위들의 크기(줄 · 칸 수)가 서로 달라요");
+    const L = []; for (let i = 0; i < S.h; i++) for (let j = 0; j < S.w; j++) { if (!pairs.every(([R, t]) => t(R.rows[i][j]))) continue; const v = S.rows[i][j]; if (isErr(v)) return v; if (typeof v === "number") L.push(v); }
+    return L.length ? (kind === "max" ? Math.max(...L) : Math.min(...L)) : 0;
+  }
+  def("MAXIFS", a => ifsAgg(a, "max")); def("MINIFS", a => ifsAgg(a, "min"));
+  def("MEDIAN", a => { const n = nums(a); if (isErr(n)) return n; if (!n.length) return err(ERR.NUM, "숫자가 없어요"); n.sort((x, y) => x - y); const m = n.length >> 1; return n.length % 2 ? n[m] : (n[m - 1] + n[m]) / 2; });
+  def("TEXTBEFORE,TEXTAFTER", a => err(ERR.NAME));
+  const tb = after => a => {
+    const e = need(a, 2, 6); if (e) return e; const d = str(sc(a[1])); if (isErr(d)) return d;
+    let k = a[2] === undefined ? 1 : num(sc(a[2])); if (isErr(k)) return k; k = Math.trunc(k); if (k === 0) return err(ERR.VALUE, "몇 번째는 0이 아니어야 해요");
+    const nf = a[5];
+    return mapText(a[0], t => {
+      if (d === "") return after ? t : "";
+      const idx = []; let i = -1; while ((i = t.indexOf(d, i + 1)) >= 0) idx.push(i);
+      const pos = k > 0 ? idx[k - 1] : idx[idx.length + k];
+      if (pos === undefined) return nf !== undefined ? sc(nf) : err(ERR.NA, `「${d}」가 ${Math.abs(k) > 1 ? Math.abs(k) + "번 " : ""}없어요 — 네 번째 칸 뒤 「없을 때」 값을 넣을 수 있어요`);
+      return after ? t.slice(pos + d.length) : t.slice(0, pos);
+    });
+  };
+  FN.TEXTBEFORE = { fn: tb(false) }; FN.TEXTAFTER = { fn: tb(true) };
+  def("TEXTSPLIT", a => {
+    const t = str(sc(a[0])); if (isErr(t)) return t; const cd = a[1] === undefined ? "" : str(sc(a[1])); const rd = a[2] === undefined ? "" : str(sc(a[2]));
+    const skip = a[3] !== undefined && bool(sc(a[3])) === true;
+    const rows = (rd ? t.split(rd) : [t]).map(r => { let c = cd ? r.split(cd) : [r]; if (skip) c = c.filter(x => x !== ""); return c; });
+    const w = Math.max(...rows.map(r => r.length)); return new Arr(rows.map(r => { const o = r.slice(); while (o.length < w) o.push(err(ERR.NA, "칸 수가 모자라는 줄")); return o; }));
+  });
+  def("SEQUENCE", a => { const r = num(sc(a[0])), c = a[1] === undefined ? 1 : num(sc(a[1])), st = a[2] === undefined ? 1 : num(sc(a[2])), sp = a[3] === undefined ? 1 : num(sc(a[3])); const x = firstErr(r, c, st, sp); if (x) return x; if (r < 1 || c < 1) return err(ERR.CALC, "줄 · 칸 수는 1 이상"); const rows = []; let v = st; for (let i = 0; i < r; i++) { const row = []; for (let j = 0; j < c; j++) { row.push(v); v += sp; } rows.push(row); } return new Arr(rows); });
+  def("MROUND", a => { const x = num(sc(a[0])), m = num(sc(a[1])); const e = firstErr(x, m); if (e) return e; if (m === 0) return 0; if (x * m < 0) return err(ERR.NUM, "값과 단위의 부호가 달라요"); return Math.round(x / m + 1e-12) * m; });
+  def("CEILING,CEILING.MATH", a => { const x = num(sc(a[0])), m = a[1] === undefined ? 1 : num(sc(a[1])); const e = firstErr(x, m); if (e) return e; if (m === 0) return 0; return Math.ceil(x / m - 1e-12) * m; });
+  def("FLOOR,FLOOR.MATH", a => { const x = num(sc(a[0])), m = a[1] === undefined ? 1 : num(sc(a[1])); const e = firstErr(x, m); if (e) return e; if (m === 0) return err(ERR.DIV); return Math.floor(x / m + 1e-12) * m; });
+  def("OFFSET", (n, ev, sh, at) => {
+    const b = n[0]; if (!b || b.k !== "ref") return err(ERR.VALUE, "OFFSET 첫 칸은 칸 주소여야 해요");
+    if (b.ref.sheet) return err(ERR.REF, `이 연습 표에는 「${b.ref.sheet}」 시트가 없어요`);
+    const A = parseAddr(b.ref.a), B = b.ref.b ? parseAddr(b.ref.b) : A;
+    const g = i => n[i] && n[i].k !== "miss" ? num(sc(ev(n[i]))) : null;
+    const dr = g(1) || 0, dc = g(2) || 0; let h = g(3), w = g(4); const x = firstErr(dr, dc, h, w); if (x) return x;
+    if (h === null) h = Math.abs(B.r - A.r) + 1; if (w === null) w = Math.abs(B.c - A.c) + 1;
+    const r1 = Math.min(A.r, B.r) + dr, c1 = Math.min(A.c, B.c) + dc;
+    if (r1 < 0 || c1 < 0 || h < 1 || w < 1) return err(ERR.REF, "표 바깥(위 · 왼쪽)으로 벗어났어요");
+    const ref = { a: addr(r1, c1), b: addr(r1 + h - 1, c1 + w - 1) };
+    if (h === 1 && w === 1) return sh.value(r1, c1);
+    return sh.rangeVals(ref, at);
+  }, true);
+  def("HYPERLINK", a => { const u = str(sc(a[0])); if (isErr(u)) return u; return a[1] !== undefined ? sc(a[1]) : u; });
+  def("TRANSPOSE", a => { const A = toArr(a[0]); return new Arr(A.rows[0].map((_, j) => A.rows.map(r => blank(r[j]) ? 0 : r[j]))); });
+  def("PMT", a => { const e = need(a, 3, 5); if (e) return e; const [r, n, pv] = a.slice(0, 3).map(v => num(sc(v))); const fv = a[3] === undefined ? 0 : num(sc(a[3])), t = a[4] === undefined ? 0 : num(sc(a[4])); const x = firstErr(r, n, pv, fv, t); if (x) return x; if (n === 0) return err(ERR.NUM, "기간이 0이에요"); if (r === 0) return -(pv + fv) / n; const q = Math.pow(1 + r, n); return -(pv * q + fv) * r / ((1 + r * t) * (q - 1)); });
+  def("IPMT", a => err(ERR.NAME));
+  delete FN.IPMT;
   /* 나무를 글자로(수식 풀이용) */
   function show(n) {
     switch (n.k) {
@@ -937,7 +997,7 @@ const F = [
 /* ───────── 찾아서 가져오기 ───────── */
 { id: "xlookup", n: "XLOOKUP", cat: "look", min: "2021", gs: 1, one: "찾을 값을 표에서 찾아, 같은 줄의 다른 칸 값을 가져옵니다.", tag: "VLOOKUP과 달리 왼쪽 칸도 가져옴",
   syn: ["찾을 값", "찾을 범위", "가져올 범위", "[없을 때]"], args: ["찾고 싶은 것 — 칸(E2)이나 글자(\"K-104\")", "찾을 값이 들어 있는 한 줄 또는 한 칸 묶음(A2:A7)", "가져올 값이 있는 묶음 — 찾을 범위와 칸 수가 같아야 함(C2:C7)", "못 찾았을 때 보일 글자 — 비우면 #N/A"],
-  task: ["다른 표에서 값 가져오기", "품번으로 단가 찾기", "코드로 이름 가져오기", "두 표 합치기", "왼쪽 칸 값 가져오기", "VLOOKUP 대신"],
+  task: ["요일 표시", "다른 시트에서 값 가져오기", "다른 표에서 값 가져오기", "품번으로 단가 찾기", "코드로 이름 가져오기", "두 표 합치기", "왼쪽 칸 값 가져오기", "VLOOKUP 대신"],
   ex: { ds: "P", cells: { F1: "찾을 품번", G1: "단가", F2: "K-104", G2: '=XLOOKUP(F2,A2:A7,C2:C7,"없음")' }, f: "G2", fmt: { G2: "n" }, cw: { B: 150 } },
   tries: [["F2", "K-109", "목록에 없는 품번 → 「없음」"], ["G2", '=XLOOKUP(F2,A2:A7,B2:B7,"없음")', "가져올 범위를 B열로 → 품목 이름"]],
   pit: ["찾을 값 앞뒤에 빈칸이 있으면 못 찾아요 → TRIM", "숫자와 「글자로 된 숫자」(왼쪽 정렬된 숫자)는 서로 다른 값", "아래로 채울 거면 범위에 $를 붙이세요(F4)"],
@@ -1003,7 +1063,7 @@ const F = [
   b: { fields: [{ k: "R", l: "더할 범위", ph: "F2:F500", r: 1 }], t: "=SUM({R})" } },
 { id: "sumif", n: "SUMIF", cat: "sum", min: "all", gs: 1, one: "조건에 맞는 줄의 값만 더합니다(조건 하나).",
   syn: ["조건 범위", "조건", "[더할 범위]"], args: ["조건을 볼 칸 묶음(B2:B9)", "\"서울\" · \">=50000\" · \"복사*\" 또는 칸", "더할 칸 묶음 — 조건 범위와 같은 크기"],
-  task: ["조건 맞는 것만 더하기", "지점별 합계", "거래처별 금액 합계", "특정 값 합계"],
+  task: ["조건부 합계", "지점별 매출 합계", "항목별 합계", "조건 맞는 것만 더하기", "지점별 합계", "거래처별 금액 합계", "특정 값 합계"],
   ex: { ds: "S", cells: { H1: "지점", I1: "합계", H2: "서울", I2: "=SUMIF(B2:B9,H2,F2:F9)" }, f: "I2", fmt: { I2: "n" } },
   tries: [["H2", "부산", "지점 바꾸기"], ["I2", '=SUMIF(F2:F9,">=50000")', "5만 원 넘는 금액만"], ["I2", '=SUMIF(D2:D9,"복사*",F2:F9)', "「복사」로 시작하는 품목"]],
   pit: ["조건에 비교 기호를 쓸 땐 따옴표 안에: \">=\"&H2", "조건이 둘 이상이면 SUMIFS", "순서가 SUMIFS와 달라요(더할 범위가 맨 뒤)"],
@@ -1011,7 +1071,7 @@ const F = [
   b: { fields: [{ k: "C", l: "조건 범위", ph: "B2:B500", r: 1 }, { k: "v", l: "조건(칸 또는 \"글자\")", ph: "H2" }, { k: "S", l: "더할 범위", ph: "F2:F500", r: 1 }], t: "=SUMIF({C},{v},{S})" } },
 { id: "sumifs", n: "SUMIFS", cat: "sum", min: "all", gs: 1, one: "여러 조건에 모두 맞는 줄의 값만 더합니다.",
   syn: ["더할 범위", "조건 범위1", "조건1", "[조건 범위2, 조건2 …]"], args: ["더할 칸 묶음(F2:F9)", "첫 조건을 볼 묶음", "첫 조건", "조건은 127쌍까지"],
-  task: ["조건 두 개 합계", "지점별 월별 합계", "기간 합계", "날짜 사이 합계", "담당자별 품목별 합계"],
+  task: ["여러 조건 합계", "조건 두 개 합계", "지점별 월별 합계", "기간 합계", "날짜 사이 합계", "담당자별 품목별 합계"],
   ex: { ds: "S", cells: { H1: "지점", I1: "품목", J1: "합계", H2: "서울", I2: "복사용지", J2: "=SUMIFS(F2:F9,B2:B9,H2,D2:D9,I2)" }, f: "J2", fmt: { J2: "n" }, cw: { J: 90 } },
   tries: [["I2", "볼펜", "품목 바꾸기"], ["J2", '=SUMIFS(F2:F9,A2:A9,">="&DATE(2026,11,10),A2:A9,"<="&DATE(2026,11,20))', "날짜 사이(11-10 ~ 11-20)"]],
   pit: ["모든 범위의 줄 수가 같아야 해요(다르면 #VALUE!)", "날짜 조건은 \">=\"&칸 또는 \">=\"&DATE(…)", "「또는」 조건은 SUMIFS 두 개를 더하세요"],
@@ -1143,7 +1203,7 @@ const F = [
   b: { fields: [{ k: "c", l: "자를 칸", ph: "A2" }, { k: "n", l: "몇 글자", ph: "3" }], t: "=LEFT({c},{n})" } },
 { id: "mid", n: "MID", cat: "text", min: "all", gs: 1, one: "글자의 중간에서, 시작 위치부터 정한 글자 수만큼 잘라냅니다.",
   syn: ["글자", "시작 위치", "글자 수"], args: ["자를 칸", "몇 번째 글자부터(첫 글자 = 1)", "몇 글자"],
-  task: ["중간 글자 자르기", "주민번호 성별 자리", "가운데 번호", "날짜 글자에서 월"],
+  task: ["가운데 글자 추출", "글자 추출", "중간 글자 자르기", "주민번호 성별 자리", "가운데 번호", "날짜 글자에서 월"],
   ex: { cells: { A1: "주문 번호", B1: "주문 월", A2: "2026-11-0315", A3: "2026-12-0042", B2: "=MID(A2,6,2)", B3: "=MID(A3,6,2)" }, f: "B2", cw: { A: 120 } },
   tries: [["B2", "=VALUE(MID(A2,6,2))", "글자 「11」을 숫자 11로"]],
   pit: ["결과는 글자 — 숫자로 쓰려면 VALUE 또는 --MID(…)"],
@@ -1405,6 +1465,193 @@ const F = [
   b: { fields: [{ k: "L", l: "전체 목록", ph: "A2:A500", r: 1, abs: 1 }, { k: "v", l: "첫 줄 칸", ph: "A2" }, { k: "m", l: "표시 방법", ch: [["all", "중복 모두"], ["2nd", "두 번째부터만"]] }], fn: "dup" } }
 ];
 
+/* ── 11-22 추가 함수 ── */
+F.push(
+{ id: "maxifs", n: "MAXIFS · MINIFS", cat: "sum", min: "2019", gs: 1, one: "조건에 맞는 줄에서 가장 큰 값(MAXIFS) · 가장 작은 값(MINIFS)을 찾습니다.",
+  syn: ["최대 범위", "조건 범위1", "조건1", "[조건 범위2, 조건2 …]"], args: ["값을 볼 칸 묶음(F2:F9)", "조건을 볼 묶음", "조건", "조건은 126쌍까지"],
+  task: ["지점별 최고 매출", "조건별 최대값", "조건별 최소값", "부서별 최고 점수", "담당자별 가장 늦은 날짜", "조건에 맞는 최댓값"],
+  ex: { ds: "S", cells: { H1: "지점", I1: "최고 금액", J1: "최저 금액", H2: "서울", I2: "=MAXIFS(F2:F9,B2:B9,H2)", J2: "=MINIFS(F2:F9,B2:B9,H2)" }, f: "I2", fmt: { I2: "n", J2: "n" }, cw: { I: 96, J: 96 } },
+  tries: [["H2", "대전", "지점 바꾸기"], ["I2", "=MAXIFS(A2:A9,C2:C9,\"이서연\")", "담당자의 가장 늦은 날짜(숫자로 보이면 날짜 서식)"]],
+  pit: ["맞는 줄이 없으면 0이 나와요(오류 아님) — 0과 「없음」을 헷갈리지 않게", "2016 이하는 =MAX(IF(B2:B9=H2,F2:F9)) 를 Ctrl+Shift+Enter로"],
+  sim: ["maxmin", "sumifs", "large"],
+  b: { fields: [{ k: "S", l: "최대 · 최소를 볼 범위", ph: "F2:F500", r: 1 }, { k: "C", l: "조건 범위", ph: "B2:B500", r: 1 }, { k: "v", l: "조건", ph: "H2" }, { k: "m", l: "무엇을", ch: [["MAXIFS", "가장 큰 값"], ["MINIFS", "가장 작은 값"]] }], t: "={m}({S},{C},{v})", altText: "2016 이하: =MAX(IF(조건범위=조건,값범위)) 를 입력하고 Ctrl+Shift+Enter(배열 수식)." } },
+{ id: "contains", n: "포함 여부(ISNUMBER + SEARCH)", cat: "cond", min: "all", gs: 1, one: "칸 글자 안에 특정 글자가 들어 있는지 TRUE · FALSE로 알려 줍니다. IF와 함께 씁니다.", tag: "모든 버전",
+  syn: ["ISNUMBER(SEARCH(찾을 글자", "대상 칸))"], args: ["들어 있는지 볼 글자(\"서울\")", "찾아볼 칸 — SEARCH는 위치(숫자)를 주고, 없으면 오류 → ISNUMBER가 TRUE · FALSE로"],
+  task: ["특정 글자 포함 여부", "주소에 서울이 들어가면", "글자가 들어 있으면 표시", "포함되어 있으면", "단어 포함 확인", "특정 문자 포함"],
+  ex: { cells: { A1: "주소", B1: "서울?", A2: "서울시 강남구 테헤란로 1", A3: "부산시 해운대구 센텀로 2", A4: "경기도 성남시 분당구 3", A5: "서울시 마포구 월드컵로 4", B2: '=IF(ISNUMBER(SEARCH("서울",A2)),"서울","")', B3: '=IF(ISNUMBER(SEARCH("서울",A3)),"서울","")', B4: '=IF(ISNUMBER(SEARCH("서울",A4)),"서울","")', B5: '=IF(ISNUMBER(SEARCH("서울",A5)),"서울","")', D1: "서울 건수", D2: '=COUNTIF(A2:A5,"*서울*")' }, f: "B2", cw: { A: 200 } },
+  tries: [["B2", '=ISNUMBER(SEARCH("강남",A2))', "IF 없이 → TRUE"], ["B3", '=IF(ISNUMBER(SEARCH("부산",A3)),"부산","")', "다른 글자"]],
+  pit: ["SEARCH는 대소문자를 안 가리고, FIND는 가려요", "개수만 필요하면 COUNTIF(범위,\"*서울*\")가 더 짧아요", "SEARCH에서 * ? 는 와일드카드 — 글자 그대로 찾으려면 ~* "],
+  sim: ["find", "countif", "if"],
+  b: { fields: [{ k: "w", l: "찾을 글자", ph: '"서울"' }, { k: "c", l: "대상 칸", ph: "A2" }, { k: "t", l: "들어 있으면 보일 값", ph: '"포함"' }], t: '=IF(ISNUMBER(SEARCH({w},{c})),{t},"")' } },
+{ id: "textsplit", n: "TEXTSPLIT", cat: "text", min: "365", gs: 0, one: "구분 글자(쉼표 · 슬래시 등)로 한 칸의 글자를 여러 칸으로 나눠 펼칩니다.",
+  syn: ["글자", "칸 구분 글자", "[줄 구분 글자]", "[빈칸 빼기]"], args: ["나눌 칸", "옆 칸으로 나눌 기준(\",\")", "아래 줄로 나눌 기준", "TRUE = 구분 글자가 겹쳐 생긴 빈칸은 빼기"],
+  task: ["쉼표로 구분된 글자 나누기", "한 셀을 여러 칸으로 나누기", "글자 분리", "슬래시로 나누기", "구분자로 쪼개기"],
+  ex: { cells: { A1: "담당 품목", A2: "복사용지,볼펜,클리어파일", A4: "나눈 결과", A5: '=TEXTSPLIT(A2,",")' }, f: "A5", cw: { A: 190 } },
+  tries: [["A2", "복사용지, 볼펜, 포스트잇", "쉼표 뒤 빈칸 → 「, 」로 나누면 깔끔"], ["A5", '=TEXTSPLIT(A2,,",")', "아래 줄로 나누기"]],
+  pit: ["365 · 2024 전용 — 그 밖은 「데이터 › 텍스트 나누기」 메뉴", "구글 시트는 =SPLIT(A2,\",\")", "펼칠 칸이 비어 있어야 해요(#SPILL!)"],
+  sim: ["textcol", "textbefore", "textjoin"],
+  b: { fields: [{ k: "c", l: "나눌 칸", ph: "A2" }, { k: "d", l: "구분 글자", ph: '","' }], t: "=TEXTSPLIT({c},{d})", altText: "2021 이하: 칸을 고르고 「데이터 › 텍스트 나누기」 → 구분 기호(쉼표 등). 구글 시트: =SPLIT(A2,\",\")." } },
+{ id: "textbefore", n: "TEXTBEFORE · TEXTAFTER", cat: "text", min: "365", gs: 0, one: "구분 글자 앞(TEXTBEFORE) · 뒤(TEXTAFTER)의 글자만 꺼냅니다. 이메일 아이디 · 괄호 안 글자에 좋습니다.",
+  syn: ["글자", "구분 글자", "[몇 번째]", "…", "…", "[없을 때]"], args: ["꺼낼 칸", "기준 글자(\"@\")", "여러 번 나오면 몇 번째(-1 = 마지막)", "", "", "구분 글자가 없을 때 보일 값"],
+  task: ["이메일에서 아이디만", "괄호 안 글자만 꺼내기", "특정 글자 앞까지", "특정 글자 뒤 글자", "도메인만 추출", "골뱅이 앞"],
+  ex: { cells: { A1: "값", B1: "결과", A2: "minjun.kim@example.com", B2: '=TEXTBEFORE(A2,"@")', A3: "minjun.kim@example.com", B3: '=TEXTAFTER(A3,"@")', A4: "김민준(영업)", B4: '=TEXTBEFORE(TEXTAFTER(A4,"("),")")' }, f: "B2", cw: { A: 190, B: 120 } },
+  tries: [["A2", "minjun.kim", "@가 없으면 #N/A"], ["B2", '=TEXTBEFORE(A2,".",-1)', "마지막 「.」 앞까지"]],
+  pit: ["365 · 2024 전용 — 그 밖은 LEFT + FIND: =LEFT(A2,FIND(\"@\",A2)-1)", "구글 시트는 REGEXEXTRACT를 써요"],
+  sim: ["find", "mid", "textsplit"],
+  b: { fields: [{ k: "c", l: "꺼낼 칸", ph: "A2" }, { k: "d", l: "기준 글자", ph: '"@"' }, { k: "m", l: "어느 쪽", ch: [["TEXTBEFORE", "기준 글자 앞"], ["TEXTAFTER", "기준 글자 뒤"]] }], t: "={m}({c},{d})", alt: "=LEFT({c},FIND({d},{c})-1)" } },
+{ id: "rownum", n: "번호 매기기(ROW · SEQUENCE)", cat: "org", min: "all", gs: 1, one: "줄을 지우거나 끼워도 이어지는 번호를 자동으로 매깁니다.", tag: "모든 버전",
+  syn: ["ROW()-1"], args: ["ROW()는 지금 칸의 줄 번호 — 머리글이 1줄이면 1을 빼면 1부터 시작. 365 · 2021은 =SEQUENCE(개수)로 한 번에"],
+  task: ["자동 번호 매기기", "순번 넣기", "줄 지워도 번호 유지", "연번", "일련번호", "번호 자동으로"],
+  ex: { cells: { A1: "번호", B1: "품목", A2: "=ROW()-1", A3: "=ROW()-1", A4: "=ROW()-1", A5: "=ROW()-1", B2: "복사용지", B3: "볼펜", B4: "클리어파일", B5: "포스트잇", D1: "SEQUENCE", D2: "=SEQUENCE(4)" }, f: "A2" },
+  tries: [["A2", '=IF(B2="","",ROW()-1)', "품목이 빈 줄은 번호 비우기"], ["D2", "=SEQUENCE(4,1,10,10)", "10 · 20 · 30 · 40"]],
+  pit: ["마우스로 1 · 2를 끌어 채운 번호는 줄을 지우면 끊겨요 — ROW()는 자동으로 다시 매김", "필터로 숨겨도 이어지게 하려면 =SUBTOTAL(3,$B$2:B2)"],
+  sim: ["subtotal", "count"],
+  b: { fields: [{ k: "h", l: "머리글 줄 수", ph: "1" }, { k: "c", l: "비었으면 번호 비울 칸(없으면 비움)", ph: "B2" }], fn: "rownum" } },
+{ id: "mround", n: "MROUND · CEILING", cat: "round", min: "all", gs: 1, one: "정한 단위(500원 · 30분 · 12개)에 가장 가까운 값으로 맞추거나(MROUND) 무조건 올려 맞춥니다(CEILING).",
+  syn: ["값", "단위"], args: ["맞출 값", "500 · 1000 · \"0:30\" 같은 단위"],
+  task: ["500원 단위로 맞추기", "단위 반올림", "30분 단위 올림", "박스 단위 올림", "100원 단위 올림", "배수로 맞추기"],
+  ex: { cells: { A1: "값", B1: "500원 단위(가까운 쪽)", C1: "500원 단위 올림", A2: 12260, B2: "=MROUND(A2,500)", C2: "=CEILING(A2,500)", A3: 12740, B3: "=MROUND(A3,500)", C3: "=CEILING(A3,500)" }, f: "B2", cf: { A: "n", B: "n", C: "n" }, cw: { B: 160, C: 140 } },
+  tries: [["A2", "12250", "딱 절반 → 위로(12,500)"], ["C2", "=FLOOR(A2,500)", "무조건 내려서(12,000)"]],
+  pit: ["값과 단위의 부호가 다르면 MROUND는 #NUM!", "십 원 · 백 원 단위 버림은 ROUNDDOWN(-1 · -2)이 더 흔해요"],
+  sim: ["round", "roundup", "won"],
+  b: { fields: [{ k: "c", l: "값 칸", ph: "A2" }, { k: "u", l: "단위", ph: "500" }, { k: "m", l: "어떻게", ch: [["MROUND", "가까운 쪽"], ["CEILING", "무조건 올림"], ["FLOOR", "무조건 내림"]] }], t: "={m}({c},{u})" } },
+{ id: "offset", n: "OFFSET", cat: "look", min: "all", gs: 1, one: "기준 칸에서 몇 줄 · 몇 칸 떨어진 곳의 칸이나 범위를 가리킵니다. 받은 파일의 「늘어나는 범위」에 자주 나옵니다.",
+  syn: ["기준 칸", "줄 이동", "칸 이동", "[높이]", "[너비]"], args: ["출발 칸(B1)", "아래로 몇 줄(위는 -)", "오른쪽으로 몇 칸(왼쪽은 -)", "몇 줄짜리 범위", "몇 칸짜리 범위"],
+  task: ["범위가 늘어나는 합계 offset", "최근 3개월 합계", "마지막 몇 개 합계", "동적 범위", "기준 칸에서 떨어진 값"],
+  ex: { cells: { A1: "월", B1: "매출", A2: "1월", B2: 320, A3: "2월", B3: 285, A4: "3월", B4: 410, A5: "4월", B5: 364, A6: "5월", B6: 398, D1: "최근 3개월 합계", D2: "=SUM(OFFSET(B1,COUNT(B2:B13)-2,0,3,1))" }, f: "D2", cw: { D: 130 } },
+  tries: [["B7", "420", "6월을 넣으면 자동으로 4~6월 합계"], ["D2", "=OFFSET(B1,3,0)", "B1에서 3줄 아래 = 3월"]],
+  pit: ["값이 바뀔 때마다 다시 계산돼 파일이 무거워질 수 있어요", "365 · 2021이면 TAKE · FILTER 또는 표(Ctrl+T)가 읽기 쉬워요", "줄을 끼우면 이동 칸 수가 달라질 수 있어요"],
+  sim: ["indirect", "indexmatch", "sum"],
+  b: { fields: [{ k: "c", l: "기준 칸(머리글)", ph: "B1" }, { k: "R", l: "값이 쌓이는 범위", ph: "B2:B500", r: 1 }, { k: "n", l: "최근 몇 개", ph: "3" }], fn: "offset" } },
+{ id: "hyperlink", n: "HYPERLINK", cat: "text", min: "all", gs: 1, one: "누르면 웹 주소 · 파일 · 다른 시트로 이동하는 링크를 만듭니다.",
+  syn: ["주소", "[보일 글자]"], args: ["https://… · 파일 경로 · \"#시트!A1\"", "칸에 보일 글자"],
+  task: ["클릭하면 이동하는 링크 만들기", "하이퍼링크", "다른 시트로 이동 버튼", "목차 만들기", "링크 걸기"],
+  ex: { cells: { A1: "시트", B1: "바로 가기", A2: "1월", B2: '=HYPERLINK("#\'"&A2&"\'!A1",A2&" 시트 열기")', A3: "블로그", B3: '=HYPERLINK("https://luvbong.tistory.com","Blog J")' }, f: "B2", cw: { B: 140 } },
+  tries: [["A2", "2월", "시트 이름을 바꾸면 링크도"]],
+  pit: ["같은 파일 안 시트는 주소 앞에 # — \"#'1월'!A1\"", "이 연습 표에서는 눌러도 이동하지 않아요(보이는 글자만)"],
+  sim: ["amp", "indirect"],
+  b: { fields: [{ k: "s", l: "시트 이름 칸 또는 \"웹 주소\"", ph: "A2" }, { k: "m", l: "어디로", ch: [["sheet", "같은 파일의 시트"], ["web", "웹 주소"]] }], fn: "hyperlink" } },
+{ id: "transpose", n: "TRANSPOSE", cat: "org", min: "all", gs: 1, one: "표의 가로 · 세로를 바꿔 펼칩니다(행 ↔ 열).",
+  syn: ["범위"], args: ["바꿀 표"],
+  task: ["행 열 바꾸기", "가로 세로 바꾸기", "행렬 전환", "세로 목록을 가로로"],
+  ex: { cells: { A1: "월", B1: "1월", C1: "2월", D1: "3월", A2: "매출", B2: 320, C2: 285, D2: 410, A4: "=TRANSPOSE(A1:D2)" }, f: "A4" },
+  tries: [["C2", "300", "원본을 바꾸면 따라 바뀜"]],
+  pit: ["2019 이하는 결과 크기만큼 칸을 먼저 고르고 Ctrl+Shift+Enter", "값만 한 번 바꾸면 되면 「복사 → 붙여넣기 › 행/열 바꿈」이 쉬워요"],
+  sim: ["pastevalue", "hlookup"],
+  b: { fields: [{ k: "R", l: "바꿀 범위", ph: "A1:D2", r: 1 }], t: "=TRANSPOSE({R})", altText: "값만 바꾸면 될 때: 범위 복사 → 붙일 칸 오른쪽 클릭 → 붙여넣기 옵션 「행/열 바꿈」." } },
+{ id: "median", n: "MEDIAN", cat: "sum", min: "all", gs: 1, one: "숫자를 크기순으로 늘어놓았을 때 가운데 값을 구합니다. 큰 값 하나에 흔들리지 않습니다.",
+  syn: ["범위"], args: ["가운데 값을 볼 칸 묶음"],
+  task: ["중간값 구하기", "중앙값", "평균 대신 가운데 값"],
+  ex: { ds: "S", cells: { H1: "평균", I1: "=AVERAGE(F2:F9)", H2: "중간값", I2: "=MEDIAN(F2:F9)" }, f: "I2", fmt: { I1: "n", I2: "n" } },
+  tries: [["F9", "1000000", "큰 거래 하나 → 평균은 크게, 중간값은 그대로"]],
+  pit: ["개수가 짝수면 가운데 두 값의 평균"],
+  sim: ["average", "large"],
+  b: { fields: [{ k: "R", l: "범위", ph: "F2:F500", r: 1 }], t: "=MEDIAN({R})" } },
+{ id: "pmt", n: "PMT", cat: "round", min: "all", gs: 1, one: "대출을 매달 같은 금액으로 갚을 때(원리금 균등) 한 달 상환액을 구합니다.",
+  syn: ["이자율", "횟수", "대출금"], args: ["한 번 낼 때의 이자율 — 연 이율이면 /12", "갚는 횟수 — 30년 월납이면 360", "빌린 돈(결과가 -로 나오면 앞에 - 붙이기)"],
+  task: ["대출 월 상환액 계산", "원리금 균등 상환", "할부 월 납입금", "대출 이자 계산"],
+  ex: { cells: { A1: "대출금", B1: 100000000, A2: "연 이율", B2: 0.045, A3: "기간(년)", B3: 30, A4: "매달 상환액", B4: "=-PMT(B2/12,B3*12,B1)", A5: "총 이자", B5: "=B4*B3*12-B1" }, f: "B4", cf: { B: "n" }, fmt: { B2: "" }, cw: { A: 100, B: 130 } },
+  tries: [["B3", "20", "20년이면 한 달 더 많이, 총 이자는 적게"], ["B2", "0.039", "이율 3.9%"]],
+  pit: ["연 이율 · 연수를 그대로 넣으면 틀려요 — /12 · ×12", "원금 균등(매달 원금이 같은 방식)은 PMT로 계산하지 않아요", "실제 은행 금액은 중도 상환 · 수수료로 다를 수 있어요"],
+  sim: ["round", "won"],
+  b: { fields: [{ k: "r", l: "연 이율 칸", ph: "B2" }, { k: "y", l: "기간(년) 칸", ph: "B3" }, { k: "p", l: "대출금 칸", ph: "B1" }], t: "=-PMT({r}/12,{y}*12,{p})" } }
+);
+/* ── 함수 없이 하는 법(엑셀 메뉴 기능) — 메뉴 이름은 Microsoft · Google 도움말로 확인, 버전에 따라 조금 다를 수 있음 ── */
+CATS.splice(CATS.findIndex(c => c.id === "err"), 0, { id: "menu", n: "함수 없이 하는 법", ic: "메", d: "드롭다운 · 조건부 서식 · 피벗" });
+const MENU = [
+{ id: "dropdown", n: "드롭다운 목록(데이터 유효성 검사)", one: "칸을 누르면 고를 목록이 나오게 합니다. 오타 없이 같은 값만 넣게 할 때 씁니다.",
+  task: ["드롭다운 목록 만들기", "콤보 박스", "선택 목록", "목록에서 고르기", "데이터 유효성 검사", "셀 선택 상자"],
+  x: ["목록을 넣을 칸(예: C2:C100)을 고르세요", "「데이터」 탭 › 「데이터 도구」 › 「데이터 유효성 검사」", "「설정」 탭 › 「제한 대상」을 「목록」으로", "「원본」에 목록을 적으세요 — 영업,관리,개발 처럼 쉼표로, 또는 목록이 있는 범위(=$H$2:$H$10)", "「확인」 — 칸 오른쪽에 ▼가 생겨요"],
+  gs: ["칸을 고르세요", "「삽입」 › 「드롭다운」(또는 「데이터」 › 「데이터 확인」)", "항목을 하나씩 적거나 「범위의 드롭다운」으로 목록 범위 지정", "「완료」"],
+  tips: ["목록을 다른 시트에 두고 범위로 연결하면 고치기 쉬워요", "목록에 없는 값을 막으려면 「오류 메시지」 탭 › 「중지」", "목록이 길면 표(Ctrl+T)로 만들어 두면 늘어날 때 자동으로 따라와요"], sim: ["unique", "indirect"], key: "" },
+{ id: "condfmt", n: "중복 값에 색칠(조건부 서식)", one: "같은 값이 두 번 이상 나오는 칸에 색을 칠합니다. 조건에 맞는 칸(마감 지남 · 목표 미달)에도 색을 칠할 수 있습니다.",
+  task: ["중복 값에 색 칠하기", "조건부 서식으로 색깔", "중복 표시 색", "조건 맞으면 색칠", "마감일 지나면 빨간색", "셀 색 자동으로"],
+  x: ["색칠할 범위를 고르세요", "「홈」 탭 › 「스타일」 › 「조건부 서식」", "「셀 강조 규칙」 › 「중복 값」", "왼쪽에서 「중복」, 오른쪽에서 색 고르기 → 「확인」", "조건이 복잡하면 「새 규칙」 › 「수식을 사용하여 서식을 지정할 셀 결정」 → 예: =$D2<TODAY()"],
+  gs: ["범위를 고르세요", "「서식」 › 「조건부 서식」", "「형식 규칙」에서 「맞춤 수식」 → =COUNTIF($A:$A,A1)>1", "색을 고르고 「완료」"],
+  tips: ["규칙은 「조건부 서식 › 규칙 관리」에서 고치고 지워요", "수식 규칙은 첫 칸 기준으로 쓰고, 열만 $로 고정($D2)"], sim: ["dup", "countif"], key: "" },
+{ id: "dedupe", n: "중복 지우기(중복된 항목 제거)", one: "표에서 같은 줄을 지우고 하나만 남깁니다. 원본이 바뀌니 복사본에서 하세요.",
+  task: ["중복 제거", "중복 삭제", "중복된 행 지우기", "같은 값 하나만 남기기", "중복 항목 제거"],
+  x: ["표 안의 칸 하나를 누르세요(또는 범위를 고르세요)", "「데이터」 탭 › 「데이터 도구」 › 「중복된 항목 제거」", "중복을 판단할 열만 체크(예: 거래처 열만)", "「확인」 — 몇 개 지웠는지 알려 줘요"],
+  gs: ["범위를 고르세요", "「데이터」 › 「데이터 정리」 › 「중복 항목 삭제」", "판단할 열 체크 → 「중복 항목 삭제」"],
+  tips: ["지우기 전에 시트를 복사해 두세요(되돌리기 Ctrl+Z는 됨)", "원본은 두고 목록만 필요하면 UNIQUE 함수(365 · 2021)"], sim: ["unique", "dup"], key: "" },
+{ id: "textcol", n: "텍스트 나누기", one: "한 칸에 쉼표 · 빈칸 · 슬래시로 붙어 있는 글자를 여러 칸으로 나눕니다(모든 버전).",
+  task: ["한 셀을 여러 칸으로 나누기", "텍스트 나누기", "쉼표로 구분된 글자 나누기", "셀 분리", "이름 성 분리", "구분 기호로 나누기"],
+  x: ["나눌 칸들을 고르세요(오른쪽에 빈 칸이 있어야 해요)", "「데이터」 탭 › 「데이터 도구」 › 「텍스트 나누기」", "「구분 기호로 분리됨」 → 「다음」", "쉼표 · 공백 · 기타(/ 등) 중 구분 기호 체크 → 「다음」", "번호 · 코드처럼 앞 0을 지킬 열은 「텍스트」로 → 「마침」"],
+  gs: ["칸들을 고르세요", "「데이터」 › 「텍스트를 열로 분할」", "아래 뜨는 「구분자」에서 쉼표 등 고르기"],
+  tips: ["원본이 바뀌어도 따라가게 하려면 TEXTSPLIT(365) · 구글 시트 SPLIT 함수", "날짜가 엉뚱하게 바뀌면 3단계에서 그 열을 「텍스트」로"], sim: ["textsplit", "textbefore"], key: "" },
+{ id: "flashfill", n: "빠른 채우기(Ctrl+E)", one: "첫 칸에 원하는 모양을 한두 개 적으면, 나머지를 엑셀이 패턴을 보고 채웁니다(엑셀 2013부터).",
+  task: ["빠른 채우기", "패턴 자동 채우기", "이름만 뽑기 자동", "전화번호 형식 자동 맞추기", "ctrl e"],
+  x: ["원본 옆 칸 첫 줄에 원하는 결과를 직접 적으세요(예: 「김민준(영업)」 옆에 「김민준」)", "바로 아래 칸을 누르고 Ctrl + E", "또는 「데이터」 탭 › 「데이터 도구」 › 「빠른 채우기」", "결과를 훑어보고 틀린 줄이 있으면 그 줄을 고쳐 적고 다시 Ctrl + E"],
+  gs: ["옆 칸에 결과를 두세 개 적으세요", "회색 추천(자동 완성 제안)이 뜨면 Ctrl + Enter 또는 ✓", "안 뜨면 「도구」 › 「자동 완성 사용」 확인"],
+  tips: ["결과는 값이라 원본을 바꿔도 따라 바뀌지 않아요", "패턴이 섞여 있으면 틀리게 채울 수 있어요 — 꼭 훑어보기"], sim: ["left", "textbefore", "substitute"], key: "Ctrl+E" },
+{ id: "filtermenu", n: "필터(자동 필터)", one: "머리글에 ▼ 단추를 달아 원하는 값만 골라 보거나 숨깁니다.",
+  task: ["필터 거는 법", "자동 필터", "원하는 것만 보기", "필터 해제", "특정 값만 보기"],
+  x: ["표 안의 칸 하나를 누르세요", "「데이터」 탭 › 「정렬 및 필터」 › 「필터」(Ctrl + Shift + L)", "머리글 ▼ → 볼 값만 체크 · 「텍스트 필터」 · 「숫자 필터」", "끄려면 같은 단추를 다시 누르기"],
+  gs: ["범위를 고르세요", "「데이터」 › 「필터 만들기」", "머리글의 필터 아이콘으로 고르기", "나만 보는 필터는 「데이터」 › 「필터 보기」"],
+  tips: ["걸러진 것만 합계는 SUBTOTAL(9,…)", "수식으로 결과를 따로 뽑으려면 FILTER 함수(365 · 2021)"], sim: ["filter", "subtotal"], key: "Ctrl+Shift+L" },
+{ id: "sortmenu", n: "정렬(여러 기준)", one: "지점별로, 그 안에서 금액 큰 순으로처럼 기준을 여러 개 걸어 표를 정렬합니다.",
+  task: ["여러 기준으로 정렬", "정렬 기준 추가", "오름차순 내림차순 정렬", "사용자 지정 정렬", "표 정렬하기"],
+  x: ["표 안의 칸 하나를 누르세요", "「데이터」 탭 › 「정렬 및 필터」 › 「정렬」", "「정렬 기준」 첫 줄: 지점 · 오름차순", "「기준 추가」 → 둘째 줄: 금액 · 내림차순 → 「확인」"],
+  gs: ["범위를 고르세요", "「데이터」 › 「범위 정렬」 › 「고급 범위 정렬 옵션」", "「데이터에 헤더 행 있음」 체크 → 기준 · 「다른 정렬 기준 열 추가」"],
+  tips: ["표의 일부만 고르고 정렬하면 줄이 어긋나요 — 칸 하나만 누르고 정렬", "원본을 두고 정렬한 결과만 보려면 SORT · SORTBY(365 · 2021)"], sim: ["sortby", "sort"], key: "" },
+{ id: "pivot", n: "요약표(피벗 테이블)", one: "긴 거래 목록을 지점별 · 월별 합계 표로 몇 번의 끌어 놓기로 만듭니다. 수식 없이 집계할 때 가장 빠릅니다.",
+  task: ["피벗 테이블 만들기", "요약표 만들기", "지점별 월별 합계표", "집계표", "피벗"],
+  x: ["표 안의 칸 하나를 누르세요", "「삽입」 탭 › 「피벗 테이블」 → 「새 워크시트」 → 「확인」", "오른쪽 「필드 목록」에서 지점을 「행」으로, 날짜를 「열」로, 금액을 「값」으로 끌어 놓기", "날짜가 월로 묶이지 않으면 날짜 칸 오른쪽 클릭 › 「그룹」 › 「월」", "원본이 바뀌면 피벗 안에서 오른쪽 클릭 › 「새로 고침」"],
+  gs: ["범위를 고르세요", "「삽입」 › 「피벗 테이블」 → 「새 시트」", "오른쪽 편집기에서 「행」 · 「열」 · 「값」에 「추가」"],
+  tips: ["원본을 표(Ctrl+T)로 만들어 두면 늘어난 줄도 새로 고침 한 번에", "합계가 「개수」로 나오면 값 칸 › 「값 필드 설정」 › 「합계」(숫자가 글자로 들어간 것)"], sim: ["sumifs", "countifs"], key: "" },
+{ id: "freeze", n: "틀 고정(첫 줄 고정)", one: "아래로 내려도 머리글 줄(왼쪽 열)이 계속 보이게 고정합니다.",
+  task: ["첫 줄 고정", "틀 고정", "머리글 고정", "스크롤해도 제목 보이게", "첫 열 고정"],
+  x: ["「보기」 탭 › 「창」 › 「틀 고정」", "「첫 행 고정」 또는 「첫 열 고정」", "여러 줄 · 열을 고정하려면 고정할 곳 바로 아래 · 오른쪽 칸(예: B3)을 누르고 「틀 고정」", "풀려면 「틀 고정 취소」"],
+  gs: ["「보기」 › 「고정」", "「1행」 · 「2행」 또는 「현재 행까지」"],
+  tips: ["인쇄할 때 머리글 반복은 별도 설정(인쇄 제목)이에요"], sim: ["printtitle"], key: "" },
+{ id: "printtitle", n: "인쇄할 때 제목 줄 반복", one: "여러 장으로 인쇄될 때 장마다 머리글 줄이 다시 찍히게 합니다.",
+  task: ["인쇄할 때 제목 행 반복", "인쇄 머리글 반복", "페이지마다 제목", "인쇄 제목"],
+  x: ["「페이지 레이아웃」 탭 › 「페이지 설정」 › 「인쇄 제목」", "「시트」 탭 › 「반복할 행」 칸을 누르고 머리글 줄(1행)을 누르면 $1:$1", "「인쇄 미리 보기」로 둘째 장 확인 → 「확인」"],
+  gs: ["「보기」 › 「고정」으로 머리글 줄을 고정", "「파일」 › 「인쇄」 → 「머리글 및 바닥글」 › 「고정된 행 반복」 체크"],
+  tips: ["한 장에 맞추기: 「인쇄」 › 「현재 설정된 용지」 아래 「한 페이지에 모든 열 맞추기」"], sim: ["freeze"], key: "" },
+{ id: "table", n: "표로 만들기(Ctrl+T)", one: "범위를 「표」로 바꾸면 줄을 더할 때 서식 · 수식 · 범위가 자동으로 따라오고, 필터 · 요약 행이 붙습니다.",
+  task: ["표 서식 적용 ctrl t", "표로 만들기", "범위 자동 확장", "표 만들기", "엑셀 표 기능"],
+  x: ["범위 안의 칸 하나를 누르고 Ctrl + T(또는 「삽입」 탭 › 「표」)", "「머리글 포함」 체크 → 「확인」", "「테이블 디자인」 탭에서 이름(예: 매출표) · 「요약 행」 켜기", "표 아래에 바로 적으면 표가 자동으로 늘어나요"],
+  gs: ["범위를 고르세요", "「서식」 › 「표로 변환」(Ctrl + Alt + T)"],
+  tips: ["표 안에서는 FILTER · UNIQUE 결과를 펼칠 수 없어요(#SPILL!) — 표 밖 칸에", "다른 수식에서 매출표[금액]처럼 열 이름으로 부를 수 있어요"], sim: ["sumifs", "pivot"], key: "Ctrl+T" },
+{ id: "fillblank", n: "빈칸을 위 칸 값으로 한 번에 채우기", one: "병합을 푼 뒤 생긴 빈칸, 첫 줄에만 적힌 지점명 등을 위 칸 값으로 한 번에 채웁니다.",
+  task: ["빈 셀 위 값으로 채우기", "병합 해제 후 빈칸 채우기", "빈칸 한 번에 채우기", "이동 옵션 빈 셀"],
+  x: ["채울 범위를 고르세요", "F5(또는 Ctrl + G) › 「옵션」 › 「빈 셀」 → 「확인」 — 빈칸만 골라져요", "그대로 = 를 치고 ↑(바로 위 칸)를 누르세요", "Ctrl + Enter — 고른 빈칸 모두에 들어가요", "수식을 값으로 바꾸기: 범위 복사 → 「값 붙여넣기」"],
+  gs: ["빈칸만 고르는 기능이 없어요 — 옆 열에 =IF(A2=\"\",B1,A2) 처럼 위 값을 끌어오는 수식을 쓰고, 값으로 붙여넣기"],
+  tips: ["끝나면 꼭 값으로 바꿔 두세요(정렬하면 수식이 엉켜요)"], sim: ["pastevalue", "if"], key: "Ctrl+Enter" },
+{ id: "pastevalue", n: "값만 붙여넣기(수식을 값으로)", one: "수식 · 서식 없이 계산 결과(값)만 붙여넣습니다. 수식을 값으로 고정할 때도 씁니다.",
+  task: ["값만 붙여넣기", "수식을 값으로 바꾸기", "선택하여 붙여넣기", "수식 없애고 값만", "서식 없이 붙여넣기"],
+  x: ["범위를 복사(Ctrl + C)", "붙일 칸에서 Ctrl + Alt + V → 「값」 → 「확인」", "또는 오른쪽 클릭 › 「붙여넣기 옵션」의 123(값) 아이콘", "같은 자리에 붙이면 수식이 값으로 바뀌어요"],
+  gs: ["복사 후 Ctrl + Shift + V(값만 붙여넣기)", "또는 「편집」 › 「선택하여 붙여넣기」 › 「값만」"],
+  tips: ["최신 365는 Ctrl + Shift + V로도 값 붙여넣기가 돼요(버전에 따라 없음)", "행/열 바꿔 붙이기도 같은 창의 「행/열 바꿈」"], sim: ["transpose", "fillblank"], key: "Ctrl+Alt+V" },
+{ id: "replace", n: "찾기 및 바꾸기(Ctrl+H)", one: "시트 전체에서 글자를 한 번에 찾아 바꾸거나 지웁니다. 하이픈 · 빈칸 · 단위 글자 정리에 빠릅니다.",
+  task: ["찾아 바꾸기", "한번에 바꾸기", "특정 글자 일괄 삭제", "찾기 바꾸기", "ctrl h"],
+  x: ["바꿀 범위를 고르세요(안 고르면 시트 전체)", "Ctrl + H", "「찾을 내용」에 - , 「바꿀 내용」은 비우기", "「모두 바꾸기」", "* 는 「아무 글자」라는 뜻이라 글자 그대로 찾으려면 ~*"],
+  gs: ["Ctrl + H(또는 「수정」 › 「찾기 및 바꾸기」)", "「찾기」 · 「바꾸기」 입력 → 「모두 바꾸기」"],
+  tips: ["원본은 두고 바꾼 결과만 필요하면 SUBSTITUTE 함수", "숫자처럼 보이는 글자에서 「원」을 지우면 숫자로 바뀌어요"], sim: ["substitute", "trim"], key: "Ctrl+H" },
+{ id: "leadzero", n: "숫자 앞 0 지키기(표시 형식)", one: "우편번호 · 사번 · 거래처 코드의 앞 0이 사라지지 않게 합니다.",
+  task: ["숫자 앞에 0이 사라져요", "앞자리 0 표시", "0으로 시작하는 숫자", "우편번호 0 사라짐", "사번 앞 0"],
+  x: ["입력할 범위를 고르고 Ctrl + 1(셀 서식)", "「표시 형식」 › 「텍스트」 → 그 다음 입력하면 그대로 남아요", "이미 숫자로 들어갔으면 「사용자 지정」 › 형식에 00000(다섯 자리) — 보이는 모양만 바뀜", "한 칸만이면 앞에 ' (작은따옴표)를 붙여 입력: '01234"],
+  gs: ["범위를 고르고 「서식」 › 「숫자」 › 「일반 텍스트」", "또는 「맞춤 숫자 형식」에 00000"],
+  tips: ["코드를 찾을 땐 양쪽 모두 텍스트인지 확인(VLOOKUP #N/A 원인)", "TEXT(A2,\"00000\")으로 글자로 바꿀 수도"], sim: ["text", "xlookup"], key: "Ctrl+1" },
+{ id: "protect", n: "시트 보호(고칠 칸만 열기)", one: "수식 칸은 못 고치게 잠그고, 입력할 칸만 열어 둡니다.",
+  task: ["시트 보호 비밀번호", "수식 못 고치게", "특정 셀만 입력 가능", "셀 잠금", "시트 잠그기"],
+  x: ["입력을 허용할 칸을 고르고 Ctrl + 1 › 「보호」 탭 › 「잠금」 체크를 끄기", "「검토」 탭 › 「보호」 › 「시트 보호」", "필요하면 비밀번호 → 허용할 동작(셀 선택 등) 체크 → 「확인」", "풀려면 「시트 보호 해제」"],
+  gs: ["「데이터」 › 「시트 및 범위 보호」", "「시트」 고르기 → 「특정 셀 제외」에 입력 칸 → 「권한 설정」"],
+  tips: ["비밀번호를 잊으면 되찾기 어려워요 — 따로 적어 두기", "시트 보호는 실수 방지용이지 보안 장치는 아니에요"], sim: [], key: "" },
+{ id: "centeracross", n: "병합 대신 「선택 영역의 가운데로」", one: "셀 병합 없이 제목을 여러 칸 가운데에 보이게 합니다. 정렬 · 복사 · 필터가 깨지지 않습니다.",
+  task: ["셀 병합 안 하고 가운데 정렬", "병합 대신", "선택 영역의 가운데로", "병합하지 않고 가운데"],
+  x: ["가운데로 보일 칸들(예: A1:F1)을 고르세요 — 글자는 맨 왼쪽 칸에", "Ctrl + 1 › 「맞춤」 탭", "「텍스트 맞춤 › 가로」를 「선택 영역의 가운데로」 → 「확인」"],
+  gs: ["같은 기능이 없어요 — 「서식」 › 「셀 병합」을 쓰거나, 가운데 칸에 제목을 적으세요"],
+  tips: ["이미 병합한 칸은 「병합하고 가운데 맞춤」을 다시 눌러 풀고 위 방법으로"], sim: ["fillblank"], key: "Ctrl+1" },
+{ id: "numconv", n: "글자로 된 숫자를 숫자로(오류 표시)", one: "칸 왼쪽 위 초록 삼각형(텍스트 숫자)을 한 번에 숫자로 바꿉니다. 합계가 0으로 나올 때의 원인입니다.",
+  task: ["텍스트로 된 숫자를 숫자로", "숫자 변환", "합계가 0으로 나와요", "초록 삼각형 없애기", "숫자로 저장된 텍스트"],
+  x: ["초록 삼각형이 있는 칸들을 고르세요", "옆에 뜨는 ! 단추 › 「숫자로 변환」", "! 단추가 안 뜨면: 「데이터」 탭 › 「텍스트 나누기」 → 바로 「마침」", "그래도 안 되면 빈 칸에 1 → 복사 → 범위 고르고 Ctrl + Alt + V › 「곱하기」"],
+  gs: ["범위를 고르고 「서식」 › 「숫자」 › 「숫자」", "안 바뀌면 옆 열에 =VALUE(A2)"],
+  tips: ["「원」 · 쉼표 · 빈칸이 섞였으면 먼저 Ctrl + H로 지우기", "수식으로는 VALUE"], sim: ["value", "replace"], key: "" }
+];
+MENU.forEach(m => F.push(Object.assign({ cat: "menu", kind: "menu", min: "all", gs: 1, sim: [] }, m)));
+
 /* 오류 8가지 */
 const ERRS = [
   { id: "na", e: "#N/A", n: "못 찾음", one: "찾는 값이 목록에 없을 때 나옵니다(VLOOKUP · XLOOKUP · MATCH).", chk: ["찾을 값 앞뒤에 빈칸이 있나요? → LEN으로 글자 수 확인, TRIM으로 정리", "한쪽은 숫자, 한쪽은 「글자로 된 숫자」(칸 왼쪽 위 초록 삼각형)인가요? → VALUE 또는 TEXT로 맞추기", "VLOOKUP 마지막 칸이 FALSE(0)인가요?", "범위에 $가 없어 아래로 채우다 범위가 밀리지 않았나요?", "정말 없는 값이면 IFNA(…,\"\")로 빈칸 처리"], fn: ["xlookup", "vlookup", "trim", "ifna"] },
@@ -1445,7 +1692,28 @@ const SYN = [
   ["말일", "마지막날", "월말", "말일자"],
   ["다른표", "다른시트", "두표", "다른파일"],
   ["하이픈", "대시", "-", "빼기기호"],
-  ["한글", "한글로", "읽기"]
+  ["한글", "한글로", "읽기"],
+  ["최고", "최대", "가장큰", "제일큰", "최댓값", "최대값"],
+  ["최소", "최저", "가장작은", "제일작은", "최솟값", "최소값"],
+  ["포함", "들어가", "들어있", "들어간", "포함된"],
+  ["나누기", "분리", "쪼개기", "분할", "나눠"],
+  ["링크", "하이퍼링크", "바로가기"],
+  ["번호", "순번", "연번", "일련번호", "넘버링"],
+  ["고정", "틀고정", "안움직이게"],
+  ["색", "색깔", "색칠", "강조", "칠하기"],
+  ["드롭다운", "목록상자", "콤보", "선택목록", "콤보박스"],
+  ["대출", "상환", "할부", "원리금"],
+  ["중간값", "중앙값", "median"],
+  ["행열", "가로세로", "전환", "바꾸기행열"],
+  ["피벗", "요약표", "집계표", "pivot"],
+  ["보호", "잠금", "잠그기"],
+  ["단위", "배수"],
+  ["붙여넣기", "붙여넣", "붙이기값"],
+  ["인쇄", "프린트", "출력"],
+  ["연수", "년수", "햇수", "년차", "근속년수"],
+  ["선택지", "드롭다운", "고르기목록"],
+  ["빨간색", "빨강", "노란색", "초록색", "색상", "색"],
+  ["여러개", "두개", "여러", "두가지", "복수", "여러조건"]
 ];
 </script>
 <script>/* 엑셀 수식 노트 — 화면 */
@@ -1484,9 +1752,9 @@ const S = {
   xtab: "x", xsrc: LS.get("xsrc", '=IFERROR(VLOOKUP(TRIM(A2),거래처!$A:$D,4,FALSE),"미등록")'),
   sheet: null /* 지금 카드의 연습 표 */
 };
-const VERS = [["365", "Microsoft 365", "웹 엑셀 포함 · 늘 최신"], ["2021", "엑셀 2021", "2024도 여기"], ["2019", "엑셀 2019", ""], ["2016", "엑셀 2016 이하", "2013 · 2010"], ["gs", "구글 시트", ""]];
+const VERS = [["365", "Microsoft 365", "웹 엑셀 포함 · 늘 최신"], ["2024", "엑셀 2024", ""], ["2021", "엑셀 2021", ""], ["2019", "엑셀 2019", ""], ["2016", "엑셀 2016 이하", "2013 · 2010"], ["gs", "구글 시트", ""]];
 const VNAME = v => (VERS.find(x => x[0] === v) || [, "버전 고르기"])[1];
-const RANK = { all: 0, 2016: 0, 2019: 1, 2021: 2, 365: 3 };
+const RANK = { all: 0, 2016: 0, 2019: 1, 2021: 2, 2024: 3, 365: 3 };
 function supported(c, v = S.ver) {
   if (!v) return true;
   if (v === "gs") return !!c.gs;
@@ -1494,10 +1762,12 @@ function supported(c, v = S.ver) {
 }
 function verBadges(c) {
   const ok = [], no = [];
-  if (c.min === "all") ok.push("모든 버전"); else if (c.min === "2019") { ok.push("365 · 2021 · 2019"); no.push("2016 이하"); } else { ok.push("365 · 2021"); no.push("2019 · 2016 이하"); }
+  if (c.kind === "menu") return { ok: "엑셀 2016 ~ 365 · 구글 시트 ○", no: "" };
+  if (c.min === "all") ok.push("모든 버전"); else if (c.min === "2019") { ok.push("365 · 2024 · 2021 · 2019"); no.push("2016 이하"); } else if (c.min === "365") { ok.push("365 · 2024"); no.push("2021 이하"); } else { ok.push("365 · 2024 · 2021"); no.push("2019 · 2016 이하"); }
   if (c.gs) ok.push("구글 시트"); else no.push("구글 시트");
   return { ok: ok.join(" · ") + " ○", no: no.length ? no.join(" · ") + " ✕" : "" };
 }
+const vlab = c => c.kind === "menu" ? "메뉴 기능" : c.min === "all" ? "모든 버전" : c.min === "2019" ? "2019부터" : c.min === "365" ? "365 · 2024" : "2021부터";
 const isMobile = () => matchMedia("(max-width:760px)").matches;
 
 /* ── 스크롤 자리 지키기(지침 7번) ── */
@@ -1513,28 +1783,44 @@ async function copyText(t, msg) { try { await navigator.clipboard.writeText(t); 
 /* ── 찾기(띄어쓰기 무시 + 비슷한 말) ── */
 const norm = s => String(s).toLowerCase().replace(/[\s·・,./()「」'"]/g, "");
 const SYNMAP = new Map(); SYN.forEach(g => { const n = g.map(norm); n.forEach(w => SYNMAP.set(w, n)); });
-const HAY = F.map(c => ({ c, name: norm(c.n), all: norm([c.n, c.one, c.tag || "", c.task.join(" "), CATN[c.cat].n, CATN[c.cat].d].join(" ")), tasks: c.task.map(norm) }));
+const HAY = F.map(c => ({ c, name: norm(c.n), one: norm(c.one + " " + (c.tag || "")), all: norm([c.n, c.one, c.tag || "", c.task.join(" "), CATN[c.cat].n, CATN[c.cat].d, (c.x || []).join(" ")].join(" ")), tasks: c.task.map(norm) }));
 const EHAY = ERRS.map(e => ({ e, all: norm([e.e, e.n, e.one, e.chk.join(" ")].join(" ")) }));
-function expand(tok) { const out = new Set([tok]); for (const [w, g] of SYNMAP) { if (tok === w || (w.length >= 2 && tok.includes(w)) ) g.forEach(x => out.add(tok.replace(w, x))); } if (SYNMAP.has(tok)) SYNMAP.get(tok).forEach(x => out.add(x)); return [...out]; }
+const STOP = new Set(["엑셀", "excel", "수식", "함수", "하기", "하는", "하는법", "법", "방법", "사용법", "쓰는법", "어떻게", "좀", "알려줘", "알려주세요", "해요", "하나요", "있나요", "되나요", "기능"]);
+const JOSA = ["에서", "으로", "이면", "하면", "라도", "부터", "까지", "처럼", "을", "를", "이", "가", "은", "는", "에", "로", "의", "도", "만", "랑"];
+function variants(tok) {
+  const base = new Set([tok]);
+  for (const j of JOSA) if (tok.endsWith(j) && tok.length - j.length >= 2) base.add(tok.slice(0, -j.length));
+  const out = new Set(base);
+  for (const b of base) { if (SYNMAP.has(b)) SYNMAP.get(b).forEach(x => out.add(x)); for (const [w, g] of SYNMAP) if (w.length >= 2 && b.includes(w) && b !== w) g.forEach(x => out.add(b.replace(w, x))); }
+  return [...out].filter(v => v.length >= 1);
+}
+const LOW = new Set(["기준", "값", "셀", "칸", "데이터", "넣기", "만들기", "구하기", "찾기", "표시", "단축키", "자동", "계산", "목록", "엑셀에서", "시트"]);
+const DF = new Map(); function idf(v) { if (!DF.has(v)) { const df = HAY.filter(h => h.all.includes(v)).length; DF.set(v, 0.55 + Math.log((HAY.length + 1) / (df + 1)) / Math.log(HAY.length + 1)); } return DF.get(v); }
+const ERRPAT = [[/#?n\/?a(?![a-z])|엔에이/i, "na"], [/#?value|밸류/i, "value"], [/#?ref(?![a-z])|레퍼/i, "ref"], [/#?div|0으로나|영으로나/i, "div"], [/#?name\?|#name|네임/i, "name"], [/#?spill|스필|펼칠/i, "spill"], [/####|샵샵|샵이/i, "hash"], [/순환/, "circ"]];
 function search(q) {
-  const qn = norm(q); if (!qn) return { fns: [], errs: [] };
-  const toks = q.toLowerCase().split(/[\s,·]+/).map(norm).filter(Boolean);
+  const qn = norm(q); if (!qn) return { fns: [], errs: [], weak: false };
+  let toks = q.toLowerCase().split(/[\s,·]+/).map(norm).filter(t => t && !STOP.has(t));
+  if (!toks.length) toks = [qn];
+  const V = toks.map(variants);
   const res = HAY.map(h => {
     let s = 0;
-    if (h.name === qn || norm(h.c.id) === qn) s += 200;
-    else if (h.name.startsWith(qn)) s += 90;
-    else if (h.name.includes(qn)) s += 60;
-    if (h.tasks.some(t => t === qn)) s += 80; else if (h.tasks.some(t => t.includes(qn))) s += 50;
-    if (h.all.includes(qn)) s += 20;
-    let hit = 0; for (const t of toks) { const vs = expand(t); if (vs.some(v => h.all.includes(v))) hit++; }
-    if (toks.length && hit === toks.length) s += 30 + hit * 8; else if (hit && toks.length > 1) s += hit * 6;
-    return { c: h.c, s };
-  }).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
-  const errs = EHAY.filter(h => h.all.includes(qn) || norm(h.e.e).includes(qn) || norm(h.e.e.replace("#", "")).startsWith(qn.replace("#", "")) && qn.length >= 2).map(h => h.e);
-  return { fns: res.slice(0, 20).map(x => x.c), errs };
+    if (h.name === qn || norm(h.c.id) === qn) s += 300;
+    else if (h.name.includes(qn) && qn.length >= 3) s += 80;
+    if (h.tasks.some(t => t === qn)) s += 150; else if (h.tasks.some(t => t.includes(qn))) s += 90; else if (h.tasks.some(t => t.length >= 3 && qn.includes(t))) s += 70;
+    if (h.all.includes(qn)) s += 25;
+    let m = 0;
+    V.forEach((vs, ti) => { let b = 0; for (const v of vs) { if (v.length < 2 && !/[a-z#0-9]/.test(v)) continue; const w = idf(v) * (LOW.has(toks[ti]) ? 0.4 : 1); if (h.name.includes(v)) b = Math.max(b, 30 * w); else if (h.tasks.some(t => t.includes(v))) b = Math.max(b, 22 * w); else if (h.one.includes(v)) b = Math.max(b, 10 * w); else if (h.all.includes(v)) b = Math.max(b, 6 * w); } if (b) m++; s += b; });
+    if (toks.length > 1) s = s * (0.45 + 0.55 * m / toks.length) + (m === toks.length ? 25 : 0);
+    return { c: h.c, s, m };
+  }).filter(x => x.s >= 8).sort((a, b) => b.s - a.s);
+  const codes = ERRPAT.filter(([rx]) => rx.test(q.replace(/\s/g, ""))).map(x => ERRID[x[1]]);
+  const errs = codes.length ? codes : EHAY.filter(h => qn.length >= 2 && h.all.includes(qn)).map(h => h.e).slice(0, 2);
+  const top = res[0] ? res[0].s : 0;
+  return { fns: res.slice(0, 20).map(x => x.c), errs, weak: !codes.length && top < 26 };
 }
 const hl = (t, q) => { const s = esc(t); if (!q) return s; const k = esc(q.trim()); if (!k) return s; const i = s.toLowerCase().indexOf(k.toLowerCase()); return i < 0 ? s : s.slice(0, i) + "<mark>" + s.slice(i, i + k.length) + "</mark>" + s.slice(i + k.length); };
 
+function logMiss(q) { const t = q.trim(); if (t.length < 2) return; clearTimeout(logMiss.t); logMiss.t = setTimeout(() => { const L = LS.get("miss", []).filter(x => x.q !== t); L.unshift({ q: t, at: todayYmdw() }); LS.set("miss", L.slice(0, 50)); }, 1500); }
 /* ── 연습 표 ── */
 function mkCells(c) {
   const ex = c.ex, cells = {}, fmt = {};
@@ -1552,6 +1838,7 @@ function fmtVal(v, f) {
   if (typeof v === "boolean") return { t: v ? "TRUE" : "FALSE", cls: "b" };
   if (typeof v === "number") {
     if (f === "date" && v > 0 && v < 2958466) return { t: ymdw(v), cls: "n" };
+    if (f === "pct") return { t: XL.fmtGeneral(Math.round(v * 10000) / 100) + "%", cls: "n" };
     if (f === "n") return { t: (Math.round(v * 100) / 100).toLocaleString("ko-KR"), cls: "n" };
     return { t: XL.fmtGeneral(v), cls: "n" };
   }
@@ -1628,6 +1915,7 @@ function setCell(k, txt) {
   if (v.startsWith("=")) { T.cells[k] = v; return; }
   const d = /^(\d{4})-(\d{1,2})-(\d{1,2})(\(.\))?$/.exec(v.trim()); if (d) { T.cells[k] = XL.serial(+d[1], +d[2], +d[3]); T.fmt[k] = "date"; return; }
   if (/^-?\d+(\.\d+)?$/.test(v.trim())) { T.cells[k] = +v.trim(); return; }
+  if (/^-?\d+(\.\d+)?%$/.test(v.trim())) { T.cells[k] = parseFloat(v) / 100; T.fmt[k] = "pct"; return; }
   T.cells[k] = v;
 }
 function sheetTSV() {
@@ -1653,6 +1941,9 @@ const BFN = {
   age(v) { const c = v.c || "A2", e = v.e || "TODAY()"; return `=DATEDIF(DATE(IF(MID(${c},8,1)<"3",1900,2000)+LEFT(${c},2),MID(${c},3,2),MID(${c},5,2)),${e},"Y")`; },
   dup(v, ver, abs) { const L = abs ? absRef(v.L || "A2:A500") : v.L || "$A$2:$A$500", c = v.v || "A2"; if (v.m === "2nd") { const st = absRef((L.split(":")[0] || "A2")); return `=IF(COUNTIF(${st}:${c},${c})>1,"중복","")`; } return `=IF(COUNTIF(${absRef(L)},${c})>1,"중복","")`; },
   indirect(v) { const c = (v.c || "B3").replace(/"/g, ""); return v.s ? `=INDIRECT("'"&${v.s}&"'!${c}")` : `=INDIRECT("${c}")`; },
+  rownum(v) { const h = v.h || "1"; return v.c ? `=IF(${v.c}="","",ROW()-${h})` : `=ROW()-${h}`; },
+  offset(v, ver, abs) { const R = v.R || "B2:B500", c = v.c || "B1", n = v.n || "3"; const RR = abs ? absRef(R) : R; const k = /^\d+$/.test(n) ? (+n - 1 ? `-${+n - 1}` : "") : `-${n}+1`; return `=SUM(OFFSET(${c},COUNT(${RR})${k},0,${n},1))`; },
+  hyperlink(v) { const s = v.s || "A2"; if (v.m === "web") return `=HYPERLINK(${/^"/.test(s) ? s : '"' + s + '"'},"열기")`; return `=HYPERLINK("#'"&${s}&"'!A1",${s}&" 열기")`; },
   sortby(v, ver, abs) { const A = x => abs ? absRef(x) : x; return `=SORTBY(${A(v.R || "A2:F500")},${A(v.K1 || "B2:B500")},1${v.K2 ? "," + A(v.K2) + ",-1" : ""})`; }
 };
 function fill(t, vals, b, abs, raw) {
@@ -1745,10 +2036,21 @@ const SAY = {
   CHOOSE: (a, A) => `${A(0)}번째 후보를 고릅니다: ${a.slice(1).map((_, i) => A(i + 1)).join(", ")}.`,
   INDIRECT: (a, A) => `글자 ${A(0)}를 칸 주소로 바꿔 그 칸 값을 가져옵니다.`,
   ISNUMBER: (a, A) => `${A(0)}이 숫자면 TRUE.`, ISBLANK: (a, A) => `${A(0)}이 비어 있으면 TRUE.`, ISERROR: (a, A) => `${A(0)}이 오류면 TRUE.`, ISTEXT: (a, A) => `${A(0)}이 글자면 TRUE.`,
+  MAXIFS: (a, A) => `${a.slice(1).reduce((o, _, i) => i % 2 ? o : o.concat(`${A(i + 1)}이 ${A(i + 2)}`), []).join(", ")}인 줄의 ${A(0)} 중 가장 큰 값.`,
+  MINIFS: (a, A) => `${a.slice(1).reduce((o, _, i) => i % 2 ? o : o.concat(`${A(i + 1)}이 ${A(i + 2)}`), []).join(", ")}인 줄의 ${A(0)} 중 가장 작은 값.`,
+  MEDIAN: (a, A) => `${A(0)}을 크기순으로 놓았을 때 가운데 값.`,
+  TEXTSPLIT: (a, A) => `${A(0)}을 ${a[1] && a[1].k !== "miss" ? A(1) + " 기준으로 옆 칸에" : ""}${a[2] && a[2].k !== "miss" ? " " + A(2) + " 기준으로 아래 줄에" : ""} 나눠 펼칩니다.`,
+  TEXTBEFORE: (a, A) => `${A(0)}에서 ${A(1)} 앞의 글자.`, TEXTAFTER: (a, A) => `${A(0)}에서 ${A(1)} 뒤의 글자.`,
+  SEQUENCE: (a, A) => `1부터 ${A(0)}까지 번호를 아래로 펼칩니다${a[2] ? `(시작 ${A(2)}, ${a[3] ? A(3) + "씩" : "1씩"})` : ""}.`,
+  MROUND: (a, A) => `${A(0)}을 ${A(1)} 단위에서 가장 가까운 값으로.`, CEILING: (a, A) => `${A(0)}을 ${A(1)} 단위로 올림.`, FLOOR: (a, A) => `${A(0)}을 ${A(1)} 단위로 내림.`,
+  OFFSET: (a, A) => `${A(0)}에서 ${A(1)}줄 아래 · ${A(2)}칸 옆으로 간 곳${a[3] ? `부터 ${A(3)}줄${a[4] ? " × " + A(4) + "칸" : ""} 범위` : " 칸"}.`,
+  HYPERLINK: (a, A) => `누르면 ${A(0)}(으)로 가는 링크${a[1] ? " — 칸에는 " + A(1) : ""}.`,
+  TRANSPOSE: (a, A) => `${A(0)}의 가로 · 세로를 바꿔 펼칩니다.`,
+  PMT: (a, A) => `이자율 ${A(0)}, ${A(1)}번에 나눠 ${A(2)}을 갚을 때 한 번 낼 금액(원리금 균등, 결과는 -로 나옴).`,
   ROW: (a, A) => `${a[0] ? A(0) + "의 " : "이 칸의 "}줄 번호.`, COLUMN: (a, A) => `${a[0] ? A(0) + "의 " : "이 칸의 "}칸 번호.`
 };
 const digKo = d => ({ "0": "정수 자리", "1": "소수 첫째 자리", "2": "소수 둘째 자리", "-1": "일의 자리(십 원 단위로)", "-2": "십의 자리(백 원 단위로)", "-3": "백의 자리(천 원 단위로)" })[d] || `${d} 자리`;
-function cardFor(name) { const m = { "RANK.EQ": "rank", MATCH: "indexmatch", INDEX: "indexmatch", COUNTA: "count", COUNTBLANK: "count", AVERAGEIF: "averageifs", MAX: "maxmin", MIN: "maxmin", SMALL: "large", YEAR: "ymd", MONTH: "ymd", DAY: "ymd", CONCAT: "amp", CONCATENATE: "amp" }; const id = m[name] || name.toLowerCase(); return BYID[id] ? id : null; }
+function cardFor(name) { const m = { MAXIFS: "maxifs", MINIFS: "maxifs", SEARCH: "contains", ISNUMBER: "contains", TEXTAFTER: "textbefore", ROW: "rownum", SEQUENCE: "rownum", CEILING: "mround", "CEILING.MATH": "mround", FLOOR: "mround", "RANK.EQ": "rank", MATCH: "indexmatch", INDEX: "indexmatch", COUNTA: "count", COUNTBLANK: "count", AVERAGEIF: "averageifs", MAX: "maxmin", MIN: "maxmin", SMALL: "large", YEAR: "ymd", MONTH: "ymd", DAY: "ymd", CONCAT: "amp", CONCATENATE: "amp" }; const id = m[name] || name.toLowerCase(); return BYID[id] ? id : null; }
 function explain(src) {
   let tree; try { tree = XL.parse(src); } catch (e) { return { err: e.message }; }
   const steps = [], lab = new Map(); let depthIf = 0, maxIf = 0; const names = new Set(); const warns = [];
@@ -1817,9 +2119,30 @@ function cardHTML(c) {
    <div class="gridw" id="gridw" data-ks="grid"></div><div id="whyb"></div></div>
    <div class="trys"><span>바꿔 보세요</span>${(c.tries || []).map((t, i) => `<button type="button" data-tryi="${i}"><b>${esc(t[0])}</b> ${esc(t[1].length > 34 ? t[1].slice(0, 32) + "…" : t[1])} → ${esc(t[2])}</button>`).join("")}<button type="button" data-tsv="1">${IC.copy.replace("<svg", '<svg width="14" height="14" style="display:inline;vertical-align:-2px"')} 예시 표 엑셀로 복사</button></div></div>
   <div class="two"><div class="sec"><h3>주의할 점</h3><ol class="pit">${(c.pit || []).map(p => `<li>${esc(p)}</li>`).join("")}</ol></div>
-   <div class="sec"><h3>비슷한 함수</h3><div class="simc">${(c.sim || []).filter(id => BYID[id]).map(id => `<button type="button" data-go="${id}">${esc(BYID[id].n)}<span>${esc(BYID[id].tag || (BYID[id].min === "all" ? "모든 버전" : BYID[id].min === "2019" ? "2019부터" : "2021 · 365"))}</span></button>`).join("")}</div>
+   <div class="sec"><h3>비슷한 함수</h3><div class="simc">${(c.sim || []).filter(id => BYID[id]).map(id => `<button type="button" data-go="${id}">${esc(BYID[id].n)}<span>${esc(BYID[id].tag || vlab(BYID[id]))}</span></button>`).join("")}</div>
    <div class="src">확인: Microsoft 지원 「${esc(c.n.split(" ")[0])} 함수」 · ${esc(ymdw(XL.serial(...CHECKED.split("-").map(Number))))} — 설명은 Blog J가 우리 말로 새로 썼어요.</div></div></div>
   </div>`;
+}
+function menuHTML(c) {
+  const st = S.notes[c.id] || {}; const tab = S.mtab || (S.ver === "gs" ? "gs" : "x");
+  const steps = tab === "gs" ? c.gs : c.x;
+  const md = s => esc(s).replace(/「([^」]+)」/g, '<b class="mi">$1</b>').replace(/(Ctrl|Alt|Shift|F4|F5|Enter) ?\+ ?/g, "$1 + ");
+  return `<div class="card">
+  <div class="ch"><div class="crumb"><span>함수 없이 하는 법 › ${esc(c.task[0])}</span><span class="tools"><button class="tb ${st.star ? "on" : ""}" type="button" data-star="${c.id}">${st.star ? IC.starf : IC.star}${st.star ? "노트에 있음" : "노트에 담기"}</button><button class="tb" type="button" data-print="menu">${IC.print}인쇄</button></span></div>
+   <div class="fn"><h1>${esc(c.n)}</h1></div><p class="one" style="margin:8px 0 0;font-size:15.5px;font-weight:600;line-height:1.6">${esc(c.one)}</p>
+   <div class="badges"><span class="bd ok">엑셀 2016 ~ 365 ○</span><span class="bd ${c.gs.length && !/없어요/.test(c.gs[0]) ? "ok" : "no"}">구글 시트 ${c.gs.length && !/없어요/.test(c.gs[0]) ? "○" : "— 대신 쓰는 법"}</span>${c.key ? `<span class="bd">단축키 ${esc(c.key)}</span>` : ""}</div></div>
+  <div class="sec"><div class="xtabs" style="max-width:420px"><button type="button" class="${tab === "x" ? "on" : ""}" data-mtab="x">엑셀(2016 ~ 365)</button><button type="button" class="${tab === "gs" ? "on" : ""}" data-mtab="gs">구글 시트</button></div>
+   <ol class="msteps">${steps.map(s => `<li><span>${md(s)}</span></li>`).join("")}</ol>
+   <p class="src">메뉴 이름은 Microsoft · Google 도움말로 확인했어요(${esc(ymdw(XL.serial(...CHECKED.split("-").map(Number))))}). 버전 · 화면 크기에 따라 리본 묶음이 접혀 보일 수 있어요.</p></div>
+  <div class="two"><div class="sec"><h3>알아 두세요</h3><ol class="pit">${(c.tips || []).map(p => `<li>${esc(p)}</li>`).join("")}</ol></div>
+   <div class="sec"><h3>수식으로 하려면</h3><div class="simc">${(c.sim || []).filter(id => BYID[id]).map(id => `<button type="button" data-go="${id}">${esc(BYID[id].n)}<span>${esc(vlab(BYID[id]))}</span></button>`).join("") || '<p class="small" style="margin:0">이 기능은 메뉴로 하는 게 가장 쉬워요.</p>'}</div></div></div></div>`;
+}
+function menuRight(c) {
+  if (isMobile()) return "";
+  const memo = (S.notes[c.id] || {}).memo || "";
+  return `<div class="pan memo"><div class="h">내 메모<span id="msaved"></span></div><textarea data-memo="${c.id}" placeholder="예: 월말 보고서 시트 — 담당자 열에 씀">${esc(memo)}</textarea></div>
+  ${c.key ? `<div class="kbd">단축키 <kbd>${esc(c.key)}</kbd> · <a href="https://pegasus0710-arch.github.io/jesa_tools/shortcut/?q=${encodeURIComponent(c.key)}" target="_blank" rel="noopener">단축키 사전에서 보기</a></div>` : ""}
+  <div class="pan" style="padding:14px"><h2 style="margin:0 0 8px;font-size:15px">같은 묶음</h2><div class="simc">${F.filter(f => f.cat === "menu" && f.id !== c.id).slice(0, 8).map(f => `<button type="button" data-go="${f.id}">${esc(f.n.replace(/\(.*\)/, ""))}</button>`).join("")}</div></div>`;
 }
 function bldHTML(c) {
   const b = c.b; if (!b) return "";
@@ -1844,7 +2167,7 @@ function bldUpdate(c) {
   $("#bout").dataset.f = plainF(f);
   let alt = "";
   if ((!supported(c) || (S.ver === null && c.min !== "all")) && !(b.fn === "ifs" && S.ver === "2016")) {
-    if (b.alt || b.fn === "ifs") { const a = plainF(buildFormula(c, vals, abs, "alt")); alt = `<div class="alt"><b>엑셀 ${c.min === "2021" ? "2019 · 2016" : "2016"}이면</b><div class="f">${esc(a)}</div><button class="lnk" type="button" data-acopy="${esc(a)}">이 수식 복사</button></div>`; }
+    if (b.alt || b.fn === "ifs") { const a = plainF(buildFormula(c, vals, abs, "alt")); alt = `<div class="alt"><b>엑셀 ${c.min === "365" ? "2021 이하" : c.min === "2021" ? "2019 · 2016" : "2016"}이면</b><div class="f">${esc(a)}</div><button class="lnk" type="button" data-acopy="${esc(a)}">이 수식 복사</button></div>`; }
     else if (b.altText) alt = `<div class="alt">${esc(b.altText)}</div>`;
   }
   $("#balt").innerHTML = alt;
@@ -1862,8 +2185,9 @@ function listHTML(cat) {
 }
 function searchHTML() {
   const r = search(S.q);
-  if (!r.fns.length && !r.errs.length) return `<div class="hsec"><div class="empty">「${esc(S.q)}」로 찾은 함수가 없어요.<br>다른 말로 찾아보세요 — 예: 가져오기 · 더하기 · 중복 · 나이 · 버림</div></div>`;
-  return `<div class="hsec lst"><h2>「${esc(S.q)}」 찾은 결과</h2><div class="res">${r.errs.map(e => `<button class="ri" type="button" data-err="${e.id}"><span class="ico err">#</span><span class="t"><b>${esc(e.e)} — ${esc(e.n)}</b><small>${esc(e.one)}</small></span></button>`).join("")}${r.fns.map(c => { const t = c.task.find(x => norm(x).includes(norm(S.q))) || c.task[0]; return `<button class="ri" type="button" data-go="${c.id}"><span class="ico">${esc(CATN[c.cat].ic)}</span><span class="t"><b>${hl(c.n, S.q)}</b><small>${hl(t, S.q)} — ${esc(c.one)}</small></span><span class="v ${supported(c) ? "" : "no"}">${supported(c) ? "" : "내 버전 ✕"}</span></button>`; }).join("")}</div></div>`;
+  if ((!r.fns.length && !r.errs.length) || r.weak) logMiss(S.q);
+  if (!r.fns.length && !r.errs.length) return `<div class="hsec"><div class="empty"><b>「${esc(S.q)}」은 아직 없어요.</b><br>다른 말로 찾아보세요 — 예: 가져오기 · 더하기 · 중복 · 나이 · 버림 · 드롭다운<br><span style="font-size:13px">못 찾은 말은 이 기기의 「내 수식 노트」에 남겨 두었어요.</span></div><div class="tasks" style="justify-content:center">${CATS.map(c => `<button type="button" data-cat="${c.id}">${esc(c.n)}</button>`).join("")}</div></div>`;
+  return `<div class="hsec lst"><h2>「${esc(S.q)}」 찾은 결과</h2>${r.weak ? `<p class="small" style="margin:-6px 0 10px">딱 맞는 카드가 없을 수 있어요 — 가까운 것부터 보여 드려요.</p>` : ""}<div class="res">${r.errs.map(e => `<button class="ri" type="button" data-err="${e.id}"><span class="ico err">#</span><span class="t"><b>${esc(e.e)} — ${esc(e.n)}</b><small>${esc(e.one)}</small></span></button>`).join("")}${r.fns.map(c => { const t = c.task.find(x => norm(x).includes(norm(S.q))) || c.task[0]; return `<button class="ri" type="button" data-go="${c.id}"><span class="ico">${esc(CATN[c.cat].ic)}</span><span class="t"><b>${hl(c.n, S.q)}</b><small>${hl(t, S.q)} — ${esc(c.one)}</small></span><span class="v ${supported(c) ? "" : "no"}">${supported(c) ? "" : "내 버전 ✕"}</span></button>`; }).join("")}</div></div>`;
 }
 function errHTML(e) {
   return `<div class="card"><div class="ch"><div class="crumb">오류 해결</div><div class="fn"><h1 style="color:var(--red)">${esc(e.e)}</h1><span class="one">${esc(e.n)}</span></div><p style="margin:8px 0 0;line-height:1.6">${esc(e.one)}</p></div>
@@ -1889,6 +2213,7 @@ function notesHTML() {
   const notes = Object.entries(S.notes).filter(([id, n]) => (n.star || n.memo) && BYID[id]);
   return `<div class="hsec"><h2 style="margin-top:2px">내 수식 노트 ★</h2><p class="small" style="margin-top:-6px">이 기기에만 저장돼요(어디에도 보내지 않음). 사이트 데이터를 지우면 함께 지워져요.</p>
   <div class="nt">${notes.length ? notes.map(([id, n]) => `<div class="ni"><div class="h"><b>${n.star ? "★ " : ""}${esc(BYID[id].n)}</b><button class="tb" type="button" data-go="${id}">카드 열기</button></div>${n.memo ? `<p>${esc(n.memo)}</p>` : `<p>${esc(BYID[id].one)}</p>`}</div>`).join("") : `<p class="small">아직 담은 함수가 없어요.</p>`}</div>
+  ${(m => m.length ? `<h2 style="margin-top:20px">못 찾은 말 <small style="font-size:12.5px;color:var(--sub);font-weight:600">이 기기에만 · 다음 카드 만들 때 참고</small></h2><div class="tasks">${m.map(x => `<button type="button" data-q="${esc(x.q)}">${esc(x.q)}</button>`).join("")}</div><button class="tb" type="button" data-missclr="1" style="margin-top:8px">목록 지우기</button>` : "")(LS.get("miss", []))}
   <h2 style="margin-top:20px">저장한 수식</h2><div class="nt">${S.saved.length ? S.saved.map((s, i) => `<div class="ni"><div class="h"><b>${esc(BYID[s.id] ? BYID[s.id].n : "수식")}</b><small style="color:var(--sub);margin-left:6px">${esc(s.at)}</small></div><code>${esc(s.f)}</code><div class="acts"><button class="tb" type="button" data-scopy="${i}">${IC.copy}복사</button><button class="tb" type="button" data-sexp="${i}">${IC.fx}풀이</button><button class="tb" type="button" data-sdel="${i}">지우기</button></div></div>`).join("") : `<p class="small">「내 표에 맞춰 만들기」에서 「노트에 저장」을 누르면 여기에 모여요.</p>`}</div></div>`;
 }
 function navHTML() {
@@ -1896,7 +2221,7 @@ function navHTML() {
   const catList = cur && cur !== "err" ? cur : S.cat;
   const notesN = Object.values(S.notes).filter(n => n.star).length + S.saved.length;
   return `<div class="pan nav" data-ks="nav"><button type="button" data-view="home" class="${S.view === "home" ? "on" : ""}"><span class="ico">${IC.home.replace("<svg", '<svg width="16" height="16"')}</span>처음</button>${CATS.map(c => `<button type="button" data-cat="${c.id}" class="${cur === c.id ? "on" : ""}"><span class="ico ${c.id === "err" ? "err" : ""}">${esc(c.ic)}</span>${esc(c.n)}<b>${c.id === "err" ? ERRS.length : F.filter(f => f.cat === c.id).length}</b></button>`).join("")}<div class="hr"></div><button type="button" data-view="explain" class="${S.view === "explain" ? "on" : ""}"><span class="ico">fx</span>수식 풀이</button><button type="button" data-view="notes" class="${S.view === "notes" ? "on" : ""}"><span class="ico star">★</span>내 수식 노트<b>${notesN}</b></button></div>
-  <div class="pan fl" data-ks="fl"><div class="subh">${esc(cur === "err" ? "오류 해결" : CATN[catList].n)}</div>${cur === "err" ? ERRS.map(e => `<button type="button" data-err="${e.id}" class="${S.err === e.id && S.view === "err" ? "on" : ""}">${esc(e.e)}<i>${esc(e.n)}</i></button>`).join("") : F.filter(f => f.cat === catList).map(c => `<button type="button" data-go="${c.id}" class="${S.view === "fn" && S.id === c.id ? "on" : ""}">${esc(c.n)}<i class="${supported(c) ? "" : "no"}">${supported(c) ? (c.min === "all" ? "모든 버전" : c.min === "2019" ? "2019 ~" : "2021 · 365") : "내 버전 ✕"}</i></button>`).join("")}</div>`;
+  <div class="pan fl" data-ks="fl"><div class="subh">${esc(cur === "err" ? "오류 해결" : CATN[catList].n)}</div>${cur === "err" ? ERRS.map(e => `<button type="button" data-err="${e.id}" class="${S.err === e.id && S.view === "err" ? "on" : ""}">${esc(e.e)}<i>${esc(e.n)}</i></button>`).join("") : F.filter(f => f.cat === catList).map(c => `<button type="button" data-go="${c.id}" class="${S.view === "fn" && S.id === c.id ? "on" : ""}">${esc(c.n)}<i class="${supported(c) ? "" : "no"}">${supported(c) ? vlab(c) : "내 버전 ✕"}</i></button>`).join("")}</div>`;
 }
 function mtopHTML() {
   const t = S.view === "fn" ? BYID[S.id].n : S.view === "err" ? ERRID[S.err].e : S.view === "cat" ? CATN[S.cat].n : S.view === "explain" ? "수식 풀이" : S.view === "notes" ? "내 수식 노트" : S.view === "search" ? "찾기" : "";
@@ -1905,7 +2230,7 @@ function mtopHTML() {
 function render(scrollTop) {
   const main = $("#main"), right = $("#right"), left = $("#left");
   let h = mtopHTML();
-  if (S.view === "fn") h += cardHTML(BYID[S.id]);
+  if (S.view === "fn") h += BYID[S.id].kind === "menu" ? menuHTML(BYID[S.id]) : cardHTML(BYID[S.id]);
   else if (S.view === "cat") h += listHTML(S.cat);
   else if (S.view === "search") h += searchHTML();
   else if (S.view === "err") h += errHTML(ERRID[S.err]);
@@ -1915,11 +2240,11 @@ function render(scrollTop) {
   const doIt = () => {
     main.innerHTML = h;
     left.innerHTML = navHTML();
-    right.innerHTML = S.view === "fn" ? bldHTML(BYID[S.id]) : rightIdle();
+    right.innerHTML = S.view === "fn" ? (BYID[S.id].kind === "menu" ? menuRight(BYID[S.id]) : bldHTML(BYID[S.id])) : rightIdle();
     right.hidden = !right.innerHTML;
     $("#verb").innerHTML = `<span class="vl">내 엑셀 · </span><b class="vf">${esc(S.ver ? VNAME(S.ver) : "버전 고르기")}</b><b class="vs">${esc(S.ver ? ({ "365": "365", "2021": "2021", "2019": "2019", "2016": "2016", gs: "시트" })[S.ver] : "버전")}</b> ▾`;
     $$(".bbar button").forEach(b => b.classList.toggle("on", b.dataset.view === (S.view === "fn" || S.view === "cat" || S.view === "err" ? "home" : S.view === "search" ? "search" : S.view)));
-    if (S.view === "fn") { renderTry(); bldUpdate(BYID[S.id]); }
+    if (S.view === "fn" && BYID[S.id].ex) { renderTry(); bldUpdate(BYID[S.id]); }
     if (S.view === "explain") explainOut();
   };
   if (scrollTop) { doIt(); scrollTo(0, 0); } else keep(doIt);
@@ -1937,10 +2262,10 @@ function snap() { return { view: S.view, id: S.id, cat: S.cat, err: S.err, q: S.
 function go(o, push = true) {
   if (push) STK.push(snap());
   Object.assign(S, o);
-  if (S.view === "fn") { newSheet(BYID[S.id]); S.cat = BYID[S.id].cat; LS.set("last", S.id); }
+  if (S.view === "fn") { if (BYID[S.id].ex) newSheet(BYID[S.id]); S.cat = BYID[S.id].cat; LS.set("last", S.id); }
   render(true);
 }
-function backStep() { const p = STK.pop(); if (!p) return false; Object.assign(S, p); if (S.view === "fn") newSheet(BYID[S.id]); render(true); scrollTo(0, p.y || 0); return true; }
+function backStep() { const p = STK.pop(); if (!p) return false; Object.assign(S, p); if (S.view === "fn" && BYID[S.id].ex) newSheet(BYID[S.id]); render(true); scrollTo(0, p.y || 0); return true; }
 
 /* ── 창 ── */
 function openSheet(html, label) { const sh = $("#sheet"); sh.hidden = false; sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true" aria-label="${esc(label)}">${html}</div>`; }
@@ -1973,7 +2298,7 @@ function openInstall() {
 function printCat(cat) {
   const L = cat === "err" ? null : F.filter(f => f.cat === cat);
   const p = $("#print");
-  p.innerHTML = L ? `<h1>엑셀 수식 노트 — ${esc(CATN[cat].n)}</h1><div class="pm">Blog J · ${esc(todayYmdw())} 인쇄 · 내 엑셀: ${esc(S.ver ? VNAME(S.ver) : "고르지 않음")}</div><table><thead><tr><th style="width:24%">함수</th><th style="width:38%">쓰는 모양</th><th>하는 일 · 주의</th></tr></thead><tbody>${L.map(c => `<tr><td><b>${esc(c.n)}</b><br><small>${esc(c.min === "all" ? "모든 버전" : c.min === "2019" ? "2019부터" : "2021 · 365")}${c.gs ? " · 구글 시트" : ""}</small></td><td class="f">${esc(c.ex.cells[c.ex.f] || "")}</td><td>${esc(c.one)}<br><small>${esc((c.pit || [])[0] || "")}</small></td></tr>`).join("")}</tbody></table>`
+  p.innerHTML = L ? `<h1>엑셀 수식 노트 — ${esc(CATN[cat].n)}</h1><div class="pm">Blog J · ${esc(todayYmdw())} 인쇄 · 내 엑셀: ${esc(S.ver ? VNAME(S.ver) : "고르지 않음")}</div><table><thead><tr><th style="width:24%">함수</th><th style="width:38%">쓰는 모양</th><th>하는 일 · 주의</th></tr></thead><tbody>${L.map(c => `<tr><td><b>${esc(c.n)}</b><br><small>${esc(vlab(c))}${c.gs ? " · 구글 시트" : ""}</small></td><td class="f">${esc(c.kind === "menu" ? c.x.slice(0, 2).join(" → ") : c.ex.cells[c.ex.f] || "")}</td><td>${esc(c.one)}<br><small>${esc((c.pit || c.tips || [])[0] || "")}</small></td></tr>`).join("")}</tbody></table>`
     : `<h1>엑셀 오류 해결 — 8가지</h1><div class="pm">Blog J · ${esc(todayYmdw())}</div><table><tbody>${ERRS.map(e => `<tr><td style="width:18%"><b>${esc(e.e)}</b><br>${esc(e.n)}</td><td>${esc(e.one)}<br><small>${esc(e.chk.slice(0, 3).join(" / "))}</small></td></tr>`).join("")}</tbody></table>`;
   setTimeout(() => print(), 50);
 }
@@ -2002,7 +2327,9 @@ document.addEventListener("click", e => {
   if (d.scopy) return copyText(S.saved[+d.scopy].f);
   if (d.sexp) { S.xsrc = S.saved[+d.sexp].f; S.xtab = "x"; return go({ view: "explain" }); }
   if (d.sdel) { S.saved.splice(+d.sdel, 1); LS.set("saved", S.saved); return render(); }
+  if (d.missclr) { LS.set("miss", []); return render(); }
   if (d.xtab) { S.xtab = d.xtab; return render(); }
+  if (d.mtab) { S.mtab = d.mtab; return render(); }
   if (d.ver !== undefined) { S.ver = d.ver || null; LS.set("ver", S.ver); LS.set("verAsked", 1); closeSheet(); toast(S.ver ? `내 엑셀: ${VNAME(S.ver)}` : "버전은 나중에 위 단추에서 고를 수 있어요"); return render(); }
   if (d.vpick || t.id === "verb") return pickVer(false);
   if (t.id === "bhelp") return openHelp();
@@ -2033,7 +2360,7 @@ addEventListener("resize", () => { setToph(); });
   setToph();
   const P = new URLSearchParams(location.search);
   const f = P.get("f"), q = P.get("q"), er = P.get("err");
-  if (f && BYID[f.toLowerCase()]) { S.view = "fn"; S.id = f.toLowerCase(); newSheet(BYID[S.id]); S.cat = BYID[S.id].cat; }
+  if (f && BYID[f.toLowerCase()]) { S.view = "fn"; S.id = f.toLowerCase(); if (BYID[S.id].ex) newSheet(BYID[S.id]); S.cat = BYID[S.id].cat; }
   else if (er && ERRID[er]) { S.view = "err"; S.err = er; }
   else if (q) { S.q = q; $("#q").value = q; $("#qclr").hidden = false; S.view = "search"; }
   else if (P.get("x")) { S.view = "explain"; }

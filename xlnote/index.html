@@ -212,7 +212,10 @@ kbd{font:800 12.5px/1 inherit;border:1px solid var(--line);border-bottom-width:2
 .xerr{margin-top:12px;background:var(--redlt);color:var(--red);font-weight:700;border-radius:10px;padding:10px 12px;font-size:14px}
 .chk{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
 .chk li{display:flex;gap:9px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.55}
-.chk li input{width:18px;height:18px;margin-top:2px;accent-color:var(--sea);flex-shrink:0}
+.chk li .n{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--sea);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center;margin-top:1px}
+.chk li .t{min-width:0;display:flex;flex-direction:column;gap:3px}
+.chk li .t b{font-weight:600}
+.chk li .ckfx{color:var(--sea);font-size:13.5px}
 /* 노트 */
 .nt{display:flex;flex-direction:column;gap:8px}
 .ni{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px}
@@ -2547,7 +2550,7 @@ function searchHTML() {
 }
 function errHTML(e) {
   return `<div class="card"><div class="ch"><div class="crumb">오류 해결</div><div class="fn"><h1 style="color:var(--red)">${esc(e.e)}</h1><span class="one">${esc(e.n)}</span></div><p style="margin:8px 0 0;line-height:1.6">${esc(e.one)}</p></div>
-  <div class="sec"><h3>하나씩 확인해 보세요</h3><ul class="chk">${e.chk.map((c, i) => `<li><input type="checkbox" id="ck${i}"><label for="ck${i}">${esc(c)}</label></li>`).join("")}</ul></div>
+  <div class="sec"><h3>하나씩 확인해 보세요</h3><ol class="chk">${e.chk.map((c, i) => { const [q, f] = c.split(" → "); return `<li><span class="n">${i + 1}</span><span class="t"><b>${esc(q)}</b>${f ? `<span class="ckfx">→ ${esc(f)}</span>` : ""}</span></li>`; }).join("")}</ol></div>
   <div class="sec"><h3>관련 함수</h3><div class="simc">${e.fn.filter(id => BYID[id]).map(id => `<button type="button" data-go="${id}">${esc(BYID[id].n)}<span>${esc(BYID[id].one.slice(0, 26))}…</span></button>`).join("")}</div></div>
   <div class="sec"><h3>다른 오류</h3><div class="errs">${ERRS.filter(x => x.id !== e.id).map(x => `<button type="button" data-err="${x.id}">${esc(x.e)}</button>`).join("")}</div></div></div>`;
 }

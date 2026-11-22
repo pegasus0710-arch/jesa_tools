@@ -2,7 +2,6 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>엑셀 수식 노트 | Blog J</title>
 <meta name="description" content="하고 싶은 일로 엑셀 함수를 찾고, 예시 표에서 직접 바꿔 보고, 내 표 칸 주소로 수식을 만들어 복사하는 무료 앱">
-<meta name="robots" content="noindex">
 <meta name="theme-color" content="#0B3D4A">
 <link rel="manifest" href="manifest.json"><link rel="icon" href="favicon.png"><link rel="apple-touch-icon" href="icon-192.png">
 <style>@font-face{font-family:"SUIT Variable";src:url("https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
@@ -1056,7 +1055,7 @@ const F = [
 /* ───────── 찾아서 가져오기 ───────── */
 { id: "xlookup", n: "XLOOKUP", cat: "look", min: "2021", gs: 1, one: "찾을 값을 표에서 찾아, 같은 줄의 다른 칸 값을 가져옵니다.", tag: "VLOOKUP과 달리 왼쪽 칸도 가져옴",
   syn: ["찾을 값", "찾을 범위", "가져올 범위", "[없을 때]"], args: ["찾고 싶은 것 — 칸(E2)이나 글자(\"K-104\")", "찾을 값이 들어 있는 한 줄 또는 한 칸 묶음(A2:A7)", "가져올 값이 있는 묶음 — 찾을 범위와 칸 수가 같아야 함(C2:C7)", "못 찾았을 때 보일 글자 — 비우면 #N/A"],
-  task: ["요일 표시", "다른 시트에서 값 가져오기", "다른 표에서 값 가져오기", "품번으로 단가 찾기", "코드로 이름 가져오기", "두 표 합치기", "왼쪽 칸 값 가져오기", "VLOOKUP 대신"],
+  task: ["다른 시트에서 값 가져오기", "다른 표에서 값 가져오기", "품번으로 단가 찾기", "코드로 이름 가져오기", "두 표 합치기", "왼쪽 칸 값 가져오기", "VLOOKUP 대신"],
   ex: { ds: "P", cells: { F1: "찾을 품번", G1: "단가", F2: "K-104", G2: '=XLOOKUP(F2,A2:A7,C2:C7,"없음")' }, f: "G2", fmt: { G2: "n" }, cw: { B: 150 } },
   tries: [["F2", "K-109", "목록에 없는 품번 → 「없음」"], ["G2", '=XLOOKUP(F2,A2:A7,B2:B7,"없음")', "가져올 범위를 B열로 → 품목 이름"]],
   pit: ["찾을 값 앞뒤에 빈칸이 있으면 못 찾아요 → TRIM", "숫자와 「글자로 된 숫자」(왼쪽 정렬된 숫자)는 서로 다른 값", "아래로 채울 거면 범위에 $를 붙이세요(F4)"],
@@ -1576,7 +1575,7 @@ F.push(
   b: { fields: [{ k: "c", l: "값 칸", ph: "A2" }, { k: "u", l: "단위", ph: "500" }, { k: "m", l: "어떻게", ch: [["MROUND", "가까운 쪽"], ["CEILING", "무조건 올림"], ["FLOOR", "무조건 내림"]] }], t: "={m}({c},{u})" } },
 { id: "offset", n: "OFFSET", cat: "look", min: "all", gs: 1, one: "기준 칸에서 몇 줄 · 몇 칸 떨어진 곳의 칸이나 범위를 가리킵니다. 받은 파일의 「늘어나는 범위」에 자주 나옵니다.",
   syn: ["기준 칸", "줄 이동", "칸 이동", "[높이]", "[너비]"], args: ["출발 칸(B1)", "아래로 몇 줄(위는 -)", "오른쪽으로 몇 칸(왼쪽은 -)", "몇 줄짜리 범위", "몇 칸짜리 범위"],
-  task: ["범위가 늘어나는 합계 offset", "최근 3개월 합계", "마지막 몇 개 합계", "동적 범위", "기준 칸에서 떨어진 값"],
+  task: ["최근 3개월 합계", "범위가 늘어나는 합계 offset", "마지막 몇 개 합계", "동적 범위", "기준 칸에서 떨어진 값"],
   ex: { cells: { A1: "월", B1: "매출", A2: "1월", B2: 320, A3: "2월", B3: 285, A4: "3월", B4: 410, A5: "4월", B5: 364, A6: "5월", B6: 398, D1: "최근 3개월 합계", D2: "=SUM(OFFSET(B1,COUNT(B2:B13)-2,0,3,1))" }, f: "D2", cw: { D: 130 } },
   tries: [["B7", "420", "6월을 넣으면 자동으로 4~6월 합계"], ["D2", "=OFFSET(B1,3,0)", "B1에서 3줄 아래 = 3월"]],
   pit: ["값이 바뀔 때마다 다시 계산돼 파일이 무거워질 수 있어요", "365 · 2021이면 TAKE · FILTER 또는 표(Ctrl+T)가 읽기 쉬워요", "줄을 끼우면 이동 칸 수가 달라질 수 있어요"],
@@ -1669,7 +1668,7 @@ const MENU = [
   gs: ["「보기」 › 「고정」으로 머리글 줄을 고정", "「파일」 › 「인쇄」 → 「머리글 및 바닥글」 › 「고정된 행 반복」 체크"],
   tips: ["한 장에 맞추기: 「인쇄」 › 「현재 설정된 용지」 아래 「한 페이지에 모든 열 맞추기」"], sim: ["freeze"], key: "" },
 { id: "table", n: "표로 만들기(Ctrl+T)", one: "범위를 「표」로 바꾸면 줄을 더할 때 서식 · 수식 · 범위가 자동으로 따라오고, 필터 · 요약 행이 붙습니다.",
-  task: ["표 서식 적용 ctrl t", "표로 만들기", "범위 자동 확장", "표 만들기", "엑셀 표 기능"],
+  task: ["표로 만들기", "표 서식 적용 ctrl t", "범위 자동 확장", "표 만들기", "엑셀 표 기능"],
   x: ["범위 안의 칸 하나를 누르고 Ctrl + T(또는 「삽입」 탭 › 「표」)", "「머리글 포함」 체크 → 「확인」", "「테이블 디자인」 탭에서 이름(예: 매출표) · 「요약 행」 켜기", "표 아래에 바로 적으면 표가 자동으로 늘어나요"],
   gs: ["범위를 고르세요", "「서식」 › 「표로 변환」(Ctrl + Alt + T)"],
   tips: ["표 안에서는 FILTER · UNIQUE 결과를 펼칠 수 없어요(#SPILL!) — 표 밖 칸에", "다른 수식에서 매출표[금액]처럼 열 이름으로 부를 수 있어요"], sim: ["sumifs", "pivot"], key: "Ctrl+T" },
@@ -2030,7 +2029,7 @@ const RI = (() => {
 })();
 </script>
 <script>/* 엑셀 수식 노트 — 화면 */
-const BUILD = "엑셀 수식 노트 v1.0 · 시험판 2026-11-22";
+const BUILD = "엑셀 수식 노트 v1.0 · 2026-12-07(월) 공개";
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -2116,7 +2115,7 @@ const DF = new Map(); function idf(v) { if (!DF.has(v)) { const df = HAY.filter(
 const RLOW = new Set(["아이콘", "모양", "단추", "버튼", "그림", "표시", "메뉴", "리본"]);
 const ERRPAT = [[/#?n\/?a(?![a-z])|엔에이/i, "na"], [/#?value|밸류/i, "value"], [/#?ref(?![a-z])|레퍼/i, "ref"], [/#?div|0으로나|영으로나/i, "div"], [/#?name\?|#name|네임/i, "name"], [/#?spill|스필|펼칠/i, "spill"], [/####|샵샵|샵이/i, "hash"], [/순환/, "circ"]];
 function search(q) {
-  const qn = norm(q); if (!qn) return { fns: [], errs: [], weak: false };
+  const qn = norm(q); if (!qn) return { codes: false, fns: [], errs: [], weak: false, rib: [], ribTop: 0, top: 0 };
   let toks = q.toLowerCase().split(/[\s,·]+/).map(norm).filter(t => t && !STOP.has(t));
   if (!toks.length) toks = [qn];
   const V = toks.map(variants);
@@ -2295,7 +2294,7 @@ function refKo(n) {
   let body; if (r.col) body = strip(r.a) === strip(r.b) ? `${strip(r.a)}열 전체` : `${strip(r.a)}~${strip(r.b)}열`; else body = r.b ? `${strip(r.a)}~${strip(r.b)}` : `${strip(r.a)} 칸`;
   return sh + body + (abs ? "($ — 아래로 채워도 그대로)" : "");
 }
-function argKo(n, lab) { if (!n) return ""; if (lab.has(n)) return lab.get(n); if (n.k === "str") return `「${n.v}」`; if (n.k === "num") return XL.fmtGeneral(n.v); if (n.k === "bool") return n.v ? "TRUE(참)" : "FALSE(거짓)"; if (n.k === "miss") return "(비움)"; const r = refKo(n); if (r) return r; return show(n, lab); }
+function argKo(n, lab) { if (!n) return ""; if (lab.has(n)) return lab.get(n); if (n.k === "str") return n.v === "" ? "빈칸(\"\")" : `「${n.v}」`; if (n.k === "num") return XL.fmtGeneral(n.v); if (n.k === "bool") return n.v ? "TRUE(참)" : "FALSE(거짓)"; if (n.k === "miss") return "(비움)"; const r = refKo(n); if (r) return r; return show(n, lab); }
 function show(n, lab) {
   if (lab.has(n)) return lab.get(n);
   switch (n.k) { case "par": return "(" + show(n.e, lab) + ")"; case "un": return n.op + show(n.e, lab); case "pct": return show(n.e, lab) + "%"; case "bin": return show(n.l, lab) + n.op + show(n.r, lab); case "call": return n.name + "(" + n.args.map(a => show(a, lab)).join(", ") + ")"; }
@@ -2331,7 +2330,7 @@ const SAY = {
   LEFT: (a, A) => `${A(0)}의 왼쪽부터 ${a[1] ? A(1) : 1}글자.`, RIGHT: (a, A) => `${A(0)}의 오른쪽 끝부터 ${a[1] ? A(1) : 1}글자.`,
   MID: (a, A) => `${A(0)}의 ${A(1)}번째 글자부터 ${A(2)}글자.`,
   LEN: (a, A) => `${A(0)}의 글자 수(빈칸 포함).`,
-  SUBSTITUTE: (a, A) => `${A(0)} 속 ${A(1)}을 ${A(2) === "「」" ? "지웁니다" : A(2) + "로 바꿉니다"}.`,
+  SUBSTITUTE: (a, A) => `${A(0)} 속 ${A(1)}을 ${A(2) === "빈칸(\"\")" ? "지웁니다" : A(2) + "로 바꿉니다"}.`,
   TEXT: (a, A) => `${A(0)}을 ${A(1)} 모양의 글자로 바꿉니다.`,
   TEXTJOIN: (a, A) => `${a.slice(2).map((_, i) => A(i + 2)).join(", ")}를 ${A(0)}로 이어 붙입니다${A.raw(1) === "TRUE" ? "(빈칸은 건너뜀)" : ""}.`,
   CONCAT: (a, A) => `${a.map((_, i) => A(i)).join(" + ")}를 이어 붙입니다.`, CONCATENATE: (a, A) => `${a.map((_, i) => A(i)).join(" + ")}를 이어 붙입니다.`,
@@ -2527,7 +2526,7 @@ function ribCardHTML(r) {
 function ribRight() {
   if (isMobile()) return "";
   const r = S.rsel !== null ? RITEMS[S.rsel] : null;
-  return r ? `<div class="pan" style="padding:16px 18px">${ribCardHTML(r)}</div>` : `<div class="pan" style="padding:16px 18px"><h2 style="margin:0 0 6px;font-size:16px">아이콘을 눌러 보세요</h2><p class="small" style="margin:0">리본의 단추를 누르면 무슨 기능인지, 언제 쓰는지, 단축키를 여기에 보여 드려요. 찾기 칸에 「붓 모양」 · 「깔때기」처럼 생김새로 찾아도 돼요.</p></div>`;
+  return r ? `<div class="pan" style="padding:16px 18px">${ribCardHTML(r)}</div>` : `<div class="pan" style="padding:16px 18px"><h2 style="margin:0 0 6px;font-size:16px">아이콘을 눌러 보세요</h2><p class="small" style="margin:0">리본의 단추를 누르면 무슨 기능인지, 언제 쓰는지, 단축키를 여기에 보여 드려요. 찾기 칸에 「붓 모양」 · 「돋보기」처럼 생김새로 찾아도 돼요.</p></div>`;
 }
 function homeHTML() {
   const notes = Object.entries(S.notes).filter(([id, n]) => n.star && BYID[id]);
@@ -2627,7 +2626,8 @@ function go(o, push = true) {
   if (S.view === "fn") { if (BYID[S.id].ex) newSheet(BYID[S.id]); S.cat = BYID[S.id].cat; LS.set("last", S.id); }
   render(true);
 }
-function backStep() { const p = STK.pop(); if (!p) return false; Object.assign(S, p); if (S.view === "fn" && BYID[S.id].ex) newSheet(BYID[S.id]); render(true); scrollTo(0, p.y || 0); return true; }
+function backStep() { const p = STK.pop(); if (!p) return false; Object.assign(S, p); if (S.view === "fn" && BYID[S.id].ex) newSheet(BYID[S.id]); render(true); const y = p.y || 0; scrollTo(0, y); requestAnimationFrame(() => scrollTo(0, y)); setTimeout(() => scrollTo(0, y), 60); return true; }
+try { history.scrollRestoration = "manual"; } catch (e) {}
 
 /* ── 창 ── */
 function openSheet(html, label) { const sh = $("#sheet"); sh.hidden = false; sh.innerHTML = `<div class="shbox" role="dialog" aria-modal="true" aria-label="${esc(label)}">${html}</div>`; }

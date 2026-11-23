@@ -1,0 +1,229 @@
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">갤럭시 홈 화면 구글 검색창은 어떤 검색창인지에 따라 끄는 곳이 다릅니다. 업데이트 뒤 생긴 검색창은 홈 화면 설정에서, 구글 위젯은 길게 눌러 지웁니다. 내 화면이 어느 쪽인지부터 고르세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%THUMB%%</p>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="display: flex; gap: 14px; align-items: flex-start; border-radius: 14px; background: #f3eee5; box-shadow: inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9); padding: 16px 20px; margin: 14px 0 18px; box-sizing: border-box;"><span style="flex-shrink: 0; width: 22px; height: 22px; line-height: 19px; margin-top: 3px; border: 2px solid #20263a; border-radius: 50%; text-align: center; font-size: 13px; font-weight: bold; color: #20263a; box-sizing: border-box;">i</span>
+<p style="margin: 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>이 글의 기준 &mdash; 갤럭시 폴드(One UI 9.0) · 2026-11-23(월) 직접 확인</b></span><br />확인 기준: 2026-11-23(월) · 참고: 실제 기기 화면(갤럭시 폴드 · One UI 9.0)<br />기기 · 버전 · 설정에 따라 메뉴 이름과 위치가 다를 수 있습니다.</p>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">갤럭시 홈 화면 구글 검색창 없애기는 검색창 종류를 먼저 구분하는 일입니다.<br />아래 네 가지 중 내 화면과 같은 것을 골라 그 장으로 가면 됩니다.</p>
+<div style="border-radius: 16px; background: #f3eee5; box-shadow: inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9); padding: 22px 24px 22px; margin: 8px 0 10px; box-sizing: border-box;">
+<p style="margin: 0 0 14px; color: #1f2125;" data-ke-size="size16"><b>구글 검색창 없애기 한눈에</b></p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,180px),1fr)); gap: 12px; margin-bottom: 8px;">
+<div style="border-radius: 12px; padding: 12px 14px; background: #f8f5ef; box-shadow: 3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.45;" data-ke-size="size16"><span style="font-size: 13px; color: #6f6857;">업데이트 뒤 생긴 검색창</span><br /><span style="color: #1f2125; font-size: 15.5px;"><b>홈 화면 설정 스위치</b></span></p>
+</div>
+<div style="border-radius: 12px; padding: 12px 14px; background: #f8f5ef; box-shadow: 3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.45;" data-ke-size="size16"><span style="font-size: 13px; color: #6f6857;">직접 놓은 구글 위젯</span><br /><span style="color: #1f2125; font-size: 15.5px;"><b>길게 눌러 「홈에서 삭제」</b></span></p>
+</div>
+<div style="border-radius: 12px; padding: 12px 14px; background: #f8f5ef; box-shadow: 3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.45;" data-ke-size="size16"><span style="font-size: 13px; color: #6f6857;">맨 왼쪽 구글 화면</span><br /><span style="color: #1f2125; font-size: 15.5px;"><b>「미디어 페이지」 끄기</b></span></p>
+</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">01</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>앱 줄 바로 위 길쭉한 검색창</b></span> &mdash; 설정 › 홈 화면 › 「홈 화면에서 바로 검색」 끄기</p>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">02</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>구글 G 로고 위젯</b></span> &mdash; 길게 누르기 › 「홈에서 삭제」</p>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">03</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>위젯 아래 점이 2개 이상(스택)</b></span> &mdash; 「위젯 스택 편집」에서 구글만 「−」</p>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">04</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>홈 맨 왼쪽으로 넘기면 나오는 구글 피드</b></span> &mdash; 홈 화면 설정 › 「홈 화면에 미디어 페이지 추가」 끄기</p>
+</div>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>내 검색창은 어떤 종류인가요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">홈 화면의 구글 검색창은 겉모습이 비슷해도 만들어진 방법이 서로 다릅니다.<br />그래서 「길게 눌렀는데 삭제가 없어요」 같은 일이 생깁니다. 아래 표에서 먼저 확인하세요.</p>
+<div style="overflow-x: auto; margin: 14px 0 22px; border-radius: 14px; box-shadow: 0 0 0 1px #e2dacb;">
+<table style="width: 100%; min-width: 480px; border-collapse: collapse; font-size: 15px; line-height: 1.6;" data-ke-align="alignLeft">
+<thead>
+<tr style="background: #f3eee5;"><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">어디에 있나요</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">어떻게 생겼나요</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">끄는 곳</th></tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">앱 줄 바로 위</td><td style="padding: 11px 14px; vertical-align: top;">업데이트 뒤 새로 생긴 길쭉한 검색창</td><td style="padding: 11px 14px; vertical-align: top;">홈 화면 설정 › 「홈 화면에서 바로 검색」</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">홈 화면 아무 곳</td><td style="padding: 11px 14px; vertical-align: top;">G 로고 · 마이크 · 카메라가 있는 위젯</td><td style="padding: 11px 14px; vertical-align: top;">길게 누르기 › 「홈에서 삭제」</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">위젯 아래 점 2개 이상</td><td style="padding: 11px 14px; vertical-align: top;">다른 위젯과 묶인 스택</td><td style="padding: 11px 14px; vertical-align: top;">「위젯 스택 편집」 › 「−」</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">홈 맨 왼쪽 화면</td><td style="padding: 11px 14px; vertical-align: top;">구글 피드(Discover) 위 검색창</td><td style="padding: 11px 14px; vertical-align: top;">홈 화면 설정 › 「미디어 페이지」 끄기</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">앱스 화면 맨 아래</td><td style="padding: 11px 14px; vertical-align: top;">「무엇을 찾고 있나요?」(파인더)</td><td style="padding: 11px 14px; vertical-align: top;">검색창은 못 끔 · 아래 내용만 끄기</td></tr>
+</tbody>
+</table>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>업데이트 후 생긴 구글 검색창 끄기 &mdash; 5단계</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">업데이트를 하고 나면 홈 화면 맨 아래 앱 줄 바로 위에 길쭉한 검색창이 생깁니다.<br />이 검색창은 위젯이 아니라 <span style="color: #1f2125; font-weight: bold;">홈 화면 설정의 스위치</span>로 켜고 끄는 방식이라, 길게 눌러도 「삭제」가 나오지 않습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG0%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 1 / 15 · 홈 화면 앱 줄 위에 생긴 검색창(설정의 미리보기 그림) &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<div style="display: flex; gap: 14px; align-items: flex-start; border-radius: 14px; background: #f3eee5; box-shadow: inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9); padding: 16px 20px; margin: 14px 0 18px; box-sizing: border-box;"><span style="flex-shrink: 0; width: 22px; height: 22px; line-height: 19px; margin-top: 3px; border: 2px solid #20263a; border-radius: 50%; text-align: center; font-size: 13px; font-weight: bold; color: #20263a; box-sizing: border-box;">i</span>
+<p style="margin: 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>더 빠른 길</b></span><br />홈 화면 빈 곳을 길게 누르면 아래에 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">설정</span>이 나옵니다. 누르면 바로 홈 화면 설정이 열리니 4단계부터 하면 됩니다.</p>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 알림창 내리고 ⚙ 설정 열기</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">화면 맨 위에서 아래로 쓸어내려 알림창을 열고, 오른쪽 위 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">⚙</span>(톱니바퀴)를 누릅니다.<br />앱 목록의 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">설정</span> 앱을 눌러도 같은 화면입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG1%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 2 / 15 · 알림창 오른쪽 위 톱니바퀴 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 설정에서 「검색」 누르기</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">설정 화면 아래쪽의 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">검색</span>(돋보기) 칸을 누릅니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG2%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 3 / 15 · 설정 아래쪽 「검색」 칸 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 「검색」이라고 입력하기</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">검색 칸에 <span style="color: #1f2125; font-weight: bold;">검색</span>이라고 입력하고, 결과에서 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">홈 화면</span> 쪽 항목(「홈 화면에서 바로 검색」)을 누릅니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG3%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 4 / 15 · 설정 검색에 「검색」 입력 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p style="margin: 4px 0 14px; line-height: 1.8;" data-ke-size="size16"><span style="font-size: 13px; font-weight: bold; color: #6f6857; margin-right: 10px;">직접 찾아갈 때</span><span style="font-weight: bold; color: #1f2125; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; text-decoration-color: #20263a;">설정 &rsaquo; 홈 화면 &rsaquo; 홈 화면에서 바로 검색</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>4. 「홈 화면에서 바로 검색」 누르기</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">홈 화면 설정 목록에서 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">홈 화면에서 바로 검색</span>을 누릅니다.<br />바로 아래에 파란 글씨로 <span style="color: #1f2125; font-weight: bold;">「검색」</span>이라고 보이면 켜진 상태, <span style="color: #1f2125; font-weight: bold;">「설정 안 함」</span>이면 꺼진 상태입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG4%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 5 / 15 · 홈 화면 설정의 「홈 화면에서 바로 검색」 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>5. 「검색」 스위치 끄기</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">검색</span> 스위치를 <span style="color: #1f2125; font-weight: bold;">끔</span>으로 바꿉니다. <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">파인더</span>는 꺼진 상태 그대로 둡니다.<br />두 스위치가 모두 꺼져 있으면 홈 화면에 검색창이 나오지 않고, 바로 적용됩니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG5%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 6 / 15 · 「검색」 스위치 끄기 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG6%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 7 / 15 · 끈 뒤 미리보기 — 검색창 자리에 쪽 표시 점만 남음 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG7%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 8 / 15 · 검색창이 사라진 홈 화면 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>갤럭시 구글 검색창 위젯 없애는 법</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">G 로고 옆에 마이크 · 카메라 단추가 있는 검색창은 <span style="color: #1f2125; font-weight: bold;">구글 위젯</span>입니다.<br />처음부터 놓여 있었거나 직접 추가한 것이라, 길게 눌러 지우면 됩니다. 구글 앱은 지워지지 않고 위젯만 홈 화면에서 빠집니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 위젯 하나일 때 &mdash; 「홈에서 삭제」</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">구글 검색창을 길게 누르면 테두리가 생기면서 메뉴가 뜹니다.<br /><span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">홈에서 삭제</span>를 누르면 끝입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG8%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 9 / 15 · 구글 위젯 하나일 때 「홈에서 삭제」 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 위젯 스택일 때 &mdash; 「모두 삭제」 대신 「위젯 스택 편집」</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위젯 아래에 <span style="color: #1f2125; font-weight: bold;">점이 2개 이상</span> 보이면 여러 위젯이 한 칸에 묶인 <span style="color: #1f2125; font-weight: bold;">위젯 스택</span>입니다.<br />이때 메뉴에는 「홈에서 삭제」 대신 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">모두 삭제</span>가 나오는데, 누르면 <span style="color: #c23a2b; font-weight: bold;">묶인 위젯이 전부</span> 지워집니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG9%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 10 / 15 · 위젯 스택 메뉴 — 「모두 삭제」는 묶인 위젯 전부 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">구글만 빼고 싶다면 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">위젯 스택 편집</span>을 누르고, 구글 위젯 왼쪽 위의 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">−</span>를 누릅니다.<br />나머지 위젯은 스택에 그대로 남습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG10%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 11 / 15 · 「위젯 스택 편집」에서 구글 위젯만 빼기 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>홈 화면 맨 왼쪽 구글 화면(Discover) 끄기</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">홈 화면을 맨 왼쪽으로 넘겼을 때 구글 뉴스 · 피드 화면이 나오고 그 위에 검색창이 있다면, <span style="color: #1f2125; font-weight: bold;">Google Discover</span> 화면입니다.<br />홈 화면 설정에서 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">홈 화면에 미디어 페이지 추가</span> 스위치를 끄면 그 화면이 통째로 빠집니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG11%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 12 / 15 · 홈 화면 설정 — 「미디어 페이지」와 「홈 화면에서 바로 검색」 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p style="margin: 4px 0 14px; line-height: 1.8;" data-ke-size="size16"><span style="font-size: 13px; font-weight: bold; color: #6f6857; margin-right: 10px;">경로</span><span style="font-weight: bold; color: #1f2125; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; text-decoration-color: #20263a;">홈 화면 빈 곳 길게 누르기 &rsaquo; 설정 &rsaquo; 홈 화면에 미디어 페이지 추가</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>갤럭시 앱스 화면 검색창도 없앨 수 있나요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">홈에서 위로 쓸어 올린 앱스 화면 맨 아래의 <span style="color: #1f2125; font-weight: bold;">「무엇을 찾고 있나요?」</span>는 삼성 검색 <span style="color: #1f2125; font-weight: bold;">파인더</span>입니다.<br />이 글을 쓰며 확인한 파인더 설정에는 <span style="color: #c23a2b; font-weight: bold;">검색창 자체를 끄는 스위치가 없었습니다.</span> 대신 검색창 위에 뜨는 추천 앱 · 최근 검색은 끌 수 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG12%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 13 / 15 · 앱스 화면 검색창 ⋮ › 「설정」 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">검색창 오른쪽 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">⋮</span>를 누르고 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">설정</span>을 누르면 파인더 설정이 열립니다.<br /><span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">추천 앱 보기</span> · <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">최근 검색 표시</span>를 끄면 검색창을 눌렀을 때 화면이 훨씬 깔끔해집니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG13%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 14 / 15 · 파인더 설정 — 추천 앱 · 최근 검색 끄기 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>지우지 않고 덜 보이게 &mdash; 위젯 투명하게</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">검색은 가끔 쓰는데 하얀 검색창이 거슬린다면, 지우지 말고 투명하게 바꾸는 방법도 있습니다.<br />구글 위젯을 길게 누르고 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">설정</span>을 누르면 맞춤설정 화면이 열립니다. <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">투명도</span> 막대를 밀고 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">테마</span>를 배경에 맞게 고르세요.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG14%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 15 / 15 · 구글 위젯 맞춤설정 — 테마 · 투명도 &middot; 갤럭시 폴드 · One UI 9.0 · 2026년 11월 화면 기준이라, 기종 · 버전에 따라 메뉴 이름과 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>기종 · 버전에 따라 다른 점</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="overflow-x: auto; margin: 14px 0 22px; border-radius: 14px; box-shadow: 0 0 0 1px #e2dacb;">
+<table style="width: 100%; min-width: 480px; border-collapse: collapse; font-size: 15px; line-height: 1.6;" data-ke-align="alignLeft">
+<thead>
+<tr style="background: #f3eee5;"><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">항목</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">이 글 기준(폴드 · One UI 9.0)</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">다른 기종 · 버전</th></tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">업데이트 뒤 생긴 검색창</td><td style="padding: 11px 14px; vertical-align: top;">홈 화면 설정 › 「홈 화면에서 바로 검색」</td><td style="padding: 11px 14px; vertical-align: top;">이 항목이 없으면 그 버전에는 이 검색창이 없는 것</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">구글 위젯 메뉴</td><td style="padding: 11px 14px; vertical-align: top;">「홈에서 삭제」(스택이면 「모두 삭제」)</td><td style="padding: 11px 14px; vertical-align: top;">버전에 따라 메뉴 이름이 조금 다를 수 있음</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">맨 왼쪽 화면</td><td style="padding: 11px 14px; vertical-align: top;">「홈 화면에 미디어 페이지 추가」</td><td style="padding: 11px 14px; vertical-align: top;">이 항목이 없으면 그 버전에는 구글 화면이 없는 것</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">앱스 화면 검색창</td><td style="padding: 11px 14px; vertical-align: top;">파인더 · 끄는 스위치 없음</td><td style="padding: 11px 14px; vertical-align: top;">홈 화면 구성이 「홈 화면만 사용」이면 앱스 화면이 없음</td></tr>
+</tbody>
+</table>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>구글 검색창을 길게 눌러도 「삭제」가 없어요.</b></span><br />앱 줄 바로 위에 생긴 검색창이라면 위젯이 아니라 홈 화면 설정 기능입니다.<br />설정 › 홈 화면 › 「홈 화면에서 바로 검색」에서 「검색」 스위치를 끄세요.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>「모두 삭제」를 눌렀더니 날씨 위젯까지 사라졌어요.</b></span><br />위젯 스택이라 묶인 위젯이 함께 지워진 것입니다.<br />홈 빈 곳을 길게 눌러 「위젯」에서 다시 추가하고, 다음에는 「위젯 스택 편집」에서 구글만 빼세요.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>구글 위젯을 지우면 구글 앱도 지워지나요?</b></span><br />아니요. 홈 화면의 위젯만 빠지고 구글 앱과 계정은 그대로입니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>갤럭시 앱스 화면 검색창은 왜 안 꺼지나요?</b></span><br />앱스 화면 검색창은 삼성 파인더라, 확인한 버전에는 끄는 스위치가 없습니다.<br />파인더 설정에서 추천 앱 · 최근 검색을 끄는 것까지만 됩니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>업데이트하면 검색창이 다시 생기나요?</b></span><br />다음 업데이트 뒤 다시 켜지는 경우가 있을 수 있습니다.<br />그때는 같은 스위치(홈 화면에서 바로 검색)를 다시 끄면 됩니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>지운 구글 검색창을 다시 놓고 싶어요.</b></span><br />홈 빈 곳을 길게 누르고 「위젯」 › 「Google」에서 검색 위젯을 골라 놓으면 됩니다.<br />업데이트로 생긴 검색창은 같은 스위치를 다시 켜면 돌아옵니다.</p>
+</div>
+
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="background: #ece6da; border-radius: 18px; padding: 18px; margin: 4px 0 10px; display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,200px),1fr)); gap: 16px; box-sizing: border-box;">
+<div style="background: #f1ebe1; border-radius: 16px; padding: 16px 18px; box-shadow: 6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.55;" data-ke-size="size16"><span style="font-size: 13px; color: #0A5C66;">앱 · 기기</span><br /><span style="font-size: 16.5px;"><a style="color: #1f2125; text-decoration: none;" href="https://luvbong.tistory.com/679" target="_blank" rel="noopener"><b>앱 캐시 삭제해도 되나요?</b></a></span><br /><span style="font-size: 14px; color: #5b5547;">갤럭시 앱 캐시 삭제 방법</span><br /><span style="font-size: 14px;"><a style="color: #20263a; font-weight: bold; text-decoration: none;" href="https://luvbong.tistory.com/679" target="_blank" rel="noopener">글 보러 가기 &rsaquo;</a></span></p>
+</div>
+<div style="background: #f1ebe1; border-radius: 16px; padding: 16px 18px; box-shadow: 6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.55;" data-ke-size="size16"><span style="font-size: 13px; color: #0A5C66;">앱 · 기기</span><br /><span style="font-size: 16.5px;"><a style="color: #1f2125; text-decoration: none;" href="https://luvbong.tistory.com/707" target="_blank" rel="noopener"><b>갤럭시 패턴 · 비밀번호 잊어버렸을 때</b></a></span><br /><span style="font-size: 14px; color: #5b5547;">초기화 없이 푸는 법</span><br /><span style="font-size: 14px;"><a style="color: #20263a; font-weight: bold; text-decoration: none;" href="https://luvbong.tistory.com/707" target="_blank" rel="noopener">글 보러 가기 &rsaquo;</a></span></p>
+</div>
+<div style="background: #f1ebe1; border-radius: 16px; padding: 16px 18px; box-shadow: 6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.55;" data-ke-size="size16"><span style="font-size: 13px; color: #0A5C66;">앱 · 기기</span><br /><span style="font-size: 16.5px;"><a style="color: #1f2125; text-decoration: none;" href="https://luvbong.tistory.com/611" target="_blank" rel="noopener"><b>갤럭시 비밀번호 분실 공장 초기화</b></a></span><br /><span style="font-size: 14px; color: #5b5547;">기종별 버튼 조합</span><br /><span style="font-size: 14px;"><a style="color: #20263a; font-weight: bold; text-decoration: none;" href="https://luvbong.tistory.com/611" target="_blank" rel="noopener">글 보러 가기 &rsaquo;</a></span></p>
+</div>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위 방법으로도 검색창이 남아 있다면 기종과 One UI 버전(설정 › 휴대전화 정보 › 소프트웨어 정보)을 댓글로 남겨 주세요.<br />같은 경우를 찾아 정리해 두겠습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="font-size: 13px; color: #6f6857;">2026-11-23(월) 고침: 구글 위젯 · 위젯 스택 · 맨 왼쪽 구글 화면 · 앱스 화면 검색창 · 투명하게 하기 추가, 그림 7장 추가</span></p>
+<p data-ke-size="size16">&nbsp;</p>

@@ -1,0 +1,192 @@
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">제미나이 GIF 만들기는 무료 계정에서도 됩니다. 채팅창에 「○○ GIF 만들어줘」라고 치면 1~2분 뒤 3초짜리 반복 움짤이 나오고, 내가 찍은 사진을 올려 움직임만 더할 수도 있습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%THUMB%%</p>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="display: flex; gap: 14px; align-items: flex-start; border-radius: 14px; background: #f3eee5; box-shadow: inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9); padding: 16px 20px; margin: 14px 0 18px; box-sizing: border-box;"><span style="flex-shrink: 0; width: 22px; height: 22px; line-height: 19px; margin-top: 3px; border: 2px solid #20263a; border-radius: 50%; text-align: center; font-size: 13px; font-weight: bold; color: #20263a; box-sizing: border-box;">i</span>
+<p style="margin: 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>이 글의 기준 &mdash; 무료 계정으로 직접 3개 만들어 봄</b></span><br />확인 기준: 2026-11-24(화) · 참고: 제미나이 안드로이드 앱(갤럭시 폴드), 무료 계정<br />기기 · 앱 버전 · 계정에 따라 메뉴나 한도가 다를 수 있습니다.</p>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">제미나이 GIF는 구글 제미나이 앱이 글이나 사진을 받아 짧게 반복되는 움직이는 그림(GIF)을 만들어 주는 기능입니다.<br />따로 메뉴를 고를 필요 없이, 평소 채팅하듯 한 줄로 부탁하면 됩니다.</p>
+<div style="border-radius: 16px; background: #f3eee5; box-shadow: inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9); padding: 22px 24px 22px; margin: 8px 0 10px; box-sizing: border-box;">
+<p style="margin: 0 0 14px; color: #1f2125;" data-ke-size="size16"><b>제미나이 GIF 한눈에</b></p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,180px),1fr)); gap: 12px; margin-bottom: 8px;">
+<div style="border-radius: 12px; padding: 12px 14px; background: #f8f5ef; box-shadow: 3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.45;" data-ke-size="size16"><span style="font-size: 13px; color: #6f6857;">무료 계정</span><br /><span style="color: #1f2125; font-size: 15.5px;"><b>직접 만들어 봄 — 됨</b></span></p>
+</div>
+<div style="border-radius: 12px; padding: 12px 14px; background: #f8f5ef; box-shadow: 3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.45;" data-ke-size="size16"><span style="font-size: 13px; color: #6f6857;">만드는 시간</span><br /><span style="color: #1f2125; font-size: 15.5px;"><b>1~2분</b></span></p>
+</div>
+<div style="border-radius: 12px; padding: 12px 14px; background: #f8f5ef; box-shadow: 3px 4px 9px rgba(160,140,108,.28),-3px -3px 8px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.45;" data-ke-size="size16"><span style="font-size: 13px; color: #6f6857;">받은 파일</span><br /><span style="color: #1f2125; font-size: 15.5px;"><b>640×360 · 3초 반복</b></span></p>
+</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">01</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>글로만 만들기</b></span> &mdash; 채팅창에 「고양이가 소파에서 떨어지는 GIF 만들어줘」</p>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">02</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>내 사진으로 만들기</b></span> &mdash; 「+」로 사진 올리고 「올린 사진에 ○○ gif」</p>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">03</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>저장</b></span> &mdash; GIF를 길게 누르기 › 「저장」</p>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 9px;"><span style="flex-shrink: 0; font-weight: bold; color: #20263a; font-variant-numeric: tabular-nums;">04</span>
+<p style="margin: 0; min-width: 0; line-height: 1.65; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>보내기</b></span> &mdash; 공유 단추 = 「공개 링크 + GIF」</p>
+</div>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>제미나이 GIF 만들기, 무료 계정에서 되나요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">됩니다. 화면 아래에 「업그레이드」 단추가 그대로 있는 <span style="color: #1f2125; font-weight: bold;">무료 계정</span>으로 GIF 3개를 차례로 만들어 봤고, 세 번 모두 완성됐습니다.<br />다만 무료 계정은 사용량 한도가 있어서, GIF를 만들 때마다 「현재 사용량」이 올라갑니다(아래 「몇 개까지」 장).</p>
+<div style="overflow-x: auto; margin: 14px 0 22px; border-radius: 14px; box-shadow: 0 0 0 1px #e2dacb;">
+<table style="width: 100%; min-width: 480px; border-collapse: collapse; font-size: 15px; line-height: 1.6;" data-ke-align="alignLeft">
+<thead>
+<tr style="background: #f3eee5;"><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">순서</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">만든 것</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">요청 방법</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">현재 사용량</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">주간 한도</th></tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">1</td><td style="padding: 11px 14px; vertical-align: top;">고양이가 소파에서 떨어지는 GIF</td><td style="padding: 11px 14px; vertical-align: top;">글로만</td><td style="padding: 11px 14px; vertical-align: top;">6%</td><td style="padding: 11px 14px; vertical-align: top;">1%</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">2</td><td style="padding: 11px 14px; vertical-align: top;">눈밭을 미끄러지는 펭귄 GIF</td><td style="padding: 11px 14px; vertical-align: top;">글로만</td><td style="padding: 11px 14px; vertical-align: top;">13%</td><td style="padding: 11px 14px; vertical-align: top;">2%</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">3</td><td style="padding: 11px 14px; vertical-align: top;">내가 찍은 산 사진에 비행기가 지나가는 GIF</td><td style="padding: 11px 14px; vertical-align: top;">사진 + 글</td><td style="padding: 11px 14px; vertical-align: top;">19%</td><td style="padding: 11px 14px; vertical-align: top;">2%</td></tr>
+</tbody>
+</table>
+</div>
+<p data-ke-size="size16"><span style="font-size: 14px; color: #6f6857;">각 GIF를 만든 직후 사용량 화면을 확인한 값입니다. 첫 GIF를 만들기 전 값은 확인하지 못했습니다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>제미나이 GIF 만드는 순서 &mdash; 글로만 요청하기</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 채팅창에 「○○ GIF 만들어줘」 입력</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">제미나이 앱을 열고 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">Gemini 자동 모드</span> 그대로 채팅창에 만들고 싶은 장면을 쓰고 끝에 <span style="color: #1f2125; font-weight: bold;">GIF</span>를 붙입니다.<br />「고양이가 소파에서 떨어지는 GIF 만들어줘」처럼 누가 · 어디서 · 무엇을 하는지 한 문장이면 충분합니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG0%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 1 / 8 · 채팅창에 요청하면 「GIF 생성 중…」 &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 「GIF 생성 중…」 기다리기</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">「GIF를 생성하는 중입니다. 몇 분 정도 걸릴 수 있으니 GIF가 준비되면 다시 확인해 주세요.」라는 안내와 함께 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">GIF 생성 중…</span> 칸이 뜹니다.<br />직접 해 보니 1~2분이면 끝났습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>3. 「Your GIF is ready!」 확인</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">다 되면 <span style="color: #1f2125; font-weight: bold;">「Your GIF is ready!」</span>라는 글과 함께 채팅창에서 GIF가 바로 움직입니다.<br />오른쪽 위의 둥근 단추가 공유 단추입니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG1%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 2 / 8 · 완성된 GIF와 오른쪽 위 공유 단추 &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG2%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 3 / 8 · 실제로 받은 고양이 GIF(640×360 · 3초 반복) &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>내 사진으로 제미나이 움짤 만들기</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">내가 찍은 사진 위에 움직임만 더할 수도 있습니다.<br />채팅창 왼쪽 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">+</span>로 갤러리 사진을 올리고, 「<span style="color: #1f2125; font-weight: bold;">올린 사진에 비행기가 지나가는 gif</span>」처럼 사진에 더할 움직임을 쓰면 됩니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG4%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 5 / 8 · 산 사진을 올리고 「올린 사진에 비행기가 지나가는 gif」 &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">결과는 올린 산 사진 그대로에 비행기 한 대가 하늘을 가로지르는 GIF였습니다.<br />사진의 산 · 철탑 · 구름 모양은 거의 그대로 남고, 요청한 움직임만 더해졌습니다.</p>
+<div style="display: flex; gap: 14px; align-items: flex-start; border-radius: 14px; background: #f3eee5; box-shadow: inset 3px 3px 8px rgba(160,140,108,.3),inset -3px -3px 8px rgba(255,255,255,.9); padding: 16px 20px; margin: 14px 0 18px; box-sizing: border-box;"><span style="flex-shrink: 0; width: 22px; height: 22px; line-height: 19px; margin-top: 3px; border: 2px solid #20263a; border-radius: 50%; text-align: center; font-size: 13px; font-weight: bold; color: #20263a; box-sizing: border-box;">i</span>
+<p style="margin: 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>사진으로 만들 때 팁</b></span><br />움직일 것을 하나만 쓰면 결과가 깔끔합니다(비행기 · 눈 · 물결 · 깃발 등).<br />사람 얼굴이 나온 사진은 공유 전에 한 번 더 생각해 보세요 — 공유 단추는 공개 링크를 만듭니다.</p>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>제미나이 GIF는 몇 개까지 만들 수 있나요?</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">무료 계정은 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">사용량 한도</span> 화면에서 남은 양을 볼 수 있습니다.<br />이 화면에는 <span style="color: #1f2125; font-weight: bold;">「현재 사용량」</span>과 <span style="color: #1f2125; font-weight: bold;">「주간 한도」</span> 두 가지가 있고, 각각 초기화되는 시각이 함께 나옵니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG3%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 4 / 8 · GIF 3개를 만든 뒤 사용량 화면 &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">직접 해 보니 GIF 한 개에 현재 사용량이 <span style="color: #1f2125; font-weight: bold;">6~7%</span>씩 올랐습니다. 글로만 만든 것과 내 사진으로 만든 것이 거의 같았습니다.<br />이 비율이면 한 번 초기화될 때까지 대략 15개 안팎이라는 계산이 나오지만, 같은 한도를 일반 질문 · 이미지 만들기에도 함께 쓰므로 <span style="color: #c23a2b; font-weight: bold;">정확한 개수는 사람마다 다릅니다.</span></p>
+<p data-ke-size="size16">화면에는 「AI Plus(으)로 사용량 2배 늘리기 ₩7,500/월」 안내가 함께 보였습니다(2026-11-24(화) 화면 기준).</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>만든 GIF 저장 · 공유하는 법</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>1. 휴대폰에 저장 &mdash; 길게 누르기 › 「저장」</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">완성된 GIF를 길게 누르면 <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">공유</span> · <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">복사</span> · <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">저장</span> 메뉴가 뜹니다. <span style="display: inline; padding: 1px 7px; margin: 0 2px; border-radius: 6px; background: #ecebe6; box-shadow: inset 0 -2px 0 #d6d3ca; color: #1f2125; font-weight: bold; white-space: nowrap;">저장</span>을 누르면 휴대폰에 GIF 파일로 남습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG5%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 6 / 8 · GIF를 길게 누르면 「공유 · 복사 · 저장」 &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">저장한 파일은 갤러리에서 바로 보이고, 자세히 보기에서 확인하니 <span style="color: #1f2125; font-weight: bold;">내장 저장공간/Pictures</span> 폴더에 <span style="color: #1f2125; font-weight: bold;">640×360 · 2.70MB</span> GIF로 들어 있었습니다.<br />30장면이 3초 동안 반복되는 파일이고, 갤러리 정보에 「AI로 생성한 콘텐츠 포함」 표시가 붙습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG7%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 8 / 8 · 갤러리 파일 정보 — Pictures 폴더 · 640×360 · 2.70MB &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>2. 다른 사람에게 보내기 &mdash; 공유 단추는 「공개 링크」</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">GIF 오른쪽 위 공유 단추를 누르면 「공개 링크 만드는 중…」이 뜬 뒤 <span style="color: #1f2125; font-weight: bold;">「Gemini로 제작됨 · 공개 링크 + GIF · share.gemini.google」</span> 카드와 앱 목록(카카오톡 · Gmail 등)이 나옵니다.<br />파일 대신 링크를 보내는 방식이라, <span style="color: #c23a2b; font-weight: bold;">링크를 받은 사람은 그 GIF를 볼 수 있습니다.</span> 가족끼리만 보고 싶다면 「저장」한 파일을 보내는 편이 낫습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p>%%IMG6%%</p>
+<p style="margin: 6px 0 0; font-size: 13px; color: #6f6857; font-variant-numeric: tabular-nums;" data-ke-size="size16">그림 7 / 8 · 공유 단추 — 「공개 링크 + GIF」 &middot; 갤럭시 폴드 제미나이 앱 · 무료 계정 · 2026-11-24(화) 화면 기준이라, 기기 · 앱 버전에 따라 메뉴 위치가 조금 다를 수 있습니다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>제미나이 GIF 쓸 때 알아 두세요</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="overflow-x: auto; margin: 14px 0 22px; border-radius: 14px; box-shadow: 0 0 0 1px #e2dacb;">
+<table style="width: 100%; min-width: 480px; border-collapse: collapse; font-size: 15px; line-height: 1.6;" data-ke-align="alignLeft">
+<thead>
+<tr style="background: #f3eee5;"><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">항목</th><th style="text-align: left; padding: 10px 14px; font-size: 13px; font-weight: bold; color: #5b5547;">직접 확인한 내용</th></tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">요금</td><td style="padding: 11px 14px; vertical-align: top;">무료 계정에서 만들어짐(사용량 한도 안에서)</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">시간</td><td style="padding: 11px 14px; vertical-align: top;">요청 뒤 1~2분</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">파일</td><td style="padding: 11px 14px; vertical-align: top;">GIF · 640×360 · 3초(30장면) 반복 · 고양이 GIF 2.70MB</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">저장 위치</td><td style="padding: 11px 14px; vertical-align: top;">안드로이드: 내장 저장공간/Pictures</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">표시</td><td style="padding: 11px 14px; vertical-align: top;">화면 오른쪽 아래 반짝이 표시 · 파일 정보 「AI로 생성한 콘텐츠 포함」</td></tr>
+<tr style="border-top: 1px solid #ece6da;"><td style="padding: 11px 14px; vertical-align: top; font-weight: bold; color: #1f2125;">공유</td><td style="padding: 11px 14px; vertical-align: top;">공유 단추 = share.gemini.google 공개 링크</td></tr>
+</tbody>
+</table>
+</div>
+<p data-ke-size="size16">GIF 파일이 2~3MB라 블로그나 메신저에 올릴 때 크게 느껴질 수 있습니다.<br />움짤 대신 한 장면만 필요하다면 GIF를 열어 화면 캡처를 하는 편이 가볍습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>자주 묻는 질문</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>제미나이 GIF는 무료인가요?</b></span><br />2026-11-24(화) 무료 계정으로 직접 3개를 만들었고 모두 완성됐습니다.<br />대신 사용량 한도가 있어 한 개에 현재 사용량이 6~7%씩 올랐습니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>메뉴 어디에서 GIF를 만드나요?</b></span><br />따로 메뉴를 고르지 않아도 됩니다. 채팅창에 「○○ GIF 만들어줘」라고 쓰면 됩니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>내 사진으로 움짤을 만들 수 있나요?</b></span><br />네. 채팅창 「+」로 사진을 올리고 「올린 사진에 ○○ gif」라고 쓰면, 사진은 그대로 두고 움직임만 더해 줍니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>만든 GIF는 어디에 저장되나요?</b></span><br />GIF를 길게 눌러 「저장」하면 안드로이드 기준 내장 저장공간/Pictures 폴더에 GIF 파일로 저장됐습니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>공유하면 다른 사람도 볼 수 있나요?</b></span><br />공유 단추는 share.gemini.google 「공개 링크」를 만듭니다. 링크를 받은 사람은 볼 수 있으니, 개인 사진으로 만든 GIF는 저장한 파일로 보내는 편이 안전합니다.</p>
+</div>
+<div style="display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #ece6da;"><span style="flex-shrink: 0; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 9px; background: #f4efe6; box-shadow: 2px 3px 6px rgba(160,140,108,.38),-2px -2px 5px rgba(255,255,255,.9); font-weight: bold; color: #20263a;">Q</span>
+<p style="margin: 2px 0 0; min-width: 0; line-height: 1.75; color: #3f3b33;" data-ke-size="size16"><span style="color: #1f2125;"><b>GIF 길이와 크기는 얼마인가요?</b></span><br />받은 파일은 640×360, 30장면이 3초 동안 반복되는 GIF였고 크기는 2.70MB였습니다.</p>
+</div>
+
+<p data-ke-size="size16">&nbsp;</p>
+<hr style="border: 0; border-top: 1px solid #e7e5dc; margin: 8px 0;" contenteditable="false" data-ke-type="horizontalRule" data-ke-style="style6" />
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>함께 보면 좋은 글</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="background: #ece6da; border-radius: 18px; padding: 18px; margin: 4px 0 10px; display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,200px),1fr)); gap: 16px; box-sizing: border-box;">
+<div style="background: #f1ebe1; border-radius: 16px; padding: 16px 18px; box-shadow: 6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.55;" data-ke-size="size16"><span style="font-size: 13px; color: #0A5C66;">AI 활용</span><br /><span style="font-size: 16.5px;"><a style="color: #1f2125; text-decoration: none;" href="https://luvbong.tistory.com/873" target="_blank" rel="noopener"><b>챗GPT 받아쓰기 사용법</b></a></span><br /><span style="font-size: 14px; color: #5b5547;">말한 대로 글자로 — 무료</span><br /><span style="font-size: 14px;"><a style="color: #20263a; font-weight: bold; text-decoration: none;" href="https://luvbong.tistory.com/873" target="_blank" rel="noopener">글 보러 가기 &rsaquo;</a></span></p>
+</div>
+<div style="background: #f1ebe1; border-radius: 16px; padding: 16px 18px; box-shadow: 6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.55;" data-ke-size="size16"><span style="font-size: 13px; color: #0A5C66;">사진 · 이미지</span><br /><span style="font-size: 16.5px;"><a style="color: #1f2125; text-decoration: none;" href="https://luvbong.tistory.com/733" target="_blank" rel="noopener"><b>사진 용량 줄이기</b></a></span><br /><span style="font-size: 14px; color: #5b5547;">여러 장 한 번에, 설치 없이</span><br /><span style="font-size: 14px;"><a style="color: #20263a; font-weight: bold; text-decoration: none;" href="https://luvbong.tistory.com/733" target="_blank" rel="noopener">글 보러 가기 &rsaquo;</a></span></p>
+</div>
+<div style="background: #f1ebe1; border-radius: 16px; padding: 16px 18px; box-shadow: 6px 7px 16px rgba(160,140,108,.38),-5px -5px 12px rgba(255,255,255,.9); box-sizing: border-box; min-width: 0;">
+<p style="margin: 0; line-height: 1.55;" data-ke-size="size16"><span style="font-size: 13px; color: #0A5C66;">사진 · 이미지</span><br /><span style="font-size: 16.5px;"><a style="color: #1f2125; text-decoration: none;" href="https://luvbong.tistory.com/809" target="_blank" rel="noopener"><b>HEIC JPG 변환 무료</b></a></span><br /><span style="font-size: 14px; color: #5b5547;">아이폰 사진 여러 장 한 번에</span><br /><span style="font-size: 14px;"><a style="color: #20263a; font-weight: bold; text-decoration: none;" href="https://luvbong.tistory.com/809" target="_blank" rel="noopener">글 보러 가기 &rsaquo;</a></span></p>
+</div>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">제미나이 GIF를 만들다가 「사용량 한도」에 걸리거나 메뉴가 다르게 보이면, 기기와 앱 버전을 댓글로 남겨 주세요.<br />같은 경우를 찾아 이 글에 더해 두겠습니다.</p>
+<p data-ke-size="size16">&nbsp;</p>

@@ -364,6 +364,31 @@ kbd{font:800 12.5px/1 inherit;border:1px solid var(--line);border-bottom-width:2
 .bkrow{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 14px}
 .ri:focus-visible{outline:2px solid var(--sea);outline-offset:1px}
 @media (max-width:760px){.fxres{display:block}.gridhint:not([hidden]){display:block}.jump{display:flex}}
+
+/* 내 버전에서 안 되는 함수 — 11-24 */
+.vno{margin:14px 0 0;border:2px solid var(--red);border-radius:12px;background:var(--redlt);overflow:hidden}
+.vno-h{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.vno-h .vno-x{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center}
+.vno-h>div{min-width:0;flex:1}
+.vno-h b{display:block;font-size:16.5px;color:var(--red);line-height:1.4}
+.vno-h span{display:block;font-size:14px;color:#7a2a20;margin-top:2px}
+.vno-h em{font-style:normal;font-weight:800;background:#fff;border-radius:5px;padding:0 5px}
+.vno-h .lnk{flex-shrink:0;white-space:nowrap}
+.vno-alt{background:#fff;border-top:1px solid #efc9c3;padding:12px 14px}
+.vno-alt>b{display:block;font-size:14px;color:var(--sea2);margin-bottom:6px}
+.vno-alt code{display:block;background:var(--sand2);border-radius:8px;padding:9px 11px;font-family:inherit;font-weight:700;font-size:14px;word-break:break-all;color:var(--ink)}
+.vno-alt p{margin:8px 0 0;font-size:13.5px;line-height:1.55;color:var(--sub)}
+.vno-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.vno-btns .go{width:auto;padding:0 14px}
+.vno-try{margin:0 0 10px;background:var(--redlt);color:#7a2a20;border-radius:9px;padding:8px 12px;font-size:13.5px;line-height:1.5}
+.vno-try b{color:var(--red)}
+.bno{display:inline-block;margin-left:6px;background:var(--red);color:#fff;border-radius:5px;padding:1px 7px;font-size:12px;font-weight:800}
+.alt .altn{margin:6px 0;font-size:13px;color:var(--sub);line-height:1.5}
+.alt.altno b{display:block;color:var(--sea2);margin-bottom:4px}
+.ri .v.no,.fl button i.no{background:var(--redlt);color:var(--red);border-radius:5px;padding:2px 7px;font-weight:800}
+.ri.unsup b,.fl button.unsup{color:#8a8f98}
+.ri.unsup b{text-decoration:line-through;text-decoration-color:rgba(194,58,43,.6)}
+.fl button.unsup.on{color:var(--sea2)}
 </style></head><body>
 <header class="top"><div class="tin">
  <div class="row"><img class="logo" src="icon-192.png" alt="" width="38" height="38"><div class="ttl">엑셀 수식 노트<small>함수 76개 · 메뉴 기능 20개 · 리본 단추 250개 · 오류 8가지</small></div><span class="sp"></span>
@@ -1142,7 +1167,7 @@ const F = [
   tries: [["H2", "부산", "지점을 바꾸면 목록이 바뀜"], ["H4", '=FILTER(A2:F9,(B2:B9=H2)*(E2:E9>=5),"없음")', "조건 두 개는 *(그리고)"], ["H2", "광주", "없는 지점 → 「없음」"]],
   pit: ["펼쳐질 칸에 값이 있으면 #SPILL! — 아래 · 옆을 비우세요", "조건 두 개 「그리고」는 *, 「또는」은 +", "2019 이하에서는 「데이터 › 필터」를 쓰세요"],
   sim: ["xlookup", "sortby", "unique"],
-  b: { fields: [{ k: "T", l: "보여 줄 범위", ph: "A2:F500", r: 1 }, { k: "C", l: "조건 범위", ph: "B2:B500", r: 1 }, { k: "v", l: "같아야 할 값(칸 또는 \"글자\")", ph: "H2" }, { k: "nf", l: "없을 때", ch: [['"없음"', "「없음」 글자"], ['""', "비워 두기"]] }], t: "=FILTER({T},{C}={v},{nf})", altText: "엑셀 2019 이하: 「데이터 › 필터」로 걸러 보거나, 표를 고른 뒤 Ctrl+Shift+L." } },
+  b: { fields: [{ k: "T", l: "보여 줄 범위", ph: "A2:F500", r: 1 }, { k: "C", l: "조건 범위", ph: "B2:B500", r: 1 }, { k: "v", l: "같아야 할 값(칸 또는 \"글자\")", ph: "H2" }, { k: "nf", l: "없을 때", ch: [['"없음"', "「없음」 글자"], ['""', "비워 두기"]] }], t: "=FILTER({T},{C}={v},{nf})", alt: '=IFERROR(INDEX({T},AGGREGATE(15,6,(ROW({C})-MIN(ROW({C}))+1)/({C}={!v}),ROWS($1:1)),COLUMNS($A:A)),"")', altNote: "결과를 놓을 첫 칸에 넣고 → 오른쪽(열 수만큼) · 아래(나올 줄 수만큼)로 채우세요. 남는 칸은 비어 보여요. Ctrl+Shift+Enter 없이 그냥 Enter.", altText: "메뉴로 하려면: 표를 고른 뒤 「데이터 › 필터」(Ctrl+Shift+L)." } },
 { id: "choose", n: "CHOOSE", cat: "look", min: "all", gs: 1, one: "번호에 따라 여러 값 중 하나를 고릅니다.",
   syn: ["번호", "값1", "값2", "[…]"], args: ["1이면 값1, 2면 값2 …", "첫 번째 후보", "두 번째 후보", "254개까지"],
   task: ["번호를 글자로 바꾸기", "분기 이름 붙이기", "요일 번호를 요일로", "1은 상 2는 중"],
@@ -2218,6 +2243,8 @@ function verBadges(c) {
   if (c.gs) ok.push("구글 시트"); else no.push("구글 시트");
   return { ok: ok.join(" · ") + " ○", no: no.length ? no.join(" · ") + " ✕" : "" };
 }
+const VSHORT = v => ({ "365": "365", "2024": "2024", "2021": "2021", "2019": "2019", "2016": "2016 이하", gs: "구글 시트" })[v] || "";
+const noTag = () => `${VSHORT(S.ver)}에서 안 됨`;
 const vlab = c => c.kind === "menu" ? "메뉴 기능" : c.min === "all" ? "모든 버전" : c.min === "2019" ? "2019부터" : c.min === "365" ? "365 · 2024" : "2021부터";
 const isMobile = () => matchMedia("(max-width:760px)").matches;
 
@@ -2424,8 +2451,9 @@ const BFN = {
   sortby(v, ver, abs) { const A = x => abs ? absRef(x) : x; return `=SORTBY(${A(v.R || "A2:F500")},${A(v.K1 || "B2:B500")},1${v.K2 ? "," + A(v.K2) + ",-1" : ""})`; }
 };
 function fill(t, vals, b, abs, raw) {
-  return t.replace(/\{(,?)([A-Za-z0-9]+)\}/g, (m, comma, k) => {
-    const f = b.fields.find(x => x.k === k) || {}; let v = vals[k];
+  return t.replace(/\{(,?)(!?)([A-Za-z0-9]+)\}/g, (m, comma, bang, k) => {
+    const f0 = b.fields.find(x => x.k === k) || {}; let v = vals[k];
+    const f = bang && (v === undefined || v === "" ? REFRX.test(f0.ph || "") : isRefTxt(v)) ? Object.assign({}, f0, { r: 1, abs: 1 }) : f0;
     const ex = v === undefined || v === "";
     if (comma) { if (ex) return ""; return "," + (f.r && (abs || f.abs) ? absRef(v) : v); }
     if (ex) { if (f.ch) v = f.ch[0][0]; else v = f.ph || k; if (raw) return "\u0001" + (f.r && (abs || f.abs) ? absRef(v) : v) + "\u0002"; }
@@ -2596,9 +2624,12 @@ function argsHTML(c) {
 }
 function verWarn(c) {
   if (supported(c)) return "";
-  const b = c.b || {}; let alt = "";
-  if (b.alt || b.fn === "ifs") alt = `대신: <code>${esc(plainF(buildFormula(c, {}, true, "alt")))}</code>`; else if (b.altText) alt = esc(b.altText);
-  return `<div class="verwarn"><b>${esc(VNAME(S.ver))}에서는 이 함수가 없어요</b> — 입력하면 #NAME?이 나와요. ${alt}</div>`;
+  const b = c.b || {}; const nm = c.n.split(" ")[0];
+  const okv = c.min === "365" ? "365 · 2024" : c.min === "2019" ? "2019 이상" : "365 · 2021 이상";
+  let alt = "";
+  if (b.alt || b.fn === "ifs") { const a = plainF(buildFormula(c, {}, true, "alt")); alt = `<div class="vno-alt"><b>${esc(VSHORT(S.ver))}에서는 이렇게</b><code>${esc(a)}</code><div class="vno-btns"><button class="go" type="button" data-acopy="${esc(a)}">${IC.copy}이 수식 복사</button>${c.b ? `<button class="go ghost" type="button" data-jump="bld">내 표 주소로 만들기</button>` : ""}</div>${b.altNote ? `<p>${esc(b.altNote)}</p>` : ""}${b.altText ? `<p>${esc(b.altText)}</p>` : ""}</div>`; }
+  else if (b.altText) alt = `<div class="vno-alt"><b>${esc(VSHORT(S.ver))}에서는 이렇게</b><p>${esc(b.altText)}</p></div>`;
+  return `<div class="vno"><div class="vno-h"><span class="vno-x" aria-hidden="true">✕</span><div><b>${esc(VNAME(S.ver))}에서는 ${esc(nm)}를 쓸 수 없어요</b><span>입력하면 <em>#NAME?</em> 오류가 나요 · ${esc(okv)}에서만 됩니다</span></div><button class="lnk" type="button" data-vpick="1">버전 바꾸기</button></div>${alt}</div>`;
 }
 function cardHTML(c) {
   const st = S.notes[c.id] || {};
@@ -2609,7 +2640,7 @@ function cardHTML(c) {
    <div class="jump"><button type="button" data-jump="try">직접 해 보기</button>${c.b ? `<button type="button" data-jump="bld">내 표 수식 만들기</button>` : ""}<button type="button" data-jump="pit">주의할 점</button></div></div>
   <div class="sec"><h3>쓰는 모양</h3><div class="syn">${synHTML(c)}</div>${argsHTML(c)}</div>
   <div class="try" id="sec-try"><div class="tryh"><h3>직접 해 보기</h3><span class="note">칸을 누르고 위 수식 칸에서 고치면 바로 계산 · 엑셀과 다를 수 있는 곳은 표시</span><span class="sp"></span><button class="tb" type="button" data-reset="1">${IC.undo}처음 예시로</button></div>
-   <div id="tryb"><div class="fx"><div class="nm" id="fxnm"></div><div class="fxe"><div class="mir" id="fxmir"></div><textarea id="fxin" rows="1" spellcheck="false" autocomplete="off" aria-label="선택한 칸의 수식 · 값"></textarea></div></div>
+   ${supported(c) ? "" : `<div class="vno-try">아래 연습 표는 ${esc(c.min === "365" ? "365" : "365 · 2021")} 기준으로 계산해요 — 같은 수식을 ${esc(VNAME(S.ver))}에 넣으면 <b>#NAME?</b>이 나와요.</div>`}<div id="tryb"><div class="fx"><div class="nm" id="fxnm"></div><div class="fxe"><div class="mir" id="fxmir"></div><textarea id="fxin" rows="1" spellcheck="false" autocomplete="off" aria-label="선택한 칸의 수식 · 값"></textarea></div></div>
    <div class="fxres" id="fxres"></div>
    <div class="gridw" id="gridw" data-ks="grid"></div><div class="gridhint" id="gridhint" hidden>← 표를 옆으로 밀면 나머지 칸이 보여요 →</div><div id="whyb"></div></div>
    <div class="trys"><span>바꿔 보세요</span>${(c.tries || []).map((t, i) => `<button type="button" data-tryi="${i}"><b>${esc(t[0])}</b> ${esc(t[1].length > 34 ? t[1].slice(0, 32) + "…" : t[1])} → ${esc(t[2])}</button>`).join("")}<button type="button" data-tsv="1">${IC.copy.replace("<svg", '<svg width="14" height="14" style="display:inline;vertical-align:-2px"')} 예시 표 엑셀로 복사</button></div></div>
@@ -2646,7 +2677,7 @@ function bldHTML(c) {
   return `<div class="pan bld"><h2>내 표에 맞춰 수식 만들기</h2><p class="d">내 표의 칸 주소만 넣으면 수식을 만들어 드려요. 다른 시트는 <b>시트이름!A2:A500</b></p>
   ${b.fields.map((f, i) => `<div class="fld"><label><i style="background:${COL[i % 4]}"></i>${esc(f.l)}</label>${f.ch ? `<select data-bk="${f.k}">${f.ch.map(o => `<option value="${esc(o[0])}" ${st[f.k] === o[0] ? "selected" : ""}>${esc(o[1])}</option>`).join("")}</select>` : `<input data-bk="${f.k}" value="${esc(st[f.k] || "")}" placeholder="예: ${esc(f.ph)}" autocomplete="off" spellcheck="false">`}</div>`).join("")}
   ${b.fields.some(f => f.r && !f.abs) ? `<label class="ck"><input type="checkbox" data-babs="1" ${abs ? "checked" : ""}>아래로 채울 거예요($ 붙이기)</label>` : ""}
-  <div class="out"><small>만든 수식</small><div class="f" id="bout"></div><button class="go" type="button" data-bcopy="1">${IC.copy}수식 복사</button>
+  <div class="out"><small id="boutl">만든 수식</small><div class="f" id="bout"></div><button class="go" type="button" data-bcopy="1">${IC.copy}수식 복사</button>
    <div style="display:flex;gap:6px;margin-top:6px"><button class="go ghost" type="button" data-bsave="1">${IC.save}노트에 저장</button><button class="go ghost" type="button" data-bexp="1">${IC.fx}풀이 보기</button></div></div>
   <div id="balt"></div></div>
   <div class="pan memo"><div class="h">내 메모<span id="msaved"></span></div><textarea data-memo="${c.id}" placeholder="예: 월말 정산 시트 — 거래처 코드로 담당자 가져옴">${esc((S.notes[c.id] || {}).memo || "")}</textarea></div>
@@ -2686,9 +2717,18 @@ function bldUpdate(c) {
   $("#bout").innerHTML = showF(f) + (/\u0001/.test(f) ? `<div style="font-size:12px;color:var(--sub);font-weight:600;margin-top:4px">회색 = 아직 비운 칸(예시 값)</div>` : "") + (warn.length ? `<div class="bwarn">${warn.map(w => `<div>${esc(w)}</div>`).join("")}</div>` : "");
   $("#bout").dataset.f = plainF(f);
   let alt = "";
-  if ((!supported(c) || (S.ver === null && c.min !== "all")) && !(b.fn === "ifs" && S.ver === "2016")) {
-    if (b.alt || b.fn === "ifs") { const a = plainF(buildFormula(c, vals, abs, "alt")); alt = `<div class="alt"><b>엑셀 ${c.min === "365" ? "2021 이하" : c.min === "2021" ? "2019 · 2016" : "2016"}이면</b><div class="f">${esc(a)}</div><button class="lnk" type="button" data-acopy="${esc(a)}">이 수식 복사</button></div>`; }
-    else if (b.altText) alt = `<div class="alt">${esc(b.altText)}</div>`;
+  const unsup = !supported(c) && !(b.fn === "ifs" && S.ver === "2016");
+  const hasAlt = b.alt || b.fn === "ifs";
+  if (unsup && hasAlt) {
+    const a = buildFormula(c, vals, abs, "alt");
+    $("#bout").innerHTML = showF(a) + (warn.length ? `<div class="bwarn">${warn.map(w => `<div>${esc(w)}</div>`).join("")}</div>` : "");
+    $("#bout").dataset.f = plainF(a);
+    $("#boutl").textContent = `${VNAME(S.ver)}용 수식`;
+    alt = `<div class="alt">${b.altNote ? `<p class="altn">${esc(b.altNote)}</p>` : ""}<b>${esc(c.min === "365" ? "365 · 2024" : "365 · 2021")}이면 더 짧게</b><div class="f">${esc(plainF(f))}</div><button class="lnk" type="button" data-acopy="${esc(plainF(f))}">이 수식 복사</button></div>`;
+  } else {
+    $("#boutl").innerHTML = unsup ? `만든 수식 <span class="bno">${esc(noTag())} — #NAME?</span>` : "만든 수식";
+    if ((unsup || (S.ver === null && c.min !== "all")) && hasAlt) { const a = plainF(buildFormula(c, vals, abs, "alt")); alt = `<div class="alt"><b>엑셀 ${c.min === "365" ? "2021 이하" : c.min === "2021" ? "2019 · 2016" : "2016"}이면</b><div class="f">${esc(a)}</div><button class="lnk" type="button" data-acopy="${esc(a)}">이 수식 복사</button>${b.altNote ? `<p class="altn">${esc(b.altNote)}</p>` : ""}</div>`; }
+    else if ((unsup || (S.ver === null && c.min !== "all")) && b.altText) alt = `<div class="alt${unsup ? " altno" : ""}">${unsup ? `<b>${esc(VSHORT(S.ver))}에서는 이렇게</b>` : ""}${esc(b.altText)}</div>`;
   }
   $("#balt").innerHTML = alt;
 }
@@ -2739,7 +2779,7 @@ function homeHTML() {
 }
 function listHTML(cat) {
   const L = F.filter(f => f.cat === cat);
-  return `<div class="lst hsec"><h2>${esc(CATN[cat].n)}</h2><div class="res">${L.map(c => `<button class="ri" type="button" data-go="${c.id}"><span class="t"><b>${esc(c.n)}</b><small>${esc(c.one)}</small></span><span class="v ${supported(c) ? "" : "no"}">${supported(c) ? "" : "내 버전 ✕"}</span></button>`).join("")}</div><div style="margin-top:12px"><button class="tb" type="button" data-print="${cat}">${IC.print}이 묶음 A4 한 장 인쇄</button></div></div>`;
+  return `<div class="lst hsec"><h2>${esc(CATN[cat].n)}</h2><div class="res">${L.map(c => `<button class="ri${supported(c) ? "" : " unsup"}" type="button" data-go="${c.id}"><span class="t"><b>${esc(c.n)}</b><small>${esc(c.one)}</small></span><span class="v ${supported(c) ? "" : "no"}">${supported(c) ? "" : esc(noTag())}</span></button>`).join("")}</div><div style="margin-top:12px"><button class="tb" type="button" data-print="${cat}">${IC.print}이 묶음 A4 한 장 인쇄</button></div></div>`;
 }
 function searchHTML() {
   const r = search(S.q);
@@ -2747,7 +2787,7 @@ function searchHTML() {
   const ribH = r.rib.length ? `<h3 style="margin:14px 0 8px;font-size:14.5px">리본 메뉴에서</h3><div class="res">${r.rib.map(x => `<button class="ri" type="button" data-rk="${x.r.it.k_}"><span class="ico rico">${x.r.it.ic ? RI(x.r.it.ic) : "리"}</span><span class="t"><b>${hl(x.r.it.n, S.q)}</b><small>${esc(x.r.tab.n)} 탭 › ${esc(x.r.grp.n)} — ${esc(x.r.it.d)}</small></span></button>`).join("")}</div>` : "";
   if (!r.fns.length && !r.errs.length && r.rib.length) return `<div class="hsec lst"><h2>「${esc(S.q)}」 찾은 결과</h2>${ribH}</div>`;
   if (!r.fns.length && !r.errs.length) return `<div class="hsec"><div class="empty"><b>「${esc(S.q)}」은 아직 없어요.</b><br>다른 말로 찾아보세요 — 예: 가져오기 · 더하기 · 중복 · 나이 · 버림 · 드롭다운<br><span style="font-size:13px">못 찾은 말은 이 기기의 「내 수식 노트」에 남겨 두었어요.</span></div><div class="tasks" style="justify-content:center">${CATS.map(c => `<button type="button" data-cat="${c.id}">${esc(c.n)}</button>`).join("")}</div></div>`;
-  return `<div class="hsec lst"><h2>「${esc(S.q)}」 찾은 결과</h2>${r.weak ? `<p class="small" style="margin:-6px 0 10px">딱 맞는 카드가 없을 수 있어요 — 가까운 것부터 보여 드려요.</p>` : ""}<div class="res">${(r.codes ? r.errs : []).map(e => `<button class="ri" type="button" data-err="${e.id}"><span class="ico err">#</span><span class="t"><b>${esc(e.e)} — ${esc(e.n)}</b><small>${esc(e.one)}</small></span></button>`).join("")}${r.ribTop > r.top ? "</div>" + ribH + '<h3 style="margin:14px 0 8px;font-size:14.5px">함수 · 기능 카드</h3><div class="res">' : ""}${r.fns.map(c => { const t = c.task.find(x => norm(x).includes(norm(S.q))) || c.task[0]; return `<button class="ri" type="button" data-go="${c.id}"><span class="ico">${catIco(c.cat)}</span><span class="t"><b>${hl(c.n, S.q)}</b><small>${hl(t, S.q)} — ${esc(c.one)}</small></span><span class="v ${supported(c) ? "" : "no"}">${supported(c) ? "" : "내 버전 ✕"}</span></button>`; }).join("")}${!r.codes ? r.errs.map(e => `<button class="ri" type="button" data-err="${e.id}"><span class="ico err">#</span><span class="t"><b>${esc(e.e)} — ${esc(e.n)}</b><small>${esc(e.one)}</small></span></button>`).join("") : ""}</div>${r.ribTop <= r.top ? ribH : ""}</div>`;
+  return `<div class="hsec lst"><h2>「${esc(S.q)}」 찾은 결과</h2>${r.weak ? `<p class="small" style="margin:-6px 0 10px">딱 맞는 카드가 없을 수 있어요 — 가까운 것부터 보여 드려요.</p>` : ""}<div class="res">${(r.codes ? r.errs : []).map(e => `<button class="ri" type="button" data-err="${e.id}"><span class="ico err">#</span><span class="t"><b>${esc(e.e)} — ${esc(e.n)}</b><small>${esc(e.one)}</small></span></button>`).join("")}${r.ribTop > r.top ? "</div>" + ribH + '<h3 style="margin:14px 0 8px;font-size:14.5px">함수 · 기능 카드</h3><div class="res">' : ""}${r.fns.map(c => { const t = c.task.find(x => norm(x).includes(norm(S.q))) || c.task[0]; return `<button class="ri${supported(c) ? "" : " unsup"}" type="button" data-go="${c.id}"><span class="ico">${catIco(c.cat)}</span><span class="t"><b>${hl(c.n, S.q)}</b><small>${hl(t, S.q)} — ${esc(c.one)}</small></span><span class="v ${supported(c) ? "" : "no"}">${supported(c) ? "" : esc(noTag())}</span></button>`; }).join("")}${!r.codes ? r.errs.map(e => `<button class="ri" type="button" data-err="${e.id}"><span class="ico err">#</span><span class="t"><b>${esc(e.e)} — ${esc(e.n)}</b><small>${esc(e.one)}</small></span></button>`).join("") : ""}</div>${r.ribTop <= r.top ? ribH : ""}</div>`;
 }
 function errHTML(e) {
   return `<div class="card"><div class="ch"><div class="crumb">오류 해결</div><div class="fn"><h1 style="color:var(--red)">${esc(e.e)}</h1><span class="one">${esc(e.n)}</span></div><p style="margin:8px 0 0;line-height:1.6">${esc(e.one)}</p></div>
@@ -2782,7 +2822,7 @@ function navHTML() {
   const catList = cur && cur !== "err" ? cur : S.cat;
   const notesN = Object.values(S.notes).filter(n => n.star).length + S.saved.length;
   return `<div class="pan nav" data-ks="nav"><button type="button" data-view="home" class="${S.view === "home" ? "on" : ""}"><span class="ico">${IC.home.replace("<svg", '<svg width="16" height="16"')}</span>처음</button>${CATS.map(c => `<button type="button" data-cat="${c.id}" class="${cur === c.id ? "on" : ""}"><span class="ico ${c.id === "err" ? "err" : ""}">${catIco(c.id)}</span>${esc(c.n)}<b>${c.id === "err" ? ERRS.length : F.filter(f => f.cat === c.id).length}</b></button>`).join("")}<div class="hr"></div><button type="button" data-view="ribbon" class="${S.view === "ribbon" ? "on" : ""}"><span class="ico">${RI("table")}</span>리본 지도<b>${RITEMS.length}</b></button><button type="button" data-view="explain" class="${S.view === "explain" ? "on" : ""}"><span class="ico">fx</span>수식 풀이</button><button type="button" data-view="notes" class="${S.view === "notes" ? "on" : ""}"><span class="ico star">★</span>내 수식 노트<b>${notesN}</b></button></div>
-  <div class="pan fl" data-ks="fl"><div class="subh">${esc(cur === "err" ? "오류 해결" : CATN[catList].n)}</div>${cur === "err" ? ERRS.map(e => `<button type="button" data-err="${e.id}" class="${S.err === e.id && S.view === "err" ? "on" : ""}">${esc(e.e)}<i>${esc(e.n)}</i></button>`).join("") : F.filter(f => f.cat === catList).map(c => `<button type="button" data-go="${c.id}" class="${S.view === "fn" && S.id === c.id ? "on" : ""}">${esc(c.n)}<i class="${supported(c) ? "" : "no"}">${supported(c) ? vlab(c) : "내 버전 ✕"}</i></button>`).join("")}</div>`;
+  <div class="pan fl" data-ks="fl"><div class="subh">${esc(cur === "err" ? "오류 해결" : CATN[catList].n)}</div>${cur === "err" ? ERRS.map(e => `<button type="button" data-err="${e.id}" class="${S.err === e.id && S.view === "err" ? "on" : ""}">${esc(e.e)}<i>${esc(e.n)}</i></button>`).join("") : F.filter(f => f.cat === catList).map(c => `<button type="button" data-go="${c.id}" class="${S.view === "fn" && S.id === c.id ? "on" : ""}${supported(c) ? "" : " unsup"}">${esc(c.n)}<i class="${supported(c) ? "" : "no"}">${supported(c) ? vlab(c) : esc(noTag())}</i></button>`).join("")}</div>`;
 }
 function mtopHTML() {
   const t = S.view === "ribbon" ? "리본 지도" : S.view === "fn" ? BYID[S.id].n : S.view === "err" ? ERRID[S.err].e : S.view === "cat" ? CATN[S.cat].n : S.view === "explain" ? "수식 풀이" : S.view === "notes" ? "내 수식 노트" : S.view === "search" ? "찾기" : "";

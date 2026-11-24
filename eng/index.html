@@ -260,6 +260,32 @@ body.hasmini #syband{bottom:calc(148px + env(safe-area-inset-bottom))}
   .chs{grid-template-columns:minmax(0,1fr)}
   .stagep{min-height:300px}
 }
+
+/* 11-24 제이: 휴대폰 가로 = 큰 글자 플레이어(듣기 화면만) */
+.ctl .fsb{display:none}
+@media (orientation:landscape) and (max-height:520px){
+  body[data-scr="play"]{padding:0!important;overflow:hidden}
+  body[data-scr="play"] .hd, body[data-scr="play"] #tabs, body[data-scr="play"] #mini, body[data-scr="play"] .qlist, body[data-scr="play"] .opt{display:none!important}
+  body[data-scr="play"] .wrap{padding:max(10px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));max-width:none;margin:0}
+  body[data-scr="play"] .pv{display:block}
+  body[data-scr="play"] .pv>div:first-child{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:1fr auto;gap:0 14px;height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+  body[data-scr="play"] .stagep{grid-row:1/3;grid-column:1;min-height:0;height:100%;overflow:hidden;padding:16px 22px 14px;border-radius:18px;--lf:1}
+  body[data-scr="play"] .ctl{grid-row:1;grid-column:2;flex-direction:column;justify-content:center;gap:10px;margin:0}
+  body[data-scr="play"] .ctl button{width:50px;height:50px}
+  body[data-scr="play"] .ctl .big{width:68px;height:68px}
+  body[data-scr="play"] .ctl .fsb{display:grid;width:42px;height:42px}
+  body[data-scr="play"] .ctl .fsb svg{width:18px;height:18px}
+  body[data-scr="play"] .tst{grid-row:2;grid-column:2;flex-direction:column;margin:8px 0 0}
+  body[data-scr="play"] .tst button{height:38px;padding:0 10px;font-size:13px}
+  body[data-scr="play"] .phase{margin:8px 0 4px}
+  body[data-scr="play"] .stagep .ko{font-size:calc(15vh * var(--lf));margin-top:auto;line-height:1.22}
+  body[data-scr="play"] .stagep .en{font-size:calc(11.5vh * var(--lf));margin-top:2.5vh;margin-bottom:auto;line-height:1.25}
+  body[data-scr="play"] .stagep .wdx{font-size:calc(17vh * var(--lf));margin-top:auto}
+  body[data-scr="play"] .stagep .mnx{font-size:calc(10vh * var(--lf))}
+  body[data-scr="play"] .stagep .exx{font-size:calc(6.2vh * var(--lf));margin-bottom:auto}
+  body[data-scr="play"] .stagep .exx small{font-size:calc(5vh * var(--lf))}
+  body[data-scr="play"] .count{padding-top:8px}
+}
 </style></head><body>
 <header class="hd"><div class="hd-in"><div class="logo"><img src="icon-192.png" alt=""><div><small>Blog J · 회화 · 단어</small><b>영어 노트</b></div></div><span class="sp"></span><nav class="nav" id="nav"></nav><span class="gdot" id="gdot"></span></div></header>
 <main class="wrap" id="main"></main>
@@ -676,6 +702,7 @@ function askExit() {
 }
 function openSheet(html) { const sh = $("#sheet"); sh.hidden = false; sh.dataset.exit = ""; sh.innerHTML = html; }
 function render() {
+  document.body.dataset.scr = U.scr;
   const nav = [["home", "챕터", IC.home], ["play", "듣기", IC.head], ["stat", "기록", IC.chart], ["set", "설정", IC.gear]];
   $("#nav").innerHTML = nav.map(([k, t, i]) => `<button data-nav="${k}" class="${U.scr === k ? "on" : ""}">${svg(i)}${t}</button>`).join("");
   $("#tabs").innerHTML = nav.map(([k, t, i]) => `<button data-nav="${k}" class="${U.scr === k ? "on" : ""}">${svg(i)}${t}</button>`).join("");
@@ -1112,11 +1139,33 @@ function logTick() { if (P.playing && P.startAt) { const now = Date.now(); dayLo
 setInterval(logTick, 15000);
 function logSent() { dayLog().n++; ls.set("data", D); }
 
+
+/* 11-24 제이: 휴대폰 가로 큰 글자 플레이어 — 글자가 넘치면 줄이기 · 전체 화면 */
+const LANDQ = matchMedia("(orientation:landscape) and (max-height:520px)");
+function fitLand() {
+  const s = $("#stg"); if (!s) return;
+  s.style.setProperty("--lf", 1);
+  if (!(LANDQ.matches && U.scr === "play")) return;
+  let f = 1; while (s.scrollHeight > s.clientHeight + 1 && f > 0.42) { f -= 0.06; s.style.setProperty("--lf", f.toFixed(2)); }
+}
+function fsToggle() {
+  const d = document, on = d.fullscreenElement || d.webkitFullscreenElement;
+  try {
+    if (on) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    else { const el = d.documentElement; const r = (el.requestFullscreen || el.webkitRequestFullscreen).call(el, { navigationUI: "hide" }); if (r && r.catch) r.catch(() => toast("이 브라우저는 전체 화면을 막아 두었어요")); }
+  } catch (e) { toast("이 브라우저는 전체 화면을 막아 두었어요"); }
+}
+LANDQ.addEventListener("change", () => {
+  const d = document;
+  if (!LANDQ.matches && (d.fullscreenElement || d.webkitFullscreenElement)) { try { (d.exitFullscreen || d.webkitExitFullscreen).call(d); } catch (e) {} }
+  setTimeout(fitLand, 60);
+});
+addEventListener("resize", () => { clearTimeout(fitLand.t); fitLand.t = setTimeout(fitLand, 80); });
 /* ── 재생 화면 ── */
 function drawPlay() {
   if (!P.ch) { const c = D.chapters.find(x => x.sec === U.sec && x.items.length) || D.chapters.find(x => x.items.length); if (c) { P.list = [c.id]; loadCh(0); } }
   const c = P.ch, W = !!(c && c.sec === "word"), un = W ? "단어" : "문장";
-  let h = `<div class="pv"><div><div class="stagep" id="stg"></div><div class="ctl"><button data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button><button class="big" data-a="pp" id="ppb" aria-label="재생"></button><button data-a="next" aria-label="다음 문장">${svg(IC.next)}</button><button class="st" data-a="starcur" id="stb" aria-label="어려운 문장">${svg(IC.star)}</button></div><div class="tst" id="tst"></div>`;
+  let h = `<div class="pv"><div><div class="stagep" id="stg"></div><div class="ctl"><button data-a="prev" aria-label="이전 문장">${svg(IC.prev)}</button><button class="big" data-a="pp" id="ppb" aria-label="재생"></button><button data-a="next" aria-label="다음 문장">${svg(IC.next)}</button><button class="st" data-a="starcur" id="stb" aria-label="어려운 문장">${svg(IC.star)}</button><button class="fsb" data-a="fs" aria-label="전체 화면"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div><div class="tst" id="tst"></div>`;
   h += `<div class="card qlist"><div class="lab"><span>${c ? esc(c.name) : "챕터 없음"}${P.list.length > 1 ? ` · ${P.li + 1}/${P.list.length}번째 챕터` : ""}</span><span>${SET.shuffle ? "섞어서" : "차례대로"}</span></div><div id="ql"></div></div></div>`;
   const seg = (k, opts, cur) => `<div class="seg" data-k="${k}">${opts.map(([v, t]) => `<button data-v="${v}" class="${String(cur) === String(v) ? "on" : ""}">${t}</button>`).join("")}</div>`;
   const row = (lab, body, sub) => `<div class="ogi"><div class="lab"><span>${lab}</span>${sub ? `<small>${sub}</small>` : ""}</div>${body}</div>`;
@@ -1172,7 +1221,7 @@ function paintPlay() {
   $("#ppb").innerHTML = svg(P.playing ? IC.pause : IC.play); $("#ppb").setAttribute("aria-label", P.playing ? "멈추기" : "재생");
   const [, real] = findItem(it.id); $("#stb").classList.toggle("on", !!(real || it).star);
   const ql = $("#ql"); if (ql) { ql.innerHTML = P.queue.map((x, i) => `<div class="qrow${i === P.qi ? " on" : ""}"><button class="qi${i === P.qi ? " on" : ""}" data-a="goq" data-i="${i}"><span class="n num">${i + 1}</span><span class="tx">${c.sec === "word" ? `<b>${esc(x.en)}</b><small>${esc(x.ko)}</small>` : `<b>${esc(x.ko)}</b><small>${esc(x.en)}</small>`}</span></button><button class="qs${(findItem(x.id)[1] || x).star ? " on" : ""}" data-a="qstar" data-id="${x.id}" aria-label="어려운 ${c.sec === "word" ? "단어" : "문장"} 표시">${svg(IC.star).replace('class="i"', `class="i" style="fill:${(findItem(x.id)[1] || x).star ? "currentColor" : "none"}"`)}</button></div>`).join(""); }
-  paintPhase();
+  paintPhase(); fitLand();
 }
 function paintPhase() {
   const em = $("#mini .mini-tx em"); if (em && P.playing) { em.textContent = PHN[P.phase] || "재생 중"; em.className = "live"; }
@@ -1492,6 +1541,7 @@ document.addEventListener("click", async e => {
   }
   if (a === "edit") { U.edit = el.dataset.id; go("edit"); return; }
   /* 카드를 누르면 늘 듣기 화면(11-13 제이 — 편집은 연필 단추로만). 지금 듣던 챕터면 그대로 이어서 */
+  if (a === "fs") { fsToggle(); return; }
   if (a === "open") { const id = el.dataset.id; if (isCur(id) && P.list.length === 1) { go("play"); return; } const was = P.playing; setList([id]); if (was) playPause(true); return; }
   if (a === "sel") { const id = el.dataset.id; U.sel.has(id) ? U.sel.delete(id) : U.sel.add(id); drawHome(); return; }
   if (a === "selclr") { U.sel.clear(); drawHome(); return; }

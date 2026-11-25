@@ -620,7 +620,7 @@ function ensureBase(force) {
 }
 ensureBase(false); ls.set("data", D);
 const SET0 = { mode: "k2e", wmode: "we2k", spell: true, wex: true, exReps: 1, exFirst: "en", azMyKey: "", azRegion: "koreacentral", azCap: 450000, reps: 3, faster: true, think: "auto", thinkF: 1, speed: 1, shuffle: false, loop: "off", reveal: true, autoStar: true, gapF: 1,
-  engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true, setAt: 0 };
+  engine: "device", vKo: "", vEn: "", azUrl: "", azKey: "", azKo: "ko-KR-SunHiNeural", azEn: "en-US-JennyNeural", azChars: {}, gdOn: false, gdEmail: "", gdLast: 0, bkAt: 0, keep: true, keepHQ: false, setAt: 0 };
 /* 「내 음성 서버」는 제이 전용 파일(jay.html)에서만 — 공개판(index.html)에서는 숨김.
    챕터 · 기록 · 다른 설정은 둘이 같이 쓰고, 음성 고르기(engine · 서버 주소 · 앱 암호)만 jay.html이 따로 기억("setj") */
 const SERVER_OK = /*SERVER_OK*/false, SRVK = ["engine", "azUrl", "azKey"];
@@ -934,7 +934,7 @@ function sayDevice(text, lang, rate, tok) {
 async function runDevice() {
   const tok = ++P.tok; P.playing = true; P.hidStop = false; keepOn(true); paintPlay();
   while (tok === P.tok) {
-    if (SET.keep && !WL && document.visibilityState === "visible") keepOn(true); /* 시스템이 풀어 버린 화면 켜 두기를 문장마다 다시 */
+    if (wantKeep() && !WL && document.visibilityState === "visible") keepOn(true); /* 시스템이 풀어 버린 화면 켜 두기를 문장마다 다시 */
     const it = curIt(); if (!it) break;
     paintPlay();
     const S = stepsFor(it, P.mode); let lastMs = 0;
@@ -963,9 +963,9 @@ function chDone() { const c = P.ch; if (c && !c.virtual) { const real = D.chapte
 let WL = null;
 let WLP = false;
 async function keepOn(on) {
-  if (on && SET.keep && !("wakeLock" in navigator)) { if (!keepOn.w1) { keepOn.w1 = 1; toast("이 브라우저는 「재생 중 화면 꺼짐 막기」를 지원하지 않아요 — 휴대폰 화면 자동 꺼짐 시간을 늘려 주세요"); } return; }
+  if (on && wantKeep() && !("wakeLock" in navigator)) { if (!keepOn.w1) { keepOn.w1 = 1; toast("이 브라우저는 「재생 중 화면 꺼짐 막기」를 지원하지 않아요 — 휴대폰 화면 자동 꺼짐 시간을 늘려 주세요"); } return; }
   try {
-    if (on && SET.keep && (!WL || WL.released) && !WLP) { WLP = true; try { WL = await navigator.wakeLock.request("screen"); WL.addEventListener("release", () => { WL = null; }); } finally { WLP = false; } if (!P.playing && WL) { WL.release(); WL = null; } }
+    if (on && wantKeep() && (!WL || WL.released) && !WLP) { WLP = true; try { WL = await navigator.wakeLock.request("screen"); WL.addEventListener("release", () => { WL = null; }); } finally { WLP = false; } if (!P.playing && WL) { WL.release(); WL = null; } }
     if (!on && WL) { WL.release(); WL = null; }
   } catch (e) { if (on && !keepOn.w2) { keepOn.w2 = 1; toast("이 기기에서 화면 꺼짐 막기가 거절됐어요 — 절전 모드를 끄거나 화면 자동 꺼짐 시간을 늘려 주세요"); } }
 }
@@ -1141,8 +1141,9 @@ function logSent() { dayLog().n++; ls.set("data", D); }
 
 
 /* 11-24 제이: 휴대폰 가로 큰 글자 플레이어 — 글자가 넘치면 줄이기 · 전체 화면 */
-const LANDQ = matchMedia("(orientation:landscape) and (max-height:520px)");
+const LANDQ = matchMedia("(orientation:landscape) and (max-height:520px)"); /* 11-25 제이: 재생 중 화면 꺼짐 막기 — 기기 음성은 「keep」(기본 켬), 고품질 음성은 「keepHQ」(기본 끔), 가로 큰 글자 플레이어는 늘 켬 */ function wantKeep() { return (LANDQ.matches && U.scr === "play") || (isAz() ? !!SET.keepHQ : !!SET.keep); } function keepSync() { const au = $("#au"); const playing = isAz() ? !!(au && !au.paused) : P.playing; if (playing && wantKeep()) keepOn(true); else if (WL) { try { WL.release(); } catch (e) {} WL = null; } } (function () { const au = document.getElementById("au"); if (!au) return; ["playing", "pause", "ended"].forEach(ev => au.addEventListener(ev, () => keepSync())); })(); document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") setTimeout(keepSync, 300); });
 function fitLand() {
+  if (fitLand.ks !== U.scr) { fitLand.ks = U.scr; keepSync(); }
   const s = $("#stg"); if (!s) return;
   s.style.setProperty("--lf", 1);
   if (!(LANDQ.matches && U.scr === "play")) return;
@@ -1158,7 +1159,7 @@ function fsToggle() {
 LANDQ.addEventListener("change", () => {
   const d = document;
   if (!LANDQ.matches && (d.fullscreenElement || d.webkitFullscreenElement)) { try { (d.exitFullscreen || d.webkitExitFullscreen).call(d); } catch (e) {} }
-  setTimeout(fitLand, 60);
+  setTimeout(fitLand, 60); keepSync();
 });
 addEventListener("resize", () => { clearTimeout(fitLand.t); fitLand.t = setTimeout(fitLand, 80); });
 /* ── 재생 화면 ── */
@@ -1274,10 +1275,10 @@ async function drawSet() {
     <div class="lab" style="margin-top:10px">영어 목소리</div><select class="inp" data-s="vEn"><option value="">자동</option>${ve.map(v => `<option value="${esc(v.voiceURI)}" ${SET.vEn === v.voiceURI ? "selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select>
     <div class="row" style="margin-top:10px"><button class="btn sm" data-a="vtest" data-v="ko">한국어 들어 보기</button><button class="btn sm" data-a="vtest" data-v="en">영어 들어 보기</button></div>
     <label class="tg" style="margin-top:8px"><input type="checkbox" data-t="keep" ${SET.keep ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>
-    <p class="hint">기기 음성은 화면이 꺼지면 휴대폰이 소리를 막아요. 그래서 화면이 꺼지면 그 문장에서 멈추고, 다시 켜면 ▶로 이어 들을 수 있어요. 화면을 끄고 들으려면 「내 Azure 키」를 쓰세요.</p>`;
+    <p class="hint">기기 음성은 화면이 꺼지면 휴대폰이 소리를 막아요. 그래서 화면이 꺼지면 그 문장에서 멈추고, 다시 켜면 ▶로 이어 들을 수 있어요. 화면을 끄고 들으려면 「내 Azure 키」를 쓰세요. 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p>`;
   } else if (SET.engine === "azkey") {
     const n = await idbCount(), RG = [["koreacentral", "한국 중부 (koreacentral)"], ["japaneast", "일본 동부 (japaneast)"], ["eastasia", "동아시아 (eastasia)"], ["southeastasia", "동남아시아 (southeastasia)"], ["eastus", "미국 동부 (eastus)"], ["westus2", "미국 서부 2 (westus2)"], ["westeurope", "서유럽 (westeurope)"]];
-    h += `<p>마이크로소프트 Azure의 고품질 음성을 <b>내 무료 키</b>로 바로 받아요. 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 재생되고, 한 번 받은 음성은 이 기기에 저장해 다시 써요.</p>
+    h += `<p>마이크로소프트 Azure의 고품질 음성을 <b>내 무료 키</b>로 바로 받아요. 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 재생되고, 한 번 받은 음성은 이 기기에 저장해 다시 써요.</p>     <label class="tg" style="margin:6px 0 4px"><input type="checkbox" data-t="keepHQ" ${SET.keepHQ ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>     <p class="hint">처음에는 꺼져 있어요 — 화면을 끄고 들을 수 있게. 휴대폰을 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p>
     <div class="lab">Azure 음성 키 <a href="${KEY_HELP}" target="_blank" rel="noopener">키 받는 방법 ↗</a></div><input class="inp" data-s="azMyKey" type="password" value="${esc(SET.azMyKey)}" placeholder="Azure 「키 및 엔드포인트」의 키 1" autocomplete="off" spellcheck="false">
     <div class="lab" style="margin-top:10px">지역 (키를 만든 곳)</div><select class="inp" data-s="azRegion">${RG.map(([k, t]) => `<option value="${k}" ${SET.azRegion === k ? "selected" : ""}>${t}</option>`).join("")}</select>
     ${azVoiceSel()}
@@ -1286,7 +1287,7 @@ async function drawSet() {
     <p class="hint">이번 달 ${(SET.azChars[mk] || 0).toLocaleString()}자 사용 · 저장한 음성 ${n.toLocaleString()}개 (한글은 2자로 셈)<br>· 키는 <b>이 기기에만</b> 저장돼요 — 구글 드라이브 · 백업 파일에는 들어가지 않아요. 공용 휴대폰 · PC에서는 쓰지 마세요.<br>· 이 방식을 쓰면 문장이 마이크로소프트 Azure로 보내져 음성이 돼요.<br>· 무료(F0)는 한 달 50만 자까지예요. 넘으면 그달은 멈추고 돈은 나가지 않아요(키를 만들 때 「Free F0」를 골랐을 때).</p>`;
   } else {
     const n = await idbCount();
-    h += `<p>Azure 음성을 <b>내 서버(EC2)</b>를 거쳐 받아요. 챕터 하나를 한 파일로 만들어 <b>화면을 꺼도</b> 재생돼요. 한 번 받은 문장은 이 기기에 저장해 두고 다시 써요(바뀐 문장만 새로 받음).</p>
+    h += `<p>Azure 음성을 <b>내 서버(EC2)</b>를 거쳐 받아요. 챕터 하나를 한 파일로 만들어 <b>화면을 꺼도</b> 재생돼요. 한 번 받은 문장은 이 기기에 저장해 두고 다시 써요(바뀐 문장만 새로 받음).</p>     <label class="tg" style="margin:6px 0 4px"><input type="checkbox" data-t="keepHQ" ${SET.keepHQ ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>     <p class="hint">처음에는 꺼져 있어요 — 화면을 끄고 들을 수 있게. 휴대폰을 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p>
     <div class="lab">음성 서버 주소</div><input class="inp" data-s="azUrl" value="${esc(SET.azUrl)}" placeholder="https://내서버주소" spellcheck="false" inputmode="url">
     <div class="lab" style="margin-top:10px">앱 암호(서버에 정한 것)</div><input class="inp" data-s="azKey" type="password" value="${esc(SET.azKey)}" placeholder="서버 설정의 APP_KEY" autocomplete="off">
     ${azVoiceSel()}
@@ -1578,7 +1579,7 @@ document.addEventListener("click", async e => {
 });
 document.addEventListener("change", e => {
   const t = e.target;
-  if (t.dataset.t) { SET[t.dataset.t] = t.checked; setTouched(); if (U.scr === "play") { const was = P.playing; if (["faster", "shuffle", "spell", "wex"].includes(t.dataset.t)) { if (was) stopAll(); if (t.dataset.t === "shuffle" && P.ch) loadCh(P.li); P.built = null; drawPlay(); if (was) playPause(true); } else paintPlay(); } return; }
+  if (t.dataset.t) { SET[t.dataset.t] = t.checked; setTouched(); if (t.dataset.t === "keep" || t.dataset.t === "keepHQ") keepSync(); if (U.scr === "play") { const was = P.playing; if (["faster", "shuffle", "spell", "wex"].includes(t.dataset.t)) { if (was) stopAll(); if (t.dataset.t === "shuffle" && P.ch) loadCh(P.li); P.built = null; drawPlay(); if (was) playPause(true); } else paintPlay(); } return; }
   if (t.dataset.s) { SET[t.dataset.s] = t.dataset.s === "azCap" ? +t.value : t.value.trim(); setTouched(); P.built = null; if (t.dataset.s === "azMyKey" && U.scr === "set") drawSet(); return; }
   if (U.scr === "edit" && (t.dataset.f || t.id === "chName")) saveEdit();
 });

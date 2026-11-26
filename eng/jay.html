@@ -719,7 +719,7 @@ async function azReady(c) {
   for (const it of c.items) for (const st of stepsFor(it, mode)) if (st.t === "say") keys.add((st.lang === "ko" ? SET.azKo : SET.azEn) + "|" + rateQ(st.rate) + "|" + st.text);
   const sig = [mode, SET.azKo, SET.azEn, ...keys].join("#");
   if (AZR[c.id] && AZR[c.id].sig === sig && AZR[c.id].pct === 100) return 100;
-  let n = 0; for (const k of keys) if (await idbGet(k) || (AUD.map && AUD.map.has(await audName(k)))) n++;   /* 11-15: 다른 기기가 드라이브에 올려 둔 음성도 「준비됨」으로 셈(동기화 때 이 기기로 받아 둠) */
+  let n = 0; const have = await idbSet(); for (const k of keys) if (have.has(k) || (AUD.map && AUD.map.has(await audName(k)))) n++;   /* 11-15: 다른 기기가 드라이브에 올려 둔 음성도 「준비됨」으로 셈(동기화 때 이 기기로 받아 둠) */
   const pct = keys.size ? Math.floor(n * 100 / keys.size) : 0; AZR[c.id] = { sig, pct }; return pct;
 }
 async function paintReady() {
@@ -904,7 +904,9 @@ function setList(ids) {
 function loadCh(li) {
   const c = chById(P.list[li]); P.ch = c; P.li = li;
   let q = c.items.slice(); if (SET.shuffle) for (let i = q.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [q[i], q[j]] = [q[j], q[i]]; }
+  if (P.built) { try { URL.revokeObjectURL(P.built.url); } catch (e) {} }   /* 11-26: 챕터를 넘길 때마다 지난 음성 파일(수십 MB)이 메모리에 남던 것 */
   P.queue = q; P.qi = 0; P.phase = ""; P.built = null; P.mode = modeOf(c);
+  const nb = P.nextB; if (nb) { P.nextB = null; if (nb.id === c.id && nb.built.sig === sigOf(nb.queue, P.mode)) { P.queue = nb.queue; P.built = nb.built; } else { try { URL.revokeObjectURL(nb.built.url); } catch (e) {} } }
 }
 const curIt = () => P.queue[P.qi];
 
@@ -981,10 +983,14 @@ document.addEventListener("visibilitychange", () => {
 const IDB = { db: null };
 function idb() { if (IDB.db) return Promise.resolve(IDB.db); return new Promise((res, rej) => { const r = indexedDB.open("bj-eng-tts", 1); r.onupgradeneeded = () => r.result.createObjectStore("a"); r.onsuccess = () => res(IDB.db = r.result); r.onerror = () => rej(r.error); }); }
 async function idbGet(k) { const db = await idb(); return new Promise(res => { const r = db.transaction("a").objectStore("a").get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }); }
-async function idbPut(k, v) { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").put(v, k); t.oncomplete = () => res(); t.onerror = () => res(); }); }
+async function idbPut(k, v) { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").put(v, k); t.oncomplete = () => { if (IDBS) IDBS.add(k); res(); }; t.onerror = t.onabort = () => { dlog("저장 실패 " + ((t.error && t.error.name) || "")); res(); }; }); }
+/* 11-26 제이: 휴대폰에서 고음질 표시가 늦고 · ▶마다 드라이브를 다시 읽음 → 이 기기에 있는지는 이름표 묶음으로 바로 확인 */
+let IDBS = null; async function idbSet() { if (!IDBS) IDBS = new Set(await idbKeys()); return IDBS; }
+/* 문제 확인용 재생 기록(최근 40줄, 이 기기에만) */
+function dlog(t) { try { const a = JSON.parse(localStorage.getItem("bj-eng-dlog") || "[]"); const d = new Date(), p = n => String(n).padStart(2, "0"); a.push(`${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} ${document.visibilityState === "hidden" ? "[화면 꺼짐] " : ""}${t}`); localStorage.setItem("bj-eng-dlog", JSON.stringify(a.slice(-40))); } catch (e) {} }
 async function idbKeys() { try { const db = await idb(); return await new Promise(res => { const r = db.transaction("a").objectStore("a").getAllKeys(); r.onsuccess = () => res(r.result || []); r.onerror = () => res([]); }); } catch (e) { return []; } }
 async function idbCount() { try { const db = await idb(); return await new Promise(res => { const r = db.transaction("a").objectStore("a").count(); r.onsuccess = () => res(r.result); r.onerror = () => res(0); }); } catch (e) { return 0; } }
-async function idbClear() { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").clear(); t.oncomplete = () => res(); }); }
+async function idbClear() { const db = await idb(); return new Promise(res => { const t = db.transaction("a", "readwrite"); t.objectStore("a").clear(); t.oncomplete = () => { IDBS = null; res(); }; }); }
 const rateQ = r => Math.round(r * 100) / 100;
 /* Azure 무료(F0)는 1분에 20번까지만 받음 → 19번 넘으면 기다렸다가 받기 · 429면 잠시 뒤 다시 */
 const AZQ = []; let AZP = "";
@@ -1030,21 +1036,22 @@ const SR = 24000;
 async function decode(buf) { const oc = new OfflineAudioContext(1, 1, SR); return await oc.decodeAudioData(buf.slice(0)); }
 /* 챕터 전체를 한 파일(WAV)로: 한글 · 생각 시간 · 영어 반복 · 따라 말할 시간 */
 async function buildChapter(c, queue, mode, onp, cancel) {
-  const parts = [], marks = []; let total = 0; const sil = ms => { const n = Math.round(SR * ms / 1000); parts.push(new Float32Array(n)); total += n; };
+  const parts = [], marks = [], memo = new Map(); let total = 0; const sil = ms => { const n = Math.round(SR * ms / 1000); parts.push(new Int16Array(n)); total += n; };
+  const pcmOf = async s => { const mk = s.lang + "|" + rateQ(s.rate) + "|" + s.text; let d = memo.get(mk); if (d) return d; const f = (await decode(await azGet(s.text, s.lang, s.rate))).getChannelData(0); d = new Int16Array(f.length); for (let i = 0; i < f.length; i++) { const v = f[i] < -1 ? -1 : f[i] > 1 ? 1 : f[i]; d[i] = v < 0 ? v * 0x8000 : v * 0x7fff; } memo.set(mk, d); return d; };
   const allSteps = queue.map(it => stepsFor(it, mode)); const nSay = allSteps.flat().filter(s => s.t === "say").length; let k = 0;
   for (let qi = 0; qi < queue.length; qi++) {
     marks.push({ qi, t: total / SR, ph: [] }); let lastSec = 0;
     for (const s of allSteps[qi]) {
       if (cancel()) throw new Error("멈췄어요");
       marks[qi].ph.push({ t: total / SR, ph: s.ph });
-      if (s.t === "say") { const ab = await decode(await azGet(s.text, s.lang, s.rate)); const d = ab.getChannelData(0); parts.push(d); total += d.length; lastSec = d.length / SR; onp(++k, nSay); }
+      if (s.t === "say") { const d = await pcmOf(s); parts.push(d); total += d.length; lastSec = d.length / SR; onp(++k, nSay); }
       else sil(s.auto ? (lastSec * 1000 * 1.05 + 700) * SET.gapF : s.ms);
     }
   }
-  const pcm = new Int16Array(total); let o = 0; for (const p of parts) { for (let i = 0; i < p.length; i++) { const v = Math.max(-1, Math.min(1, p[i])); pcm[o++] = v < 0 ? v * 0x8000 : v * 0x7fff; } }
+  const pcm = { length: total };
   const hd = new DataView(new ArrayBuffer(44)); const W = (p, s) => { for (let i = 0; i < s.length; i++) hd.setUint8(p + i, s.charCodeAt(i)); };
   W(0, "RIFF"); hd.setUint32(4, 36 + pcm.length * 2, true); W(8, "WAVE"); W(12, "fmt "); hd.setUint32(16, 16, true); hd.setUint16(20, 1, true); hd.setUint16(22, 1, true); hd.setUint32(24, SR, true); hd.setUint32(28, SR * 2, true); hd.setUint16(32, 2, true); hd.setUint16(34, 16, true); W(36, "data"); hd.setUint32(40, pcm.length * 2, true);
-  return { url: URL.createObjectURL(new Blob([hd, pcm], { type: "audio/wav" })), marks, dur: total / SR, sig: sigOf(queue, mode) };
+  return { url: URL.createObjectURL(new Blob([hd, ...parts], { type: "audio/wav" })), marks, dur: total / SR, sig: sigOf(queue, mode) };
 }
 const sigOf = (queue, mode) => [mode, SET.spell, SET.wex, SET.exReps, SET.exFirst, SET.reps, SET.faster, SET.think, SET.thinkF, SET.speed, SET.gapF, SET.azKo, SET.azEn, queue.map(i => i.id + i.ko + i.en + exOf(i).map(x => x.e + "~" + x.k).join("^")).join("|")].join("#");
 const B = { cancel: false };
@@ -1053,19 +1060,24 @@ async function runAzure(fromQi) {
   if (!P.built || P.built.sig !== sigOf(P.queue, P.mode)) {
     /* 11-15 제이: PC에서 만든 음성을 휴대폰이 또 만듦 — 드라이브 토큰(1시간)이 끝나 있으면 드라이브를 못 읽고 조용히 Azure로 새로 만들었음.
        ▶ 누름으로 다시 연결(PC) · 휴대폰 설치 앱은 물어봄(다시 연결 = 구글 화면으로 갔다 옴) */
-    if ((SET.engine === "azkey" || SET.engine === "azure") && audOn() && !P.gdSkip && !SYNC.live() && !SYNC.restore()) {
+    const need = []; { const have = await idbSet(), seen = new Set(); for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const kk = (st.lang === "ko" ? SET.azKo : SET.azEn) + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!have.has(kk)) need.push(kk); } } }
+    if (tok !== P.tok) return;
+    dlog(`음성 준비 — ${P.ch ? P.ch.name : ""} · 이 기기에 없는 음성 ${need.length}개`);
+    if (need.length && audOn() && !P.gdSkip && !SYNC.live() && !SYNC.restore()) {
       if (GD_RE()) { P.playing = false; paintPlay(); gdAsk(); return; }
       try { await SYNC.token(true); setTimeout(audSyncAll, 3000); } catch (e) { toast("구글 드라이브에 다시 연결하지 못했어요 — 없는 음성은 이 기기에서 만들어요"); }
     }
     AUD.got = 0; AUD.made = 0;
     $("#busy").hidden = false; B.cancel = false; AZP = ""; $("#busyT").textContent = "음성 만드는 중…"; $("#busyB").style.width = "0";
-    if (SET.engine === "azkey" || SET.engine === "azure") { if (audOn()) { $("#busyT").textContent = "다른 기기에서 만든 음성 확인 중…"; try { await audList(0); } catch (e) {} } const seen = new Set(); let nn = 0; for (const it of P.queue) for (const st of stepsFor(it, P.mode)) if (st.t === "say") { const vv = st.lang === "ko" ? SET.azKo : SET.azEn, kk = vv + "|" + rateQ(st.rate) + "|" + st.text; if (!seen.has(kk)) { seen.add(kk); if (!(await idbGet(kk)) && !(AUD.map && AUD.map.has(await audName(kk)))) nn++; } } if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
+    if (need.length) { if (audOn()) { $("#busyT").textContent = "다른 기기에서 만든 음성 확인 중…"; try { await audList(0); } catch (e) {} } let nn = 0; for (const kk of need) if (!(AUD.map && AUD.map.has(await audName(kk)))) nn++; if (nn > 19) toast(`처음 한 번만 음성을 받아요 — 무료 키는 1분에 20문장까지라 약 ${Math.ceil(nn / 19)}분 걸려요. 받은 음성은 저장돼 다음부터 바로 들려요`); }
+    const t0 = Date.now();
     try { if (P.built) URL.revokeObjectURL(P.built.url); P.built = await buildChapter(P.ch, P.queue, P.mode, (k, n) => { AZP = `음성 준비 중 ${k} / ${n}` + (AUD.got || AUD.made ? ` · 드라이브에서 받음 ${AUD.got || 0} · 새로 만듦 ${AUD.made || 0}` : ""); $("#busyT").textContent = AZP; $("#busyB").style.width = (k * 100 / n) + "%"; }, () => B.cancel || tok !== P.tok); }
     catch (e) { $("#busy").hidden = true; P.playing = false; paintPlay(); if (e.message !== "멈췄어요") toast(e.message + " — ▶를 다시 누르면 받은 데서부터 이어서 만들어요"); return; }
     $("#busy").hidden = true;
     if (tok !== P.tok) return;
-    au.src = P.built.url;
+    dlog(`음성 준비 끝 ${((Date.now() - t0) / 1000).toFixed(1)}초 · 드라이브 ${AUD.got || 0} · 새로 ${AUD.made || 0}`);
   }
+  if (P.srcUrl !== P.built.url) { au.src = P.built.url; P.srcUrl = P.built.url; }
   const m = P.built.marks[fromQi != null ? fromQi : P.qi]; if (m) au.currentTime = m.t + 0.01;
   P.playing = true; mediaMeta();
   try { await au.play(); } catch (e) { P.playing = false; toast("재생을 시작하지 못했어요 — 한 번 더 눌러 주세요"); }
@@ -1074,8 +1086,20 @@ async function runAzure(fromQi) {
 function confirmFallback() { return SS && window.confirm("고품질 음성을 만들지 못했어요.\n이번에는 기기 음성으로 들을까요? (화면을 켜 두어야 해요)"); }
 /* 다음 챕터는 미리 만들어 둠(이어 듣기 끊김 줄이기) — 음성만 저장소에 받아 둠 */
 async function prebuildNext() {
-  if (P.li >= P.list.length - 1) return; const c = chById(P.list[P.li + 1]); if (!c) return;
-  try { for (const it of c.items) for (const s of stepsFor(it, P.mode)) if (s.t === "say") await azGet(s.text, s.lang, s.rate); } catch (e) {}
+  /* 11-26 제이: 화면을 끄면 챕터가 끝난 뒤 다음 챕터를 못 만들고 멈춤(소리가 없으면 휴대폰이 앱을 재움) → 듣는 동안 다음 챕터 파일을 미리 만들어 둠 */
+  const nli = P.li < P.list.length - 1 ? P.li + 1 : (SET.loop === "list" && P.list.length > 1 ? 0 : -1); if (nli < 0 || P.preBusy) return;
+  const c = chById(P.list[nli]); if (!c || !c.items.length || (P.nextB && P.nextB.id === c.id)) return;
+  const cur = P.ch && P.ch.id, li = P.li, gone = () => !P.ch || P.ch.id !== cur || P.li !== li || !isAz();
+  const mode0 = modeOf(c), have = await idbSet(); let miss = 0; for (const it of c.items) for (const st of stepsFor(it, mode0)) if (st.t === "say" && !have.has((st.lang === "ko" ? SET.azKo : SET.azEn) + "|" + rateQ(st.rate) + "|" + st.text)) miss++;
+  if (gone() || P.preBusy) return;
+  if (miss && audOn() && !SYNC.live() && !SYNC.restore()) { dlog(`다음 챕터 미리 만들기 건너뜀 — 없는 음성 ${miss}개 · 드라이브 연결 쉬는 중`); return; }   /* 한도를 몰래 쓰지 않게 */
+  P.preBusy = true;
+  try { const q = c.items.slice(); if (SET.shuffle) for (let i = q.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [q[i], q[j]] = [q[j], q[i]]; }
+    const mode = modeOf(c), b = await buildChapter(c, q, mode, () => {}, gone);
+    if (gone()) { try { URL.revokeObjectURL(b.url); } catch (e) {} }
+    else { if (P.nextB) { try { URL.revokeObjectURL(P.nextB.built.url); } catch (e) {} } P.nextB = { id: c.id, queue: q, built: b }; dlog("다음 챕터 미리 만듦 — " + c.name); }
+  } catch (e) { if (e.message !== "멈췄어요") dlog("다음 챕터 미리 만들기 실패 — " + e.message); }
+  P.preBusy = false;
 }
 function azTick() {
   const au = $("#au"); if (!P.built || !isAz()) return;
@@ -1086,15 +1110,18 @@ function azTick() {
   if ("mediaSession" in navigator && navigator.mediaSession.setPositionState && au.duration && isFinite(au.duration)) { try { navigator.mediaSession.setPositionState({ duration: au.duration, position: Math.min(t, au.duration), playbackRate: 1 }); } catch (e) {} }
 }
 $("#au").addEventListener("timeupdate", azTick);
+$("#au").addEventListener("error", () => { const au = $("#au"); if (!isAz() || !au.src) return; dlog("소리 파일 오류 " + ((au.error && au.error.code) || "")); P.srcUrl = ""; P.built = null; P.playing = false; paintPlay(); if (document.visibilityState === "visible") toast("소리 파일을 다시 만들어야 해요 — ▶를 눌러 주세요"); });
+document.addEventListener("visibilitychange", () => { if (isAz() && P.playing) dlog(document.visibilityState === "hidden" ? "화면 꺼짐 · 듣는 중" : "화면 켜짐"); });
+$("#au").addEventListener("stalled", () => { if (isAz() && P.playing) dlog("소리 끊김(stalled)"); });
 $("#au").addEventListener("ended", () => {
-  if (!isAz()) return; logSent(); chDone();
+  if (!isAz()) return; dlog(`챕터 끝 — ${P.ch ? P.ch.name : ""} · 다음 파일 ${P.nextB ? "준비됨" : "없음"}`); logSent(); chDone();
   if (P.li < P.list.length - 1) { loadCh(P.li + 1); render(); runAzure(0); return; }
   if (SET.loop === "chapter") { P.qi = 0; runAzure(0); return; }
   if (SET.loop === "list") { loadCh(0); render(); runAzure(0); return; }
   P.playing = false; P.qi = 0; paintPlay(); toast("끝까지 들었어요 — 수고했어요");
 });
-$("#au").addEventListener("pause", () => { if (isAz() && !$("#au").ended) { P.playing = false; paintPlay(); } });
-$("#au").addEventListener("play", () => { if (isAz()) { P.playing = true; paintPlay(); } });
+$("#au").addEventListener("pause", () => { if (isAz() && !$("#au").ended) { if (P.playing && !P.userStop) dlog(`멈춤(내가 누르지 않음) ${Math.round($("#au").currentTime)}초 지점`); P.userStop = false; P.playing = false; paintPlay(); } });
+$("#au").addEventListener("play", () => { if (isAz()) { P.playing = true; paintPlay(); setTimeout(prebuildNext, 1500); } });
 
 /* ── 잠금 화면 · 블루투스 단추(Media Session) ── */
 function mediaMeta() {
@@ -1108,13 +1135,13 @@ if ("mediaSession" in navigator) {
   A("seekforward", () => jump(1)); A("seekbackward", () => jump(0));
 }
 /* ── 단추 ── */
-function stopAll() { P.tok++; if (SS) SS.cancel(); const au = $("#au"); try { au.pause(); } catch (e) {} P.playing = false; keepOn(false); }
+function stopAll() { P.userStop = true; setTimeout(() => { P.userStop = false; }, 400); P.tok++; if (SS) SS.cancel(); const au = $("#au"); try { au.pause(); } catch (e) {} P.playing = false; keepOn(false); }
 function playPause(want) {
   const on = want == null ? !P.playing : want;
   if (!P.ch) { const c = dueList()[0] || D.chapters.find(x => x.sec === U.sec && x.items.length) || D.chapters.find(x => x.items.length); if (!c) return toast("챕터를 먼저 만들어 주세요"); P.list = [c.id]; loadCh(0); }
   if (!on) { stopAll(); paintPlay(); return; }
   P.mode = modeOf(P.ch); P.started = true; logStart();
-  if (isAz()) { const au = $("#au"); if (P.built && P.built.sig === sigOf(P.queue, P.mode) && au.src) { au.play().catch(() => {}); P.playing = true; paintPlay(); } else runAzure(); }
+  if (isAz()) { const au = $("#au"); if (P.built && P.built.sig === sigOf(P.queue, P.mode) && P.srcUrl === P.built.url) { au.play().catch(() => {}); P.playing = true; paintPlay(); } else runAzure(); }
   else runDevice();
 }
 function jump(d) {
@@ -1278,7 +1305,7 @@ async function drawSet() {
     <p class="hint">기기 음성은 화면이 꺼지면 휴대폰이 소리를 막아요. 그래서 화면이 꺼지면 그 문장에서 멈추고, 다시 켜면 ▶로 이어 들을 수 있어요. 화면을 끄고 들으려면 「내 Azure 키」를 쓰세요. 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p>`;
   } else if (SET.engine === "azkey") {
     const n = await idbCount(), RG = [["koreacentral", "한국 중부 (koreacentral)"], ["japaneast", "일본 동부 (japaneast)"], ["eastasia", "동아시아 (eastasia)"], ["southeastasia", "동남아시아 (southeastasia)"], ["eastus", "미국 동부 (eastus)"], ["westus2", "미국 서부 2 (westus2)"], ["westeurope", "서유럽 (westeurope)"]];
-    h += `<p>마이크로소프트 Azure의 고품질 음성을 <b>내 무료 키</b>로 바로 받아요. 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 재생되고, 한 번 받은 음성은 이 기기에 저장해 다시 써요.</p>     <label class="tg" style="margin:6px 0 4px"><input type="checkbox" data-t="keepHQ" ${SET.keepHQ ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>     <p class="hint">처음에는 꺼져 있어요 — 화면을 끄고 들을 수 있게. 휴대폰을 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p>
+    h += `<p>마이크로소프트 Azure의 고품질 음성을 <b>내 무료 키</b>로 바로 받아요. 챕터를 한 파일로 만들어 <b>화면을 꺼도</b> 재생되고, 한 번 받은 음성은 이 기기에 저장해 다시 써요.</p>     <label class="tg" style="margin:6px 0 4px"><input type="checkbox" data-t="keepHQ" ${SET.keepHQ ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>     <p class="hint">처음에는 꺼져 있어요 — 화면을 끄고 들을 수 있게. 휴대폰을 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p><details style="margin-top:8px"><summary class="hint" style="cursor:pointer;margin:0">재생 기록 보기(문제 확인용 · 이 기기에만)</summary><pre id="dlogT" style="white-space:pre-wrap;font-size:12.5px;line-height:1.5;margin:6px 0 0;max-height:240px;overflow:auto"></pre></details>
     <div class="lab">Azure 음성 키 <a href="${KEY_HELP}" target="_blank" rel="noopener">키 받는 방법 ↗</a></div><input class="inp" data-s="azMyKey" type="password" value="${esc(SET.azMyKey)}" placeholder="Azure 「키 및 엔드포인트」의 키 1" autocomplete="off" spellcheck="false">
     <div class="lab" style="margin-top:10px">지역 (키를 만든 곳)</div><select class="inp" data-s="azRegion">${RG.map(([k, t]) => `<option value="${k}" ${SET.azRegion === k ? "selected" : ""}>${t}</option>`).join("")}</select>
     ${azVoiceSel()}
@@ -1287,7 +1314,7 @@ async function drawSet() {
     <p class="hint">이번 달 ${(SET.azChars[mk] || 0).toLocaleString()}자 사용 · 저장한 음성 ${n.toLocaleString()}개 (한글은 2자로 셈)<br>· 키는 <b>이 기기에만</b> 저장돼요 — 구글 드라이브 · 백업 파일에는 들어가지 않아요. 공용 휴대폰 · PC에서는 쓰지 마세요.<br>· 이 방식을 쓰면 문장이 마이크로소프트 Azure로 보내져 음성이 돼요.<br>· 무료(F0)는 한 달 50만 자까지예요. 넘으면 그달은 멈추고 돈은 나가지 않아요(키를 만들 때 「Free F0」를 골랐을 때).</p>`;
   } else {
     const n = await idbCount();
-    h += `<p>Azure 음성을 <b>내 서버(EC2)</b>를 거쳐 받아요. 챕터 하나를 한 파일로 만들어 <b>화면을 꺼도</b> 재생돼요. 한 번 받은 문장은 이 기기에 저장해 두고 다시 써요(바뀐 문장만 새로 받음).</p>     <label class="tg" style="margin:6px 0 4px"><input type="checkbox" data-t="keepHQ" ${SET.keepHQ ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>     <p class="hint">처음에는 꺼져 있어요 — 화면을 끄고 들을 수 있게. 휴대폰을 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p>
+    h += `<p>Azure 음성을 <b>내 서버(EC2)</b>를 거쳐 받아요. 챕터 하나를 한 파일로 만들어 <b>화면을 꺼도</b> 재생돼요. 한 번 받은 문장은 이 기기에 저장해 두고 다시 써요(바뀐 문장만 새로 받음).</p>     <label class="tg" style="margin:6px 0 4px"><input type="checkbox" data-t="keepHQ" ${SET.keepHQ ? "checked" : ""}><span>재생 중 화면 꺼짐 막기</span></label>     <p class="hint">처음에는 꺼져 있어요 — 화면을 끄고 들을 수 있게. 휴대폰을 가로로 돌린 큰 글자 플레이어에서는 이 칸과 상관없이 화면이 켜져 있어요.</p><details style="margin-top:8px"><summary class="hint" style="cursor:pointer;margin:0">재생 기록 보기(문제 확인용 · 이 기기에만)</summary><pre id="dlogT" style="white-space:pre-wrap;font-size:12.5px;line-height:1.5;margin:6px 0 0;max-height:240px;overflow:auto"></pre></details>
     <div class="lab">음성 서버 주소</div><input class="inp" data-s="azUrl" value="${esc(SET.azUrl)}" placeholder="https://내서버주소" spellcheck="false" inputmode="url">
     <div class="lab" style="margin-top:10px">앱 암호(서버에 정한 것)</div><input class="inp" data-s="azKey" type="password" value="${esc(SET.azKey)}" placeholder="서버 설정의 APP_KEY" autocomplete="off">
     ${azVoiceSel()}
@@ -1302,7 +1329,7 @@ async function drawSet() {
   h += `<div class="sc"><div class="sh2">${svg(IC.dl)}백업</div><p>모든 챕터 · 기록을 파일 하나로 받아 두고 되살릴 수 있어요.${SET.bkAt ? `<br><span class="num">마지막 백업 ${ymdw(ymdT(SET.bkAt))} ${hm(SET.bkAt)}</span>` : ""}</p><div class="row"><button class="btn" data-a="bk" data-v="make">${svg(IC.dl)}백업 만들기</button><button class="btn" data-a="bk" data-v="restore">${svg(IC.upl)}되살리기</button></div></div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.phone)}앱으로 설치</div><p>${INST.standalone ? "지금 설치한 앱으로 쓰고 있어요." : "홈 화면 · 바탕 화면에 아이콘으로 두고 바로 열 수 있어요."}</p>${INST.standalone ? "" : `<button class="btn go" data-a="inst">${svg(IC.phone)}설치하기</button>`}</div>`;
   h += `<div class="sc"><div class="sh2">${svg(IC.help)}알아 두세요</div><p>· 앱이 닫혀 있을 때는 복습 알림을 보내지 못해요 — 열 때 「오늘 복습할 챕터」를 보여 드려요.<br>· 기기 음성은 화면이 꺼지면 멈출 수 있어요(휴대폰이 앱을 재움). 운전 · 걷기 중에는 「내 Azure 키」를 쓰세요.<br>· 기본 회화 · 단어는 Blog J가 직접 쓴 문장이에요. 같은 뜻을 다르게 말하는 방법도 많아요.<br>· 내 목소리 녹음 · 비교는 다음 버전에 넣을 예정이에요.</p><p style="font-size:12.5px">${BUILD}</p></div>`;
-  if (U.scr !== "set") return; $("#main").innerHTML = h + `</div>`; audStat();
+  if (U.scr !== "set") return; $("#main").innerHTML = h + `</div>`; audStat(); { const dl2 = $("#dlogT"); if (dl2) { let a = []; try { a = JSON.parse(localStorage.getItem("bj-eng-dlog") || "[]"); } catch (e) {} dl2.textContent = a.length ? a.slice().reverse().join("\n") : "아직 기록이 없어요"; } }
 }
 
 /* ── 단어장 인쇄 (A4 · 뜻 가리기 / 단어 가리기) ── */
@@ -1430,7 +1457,9 @@ async function audStat() {   /* 설정 화면: 이 기기 · 드라이브 · 올
   const el = $("#audSt"); if (!el) return;
   try { const keys = (await idbKeys()).filter(k => typeof k === "string"); let m = null; try { m = await audList(0); } catch (e) {}
     let up = 0; if (m) for (const k of keys) if (!m.has(await audName(k))) up++;
-    el.textContent = `이 기기 ${keys.length}개 · 드라이브 ${m ? m.size + "개" : "읽지 못함(연결 쉬는 중)"}${m ? ` · 올릴 것 ${up}개` : ""}${AUD.err ? " · " + AUD.err : ""}`;
+    let stg = ""; try { if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(), ps = navigator.storage.persisted ? await navigator.storage.persisted() : null; stg = ` · 저장 ${Math.round((e.usage || 0) / 1048576)}MB${ps === false ? "(휴대폰이 비울 수 있음)" : ""}`; } } catch (e) {}
+    el.textContent = `이 기기 ${keys.length}개 · 드라이브 ${m ? m.size + "개" : "읽지 못함(연결 쉬는 중)"}${m ? ` · 올릴 것 ${up}개` : ""}${stg}${AUD.err ? " · " + AUD.err : ""}`;
+
   } catch (e) { el.textContent = "확인하지 못했어요"; }
 }
 async function audFix() {
@@ -1444,9 +1473,9 @@ async function audFix() {
 }
 async function audPullAll() {
   if (AUD.pulling || !audOn() || !isAz()) return; AUD.pulling = true;
-  try { const m = await audList(); paintReady(); const need = [], seen = new Set();
+  try { const m = await audList(); paintReady(); const need = [], seen = new Set(), have = await idbSet();
     for (const c of D.chapters) { if (!c.items || !c.items.length) continue; const mode = modeOf(c);
-      for (const it of c.items) for (const st of stepsFor(it, mode)) if (st.t === "say") { const k = (st.lang === "ko" ? SET.azKo : SET.azEn) + "|" + rateQ(st.rate) + "|" + st.text; if (seen.has(k)) continue; seen.add(k); if (m.has(await audName(k)) && !(await idbGet(k))) need.push(k); } }
+      for (const it of c.items) for (const st of stepsFor(it, mode)) if (st.t === "say") { const k = (st.lang === "ko" ? SET.azKo : SET.azEn) + "|" + rateQ(st.rate) + "|" + st.text; if (seen.has(k)) continue; seen.add(k); if (!have.has(k) && m.has(await audName(k))) need.push(k); } }
     let i = 0, done = 0; const one = async () => { while (i < need.length) { const k = need[i++]; if (await audFromDrive(k)) done++; if (done && done % 20 === 0) paintReady(); } };
     await Promise.all([one(), one(), one()]);
     if (done) { paintReady(); if (U.scr === "home" || U.scr === "set") toast(`다른 기기에서 만든 고음질 음성 ${done}개를 받아 뒀어요`); }

@@ -161,6 +161,14 @@ table.grid{border-collapse:separate;border-spacing:0;font-size:13px;min-width:10
 .foot a{color:var(--ink2);font-weight:700;text-decoration:none;border-bottom:1px solid var(--line2)}
 .sw{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-1px;margin-right:4px}
 .serlist{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+#stage [data-ce]{cursor:pointer}#stage g[data-ce^="v:"]{cursor:grab;touch-action:none}#stage.ce-drag,#stage.ce-drag *{cursor:grabbing!important}
+.ce-hint{display:flex;align-items:flex-start;gap:6px;margin-top:10px}.ce-hint svg{flex-shrink:0;margin-top:2px;color:var(--brand-ink)}
+#cepop{position:fixed;z-index:60;width:300px;max-width:calc(100vw - 24px);max-height:min(560px,calc(100vh - 24px));overflow:auto;background:#fff;border:1.5px solid var(--brand-ink);border-radius:14px;box-shadow:0 18px 40px -12px rgba(20,30,40,.35);padding:14px 16px 16px;display:none}
+#cepop.on{display:block}#cepop .ceh{display:flex;align-items:center;gap:8px;margin:-2px 0 6px}#cepop .ceh b{flex:1;min-width:0;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#cepop .ceh .sw{width:14px;height:14px;border-radius:4px;flex-shrink:0}
+#cepop .cex{border:0;background:none;font-size:22px;line-height:1;padding:2px 6px;border-radius:8px;color:var(--ink3);cursor:pointer}#cepop .cex:hover{background:var(--hover)}
+#cepop .cetag{font-size:12.5px;color:var(--ink3);margin:0 0 4px}#cepop .seg{flex-wrap:wrap}#cepop .f{margin-top:12px}#cepop .corow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}#cepop input[type=color]{width:42px;height:32px}
+#cepop .celnk{border:0;background:none;padding:0;color:var(--brand-ink);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-top:12px;display:inline-block}
+@media (max-width:760px){#cepop{left:0!important;right:0;top:auto!important;bottom:0;width:auto;max-width:none;border-radius:16px 16px 0 0;max-height:62vh;border-width:1.5px 0 0;padding-bottom:22px}}
 .serpos{display:flex;flex-direction:column;gap:6px;margin-top:4px}.serpos .spr{display:flex;align-items:center;gap:8px;min-width:0}.serpos .spr b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}.serpos .sw{width:12px;height:12px;border-radius:3px;flex-shrink:0}.serpos select.inp{width:auto;min-width:118px;flex:0 0 auto}.serpos input[type=color]{width:38px;height:30px;flex-shrink:0}
 .serlist label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);padding:6px 10px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
 .serlist label input{accent-color:var(--brand-ink)}
@@ -613,7 +621,7 @@ const DEF = {
   pieDonut: false, pieSort: true, pieLabel: "pct", comboAxis2: true, lineSer: [1], barLine: [], lineBand: "mid", autoSize: true, hide: [], noVal: [], table: false, markPx: 18, markFill: "same", markColor: "#ffffff", linePx: 5.5, lblBg: false, noBg: [], unitOnVal2: true, unitPos: "axis", legAlign: "left", legVAlign: "middle", lblBgColor: "#ffffff", lblBgOp: 85, noTitle: false, noSub: false, ratio: "16:9", rw: 16, rh: 9,
   title: "", sub: "", unit: "", unit2: "", unitOnVal: false, dec: "auto", vals: "auto", theme: "bj", accent: 0,
   fill: "solid", colors: {}, catColors: {}, barLabelPos: "out", lineLabelPos: "top", labelColor: "auto", marker: "circle",
-  legend: "top", grid: true, zero: false, serLbl: {}, serLc: {}, lineAx: {}, size: "ppt", w: 1920, h: 1080, bg: "white", bgColor: "#f4f6fb", font: 100, source: ""
+  legend: "top", grid: true, zero: false, serLbl: {}, serLc: {}, lineAx: {}, lblOv: {}, size: "ppt", w: 1920, h: 1080, bg: "white", bgColor: "#f4f6fb", font: 100, source: ""
 };
 let S = { ...DEF, ...load("set", {}) };
 function syncH() { S.rw = Math.max(1, Math.min(100, S.rw || 16)); S.rh = Math.max(1, Math.min(100, S.rh || 9)); S.w = Math.max(300, Math.min(4000, Math.round(S.w) || 1920)); S.h = Math.round(S.w * S.rh / S.rw);
@@ -645,6 +653,7 @@ function moveSeries(j, d) { const k = j + d; if (k < 0 || k >= D.series.length) 
   [D.series[j], D.series[k]] = [D.series[k], D.series[j]]; D.rows.forEach(r => { [r[j + 1], r[k + 1]] = [r[k + 1], r[j + 1]]; });
   ["hide", "noVal", "noBg", "lineSer", "barLine"].forEach(key => { S[key] = S[key].map(sw).sort((a, b) => a - b); });
   ["colors", "serLbl", "serLc", "lineAx"].forEach(key => { const c = { ...(S[key] || {}) }; S[key] = {}; Object.keys(c).forEach(i => { S[key][sw(+i)] = c[i]; }); });
+  { const o = { ...(S.lblOv || {}) }; S.lblOv = {}; Object.keys(o).forEach(key => { const [a, c] = key.split(":"); S.lblOv[sw(+a) + ":" + c] = o[key]; }); }
   if (/^s\d+$/.test(S.sortBy)) S.sortBy = "s" + sw(+S.sortBy.slice(1));
   if (S.theme === "accent" && !(S.type === "pie" || (D.series.length === 1 && S.type !== "line"))) S.accent = sw(S.accent);
   D.sample = false; render(); }
@@ -657,14 +666,14 @@ function libImport(f) { const r = new FileReader(); r.onload = () => { try { con
 function fileSave() { const name = (S.title.trim() || LIBNAME || "차트").replace(/[\\/:*?"<>|]/g, "").slice(0, 40);
   dl(new Blob([JSON.stringify({ app: "BlogJ-chart", kind: "chart", ver: 1, name, at: Date.now(), S, D: { ...D, sample: false } }, null, 1)], { type: "application/json" }), `${name}.bjchart`);
   toast(`'${name}.bjchart' 파일로 저장했어요`); }
-const DATA_KEYS = ["hide", "noVal", "noBg", "lineSer", "barLine", "sortBy", "colors", "catColors", "accent", "title", "sub", "source", "serLbl", "serLc", "lineAx"];
+const DATA_KEYS = ["hide", "noVal", "noBg", "lineSer", "barLine", "sortBy", "colors", "catColors", "accent", "title", "sub", "source", "serLbl", "serLc", "lineAx", "lblOv"];
 function fileOpen(f, designOnly) { const r = new FileReader(); r.onload = () => { let j; try { j = JSON.parse(r.result); } catch (e) { j = null; }
     if (j && j.app === "BlogJ-chart" && j.items && !designOnly) { libImport(f); return; }
     if (!j || j.app !== "BlogJ-chart" || j.kind !== "chart" || !j.S || !j.D) { toast("Blog J 차트 파일(.bjchart)이 아니에요"); return; }
     if (designOnly) { const keep = {}; DATA_KEYS.forEach(k => keep[k] = S[k]); S = { ...DEF, ...j.S, ...keep }; syncH(); render(); toast(`'${j.name || f.name}'의 디자인을 지금 데이터에 적용했어요`); }
     else { S = { ...DEF, ...j.S }; D = { ...j.D, sample: false }; LIBNAME = j.name || ""; syncH(); STEP = 2; render(); toast(`'${j.name || f.name}'을(를) 열었어요. 숫자를 바꾸면 바로 반영돼요`); } };
   r.readAsText(f); }
-const libDate = t => { const d = new Date(t); return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+const libDate = t => { const d = new Date(t), p2 = n => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}(${"일월화수목금토"[d.getDay()]}) ${p2(d.getHours())}:${p2(d.getMinutes())}`; };
 const LIB_WARN = `<b>이 브라우저에만</b> 저장돼요. 다른 PC·다른 브라우저·시크릿 창에서는 보이지 않고, 인터넷 사용 기록(사이트 데이터)을 지우면 함께 지워져요. 아이폰 사파리는 7일 동안 열지 않으면 지워질 수 있어요. 오래 둘 차트는 <b>백업 파일</b>로도 받아 두세요.`;
 
 /* ── 숫자 표시 ── */
@@ -720,6 +729,9 @@ const labCol = (inside, base) => S.labelColor !== "auto" ? S.labelColor : inside
 function valBg(x, y, s, fs, anchor) { if (!S.lblBg) return ""; const w = textW(String(s), fs) + fs * .8, h = fs * 1.42, cy = y - fs * .36;
   const x0 = anchor === "middle" ? x - w / 2 : anchor === "end" ? x - w + fs * .4 : x - fs * .4;
   return `<rect x="${x0.toFixed(1)}" y="${(cy - h / 2).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${(h * .3).toFixed(1)}" fill="${S.lblBgColor}" fill-opacity="${S.lblBgOp / 100}"/>`; }
+/* 11-26: 차트 눌러 꾸미기 — 누를 수 있는 부분에 data-ce 표시 */
+const CE_ = (str, key) => key == null ? str : str.replace(/^<(\w+)/, `<$1 data-ce="${key}"`);
+const ovOf = (oi, c) => (S.lblOv || {})[oi + ":" + (ORD[c] != null ? ORD[c] : c)];
 /* 꺾은선 표식 4가지 */
 function marker(shape, x, y, r, c, k) {
   const sw = Math.min(r * .9, S.linePx * k / 1.6);  /* 테두리 = 선과 같은 색 · 같은 굵기 */
@@ -760,11 +772,11 @@ function draw() {
   const { cats, series } = orderData(cleanData()); HIT = []; DEFS = []; HID = { line: 0, bar: 0, pie: 0 };
   let o = [];
   const T = (x, y, s, fs, fill, anchor, weight, extra) => `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="${fs.toFixed(1)}" fill="${fill}" text-anchor="${anchor || "start"}" font-weight="${weight || 500}"${extra || ""}>${esc(s)}</text>`;
-  if (S.bg !== "clear") o.push(`<rect width="${W}" height="${H}" fill="${BGC}"/>`);
+  o.push(S.bg !== "clear" ? `<rect width="${W}" height="${H}" fill="${BGC}" data-ce="bg"/>` : `<rect width="${W}" height="${H}" fill="#ffffff" fill-opacity="0" data-ce="bg"/>`);
   let top = pad;
   const showT = !S.noTitle && S.title.trim(), showS = !S.noSub && S.sub.trim();
-  if (showT) { o.push(T(pad, top + fsT * .85, S.title, fsT, INK, "start", 800)); top += fsT * 1.25; }
-  if (showS) { o.push(T(pad, top + fsS * .85, S.sub, fsS, INK2, "start", 500)); top += fsS * 1.4; }
+  if (showT) { o.push(T(pad, top + fsT * .85, S.title, fsT, INK, "start", 800, ' data-ce="title"')); top += fsT * 1.25; }
+  if (showS) { o.push(T(pad, top + fsS * .85, S.sub, fsS, INK2, "start", 500, ' data-ce="title"')); top += fsS * 1.4; }
   if (showT || showS) top += 14 * k;
   let bottom = H - pad;
   if (S.source.trim()) { o.push(T(pad, H - pad * .55, "출처: " + S.source, fsA * .9, INK3, "start", 500)); bottom -= fsA * 1.4; }
@@ -801,15 +813,15 @@ function draw() {
     const lh = fsL * 1.7, total = rows.length * lh;
     const y0 = S.legend === "top" ? top : bottom - total + lh * .2;
     const rowW = r => r.reduce((a, it) => a + it.w, 0) + 18 * k * (r.length - 1);
-    rows.forEach((r, ri) => { let x = S.legAlign === "center" ? (W - rowW(r)) / 2 : S.legAlign === "right" ? W - pad - rowW(r) : pad; const y = y0 + ri * lh + fsL * .5; r.forEach(it => { o.push(legMark(x, y, it.c, it.line, k)); o.push(T(x + 24 * k, y + fsL * .35, it.name, fsL, INK2, "start", 600)); x += it.w + 18 * k; }); });
+    rows.forEach((r, ri) => { let x = S.legAlign === "center" ? (W - rowW(r)) / 2 : S.legAlign === "right" ? W - pad - rowW(r) : pad; const y = y0 + ri * lh + fsL * .5; r.forEach(it => { o.push(`<g data-ce="leg">` + legMark(x, y, it.c, it.line, k) + T(x + 24 * k, y + fsL * .35, it.name, fsL, INK2, "start", 600) + `</g>`); x += it.w + 18 * k; }); });
     if (cornerTxt) o.push(T(W - pad, y0 + fsL * .5 + fsA * .32, cornerTxt, fsA * .92, INK3, "end", 600));
     if (S.legend === "top") top += total + 8 * k; else bottom -= total + 8 * k;
   }
   if (showLeg && S.legend === "right") {
     const tot = legItems.length * fsL * 1.8; let y = S.legVAlign === "middle" ? Math.max(top, (top + bottom) / 2 - tot / 2) + fsL : S.legVAlign === "bottom" ? Math.max(top, bottom - tot) + fsL : top + fsL; const x = right + 16 * k + 8 * k;
-    legItems.forEach(it => { o.push(legMark(x, y - fsL * .35, it.c, it.line, k)); o.push(T(x + 24 * k, y, clip(it.name, fsL, legRightW - 34 * k), fsL, INK2, "start", 600)); y += fsL * 1.8; });
+    legItems.forEach(it => { o.push(`<g data-ce="leg">` + legMark(x, y - fsL * .35, it.c, it.line, k) + T(x + 24 * k, y, clip(it.name, fsL, legRightW - 34 * k), fsL, INK2, "start", 600) + `</g>`); y += fsL * 1.8; });
   }
-  const VT = (x, y, s, fs, fill, anchor, weight, extra, oi) => { if (oi != null && S.serLc && S.serLc[oi]) fill = S.serLc[oi]; const bg = S.lblBg && (oi == null || !S.noBg.includes(oi)); return (bg ? valBg(x, y, s, fs, anchor) : "") + T(x, y, s, fs, bg ? labBg(fill) : fill, anchor, weight, bg ? "" : extra); };
+  const VT = (x, y, s, fs, fill, anchor, weight, extra, oi, ce) => { if (oi != null && S.serLc && S.serLc[oi]) fill = S.serLc[oi]; const bg = S.lblBg && (oi == null || !S.noBg.includes(oi)); const out = (bg ? valBg(x, y, s, fs, anchor) : "") + T(x, y, s, fs, bg ? labBg(fill) : fill, anchor, weight, bg ? "" : extra); return ce ? `<g data-ce="${ce}">${out}</g>` : out; };
   const P = { W, H, k, top, bottom, left: pad, right, fsA, fsV, fsL, col, T, VT, o };
   if (isPie) drawPie(P, cats, ser[0]); else if (S.type === "hbar") drawHbar(P, cats, ser); else drawXY(P, cats, ser, lineSet);
   return wrap(o, W, H);
@@ -916,15 +928,15 @@ function drawXY(P, cats, ser, lineIdx) {
   const yOf = i => axis2 && !rIdx.includes(i) ? y : yL;
   /* 눈금선 · 축 */
   sc.ticks.forEach((v, i) => { const yy = y(v);
-    if (S.grid || v === 0) o.push(`<line x1="${L}" x2="${R}" y1="${yy}" y2="${yy}" stroke="${v === 0 && sc.lo < 0 ? AXIS : GRID}" stroke-width="${(v === 0 && sc.lo < 0 ? 1.6 : 1) * k}"/>`);
-    if (S.yAxis) o.push(T(L - 10 * k, yy + fsA * .35, yl[i], fsA, INK3, "end", 500));
-    if (rOn) o.push(T(R + 10 * k, yy + fsA * .35, rl[i], fsA, INK3, "start", 500)); });
+    if (S.grid || v === 0) o.push(`<line x1="${L}" x2="${R}" y1="${yy}" y2="${yy}" stroke="${v === 0 && sc.lo < 0 ? AXIS : GRID}" stroke-width="${(v === 0 && sc.lo < 0 ? 1.6 : 1) * k}" data-ce="axis"/>`);
+    if (S.yAxis) o.push(T(L - 10 * k, yy + fsA * .35, yl[i], fsA, INK3, "end", 500, ' data-ce="axis"'));
+    if (rOn) o.push(T(R + 10 * k, yy + fsA * .35, rl[i], fsA, INK3, "start", 500, ' data-ce="axis"')); });
   const base = y(Math.max(sc.lo, Math.min(0, sc.hi)));
   if (S.xAxis) o.push(`<line x1="${L}" x2="${R}" y1="${base}" y2="${base}" stroke="${AXIS}" stroke-width="${1.6 * k}"/>`);
   if (unitTxt && S.yAxis) o.push(T(L - 10 * k, P.top + fsA * .9, unitTxt, fsA * .92, INK3, "end", 500));
   if (rOn && rUnit) o.push(T(R + 10 * k, P.top + fsA * .9, rUnit, fsA * .92, INK3, "start", 500));
   const labMax = Math.max(...cats.map(c => textW(c, catFs))) + 8 * k, every = !S.table && labMax > bandW && n > 6 ? Math.ceil(labMax / bandW) : 1;
-  if (S.xAxis || S.table) cats.forEach((c, i) => { if (i % every === 0) o.push(T(L + bandW * (i + .5), P.bottom - tbH - catFs * .55, every > 1 ? c : clip(c, catFs, bandW - 4 * k), catFs, INK2, "middle", 600)); });
+  if (S.xAxis || S.table) cats.forEach((c, i) => { if (i % every === 0) o.push(T(L + bandW * (i + .5), P.bottom - tbH - catFs * .55, every > 1 ? c : clip(c, catFs, bandW - 4 * k), catFs, INK2, "middle", 600, ' data-ce="axis"')); });
   /* 선 점 위치(막대 값 글자와 겹침 피하기에 씀) */
   const linePts = c => lineIdx.map(li => ser[li].v[c] == null ? null : yOf(li)(ser[li].v[c])).filter(q => q != null);
   /* 막대 */
@@ -942,17 +954,20 @@ function drawXY(P, cats, ser, lineIdx) {
           const b0 = v >= 0 ? pp : nn, end = b0 + v; if (v >= 0) pp = end; else nn = end;
           const ya = y(b0), yb = y(end);
           const p = i === lastPos ? barPath(x0, ya, bw, yb, 4 * k) : `M${x0},${Math.min(ya, yb)}h${bw}v${Math.max(.5, Math.abs(yb - ya) - gap)}h${-bw}Z`;
-          o.push(`<path d="${p}" fill="${fills[j]}"/>`);
+          o.push(`<path d="${p}" fill="${fills[j]}" data-ce="s:${ser[i].oi}"/>`);
           HIT.push({ x: x0, y: Math.min(ya, yb), w: bw, h: Math.abs(yb - ya), cat: cats[c], ser: ser[i].name, val: fmt(raw, d1, S.unit) + (pct ? ` (${v.toFixed(1)}%)` : ""), c: col[i] });
           if (S.vals === "all" && !S.noVal.includes(ser[i].oi) && Math.abs(yb - ya) > fsV * 1.3) o.push(VT(x0 + bw / 2, (ya + yb) / 2 + fsV * .35, pct ? v.toFixed(0) + "%" : fmt(raw, d1, S.unit), fsV * .9, labCol(true, col[i]), "middle", 700, "", ser[i].oi)); });
         if (!pct && S.vals !== "none") { const tot2 = barIdx.reduce((s, i) => s + (ser[i].v[c] || 0), 0); o.push(VT(x0 + bw / 2, y(pp) - 8 * k, fmt(tot2, d1, S.unit), fsV, labOut(), "middle", 700)); }
       } else barIdx.forEach((i, j) => { const v = ser[i].v[c]; if (v == null) return; const x = x0 + j * (bw + gap), y0 = y(0 > sc.lo ? 0 : sc.lo), ye = y(v);
-        o.push(`<path d="${barPath(x, y0, bw, ye, 4 * k)}" fill="${catAcc() ? fillOf(catCol(c), "v") : fills[j]}"/>`);
+        o.push(`<path d="${barPath(x, y0, bw, ye, 4 * k)}" fill="${catAcc() ? fillOf(catCol(c), "v") : fills[j]}" data-ce="${catAcc() ? "c:" + ORD[c] : "s:" + ser[i].oi}"/>`);
         const di = decOf(ser[i].v);
         HIT.push({ x, y: Math.min(y0, ye), w: bw, h: Math.abs(ye - y0), cat: cats[c], ser: ser[i].name, val: fmt(v, di, S.unit), c: catCol(c, col[i]) });
         const autoMode = (barIdx.length * n <= 16) ? "all" : "max";
         const fsB0 = barIdx.length > 2 ? fsV * .85 : fsV, txtB = fmt(v, di, S.unit), wB = textW(txtB, fsB0) + (S.lblBg ? fsB0 * .8 : 2 * k), avB = barIdx.length > 1 ? bw * 1.3 + gap : bandW * .96, fsB = wB > avB ? Math.max(fsV * .7, fsB0 * avB / wB) : fsB0;
-        if (showVal(autoMode, c, n, v, vmax) && !S.noVal.includes(ser[i].oi)) {
+        const ovB = ovOf(ser[i].oi, c), ceB = "v:" + ser[i].oi + ":" + ORD[c];
+        if (ovB && ovB.pos === "none") { /* 이 숫자만 숨김 */ }
+        else if (ovB && (ovB.dx || ovB.dy) && showVal(autoMode, c, n, v, vmax) && !S.noVal.includes(ser[i].oi)) { const bl = barLabelY(y0, ye, fsV, k); o.push(VT(x + bw / 2 + ovB.dx * k, bl.y + ovB.dy * k, txtB, fsB, labCol(false, catCol(c, col[i])), "middle", 700, "", ser[i].oi, ceB)); }
+        else if (showVal(autoMode, c, n, v, vmax) && !S.noVal.includes(ser[i].oi)) {
           let { y: ly, inside } = barLabelY(y0, ye, fsV, k);
           if (!inside && mixed && band === "mid" && Math.abs(ye - y0) > fsV * 2.2 && linePts(c).some(q => Math.abs(q - (ly - fsV * .35)) < fsV * 1.8 || Math.abs(q - fsV * 1.2 - (ly - fsV * .35)) < fsV * 1.5)) { inside = true; ly = ye < y0 ? ye + fsV * 1.35 : ye - 10 * k; }
           if (inside && band === "mid") { const lys = linePts(c); for (let t = 0; t < 4 && lys.some(q => Math.abs(q - (ly - fsV * .35)) < fsV * 1.8); t++) ly += (ye < y0 ? 1 : -1) * fsV * 1.6; }
@@ -960,7 +975,7 @@ function drawXY(P, cats, ser, lineIdx) {
             /* 11-26: 옆 막대 숫자와 겹치면 한 줄 위로 · 그래도 겹치면 숨기고 셈 */
             const w2 = textW(txtB, fsB) + (S.lblBg ? fsB * .8 : 0), box = dy => [x + bw / 2 - w2 / 2, ly + dy - fsB * .85, x + bw / 2 + w2 / 2, ly + dy + fsB * .2], hitb = b => BLB.some(q => b[0] < q[2] && b[2] > q[0] && b[1] < q[3] && b[3] > q[1]);
             let dy = 0; if (hitb(box(0))) dy = inside ? null : (ye < y0 ? -1 : 1) * fsB * 1.05; if (dy != null && dy !== 0 && hitb(box(dy))) dy = null;
-            if (dy == null) HID.bar++; else { BLB.push(box(dy)); o.push(VT(x + bw / 2, ly + dy, txtB, fsB, labCol(inside, catCol(c, col[i])), "middle", 700, "", ser[i].oi)); } } } });
+            if (dy == null) HID.bar++; else { BLB.push(box(dy)); o.push(VT(x + bw / 2, ly + dy, txtB, fsB, labCol(inside, catCol(c, col[i])), "middle", 700, "", ser[i].oi, ceB)); } } } });
     }
   }
   /* 선 */
@@ -970,15 +985,17 @@ function drawXY(P, cats, ser, lineIdx) {
     const segs = []; let cur = []; pts.forEach(p => { if (p) cur.push(p); else if (cur.length) { segs.push(cur); cur = []; } }); if (cur.length) segs.push(cur);
     const path = s => S.lineSmooth && s.length > 2 ? smooth(s) : "M" + s.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join("L");
     segs.forEach(s => { if (isLine && S.lineArea) o.push(`<path d="${path(s)}L${s[s.length - 1][0]},${y(Math.max(sc.lo, 0))}L${s[0][0]},${y(Math.max(sc.lo, 0))}Z" fill="${col[i]}" fill-opacity="${lineIdx.length > 1 ? .10 : .16}"/>`);
-      o.push(`<path d="${path(s)}" fill="none" stroke="${col[i]}" stroke-width="${S.linePx * k / 1.6}" stroke-linejoin="round" stroke-linecap="round"/>`); });
+      o.push(`<path d="${path(s)}" fill="none" stroke="${col[i]}" stroke-width="${S.linePx * k / 1.6}" stroke-linejoin="round" stroke-linecap="round" data-ce="s:${ser[i].oi}"/><path d="${path(s)}" fill="none" stroke="#000" stroke-opacity="0" stroke-width="${Math.max(16 * k, S.linePx * k)}" data-ce="s:${ser[i].oi}"/>`); });
     const vmax = Math.max(...pts.filter(Boolean).map(p => p[2]));
     pts.forEach((p, c) => { if (!p) return;
-      if (S.marker !== "none") o.push(marker(S.marker, p[0], p[1], S.markPx / 2 * k / 1.6, col[i], k));
+      if (S.marker !== "none") o.push(CE_(marker(S.marker, p[0], p[1], S.markPx / 2 * k / 1.6, col[i], k), "s:" + ser[i].oi));
       HIT.push({ x: p[0] - bandW / 2, y: Math.min(lnTop, barTop), w: bandW, h: Math.max(lnBot, barBot) - Math.min(lnTop, barTop), cat: cats[c], ser: ser[i].name, val: fmt(p[2], dd, un, true), c: col[i], pt: [p[0], p[1]] });
       const autoMode = mixed || (lineIdx.length === 1 && n <= 12) ? "all" : "last";
       MK.push([p[0], p[1]]);
       const sp = S.serLbl[ser[i].oi] || "";
-      if (sp !== "none" && showVal(autoMode, c, n, p[2], vmax) && !S.noVal.includes(ser[i].oi)) LB.push({ c, oi: ser[i].oi, x: p[0], y: p[1], txt: fmt(p[2], dd, un, uon), pos: sp || S.lineLabelPos, fixed: !!sp }); });
+      const ov = ovOf(ser[i].oi, c);
+      if (ov && ov.pos === "none") return;
+      if ((ov || sp !== "none") && showVal(autoMode, c, n, p[2], vmax) && !S.noVal.includes(ser[i].oi)) LB.push({ c, oi: ser[i].oi, x: p[0], y: p[1], txt: fmt(p[2], dd, un, uon), pos: (ov && ov.pos) || (sp !== "none" && sp) || S.lineLabelPos, fixed: !!(sp || (ov && ov.pos)), ov }); });
   });
   /* 11-26: 꺾은선 숫자 겹침 피하기 — 고른 위치 먼저, 겹치면 반대쪽 · 한 칸 더 멀리 · 그래도 겹치면 숨기고 셈.
      계열마다 위치를 정했으면(S.serLbl) 그 위치에서만 멀리/가까이를 찾음 */
@@ -988,10 +1005,12 @@ function drawXY(P, cats, ser, lineIdx) {
     LB.sort((a, b) => a.c - b.c || a.y - b.y).forEach(l => { const w = textW(l.txt, fsV) + (S.lblBg ? fsV * .8 : 0);
       const at = (pos, ex) => pos === "bottom" ? [l.x, l.y + off + ex + fsV * .85, "middle"] : pos === "left" ? [l.x - off - ex - 4 * k, l.y + fsV * .35, "end"] : pos === "right" ? [l.x + off + ex + 4 * k, l.y + fsV * .35, "start"] : [l.x, l.y - off - ex - 2 * k, "middle"];
       const tries = l.fixed ? [[l.pos, 0], [l.pos, fsV * .9], [l.pos, fsV * 1.8]] : [[l.pos, 0], [opp[l.pos], 0], [l.pos, fsV * .9], [opp[l.pos], fsV * .9], [l.pos, fsV * 1.8], [opp[l.pos], fsV * 1.8]];
-      let ok = null; for (const [ps, ex] of tries) { const a = at(ps, ex), b = bx(a[0], a[1], w, a[2]); if (!hitB(b)) { ok = [a, b]; break; } }
-      if (!ok && l.fixed) { const a = at(l.pos, 0); ok = [a, bx(a[0], a[1], w, a[2])]; }  /* 직접 정한 위치는 겹쳐도 보임 */
+      let ok = null;
+      if (l.ov && (l.ov.dx || l.ov.dy)) { const a0 = at(l.pos, 0), a = [a0[0] + l.ov.dx * k, a0[1] + l.ov.dy * k, a0[2]]; ok = [a, bx(a[0], a[1], w, a[2])]; }  /* 끌어서 옮긴 숫자는 그 자리 그대로 */
+      else for (const [ps, ex] of tries) { const a = at(ps, ex), b = bx(a[0], a[1], w, a[2]); if (!hitB(b)) { ok = [a, b, ps]; break; } }
+      if (!ok && l.fixed) { const a = at(l.pos, 0); ok = [a, bx(a[0], a[1], w, a[2]), l.pos]; }  /* 직접 정한 위치는 겹쳐도 보임 */
       if (!ok) { HID.line++; return; } put.push(ok[1]);
-      o.push(VT(ok[0][0], ok[0][1], l.txt, fsV, S.labelColor === "auto" && lineIdx.length > 1 ? serInk(col[ser.findIndex(q => q.oi === l.oi)]) : labOut(), ok[0][2], 700, ` stroke="${S.bg === "clear" ? "#fff" : BGC}" stroke-width="${4 * k}" paint-order="stroke"`, l.oi)); }); }
+      o.push(VT(ok[0][0], ok[0][1], l.txt, fsV, S.labelColor === "auto" && lineIdx.length > 1 ? serInk(col[ser.findIndex(q => q.oi === l.oi)]) : labOut(), ok[0][2], 700, ` stroke="${S.bg === "clear" ? "#fff" : BGC}" stroke-width="${4 * k}" paint-order="stroke"`, l.oi, "v:" + l.oi + ":" + (ORD[l.c] != null ? ORD[l.c] : l.c) + ":" + (ok[2] || l.pos))); }); }
   /* 데이터 표: 항목 칸이 막대 위치와 같은 줄에 맞춰짐 */
   if (S.table) { const yT = P.bottom - tbH, yH = B0, fz0 = fsV * .85;
     const cells = ser.map((s, r) => { const dd = decOf(s.v), ln = mixed && lineIdx.includes(r); return s.v.map(v => v == null ? "" : fmt(v, dd, ln ? S.unit2 : S.unit, ln ? S.unitOnVal2 : S.unitOnVal)); });
@@ -1027,28 +1046,29 @@ function drawHbar(P, cats, ser) {
   const x = v => L + (v - sc.lo) / (sc.hi - sc.lo) * (R - L);
   const band = (B - Tp) / n;
   sc.ticks.forEach(v => { if (S.grid) o.push(`<line x1="${x(v)}" x2="${x(v)}" y1="${Tp}" y2="${B}" stroke="${GRID}" stroke-width="${k}"/>`);
-    if (S.xAxis) o.push(T(x(v), P.bottom - fsA * .45, pct ? v + "%" : fmt(v, tickDec(sc.ticks)), fsA, INK3, "middle", 500)); });
+    if (S.xAxis) o.push(T(x(v), P.bottom - fsA * .45, pct ? v + "%" : fmt(v, tickDec(sc.ticks)), fsA, INK3, "middle", 500, ' data-ce="axis"')); });
   if (S.yAxis) o.push(`<line x1="${x(0)}" x2="${x(0)}" y1="${Tp}" y2="${B}" stroke="${AXIS}" stroke-width="${1.6 * k}"/>`);
   if (unitTxt && S.xAxis) o.push(T(P.right, P.top + fsA * .9, unitTxt, fsA * .92, INK3, "end", 500));
   const gap = Math.max(0, S.barGap * k), inner = band * Math.min(.98, Math.max(.1, S.barWidth / 100)), nb = stack ? 1 : ser.length, bh = Math.max(2, (inner - gap * (nb - 1)) / nb);
   const vmax = Math.max(...ser.flatMap(s => s.v.filter(v => v != null)));
   const fills = ser.map((_, i) => fillOf(col[i], "h"));
   idx.forEach((c, r) => { const y0 = Tp + band * r + (band - inner) / 2;
-    if (S.yAxis) o.push(T(L - 10 * k, Tp + band * (r + .5) + catFs * .35, clip(cats[c], catFs, labW - 12 * k), catFs, INK2, "end", 600));
+    if (S.yAxis) o.push(T(L - 10 * k, Tp + band * (r + .5) + catFs * .35, clip(cats[c], catFs, labW - 12 * k), catFs, INK2, "end", 600, ' data-ce="axis"'));
     if (stack) { let pp = 0; const tot = ser.reduce((s, x) => s + Math.max(0, x.v[c] || 0), 0) || 1; const lastI = ser.map((_, i) => i).reverse().find(i => (ser[i].v[c] || 0) > 0);
       ser.forEach((s, i) => { let v = s.v[c]; if (v == null || v <= 0) return; const raw = v; if (pct) v = v / tot * 100; const a = x(pp), b = x(pp + v); pp += v;
-        o.push(`<path d="${i === lastI ? barPath(y0, a, bh, b, 4 * k, true) : `M${a},${y0}h${Math.max(.5, b - a - gap)}v${bh}h${-Math.max(.5, b - a - gap)}Z`}" fill="${fills[i]}"/>`);
+        o.push(`<path d="${i === lastI ? barPath(y0, a, bh, b, 4 * k, true) : `M${a},${y0}h${Math.max(.5, b - a - gap)}v${bh}h${-Math.max(.5, b - a - gap)}Z`}" fill="${fills[i]}" data-ce="s:${s.oi}"/>`);
         HIT.push({ x: a, y: y0, w: b - a, h: bh, cat: cats[c], ser: s.name, val: fmt(raw, d, S.unit) + (pct ? ` (${v.toFixed(1)}%)` : ""), c: col[i] });
         if (S.vals === "all" && !S.noVal.includes(s.oi) && b - a > textW(pct ? "100%" : fmt(raw, d), fsV * .9) + 10 * k) o.push(VT((a + b) / 2, y0 + bh / 2 + fsV * .32, pct ? v.toFixed(0) + "%" : fmt(raw, d, S.unit), fsV * .9, labCol(true, col[i]), "middle", 700, "", s.oi)); });
       if (!pct && S.vals !== "none") o.push(VT(x(pp) + 8 * k, y0 + bh / 2 + fsV * .35, fmt(ser.reduce((s, x) => s + (x.v[c] || 0), 0), d, S.unit), fsV, labOut(), "start", 700));
     } else ser.forEach((s, i) => { const v = s.v[c]; if (v == null) return; const yy = y0 + i * (bh + gap), xa = x(0), xb = x(v);
-      o.push(`<path d="${barPath(yy, xa, bh, xb, 4 * k, true)}" fill="${catAcc() ? fillOf(catCol(c), "h") : fills[i]}"/>`);
+      o.push(`<path d="${barPath(yy, xa, bh, xb, 4 * k, true)}" fill="${catAcc() ? fillOf(catCol(c), "h") : fills[i]}" data-ce="${catAcc() ? "c:" + ORD[c] : "s:" + s.oi}"/>`);
       const di = decOf(s.v);
       HIT.push({ x: Math.min(xa, xb), y: yy, w: Math.abs(xb - xa), h: bh, cat: cats[c], ser: s.name, val: fmt(v, di, S.unit), c: catCol(c, col[i]) });
-      if (showVal("all", r, n, v, vmax) && !S.noVal.includes(s.oi)) { const t = fmt(v, di, S.unit), fz = ser.length > 2 ? fsV * .85 : fsV, tw = textW(t, fz), right = v >= 0, len = Math.abs(xb - xa), yT = yy + bh / 2 + fz * .35;
+      const ovH = ovOf(s.oi, c);
+      if (!(ovH && ovH.pos === "none") && showVal("all", r, n, v, vmax) && !S.noVal.includes(s.oi)) { const t = fmt(v, di, S.unit), fz = ser.length > 2 ? fsV * .85 : fsV, tw = textW(t, fz), right = v >= 0, len = Math.abs(xb - xa), yT = yy + bh / 2 + fz * .35;
         let p = S.barLabelPos; if (p !== "out" && len < tw + 16 * k) p = "out";
         const pos = p === "out" ? [right ? xb + 8 * k : xb - 8 * k, right ? "start" : "end", false] : p === "center" ? [(xa + xb) / 2, "middle", true] : p === "inBase" ? [right ? xa + 8 * k : xa - 8 * k, right ? "start" : "end", true] : [right ? xb - 8 * k : xb + 8 * k, right ? "end" : "start", true];
-        o.push(VT(pos[0], yT, t, fz, labCol(pos[2], catCol(c, col[i])), pos[1], 700, "", s.oi)); } });
+        o.push(VT(pos[0] + (ovH ? ovH.dx || 0 : 0) * k, yT + (ovH ? ovH.dy || 0 : 0) * k, t, fz, labCol(pos[2] && !(ovH && (ovH.dx || ovH.dy)), catCol(c, col[i])), pos[1], 700, "", s.oi, "v:" + s.oi + ":" + ORD[c])); } });
   });
   /* 데이터 표: 오른쪽에, 막대 줄과 같은 높이로 */
   if (S.table) { let x = P.right - tblW + 14 * k; const xs = P.right - tblW + 14 * k, hy = Tp - fsV * 1.9;
@@ -1082,7 +1102,7 @@ function drawPie(P, cats, s) {
     if (items.length === 1) dpath = S.pieDonut ? `M${cx - R},${cy}a${R},${R} 0 1,0 ${2 * R},0a${R},${R} 0 1,0 ${-2 * R},0Z M${cx - r0},${cy}a${r0},${r0} 0 1,1 ${2 * r0},0a${r0},${r0} 0 1,1 ${-2 * r0},0Z` : `M${cx - R},${cy}a${R},${R} 0 1,0 ${2 * R},0a${R},${R} 0 1,0 ${-2 * R},0Z`;
     else { const [x1, y1] = P1(R, a), [x2, y2] = P1(R, a1);
       dpath = r0 ? (() => { const [x3, y3] = P1(r0, a1), [x4, y4] = P1(r0, a); return `M${x1},${y1}A${R},${R} 0 ${big},1 ${x2},${y2}L${x3},${y3}A${r0},${r0} 0 ${big},0 ${x4},${y4}Z`; })() : `M${cx},${cy}L${x1},${y1}A${R},${R} 0 ${big},1 ${x2},${y2}Z`; }
-    o.push(`<path d="${dpath}" fill="${ff}" stroke="${S.bg === "clear" ? "#fff" : BGC}" stroke-width="${2.5 * k}" stroke-linejoin="round" fill-rule="evenodd"/>`);
+    o.push(`<path d="${dpath}" fill="${ff}" stroke="${S.bg === "clear" ? "#fff" : BGC}" stroke-width="${2.5 * k}" stroke-linejoin="round" fill-rule="evenodd" data-ce="c:${it.i}"/>`);
     const pc = it.v / tot * 100;
     HIT.push({ pie: [cx, cy, r0, R, a, a1], cat: it.c, ser: s.name, val: fmt(it.v, d, S.unit) + ` (${pc.toFixed(1)}%)`, c: cc });
     if (S.pieLabel !== "none" && pc < (S.pieLabel === "out" ? 2 : 5)) HID.pie++;
@@ -1186,7 +1206,7 @@ function render() {
       ${hasBar && t !== "pie" ? `<label class="f">막대 숫자 위치</label>${seg("barLabelPos", [["out", "막대 위"], ["inEnd", "막대 안"], ["center", "가운데"], ["inBase", "막대 아래"]])}${t === "hbar" ? `<p class="hint">가로 막대에서는 위 = 막대 끝 바깥, 아래 = 막대 시작 쪽이에요.</p>` : ""}` : ""}
       ${hasLine ? `<label class="f">꺾은선 숫자 위치 <span class="muted">${lines.length > 1 ? "모든 꺾은선 기본 · 겹치면 알아서 비켜요" : ""}</span></label>${seg("lineLabelPos", [["top", "위"], ["bottom", "아래"], ["left", "왼쪽"], ["right", "오른쪽"]])}
       ${lines.length > 1 ? `<label class="f">계열마다 숫자 위치 <span class="muted">정하면 그 계열은 그 자리에 고정</span></label><div class="serpos">${lines.map(i => `<div class="spr"><span class="sw" style="background:${sc[i]}"></span><b>${esc(D.series[i] || "계열 " + (i + 1))}</b><select class="inp" data-slp="${i}" aria-label="${esc(D.series[i])} 숫자 위치">${[["", "기본"], ["top", "위"], ["bottom", "아래"], ["left", "왼쪽"], ["right", "오른쪽"], ["none", "숨기기"]].map(([v, l]) => `<option value="${v}" ${(S.serLbl[i] || "") === v ? "selected" : ""}>${l}</option>`).join("")}</select></div>`).join("")}</div>` : ""}` : ""}
-      <label class="f">소수점</label><select class="inp" data-k="dec">${[["auto", "자동"], ["0", "없음"], ["1", "1자리"], ["2", "2자리"]].map(([v, l]) => `<option value="${v}" ${S.dec === v ? "selected" : ""}>${l}</option>`).join("")}</select>`],
+      <label class="f">소수점</label><select class="inp" data-k="dec">${[["auto", "자동"], ["0", "없음"], ["1", "1자리"], ["2", "2자리"]].map(([v, l]) => `<option value="${v}" ${S.dec === v ? "selected" : ""}>${l}</option>`).join("")}</select>${Object.keys(S.lblOv || {}).length ? `<div class="note" style="margin-top:12px">차트에서 직접 옮기거나 숨긴 숫자 ${Object.keys(S.lblOv).length}개가 있어요. <button class="lnk" data-ceovall="1">모두 제자리로</button></div>` : ""}`],
     ["valstyle", "숫자 꾸미기", "숫자 색 · 숫자 배경", `      <label class="f">숫자 색</label><div class="corow"><div class="seg" style="flex:1">${[["auto", "자동"], ["#20241f", "검정"], ["#ffffff", "흰색"], ["#20263a", "네이비"]].map(([v, l]) => `<button class="${S.labelColor === v ? "on" : ""}" data-seg="labelColor" data-v='${JSON.stringify(v)}'>${l}</button>`).join("")}</div><input type="color" data-lc="1" value="${S.labelColor === "auto" ? "#20241f" : S.labelColor}" aria-label="숫자 색 직접 고르기" title="직접 고르기"></div>
       <p class="hint">자동은 막대 안이면 흰색, 밖이면 검정이에요. 꺾은선이 여러 개면 숫자를 선 색으로 칠해 어느 선 숫자인지 보이게 해요.</p>
       ${t !== "pie" && vis.length > 1 ? `<label class="f">계열마다 숫자 색 <span class="muted">고르면 위 색보다 먼저</span></label><div class="serpos">${vis.map(i => `<div class="spr"><span class="sw" style="background:${sc[i]}"></span><b>${esc(D.series[i] || "계열 " + (i + 1))}</b><input type="color" data-slc="${i}" value="${S.serLc[i] || (S.labelColor === "auto" ? "#20241f" : S.labelColor)}" aria-label="${esc(D.series[i])} 숫자 색">${S.serLc[i] ? `<button class="lnk" data-slcr="${i}">기본으로</button>` : `<button class="lnk" data-slcs="${i}">계열 색으로</button>`}</div>`).join("")}</div>` : ""}
@@ -1246,15 +1266,16 @@ ${t === "line" ? `${chk("zero", "세로축을 0부터 시작")}<p class="hint">0
   <div class="col-r"><div class="res-card">
     <div class="res-h"><h3>${esc(chartName())}</h3><span id="dimtxt"></span></div>
     <div class="stage" id="stage"><div class="tip" id="tip"></div></div>
+    <p class="hint ce-hint">${IC('<path d="M9 4v9l-2-2-2 2 5 6h7l2-7-6-2V4z"/>', 15)}<span>차트에서 <b>막대 · 선 · 숫자 · 제목 · 범례 · 축 · 배경</b>을 누르면 그 자리에서 꾸밀 수 있어요. 숫자는 끌어서 옮길 수도 있어요.</span></p>
     ${STEP < 5 ? `<p class="hint" style="margin-top:10px">꾸미기까지 마치고 <b>선택 완료</b>를 누르면 저장·복사할 수 있어요.</p>` : ""}
     <p class="priv">${IC(I.shield, 14)} 표의 숫자는 이 브라우저 안에서만 쓰이고 어디에도 전송되지 않습니다. 입력한 표와 설정은 다음에 이어서 쓰도록 이 브라우저에만 기억됩니다.</p>
   </div></div></div>
   <div class="foot">Copyright © <a href="https://luvbong.tistory.com/" target="_blank" rel="noopener">Blog J</a> | All Rights Reserved</div>
   <div class="toast" id="toast"></div></div>${pasteModal()}`;
-  paint(); save();
+  paint(); save(); ceRefresh();
 }
 function paint() { const st = $("#stage"); if (!st) return; const tip = $("#tip"); st.innerHTML = draw(); st.appendChild(tip); const d = dims(), sv = st.querySelector("svg"), mh = innerHeight * .78; if (sv && st.clientWidth * d.h / d.w > mh) sv.style.width = Math.round(mh * d.w / d.h) + "px"; const dt = $("#dimtxt"); if (dt) { const hidTxt = HID.line ? ` · <b class="grow">겹쳐서 숨긴 숫자 ${HID.line}개 — '숫자 표시'에서 계열마다 위치를 정하면 보여요</b>` : HID.bar ? ` · <b class="grow">막대가 좁아 숨긴 숫자 ${HID.bar}개 — 가로 크기를 키우거나 '가장 큰 값'만 보이게 해 보세요</b>` : HID.pie ? ` · <b class="grow">작은 조각 ${HID.pie}개 숫자는 범례에 있어요</b>` : "";
-    dt.innerHTML = `${d.w}×${d.h}px${d.grow ? ` · <b class="grow">${d.grow}</b>` : ""}${hidTxt || (d.grow ? "" : " · 막대·점에 마우스를 올리면 값이 보여요")}`; } }
+    dt.innerHTML = `${d.w}×${d.h}px${d.grow ? ` · <b class="grow">${d.grow}</b>` : ""}${hidTxt || (d.grow ? "" : " · 막대 · 선 · 숫자 · 제목 · 배경을 누르면 바로 꾸밀 수 있어요")}`; } ceMark(); }
 let toastT; function toast(m) { const t = $("#toast"); if (!t) return; t.textContent = m; t.style.display = "block"; clearTimeout(toastT); toastT = setTimeout(() => t.style.display = "none", 2400); }
 
 /* ── 엑셀 붙여넣기 창: 붙여넣기 → 표로 확인 → 확정하면 닫히며 입력 ── */
@@ -1284,7 +1305,7 @@ function pmRefresh() { const old = $(".pm"); const html = pasteModal(); if (old)
 function applyData(p) {
   if (p.series.length > 8) { p.series = p.series.slice(0, 8); p.rows = p.rows.map(r => r.slice(0, 9)); }
   D = p; if (Object.values(SAMPLES).some(x => x.title === S.title)) { S.title = ""; S.sub = ""; S.source = ""; }
-  S.colors = {}; S.catColors = {}; S.hide = []; S.noVal = []; S.noBg = []; S.sortBy = "none"; S.lineSer = S.lineSer.filter(i => i < p.series.length); S.barLine = S.barLine.filter(i => i < p.series.length);
+  S.colors = {}; S.catColors = {}; S.hide = []; S.noVal = []; S.noBg = []; S.lblOv = {}; ceClose(); S.sortBy = "none"; S.lineSer = S.lineSer.filter(i => i < p.series.length); S.barLine = S.barLine.filter(i => i < p.series.length);
   if (S.type === "combo" && p.series.length > 1) S.lineSer = [p.series.length - 1];  /* 새 데이터: 콤보는 마지막 계열을 꺾은선으로 */
   render(); toast(`${p.rows.length}줄 × ${p.series.length}계열을 넣었어요`); }
 
@@ -1303,6 +1324,7 @@ document.addEventListener("click", e => {
   if (b.dataset.bgc) { S.lblBgColor = b.dataset.bgc; render(); return; }
   if (b.dataset.wpx) { S.w = +b.dataset.wpx; syncH(); render(); return; }
   if (b.dataset.size) { const z = { ppt: [1920, 1080], doc: [1600, 1200], blog: [800, 500], sq: [1080, 1080] }[b.dataset.size]; S.size = b.dataset.size; if (z) { S.w = z[0]; S.h = z[1]; } render(); return; }
+  if (b.dataset.ceovall) { S.lblOv = {}; render(); toast("옮기거나 숨긴 숫자를 모두 제자리로 돌렸어요"); return; }
   if (b.dataset.screset != null) { delete S.colors[b.dataset.screset]; render(); return; }
   if (b.dataset.slcr != null) { delete S.serLc[b.dataset.slcr]; render(); return; }
   if (b.dataset.slcs != null) { const i = +b.dataset.slcs; S.serLc[i] = colors(D.series.length)[i]; render(); return; }
@@ -1310,7 +1332,7 @@ document.addEventListener("click", e => {
   if (b.dataset.delr != null) { D.sample = false; D.rows.splice(+b.dataset.delr, 1); if (!D.rows.length) D.rows.push(["", ...D.series.map(() => null)]); render(); return; }
   if (b.dataset.mvc != null) { moveSeries(+b.dataset.mvc, +b.dataset.d); return; }
   if (b.dataset.delc != null) { if (D.series.length < 2) { toast("계열은 하나 이상 있어야 해요"); return; } D.sample = false; const j = +b.dataset.delc; D.series.splice(j, 1); D.rows.forEach(r => r.splice(j + 1, 1));
-    const fix = a => a.filter(i => i !== j).map(i => i > j ? i - 1 : i); S.hide = fix(S.hide); S.noVal = fix(S.noVal); S.noBg = fix(S.noBg); S.sortBy = "none"; S.lineSer = fix(S.lineSer); S.barLine = fix(S.barLine); S.colors = {}; S.serLbl = {}; S.serLc = {}; S.lineAx = {}; render(); return; }
+    const fix = a => a.filter(i => i !== j).map(i => i > j ? i - 1 : i); S.hide = fix(S.hide); S.noVal = fix(S.noVal); S.noBg = fix(S.noBg); S.sortBy = "none"; S.lineSer = fix(S.lineSer); S.barLine = fix(S.barLine); S.colors = {}; S.serLbl = {}; S.serLc = {}; S.lineAx = {}; S.lblOv = {}; ceClose(); render(); return; }
   const a = b.dataset.act;
   if (a === "pasteopen") { PM = { open: true, text: "", head: true, flip: false, focus: true }; pmRefresh(); }
   else if (a === "pmclose") { PM.open = false; pmRefresh(); }
@@ -1376,6 +1398,88 @@ document.addEventListener("mousemove", e => { const st = $("#stage"), tip = $("#
   tip.innerHTML = `<b>${esc(hit.cat)}</b><i style="background:${hit.c}"></i>${esc(hit.ser)} · ${esc(hit.val)}`;
   tip.style.display = "block"; let lx = e.clientX - rc.left + 14, ly = e.clientY - rc.top + 14; if (lx + tip.offsetWidth > rc.width) lx = e.clientX - rc.left - tip.offsetWidth - 10; if (ly + tip.offsetHeight > rc.height) ly = e.clientY - rc.top - tip.offsetHeight - 10;
   tip.style.left = lx + "px"; tip.style.top = ly + "px"; });
+
+
+/* ══════════ 11-26: 차트 눌러 꾸미기 ══════════
+   data-ce: s:계열 · c:원 조각/강조 항목 · v:계열:항목[:지금 위치] · title · leg · axis · bg */
+let CE = null;   /* { key, x, y } — 열린 꾸미기 창 */
+const CE_POS = [["top", "위"], ["bottom", "아래"], ["left", "왼쪽"], ["right", "오른쪽"]];
+function ceEl() { let p = $("#cepop"); if (!p) { p = document.createElement("div"); p.id = "cepop"; p.setAttribute("role", "dialog"); p.setAttribute("aria-label", "차트 꾸미기"); document.body.appendChild(p); } return p; }
+function ceClose() { CE = null; const p = $("#cepop"); if (p) p.classList.remove("on"); ceMark(); }
+function ceHead(t, c) { return `<div class="ceh">${c ? `<span class="sw" style="background:${c}"></span>` : ""}<b>${esc(t)}</b><button class="cex" data-ce-x="1" aria-label="닫기">×</button></div>`; }
+function ceBody(key) {
+  const t = S.type, isXY = t !== "pie", cAll = isXY ? colors(D.series.length) : colors(D.rows.length, true), lines = lineSeries(D.series.length);
+  if (key.startsWith("s:")) { const i = +key.slice(2), nm = D.series[i] || "계열 " + (i + 1), isL = lines.includes(i);
+    const axisSel = t === "combo" && S.comboAxis2 && S.lineBand === "mid" && isL && lines.filter(j => !S.hide.includes(j)).length > 1;
+    return ceHead(nm, cAll[i]) + `<p class="cetag">${isL ? "꺾은선" : "막대"} 한 줄 꾸미기 — 이 계열에만 적용돼요</p>
+      <label class="f">${isL ? "선" : "막대"} 색</label><div class="corow"><input type="color" data-sc="${i}" value="${cAll[i]}" aria-label="${esc(nm)} 색">${S.colors[i] ? `<button class="lnk" data-screset="${i}">원래 색으로</button>` : ""}</div>
+      ${isL ? `<label class="f">숫자 위치 <span class="muted">이 선의 숫자만</span></label><select class="inp" data-slp="${i}">${[["", "기본(자동으로 비킴)"], ["top", "위"], ["bottom", "아래"], ["left", "왼쪽"], ["right", "오른쪽"], ["none", "숨기기"]].map(([v, l]) => `<option value="${v}" ${(S.serLbl[i] || "") === v ? "selected" : ""}>${l}</option>`).join("")}</select>` : `<label class="chk" style="margin-top:12px"><input type="checkbox" data-numv="${i}" ${S.noVal.includes(i) ? "" : "checked"}> 이 막대에 숫자 보이기</label>`}
+      <label class="f">숫자 색</label><div class="corow"><input type="color" data-slc="${i}" value="${S.serLc[i] || (S.labelColor === "auto" ? "#20241f" : S.labelColor)}" aria-label="${esc(nm)} 숫자 색">${S.serLc[i] ? `<button class="lnk" data-slcr="${i}">기본으로</button>` : `<button class="lnk" data-slcs="${i}">계열 색으로</button>`}</div>
+      ${S.lblBg ? `<label class="chk" style="margin-top:10px"><input type="checkbox" data-nobg="${i}" ${S.noBg.includes(i) ? "" : "checked"}> 숫자 배경 넣기</label>` : ""}
+      ${axisSel ? `<label class="f">축</label><select class="inp" data-lax="${i}">${[["", "자동"], ["L", "왼쪽 축 (막대와 같이)"], ["R", "오른쪽 축"]].map(([v, l]) => `<option value="${v}" ${(S.lineAx[i] || "") === v ? "selected" : ""}>${l}</option>`).join("")}</select>` : ""}
+      ${isL ? `${rng("linePx", "선 굵기 <span class=\"muted\">모든 선</span>", 2, 14, .5, "px")}<label class="f">표식 <span class="muted">모든 선</span></label>${seg("marker", MARKS)}` : rng("barWidth", "막대 굵기 <span class=\"muted\">모든 막대</span>", 20, 95, 1, "%")}`; }
+  if (key.startsWith("c:")) { const i = +key.slice(2), nm = (D.rows[i] && D.rows[i][0]) || "항목 " + (i + 1), cc = colors(D.rows.length, true)[i];
+    if (t !== "pie") return ceHead(nm, ACC) + `<p class="cetag">강조 색으로 칠한 항목이에요. 강조할 항목은 <b>차트 꾸미기 → 색</b>에서 바꿔요.</p>`;
+    return ceHead(nm, cc) + `<p class="cetag">원 조각 한 개</p><label class="f">조각 색</label><div class="corow"><input type="color" data-cc="${i}" value="${cc}" aria-label="${esc(nm)} 색">${S.catColors[i] ? `<button class="lnk" data-ccreset="${i}">원래 색으로</button>` : ""}</div>
+      <label class="f">조각 위 표시</label>${seg("pieLabel", [["pct", "%"], ["val", "값"], ["out", "바깥에 %"], ["none", "없음"]])}
+      ${chk("pieDonut", "도넛 모양")}`; }
+  if (key.startsWith("v:")) { const [, a, c, cur] = key.split(":"), i = +a, ck = i + ":" + c, ov = S.lblOv[ck] || {}, nm = D.series[i] || "", cat = (D.rows[+c] && D.rows[+c][0]) || "", isL = lines.includes(i);
+    const moved = ov.dx || ov.dy;
+    return ceHead(`${cat} · ${nm}`, cAll[i]) + `<p class="cetag">숫자 한 개 — 이 숫자에만 적용돼요. <b>끌어서 옮길 수도 있어요.</b></p>
+      ${isL ? `<label class="f">위치</label><div class="seg">${CE_POS.map(([v, l]) => `<button class="${(ov.pos || (moved ? "" : "")) === v ? "on" : ""}" data-ceov="${ck}" data-v="${v}">${l}</button>`).join("")}</div>` : ""}
+      <div class="corow" style="margin-top:12px"><button class="btn ghost" data-ceov="${ck}" data-v="none">이 숫자 숨기기</button>${S.lblOv[ck] ? `<button class="btn ghost" data-ceovreset="${ck}">제자리로</button>` : ""}</div>
+      ${moved ? `<p class="hint">끌어서 옮긴 자리에 고정돼 있어요. 「제자리로」를 누르면 자동 위치로 돌아가요.</p>` : ""}
+      <button class="celnk" data-ce-go="s:${i}">이 ${isL ? "선" : "막대"}의 숫자 모두 꾸미기 ›</button>`; }
+  if (key === "title") return ceHead("제목 · 부제목") + `<label class="f">제목</label><input class="inp" data-k="title" value="${esc(S.title)}" placeholder="예: 월별 매출 비교" ${S.noTitle ? "disabled" : ""}>${chk("noTitle", "제목 표시 안 함")}
+      <label class="f">부제목</label><input class="inp" data-k="sub" value="${esc(S.sub)}" placeholder="예: 2026년 상반기" ${S.noSub ? "disabled" : ""}>${chk("noSub", "부제목 표시 안 함")}
+      <label class="f">글자 크기 <b class="qv">${S.font}%</b> <span class="muted">차트 전체</span></label><input type="range" min="80" max="140" step="5" data-k="font" data-num="1" value="${S.font}">`;
+  if (key === "leg") return ceHead("범례") + (t === "pie" ? `<label class="f">범례</label>${seg("legend", [["right", "표시"], ["none", "숨기기"]])}`
+      : `<label class="f">범례 위치</label>${seg("legend", [["top", "위"], ["bottom", "아래"], ["right", "오른쪽"], ["none", "숨기기"]])}${S.legend === "top" || S.legend === "bottom" ? `<label class="f">정렬</label>${seg("legAlign", [["left", "왼쪽"], ["center", "가운데"], ["right", "오른쪽"]])}` : ""}`);
+  if (key === "axis") return ceHead(t === "hbar" ? "축 · 항목 이름" : "축 · 눈금") + `${chk("grid", "눈금선")}${chk("xAxis", t === "hbar" ? "X축(아래 숫자 눈금)" : "X축(가로축 · 항목 이름)")}${chk("yAxis", t === "hbar" ? "Y축(왼쪽 항목 이름)" : "왼쪽 세로축(숫자 눈금)")}${t === "line" ? chk("zero", "세로축을 0부터 시작") : ""}`;
+  if (key === "bg") return ceHead("배경 · 크기") + `<label class="f">배경</label>${seg("bg", [["white", "흰색"], ["color", "색 고르기"], ["clear", "투명 (PNG)"]])}
+      ${S.bg === "color" ? `<div class="corow" style="margin-top:8px"><input type="color" data-k="bgColor" value="${S.bgColor}" aria-label="배경 색"><div class="chips">${[["#f4f6fb", "연한 회청"], ["#f7f6f2", "종이색"], ["#fff8ec", "연한 크림"], ["#20263a", "네이비"], ["#1f2421", "먹색"]].map(([v, l]) => `<button class="chip ${S.bgColor === v ? "on" : ""}" data-bgcol="${v}">${l}</button>`).join("")}</div></div>` : ""}
+      <label class="f">글자 크기 <b class="qv">${S.font}%</b></label><input type="range" min="80" max="140" step="5" data-k="font" data-num="1" value="${S.font}">
+      ${isXY ? `<label class="f">숫자 표시</label>${seg("vals", [["auto", "알아서"], ["all", "모두"], ["last", "마지막만"], ["max", "가장 큰 값"], ["none", "숨기기"]])}` : ""}`;
+  return "";
+}
+function cePlace() { const p = ceEl(); if (!CE) return; if (innerWidth <= 760) { p.style.left = ""; p.style.top = ""; return; }
+  const w = p.offsetWidth || 300, h = p.offsetHeight || 320; let x = CE.x + 16, y = CE.y - 20; const sr = ($("#stage") || document.body).getBoundingClientRect(); if (sr.left - w - 20 >= 12) x = sr.left - w - 16;  /* 넓은 화면: 차트를 가리지 않게 차트 왼쪽에 */
+  if (x + w > innerWidth - 12) x = CE.x - w - 16; if (x < 12) x = 12; if (y + h > innerHeight - 12) y = innerHeight - 12 - h; if (y < 12) y = 12;
+  p.style.left = x + "px"; p.style.top = y + "px"; }
+function ceOpen(key, x, y) { const tp = $("#tip"); if (tp) tp.style.display = "none"; if (key.startsWith("v:")) key = key.split(":").slice(0, 3).join(":"); CE = { key, x, y }; const p = ceEl(); const b = ceBody(key); if (!b) { ceClose(); return; } p.innerHTML = b; p.classList.add("on"); cePlace(); ceMark(); }
+function ceRefresh() { if (!CE) return; const p = ceEl(), act = document.activeElement, inPop = act && p.contains(act) && act.dataset && act.dataset.k; if (inPop) return; const st = p.scrollTop; const b = ceBody(CE.key); if (!b) { ceClose(); return; } p.innerHTML = b; p.scrollTop = st; cePlace(); }
+/* 고른 부분 표시: 남색 점선 상자 + 주황 점 (화면에만, 저장 그림에는 없음) */
+function ceMark() { const sv = document.querySelector("#stage svg"); if (!sv) return; sv.querySelectorAll(".ce-hl").forEach(e => e.remove()); if (!CE) return;
+  const key = CE.key, els = [...sv.querySelectorAll("[data-ce]")].filter(e => { const d = e.dataset.ce; return key.startsWith("v:") ? d.split(":").slice(0, 3).join(":") === key : d === key; }).filter(e => !(e.tagName === "path" && e.getAttribute("stroke-opacity") === "0"));
+  if (!els.length) return; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  els.forEach(e => { try { const b = e.getBBox(); if (!b.width && !b.height) return; x0 = Math.min(x0, b.x); y0 = Math.min(y0, b.y); x1 = Math.max(x1, b.x + b.width); y1 = Math.max(y1, b.y + b.height); } catch (er) {} });
+  if (!isFinite(x0)) return; const k = kOf(S.w, S.h), pd = 6 * k, ns = "http://www.w3.org/2000/svg";
+  const r = document.createElementNS(ns, "rect"); [["x", x0 - pd], ["y", y0 - pd], ["width", x1 - x0 + pd * 2], ["height", y1 - y0 + pd * 2], ["rx", 6 * k], ["fill", "none"], ["stroke", "#0A1931"], ["stroke-width", 2.4 * k], ["stroke-dasharray", `${7 * k} ${5 * k}`], ["class", "ce-hl"], ["pointer-events", "none"]].forEach(([a, v]) => r.setAttribute(a, v)); sv.appendChild(r);
+  const c = document.createElementNS(ns, "circle"); [["cx", x1 + pd], ["cy", y0 - pd], ["r", 5.5 * k], ["fill", "#F56D03"], ["stroke", "#fff"], ["stroke-width", 2 * k], ["class", "ce-hl"], ["pointer-events", "none"]].forEach(([a, v]) => c.setAttribute(a, v)); sv.appendChild(c); }
+/* 누르기 · 끌기 */
+let CED = null;
+document.addEventListener("pointerdown", e => { const st = $("#stage"); if (!st || !st.contains(e.target)) return; const el = e.target.closest("[data-ce]"); if (!el) return;
+  const sv = st.querySelector("svg"), rs = sv.getBoundingClientRect(); CED = { el, key: el.dataset.ce, x: e.clientX, y: e.clientY, sx: dims().w / rs.width, moved: false, id: e.pointerId };
+  if (CED.key.startsWith("v:")) { e.preventDefault(); try { el.setPointerCapture(e.pointerId); } catch (er) {} } });
+document.addEventListener("pointermove", e => { if (!CED || !CED.key.startsWith("v:")) return; const dx = e.clientX - CED.x, dy = e.clientY - CED.y;
+  if (!CED.moved && Math.hypot(dx, dy) < 5) return; CED.moved = true; $("#stage").classList.add("ce-drag"); const tip = $("#tip"); if (tip) tip.style.display = "none";
+  CED.el.setAttribute("transform", `translate(${(dx * CED.sx).toFixed(1)},${(dy * CED.sx).toFixed(1)})`); });
+document.addEventListener("pointerup", e => { if (!CED) return; const d = CED; CED = null; const st = $("#stage"); st && st.classList.remove("ce-drag");
+  if (d.moved) { const k = kOf(S.w, S.h), [, a, c, pos] = d.key.split(":"), ck = a + ":" + c, ov = { ...(S.lblOv[ck] || {}) };
+    ov.dx = Math.round(((ov.dx || 0) * k + (e.clientX - d.x) * d.sx) / k * 10) / 10; ov.dy = Math.round(((ov.dy || 0) * k + (e.clientY - d.y) * d.sx) / k * 10) / 10; if (pos && !ov.pos) ov.pos = pos;
+    S.lblOv[ck] = ov; save(); paint(); ceOpen(d.key, e.clientX, e.clientY); toast("숫자를 옮겼어요 · 「제자리로」로 되돌릴 수 있어요"); return; }
+  ceOpen(d.key, e.clientX, e.clientY); });
+document.addEventListener("click", e => { const p = $("#cepop"); if (!CE || !p) return;
+  const b = e.target.closest("button");
+  if (b && p.contains(b)) {
+    if (b.dataset.ceX) { ceClose(); return; }
+    if (b.dataset.ceGo) { CE.key = b.dataset.ceGo; ceRefresh(); ceMark(); return; }
+    if (b.dataset.ceov) { const ck = b.dataset.ceov, v = b.dataset.v; S.lblOv[ck] = v === "none" ? { pos: "none" } : { pos: v }; render(); if (v === "none") { ceClose(); toast("이 숫자를 숨겼어요 · 「숫자 표시」에서 되돌릴 수 있어요"); } return; }
+    if (b.dataset.ceovreset) { delete S.lblOv[b.dataset.ceovreset]; render(); return; }
+    return; }
+  if (p.contains(e.target)) return; const st = $("#stage"); if (st && st.contains(e.target)) return; ceClose(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && CE) ceClose(); });
+addEventListener("resize", () => { if (CE) cePlace(); });
 
 /* ── 저장 · 복사 ── */
 function fileBase() { return (S.title.trim() || "차트").replace(/[\\/:*?"<>|]/g, "").slice(0, 40); }

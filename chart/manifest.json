@@ -1,0 +1,31 @@
+{
+ "id": "/jesa_tools/chart/",
+ "name": "차트 만들기 | Blog J",
+ "short_name": "차트 만들기",
+ "description": "엑셀 표를 붙여넣으면 막대 · 꺾은선 · 원 · 콤보 차트 완성 — 차트를 눌러 꾸미고 PC 폴더에 저장하는 Blog J 무료 앱",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#faf6ee",
+ "theme_color": "#0b3d4a",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512-mask.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

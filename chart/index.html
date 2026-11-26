@@ -190,7 +190,7 @@ table.grid{border-collapse:separate;border-spacing:0;font-size:13px;min-width:10
 #cepop.on{display:block}#cepop .ceh{display:flex;align-items:center;gap:8px;margin:-2px 0 6px}#cepop .ceh b{flex:1;min-width:0;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#cepop .ceh .sw{width:14px;height:14px;border-radius:4px;flex-shrink:0}
 #cepop .cex{border:0;background:none;font-size:22px;line-height:1;padding:2px 6px;border-radius:8px;color:var(--ink3);cursor:pointer}#cepop .cex:hover{background:var(--hover)}
 #cepop .cetag{font-size:12.5px;color:var(--ink3);margin:0 0 4px}#cepop .seg{flex-wrap:wrap}#cepop .f{margin-top:12px}#cepop .corow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}#cepop input[type=color]{width:42px;height:32px}
-#cepop .celnk{border:0;background:none;padding:0;color:var(--brand-ink);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-top:12px;display:inline-block}
+#cepop .btn.on{border-color:var(--brand-ink);box-shadow:inset 0 0 0 1.5px var(--brand-ink)}#cepop .celnk{border:0;background:none;padding:0;color:var(--brand-ink);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-top:12px;display:inline-block}
 @media (max-width:760px){#cepop{left:0!important;right:0;top:auto!important;bottom:0;width:auto;max-width:none;border-radius:16px 16px 0 0;max-height:62vh;border-width:1.5px 0 0;padding-bottom:22px}}
 .serpos{display:flex;flex-direction:column;gap:6px;margin-top:4px}.serpos .spr{display:flex;align-items:center;gap:8px;min-width:0}.serpos .spr b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}.serpos .sw{width:12px;height:12px;border-radius:3px;flex-shrink:0}.serpos select.inp{width:auto;min-width:118px;flex:0 0 auto}.serpos input[type=color]{width:38px;height:30px;flex-shrink:0}
 .serlist label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);padding:6px 10px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
@@ -723,7 +723,7 @@ const DEF = {
   pieDonut: false, pieSort: true, pieLabel: "pct", comboAxis2: true, lineSer: [1], barLine: [], lineBand: "mid", autoSize: true, hide: [], noVal: [], table: false, markPx: 18, markFill: "same", markColor: "#ffffff", linePx: 5.5, lblBg: false, noBg: [], unitOnVal2: true, unitPos: "axis", legAlign: "left", legVAlign: "middle", lblBgColor: "#ffffff", lblBgOp: 85, noTitle: false, noSub: false, ratio: "16:9", rw: 16, rh: 9,
   title: "", sub: "", unit: "", unit2: "", unitOnVal: false, dec: "auto", vals: "auto", theme: "bj", accent: 0,
   fill: "solid", colors: {}, catColors: {}, barLabelPos: "out", lineLabelPos: "top", labelColor: "auto", marker: "circle",
-  legend: "top", grid: true, zero: false, serLbl: {}, serLc: {}, lineAx: {}, lblOv: {}, size: "ppt", w: 1920, h: 1080, bg: "white", bgColor: "#f4f6fb", font: 100, source: ""
+  legend: "top", grid: true, zero: false, serLbl: {}, serLc: {}, lineAx: {}, lblOv: {}, ptOv: {}, size: "ppt", w: 1920, h: 1080, bg: "white", bgColor: "#f4f6fb", font: 100, source: ""
 };
 let S = { ...DEF, ...load("set", {}) };
 function syncH() { S.rw = Math.max(1, Math.min(100, S.rw || 16)); S.rh = Math.max(1, Math.min(100, S.rh || 9)); S.w = Math.max(300, Math.min(4000, Math.round(S.w) || 1920)); S.h = Math.round(S.w * S.rh / S.rw);
@@ -755,7 +755,7 @@ function moveSeries(j, d) { const k = j + d; if (k < 0 || k >= D.series.length) 
   [D.series[j], D.series[k]] = [D.series[k], D.series[j]]; D.rows.forEach(r => { [r[j + 1], r[k + 1]] = [r[k + 1], r[j + 1]]; });
   ["hide", "noVal", "noBg", "lineSer", "barLine"].forEach(key => { S[key] = S[key].map(sw).sort((a, b) => a - b); });
   ["colors", "serLbl", "serLc", "lineAx"].forEach(key => { const c = { ...(S[key] || {}) }; S[key] = {}; Object.keys(c).forEach(i => { S[key][sw(+i)] = c[i]; }); });
-  { const o = { ...(S.lblOv || {}) }; S.lblOv = {}; Object.keys(o).forEach(key => { const [a, c] = key.split(":"); S.lblOv[sw(+a) + ":" + c] = o[key]; }); }
+  ["lblOv", "ptOv"].forEach(nm => { const o = { ...(S[nm] || {}) }; S[nm] = {}; Object.keys(o).forEach(key => { const [a, c] = key.split(":"); S[nm][sw(+a) + ":" + c] = o[key]; }); });
   if (/^s\d+$/.test(S.sortBy)) S.sortBy = "s" + sw(+S.sortBy.slice(1));
   if (S.theme === "accent" && !(S.type === "pie" || (D.series.length === 1 && S.type !== "line"))) S.accent = sw(S.accent);
   D.sample = false; render(); }
@@ -768,7 +768,7 @@ function libImport(f) { const r = new FileReader(); r.onload = () => { try { con
 function fileSave() { const name = (S.title.trim() || LIBNAME || "차트").replace(/[\\/:*?"<>|]/g, "").slice(0, 40);
   dl(new Blob([JSON.stringify({ app: "BlogJ-chart", kind: "chart", ver: 1, name, at: Date.now(), S, D: { ...D, sample: false } }, null, 1)], { type: "application/json" }), `${name}.bjchart`);
   toast(`'${name}.bjchart' 파일로 저장했어요`); }
-const DATA_KEYS = ["hide", "noVal", "noBg", "lineSer", "barLine", "sortBy", "colors", "catColors", "accent", "title", "sub", "source", "serLbl", "serLc", "lineAx", "lblOv"];
+const DATA_KEYS = ["hide", "noVal", "noBg", "lineSer", "barLine", "sortBy", "colors", "catColors", "accent", "title", "sub", "source", "serLbl", "serLc", "lineAx", "lblOv", "ptOv"];
 function fileOpen(f, designOnly) { const r = new FileReader(); r.onload = () => { let j; try { j = JSON.parse(r.result); } catch (e) { j = null; }
     if (j && j.app === "BlogJ-chart" && j.items && !designOnly) { libImport(f); return; }
     if (!j || j.app !== "BlogJ-chart" || j.kind !== "chart" || !j.S || !j.D) { toast("Blog J 차트 파일(.bjchart)이 아니에요"); return; }
@@ -833,7 +833,10 @@ function valBg(x, y, s, fs, anchor) { if (!S.lblBg) return ""; const w = textW(S
   return `<rect x="${x0.toFixed(1)}" y="${(cy - h / 2).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${(h * .3).toFixed(1)}" fill="${S.lblBgColor}" fill-opacity="${S.lblBgOp / 100}"/>`; }
 /* 11-26: 차트 눌러 꾸미기 — 누를 수 있는 부분에 data-ce 표시 */
 const CE_ = (str, key) => key == null ? str : str.replace(/^<(\w+)/, `<$1 data-ce="${key}"`);
-const ovOf = (oi, c) => (S.lblOv || {})[oi + ":" + (ORD[c] != null ? ORD[c] : c)];
+const ckOf = (oi, c) => oi + ":" + (ORD[c] != null ? ORD[c] : c);
+const ovOf = (oi, c) => (S.lblOv || {})[ckOf(oi, c)];
+const ptCol = (oi, c, base) => { const o = (S.ptOv || {})[ckOf(oi, c)]; return o && o.color ? o.color : base; };   /* 막대 하나 · 점 하나만 다른 색 */
+const ovFs = (ov, fs) => ov && ov.big ? fs * 1.32 : fs;   /* 숫자 하나만 크게 */
 /* 꺾은선 표식 4가지 */
 function marker(shape, x, y, r, c, k) {
   const sw = Math.min(r * .9, S.linePx * k / 1.6);  /* 테두리 = 선과 같은 색 · 같은 굵기 */
@@ -923,7 +926,7 @@ function draw() {
     const tot = legItems.length * fsL * 1.8; let y = S.legVAlign === "middle" ? Math.max(top, (top + bottom) / 2 - tot / 2) + fsL : S.legVAlign === "bottom" ? Math.max(top, bottom - tot) + fsL : top + fsL; const x = right + 16 * k + 8 * k;
     legItems.forEach(it => { o.push(`<g data-ce="leg">` + legMark(x, y - fsL * .35, it.c, it.line, k) + T(x + 24 * k, y, clip(it.name, fsL, legRightW - 34 * k), fsL, INK2, "start", 600) + `</g>`); y += fsL * 1.8; });
   }
-  const VT = (x, y, s, fs, fill, anchor, weight, extra, oi, ce) => { if (oi != null && S.serLc && S.serLc[oi]) fill = S.serLc[oi]; const bg = S.lblBg && (oi == null || !S.noBg.includes(oi)); const out = (bg ? valBg(x, y, s, fs, anchor) : "") + T(x, y, s, fs, bg ? labBg(fill) : fill, anchor, weight, bg ? "" : extra); return ce ? `<g data-ce="${ce}">${out}</g>` : out; };
+  const VT = (x, y, s, fs, fill, anchor, weight, extra, oi, ce, ovl) => { if (oi != null && S.serLc && S.serLc[oi]) fill = S.serLc[oi]; if (ovl && ovl.color) fill = ovl.color; if (ovl && ovl.bold) weight = 900; if (ovl && ovl.big) fs = fs * 1.32; const bg = S.lblBg && (oi == null || !S.noBg.includes(oi)); const out = (bg ? valBg(x, y, s, fs, anchor) : "") + T(x, y, s, fs, bg ? labBg(fill) : fill, anchor, weight, bg ? "" : extra); return ce ? `<g data-ce="${ce}">${out}</g>` : out; };
   const P = { W, H, k, top, bottom, left: pad, right, fsA, fsV, fsL, col, T, VT, o };
   if (isPie) drawPie(P, cats, ser[0]); else if (S.type === "hbar") drawHbar(P, cats, ser); else drawXY(P, cats, ser, lineSet);
   return wrap(o, W, H);
@@ -1056,19 +1059,19 @@ function drawXY(P, cats, ser, lineIdx) {
           const b0 = v >= 0 ? pp : nn, end = b0 + v; if (v >= 0) pp = end; else nn = end;
           const ya = y(b0), yb = y(end);
           const p = i === lastPos ? barPath(x0, ya, bw, yb, 4 * k) : `M${x0},${Math.min(ya, yb)}h${bw}v${Math.max(.5, Math.abs(yb - ya) - gap)}h${-bw}Z`;
-          o.push(`<path d="${p}" fill="${fills[j]}" data-ce="s:${ser[i].oi}"/>`);
+          o.push(`<path d="${p}" fill="${ptCol(ser[i].oi, c, fills[j])}" data-ce="p:${ckOf(ser[i].oi, c)}"/>`);
           HIT.push({ x: x0, y: Math.min(ya, yb), w: bw, h: Math.abs(yb - ya), cat: cats[c], ser: ser[i].name, val: fmt(raw, d1, S.unit) + (pct ? ` (${v.toFixed(1)}%)` : ""), c: col[i] });
           if (S.vals === "all" && !S.noVal.includes(ser[i].oi) && Math.abs(yb - ya) > fsV * 1.3) o.push(VT(x0 + bw / 2, (ya + yb) / 2 + fsV * .35, pct ? v.toFixed(0) + "%" : fmt(raw, d1, S.unit), fsV * .9, labCol(true, col[i]), "middle", 700, "", ser[i].oi)); });
         if (!pct && S.vals !== "none") { const tot2 = barIdx.reduce((s, i) => s + (ser[i].v[c] || 0), 0); o.push(VT(x0 + bw / 2, y(pp) - 8 * k, fmt(tot2, d1, S.unit), fsV, labOut(), "middle", 700)); }
       } else barIdx.forEach((i, j) => { const v = ser[i].v[c]; if (v == null) return; const x = x0 + j * (bw + gap), y0 = y(0 > sc.lo ? 0 : sc.lo), ye = y(v);
-        o.push(`<path d="${barPath(x, y0, bw, ye, 4 * k)}" fill="${catAcc() ? fillOf(catCol(c), "v") : fills[j]}" data-ce="${catAcc() ? "c:" + ORD[c] : "s:" + ser[i].oi}"/>`);
+        o.push(`<path d="${barPath(x, y0, bw, ye, 4 * k)}" fill="${ptCol(ser[i].oi, c, catAcc() ? fillOf(catCol(c), "v") : fills[j])}" data-ce="p:${ckOf(ser[i].oi, c)}"/>`);
         const di = decOf(ser[i].v);
         HIT.push({ x, y: Math.min(y0, ye), w: bw, h: Math.abs(ye - y0), cat: cats[c], ser: ser[i].name, val: fmt(v, di, S.unit), c: catCol(c, col[i]) });
         const autoMode = (barIdx.length * n <= 16) ? "all" : "max";
         const fsB0 = barIdx.length > 2 ? fsV * .85 : fsV, txtB = fmt(v, di, S.unit), wB = textW(txtB, fsB0) + (S.lblBg ? fsB0 * .8 : 2 * k), avB = barIdx.length > 1 ? bw * 1.3 + gap : bandW * .96, fsB = wB > avB ? Math.max(fsV * .7, fsB0 * avB / wB) : fsB0;
         const ovB = ovOf(ser[i].oi, c), ceB = "v:" + ser[i].oi + ":" + ORD[c];
         if (ovB && ovB.pos === "none") { /* 이 숫자만 숨김 */ }
-        else if (ovB && (ovB.dx || ovB.dy) && showVal(autoMode, c, n, v, vmax) && !S.noVal.includes(ser[i].oi)) { const bl = barLabelY(y0, ye, fsV, k); o.push(VT(x + bw / 2 + ovB.dx * k, bl.y + ovB.dy * k, txtB, fsB, labCol(false, catCol(c, col[i])), "middle", 700, "", ser[i].oi, ceB)); }
+        else if (ovB && (ovB.dx || ovB.dy) && showVal(autoMode, c, n, v, vmax) && !S.noVal.includes(ser[i].oi)) { const bl = barLabelY(y0, ye, fsV, k); o.push(VT(x + bw / 2 + ovB.dx * k, bl.y + ovB.dy * k, txtB, fsB, labCol(false, catCol(c, col[i])), "middle", 700, "", ser[i].oi, ceB, ovB)); }
         else if (showVal(autoMode, c, n, v, vmax) && !S.noVal.includes(ser[i].oi)) {
           let { y: ly, inside } = barLabelY(y0, ye, fsV, k);
           if (!inside && mixed && band === "mid" && Math.abs(ye - y0) > fsV * 2.2 && linePts(c).some(q => Math.abs(q - (ly - fsV * .35)) < fsV * 1.8 || Math.abs(q - fsV * 1.2 - (ly - fsV * .35)) < fsV * 1.5)) { inside = true; ly = ye < y0 ? ye + fsV * 1.35 : ye - 10 * k; }
@@ -1077,7 +1080,7 @@ function drawXY(P, cats, ser, lineIdx) {
             /* 11-26: 옆 막대 숫자와 겹치면 한 줄 위로 · 그래도 겹치면 숨기고 셈 */
             const w2 = textW(txtB, fsB) + (S.lblBg ? fsB * .8 : 0), box = dy => [x + bw / 2 - w2 / 2, ly + dy - fsB * .85, x + bw / 2 + w2 / 2, ly + dy + fsB * .2], hitb = b => BLB.some(q => b[0] < q[2] && b[2] > q[0] && b[1] < q[3] && b[3] > q[1]);
             let dy = 0; if (hitb(box(0))) dy = inside ? null : (ye < y0 ? -1 : 1) * fsB * 1.05; if (dy != null && dy !== 0 && hitb(box(dy))) dy = null;
-            if (dy == null) HID.bar++; else { BLB.push(box(dy)); o.push(VT(x + bw / 2, ly + dy, txtB, fsB, labCol(inside, catCol(c, col[i])), "middle", 700, "", ser[i].oi, ceB)); } } } });
+            if (dy == null) HID.bar++; else { BLB.push(box(dy)); o.push(VT(x + bw / 2, ly + dy, txtB, fsB, labCol(inside, ptCol(ser[i].oi, c, catCol(c, col[i]))), "middle", 700, "", ser[i].oi, ceB, ovB)); } } } });
     }
   }
   /* 선 */
@@ -1090,7 +1093,7 @@ function drawXY(P, cats, ser, lineIdx) {
       o.push(`<path d="${path(s)}" fill="none" stroke="${col[i]}" stroke-width="${S.linePx * k / 1.6}" stroke-linejoin="round" stroke-linecap="round" data-ce="s:${ser[i].oi}"/><path d="${path(s)}" fill="none" stroke="#000" stroke-opacity="0" stroke-width="${Math.max(16 * k, S.linePx * k)}" data-ce="s:${ser[i].oi}"/>`); });
     const vmax = Math.max(...pts.filter(Boolean).map(p => p[2]));
     pts.forEach((p, c) => { if (!p) return;
-      if (S.marker !== "none") o.push(CE_(marker(S.marker, p[0], p[1], S.markPx / 2 * k / 1.6, col[i], k), "s:" + ser[i].oi));
+      { const pc = ptCol(ser[i].oi, c, null); if (S.marker !== "none" || pc) o.push(CE_(marker(S.marker !== "none" ? S.marker : "circle", p[0], p[1], (S.marker !== "none" ? S.markPx : Math.max(10, S.linePx * 2.2)) / 2 * k / 1.6 * (pc ? 1.15 : 1), pc || col[i], k), "p:" + ckOf(ser[i].oi, c))); }
       HIT.push({ x: p[0] - bandW / 2, y: Math.min(lnTop, barTop), w: bandW, h: Math.max(lnBot, barBot) - Math.min(lnTop, barTop), cat: cats[c], ser: ser[i].name, val: fmt(p[2], dd, un, true), c: col[i], pt: [p[0], p[1]] });
       const autoMode = mixed || (lineIdx.length === 1 && n <= 12) ? "all" : "last";
       MK.push([p[0], p[1]]);
@@ -1104,7 +1107,7 @@ function drawXY(P, cats, ser, lineIdx) {
   if (LB.length) { const off = 6.5 * k + Math.max(0, mkR - 1.5 * k), pd = 2 * k, put = [], bx = (tx, ty, w, an) => { const x0 = an === "middle" ? tx - w / 2 : an === "end" ? tx - w : tx; return [x0 - pd, ty - fsV * .82 - pd, x0 + w + pd, ty + fsV * .22 + pd]; };
     const hitB = b => put.some(q => b[0] < q[2] && b[2] > q[0] && b[1] < q[3] && b[3] > q[1]) || MK.some(([mx, my]) => mx > b[0] - mkR && mx < b[2] + mkR && my > b[1] - mkR && my < b[3] + mkR) || b[1] < P.top + (S.unitPos === "axis" && S.unit ? fsA * 1.6 : 0) || b[3] > (barBot > lnBot ? barBot : lnBot) + fsV * .2 || b[0] < L - 4 * k || b[2] > R + 40 * k;
     const opp = { top: "bottom", bottom: "top", left: "right", right: "left" };
-    LB.sort((a, b) => a.c - b.c || a.y - b.y).forEach(l => { const w = textW(l.txt, fsV) + (S.lblBg ? fsV * .8 : 0);
+    LB.sort((a, b) => a.c - b.c || a.y - b.y).forEach(l => { const w = textW(l.txt, ovFs(l.ov, fsV)) + (S.lblBg ? fsV * .8 : 0);
       const at = (pos, ex) => pos === "bottom" ? [l.x, l.y + off + ex + fsV * .85, "middle"] : pos === "left" ? [l.x - off - ex - 4 * k, l.y + fsV * .35, "end"] : pos === "right" ? [l.x + off + ex + 4 * k, l.y + fsV * .35, "start"] : [l.x, l.y - off - ex - 2 * k, "middle"];
       const tries = l.fixed ? [[l.pos, 0], [l.pos, fsV * .9], [l.pos, fsV * 1.8]] : [[l.pos, 0], [opp[l.pos], 0], [l.pos, fsV * .9], [opp[l.pos], fsV * .9], [l.pos, fsV * 1.8], [opp[l.pos], fsV * 1.8]];
       let ok = null;
@@ -1112,7 +1115,7 @@ function drawXY(P, cats, ser, lineIdx) {
       else for (const [ps, ex] of tries) { const a = at(ps, ex), b = bx(a[0], a[1], w, a[2]); if (!hitB(b)) { ok = [a, b, ps]; break; } }
       if (!ok && l.fixed) { const a = at(l.pos, 0); ok = [a, bx(a[0], a[1], w, a[2]), l.pos]; }  /* 직접 정한 위치는 겹쳐도 보임 */
       if (!ok) { HID.line++; return; } put.push(ok[1]);
-      o.push(VT(ok[0][0], ok[0][1], l.txt, fsV, S.labelColor === "auto" && lineIdx.length > 1 ? serInk(col[ser.findIndex(q => q.oi === l.oi)]) : labOut(), ok[0][2], 700, ` stroke="${S.bg === "clear" ? "#fff" : BGC}" stroke-width="${4 * k}" paint-order="stroke"`, l.oi, "v:" + l.oi + ":" + (ORD[l.c] != null ? ORD[l.c] : l.c) + ":" + (ok[2] || l.pos))); }); }
+      o.push(VT(ok[0][0], ok[0][1], l.txt, fsV, S.labelColor === "auto" && lineIdx.length > 1 ? serInk(col[ser.findIndex(q => q.oi === l.oi)]) : labOut(), ok[0][2], 700, ` stroke="${S.bg === "clear" ? "#fff" : BGC}" stroke-width="${4 * k}" paint-order="stroke"`, l.oi, "v:" + l.oi + ":" + (ORD[l.c] != null ? ORD[l.c] : l.c) + ":" + (ok[2] || l.pos), l.ov)); }); }
   /* 데이터 표: 항목 칸이 막대 위치와 같은 줄에 맞춰짐 */
   if (S.table) { const yT = P.bottom - tbH, yH = B0, fz0 = fsV * .85;
     const cells = ser.map((s, r) => { const dd = decOf(s.v), ln = mixed && lineIdx.includes(r); return s.v.map(v => v == null ? "" : fmt(v, dd, ln ? S.unit2 : S.unit, ln ? S.unitOnVal2 : S.unitOnVal)); });
@@ -1158,19 +1161,19 @@ function drawHbar(P, cats, ser) {
     if (S.yAxis) o.push(T(L - 10 * k, Tp + band * (r + .5) + catFs * .35, clip(cats[c], catFs, labW - 12 * k), catFs, INK2, "end", 600, ' data-ce="axis"'));
     if (stack) { let pp = 0; const tot = ser.reduce((s, x) => s + Math.max(0, x.v[c] || 0), 0) || 1; const lastI = ser.map((_, i) => i).reverse().find(i => (ser[i].v[c] || 0) > 0);
       ser.forEach((s, i) => { let v = s.v[c]; if (v == null || v <= 0) return; const raw = v; if (pct) v = v / tot * 100; const a = x(pp), b = x(pp + v); pp += v;
-        o.push(`<path d="${i === lastI ? barPath(y0, a, bh, b, 4 * k, true) : `M${a},${y0}h${Math.max(.5, b - a - gap)}v${bh}h${-Math.max(.5, b - a - gap)}Z`}" fill="${fills[i]}" data-ce="s:${s.oi}"/>`);
+        o.push(`<path d="${i === lastI ? barPath(y0, a, bh, b, 4 * k, true) : `M${a},${y0}h${Math.max(.5, b - a - gap)}v${bh}h${-Math.max(.5, b - a - gap)}Z`}" fill="${ptCol(s.oi, c, fills[i])}" data-ce="p:${ckOf(s.oi, c)}"/>`);
         HIT.push({ x: a, y: y0, w: b - a, h: bh, cat: cats[c], ser: s.name, val: fmt(raw, d, S.unit) + (pct ? ` (${v.toFixed(1)}%)` : ""), c: col[i] });
         if (S.vals === "all" && !S.noVal.includes(s.oi) && b - a > textW(pct ? "100%" : fmt(raw, d), fsV * .9) + 10 * k) o.push(VT((a + b) / 2, y0 + bh / 2 + fsV * .32, pct ? v.toFixed(0) + "%" : fmt(raw, d, S.unit), fsV * .9, labCol(true, col[i]), "middle", 700, "", s.oi)); });
       if (!pct && S.vals !== "none") o.push(VT(x(pp) + 8 * k, y0 + bh / 2 + fsV * .35, fmt(ser.reduce((s, x) => s + (x.v[c] || 0), 0), d, S.unit), fsV, labOut(), "start", 700));
     } else ser.forEach((s, i) => { const v = s.v[c]; if (v == null) return; const yy = y0 + i * (bh + gap), xa = x(0), xb = x(v);
-      o.push(`<path d="${barPath(yy, xa, bh, xb, 4 * k, true)}" fill="${catAcc() ? fillOf(catCol(c), "h") : fills[i]}" data-ce="${catAcc() ? "c:" + ORD[c] : "s:" + s.oi}"/>`);
+      o.push(`<path d="${barPath(yy, xa, bh, xb, 4 * k, true)}" fill="${ptCol(s.oi, c, catAcc() ? fillOf(catCol(c), "h") : fills[i])}" data-ce="p:${ckOf(s.oi, c)}"/>`);
       const di = decOf(s.v);
       HIT.push({ x: Math.min(xa, xb), y: yy, w: Math.abs(xb - xa), h: bh, cat: cats[c], ser: s.name, val: fmt(v, di, S.unit), c: catCol(c, col[i]) });
       const ovH = ovOf(s.oi, c);
       if (!(ovH && ovH.pos === "none") && showVal("all", r, n, v, vmax) && !S.noVal.includes(s.oi)) { const t = fmt(v, di, S.unit), fz = ser.length > 2 ? fsV * .85 : fsV, tw = textW(t, fz), right = v >= 0, len = Math.abs(xb - xa), yT = yy + bh / 2 + fz * .35;
         let p = S.barLabelPos; if (p !== "out" && len < tw + 16 * k) p = "out";
         const pos = p === "out" ? [right ? xb + 8 * k : xb - 8 * k, right ? "start" : "end", false] : p === "center" ? [(xa + xb) / 2, "middle", true] : p === "inBase" ? [right ? xa + 8 * k : xa - 8 * k, right ? "start" : "end", true] : [right ? xb - 8 * k : xb + 8 * k, right ? "end" : "start", true];
-        o.push(VT(pos[0] + (ovH ? ovH.dx || 0 : 0) * k, yT + (ovH ? ovH.dy || 0 : 0) * k, t, fz, labCol(pos[2] && !(ovH && (ovH.dx || ovH.dy)), catCol(c, col[i])), pos[1], 700, "", s.oi, "v:" + s.oi + ":" + ORD[c])); } });
+        o.push(VT(pos[0] + (ovH ? ovH.dx || 0 : 0) * k, yT + (ovH ? ovH.dy || 0 : 0) * k, t, fz, labCol(pos[2] && !(ovH && (ovH.dx || ovH.dy)), ptCol(s.oi, c, catCol(c, col[i]))), pos[1], 700, "", s.oi, "v:" + s.oi + ":" + ORD[c], ovH)); } });
   });
   /* 데이터 표: 오른쪽에, 막대 줄과 같은 높이로 */
   if (S.table) { let x = P.right - tblW + 14 * k; const xs = P.right - tblW + 14 * k, hy = Tp - fsV * 1.9;
@@ -1308,7 +1311,7 @@ function render() {
       ${hasBar && t !== "pie" ? `<label class="f">막대 숫자 위치</label>${seg("barLabelPos", [["out", "막대 위"], ["inEnd", "막대 안"], ["center", "가운데"], ["inBase", "막대 아래"]])}${t === "hbar" ? `<p class="hint">가로 막대에서는 위 = 막대 끝 바깥, 아래 = 막대 시작 쪽이에요.</p>` : ""}` : ""}
       ${hasLine ? `<label class="f">꺾은선 숫자 위치 <span class="muted">${lines.length > 1 ? "모든 꺾은선 기본 · 겹치면 알아서 비켜요" : ""}</span></label>${seg("lineLabelPos", [["top", "위"], ["bottom", "아래"], ["left", "왼쪽"], ["right", "오른쪽"]])}
       ${lines.length > 1 ? `<label class="f">계열마다 숫자 위치 <span class="muted">정하면 그 계열은 그 자리에 고정</span></label><div class="serpos">${lines.map(i => `<div class="spr"><span class="sw" style="background:${sc[i]}"></span><b>${esc(D.series[i] || "계열 " + (i + 1))}</b><select class="inp" data-slp="${i}" aria-label="${esc(D.series[i])} 숫자 위치">${[["", "기본"], ["top", "위"], ["bottom", "아래"], ["left", "왼쪽"], ["right", "오른쪽"], ["none", "숨기기"]].map(([v, l]) => `<option value="${v}" ${(S.serLbl[i] || "") === v ? "selected" : ""}>${l}</option>`).join("")}</select></div>`).join("")}</div>` : ""}` : ""}
-      <label class="f">소수점</label><select class="inp" data-k="dec">${[["auto", "자동"], ["0", "없음"], ["1", "1자리"], ["2", "2자리"]].map(([v, l]) => `<option value="${v}" ${S.dec === v ? "selected" : ""}>${l}</option>`).join("")}</select>${Object.keys(S.lblOv || {}).length ? `<div class="note" style="margin-top:12px">차트에서 직접 옮기거나 숨긴 숫자 ${Object.keys(S.lblOv).length}개가 있어요. <button class="lnk" data-ceovall="1">모두 제자리로</button></div>` : ""}`],
+      <label class="f">소수점</label><select class="inp" data-k="dec">${[["auto", "자동"], ["0", "없음"], ["1", "1자리"], ["2", "2자리"]].map(([v, l]) => `<option value="${v}" ${S.dec === v ? "selected" : ""}>${l}</option>`).join("")}</select>${Object.keys(S.lblOv || {}).length + Object.keys(S.ptOv || {}).length ? `<div class="note" style="margin-top:12px">차트에서 하나씩 바꾼 숫자 · 막대 · 점이 ${Object.keys(S.lblOv).length + Object.keys(S.ptOv).length}개 있어요. <button class="lnk" data-ceovall="1">모두 원래대로</button></div>` : ""}`],
     ["valstyle", "숫자 꾸미기", "숫자 색 · 숫자 배경", `      <label class="f">숫자 색</label><div class="corow"><div class="seg" style="flex:1">${[["auto", "자동"], ["#20241f", "검정"], ["#ffffff", "흰색"], ["#20263a", "네이비"]].map(([v, l]) => `<button class="${S.labelColor === v ? "on" : ""}" data-seg="labelColor" data-v='${JSON.stringify(v)}'>${l}</button>`).join("")}</div><input type="color" data-lc="1" value="${S.labelColor === "auto" ? "#20241f" : S.labelColor}" aria-label="숫자 색 직접 고르기" title="직접 고르기"></div>
       <p class="hint">자동은 막대 안이면 흰색, 밖이면 검정이에요. 꺾은선이 여러 개면 숫자를 선 색으로 칠해 어느 선 숫자인지 보이게 해요.</p>
       ${t !== "pie" && vis.length > 1 ? `<label class="f">계열마다 숫자 색 <span class="muted">고르면 위 색보다 먼저</span></label><div class="serpos">${vis.map(i => `<div class="spr"><span class="sw" style="background:${sc[i]}"></span><b>${esc(D.series[i] || "계열 " + (i + 1))}</b><input type="color" data-slc="${i}" value="${S.serLc[i] || (S.labelColor === "auto" ? "#20241f" : S.labelColor)}" aria-label="${esc(D.series[i])} 숫자 색">${S.serLc[i] ? `<button class="lnk" data-slcr="${i}">기본으로</button>` : `<button class="lnk" data-slcs="${i}">계열 색으로</button>`}</div>`).join("")}</div>` : ""}
@@ -1368,7 +1371,7 @@ ${t === "line" ? `${chk("zero", "세로축을 0부터 시작")}<p class="hint">0
   <div class="col-r"><div class="res-card">
     <div class="res-h"><h3>${esc(chartName())}</h3><span id="dimtxt"></span></div>
     <div class="stage" id="stage"><div class="tip" id="tip"></div></div>
-    <p class="hint ce-hint">${IC('<path d="M9 4v9l-2-2-2 2 5 6h7l2-7-6-2V4z"/>', 15)}<span>차트에서 <b>막대 · 선 · 숫자 · 제목 · 범례 · 축 · 배경</b>을 누르면 그 자리에서 꾸밀 수 있어요. 숫자는 끌어서 옮길 수도 있어요.</span></p>
+    <p class="hint ce-hint">${IC('<path d="M9 4v9l-2-2-2 2 5 6h7l2-7-6-2V4z"/>', 15)}<span>차트에서 <b>막대 하나 · 점 하나 · 숫자 하나 · 선 · 제목 · 범례 · 축 · 배경</b>을 누르면 그것만 꾸밀 수 있어요. 숫자는 끌어서 옮길 수도 있어요.</span></p>
     ${STEP < 5 ? `<p class="hint" style="margin-top:10px">꾸미기까지 마치고 <b>선택 완료</b>를 누르면 저장·복사할 수 있어요.</p>` : ""}
     <p class="priv">${IC(I.shield, 14)} 표의 숫자는 이 PC 안에서만 쓰이고 어디에도 전송되지 않습니다. 입력한 표 · 설정 · 내 차트는 고른 PC 폴더에만 저장됩니다.</p>
   </div></div></div>
@@ -1407,7 +1410,7 @@ function pmRefresh() { const old = $(".pm"); const html = pasteModal(); if (old)
 function applyData(p) {
   if (p.series.length > 8) { p.series = p.series.slice(0, 8); p.rows = p.rows.map(r => r.slice(0, 9)); }
   D = p; if (Object.values(SAMPLES).some(x => x.title === S.title)) { S.title = ""; S.sub = ""; S.source = ""; }
-  S.colors = {}; S.catColors = {}; S.hide = []; S.noVal = []; S.noBg = []; S.lblOv = {}; ceClose(); S.sortBy = "none"; S.lineSer = S.lineSer.filter(i => i < p.series.length); S.barLine = S.barLine.filter(i => i < p.series.length);
+  S.colors = {}; S.catColors = {}; S.hide = []; S.noVal = []; S.noBg = []; S.lblOv = {}; S.ptOv = {}; ceClose(); S.sortBy = "none"; S.lineSer = S.lineSer.filter(i => i < p.series.length); S.barLine = S.barLine.filter(i => i < p.series.length);
   if (S.type === "combo" && p.series.length > 1) S.lineSer = [p.series.length - 1];  /* 새 데이터: 콤보는 마지막 계열을 꺾은선으로 */
   render(); toast(`${p.rows.length}줄 × ${p.series.length}계열을 넣었어요`); }
 
@@ -1426,7 +1429,7 @@ document.addEventListener("click", e => {
   if (b.dataset.bgc) { S.lblBgColor = b.dataset.bgc; render(); return; }
   if (b.dataset.wpx) { S.w = +b.dataset.wpx; syncH(); render(); return; }
   if (b.dataset.size) { const z = { ppt: [1920, 1080], doc: [1600, 1200], blog: [800, 500], sq: [1080, 1080] }[b.dataset.size]; S.size = b.dataset.size; if (z) { S.w = z[0]; S.h = z[1]; } render(); return; }
-  if (b.dataset.ceovall) { S.lblOv = {}; render(); toast("옮기거나 숨긴 숫자를 모두 제자리로 돌렸어요"); return; }
+  if (b.dataset.ceovall) { S.lblOv = {}; S.ptOv = {}; render(); toast("하나씩 바꾼 숫자 · 막대 · 점을 모두 원래대로 돌렸어요"); return; }
   if (b.dataset.screset != null) { delete S.colors[b.dataset.screset]; render(); return; }
   if (b.dataset.slcr != null) { delete S.serLc[b.dataset.slcr]; render(); return; }
   if (b.dataset.slcs != null) { const i = +b.dataset.slcs; S.serLc[i] = colors(D.series.length)[i]; render(); return; }
@@ -1434,7 +1437,7 @@ document.addEventListener("click", e => {
   if (b.dataset.delr != null) { D.sample = false; D.rows.splice(+b.dataset.delr, 1); if (!D.rows.length) D.rows.push(["", ...D.series.map(() => null)]); render(); return; }
   if (b.dataset.mvc != null) { moveSeries(+b.dataset.mvc, +b.dataset.d); return; }
   if (b.dataset.delc != null) { if (D.series.length < 2) { toast("계열은 하나 이상 있어야 해요"); return; } D.sample = false; const j = +b.dataset.delc; D.series.splice(j, 1); D.rows.forEach(r => r.splice(j + 1, 1));
-    const fix = a => a.filter(i => i !== j).map(i => i > j ? i - 1 : i); S.hide = fix(S.hide); S.noVal = fix(S.noVal); S.noBg = fix(S.noBg); S.sortBy = "none"; S.lineSer = fix(S.lineSer); S.barLine = fix(S.barLine); S.colors = {}; S.serLbl = {}; S.serLc = {}; S.lineAx = {}; S.lblOv = {}; ceClose(); render(); return; }
+    const fix = a => a.filter(i => i !== j).map(i => i > j ? i - 1 : i); S.hide = fix(S.hide); S.noVal = fix(S.noVal); S.noBg = fix(S.noBg); S.sortBy = "none"; S.lineSer = fix(S.lineSer); S.barLine = fix(S.barLine); S.colors = {}; S.serLbl = {}; S.serLc = {}; S.lineAx = {}; S.lblOv = {}; S.ptOv = {}; ceClose(); render(); return; }
   const a = b.dataset.act;
   if (a === "pasteopen") { PM = { open: true, text: "", head: true, flip: false, focus: true }; pmRefresh(); }
   else if (a === "pmclose") { PM.open = false; pmRefresh(); }
@@ -1463,7 +1466,7 @@ document.addEventListener("change", e => { const t = e.target;
   else if (t.dataset.line != null) { const i = +t.dataset.line, key = t.dataset.linek; S[key] = t.checked ? [...new Set([...S[key], i])].sort() : S[key].filter(x => x !== i); render(); }
   else if (t.dataset.slp != null) { if (t.value) S.serLbl[t.dataset.slp] = t.value; else delete S.serLbl[t.dataset.slp]; render(); }
   else if (t.dataset.lax != null) { if (t.value) S.lineAx[t.dataset.lax] = t.value; else delete S.lineAx[t.dataset.lax]; render(); }
-  else if (t.dataset.sc != null || t.dataset.cc != null || t.dataset.lc || t.dataset.slc != null) render();
+  else if (t.dataset.sc != null || t.dataset.cc != null || t.dataset.lc || t.dataset.slc != null || t.dataset.cept || t.dataset.ceovc) render();
   else if (t.tagName === "SELECT" && t.dataset.k) { S[t.dataset.k] = t.dataset.num ? +t.value : t.value; render(); }
   else if (t.dataset.k && t.type === "number") { S[t.dataset.k] = Math.round(+t.value || 0); syncH(); render(); }
   else if (t.dataset.r != null || t.dataset.h != null) save();  /* 값은 입력할 때 이미 그려짐 · 다시 그리면 바로 누른 버튼이 사라짐 */
@@ -1474,6 +1477,8 @@ document.addEventListener("input", e => { const t = e.target;
   if (t.dataset.cc != null) { S.catColors[t.dataset.cc] = t.value; paint(); save(); return; }
   if (t.dataset.lc) { S.labelColor = t.value; paint(); save(); return; }
   if (t.dataset.slc != null) { S.serLc[t.dataset.slc] = t.value; paint(); save(); return; }
+  if (t.dataset.cept) { S.ptOv[t.dataset.cept] = { ...(S.ptOv[t.dataset.cept] || {}), color: t.value }; paint(); save(); return; }
+  if (t.dataset.ceovc) { const o = { ...(S.lblOv[t.dataset.ceovc] || {}) }; if (o.pos === "none") delete o.pos; o.color = t.value; S.lblOv[t.dataset.ceovc] = o; paint(); save(); return; }
   if (t.dataset.k && t.type !== "number" && t.tagName !== "SELECT") { S[t.dataset.k] = t.dataset.num ? +t.value : t.value; if (t.type === "range") { const q = t.previousElementSibling && t.previousElementSibling.querySelector(".qv"); if (q) q.textContent = t.value + (t.dataset.suf || "%"); } paint(); save(); }
   else if (t.dataset.h != null) { D.sample = false; if (t.dataset.h === "cat") D.cat = t.value; else { D.series[+t.dataset.h] = t.value; document.querySelectorAll(`[data-h="${t.dataset.h}"]`).forEach(x => { if (x !== t) x.value = t.value; }); } paint(); save(); }
   else if (t.dataset.r != null) { D.sample = false; const r = +t.dataset.r, c = +t.dataset.c; if (c === 0) D.rows[r][0] = t.value; else { const v = parseNum(t.value); D.rows[r][c] = t.value.trim() === "" ? null : (v == null || isNaN(v) ? t.value : v); t.classList.toggle("bad", t.value.trim() !== "" && (v == null || isNaN(v))); } paint(); save(); }
@@ -1525,10 +1530,17 @@ function ceBody(key) {
     return ceHead(nm, cc) + `<p class="cetag">원 조각 한 개</p><label class="f">조각 색</label><div class="corow"><input type="color" data-cc="${i}" value="${cc}" aria-label="${esc(nm)} 색">${S.catColors[i] ? `<button class="lnk" data-ccreset="${i}">원래 색으로</button>` : ""}</div>
       <label class="f">조각 위 표시</label>${seg("pieLabel", [["pct", "%"], ["val", "값"], ["out", "바깥에 %"], ["none", "없음"]])}
       ${chk("pieDonut", "도넛 모양")}`; }
+  if (key.startsWith("p:")) { const [, a, c] = key.split(":"), i = +a, ck = i + ":" + c, po = S.ptOv[ck] || {}, nm = D.series[i] || "", cat = (D.rows[+c] && D.rows[+c][0]) || "", isL = lines.includes(i), cur = po.color || cAll[i], lo = S.lblOv[ck] || {};
+    return ceHead(`${cat} · ${nm}`, cur) + `<p class="cetag">${isL ? "점" : "막대"} 하나 — <b>이것만</b> 바꿔요. 강조하고 싶은 한 곳에 써 보세요.</p>
+      <label class="f">이 ${isL ? "점" : "막대"}만 색</label><div class="corow"><input type="color" data-cept="${ck}" value="${cur}" aria-label="이 ${isL ? "점" : "막대"} 색"><div class="chips">${[["#E07A4F", "주황 강조"], ["#C23A2B", "빨강"], ["#0A1931", "남색"], ["#B9BEC9", "회색"]].map(([v, l]) => `<button class="chip ${po.color === v ? "on" : ""}" data-ceptc="${ck}" data-v="${v}">${l}</button>`).join("")}</div></div>
+      ${po.color ? `<button class="lnk" data-ceptr="${ck}" style="margin-top:8px">원래 색으로</button>` : ""}
+      <label class="f">이 ${isL ? "점" : "막대"}의 숫자</label><div class="corow"><button class="btn ghost ${lo.big ? "on" : ""}" data-ceovt="${ck}" data-v="big">${lo.big ? "✓ " : ""}크게</button><button class="btn ghost ${lo.bold ? "on" : ""}" data-ceovt="${ck}" data-v="bold">${lo.bold ? "✓ " : ""}굵게</button><input type="color" data-ceovc="${ck}" value="${lo.color || "#20241f"}" aria-label="숫자 색" title="숫자 색"></div>
+      <button class="celnk" data-ce-go="s:${i}">이 ${isL ? "선" : "계열 막대"} 전체 꾸미기 ›</button>`; }
   if (key.startsWith("v:")) { const [, a, c, cur] = key.split(":"), i = +a, ck = i + ":" + c, ov = S.lblOv[ck] || {}, nm = D.series[i] || "", cat = (D.rows[+c] && D.rows[+c][0]) || "", isL = lines.includes(i);
     const moved = ov.dx || ov.dy;
     return ceHead(`${cat} · ${nm}`, cAll[i]) + `<p class="cetag">숫자 한 개 — 이 숫자에만 적용돼요. <b>끌어서 옮길 수도 있어요.</b></p>
       ${isL ? `<label class="f">위치</label><div class="seg">${CE_POS.map(([v, l]) => `<button class="${(ov.pos || (moved ? "" : "")) === v ? "on" : ""}" data-ceov="${ck}" data-v="${v}">${l}</button>`).join("")}</div>` : ""}
+      <label class="f">이 숫자만</label><div class="corow"><button class="btn ghost ${ov.big ? "on" : ""}" data-ceovt="${ck}" data-v="big">${ov.big ? "✓ " : ""}크게</button><button class="btn ghost ${ov.bold ? "on" : ""}" data-ceovt="${ck}" data-v="bold">${ov.bold ? "✓ " : ""}굵게</button><input type="color" data-ceovc="${ck}" value="${ov.color || "#20241f"}" aria-label="이 숫자 색" title="이 숫자 색">${ov.color ? `<button class="lnk" data-ceovcr="${ck}">색 원래대로</button>` : ""}</div>
       <div class="corow" style="margin-top:12px"><button class="btn ghost" data-ceov="${ck}" data-v="none">이 숫자 숨기기</button>${S.lblOv[ck] ? `<button class="btn ghost" data-ceovreset="${ck}">제자리로</button>` : ""}</div>
       ${moved ? `<p class="hint">끌어서 옮긴 자리에 고정돼 있어요. 「제자리로」를 누르면 자동 위치로 돌아가요.</p>` : ""}
       <button class="celnk" data-ce-go="s:${i}">이 ${isL ? "선" : "막대"}의 숫자 모두 꾸미기 ›</button>`; }
@@ -1576,8 +1588,12 @@ document.addEventListener("click", e => { const p = $("#cepop"); if (!CE || !p) 
   if (b && p.contains(b)) {
     if (b.dataset.ceX) { ceClose(); return; }
     if (b.dataset.ceGo) { CE.key = b.dataset.ceGo; ceRefresh(); ceMark(); return; }
-    if (b.dataset.ceov) { const ck = b.dataset.ceov, v = b.dataset.v; S.lblOv[ck] = v === "none" ? { pos: "none" } : { pos: v }; render(); if (v === "none") { ceClose(); toast("이 숫자를 숨겼어요 · 「숫자 표시」에서 되돌릴 수 있어요"); } return; }
+    if (b.dataset.ceov) { const ck = b.dataset.ceov, v = b.dataset.v, keep = S.lblOv[ck] || {}; S.lblOv[ck] = v === "none" ? { pos: "none" } : { pos: v, color: keep.color, big: keep.big, bold: keep.bold }; render(); if (v === "none") { ceClose(); toast("이 숫자를 숨겼어요 · 「숫자 표시」에서 되돌릴 수 있어요"); } return; }
     if (b.dataset.ceovreset) { delete S.lblOv[b.dataset.ceovreset]; render(); return; }
+    if (b.dataset.ceovt) { const ck = b.dataset.ceovt, o = { ...(S.lblOv[ck] || {}) }; if (o.pos === "none") delete o.pos; o[b.dataset.v] = !o[b.dataset.v]; S.lblOv[ck] = o; render(); return; }
+    if (b.dataset.ceovcr) { const o = { ...(S.lblOv[b.dataset.ceovcr] || {}) }; delete o.color; S.lblOv[b.dataset.ceovcr] = o; render(); return; }
+    if (b.dataset.ceptc) { S.ptOv[b.dataset.ceptc] = { ...(S.ptOv[b.dataset.ceptc] || {}), color: b.dataset.v }; render(); return; }
+    if (b.dataset.ceptr) { delete S.ptOv[b.dataset.ceptr]; render(); return; }
     return; }
   if (p.contains(e.target)) return; const st = $("#stage"); if (st && st.contains(e.target)) return; ceClose(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && CE) ceClose(); });

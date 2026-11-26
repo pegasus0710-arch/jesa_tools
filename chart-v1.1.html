@@ -530,10 +530,10 @@ const BJ_GATE = (() => {
 })();
 </script>
 <script>
-/* ══════════ 차트 만들기 v1.0 ══════════
+/* ══════════ 차트 만들기 v1.1 (11-26: 숫자 겹침 · 계열별 숫자 위치/색 · 꺾은선 축 0 끔 · 콤보 꺾은선별 축) ══════════
    엑셀·PPT 보고서용 차트. 데이터는 브라우저 안에서만 쓰이고 어디에도 전송되지 않음.
    차트는 SVG로 그리고, 저장할 때 같은 SVG를 캔버스에 옮겨 PNG·JPG로 만든다. */
-const APP_VER = "1.0";
+const APP_VER = "1.1";
 const $ = (s, el) => (el || document).querySelector(s);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const Q = new URLSearchParams(location.search);
